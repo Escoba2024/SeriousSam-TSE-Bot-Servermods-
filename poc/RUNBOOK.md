@@ -223,3 +223,29 @@ Schusswirkung, Scoreboard und Jitter/Teleports offen. Die beiden automatischen
 Kampfversuche zeigten Gesundheit 100 und Frags 0 bei beiden Spielern. Nächster
 Schritt: freie Schusslinie tatsächlich herstellen und Schaden/Death/Respawn
 beobachten; erst danach Reconnect/Mapwechsel/Shutdown/10-,30-,60-Minuten-Sync.
+
+
+## Retail-Pruefung 02.10.2026
+
+Aktueller Gate-Stand und Hashes oben im Phase-1-Protokoll.
+`bot_bTestThirdPerson=1` ist eine native View-Taste fuer Spectator-QA;
+Standard FALSE. Phase1Visual.ini nutzt sie, Phase1Respawn.ini nutzt Yaw5
+auf Fortress fuer normale Umwelttode/Respawns.
+
+`-CaptureObserver -CaptureFps 30`: native 960x540-TGAs.
+`-AllowReconnect`: nur Retail-Exit1 mit nativem Quit und vollstaendigen
+Renderer-Cleanupmarkern; gleiche Bot-/Observer-CLI neu starten, Logs und
+Slotstatus archivieren. Ein Crash gilt nicht als erfolgreicher Join.
+`-ExpectedShutdown`: Observer erforderlich, AllowReconnect ausgeschlossen;
+Server0/Bot1/Observer1 und beide Quitmarker. Default-Hardcleanup beweist kein Shutdown.
+
+`Test-Phase1Telemetry.ps1 -QueryServer`: Status und Player-Frags separat vom Server.
+`-SyncMinutes N`: mindestens N*1200 einzigartige monotone Tick-Snapshots und
+jede Minute Positionen, Yaw, angewendetes Fireon/off. Lebende Prozesse reichen nicht.
+Soaks: Fortress ohne Timelimit, normaler Vanilla-Spectator ohne lokalen Spieler,
+beide Testkopien Fensterbetrieb, PauseOnMinimize0, FPS60/30. Praeferenz ueber
+normales Join-Menue oder gesicherte GAMEV012-Datei setzen und danach restaurieren.
+Originalinstallation unveraendert. Lokale Sequenz und Backups: .codex/run-native-soaks.ps1.
+Regressionen: Test-RetailJoinState.Tests.ps1, Test-Phase1Telemetry.Tests.ps1.
+NativeJoin615s plus finale Telemetry -SyncMinutes10; analog1815/3615s fuer30/60.
+10 Minuten BESTÄTIGT; 30 Minuten läuft aktuell; 60 Minuten + 60-Minuten-Wiederholung offen. Keine Gesamtabnahme.

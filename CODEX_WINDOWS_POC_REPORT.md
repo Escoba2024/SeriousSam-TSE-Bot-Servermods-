@@ -1,3 +1,25 @@
+<!-- PHASE1_CURRENT_START -->
+## Aktueller Stand – 02.10.2026
+
+**Phase 1: NOCH OFFEN – Gate E läuft. 10-Minuten-Sync bestanden; 30-Minuten-Lauf aktuell aktiv. Phase 2 nicht begonnen.**
+
+| Gate | Stand | Aktuelle Evidenz unter `.codex/evidence/phase1-final-20261002/` |
+|---|---|---|
+| A: sichtbarer normaler Bot, Bewegung/Drehung/Fire | BESTÄTIGT | `native-visual60-30fps`: 60.10 s, 1752 native TGAs, dichte Geh-/Dreh-/Muzzleflash-Serie und Video. Native Kamerakollision nahe Wänden kann die Drittpersonansicht verkleinern. Keine auffälligen Sprünge in der geprüften Serie. |
+| B: Schaden/Frag und normale Bot-Deaths/Respawns | BESTÄTIGT | `native-safe-log-combat120`: Vanilla-Health 100/80/60/40/20/0, Bot-Frag 1, gleicher Serverkill/Observerkill und unabhängige UDP-Playerabfrage. Vier normale Bot-Respawns bereits in `phase1-20261002/fortress-slow-turn180`; weitere mit aktueller DLL im Maptest. Umweltschaden/-tode, keine Health-/Entitywrites. |
+| C: Slotfreigabe/Rejoin, zwei Maps | BESTÄTIGT | `native-mapcycle-safe-log480`: 480.29 s, Little Trouble → Fortress → Skulls, ein Server, 6 CRC-OK, 2 native Quits/Neustarts, jeweils Slotfreigabe und beide Clients am Ende verbunden. Aktionen pro Map in `lifecycle-actions.json`. Bot-Neustart nach Autojoin-Timeout; nahtloses Autoreconnect nicht bewiesen. |
+| D: regulärer Shutdown/Crashdiagnostik | BESTÄTIGT | `native-shutdown240-windowed`: 158.86 s, Server 0/Bot 1/Observer 1, beide Quit + Renderer-Cleanup; keine neuen RPT/CrashEvents/Prozesse/Ports in `diagnostics.json`. Retail-Client Exit 1 ist normales SubMain TRUE. |
+| E: 10/30/60 min aktive Sync + Wiederholung 60 | 10 MIN BESTÄTIGT / 30 MIN LAUFEND | `native-sync-10m-run1`: 615.18 s, Bot/Server/Vanilla-Observer am Ende aktiv und verbunden, CRC/Join PASS. Telemetrie: Ticks 1–12040 monoton, 12040 Samples, 2362 Positionen, 2507 Yaw-Werte, 1804 Fire-on/10236 Fire-off, 0 verworfene Snapshotzeilen. Jede der zehn Minuten erfüllt den Aktivitätscheck. 30-Minuten-Stufe läuft; 60 Minuten + Wiederholung offen. |
+
+Aktuelle Bot-DLL SHA256: `D9606F86B7E91DE6C492404F8B635749B227EF3CF93B6283BD229CF238C756FA`.
+Server/Observer-GameMP bleiben `1C41DA35B3FC47378C407B770E1BD1DCC2B7E6BF676C140586BC6035461D4208`,
+alle EntitiesMP bleiben `7F595F2A7FC96A978B3467983E8F17C70D827F17A5F4EE887F9C7A1F20B1D350`.
+
+Crashkorrektur: Bot-Timerdiagnosen verwendeten Engine `CPrintF` und `GetGameSpyPlayerInfo`. Deren gemeinsamer `CTString::VPrintF`-Puffer kollidierte mit dem Renderer; nach Umstellung auf lokales `vsnprintf` + `CPutString` blieben die getesteten Reconnect-Läufe stabil. Keine Engine-/Entities-Änderung.
+
+Frühere Kurzlauf-PASS und historische offene Gates unten sind keine aktuelle Gesamtabnahme.
+<!-- PHASE1_CURRENT_END -->
+
 # Windows/Retail TSE 1.07 Pfad-D-PoC – erster Laufzeitlauf
 
 > Aktueller Stand 01.10.2026: Der unten dokumentierte ursprüngliche Crash wurde

@@ -1,3 +1,31 @@
+<!-- PHASE1_CURRENT_START -->
+## Aktueller Stand � 02.10.2026
+
+**Phase 1: NOCH OFFEN – Gate E läuft. 10-Minuten-Sync bestanden; 30-Minuten-Lauf aktuell aktiv. Phase 2 nicht begonnen.**
+
+| Gate | Stand | Aktuelle Evidenz unter `.codex/evidence/phase1-final-20261002/` |
+|---|---|---|
+| A: sichtbarer normaler Bot, Bewegung/Drehung/Fire | BESTAETIGT | `native-visual60-30fps`: 60.10 s, 1752 native TGAs, dichte Geh-/Dreh-/Muzzleflash-Serie und Video. Native Kamerakollision nahe Waenden kann die Drittpersonansicht verkleinern. Keine auffaelligen Spruenge in der geprueften Serie. |
+| B: Schaden/Frag und normale Bot-Deaths/Respawns | BESTAETIGT | `native-safe-log-combat120`: Vanillahealth 100/80/60/40/20/0, Botfrag1, gleicher Serverkill/Observerkill und unabhaengige UDP-Playerabfrage. Vier normale Bot-Respawns bereits in `phase1-20261002/fortress-slow-turn180`; weitere mit aktueller DLL im Maptest. Umweltschaden/-tode, keine Health-/Entitywrites. |
+| C: Slotfreigabe/Rejoin, zwei Maps | BESTAETIGT | `native-mapcycle-safe-log480`: 480.29 s, Little Trouble -> Fortress -> Skulls, ein Server,6CRC,2nativeQuits/Neustarts,jeweilsSlot0,bothCurrentlyJoined. Aktionen proMap in `lifecycle-actions.json`. Bot-Neustart nach Autojoin-Timeout; nahtloses Autoreconnect nicht bewiesen. |
+| D: regulaerer Shutdown/Crashdiagnostik | BESTAETIGT | `native-shutdown240-windowed`:158.86s,Server0/Bot1/Observer1,beideQuit+RendererCleanup;0neueRPT/CrashEvents/Prozesse/Ports in `diagnostics.json`. Retail-Client Exit1 ist normales SubMain TRUE. |
+| E:10/30/60min aktive Sync + Wiederholung60 | 10 MIN BESTÄTIGT / 30 MIN LAUFEND | `native-sync-10m-run1`: 615.18 s, Bot/Server/Vanilla-Observer am Ende aktiv und verbunden, CRC/Join PASS. Telemetrie: Ticks 1–12040 monoton, 12040 Samples, 2362 Positionen, 2507 Yaw-Werte, 1804 Fire-on/10236 Fire-off, 0 verworfene Snapshotzeilen. Jede der zehn Minuten erfüllt den Aktivitätscheck. 30-Minuten-Stufe läuft; 60 Minuten + Wiederholung offen. |
+
+Aktuelle Bot-DLL SHA256: `D9606F86B7E91DE6C492404F8B635749B227EF3CF93B6283BD229CF238C756FA`.
+Server/Observer-GameMP bleiben `1C41DA35B3FC47378C407B770E1BD1DCC2B7E6BF676C140586BC6035461D4208`,
+alle EntitiesMP bleiben `7F595F2A7FC96A978B3467983E8F17C70D827F17A5F4EE887F9C7A1F20B1D350`.
+
+Crashkorrektur: Bot-Timerdiagnosen verwendeten Engine `CPrintF` und `GetGameSpyPlayerInfo`.
+Deren gemeinsamer `CTString::VPrintF`-Puffer kollidierte mit dem Renderer; Crashlog zeigte
+`[BotWeapon]terface\Crosshairs\Crosshair4.tex` statt des Texturpfads. Nach Ladefehler renderte
+Vanilla eine leere Crosshairtextur. Timer formatiert jetzt lokal mit `vsnprintf` und schreibt
+ueber `CPutString`; Frag/Score wird direkt lesend erfasst. Keine Engine-/Entitiesaenderung.
+Primaerquellen: [CTString](https://raw.githubusercontent.com/Croteam-official/Serious-Engine/master/Sources/Engine/Base/CTString.cpp),
+[Console](https://raw.githubusercontent.com/Croteam-official/Serious-Engine/master/Sources/Engine/Base/Console.cpp).
+
+Fruehere Kurzlauf-PASS und historische offene Gates unten sind keine aktuelle Gesamtabnahme.
+<!-- PHASE1_CURRENT_END -->
+
 # Testprotokoll – Phase 1: Pfad-D-PoC mit genau 1 Bot
 
 **Datum:** ____________  **Tester:** ____________

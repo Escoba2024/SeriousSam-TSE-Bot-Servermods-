@@ -26,13 +26,10 @@ Der Windows-/Retail-PoC läuft gegen echte TSE-1.07-Retail-Binaries. Bestätigt 
 - zwei Session-/Mapwechsel mit kontrolliertem Reconnect und erneuter CRC-/Join-Abnahme;
 - regulärer Shutdown von Bot, Observer und Dedicated Server.
 
-**Phase 1 ist trotzdem noch nicht abgeschlossen.** Der längste konsolidierte Lifecycle-Lauf beträgt 480,29 Sekunden und erfüllt noch nicht das definierte 10-Minuten-Sync-Gate.
+**Phase 1 ist trotzdem noch nicht abgeschlossen.** Die Gates A–D sind für den aktuellen Ein-Bot-Pfad bestätigt. Zusätzlich ist der aktive 10-Minuten-Sync-Test bestanden; die 30-Minuten-Stufe läuft aktuell.
 
 ## Noch offene Phase-1-Gates
 
-- vollständige visuelle Observer-Abnahme von Botmodell, Bewegung, Rotation und Jitter-/Resetfreiheit;
-- Gegenschaden durch einen unveränderten Observer und harte Healthkonsistenz;
-- 10-Minuten-Sync;
 - 30-Minuten-Sync;
 - 60-Minuten-Sync mit aktiver Bewegung, Rotation und Fire;
 - reproduzierbare 60-Minuten-Wiederholung und grobe Ressourcenmessung.
@@ -52,4 +49,4 @@ Lokale Retail-Kopien, Buildprodukte, Screenshots/TGAs und Runtime-Evidenz unter 
 
 ## Aktueller nächster Meilenstein
 
-Visuelle Restabnahme und Kampf-Gegenseite abschließen, anschließend 10 → 30 → 60 Minuten Sync testen. Erst nach bestandenem Phase-1-Gate mit mehreren lokalen Bots fortfahren.
+Den laufenden 30-Minuten-Sync abschließen, danach 60-Minuten-Sync und reproduzierbare 60-Minuten-Wiederholung. Erst nach bestandenem Phase-1-Gate mit mehreren lokalen Bots fortfahren.
