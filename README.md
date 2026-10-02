@@ -26,15 +26,11 @@ Der Windows-/Retail-PoC läuft gegen echte TSE-1.07-Retail-Binaries. Bestätigt 
 - zwei Session-/Mapwechsel mit kontrolliertem Reconnect und erneuter CRC-/Join-Abnahme;
 - regulärer Shutdown von Bot, Observer und Dedicated Server.
 
-**Phase 1 ist trotzdem noch nicht abgeschlossen.** Die Gates A–D sind für den aktuellen Ein-Bot-Pfad bestätigt. Zusätzlich ist der aktive 10-Minuten-Sync-Test bestanden; die 30-Minuten-Stufe läuft aktuell.
+**Phase 1: BESTANDEN.** Gates A–E sind für den Ein-Bot-Pfad bestätigt, einschließlich aktiver 10-/30-/60-Minuten-Sync-Prüfungen und einer unabhängigen 60-Minuten-Wiederholung. Ressourcen, Restore, Crashdiagnostik und DLL-Hashes sind dokumentiert.
 
-## Noch offene Phase-1-Gates
+## Nächste Phase
 
-- 30-Minuten-Sync;
-- 60-Minuten-Sync mit aktiver Bewegung, Rotation und Fire;
-- reproduzierbare 60-Minuten-Wiederholung und grobe Ressourcenmessung.
-
-Phase 2 mit zwei bis vier lokalen Bots bleibt bis dahin gesperrt.
+Phase 2 – **2 bis 4 lokale Bots pro BotClient-Prozess**. Zuerst zwei eigene Spielerprofile und native Split-Screen-/Join-Konfiguration prüfen; danach Slot-/GUID-Eindeutigkeit, Aktionen aller Bots und Sync. Phase 2 ist noch nicht abgenommen. Kontrollierter Reconnect nach Mapwechsel ist belegt; nahtloses Autoreconnect bleibt nicht belegt.
 
 ## Einstieg für Entwickler / KI
 
@@ -49,4 +45,4 @@ Lokale Retail-Kopien, Buildprodukte, Screenshots/TGAs und Runtime-Evidenz unter 
 
 ## Aktueller nächster Meilenstein
 
-Den laufenden 30-Minuten-Sync abschließen, danach 60-Minuten-Sync und reproduzierbare 60-Minuten-Wiederholung. Erst nach bestandenem Phase-1-Gate mit mehreren lokalen Bots fortfahren.
+Phase 2 mit zwei lokalen Bots beginnen, anschließend auf drei/vier erweitern und separat abnehmen. Aktuelle Phase-1-Evidenz im technischen Bericht und Testprotokoll.

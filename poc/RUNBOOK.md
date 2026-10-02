@@ -248,4 +248,4 @@ normales Join-Menue oder gesicherte GAMEV012-Datei setzen und danach restauriere
 Originalinstallation unveraendert. Lokale Sequenz und Backups: .codex/run-native-soaks.ps1.
 Regressionen: Test-RetailJoinState.Tests.ps1, Test-Phase1Telemetry.Tests.ps1.
 NativeJoin615s plus finale Telemetry -SyncMinutes10; analog1815/3615s fuer30/60.
-10 Minuten BESTÄTIGT; 30 Minuten läuft aktuell; 60 Minuten + 60-Minuten-Wiederholung offen. Keine Gesamtabnahme.
+10/30/60 Minuten plus unabhängige 60-Minuten-Wiederholung bestanden. Phase 1: BESTANDEN. Rohlogs, result.json, telemetry.json, Ressourcen und Abschlussdiagnostik lokal archiviert. Boolesche Ergebnisfelder sind gegen Chunkarray-Logs regressionsgeprüft. Nächster Schritt: Phase 2 mit zwei lokalen Bots.

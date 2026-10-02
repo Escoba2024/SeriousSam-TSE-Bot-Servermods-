@@ -139,10 +139,10 @@ try {
         startedUtc = $started.ToString('o'); elapsedSeconds = ([DateTime]::UtcNow-$started).TotalSeconds
         loaded = $loaded; alive = $alive; exitCode = $exitCode
         serverAlive = !$server.HasExited
-        crcChallenge = $serverText -match 'Sent CRC challenge'
-        crcAccepted = $serverText -match 'CRC check OK'
-        serverJoined = $serverText -match '(?m)^.+ joined\s*$'
-        clientJoined = $clientText -match '(?m)^.+ joined\s*$'
+        crcChallenge = [bool]($serverText -match 'Sent CRC challenge')
+        crcAccepted = [bool]($serverText -match 'CRC check OK')
+        serverJoined = [bool]($serverText -match '(?m)^.+ joined\s*$')
+        clientJoined = [bool]($clientText -match '(?m)^.+ joined\s*$')
         controlledReconnects = $reconnects
         observerReconnects = $observerReconnects
         clientCurrentlyJoined = (Test-NativeJoined $clientText)
@@ -151,7 +151,7 @@ try {
         $observerText = Get-Content -Raw "$observerDir\SeriousSam.log"
         $result.observerCurrentlyJoined = (Test-NativeJoined $observerText)
         $result.observerAlive = !$observerProcess.HasExited
-        $result.observerSawBotJoin = (Get-Content -Raw "$observerDir\SeriousSam.log") -match 'TSE_Bot_PoC.* joined'
+        $result.observerSawBotJoin = [bool]($observerText -match 'TSE_Bot_PoC.* joined')
         $result.crcAcceptedCount = ([regex]::Matches($serverText, 'CRC check OK')).Count
     }
     if ($ExpectedShutdown) {
@@ -160,8 +160,8 @@ try {
             botExit = if ($client.HasExited) {$client.ExitCode} else {$null}
             observerExit = if ($observerProcess.HasExited) {$observerProcess.ExitCode} else {$null}
             serverExit = if ($server.HasExited) {$server.ExitCode} else {$null}
-            botQuit = $clientText -match $quitPattern
-            observerQuit = (Get-Content -Raw "$observerDir\SeriousSam.log") -match $quitPattern
+            botQuit = [bool]($clientText -match $quitPattern)
+            observerQuit = [bool]($observerText -match $quitPattern)
         }
         $shutdownOk = $result.nativeShutdown.botExit -eq 1 -and $result.nativeShutdown.observerExit -eq 1 -and
             $result.nativeShutdown.serverExit -eq 0 -and $result.nativeShutdown.botQuit -and $result.nativeShutdown.observerQuit
