@@ -28,9 +28,13 @@ Der Windows-/Retail-PoC läuft gegen echte TSE-1.07-Retail-Binaries. Bestätigt 
 
 **Phase 1: BESTANDEN.** Gates A–E sind für den Ein-Bot-Pfad bestätigt, einschließlich aktiver 10-/30-/60-Minuten-Sync-Prüfungen und einer unabhängigen 60-Minuten-Wiederholung. Ressourcen, Restore, Crashdiagnostik und DLL-Hashes sind dokumentiert.
 
-## Nächste Phase
+## Phase 2 und nächster Schritt
 
-Phase 2 – **2 bis 4 lokale Bots pro BotClient-Prozess**. Zuerst zwei eigene Spielerprofile und native Split-Screen-/Join-Konfiguration prüfen; danach Slot-/GUID-Eindeutigkeit, Aktionen aller Bots und Sync. Phase 2 ist noch nicht abgenommen. Kontrollierter Reconnect nach Mapwechsel ist belegt; nahtloses Autoreconnect bleibt nicht belegt.
+**Phase 2: BESTANDEN.** Zwei, drei und vier lokale Bots in einem BotClient geprüft: eigene Profile/GUIDs, native Actions aller Spieler, Server-Slots/Frags, zehn aktive Minuten mit vier Bots und zwei Kartenwechsel mit kontrolliertem Rejoin. Server, Observer und Entities bleiben unverändert; keine neue Bot-DLL nötig. Der Telemetrieprüfer prüft jetzt jede lokale Spielerminute einzeln.
+
+Vier-Bot-Dauertest: zehn Minuten. Kontrollierter Reconnect ist bestätigt; nahtloses Gesamt-Autoreconnect bleibt unbelegt. Details und Rohbelege: `CODEX_WINDOWS_POC_REPORT.md`.
+
+Nächster Schritt: **Phase 3 – zwei BotClient-Prozesse**, zunächst mit getrennten Profilen und eigenen GUIDs; danach menschliche Clients, Ressourcen und Serverbrowser prüfen. Phase 3 ist noch nicht abgenommen.
 
 ## Einstieg für Entwickler / KI
 

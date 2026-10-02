@@ -2,7 +2,8 @@ param(
     [Parameter(Mandatory=$true)][string]$BotLog,
     [Parameter(Mandatory=$true)][string]$Output,
     [switch]$QueryServer,
-    [int]$SyncMinutes = 0
+    [int]$SyncMinutes = 0,
+    [ValidateRange(1,4)][int]$ExpectedPlayers = 1
 )
 $ErrorActionPreference = 'Stop'
 if (Test-Path -LiteralPath $Output) { throw 'Use a new output file.' }
@@ -53,23 +54,30 @@ $result = [ordered]@{
 }
 if ($SyncMinutes -gt 0) {
     if ($rejected) { throw 'Malformed snapshots during sync run.' }
-    $rows = @($samples | Where-Object player -eq 0)
-    for ($i=1; $i -lt $rows.Count; $i++) {
+    if ($players.Count -ne $ExpectedPlayers) { throw 'Expected native player count does not match.' }
+    $windows = @(foreach ($playerIndex in 0..($ExpectedPlayers-1)) {
+      $rows = @($samples | Where-Object player -eq $playerIndex)
+      if ($rows.Count -lt $SyncMinutes*1200) { throw 'Insufficient active native ticks for requested sync duration.' }
+      for ($i=1; $i -lt $rows.Count; $i++) {
         if ($rows[$i].tick -le $rows[$i-1].tick) { throw 'Native tick counter restarted or duplicated during sync run.' }
-    }
-    if ($rows.Count -lt $SyncMinutes*1200) { throw 'Insufficient active native ticks for requested sync duration.' }
-    $windows = @(for ($minute=0; $minute -lt $SyncMinutes; $minute++) {
-        $part = @($rows | Where-Object { $_.tick -gt $minute*1200 -and $_.tick -le ($minute+1)*1200 })
+      }
+      $firstTick = $rows[0].tick
+      for ($minute=0; $minute -lt $SyncMinutes; $minute++) {
+        $part = @($rows | Where-Object { $_.tick -ge $firstTick+$minute*1200 -and $_.tick -lt $firstTick+($minute+1)*1200 })
         $entry = [ordered]@{
-            minute=$minute+1; samples=$part.Count
+            player=$playerIndex; minute=$minute+1; samples=$part.Count
             positions=@($part | ForEach-Object { "$($_.x),$($_.y),$($_.z)" } | Sort-Object -Unique).Count
             yaw=@($part.yaw | Sort-Object -Unique).Count
             fireOn=@($part | Where-Object { $_.buttons -band 1 }).Count
             fireOff=@($part | Where-Object { !($_.buttons -band 1) }).Count
         }
         if ($entry.samples -lt 1190 -or $entry.positions -lt 10 -or $entry.yaw -lt 10 -or
-            !$entry.fireOn -or !$entry.fireOff) { throw "Native actions stalled in minute $($minute+1)." }
+            !$entry.fireOn -or !$entry.fireOff) {
+            if ($ExpectedPlayers -eq 1) { throw "Native actions stalled in minute $($minute+1)." }
+            throw "Native actions stalled for player $playerIndex in minute $($minute+1)."
+        }
         $entry
+      }
     })
     $result.activeSyncMinutes = $windows
 }

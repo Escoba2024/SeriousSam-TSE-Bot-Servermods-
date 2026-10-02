@@ -1,3 +1,21 @@
+<!-- PHASE2_CURRENT_START -->
+## Phase 2 – Abnahme 02.10.2026
+
+**Phase 2: BESTANDEN für 2 bis 4 lokale Bots in einem BotClient.** Vier eigene native Profile/GUIDs, unabhängige Actions, Server-Slots/Frags, zehn aktive Minuten mit vier Spielern sowie zwei Mapwechsel und kontrollierte Wiederbeitritte geprüft. Phase 1 bleibt bestanden. Nächster Schritt: Phase 3 – zunächst zwei BotClient-Prozesse mit getrennten Spieleridentitäten.
+
+| Prüfung | Ergebnis | Lokale Evidenz unter `.codex/evidence/phase2-20261002/` |
+|---|---|---|
+| 2/3/4 lokale Bots, ein Prozess | PASS | `native-2bots-smoke90`, `native-3bots-smoke90`, `native-4bots-smoke90`: jeder Spieler mit nativer Bewegung, Yaw und Fire-on/off; Vanilla-UDP-Status jeweils 2/3/4 Slots mit eigenen Namen und Scores. Vier unterschiedliche vorhandene PLC4-GUIDs bleiben unverändert (`profiles-2/3/4.json`). |
+| Vier-Bot-Sync | PASS | `sync-4bots-10m/native-4bots-smoke630`: 630,12 s, 12355/12355/12355/12347 Snapshots; 40 unabhängige aktive Minutenfenster, keine beschädigten Zeilen, CRC 2, Bot und Vanilla-Observer am Ende verbunden. Keine Sync-/Crashmarker. |
+| Zwei Kartenwechsel und Rejoin | PASS | `mapcycle-4bots/runtime`: Little Trouble → Fortress → Skulls, gleicher Dedicated-Server; zweimal native Quits und normale Neustarts beider Clients. Alle vier Slots jeweils freigegeben (UDP `numplayers=0`) und wieder belegt; Aktionen aller vier Spieler auf jeder Map (`lifecycle-actions.json`). CRC-OK: 8. Der Bot-Autojoin funktionierte hier; der Vanilla-Observer lief zweimal in einen Autojoin-Timeout. Kontrollierter Wiederbeitritt ist abgenommen, kein nahtloses Gesamt-Autoreconnect. |
+| Native Darstellung | Beleg | `sync-4bots-10m/native-4bots-smoke630/observer-four-views.tga` und `.png`: vier native Observer-Viewports, darunter normale Todeskameras. Kein lesbares HUD im Bild; Identitäten/Frags stammen aus separaten Serverabfragen. |
+| Cleanup / Binaries | PASS | `final-diagnostics.json`: elf bytegleiche Restores einschließlich vier Profile, keine eigenen Prozesse/UDP-Ports, keine neuen passenden Windows-Crashereignisse/RPTs. Bot-DLL D9606F86… unverändert; Server/Observer/Entities bleiben die Phase-1-Binaries. |
+
+Kein neuer Bot-Game-Code nötig: die vorhandene lokale Vier-Spieler-Schleife und native Split-Screen-/Join-Konfiguration reichen. Der Telemetrieprüfer hat `-ExpectedPlayers 1..4`; im Sync-Modus prüft er jede native Spielerminute, einschließlich später startender Spieler. Regressionen für eingefrorenen zweiten Spieler, fehlenden Spieler und spätere Startticks bestanden; unabhängiger Code-Review ebenfalls. Die alte Prüfung akzeptierte den eingefrorenen zweiten Spieler, weil sie nur Spieler 0 betrachtete (`legacy-frozen-player-result.json`).
+
+Ressourcen im Vier-Bot-Sync: sechs getrennte Prozessproben; privater Speicher etwa 170→176 MiB beim BotClient, 168→177 MiB beim Observer, 21→20 MiB beim Server. Kein allgemeiner Leckfreiheitsbeweis. Vier-Bot-Dauerevidenz umfasst zehn Minuten; die Phase-1-Stundenläufe gelten weiterhin nur für den Ein-Bot-Pfad. Keine Multiprocess-, KI- oder Navigationsabnahme.
+<!-- PHASE2_CURRENT_END -->
+
 <!-- PHASE1_CURRENT_START -->
 ## Aktueller Stand – 02.10.2026
 

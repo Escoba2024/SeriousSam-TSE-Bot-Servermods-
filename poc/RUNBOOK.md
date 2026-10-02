@@ -249,3 +249,20 @@ Originalinstallation unveraendert. Lokale Sequenz und Backups: .codex/run-native
 Regressionen: Test-RetailJoinState.Tests.ps1, Test-Phase1Telemetry.Tests.ps1.
 NativeJoin615s plus finale Telemetry -SyncMinutes10; analog1815/3615s fuer30/60.
 10/30/60 Minuten plus unabhängige 60-Minuten-Wiederholung bestanden. Phase 1: BESTANDEN. Rohlogs, result.json, telemetry.json, Ressourcen und Abschlussdiagnostik lokal archiviert. Boolesche Ergebnisfelder sind gegen Chunkarray-Logs regressionsgeprüft. Nächster Schritt: Phase 2 mit zwei lokalen Bots.
+
+## Phase 2: vier lokale Spieler (02.10.2026)
+
+Phase 2 ist lokal abgenommen; genaue Messwerte und Grenzen im aktuellen Abschnitt des Windows-PoC-Berichts. Vor Änderung der Testkopien Preferences (`Data/SeriousSam.gms`), vier `Players/Player0..3.plr`, Anzeige und Server-Rundenkonfiguration sichern. Über das normale Join-/Split-Screen-Menü zwei, drei bzw. vier unterschiedliche lokale Profile auswählen; Namen ändern ersetzt keine eindeutige GUID. Vanilla-Observer als Spectator ohne lokalen Spieler verbinden. Nur BotClient benutzt die bewährte GameMP-DLL. Keine Änderung an Entities/Engine/Server/Observer-Binaries.
+
+Nach nativer Konfiguration ein frischer Vier-Bot-Sync-Lauf auf Fortress ohne Frag-/Zeitlimit:
+
+```powershell
+.\poc\scripts\Test-RetailJoin.ps1 -Dll .codex\phase1-safe-log-build\Sources\Bin\vs2022.Release_TSE107\GameMP.dll -Evidence .codex\evidence\my-four-bots -Seconds 630 -Observer -Startup Scripts/Phase1Respawn.ini
+.\poc\scripts\Test-Phase1Telemetry.ps1 -BotLog .codex\evidence\my-four-bots\SeriousSam.log -Output .codex\evidence\my-four-bots\telemetry.json -SyncMinutes 10 -ExpectedPlayers 4
+```
+
+Der Join-Test konfiguriert die lokale Spielerzahl nicht selbst. Zusätzlich während der Session UDP-25601-Status/Players abfragen: vier eindeutige Namen, native Scores; CRC gilt pro Verbindung, nicht pro lokalem Spieler. `-ExpectedPlayers` zählt und prüft im Sync-Modus jeden erwarteten Spieler 0..N-1 unabhängig. Zehn Minuten entsprechen je Spieler mindestens 12000 monotone native Tick-Snapshots; jedes Minutenfenster braucht Bewegung, Rotation und Fire-on/off. Für zwei/drei Spieler denselben Ablauf mit passender nativer Menüwahl und `-ExpectedPlayers 2/3` verwenden.
+
+Kartenfolge Little Trouble (1 Minute), Fortress (2 Minuten), Skulls (ohne Zeitlimit), Fraglimit 0. `-AllowReconnect` archiviert nur kontrollierte native Quits mit normalem Retail-Exit 1 und vollständigem Renderer-Cleanup, startet dieselbe CLI neu und erfasst die Slotfreigabe. Bei Autojoin-Timeout `/Quit()` in der nativen Spielkonsole; kein Crash als Rejoin-PASS. Am Ende alle vier Spieler und den Vanilla-Observer erneut abnehmen; Actions für jeden Spieler auf jeder Map getrennt auswerten. Das automatische Wiederverbinden des Observers funktionierte im Phase-2-Lauf nicht. Abschließend sämtliche Testkonfigurationen/Profile bytegleich restaurieren und Prozesse/Ports/Crashdiagnostik prüfen.
+
+Lokale ausgeführte Sequenzen samt Backups: `.codex/run-phase2-smokes.ps1`, `.codex/run-phase2-mapcycle.ps1`, `.codex/evidence/phase2-20261002/`. Phase 3 beginnt erst nach dieser Vier-Spieler-Abnahme.
