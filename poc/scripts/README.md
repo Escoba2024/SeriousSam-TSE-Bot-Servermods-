@@ -40,3 +40,34 @@ Alle Pfade/IPs sind am Anfang jedes Skripts konfigurierbar (`set`-Zeilen). Skrip
 
 Die Test-INI-Dateien nur im isolierten BotClient verwenden. Gameplay-Gates bleiben
 bis zur tatsächlichen Schadens-/Respawn- und Observer-Abnahme offen; siehe Runbook.
+
+## Phase-2–7-Vorbereitungs-Kit (02.10.2026) – NICHT ABGENOMMEN
+
+Alle folgenden Werkzeuge sind implementiert und (wo logisch möglich) unit-getestet,
+aber **ohne Runtime-Evidenz**; die Abnahme folgt den Testprotokollen Phase 2/3/4–7.
+
+| Datei | Zweck | Phase |
+|---|---|---|
+| `Phase2TwoBots.ini` / `Phase2FourBots.ini` | 2 bzw. 4 lokale Bots in einem Bot-Client (nativer Split-Screen-Join über `bot_ctLocalPlayers`) | 2 |
+| `Test-Phase2MultiBot.ps1` (+ `.Tests.ps1`) | Mehrbot-Auswertung: Slot-/Index-/Namens-Eindeutigkeit, per-Bot-Aktivität, Lockstep-Check, optional `\players\`-Abgleich | 2 |
+| `fleet-config.sample.json` | Vorlage: N Bot-Client-Prozesse × 1–4 Bots (je Prozess eigene Installation) | 3 |
+| `Start-BotFleet.ps1` / `Stop-BotFleet.ps1` | Gestaffelter Fleet-Start/-Stop mit State-Datei; Stop bevorzugt nativen Quit (`CloseMainWindow`) | 3 |
+| `PopulationCore.ps1` | Gemeinsame, testbare Logik: Populationsregeln (Spiegel `botcore_ai.h`), LCG, Fleet-Validierung, `\players\`-Klassifikation | 3/5/6/7 |
+| `Test-FleetAndPopulation.Tests.ps1` | Unit-Regressionen für PopulationCore/Fleet/Farm inkl. LCG-Abgleich mit der C++-Referenz | 3/5/7 |
+| `Phase4Ai.ini` | KI-Modus: automatische Zielwahl + Waffenwahl nach Distanzband (`bot_iAiMode = 1`) | 4 |
+| `BotWaypoints.sample.txt` | Handgepflegter Waypoint-Graph (`node`/`edge`) als Stuck-Fallback; keine Sichtlinienprüfung | 4 |
+| `Manage-BotPopulation.ps1` | Population Manager: Target halten, Human-Slots priorisieren, gejitterte Join-/Leave-Delays, `-DryRun`/`-Once` | 5/6 |
+| `Phase6Presence.ini` + `ChatLines.sample.txt` + `BotNames.sample.txt` | Niederfrequenter, gejitterter Bot-Chat über den normalen Chatpfad; Namenspool für Profile | 6 |
+| `serverfarm-config.sample.json` | Vorlage: mehrere Server-Instanzen (eigene Ports/Configs/Bot-Gruppen/Populationen) | 7 |
+| `Start-ServerFarm.ps1` / `Stop-ServerFarm.ps1` | Start/Stop mehrerer unveränderter Dedicated-Instanzen (prüft `net_iPort` je Config) | 7 |
+
+Hinweise:
+
+- `Build-RetailGameMP.ps1 -Bot` kopiert jetzt zusätzlich `botcore_ai.h` und setzt den
+  Phase-2-Anker `BotDriver_ConfigureJoin` am Kopf von `CGame::JoinGame` (bricht bei
+  Anker-Abweichung hart ab).
+- Alle neuen BotDriver-Symbole sind per Default aus (`bot_ctLocalPlayers = 1`,
+  `bot_iAiMode = 0`, `bot_fChatPeriod = 0`); das belegte Phase-1-Verhalten bleibt
+  bei unveränderten INIs identisch.
+- Die `.Tests.ps1`-Dateien laufen ohne Spielinstallation (synthetische Logs/Configs)
+  und müssen vor der jeweiligen Erstabnahme PASS sein.

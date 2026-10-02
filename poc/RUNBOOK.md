@@ -50,6 +50,39 @@ BotClient installiert. Eigene Spielerprofile vorher einrichten; Server und
 Observer behalten originale Binaries. CRC-/Join-Erfolg ersetzt keinen
 60-Minuten-Test und keine Prüfung von Schaden, Respawn oder Mapwechsel.
 
+## 🚧 Phase-2–7-Vorbereitungs-Kit (Ergänzung 02.10.2026) – NICHT ABGENOMMEN
+
+Nach dem Phase-1-PASS ist der komplette Code-/Skript-/Protokollpfad für die
+Folgephasen vorbereitet (ohne Runtime-Evidenz; Abnahme ausschließlich über die
+Testprotokolle):
+
+1. **Phase 2 (2–4 lokale Bots):** `Build-RetailGameMP.ps1 -Bot` baut jetzt den
+   erweiterten BotDriver (`bot_ctLocalPlayers`, `bot_iProfileBase`,
+   `bot_bVariants`; neuer Anker `BotDriver_ConfigureJoin` am Kopf von
+   `CGame::JoinGame`). Vorher im Bot-Client 2–4 Spielerprofile anlegen. Start
+   mit `Scripts\Phase2TwoBots.ini`, Auswertung mit `Test-Phase2MultiBot.ps1`.
+   Protokoll: `TESTPROTOKOLL-PHASE-2.md`.
+2. **Phase 3 (Multiprocess):** `fleet-config.sample.json` kopieren,
+   `Start-BotFleet.ps1`/`Stop-BotFleet.ps1` verwenden (je Prozess eine eigene
+   isolierte Bot-Client-Installation). Protokoll: `TESTPROTOKOLL-PHASE-3.md`.
+3. **Phase 4 (einfache KI):** `Scripts\Phase4Ai.ini` (`bot_iAiMode = 1`),
+   optional Waypoint-Datei nach `BotWaypoints.sample.txt`. Die Entscheidungs-
+   logik liegt engine-frei in `poc/botcore/botcore_ai.h` (Standalone-Tests:
+   `make -C poc/botcore test`).
+4. **Phase 5 (Population):** `Manage-BotPopulation.ps1` gegen die Fleet-Config;
+   Regeln gespiegelt in `botcore_ai.h`/`PopulationCore.ps1` und beidseitig
+   unit-getestet.
+5. **Phase 6 (Presence/Chat):** `Scripts\Phase6Presence.ini` + Kopien von
+   `ChatLines.sample.txt`/`BotNames.sample.txt`; Join-/Leave-Jitter kommt aus
+   dem Population Manager.
+6. **Phase 7 (Serverfarm):** `serverfarm-config.sample.json` +
+   `Start-ServerFarm.ps1`/`Stop-ServerFarm.ps1`; je Instanz eigener
+   `Scripts\Dedicated\<name>\`-Ordner mit `net_iPort = <port>;`.
+
+Protokolle für Phase 4–7: `TESTPROTOKOLL-PHASE-4-7.md`. Unit-Regressionen vor
+der jeweiligen Erstabnahme: `Test-Phase2MultiBot.Tests.ps1`,
+`Test-FleetAndPopulation.Tests.ps1`, `make -C poc/botcore test`.
+
 ---
 
 ## Schritt 1 – Referenz-Repos holen

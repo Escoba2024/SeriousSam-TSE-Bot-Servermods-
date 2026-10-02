@@ -196,3 +196,20 @@ Offene Punkte (nicht per Source belegbar): tatsächliches Laufzeitverhalten des 
 **SeriousSam (EXE):** `CmdLine.cpp:108-140` · `SeriousSam.cpp:371-391` (InitializeGame/LoadLibrary), `:480-540` (Init-Reihenfolge, +script), `:556-566` (+connect) · `GUI/Menus/MenuStarters.cpp:275` (StartNetworkGame, SSC_DEDICATED → Konsole)
 
 **Extern:** `github.com/Croteam-official/Serious-Engine` (README) · `github.com/DreamyCecil/SE1-ModSDK` (README; Branch `includes` → `Engine107/`) · `github.com/DreamyCecil/CecilBotMod` (PlayerBot.ecl, NavMeshGenerator.ecl)
+
+---
+
+## 9. Ergänzung 02.10.2026 – Phase-2/4/6-Integrationspunkte (Verifikationsstatus)
+
+Die Phase-2–7-Vorbereitung fügt neue GameMP-Integrationspunkte hinzu. Status je Punkt:
+
+| Integrationspunkt | Quelle/Begründung | Status |
+|---|---|---|
+| `BotDriver_ConfigureJoin` am Kopf von `CGame::JoinGame` setzt `gm_StartSplitScreenCfg = SSC_PLAY1..4` und `gm_aiStartLocalPlayers[0..3]` | `Game.h:186-190` (SSC_*), `:216` (gm_lpLocalPlayers[4]), `Game.cpp:1173-1200` (JoinGame nutzt genau diese Member für `JoinSession_t(…, ctLocalPlayers)`; siehe Abschnitt 6 Punkt 5) | Quellseitig belegt (1.10-Referenz); ModSDK-Anker wird vom Build-Skript hart geprüft; **Runtime-Beweis offen** (TESTPROTOKOLL-PHASE-2 Pflichttest 1) |
+| Waffenwahl-Buttons `index << 14` | `Player.es:259-273` (PLACT_SELECT_WEAPON_SHIFT); identische Kodierung wie der runtime-belegte Phase-1-Colt-Test (`2L<<14`) | Runtime-belegt für Colt; andere Indizes **offen** (TESTPROTOKOLL-PHASE-4-7, Phase 4 Punkt 3) |
+| `m_iAvailableWeapons`-Bitmaske `1 << (WEAPON_*-1)` | `PlayerWeapons.es` (TSE-WeaponType-Enum; Default-Maske 0x03 = Knife+Colt) | Quellseitig belegt; Lesezugriff war bereits Teil der Phase-1-Diagnostik |
+| `CNetwork::SendChat(ULONG ulFrom, ULONG ulTo, CTString)` für Phase-6-Chat | `Network/Network.h` (öffentliche Engine-API; vom vanilla `Say`-Pfad genutzt) | Signatur wird beim Build geprüft (Compile-Fehler bei Abweichung); **Runtime-Beweis offen** (Phase 6 Punkt 4: Ankunft als regulärer Spielerchat) |
+| Waypoint-/Chat-Dateien über `std::fopen` (Klartext unter `Scripts\`, außerhalb des Engine-VFS/GRO) | bewusst kein `CTFileStream`, um keine CRC-/VFS-Seiteneffekte zu erzeugen; Dateien liegen nur im Bot-Client | Kein Engine-Einfluss; Ladefehler deaktivieren das Feature laut Log (fail closed) |
+| Kein neuer Schreibzugriff auf Entities/Engine-Zustand durch Phase-4-KI | `BotDriver.cpp`: weiterhin ausschließlich Snapshots lesen + `CPlayerSource::SetAction()` | Per Code-Review dieser Vorbereitung; Sync-Neutralität ist Runtime-Beweisziel (Phase 4 Punkt 6) |
+
+Die engine-freie Entscheidungslogik (Targeting, Waffenbänder, Waypoint-BFS, Stuck-Fenster, Populationsregeln, Presence-LCG) liegt in `botcore/botcore_ai.h` und ist durch `test_botcore_ai.cpp` abgedeckt; die PowerShell-Spiegel (`PopulationCore.ps1`) sind per Referenzwerten gegen die C++-Implementierung gepinnt (`Test-FleetAndPopulation.Tests.ps1`). Standalone-Checks ersetzen keine native Abnahme.

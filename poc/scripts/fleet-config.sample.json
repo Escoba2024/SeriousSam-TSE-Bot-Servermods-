@@ -1,0 +1,19 @@
+{
+  "_comment": "Phase-3-Fleet: N Bot-Client-Prozesse x bis zu 4 lokale Bots. Jeder Prozess braucht seine EIGENE isolierte 1.07-Installation (eigene Profile/GUIDs, eigener SeriousSam.log). Vorlage kopieren und Pfade anpassen; .codex/ bleibt ausserhalb des Repos.",
+  "server": "127.0.0.1:25600",
+  "queryPort": 25601,
+  "botNamePrefix": "TSE_Bot",
+  "startStaggerSeconds": 10,
+  "processes": [
+    {
+      "clientDir": "C:\\tse\\.codex\\retail\\TSE-BotClient",
+      "localPlayers": 4,
+      "startupScript": "Scripts\\Phase2FourBots.ini"
+    },
+    {
+      "clientDir": "C:\\tse\\.codex\\retail\\TSE-BotClient-2",
+      "localPlayers": 4,
+      "startupScript": "Scripts\\Phase2FourBots.ini"
+    }
+  ]
+}

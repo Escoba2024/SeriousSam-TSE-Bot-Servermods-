@@ -28,14 +28,18 @@ $project = $project.Replace('<GenerateDebugInformation>true</GenerateDebugInform
 $project = $project.Replace('<ClCompile Include="Game.cpp" />', '<ClCompile Include="Game.cpp" /><ClCompile Include="RetailAllocator.cpp"><PrecompiledHeader>NotUsing</PrecompiledHeader></ClCompile>')
 if ($Bot) {
     Copy-Item "$patch\BotDriver.cpp","$patch\BotDriver.h" $game
-    Copy-Item (Join-Path (Split-Path $PSScriptRoot -Parent) 'botcore\botcore.h') $game
+    $botcore = Join-Path (Split-Path $PSScriptRoot -Parent) 'botcore'
+    Copy-Item "$botcore\botcore.h","$botcore\botcore_ai.h" $game
     $source = Get-Content -Raw "$game\Game.cpp"
-    $anchors = @('#include "LCDDrawing.h"', "void CGame::GameHandleTimer(void)`n{", '  CAM_Init();')
+    # Phase-2 anchor: the multi-local-player join override must run at the head
+    # of CGame::JoinGame(). All anchors fail closed: a mismatch aborts the build.
+    $anchors = @('#include "LCDDrawing.h"', "void CGame::GameHandleTimer(void)`n{", '  CAM_Init();', "BOOL CGame::JoinGame(CNetworkSession &session)`n{")
     $source = $source.Replace("`r`n", "`n")
     foreach ($anchor in $anchors) { if (!$source.Contains($anchor)) { throw 'Bot integration anchor missing.' } }
     $source = $source.Replace($anchors[0], $anchors[0]+"`n"+'#include "BotDriver.h"')
     $source = $source.Replace($anchors[1], $anchors[1]+"`n  if (BotDriver_HandleTimer(this)) return;")
     $source = $source.Replace($anchors[2], $anchors[2]+"`n  BotDriver_Init();")
+    $source = $source.Replace($anchors[3], $anchors[3]+"`n  BotDriver_ConfigureJoin(this);")
     Set-Content "$game\Game.cpp" $source
     $project = $project.Replace('<ClCompile Include="Game.cpp" />', '<ClCompile Include="Game.cpp" /><ClCompile Include="BotDriver.cpp" />')
 }

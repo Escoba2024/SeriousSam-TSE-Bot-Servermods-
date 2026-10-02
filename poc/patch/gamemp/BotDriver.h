@@ -26,6 +26,17 @@
  */
 void BotDriver_Init(void);
 
+/* Phase 2: called at the head of CGame::JoinGame(). When the bot driver is
+ * enabled and bot_ctLocalPlayers >= 2, this overrides the split-screen join
+ * configuration (gm_StartSplitScreenCfg, gm_aiStartLocalPlayers) so one bot
+ * client process joins with 2..4 local players - through the exact same
+ * native join path the split-screen menu uses. Distinct player profiles
+ * (bot_iProfileBase..+n-1) must exist in the bot client beforehand; their
+ * per-character GUIDs provide the required uniqueness.
+ * Does nothing when disabled, so the vanilla observer path stays untouched.
+ */
+void BotDriver_ConfigureJoin(class CGame *pgame);
+
 /* Called at the start of CGame::GameHandleTimer() (every timer tick, 20 Hz).
  * If the bot driver is enabled, it generates one synthetic CPlayerAction per
  * active local player and hands it to CPlayerSource::SetAction() - exactly

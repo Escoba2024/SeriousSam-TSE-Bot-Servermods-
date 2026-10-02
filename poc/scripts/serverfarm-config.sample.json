@@ -1,0 +1,26 @@
+{
+  "_comment": "Phase-7-Farm: mehrere unveraenderte Dedicated Server mit getrennten Ports, getrennten Bot-Client-Gruppen und eigenen Zielpopulationen. Gemeinsamer Code, instanzspezifische Konfiguration. Jede Instanz braucht ein eigenes Scripts\\Dedicated\\<configName>\\-Verzeichnis (Vorlage: dedicated-config/) mit 'net_iPort = <port>;' in der init.ini. Query-Port ist port+1.",
+  "serverDir": "C:\\tse\\.codex\\retail\\TSE-Server",
+  "instances": [
+    {
+      "name": "BotTest",
+      "port": 25600,
+      "maxPlayers": 16,
+      "targetPopulation": 12,
+      "reservedHumanSlots": 2,
+      "botNamePrefix": "TSE_Bot",
+      "presenceSeed": 101,
+      "fleetConfig": "fleet-config-instance1.json"
+    },
+    {
+      "name": "BotTest2",
+      "port": 25610,
+      "maxPlayers": 16,
+      "targetPopulation": 8,
+      "reservedHumanSlots": 2,
+      "botNamePrefix": "TSE2_Bot",
+      "presenceSeed": 202,
+      "fleetConfig": "fleet-config-instance2.json"
+    }
+  ]
+}

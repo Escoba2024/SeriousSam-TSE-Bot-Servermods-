@@ -1,0 +1,13 @@
+# BotNames.sample.txt - Namenspool fuer Bot-Spielerprofile (Phase 6).
+# Diese Datei wird NICHT vom Spiel geladen: Die Namen werden beim einmaligen
+# Anlegen der Spielerprofile im Bot-Client manuell vergeben (je Profil eine
+# eigene Character-GUID). Pro Bot-Client-Installation eigene Namen verwenden,
+# damit Scoreboard und \players\-Abfrage eindeutig bleiben.
+Serious Alex
+Fast Eddie
+Kamikaze Kai
+Lena Laser
+Rocket Rita
+Bruno Beheaded
+Scorp Sandra
+Werebull Willi

@@ -1,0 +1,12 @@
+# ChatLines.sample.txt - Vorlage fuer bot_strChatFile (Phase 6).
+# Nach <Bot-Client>\Scripts\BotChatLines.txt kopieren und anpassen.
+# Eine Chatzeile pro Zeile; '#'-Zeilen und Leerzeilen werden ignoriert.
+# Anfuehrungszeichen, Backslashes und Semikolons werden beim Laden entfernt.
+gg
+nice shot
+lol
+ouch
+rematch?
+good game all
+where is everyone
+that was close

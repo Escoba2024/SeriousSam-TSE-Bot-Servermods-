@@ -1,0 +1,17 @@
+# BotWaypoints.sample.txt - Vorlage fuer bot_strWaypoints (Phase 4).
+# Nach <Bot-Client>\Scripts\BotWaypoints.txt kopieren und PRO MAP von Hand
+# pflegen (Koordinaten im Spiel per [BotDriver]-Positionslog ablesen).
+# Format:  node <x> <y> <z>     - Knoten, Index in Dateireihenfolge ab 0
+#          edge <a> <b>         - beidseitige Kante zwischen Knoten a und b
+# Der Graph ist NUR ein Stuck-Fallback; es gibt keine Sichtlinien- oder
+# Kollisionspruefung. Fehlerhafte Zeilen deaktivieren die Navigation (Log).
+#
+# Beispiel (Platzhalterwerte, NICHT fuer eine echte Map geeignet):
+node 0 0 0
+node 20 0 0
+node 20 0 20
+node 0 0 20
+edge 0 1
+edge 1 2
+edge 2 3
+edge 3 0

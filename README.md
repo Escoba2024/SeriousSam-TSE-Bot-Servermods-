@@ -32,14 +32,28 @@ Der Windows-/Retail-PoC läuft gegen echte TSE-1.07-Retail-Binaries. Bestätigt 
 
 Phase 2 – **2 bis 4 lokale Bots pro BotClient-Prozess**. Zuerst zwei eigene Spielerprofile und native Split-Screen-/Join-Konfiguration prüfen; danach Slot-/GUID-Eindeutigkeit, Aktionen aller Bots und Sync. Phase 2 ist noch nicht abgenommen. Kontrollierter Reconnect nach Mapwechsel ist belegt; nahtloses Autoreconnect bleibt nicht belegt.
 
+## Vorbereitungsstand Phase 2–7 (02.10.2026) – implementiert, NICHT abgenommen
+
+Der komplette Umsetzungs-/Testpfad für die Folgephasen ist vorbereitet; **keine** dieser Phasen hat Runtime-Evidenz, alle Gates sind offen:
+
+- **Phase 2:** BotDriver mit `bot_ctLocalPlayers 1..4` (nativer Split-Screen-Join via `BotDriver_ConfigureJoin`), per-Bot-Varianten; `Phase2TwoBots/FourBots.ini`; Harness `Test-Phase2MultiBot.ps1` (+ Unit-Tests); `poc/TESTPROTOKOLL-PHASE-2.md`.
+- **Phase 3:** Fleet-Orchestrierung `Start-/Stop-BotFleet.ps1` + `fleet-config.sample.json`; `poc/TESTPROTOKOLL-PHASE-3.md`.
+- **Phase 4:** engine-freie KI in `poc/botcore/botcore_ai.h` (Zielwahl, Waffenbänder, Waypoint-Fallback, Stuck-Erkennung; standalone getestet) + `bot_iAiMode = 1`-Integration im BotDriver; `Phase4Ai.ini`.
+- **Phase 5:** Population Manager (`Manage-BotPopulation.ps1`, Regeln gespiegelt und beidseitig unit-getestet in `botcore_ai.h`/`PopulationCore.ps1`): Zielpopulation, Human-Priorität, reservierte Slots.
+- **Phase 6:** Presence/Chat (gejitterte Join-/Leave-Delays, niederfrequenter Chat über `CNetwork::SendChat`, Namens-/Chat-Pools); `Phase6Presence.ini`.
+- **Phase 7:** Multi-Server-Farm (`Start-/Stop-ServerFarm.ps1`, `serverfarm-config.sample.json`, getrennte Ports/Bot-Gruppen/Populationen).
+
+Abnahmeordnung unverändert streng sequenziell: Phase 2 Smoke (2 Bots) → 4 Bots + 60-Minuten-Gate → Phase 3 → … → Phase 7; Protokolle in `poc/TESTPROTOKOLL-PHASE-2.md`, `-PHASE-3.md`, `-PHASE-4-7.md`. Alle neuen BotDriver-Symbole sind per Default inaktiv; das belegte Phase-1-Verhalten bleibt unverändert.
+
 ## Einstieg für Entwickler / KI
 
 1. `CODEX_WINDOWS_POC_REPORT.md` – aktuelle Runtime-Evidenz, Buildpfad, Hashes, Tests und offene Gates.
 2. `docs/superpowers/specs/2026-09-30-vanilla-server-bots-design.md` – Architektur und Phasenmodell.
-3. `poc/RUNBOOK.md` – reproduzierbarer Build-/Testablauf.
-4. `poc/VERIFIKATION.md` – Quellcode- und Protokollverifikation.
+3. `poc/RUNBOOK.md` – reproduzierbarer Build-/Testablauf (inkl. Phase-2–7-Kit).
+4. `poc/VERIFIKATION.md` – Quellcode- und Protokollverifikation (inkl. Phase-2/4/6-Integrationspunkte).
 5. `poc/patch/gamemp/` – GameMP-seitiger BotDriver und Retail-Allocator.
-6. `poc/scripts/` – Build-, Runtime-, Telemetrie- und Lifecycle-Tests.
+6. `poc/botcore/` – engine-freie Action-/KI-/Populationslogik mit Standalone-Tests (`make test`).
+7. `poc/scripts/` – Build-, Runtime-, Telemetrie-, Fleet-, Population- und Farm-Skripte.
 
 Lokale Retail-Kopien, Buildprodukte, Screenshots/TGAs und Runtime-Evidenz unter `.codex/` gehören nicht ins Repository.
 
