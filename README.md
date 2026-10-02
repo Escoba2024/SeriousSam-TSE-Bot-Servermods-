@@ -49,4 +49,4 @@ Lokale Retail-Kopien, Buildprodukte, Screenshots/TGAs und Runtime-Evidenz unter 
 
 ## Aktueller nächster Meilenstein
 
-Phase 2 mit zwei lokalen Bots beginnen, anschließend auf drei/vier erweitern und separat abnehmen. Aktuelle Phase-1-Evidenz im technischen Bericht und Testprotokoll.
+Phase 3 mit zwei getrennten BotClient-Prozessen beginnen. Zuerst getrennte Profile/GUIDs und stabile gleichzeitige Joins prüfen; anschließend Human+Bot-Mischbetrieb, Ressourcenlast, Serverbrowser/Player-Query und Reconnect-/Mapwechsel-Verhalten abnehmen. Phase 2 ist mit 2/3/4 lokalen Bots in einem BotClient bestanden.
