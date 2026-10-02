@@ -20,4 +20,24 @@ try {
     & "$PSScriptRoot\Test-Phase1Telemetry.ps1" -BotLog "$testDir\sample.log" -Output "$testDir\result.json" | Out-Null
 } catch { $rejectedOverwrite = $_.Exception.Message -eq 'Use a new output file.' }
 if (!$rejectedOverwrite) { throw 'Existing evidence was not protected.' }
+$active = @(for ($tick=1; $tick -le 1200; $tick++) {
+    "[BotSnapshot] tick=$tick player=0 pos=($tick,0.00,0.00) yaw=$($tick%360) health=100.0 buttons=$($tick%2) \frags_0\0"
+})
+$active | Set-Content "$testDir\active.log"
+& "$PSScriptRoot\Test-Phase1Telemetry.ps1" -BotLog "$testDir\active.log" -Output "$testDir\active.json" -SyncMinutes 1 | Out-Null
+$stalled = @($active) + @(for ($tick=1201; $tick -le 2400; $tick++) {
+    "[BotSnapshot] tick=$tick player=0 pos=(0.00,0.00,0.00) yaw=0.00 health=100.0 buttons=1 \frags_0\0"
+})
+$stalled | Set-Content "$testDir\stalled.log"
+$rejectedStall = $false
+try {
+    & "$PSScriptRoot\Test-Phase1Telemetry.ps1" -BotLog "$testDir\stalled.log" -Output "$testDir\stalled.json" -SyncMinutes 2 | Out-Null
+} catch { $rejectedStall = $_.Exception.Message -eq 'Native actions stalled in minute 2.' }
+if (!$rejectedStall) { throw 'Ticking input with frozen native actions was accepted.' }
+@($active)+@($active) | Set-Content "$testDir\duplicate.log"
+$rejectedDuplicate = $false
+try {
+    & "$PSScriptRoot\Test-Phase1Telemetry.ps1" -BotLog "$testDir\duplicate.log" -Output "$testDir\duplicate.json" -SyncMinutes 2 | Out-Null
+} catch { $rejectedDuplicate = $_.Exception.Message -eq 'Native tick counter restarted or duplicated during sync run.' }
+if (!$rejectedDuplicate) { throw 'Duplicate input ticks inflated sync duration.' }
 Write-Output "ALL TELEMETRY CHECKS PASSED ($testDir)"

@@ -25,7 +25,21 @@
 #include "Game.h"
 #include "BotDriver.h"
 #include "botcore.h"
+#include "SessionProperties.h"
+#include <cstdarg>
+#include <cstdio>
 #include <EntitiesV/PlayerWeapons.h>
+
+// Engine CTString::VPrintF shares a static buffer with the renderer. Timer
+// diagnostics must format locally, then use the synchronized console writer.
+static void BotLog(const char *format, ...) {
+  char text[2048];
+  va_list args;
+  va_start(args, format);
+  std::vsnprintf(text, sizeof(text), format, args);
+  va_end(args);
+  CPutString(text);
+}
 
 /* ------------------------------------------------------------------------ */
 /* Console symbols                                                            */
@@ -39,6 +53,7 @@ static INDEX bot_iFireTicks  = 3;       // fire pulse length in ticks (20 ticks 
 static INDEX bot_iLogEvery   = 40;      // status log every N ticks (0 = off)
 static INDEX bot_bDiagnostics = FALSE; // read-only player snapshots for Phase 1
 static INDEX bot_iTestTarget = -1;     // fixed player index, -1 = original PoC
+static INDEX bot_bTestThirdPerson = FALSE; // native view action for spectator QA
 
 void BotDriver_Init(void)
 {
@@ -50,6 +65,7 @@ void BotDriver_Init(void)
   _pShell->DeclareSymbol("user INDEX bot_iLogEvery;",   &bot_iLogEvery);
   _pShell->DeclareSymbol("user INDEX bot_bDiagnostics;", &bot_bDiagnostics);
   _pShell->DeclareSymbol("user INDEX bot_iTestTarget;", &bot_iTestTarget);
+  _pShell->DeclareSymbol("user INDEX bot_bTestThirdPerson;", &bot_bTestThirdPerson);
 }
 
 /* ------------------------------------------------------------------------ */
@@ -107,8 +123,8 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
       bs.bs_aHeading = 0.0f;
       bs.bs_iTick    = 0;
       bs.bs_aPitch   = 0.0f;
-      CPrintF("[BotDriver] local player %d (player index %d) is now bot-driven: %s\n",
-        iLP, ppls->pls_Index, ppls->pls_pcCharacter.GetNameForPrinting());
+      BotLog("[BotDriver] local player %d (player index %d) is now bot-driven: %s\n",
+        iLP, ppls->pls_Index, (const char *)ppls->pls_pcCharacter.pc_strName);
     }
     bs.bs_iTick++;
 
@@ -163,6 +179,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     UBYTE controls[sizeof(lp.lp_ubPlayerControlsState)];
     memcpy(controls, ctl_pvPlayerControls, ctl_slPlayerControlsSize);
     memset(ctl_pvPlayerControls, 0, ctl_slPlayerControlsSize);
+    _pShell->SetINDEX("ctl_b3rdPersonView", bot_bTestThirdPerson);
     ctl_ComposeActionPacket(ppls->pls_pcCharacter, pa, FALSE);
     memcpy(ctl_pvPlayerControls, controls, ctl_slPlayerControlsSize);
     if (bFire) {
@@ -175,15 +192,15 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
 
     // 5) periodic status log (position read from our own player entity)
     if (bot_iLogEvery>0 && (bs.bs_iTick%bot_iLogEvery)==0) {
-      if (bot_bDiagnostics) CPrintF("[BotInput] tick=%d forward=%.2f up=%.2f\n",
+      if (bot_bDiagnostics) BotLog("[BotInput] tick=%d forward=%.2f up=%.2f\n",
         bs.bs_iTick, pa.pa_vTranslation(3), pa.pa_vTranslation(2));
       CEntity *pen = _pNetwork->GetLocalPlayerEntity(ppls);
       if (pen!=NULL) {
         const FLOAT3D &vPos = pen->en_plPlacement.pl_PositionVector;
-        CPrintF("[BotDriver] bot%d tick=%d pos=(%.1f,%.1f,%.1f) heading=%.1f fire=%d\n",
+        BotLog("[BotDriver] bot%d tick=%d pos=(%.1f,%.1f,%.1f) heading=%.1f fire=%d\n",
           iLP, bs.bs_iTick, vPos(1), vPos(2), vPos(3), bs.bs_aHeading, bFire);
       } else {
-        CPrintF("[BotDriver] bot%d tick=%d (no entity yet) heading=%.1f fire=%d\n",
+        BotLog("[BotDriver] bot%d tick=%d (no entity yet) heading=%.1f fire=%d\n",
           iLP, bs.bs_iTick, bs.bs_aHeading, bFire);
       }
       if (bot_bDiagnostics && iLP==0) {
@@ -191,7 +208,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           CPlayerWeapons *weapons = player->GetPlayerWeapons();
           CPlacement3D eye = player->en_plViewpoint;
           eye.RelativeToAbsolute(player->en_plPlacement);
-          CPrintF("[BotWeapon] tick=%d eye=(%.2f,%.2f,%.2f) yaw=%.2f pitch=%.2f weapon=%d wanted=%d available=%d ammo=%d firing=%d rayDistance=%.2f\n",
+          BotLog("[BotWeapon] tick=%d eye=(%.2f,%.2f,%.2f) yaw=%.2f pitch=%.2f weapon=%d wanted=%d available=%d ammo=%d firing=%d rayDistance=%.2f\n",
             bs.bs_iTick, eye.pl_PositionVector(1), eye.pl_PositionVector(2),
             eye.pl_PositionVector(3), eye.pl_OrientationAngle(1), eye.pl_OrientationAngle(2),
             weapons->m_iCurrentWeapon, weapons->m_iWantedWeapon, weapons->m_iAvailableWeapons,
@@ -200,14 +217,15 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         for (INDEX iPlayer=0; iPlayer<16; iPlayer++) {
           CPlayer *player = (CPlayer *)CEntity::GetPlayerEntity(iPlayer);
           if (player==NULL) continue;
-          CTString info;
-          player->GetGameSpyPlayerInfo(iPlayer, info);
+          const CSessionProperties *session = (const CSessionProperties *)_pNetwork->GetSessionProperties();
+          const INDEX frags = session->sp_bUseFrags
+            ? player->m_psLevelStats.ps_iKills : player->m_psLevelStats.ps_iScore;
           const CPlacement3D &placement = player->en_plPlacement;
-          CPrintF("[BotSnapshot] tick=%d player=%d pos=(%.2f,%.2f,%.2f) yaw=%.2f health=%.1f buttons=%lu %s\n",
+          BotLog("[BotSnapshot] tick=%d player=%d pos=(%.2f,%.2f,%.2f) yaw=%.2f health=%.1f buttons=%lu \\frags_%d\\%d\n",
             bs.bs_iTick, iPlayer, placement.pl_PositionVector(1),
             placement.pl_PositionVector(2), placement.pl_PositionVector(3),
             placement.pl_OrientationAngle(1), player->GetHealth(),
-            (unsigned long)player->m_ulLastButtons, (const char *)info);
+            (unsigned long)player->m_ulLastButtons, iPlayer, frags);
         }
       }
     }

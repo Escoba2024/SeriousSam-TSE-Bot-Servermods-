@@ -5,8 +5,15 @@ param(
     [string]$Startup = '',
     [switch]$Observer,
     [switch]$VisibleClients,
-    [switch]$CaptureObserver
+    [switch]$CaptureObserver,
+    [ValidateRange(1,60)][int]$CaptureFps = 10,
+    [switch]$AllowReconnect,
+    [switch]$ExpectedShutdown
 )
+function Test-NativeJoined([string]$Text) {
+    $joins = [regex]::Matches($Text, '(?m)^\s*joined\s*$')
+    return $joins.Count -gt 0 -and $joins[$joins.Count - 1].Index -gt $Text.LastIndexOf('Cannot join game:')
+}
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 $retail = Join-Path $repo '.codex\retail'
@@ -15,6 +22,7 @@ $clientDir = Join-Path $retail 'TSE-BotClient'
 $observerDir = Join-Path $retail 'TSE-Observer'
 $clientWindowStyle = if ($VisibleClients) { 'Normal' } else { 'Hidden' }
 $dllPath = (Resolve-Path -LiteralPath $Dll).Path
+if ($ExpectedShutdown -and (!$Observer -or $AllowReconnect)) { throw 'ExpectedShutdown requires Observer and excludes AllowReconnect.' }
 if ($CaptureObserver -and !$Observer) { throw 'CaptureObserver requires Observer.' }
 if (Get-Process SeriousSam,DedicatedServer -ErrorAction SilentlyContinue | Where-Object {
     $_.Path -like "$retail\*"
@@ -35,6 +43,7 @@ $server = $null
 $client = $null
 $observerProcess = $null
 $loaded = $false
+$shutdownOk = $false
 $configBackups = @{}
 try {
     if ($CaptureObserver) {
@@ -48,7 +57,7 @@ try {
             $configBackups[$config] = $backup
             $settings = Get-Content -Raw -LiteralPath $config
             foreach ($setting in @{sam_bFullScreen=0; sam_iScreenSizeI=960; sam_iScreenSizeJ=540;
-                sam_iMaxFPSActive=10; sam_iMaxFPSInactive=5; sam_bPauseOnMinimize=0}.GetEnumerator()) {
+                sam_iMaxFPSActive=$CaptureFps; sam_iMaxFPSInactive=$CaptureFps; sam_bPauseOnMinimize=0}.GetEnumerator()) {
                 $settings = $settings -replace ($setting.Key+'\s*=\s*[^;]*;'), ($setting.Key+'=(INDEX)'+$setting.Value+';')
             }
             if ($directory -eq $observerDir) { $settings += "`ndem_iAnimFrame = $frameStart;" }
@@ -77,12 +86,50 @@ try {
     $client = Start-Process "$clientDir\Bin\SeriousSam.exe" -ArgumentList $args -WorkingDirectory "$clientDir\Bin" -WindowStyle $clientWindowStyle -PassThru
     $started = [DateTime]::UtcNow
     $deadline = $started.AddSeconds($Seconds)
+    $reconnects = @()
+    $observerReconnects = @()
+    $unexpectedExit = $false
     do {
         Start-Sleep -Milliseconds 250
-        if (!$client.HasExited -and !$loaded) {
-            $loaded = @((Get-Process -Id $client.Id).Modules | Where-Object {$_.ModuleName -eq 'GameMP.dll'}).Count -gt 0
+        # Retail SubMain returns TRUE (1) on normal shutdown; require the Quit
+        # and completed renderer-cleanup markers, never accept exit 1 alone.
+        $clientExited = $client.HasExited
+        if ($clientExited) { $client.WaitForExit() }
+        $normalQuit = $AllowReconnect -and $clientExited -and $client.ExitCode -eq 1 -and
+            ((Get-Content -Raw "$clientDir\SeriousSam.log") -match '(?s)-> /Quit\(\).*Renderer buffers cleared\..*CDS: mode reset')
+        if ($normalQuit) {
+            $reconnects += [ordered]@{exitedUtc=[DateTime]::UtcNow.ToString('o'); exitCode=$client.ExitCode}
+            Copy-Item "$clientDir\SeriousSam.log" "$out\client-before-reconnect-$($reconnects.Count).log"
+            Start-Sleep -Milliseconds 500
+            $udp = [Net.Sockets.UdpClient]::new()
+            try {
+                $udp.Client.ReceiveTimeout = 2000
+                $udp.Connect('127.0.0.1',25601)
+                $request = [Text.Encoding]::ASCII.GetBytes('\status\')
+                [void]$udp.Send($request,$request.Length)
+                $peer = [Net.IPEndPoint]::new([Net.IPAddress]::Any,0)
+                $reconnects[-1].serverStatus = [Text.Encoding]::ASCII.GetString($udp.Receive([ref]$peer))
+            } finally { $udp.Dispose() }
+            $client = Start-Process "$clientDir\Bin\SeriousSam.exe" -ArgumentList $args -WorkingDirectory "$clientDir\Bin" -WindowStyle $clientWindowStyle -PassThru
+            $loaded = $false
+        } elseif ($AllowReconnect -and $clientExited) {
+            $unexpectedExit = $true
         }
-    } until ($client.HasExited -or [DateTime]::UtcNow -gt $deadline)
+        if ($AllowReconnect -and $Observer -and $observerProcess.HasExited) {
+            $observerProcess.WaitForExit()
+            $observerText = Get-Content -Raw "$observerDir\SeriousSam.log"
+            if ($observerProcess.ExitCode -eq 1 -and $observerText -match '(?s)-> /Quit\(\).*Renderer buffers cleared\..*CDS: mode reset') {
+                $observerReconnects += [ordered]@{exitedUtc=[DateTime]::UtcNow.ToString('o');exitCode=1}
+                Copy-Item "$observerDir\SeriousSam.log" "$out\observer-before-reconnect-$($observerReconnects.Count).log"
+                $observerProcess = Start-Process "$observerDir\Bin\SeriousSam.exe" -ArgumentList '+connect 127.0.0.1:25600 +quickjoin' -WorkingDirectory "$observerDir\Bin" -WindowStyle $clientWindowStyle -PassThru
+            } else { $unexpectedExit = $true }
+        }
+        if (!$client.HasExited -and !$loaded) {
+            try { $loaded = @((Get-Process -Id $client.Id).Modules | Where-Object {$_.ModuleName -eq 'GameMP.dll'}).Count -gt 0 }
+            catch { if (!$client.HasExited) { throw } }
+        }
+    } until ($unexpectedExit -or (!$AllowReconnect -and !$ExpectedShutdown -and $client.HasExited) -or
+        ($ExpectedShutdown -and $client.HasExited -and $observerProcess.HasExited -and $server.HasExited) -or [DateTime]::UtcNow -gt $deadline)
     $alive = !$client.HasExited
     $exitCode = if ($alive) { $null } else { $client.ExitCode }
     $serverText = Get-Content -Raw "$serverDir\Dedicated_BotTest.log"
@@ -91,22 +138,42 @@ try {
         dll = $dllPath; sha256 = (Get-FileHash $dllPath).Hash
         startedUtc = $started.ToString('o'); elapsedSeconds = ([DateTime]::UtcNow-$started).TotalSeconds
         loaded = $loaded; alive = $alive; exitCode = $exitCode
+        serverAlive = !$server.HasExited
         crcChallenge = $serverText -match 'Sent CRC challenge'
         crcAccepted = $serverText -match 'CRC check OK'
         serverJoined = $serverText -match '(?m)^.+ joined\s*$'
         clientJoined = $clientText -match '(?m)^.+ joined\s*$'
+        controlledReconnects = $reconnects
+        observerReconnects = $observerReconnects
+        clientCurrentlyJoined = (Test-NativeJoined $clientText)
     }
     if ($Observer) {
+        $observerText = Get-Content -Raw "$observerDir\SeriousSam.log"
+        $result.observerCurrentlyJoined = (Test-NativeJoined $observerText)
         $result.observerAlive = !$observerProcess.HasExited
         $result.observerSawBotJoin = (Get-Content -Raw "$observerDir\SeriousSam.log") -match 'TSE_Bot_PoC.* joined'
         $result.crcAcceptedCount = ([regex]::Matches($serverText, 'CRC check OK')).Count
     }
+    if ($ExpectedShutdown) {
+        $quitPattern = '(?s)-> /Quit\(\).*Renderer buffers cleared\..*CDS: mode reset'
+        $result.nativeShutdown = [ordered]@{
+            botExit = if ($client.HasExited) {$client.ExitCode} else {$null}
+            observerExit = if ($observerProcess.HasExited) {$observerProcess.ExitCode} else {$null}
+            serverExit = if ($server.HasExited) {$server.ExitCode} else {$null}
+            botQuit = $clientText -match $quitPattern
+            observerQuit = (Get-Content -Raw "$observerDir\SeriousSam.log") -match $quitPattern
+        }
+        $shutdownOk = $result.nativeShutdown.botExit -eq 1 -and $result.nativeShutdown.observerExit -eq 1 -and
+            $result.nativeShutdown.serverExit -eq 0 -and $result.nativeShutdown.botQuit -and $result.nativeShutdown.observerQuit
+    }
     $result | ConvertTo-Json | Set-Content "$out\result.json"
     $result | ConvertTo-Json | Write-Output
-    if (!$alive -or !$result.crcAccepted -or !$result.serverJoined -or !$result.clientJoined) {
+    if ((!$result.clientCurrentlyJoined -and !$shutdownOk) -or (!$alive -and !$shutdownOk) -or (!$result.serverAlive -and !$shutdownOk) -or !$loaded -or !$result.crcAccepted -or !$result.serverJoined -or !$result.clientJoined) {
         throw 'Retail join/stability gate failed; evidence saved.'
     }
-    if ($Observer -and (!$result.observerAlive -or !$result.observerSawBotJoin -or $result.crcAcceptedCount -ne 2)) { throw 'Observer/bot coexistence gate failed.' }
+    $expectedCrc = 2 + $reconnects.Count + $observerReconnects.Count
+    if ($Observer -and ((!$result.observerAlive -and !$shutdownOk) -or (!$result.observerCurrentlyJoined -and !$shutdownOk) -or !$result.observerSawBotJoin -or $result.crcAcceptedCount -lt $expectedCrc)) { throw 'Observer/bot coexistence gate failed.' }
+    if ($ExpectedShutdown -and !$shutdownOk) { throw 'Normal shutdown gate failed.' }
 } finally {
     $cleanupErrors = @()
     try {

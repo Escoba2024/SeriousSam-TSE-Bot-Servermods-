@@ -448,3 +448,34 @@ Kunta-native-combat120.07s: CRC/Join/Prozessleben PASS,1200TGAs; health100 bei b
 Alle eigenen Testprozesse und UDP25600/25601 beendet; Bot-/Observer-Displayconfigs und Servermap aus Backups byte-identisch restauriert. Finale DLL weiterhin AA0D07C11D00CF92C4908AA7C0C547AC8E96B32685737469701ACF7F87A37984. Reviewer ohne neue relevante Befunde.
 Phase1 NOCH OFFEN. Neu belegt: vier normale Umwelt-Deaths/Respawns mit Actions danach. Noch offen: sichtbare Botbewegung/-rotation und Jitterpruefung, volle Schadenskonsistenz; danach Reconnect, zwei Mapwechsel, regulaerer Shutdown,10/30/60min-Sync. Phase2 nicht begonnen. Benoetigter naechster Schritt: Vanilla-Observer manuell zum Bot ausrichten; automatisierte Tastendruecke erzeugen keine beobachteten Gameplay-Actions. Die Anfrage dazu bleibt ohne Antwort.
 Der Quell-/Test-/Dokustand wird als wertvoller Zwischencheckpoint gesichert; Retailkopien, DLLs und TGAs bleiben lokal ausgeschlossen.
+
+## Konsolidierung 02.10.2026 – Mapwechsel/Reconnect und regulärer Shutdown
+
+### BESTÄTIGT
+
+- Der Lauf `.codex/evidence/phase1-final-20261002/native-mapcycle-safe-log480/` lief 480,29 s mit unverändertem Dedicated Server und Vanilla-Observer. Bot, Server und Observer waren am Ende aktiv und aktuell verbunden; CRC, Server-Join und Client-Join waren erfolgreich.
+- In demselben Lauf wurden zwei echte Session-/Map-Übergänge protokolliert: Little Trouble → Fortress → We Got Skulls'n'Bones Too. Nach jedem Übergang bestanden Bot und Observer den CRC-/Join-Pfad erneut; der Serverlog enthält insgesamt sechs `CRC check OK`-Ereignisse und jeweils den erneuten Join von `TSE_Bot_PoC`.
+- Der Bot wurde bei beiden Übergängen kontrolliert mit Retail-Exitcode 1 beendet und neu gestartet. Die unmittelbar danach abgefragte Server-Statusantwort zeigte jeweils `numplayers=0`; anschließend erfolgte der erneute reguläre Join. Damit sind kontrollierter Disconnect/Reconnect und Slotfreigabe für diesen getesteten Pfad belegt.
+- Die Bot-Actions liefen nach den Übergängen weiter. Der Botlog enthält bis zum Laufende fortlaufende Positionsänderungen, Heading-Änderungen und Fire-Pulse bis mindestens Tick 1979.
+- `native-shutdown240-windowed/result.json` belegt den regulären Shutdownpfad: Bot Exit 1, Observer Exit 1, Server Exit 0; Bot- und Observerlog enthalten `/Quit()`, Renderer-Cleanup und CDS-Reset. Damit ist der normale Prozess-/Allocator-Shutdown für diesen getesteten Pfad bestätigt.
+- Die bereits zuvor dokumentierten Gameplay-Belege bleiben gültig: Bot beschädigt und fraggt den Vanilla-Observer; auf Fortress wurden vier Bot-Deaths mit vier anschließenden Respawns und danach fortgesetzten Bewegungs-/Fire-Actions protokolliert.
+
+### TECHNISCHE SCHLUSSFOLGERUNG
+
+- Die Umstellung der Timer-Diagnostik von `CPrintF`/CTString-Formatierung auf lokales `std::vsnprintf` + `CPutString` korreliert mit stabilen 300/360/480-s-Reconnectläufen. Ein früherer Reconnectlauf des Spectator-Builds endete mit 0xC0000005. Ohne zusätzlichen Crash-Stack wird die Logging-Änderung deshalb als belastbare Stabilisierung, aber nicht als abschließend bewiesene alleinige Crashursache bewertet.
+- Das Sessionlebenszyklus-Gate ist für den konkret getesteten Ein-Bot-Pfad weitgehend erfüllt: kontrollierter Disconnect/Reconnect, Slotfreigabe, zwei Mapwechsel mit erneuter CRC/Join-Abnahme und regulärer Shutdown sind reproduziert. Die vollständige Phase-1-Freigabe folgt daraus noch nicht.
+
+### OFFEN / GATE-STATUS
+
+- Phase 1 bleibt OFFEN. Die vollständige visuelle Observer-Abnahme von Botmodell, sichtbarer Bewegung/Rotation und Jitter-/Resetfreiheit ist noch nicht belastbar abgeschlossen.
+- Die Gegenseite des Kampflebenszyklus ist noch nicht vollständig abgenommen: Bot-Schaden durch einen unveränderten Observer und eine durchgehend konsistente Server-/Observer-Healthmessung fehlen als harter Beleg.
+- Das Synchronitätsgate ist weiterhin offen. Der längste aktuelle konsolidierte Lauf beträgt 480,29 s und erfüllt damit noch nicht einmal das definierte 10-Minuten-Gate; 10/30/60 Minuten sowie die 60-Minuten-Wiederholung bleiben durchzuführen.
+- Phase 2 mit 2–4 lokalen Bots bleibt bis zum vollständigen Phase-1-Gate gesperrt.
+
+### Test-Härtung vor Repository-Sicherung
+
+- `Test-Phase1Telemetry.ps1` kann jetzt optional aktive Sync-Minuten anhand monotoner nativer Ticks sowie Positions-, Yaw- und Fire-Aktivität validieren; synthetische Stall- und Duplicate-Tick-Regressionen bestehen.
+- `Test-RetailJoin.ps1` prüft aktuellen Joinzustand, kontrollierte Reconnects, erwartete CRC-Anzahl und regulären Shutdown explizit. Der neue Join-State-Unit-Test deckte vor der Sicherung einen PowerShell-Indexfehler in der Last-Match-Auswahl auf; `$joins[-1]` wurde auf `$joins[$joins.Count - 1]` korrigiert.
+- Nach dieser Korrektur: `ALL TELEMETRY CHECKS PASSED`, `ALL NATIVE JOIN STATE CHECKS PASSED`; PowerShell-Syntax der geänderten Testskripte ist gültig.
+
+**Nächster harter Meilenstein:** visuelle Ein-Bot-Abnahme und fehlende Kampf-Gegenseite abschließen; danach 10/30/60-Minuten-Sync in dieser Reihenfolge. Erst nach bestandenem 60-Minuten-Gate Phase 2 beginnen.
