@@ -61,4 +61,12 @@ try {
     & "$PSScriptRoot\Test-Phase1Telemetry.ps1" -BotLog "$testDir\multi-active.log" -Output "$testDir\multi-missing.json" -SyncMinutes 1 -ExpectedPlayers 3 | Out-Null
 } catch { $rejectedMissing = $_.Exception.Message -eq 'Expected native player count does not match.' }
 if (!$rejectedMissing) { throw 'Missing local player was accepted.' }
+$remoteIndices = @('[BotDriver] local player 0 (player index 4) is now bot-driven: A',
+    '[BotDriver] local player 1 (player index 5) is now bot-driven: B') +
+    @($multiActive | ForEach-Object { $_.Replace('player=0','player=4').Replace('frags_0','frags_4').Replace('player=1','player=5').Replace('frags_1','frags_5') }) +
+    @('[BotSnapshot] tick=1 player=0 pos=(0,0,0) yaw=0 health=100 buttons=0 \frags_0\0')
+$remoteIndices | Set-Content "$testDir\remote-indices.log"
+& "$PSScriptRoot\Test-Phase1Telemetry.ps1" -BotLog "$testDir\remote-indices.log" -Output "$testDir\remote-indices.json" -SyncMinutes 1 -ExpectedPlayers 2 -LocalOnly | Out-Null
+$offsetResult = Get-Content "$testDir\remote-indices.json" -Raw | ConvertFrom-Json
+if (($offsetResult.players.player -join ',') -ne '4,5' -or $offsetResult.activeSyncMinutes.Count -ne 2) { throw 'Process-local network indices were not checked.' }
 Write-Output "ALL TELEMETRY CHECKS PASSED ($testDir)"

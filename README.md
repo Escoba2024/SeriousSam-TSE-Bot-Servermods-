@@ -1,52 +1,34 @@
 # Serious Sam TSE 1.07 – Vanilla Bot Clients
 
-Ziel dieses Repositories ist ein Bot-System für **Serious Sam: The Second Encounter v1.07**, bei dem der Dedicated Server und menschliche Spieler unverändert bleiben. Bots joinen über separate modifizierte Bot-Client-Prozesse als reguläre Netzwerkspieler und erzeugen ihre Eingaben ausschließlich über die normale `CPlayerAction`-/`CPlayerSource::SetAction`-Pipeline.
+Bots joinen als reguläre Netzwerkspieler über separate modifizierte BotClient-Prozesse. Dedicated Server, Engine, Entities und menschliche TSE-1.07-Clients bleiben unverändert. Eingaben entstehen ausschließlich über normale `CPlayerAction`-/`CPlayerSource::SetAction`-Pfade. Pro Prozess sind maximal vier lokale Spieler vorgesehen; acht Bots verwenden zwei getrennte Installationen.
 
-## Verbindliche Architektur
+## Nachweisbarer Stand – 12.10.2026
 
-- Primärpfad: separater Bot-Client mit GameMP-only-Anpassung.
-- Dedicated Server, `EntitiesMP.dll`, Engine und Vanilla-Observer bleiben unverändert.
-- CecilBotMod ist Referenz für spätere KI-/Navigationslogik, nicht der produktive Netzwerkspieler-Pfad.
-- Maximal vier lokale Spieler pro normalem Client-Prozess; Multiprocess-Skalierung ist eine spätere Phase.
-- Vanilla-Kompatibilität, CRC/Join und Synchronität sind harte Runtime-Gates.
+| Bereich | Stand |
+|---|---|
+| Phase 1: Retail-PoC | BESTANDEN: Build/CRC/Join, Vanilla-Observer, native Actions, Schaden/Frag, Tod/Respawn, kontrollierte Mapwechsel/Reconnects, regulärer Shutdown, eigene 10-/30-/60-Minuten-Läufe plus unabhängige Stundenwiederholung. |
+| Phase 2: vier Bots | BESTANDEN: zwei bis vier getrennte lokale Spieler; eigene Vier-Bot-Stunde auf Shadow am 08.10. mit 240 vollständigen aktiven Minutenfenstern. |
+| Phase 3: acht Bots / 2 × 4 | LOKAL BESTANDEN: eigene Recovery-Stunde, 480 aktive Bot-Minuten, vollständige native Namen/Slots, Human-Lifecycle und BotClient-Ersatz. Kurze Mehrkarten-/Failed-Join-/Hard-Exit-Szenarien separat geprüft. |
+| AutoCombat + Hinderniserholung | LOKAL BESTANDEN mit aktuellem 61DC-Kandidaten: eigene Acht-Bot-KI-Stunde, 3697.291299 s vollständige Serverabfragen, 480 vollständige 20-Hz-Minutenfenster und 69 reguläre Brush-Advances ≥ 2 m; jeder Bot mit belegtem Fortschritt. |
+| Sparsames `LocalBotRelease.ini` | Separater Lifecycle-Smoke BESTANDEN: 176.503899 s Serverabfragen. Dieser Smoke ersetzt keine weitere KI-Stunde. |
+| Population Manager | TEILWEISE: geprüfte reine Populationsregeln und Fleet-Werkzeuge; dauerhafter automatischer Supervisor und robuste Human/Bot-Erkennung offen. |
+| Navigation und Betrieb | Globale Wege, Items, Boden-/Abgrundsicherheit, weitere Waffenfamilien, Coop, öffentliche Serverbrowser-/333networks-Prüfung, 12/16 Bots, mehrere Server und 24/7 offen. |
 
-Die verbindliche Designspezifikation liegt unter:
-`docs/superpowers/specs/2026-09-30-vanilla-server-bots-design.md`.
+Der aktuell nativ qualifizierte KI-Kandidat hat DLL-SHA256 **`61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9`**. Es wird keine DLL mit diesem Repository ausgeliefert. Eine neu gebaute DLL benötigt ihre eigene Runtime-Abnahme. Die 1124 im Observer bezeugten Kampfkills gehören zum gesamten gespeicherten Lauf einschließlich Lifecycle/Vorlauf/Teardown; sie sind keine ausschließlich dem Stundenfenster zugeordnete Killzahl.
 
-## Aktueller bestätigter Runtime-Stand
+Der Ground-Lookahead-Versuch vom 11.–12.10. hat nach BotClient-Ersatz native Sync-Fehler und **keine bestandene Abnahme**. Seine Quellen und Rohbelege sind lokal privat gesichert und außerhalb dieses qualifizierten Quellreleases. Der aktuelle Bericht dokumentiert den offenen Versuch.
 
-Der Windows-/Retail-PoC läuft gegen echte TSE-1.07-Retail-Binaries. Bestätigt sind derzeit:
+## Einstieg / Übergabe an eine andere KI
 
-- reproduzierbarer x86-`GameMP.dll`-Build mit Engine-Allocator-Anbindung;
-- echter CRC-/Joinpfad gegen unveränderten Dedicated Server;
-- unveränderter Vanilla-Observer gleichzeitig verbunden;
-- native Bewegung, Rotation und Fire-Actions über den normalen Action-Composer;
-- realer Schaden und Frag des Bots gegen den Vanilla-Observer;
-- vier Bot-Death-/Respawn-Zyklen mit fortgesetzten Actions danach;
-- zwei Session-/Mapwechsel mit kontrolliertem Reconnect und erneuter CRC-/Join-Abnahme;
-- regulärer Shutdown von Bot, Observer und Dedicated Server.
+1. [Aktueller Entwicklungsstand und Belege](docs/reports/2026-10-12-shadow-development-status.md): Meilensteine, exakte Kandidaten, Messwerte, Fehlerhistorie, Einschränkungen und Prioritäten.
+2. [Lokales Release und Reproduktion](poc/LOCAL-RELEASE.md): Vorbereitung, Start/Stop, Rücknahme, SDK-Pins und eigene native Abnahme.
+3. [Phase-3-Abnahme](poc/PHASE-3-ABNAHME.md): Recovery-DLL und separate Acht-/Zweibot-Stunden.
+4. [Publikationsprüfung](docs/reports/2026-10-12-publication-validation.md): Regressionen und Prüfung aus einem separaten Checkout.
+5. [Source-Provenance](docs/reports/2026-10-12-source-verification.json) und [bereinigte Acceptance-Summary](docs/reports/2026-10-12-acceptance-summary.json): Original-/Veröffentlichungs-Hashes und genaue Prüfumfänge.
+6. [Architektur](docs/superpowers/specs/2026-09-30-vanilla-server-bots-design.md), [Runbook](poc/RUNBOOK.md), [historischer Retail-Bericht](CODEX_WINDOWS_POC_REPORT.md).
 
-**Phase 1: BESTANDEN.** Gates A–E sind für den Ein-Bot-Pfad bestätigt, einschließlich aktiver 10-/30-/60-Minuten-Sync-Prüfungen und einer unabhängigen 60-Minuten-Wiederholung. Ressourcen, Restore, Crashdiagnostik und DLL-Hashes sind dokumentiert.
+`poc/release/gamemp/` enthält die 13 erfassten GameMP-Anpassungen des aktuellen Kandidaten. Vor der Veröffentlichung stimmten sie mit dessen originalen Buildquellen überein; der vollständige Quellvergleich umfasst 32 Game-Eingaben. Die veröffentlichten Dateien tragen zusätzlich datierte GPL-Änderungshinweise. Die Provenance-Datei enthält beide Hashes und den exakten Hinweisblock; ausschließlich dessen Entfernung stellt die ursprünglichen Quellen wieder her. Der qualifizierte DLL-Hash bleibt unverändert.
 
-## Phase 2 und nächster Schritt
+`poc/botcore/` enthält enginefreie Regeln und sechs C++-Tests, `poc/scripts/` Fleet-/Release-/Build-/Audit-Werkzeuge, `tools/` die bisherigen lokalen Sicherungshüllen und älteren unabhängigen Auditoren. `poc/patch/gamemp/` und Patches `0001`–`0007` dokumentieren vorangegangene Entwicklungsstufen; für den aktuellen vollständigen Quellbuild die Release-Anleitung verwenden.
 
-**Phase 2: BESTANDEN.** Zwei, drei und vier lokale Bots in einem BotClient geprüft: eigene Profile/GUIDs, native Actions aller Spieler, Server-Slots/Frags, zehn aktive Minuten mit vier Bots und zwei Kartenwechsel mit kontrolliertem Rejoin. Server, Observer und Entities bleiben unverändert; keine neue Bot-DLL nötig. Der Telemetrieprüfer prüft jetzt jede lokale Spielerminute einzeln.
-
-Vier-Bot-Dauertest: zehn Minuten. Kontrollierter Reconnect ist bestätigt; nahtloses Gesamt-Autoreconnect bleibt unbelegt. Details und Rohbelege: `CODEX_WINDOWS_POC_REPORT.md`.
-
-Nächster Schritt: **Phase 3 – zwei BotClient-Prozesse**, zunächst mit getrennten Profilen und eigenen GUIDs; danach menschliche Clients, Ressourcen und Serverbrowser prüfen. Phase 3 ist noch nicht abgenommen.
-
-## Einstieg für Entwickler / KI
-
-1. `CODEX_WINDOWS_POC_REPORT.md` – aktuelle Runtime-Evidenz, Buildpfad, Hashes, Tests und offene Gates.
-2. `docs/superpowers/specs/2026-09-30-vanilla-server-bots-design.md` – Architektur und Phasenmodell.
-3. `poc/RUNBOOK.md` – reproduzierbarer Build-/Testablauf.
-4. `poc/VERIFIKATION.md` – Quellcode- und Protokollverifikation.
-5. `poc/patch/gamemp/` – GameMP-seitiger BotDriver und Retail-Allocator.
-6. `poc/scripts/` – Build-, Runtime-, Telemetrie- und Lifecycle-Tests.
-
-Lokale Retail-Kopien, Buildprodukte, Screenshots/TGAs und Runtime-Evidenz unter `.codex/` gehören nicht ins Repository.
-
-## Aktueller nächster Meilenstein
-
-Phase 3 mit zwei getrennten BotClient-Prozessen beginnen. Zuerst getrennte Profile/GUIDs und stabile gleichzeitige Joins prüfen; anschließend Human+Bot-Mischbetrieb, Ressourcenlast, Serverbrowser/Player-Query und Reconnect-/Mapwechsel-Verhalten abnehmen. Phase 2 ist mit 2/3/4 lokalen Bots in einem BotClient bestanden.
+Build: SE1-ModSDK `aa7869c2c2c4db0562281814d0ac3784e6b9d6f0`, Includes `94ff8cd0e63941f8601294350b616472f772ed51`, VS2022/v143/x86 und Windows SDK 10.0.19041.0. SDK und rechtmäßig vorhandene Retail-Kopien werden separat benötigt. Lokale Daten liegen unter dem ignorierten `.codex/`; Git enthält keine privaten Profile, Runtime-Rohlogs, Zugangsdaten, Retail-Binaries oder Spieldaten. [Lizenzen und Herkunft](THIRD-PARTY-NOTICES.md).

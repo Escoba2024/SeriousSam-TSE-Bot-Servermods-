@@ -1,0 +1,89 @@
+--- a/Sources/Game/BotDriver.cpp
++++ b/Sources/Game/BotDriver.cpp
+@@ -71,6 +71,32 @@
+   _botReconnect.Reset();
+ }
+ 
++static BOOL BotDriver_ReconnectAbortRequested(void)
++{
++  if (GetAsyncKeyState(VK_ESCAPE)&0x8001) { return TRUE; }
++  MSG msg;
++  if (PeekMessage(&msg, NULL, WM_QUIT, WM_QUIT, PM_NOREMOVE) ||
++      PeekMessage(&msg, NULL, WM_CLOSE, WM_CLOSE, PM_NOREMOVE)) {
++    return TRUE; // leave close/quit for the native outer message loop
++  }
++  // Consume and dispatch earlier system commands so they cannot hide SC_CLOSE.
++  while (PeekMessage(&msg, NULL, WM_SYSCOMMAND, WM_SYSCOMMAND, PM_REMOVE)) {
++    // WM_QUIT bypasses PeekMessage's filter, including a quit posted while
++    // dispatching an earlier system command. Preserve its original exit code.
++    if (msg.message==WM_QUIT) {
++      PostQuitMessage((int)msg.wParam);
++      return TRUE;
++    }
++    if ((msg.wParam&0xFFF0)==SC_CLOSE) {
++      PostMessage(msg.hwnd, msg.message, msg.wParam, msg.lParam);
++      return TRUE;
++    }
++    TranslateMessage(&msg);
++    DispatchMessage(&msg);
++  }
++  return FALSE;
++}
++
+ BOOL BotDriver_HandleReconnect(CGame *pgame)
+ {
+   if (!bot_bEnabled || pgame==NULL) {
+@@ -88,16 +114,33 @@
+       gameOn && _pNetwork->IsDisconnected(), _strBotReconnectAddress.Length()>0)) {
+     return TRUE;
+   }
+-  BotLog("[BotReconnect] attempt address=%s\n", (const char *)_strBotReconnectAddress);
+-  BOOL joined=FALSE;
+-  try {
+-    joined=pgame->JoinGame(CNetworkSession(_strBotReconnectAddress));
+-  } catch (...) {
+-    _botReconnect.Reset();
+-    throw; // preserve the failure; never leave a permanently in-flight retry
+-  }
+-  _botReconnect.OnResult(_pTimer->GetHighPrecisionTimer().GetSeconds(), joined!=FALSE);
+-  BotLog("[BotReconnect] result=%s\n", joined ? "joined" : "failed");
++  do {
++    BotLog("[BotReconnect] attempt address=%s\n", (const char *)_strBotReconnectAddress);
++    BOOL joined=FALSE;
++    try {
++      joined=pgame->JoinGame(CNetworkSession(_strBotReconnectAddress));
++    } catch (...) {
++      _botReconnect.Reset();
++      throw; // preserve the failure; never leave a permanently in-flight retry
++    }
++    _botReconnect.OnResult(_pTimer->GetHighPrecisionTimer().GetSeconds(), joined!=FALSE);
++    BotLog("[BotReconnect] result=%s\n", joined ? "joined" : "failed");
++    if (joined) { return TRUE; }
++    // Returning with gameOn=false makes the retail EXE stop GameMainLoop.
++    // Keep recovery on its existing main-thread stack, never on the timer.
++    while (_botReconnect.HasPending()) {
++      if (!bot_bEnabled || _strBotReconnectAddress!=pgame->gam_strJoinAddress ||
++          BotDriver_ReconnectAbortRequested()) {
++        _botReconnect.Reset();
++        return TRUE;
++      }
++      // PeekMessage may synchronously deliver a StopGame cancellation.
++      if (!_botReconnect.HasPending()) { return TRUE; }
++      if (_botReconnect.Poll(_pTimer->GetHighPrecisionTimer().GetSeconds(),
++          TRUE, FALSE, FALSE, FALSE, FALSE, TRUE)) { break; }
++      Sleep(50);
++    }
++  } while (_botReconnect.HasPending());
+   return TRUE;
+ }
+ 
+--- a/Sources/Game/bot_reconnect.h
++++ b/Sources/Game/bot_reconnect.h
+@@ -13,6 +13,7 @@
+   double due_ = 0;
+   double delay_ = 2;
+ public:
++  bool HasPending() const { return pending_; }
+   void Reset() { pending_ = joining_ = internalStop_ = false; due_ = 0; delay_ = 2; }
+   void OnStop() {
+     if (joining_ && internalStop_) { internalStop_ = false; return; }

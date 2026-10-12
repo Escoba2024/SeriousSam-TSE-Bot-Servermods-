@@ -1,0 +1,31 @@
+# Private runtime, evidence, builds and task scratch
+.codex/
+.superpowers/
+__pycache__/
+*.py[cod]
+*.dll
+*.exe
+*.lib
+*.obj
+*.pdb
+*.ilk
+*.gro
+*.tga
+*.zip
+*.bundle
+*.plr
+*.guid
+*.gms
+*.RPT
+# Unqualified ground experiment is retained locally and in the private backup.
+/poc/ground/
+/docs/superpowers/plans/2026-10-11-ground-lookahead.md
+/docs/superpowers/specs/2026-10-11-ground-lookahead.md
+# Historical task prompts / duplicate README draft stay private.
+/CODEX_CONTINUE_ABI.md
+/CODEX_SHADOW_HANDOFF_2026-10-08.md
+/CODEX_TASK.txt
+/_codex_windows_poc_task.md
+/SHADOW-MIGRATION-README.txt
+/MIGRATION-RUNTIME-NOTES.txt
+/poc/REPO-README.md

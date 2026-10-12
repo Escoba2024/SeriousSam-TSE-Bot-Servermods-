@@ -1,0 +1,188 @@
+diff --git a/Sources/Game/BotDriver.cpp b/Sources/Game/BotDriver.cpp
+index 082569f..a4576a3 100644
+--- a/Sources/Game/BotDriver.cpp
++++ b/Sources/Game/BotDriver.cpp
+@@ -28,6 +28,7 @@
+ #include "bot_reconnect.h"
+ #include "bot_combat.h"
+ #include "bot_weapon_input.h"
++#include "bot_navigation.h"
+ #include <Engine/World/WorldRayCasting.h>
+ #include "SessionProperties.h"
+ #include <cstdarg>
+@@ -60,12 +61,17 @@ static INDEX bot_iTestTarget = -1;     // fixed player index, -1 = original PoC
+ static INDEX bot_bTestThirdPerson = FALSE; // native view action for spectator QA
+ static INDEX bot_bAutoCombat = FALSE; // optional deathmatch decisions
+ static INDEX bot_bCombatSkipLocals = TRUE; // siblings share one bot client
++static INDEX bot_bObstacleAvoidance = FALSE; // optional reactive movement recovery
+ 
+ static botcore::Reconnect _botReconnect;
+ static CTString _strBotReconnectAddress;
++static volatile LONG _botNavigationResetRequested=FALSE;
+ 
+ void BotDriver_StopGame(void)
+ {
++  // StopGame can run on the main thread while the timer owns slot state.
++  // Publish only the request; consume it before the next bot action.
++  InterlockedExchange(&_botNavigationResetRequested,TRUE);
+   // JoinGame itself calls StopGame: preserve only that in-flight recovery.
+   // An explicit stop between attempts cancels pending retries.
+   _botReconnect.OnStop();
+@@ -162,6 +168,7 @@ void BotDriver_Init(void)
+   _pShell->DeclareSymbol("user INDEX bot_bTestThirdPerson;", &bot_bTestThirdPerson);
+   _pShell->DeclareSymbol("user INDEX bot_bAutoCombat;", &bot_bAutoCombat);
+   _pShell->DeclareSymbol("user INDEX bot_bCombatSkipLocals;", &bot_bCombatSkipLocals);
++  _pShell->DeclareSymbol("user INDEX bot_bObstacleAvoidance;", &bot_bObstacleAvoidance);
+ }
+ 
+ /* ------------------------------------------------------------------------ */
+@@ -175,12 +182,22 @@ struct SBotState {
+   ANGLE  bs_aPitch;
+   INDEX  bs_iCombatTarget;
+   botcore::CombatWeaponInput bs_weaponInput;
++  botcore::ObstacleRecovery bs_navigation;
++  CPlayer *bs_navPlayer;
+ };
+ 
+ static SBotState _absBots[4] = {
+   {NULL, 0.0f, 0}, {NULL, 0.0f, 0}, {NULL, 0.0f, 0}, {NULL, 0.0f, 0},
+ };
+ 
++static void BotResetNavigation(void)
++{
++  for (INDEX slot=0; slot<4; ++slot) {
++    _absBots[slot].bs_navigation.Reset();
++    _absBots[slot].bs_navPlayer=NULL;
++  }
++}
++
+ static CPlacement3D BotCombatEye(CPlayer *player)
+ {
+   CPlacement3D eye=player->en_plViewpoint;
+@@ -216,13 +233,30 @@ static BOOL BotCombatVisible(CPlayer *player, CPlayer *target)
+   return ray.cr_penHit==NULL || ray.cr_penHit==target;
+ }
+ 
++static FLOAT BotObstacleDistance(CPlayer *player, FLOAT yaw, INDEX *hitType=NULL)
++{
++  FLOAT3D origin=player->en_plPlacement.pl_PositionVector;
++  origin(2)+=0.8f;
++  const double radians=yaw*3.14159265358979323846/180.0;
++  const FLOAT3D direction((FLOAT)-std::sin(radians),0,(FLOAT)-std::cos(radians));
++  CCastRay ray(player,origin,origin+direction*3.0f);
++  ray.cr_bAllowOverHit=FALSE;
++  ray.cr_bPhysical=TRUE;
++  ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;
++  ray.Cast(player->GetWorld());
++  if (hitType!=NULL) *hitType=ray.cr_penHit==NULL?0:(INDEX)ray.cr_penHit->GetRenderType();
++  return ray.cr_penHit==NULL?3.0f:Clamp(ray.cr_fHitDistance,0.0f,3.0f);
++}
++
+ /* ------------------------------------------------------------------------ */
+ /* The bot driver tick                                                        */
+ /* ------------------------------------------------------------------------ */
+ 
+ BOOL BotDriver_HandleTimer(CGame *pgame)
+ {
++  if (InterlockedExchange(&_botNavigationResetRequested,FALSE)) BotResetNavigation();
+   if (!bot_bEnabled || pgame==NULL || !pgame->gm_bGameOn) {
++    BotResetNavigation();
+     return FALSE;
+   }
+ 
+@@ -238,17 +272,19 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+ 
+   // for all possible local players (hard limit 4 - see NET_MAXLOCALPLAYERS)
+   for (INDEX iLP=0; iLP<4; iLP++) {
++    SBotState &bs = _absBots[iLP];
+     CLocalPlayer &lp = pgame->gm_lpLocalPlayers[iLP];
+     CPlayerSource *ppls = lp.lp_pplsPlayerSource;
+ 
+     // if this local player exists
+     if (ppls==NULL) {
++      bs.bs_navigation.Reset(); bs.bs_navPlayer=NULL;
+       continue;
+     }
+     CPlayer *localInput = (CPlayer *)CEntity::GetPlayerEntity(ppls->pls_Index);
+-    if (localInput==NULL) continue;
+-
+-    SBotState &bs = _absBots[iLP];
++    if (localInput==NULL) {
++      bs.bs_navigation.Reset(); bs.bs_navPlayer=NULL; continue;
++    }
+ 
+     // reset state when a new player source appears (join / rejoin / map change)
+     if (bs.bs_ppls != ppls) {
+@@ -258,6 +294,8 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+       bs.bs_aPitch   = 0.0f;
+       bs.bs_iCombatTarget = -1;
+       bs.bs_weaponInput.Reset();
++      bs.bs_navigation.Reset();
++      bs.bs_navPlayer=NULL;
+       BotLog("[BotDriver] local player %d (player index %d) is now bot-driven: %s\n",
+         iLP, ppls->pls_Index, (const char *)ppls->pls_pcCharacter.pc_strName);
+     }
+@@ -274,11 +312,14 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+     const BOOL automatic=bot_bAutoCombat && bot_iTestTarget<0;
+     INDEX combatWeapon=0;
+     ULONG combatSelect=0;
++    BOOL combatDeathmatch=FALSE;
++    BOOL combatHold=bot_fMoveFactor<=0;
+     if (automatic) {
+       testAimReady=FALSE;
+       const CSessionProperties *session=(const CSessionProperties *)_pNetwork->GetSessionProperties();
+       const BOOL deathmatch=session->sp_gmGameMode==CSessionProperties::GM_SCOREMATCH ||
+         session->sp_gmGameMode==CSessionProperties::GM_FRAGMATCH;
++      combatDeathmatch=deathmatch;
+       botcore::CombatDecision decision={-1,1,0,0,0,false};
+       INDEX visible=0;
+       if (player!=NULL && deathmatch && player->GetHealth()>0 && player->m_penWeapons!=NULL) {
+@@ -310,6 +351,9 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+         moveFactor=(FLOAT)decision.moveFactor;
+         testAimReady=decision.fireAllowed;
+         combatWeapon=decision.weapon;
++        const FLOAT distance=(BotCombatEye(target).pl_PositionVector-
++          BotCombatEye(player).pl_PositionVector).Length();
++        combatHold=combatHold || distance<=((combatWeapon==1 || combatWeapon==10)?1.5f:8.0f);
+         CPlayerWeapons *weapons=player->GetPlayerWeapons();
+         combatSelect=bs.bs_weaponInput.Poll(bs.bs_iTick,combatWeapon,
+           weapons->m_iWantedWeapon,player->m_ulLastButtons);
+@@ -352,6 +396,38 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+       bs.bs_aHeading += bot_fYawSpeed*fTick;
+     }
+ 
++    if (bot_bObstacleAvoidance && automatic && combatDeathmatch && player!=NULL) {
++      if (bs.bs_navPlayer!=player) { bs.bs_navigation.Reset(); bs.bs_navPlayer=player; }
++      const BOOL alive=player->GetHealth()>0;
++      const FLOAT yaw=BotCombatEye(player).pl_OrientationAngle(1);
++      FLOAT front=3,left=3,right=3;
++      INDEX frontHitType=0;
++      if (alive && !combatHold) {
++        front=BotObstacleDistance(player,yaw,&frontHitType);
++        left=BotObstacleDistance(player,yaw+60.0f);
++        right=BotObstacleDistance(player,yaw-60.0f);
++      }
++      const FLOAT3D &position=player->en_plPlacement.pl_PositionVector;
++      const botcore::NavigationInput input={position(1),position(3),yaw,
++        std::fabs(bot_fYawSpeed)*fTick,moveFactor,front,left,right,
++        alive!=FALSE,combatHold!=FALSE,(iLP&1)?-1:1,
++        Clamp(bot_fMoveFactor,0.0f,1.0f)};
++      const botcore::NavigationDecision navigation=bs.bs_navigation.Update(input);
++      if (navigation.overrideInput) {
++        bs.bs_aHeading=player->m_aLastRotation(1)+(FLOAT)navigation.yawDelta;
++        bs.bs_aPitch=player->m_aLastRotation(2);
++        moveFactor=(FLOAT)navigation.forward;
++        testAimReady=FALSE; // recovery heading is movement, not combat aim
++      }
++      if (navigation.began || navigation.finished ||
++          (bot_iLogEvery>0 && bs.bs_iTick%bot_iLogEvery==0)) {
++        BotLog("[BotNavigation] local=%d tick=%d alive=%d hold=%d requested=%.2f front=%.2f hitType=%d left=%.2f right=%.2f active=%d phase=%d reason=%d began=%d finished=%d yaw=%.2f delta=%.2f forward=%.2f pos=(%.2f,%.2f,%.2f)\n",
++          iLP,bs.bs_iTick,alive,combatHold,input.forward,front,frontHitType,left,right,navigation.active,
++          (int)navigation.phase,(int)navigation.reason,navigation.began,navigation.finished,
++          yaw,navigation.yawDelta,moveFactor,position(1),position(2),position(3));
++      }
++    } else { bs.bs_navigation.Reset(); bs.bs_navPlayer=NULL; }
++
+     // 2) periodic fire pulse (with a small per-bot phase offset)
+     BOOL bFire = FALSE;
+     if (ctPeriodTicks>0 && ctFireTicks>0) {

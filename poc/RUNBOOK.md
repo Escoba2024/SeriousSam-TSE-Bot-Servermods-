@@ -266,3 +266,134 @@ Der Join-Test konfiguriert die lokale Spielerzahl nicht selbst. Zusätzlich wäh
 Kartenfolge Little Trouble (1 Minute), Fortress (2 Minuten), Skulls (ohne Zeitlimit), Fraglimit 0. `-AllowReconnect` archiviert nur kontrollierte native Quits mit normalem Retail-Exit 1 und vollständigem Renderer-Cleanup, startet dieselbe CLI neu und erfasst die Slotfreigabe. Bei Autojoin-Timeout `/Quit()` in der nativen Spielkonsole; kein Crash als Rejoin-PASS. Am Ende alle vier Spieler und den Vanilla-Observer erneut abnehmen; Actions für jeden Spieler auf jeder Map getrennt auswerten. Das automatische Wiederverbinden des Observers funktionierte im Phase-2-Lauf nicht. Abschließend sämtliche Testkonfigurationen/Profile bytegleich restaurieren und Prozesse/Ports/Crashdiagnostik prüfen.
 
 Lokale ausgeführte Sequenzen samt Backups: `.codex/run-phase2-smokes.ps1`, `.codex/run-phase2-mapcycle.ps1`, `.codex/evidence/phase2-20261002/`. Phase 3 beginnt erst nach dieser Vier-Spieler-Abnahme.
+# Zusaetzliche begrenzte Recovery-Gates (2026-10-10)
+
+Der neue inkrementelle Patch `patch/0003-gamemp-reconnect-transaction.patch`
+setzt den bereits gebauten Reconnect-Stand aus `0002` voraus. Pruefen gegen
+den separaten SDK-Build vom 2026-10-09:
+
+```powershell
+git apply --check --directory='.codex/shadow-20261009-reconnect-build' poc/patch/0003-gamemp-reconnect-transaction.patch
+```
+
+`Test-RetailFleet.ps1 -FailedJoinRecovery -MapCycle -ControlledObserverRejoin
+-Seconds 330 -SyncMinutes 0` haelt ausschliesslich den eigenen isolierten
+DedicatedServer beim zweiten nativen Rundenstart kurz an. Beide BotClients
+muessen einen echten fehlgeschlagenen Join und danach erfolgreichen Rejoin
+mit unveraenderten Prozessidentitaeten zeigen. Drei Karten, acht Namen/GUIDs,
+CRC und aktive Aktionen bleiben verpflichtend. Timeout-Ausnahmen gelten nur
+fuer den direkten nativen Fehlertext eines anschliessend reparierten Join.
+Der Prozess wird im finally fortgesetzt; der Pause-Helper ist begrenzt.
+
+`Test-RetailFleet.ps1 -Lifecycle -UnexpectedExitRecovery -Seconds 120
+-SyncMinutes 1` beendet den verifizierten eigenen BotClient B hart. Der
+Testcontroller erkennt dessen Ende, wartet auf vier reale verbleibende Slots,
+bei einem harten Ende bis maximal330s fuer die native Server-Timeoutfreigabe,
+startet B mit dem vorhandenen Start-BotFleet erneut und verlangt acht reale
+Spieler sowie mindestens eine volle aktive Minute fuer jeden Bot. Das alte
+Log wird separat archiviert; der harte Exit gilt nicht als normaler Shutdown.
+Dieser begrenzte Ablauf installiert keinen dauerhaften Fleet-Supervisor.
+
+Beide Aufrufe benoetigen ausserdem explizit `-Dll <separate BotClient-DLL>` und
+`-Evidence <neues Verzeichnis>`. Die lokale Preservation-Huelle
+`tools/run-shadow-fleet.ps1` sichert und restauriert die komplette Inventur
+der fuenf isolierten Kopien. Ergebnis und noch offene Langzeit-Gates stehen
+in `docs/reports/2026-10-12-shadow-development-status.md`; einen PASS nur nach den jeweiligen nativen
+Abschlussdateien und der unabhaengigen Auditdatei uebernehmen.
+
+## Lokale Acht-/Zweibot-Stundenabnahme (10.10.2026)
+
+Beide Stunden-Gates sind bestanden. Messwerte, Buildhash und Umfang stehen
+in `PHASE-3-ABNAHME.md`; lokale Rohdaten unter
+`.codex/evidence/shadow-20261010/completion/`. Die historische
+Vier-Bot-Stunde gehört weiterhin zum alten Build `339058AD…`.
+
+Für Wiederholungen PowerShell 7 verwenden, vom Repository-Root aus arbeiten
+und neue Evidence-Verzeichnisse wählen. Keine parallelen Tests in den fünf
+isolierten Kopien starten. Der explizite `-Dll`-Parameter verhindert, dass
+der Zweibot-Wrapper seine ältere Default-DLL verwendet.
+
+Erstes Terminal, Acht-Bot-Lauf mit normalen Human-/Lifecycle-Schritten:
+
+```powershell
+pwsh -NoProfile -File tools/run-shadow-fleet.ps1 -Evidence .codex/evidence/repeat-completion/eight -Seconds 3700 -SyncMinutes 60 -Lifecycle -Dll .codex/shadow-20261010-reconnect-final/Sources/Bin/vs2022.Release_TSE107/GameMP.dll
+```
+
+Während dieser Lauf aktiv ist, im zweiten Terminal die tatsächlich wirksame
+Serverkonfiguration sichern. Nach dem Restore stehen dort wieder die
+Ausgangsdateien; eine spätere Erfassung ist kein Ersatz:
+
+```powershell
+$captureRoot = '.codex/evidence/repeat-completion'
+$candidate = '.codex/shadow-20261010-reconnect-final/Sources/Bin/vs2022.Release_TSE107/GameMP.dll'
+$configuration = [ordered]@{
+    logicalProcessors = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
+    dllSha256 = (Get-FileHash -LiteralPath $candidate).Hash
+    serverInit = Get-Content -LiteralPath .codex/retail/TSE-Server/Scripts/Dedicated/BotTest/init.ini -Raw
+    serverRound = Get-Content -LiteralPath .codex/retail/TSE-Server/Scripts/Dedicated/BotTest/1_begin.ini -Raw
+    capturedUtc = [datetime]::UtcNow.ToString('o')
+}
+$configuration | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath "$captureRoot/effective-server-config.json" -Encoding utf8
+```
+
+Nach bestandenem nativen Lauf und vollständigem Restore den unabhängigen
+Basisaudit und Stundenaudit ausführen. Der Stundenauditor ist auf diesen
+finalen DLL-Kandidaten und den dokumentierten Acht-CPU-Host zugeschnitten;
+auf anderer Hardware müssen diese Voraussetzungen erneut bewertet werden.
+
+```powershell
+python tools/audit-shadow-fleet.py .codex/evidence/repeat-completion/eight
+python tools/audit-shadow-hour.py .codex/evidence/repeat-completion/eight
+```
+
+Erst danach den separaten Zweibot-Lauf starten und unabhängig auswerten:
+
+```powershell
+pwsh -NoProfile -File tools/run-shadow-validation.ps1 -Mode Soak -Counts 2 -Seconds 3700 -SyncMinutes 60 -Evidence .codex/evidence/repeat-completion/two -Dll .codex/shadow-20261010-reconnect-final/Sources/Bin/vs2022.Release_TSE107/GameMP.dll
+python tools/audit-shadow-two-hour.py .codex/evidence/repeat-completion/two
+```
+
+Die Akzeptanz verlangt native Ergebnisse, eindeutige Profile/GUIDs, volle
+Spielernamen/Slots, CRC, jede aktive Bot-Minute, Ressourcen und Restore.
+`audit-shadow-hour.py` verlangt zusätzlich echte Schluss-Stop-States und
+prüft alle acht replizierten Spieler in denselben frühen A-Tickfenstern.
+Das vor der langen Telemetrie erfasste Prefix muss diese Stunde selbst
+belegen; spätere Logaktivität darf fehlende Messdaten nicht ersetzen.
+Eine unvollständige Capture-Randzeile wird ausgeschlossen, nicht repariert;
+im geprüften Lauf enthalten alle ausgewählten Fenster 1200 vollständige
+Snapshots. Einzelne Snapshots haben keine UTC-Zeitstempel.
+
+Der Zweibot-Test belegt Stabilität und verwendet den vorhandenen harten
+Teardown von `Test-RetailJoin`; kein regulärer Shutdown-PASS daraus.
+Das Stunden-Gate auf Fortress ist getrennt von den kurzen Drei-Karten-,
+Failed-Join- und Hard-Exit-Szenarien. KI/Navigation, externes Hosting,
+nahtloser Observer-Rejoin und permanenter Supervisor bleiben eigene Gates.
+
+
+## Optionaler Auto-Kampf nach der Netzwerkabnahme
+
+Build 28A32C64… integriert den vorhandenen Botcore für automatische sichtbare Deathmatch-Gegner, Munition und korrekt gepulste native Waffengruppen. Reproduktion, Symbole, Testumfang und Grenzen stehen in `poc/AUTO-COMBAT.md`. `Build-CombatGameMP.ps1` setzt den erhaltenen Recovery-Build voraus und baut separat mit Patch 0004. Der neue Combat-Auditor ist `poc/scripts/Test-AutoCombatEvidence.py`; alle Runtime-Tests nacheinander mit Preservation-Hülle ausführen. Die Drei-Minuten-Abnahme und beiden 60-s-Varianten übertragen keine ältere Stundenabnahme auf diese neue DLL. Navigation und weitere native Waffen-/Sicht-/Koop-Fixtures bleiben offen.
+
+## Optionale reaktive Hinderniserholung (10.10.2026)
+
+Build `1A38F0A4…` ergänzt den vorhandenen StuckDetector um drei native
+3-m-Kollisionsstrahlen und begrenzte Turn/Advance-Aktionen. Der optionale
+Schalter `bot_bObstacleAvoidance` bleibt standardmäßig aus. Er benötigt
+automatischen Score-/Fragmatch-Kampf und keinen festen Testgegner.
+`Build-ObstacleGameMP.ps1` verwendet den erhaltenen Auto-Combat-Build als
+Basis und Patch 0005 in einem neuen SDK-Verzeichnis.
+
+Verhalten, genaue Symbole, SHA256, Bau- und Testbefehle stehen in
+`poc/OBSTACLE-RECOVERY.md`. `Test-ObstacleEvidence.py` verlangt tatsächlichen
+Wandkontakt und mindestens 2 m Fortschritt im selben abgeschlossenen
+Ausweichversuch je Bot, lückenlose native Eingaben, Zeitgrenzen und weiterhin
+wirksamen Kampf. Native Tests in den Retail-Kopien weiter nacheinander mit
+Preservation-Hülle ausführen. Die Erholung prüft keinen Boden oder Abgrund;
+globale Routen, Item-Wege, Coop und Stunden-/Acht-Bot-Prüfungen dieser DLL
+bleiben offen. Der frühere Navigation-Hinweis im Combat-Nachtrag beschreibt
+den damaligen Build ohne diese optionale Erweiterung.
+
+
+## Lokales Acht-Bot-KI-Release (11.10.2026)
+
+Der aktuelle61DC-Kandidat ist mit AutoCombat und reaktiver Hinderniserholung in einer frischen Acht-Bot-Stunde abgenommen. Der produktive sparse Startup ist separat nativ geprüft. Vorbereitung, Start, Stop, Rücknahme, Quellbuild und erneute Abnahme stehen in `poc/LOCAL-RELEASE.md`; exakte Ergebnisse in `.codex/evidence/shadow-20261010/local-release/report.md`. Frühere Ergebnisse anderer DLLs bleiben getrennte historische Belege. Die Testkopien wurden abschließend zurückgenommen; ein Betriebsstart erfordert eine neue Vorbereitung. Native Tests weiterhin einzeln mit Sicherungs-/Rücknahmehülle ausführen.

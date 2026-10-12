@@ -3,12 +3,27 @@ param(
     [Parameter(Mandatory=$true)][string]$Output,
     [switch]$QueryServer,
     [int]$SyncMinutes = 0,
-    [ValidateRange(1,4)][int]$ExpectedPlayers = 1
+    [ValidateRange(1,4)][int]$ExpectedPlayers = 1,
+    [switch]$LocalOnly
 )
 $ErrorActionPreference = 'Stop'
 if (Test-Path -LiteralPath $Output) { throw 'Use a new output file.' }
 $rejected = 0
-$samples = @(foreach ($line in Get-Content -LiteralPath $BotLog) {
+$lines = Get-Content -LiteralPath $BotLog
+$localIndices = @{}
+if ($LocalOnly) {
+    foreach ($line in $lines) {
+        if ($line -match '^\[BotDriver\] local player (\d+) \(player index (\d+)\) is now bot-driven:') {
+            $localIndices[[int]$Matches[1]] = [int]$Matches[2]
+        }
+    }
+    if ($localIndices.Count -ne $ExpectedPlayers -or
+        @($localIndices.Values | Sort-Object -Unique).Count -ne $ExpectedPlayers -or
+        (($localIndices.Keys | Sort-Object) -join ',') -ne ((0..($ExpectedPlayers-1)) -join ',')) {
+        throw 'Expected local player registrations do not match.'
+    }
+}
+$samples = @(foreach ($line in $lines) {
     if ($line -match '^\[BotSnapshot\] tick=(\d+) player=(\d+) pos=\(([-\d.]+),([-\d.]+),([-\d.]+)\) yaw=([-\d.]+) health=([-\d.]+) buttons=(\d+) (.+)$') {
         $sample = [pscustomobject]@{
             tick=[int]$Matches[1]; player=[int]$Matches[2]
@@ -16,6 +31,7 @@ $samples = @(foreach ($line in Get-Content -LiteralPath $BotLog) {
             yaw=[double]$Matches[6]; health=[double]$Matches[7]
             buttons=[uint32]$Matches[8]; info=$Matches[9]
         }
+        if ($LocalOnly -and $localIndices.Values -notcontains $sample.player) { continue }
         if (!($sample.info -match ('\\frags_'+$sample.player+'\\(-?\d+)'))) {
             $rejected++
             continue
@@ -55,7 +71,7 @@ $result = [ordered]@{
 if ($SyncMinutes -gt 0) {
     if ($rejected) { throw 'Malformed snapshots during sync run.' }
     if ($players.Count -ne $ExpectedPlayers) { throw 'Expected native player count does not match.' }
-    $windows = @(foreach ($playerIndex in 0..($ExpectedPlayers-1)) {
+    $windows = @(foreach ($playerIndex in ($players.player | Sort-Object)) {
       $rows = @($samples | Where-Object player -eq $playerIndex)
       if ($rows.Count -lt $SyncMinutes*1200) { throw 'Insufficient active native ticks for requested sync duration.' }
       for ($i=1; $i -lt $rows.Count; $i++) {

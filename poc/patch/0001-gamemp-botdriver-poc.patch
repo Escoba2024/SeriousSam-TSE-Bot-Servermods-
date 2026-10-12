@@ -1,0 +1,251 @@
+diff --git a/Sources/GameMP/BotDriver.cpp b/Sources/GameMP/BotDriver.cpp
+new file mode 100644
+index 0000000..6749237
+--- /dev/null
++++ b/Sources/GameMP/BotDriver.cpp
+@@ -0,0 +1,146 @@
++/* A "Pfad D" proof-of-concept bot driver for Serious Sam: TSE.
++ * (sample code for the vanilla-compatible bot client; see VERIFIKATION.md)
++ *
++ * Behavior (PoC, no AI): every local player walks forward at full speed,
++ * slowly rotates its heading and fires in periodic pulses. All state that
++ * the server and other clients see is produced exclusively through the
++ * regular action pipeline:
++ *
++ *   CPlayerSource::SetAction()  ->  WriteActionPacket()  ->  (network)
++ *   ->  CPlayerBuffer / MSG_SEQ_ALLACTIONS  ->  CPlayerTarget::ApplyActionPacket()
++ *   ->  CPlayerEntity::ApplyAction()
++ *
++ * Conventions replicated from the vanilla code (see Player.es):
++ *  - pa_vTranslation is a VELOCITY: full forward = -plr_fSpeedForward (z<0!)
++ *  - pa_aRotation / pa_aViewRotation are ABSOLUTE accumulated angles
++ *    (relative to the spawn orientation) - they must NOT wrap, because
++ *    CPlayerEntity::ApplyAction() computes deltas against the last action.
++ *  - pa_ulButtons uses the PLACT_* flags of Player.es (bit 0 = fire).
++ *  - pa_llCreated is stamped by CPlayerSource::SetAction() itself.
++ */
++
++#include "StdAfx.h"
++#include <Engine/Network/Network.h>
++#include <Engine/Entities/Entity.h>
++#include "Game.h"
++#include "BotDriver.h"
++
++/* ------------------------------------------------------------------------ */
++/* Console symbols                                                            */
++/* ------------------------------------------------------------------------ */
++
++static INDEX bot_bEnabled    = FALSE;   // master switch
++static FLOAT bot_fYawSpeed   = 45.0f;   // [deg/s] heading change rate (0 = straight)
++static FLOAT bot_fMoveFactor = 1.0f;    // [0..1] fraction of plr_fSpeedForward
++static FLOAT bot_fFirePeriod = 1.0f;    // [s] fire pulse period (0 = never fire)
++static INDEX bot_iFireTicks  = 3;       // fire pulse length in ticks (20 ticks = 1 s)
++static INDEX bot_iLogEvery   = 40;      // status log every N ticks (0 = off)
++
++void BotDriver_Init(void)
++{
++  _pShell->DeclareSymbol("user INDEX bot_bEnabled;",    &bot_bEnabled);
++  _pShell->DeclareSymbol("user FLOAT bot_fYawSpeed;",   &bot_fYawSpeed);
++  _pShell->DeclareSymbol("user FLOAT bot_fMoveFactor;", &bot_fMoveFactor);
++  _pShell->DeclareSymbol("user FLOAT bot_fFirePeriod;", &bot_fFirePeriod);
++  _pShell->DeclareSymbol("user INDEX bot_iFireTicks;",  &bot_iFireTicks);
++  _pShell->DeclareSymbol("user INDEX bot_iLogEvery;",   &bot_iLogEvery);
++}
++
++/* ------------------------------------------------------------------------ */
++/* Per-local-player bot state                                                 */
++/* ------------------------------------------------------------------------ */
++
++struct SBotState {
++  CPlayerSource *bs_ppls;     // player source this state belongs to
++  ANGLE  bs_aHeading;         // accumulated heading (relative to spawn direction)
++  INDEX  bs_iTick;            // ticks since (re)join
++};
++
++static SBotState _absBots[4] = {
++  {NULL, 0.0f, 0}, {NULL, 0.0f, 0}, {NULL, 0.0f, 0}, {NULL, 0.0f, 0},
++};
++
++/* ------------------------------------------------------------------------ */
++/* The bot driver tick                                                        */
++/* ------------------------------------------------------------------------ */
++
++BOOL BotDriver_HandleTimer(CGame *pgame)
++{
++  if (!bot_bEnabled || pgame==NULL || !pgame->gm_bGameOn) {
++    return FALSE;
++  }
++
++  const FLOAT fTick     = _pTimer->TickQuantum;             // 1/20 s
++  const FLOAT fSpeedFwd = _pShell->GetFLOAT("plr_fSpeedForward");
++
++  // fire pulse parameters (derived once per tick, fully deterministic)
++  INDEX ctPeriodTicks = 0;
++  INDEX ctFireTicks   = 0;
++  if (bot_fFirePeriod >= fTick) {
++    ctPeriodTicks = (INDEX)(bot_fFirePeriod/fTick + 0.5f);
++    ctFireTicks   = Clamp<INDEX>(bot_iFireTicks, 0, ctPeriodTicks);
++  }
++
++  // for all possible local players (hard limit 4 - see NET_MAXLOCALPLAYERS)
++  for (INDEX iLP=0; iLP<4; iLP++) {
++    CLocalPlayer &lp = pgame->gm_lpLocalPlayers[iLP];
++    CPlayerSource *ppls = lp.lp_pplsPlayerSource;
++
++    // if this local player exists
++    if (ppls==NULL) {
++      continue;
++    }
++
++    SBotState &bs = _absBots[iLP];
++
++    // reset state when a new player source appears (join / rejoin / map change)
++    if (bs.bs_ppls != ppls) {
++      bs.bs_ppls     = ppls;
++      bs.bs_aHeading = 0.0f;
++      bs.bs_iTick    = 0;
++      CPrintF("[BotDriver] local player %d (player index %d) is now bot-driven: %s\n",
++        iLP, ppls->pls_Index, ppls->pls_pcCharacter.GetNameForPrinting());
++    }
++    bs.bs_iTick++;
++
++    // 1) accumulate heading (same convention as CPlayer::m_aLocalRotation:
++    //    absolute accumulated angle relative to spawn orientation - never wrap!)
++    bs.bs_aHeading += bot_fYawSpeed*fTick;
++
++    // 2) periodic fire pulse (with a small per-bot phase offset)
++    BOOL bFire = FALSE;
++    if (ctPeriodTicks>0 && ctFireTicks>0) {
++      const INDEX iPhase = (bs.bs_iTick + iLP*ctPeriodTicks/4) % ctPeriodTicks;
++      bFire = (iPhase < ctFireTicks);
++    }
++
++    // 3) compose the action
++    CPlayerAction pa;
++    pa.Clear();
++    pa.pa_vTranslation(3) = -fSpeedFwd * Clamp(bot_fMoveFactor, 0.0f, 1.0f);  // forward = negative z!
++    pa.pa_aRotation(1)    = bs.bs_aHeading;   // heading yaw
++    pa.pa_aViewRotation(1) = 0.0f;            // no freelook
++    if (bFire) {
++      pa.pa_ulButtons |= BOT_PLACT_FIRE;
++    }
++
++    // 4) hand it to the network player source (stamps pa_llCreated internally)
++    ppls->SetAction(pa);
++
++    // 5) periodic status log (position read from our own player entity)
++    if (bot_iLogEvery>0 && (bs.bs_iTick%bot_iLogEvery)==0) {
++      CEntity *pen = _pNetwork->GetLocalPlayerEntity(ppls);
++      if (pen!=NULL) {
++        const FLOAT3D &vPos = pen->en_plPlacement.pl_PositionVector;
++        CPrintF("[BotDriver] bot%d tick=%d pos=(%.1f,%.1f,%.1f) heading=%.1f fire=%d\n",
++          iLP, bs.bs_iTick, vPos(1), vPos(2), vPos(3), bs.bs_aHeading, bFire);
++      } else {
++        CPrintF("[BotDriver] bot%d tick=%d (no entity yet) heading=%.1f fire=%d\n",
++          iLP, bs.bs_iTick, bs.bs_aHeading, bFire);
++      }
++    }
++  }
++
++  // the bot driver owns action generation now - skip vanilla input handling
++  return TRUE;
++}
+diff --git a/Sources/GameMP/BotDriver.h b/Sources/GameMP/BotDriver.h
+new file mode 100644
+index 0000000..cbdc807
+--- /dev/null
++++ b/Sources/GameMP/BotDriver.h
+@@ -0,0 +1,37 @@
++/* A "Pfad D" proof-of-concept bot driver for Serious Sam: TSE.
++ * (sample code for the vanilla-compatible bot client; see VERIFIKATION.md)
++ *
++ * This is NOT a Croteam file. It is a new, self-contained GameMP module that
++ * generates synthetic CPlayerActions for all local players, bypassing the
++ * normal controls/input path.
++ */
++
++#ifndef SE_INCL_BOTDRIVER_H
++#define SE_INCL_BOTDRIVER_H
++
++#ifdef PRAGMA_ONCE
++  #pragma once
++#endif
++
++/*
++ * Button flags for CPlayerAction::pa_ulButtons.
++ * These MUST match the PLACT_* defines in Sources/EntitiesMP/Player.es!
++ * (kept in sync manually - do not change one without the other)
++ */
++#define BOT_PLACT_FIRE (1L<<0)
++
++/* Declare bot console symbols. Call once from CGame::InitInternal(),
++ * BEFORE persistent symbols and Scripts/Game_startup.ini are executed,
++ * so those scripts can set the bot variables.
++ */
++void BotDriver_Init(void);
++
++/* Called at the start of CGame::GameHandleTimer() (every timer tick, 20 Hz).
++ * If the bot driver is enabled, it generates one synthetic CPlayerAction per
++ * active local player and hands it to CPlayerSource::SetAction() - exactly
++ * like the vanilla input path does - and returns TRUE so that the caller
++ * skips normal input handling.
++ */
++BOOL BotDriver_HandleTimer(class CGame *pgame);
++
++#endif  /* SE_INCL_BOTDRIVER_H */
+diff --git a/Sources/GameMP/Game.cpp b/Sources/GameMP/Game.cpp
+index 1eb3e6e..af8fe80 100644
+--- a/Sources/GameMP/Game.cpp
++++ b/Sources/GameMP/Game.cpp
+@@ -28,6 +28,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
+ #include <Engine/CurrentVersion.h>
+ #include "Camera.h"
+ #include "LCDDrawing.h"
++#include "BotDriver.h"
+ 
+ extern FLOAT con_fHeightFactor = 0.5f;
+ extern FLOAT con_tmLastLines   = 5.0f;
+@@ -759,6 +760,12 @@ void CGameTimerHandler::HandleTimer(void)
+ 
+ void CGame::GameHandleTimer(void)
+ {
++  // [BotDriver] if enabled, synthesize the actions of all local players and
++  // bypass the normal input path (works without input focus and with menus on)
++  if (BotDriver_HandleTimer(this)) {
++    return;
++  }
++
+   // if direct input is active
+   if( _pInput->IsInputEnabled() && !gm_bMenuOn)
+   {
+@@ -1016,6 +1023,10 @@ void CGame::InitInternal( void)
+ 
+   CAM_Init();
+ 
++  // [BotDriver] declare bot console symbols (must happen before persistent
++  // symbols and the startup script are executed, so scripts can set them)
++  BotDriver_Init();
++
+   // load persistent symbols
+   if (!_bDedicatedServer) {
+     _pShell->Execute(CTString("include \"")+fnmPersistentSymbols+"\";");
+diff --git a/Sources/GameMP/GameMP.vcxproj b/Sources/GameMP/GameMP.vcxproj
+index 8a89c37..057279c 100644
+--- a/Sources/GameMP/GameMP.vcxproj
++++ b/Sources/GameMP/GameMP.vcxproj
+@@ -175,6 +175,7 @@ copy Debug\$(TargetName).lib $(SolutionDir)..\Bin\Debug\ &gt;nul</Command>
+     </CustomBuildStep>
+   </ItemDefinitionGroup>
+   <ItemGroup>
++    <ClCompile Include="BotDriver.cpp" />
+     <ClCompile Include="Camera.cpp" />
+     <ClCompile Include="CompMessage.cpp" />
+     <ClCompile Include="CompModels.cpp" />
+@@ -195,6 +196,7 @@ copy Debug\$(TargetName).lib $(SolutionDir)..\Bin\Debug\ &gt;nul</Command>
+     <ClCompile Include="WEDInterface.cpp" />
+   </ItemGroup>
+   <ItemGroup>
++    <ClInclude Include="BotDriver.h" />
+     <ClInclude Include="Camera.h" />
+     <ClInclude Include="CompMessage.h" />
+     <ClInclude Include="Computer.h" />

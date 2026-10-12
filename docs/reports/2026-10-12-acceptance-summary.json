@@ -1,0 +1,51 @@
+{
+  "format": "SeriousSamTSE-public-acceptance-summary-v1",
+  "asOf": "2026-10-12",
+  "scope": "Sanitized summaries of private local raw evidence; not a published raw-log audit.",
+  "aiHour": {
+    "passed": true,
+    "dllSha256": "61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9",
+    "startupSha256": "8D3C1BAE3D8C3A1B14E310CD65882E7556093E5EF07EECF4ADDF51243AF2CC67",
+    "nativeQuerySeconds": 3697.291299,
+    "crcAcceptedCount": 6,
+    "nativeJoinOnly": false,
+    "lifecycle": true,
+    "completeMinuteWindows": 480,
+    "completeMinutesPerBot": 60
+  },
+  "productionSmoke": {
+    "passed": true,
+    "dllSha256": "61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9",
+    "startupSha256": "2B063633CE598B787BAFDA426C30DD39125A9EA7DF1D94A37B880FA64EEC42F6",
+    "nativeQuerySeconds": 176.503899,
+    "crcAcceptedCount": 6,
+    "nativeJoinOnly": true,
+    "lifecycle": true
+  },
+  "brushAdvancesAtLeast2m": [
+    7,
+    12,
+    3,
+    8,
+    11,
+    12,
+    4,
+    12
+  ],
+  "lifecycleCounts": [
+    8,
+    9,
+    8,
+    9,
+    8,
+    4,
+    8
+  ],
+  "groundExperimentQualified": false,
+  "privateEvidenceSha256": {
+    "report.md": "62A71BDE36B16CA29D768A89BB5C456BC5DB4C7250C88FD3136B5FB778E5A72C",
+    "final-verification.json": "9E2A1F5E3DF3B10195DC3D43AC65FBAEA4A075EB264B4B3B8B980F4FA766524F",
+    "eight-render-hour/acceptance-audit.json": "AB5DEE72E913986563E03B9E2D5EC77B8AFE50EDE9C9E83E73C6BAD229683892",
+    "production-smoke-query-ready/production-audit.json": "19CB18CBD66905D06376BA54B3AF1BCF6CBBCDCC8AD8EA69C36EEE28FD71B9D6"
+  }
+}

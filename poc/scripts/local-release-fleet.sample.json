@@ -1,0 +1,10 @@
+{
+  "server": "127.0.0.1:25600",
+  "queryPort": 25601,
+  "botNamePrefix": "TSE_Bot",
+  "startStaggerSeconds": 3,
+  "processes": [
+    {"clientDir": "C:\\tse\\TSE-BotClient", "localPlayers": 4, "startupScript": "Scripts\\LocalBotRelease.ini"},
+    {"clientDir": "C:\\tse\\TSE-BotClient2", "localPlayers": 4, "startupScript": "Scripts\\LocalBotRelease.ini"}
+  ]
+}

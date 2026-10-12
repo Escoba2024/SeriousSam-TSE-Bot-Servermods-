@@ -1,0 +1,165 @@
+--- a/Sources/Game/Game.cpp
++++ b/Sources/Game/Game.cpp
+@@ -1361,6 +1361,7 @@
+ 
+ void CGame::StopGame(void)
+ {
++  BotDriver_StopGame();
+   // disable computer quickly
+   ComputerForceOff();
+ 
+@@ -2648,7 +2649,7 @@
+     gam_iRecordHighScore = -1.0f;
+   }
+   // if server was restarted
+-  if (gm_bGameOn && !_pNetwork->IsServer() && _pNetwork->IsGameFinished() && _pNetwork->IsDisconnected()) {
++  if (!BotDriver_HandleReconnect(this) && gm_bGameOn && !_pNetwork->IsServer() && _pNetwork->IsGameFinished() && _pNetwork->IsDisconnected()) {
+     // automatically reconnect
+     JoinGame(CNetworkSession(gam_strJoinAddress));
+   }
+--- a/Sources/Game/BotDriver.cpp
++++ b/Sources/Game/BotDriver.cpp
+@@ -25,6 +25,7 @@
+ #include "Game.h"
+ #include "BotDriver.h"
+ #include "botcore.h"
++#include "bot_reconnect.h"
+ #include "SessionProperties.h"
+ #include <cstdarg>
+ #include <cstdio>
+@@ -54,6 +55,51 @@
+ static INDEX bot_bDiagnostics = FALSE; // read-only player snapshots for Phase 1
+ static INDEX bot_iTestTarget = -1;     // fixed player index, -1 = original PoC
+ static INDEX bot_bTestThirdPerson = FALSE; // native view action for spectator QA
++
++static botcore::Reconnect _botReconnect;
++static CTString _strBotReconnectAddress;
++
++void BotDriver_StopGame(void)
++{
++  // JoinGame itself calls StopGame: preserve only that in-flight recovery.
++  // An explicit stop between attempts cancels pending retries.
++  _botReconnect.OnStop();
++}
++
++void BotDriver_CancelReconnect(void)
++{
++  _botReconnect.Reset();
++}
++
++BOOL BotDriver_HandleReconnect(CGame *pgame)
++{
++  if (!bot_bEnabled || pgame==NULL) {
++    _botReconnect.Reset();
++    return FALSE; // retain the original SDK path when bot mode is disabled
++  }
++  if (_strBotReconnectAddress!=pgame->gam_strJoinAddress) {
++    _botReconnect.Reset();
++    _strBotReconnectAddress=pgame->gam_strJoinAddress;
++  }
++  const BOOL gameOn=pgame->gm_bGameOn;
++  if (!_botReconnect.Poll(_pTimer->GetHighPrecisionTimer().GetSeconds(),
++      TRUE, gameOn, gameOn && _pNetwork->IsServer(),
++      gameOn && _pNetwork->IsGameFinished(),
++      gameOn && _pNetwork->IsDisconnected(), _strBotReconnectAddress.Length()>0)) {
++    return TRUE;
++  }
++  BotLog("[BotReconnect] attempt address=%s\n", (const char *)_strBotReconnectAddress);
++  BOOL joined=FALSE;
++  try {
++    joined=pgame->JoinGame(CNetworkSession(_strBotReconnectAddress));
++  } catch (...) {
++    _botReconnect.Reset();
++    throw; // preserve the failure; never leave a permanently in-flight retry
++  }
++  _botReconnect.OnResult(_pTimer->GetHighPrecisionTimer().GetSeconds(), joined!=FALSE);
++  BotLog("[BotReconnect] result=%s\n", joined ? "joined" : "failed");
++  return TRUE;
++}
+ 
+ void BotDriver_Init(void)
+ {
+--- a/Sources/Game/BotDriver.h
++++ b/Sources/Game/BotDriver.h
+@@ -26,6 +26,11 @@
+  */
+ void BotDriver_Init(void);
+ 
++// Main-thread map recovery; TRUE means bot mode owns reconnect handling.
++BOOL BotDriver_HandleReconnect(class CGame *pgame);
++void BotDriver_StopGame(void);
++void BotDriver_CancelReconnect(void);
++
+ /* Called at the start of CGame::GameHandleTimer() (every timer tick, 20 Hz).
+  * If the bot driver is enabled, it generates one synthetic CPlayerAction per
+  * active local player and hands it to CPlayerSource::SetAction() - exactly
+--- a/Sources/Game/LoadingHook.cpp
++++ b/Sources/Game/LoadingHook.cpp
+@@ -15,6 +15,7 @@
+ 
+ 
+ #include "StdAfx.h"
++#include "BotDriver.h"
+ #include "LCDDrawing.h"
+ #include <locale.h>
+ 
+@@ -64,6 +65,7 @@
+   }
+   if (_bUserBreakEnabled && (GetAsyncKeyState(VK_ESCAPE)&ulCheckFlags)) {
+     // break loading
++    BotDriver_CancelReconnect();
+     throw TRANS("User break!");
+   }
+ 
+--- /dev/null
++++ b/Sources/Game/bot_reconnect.h
+@@ -0,0 +1,49 @@
++#ifndef BOTCORE_RECONNECT_H
++#define BOTCORE_RECONNECT_H
++
++namespace botcore {
++
++// Main-thread policy. Clock values are monotonic seconds, independent of the
++// session tick that resets during JoinGame. Only a finished-map disconnect
++// arms recovery; a failed join may subsequently leave gameOn false.
++class Reconnect {
++  bool pending_ = false;
++  bool joining_ = false;
++  bool internalStop_ = false;
++  double due_ = 0;
++  double delay_ = 2;
++public:
++  void Reset() { pending_ = joining_ = internalStop_ = false; due_ = 0; delay_ = 2; }
++  void OnStop() {
++    if (joining_ && internalStop_) { internalStop_ = false; return; }
++    Reset();
++  }
++
++  bool Poll(double now, bool enabled, bool gameOn, bool server,
++            bool finished, bool disconnected, bool hasTarget) {
++    if (!enabled || server || !hasTarget) { Reset(); return false; }
++    if (joining_) return false;
++    if (gameOn && !finished && !disconnected) { Reset(); return false; }
++    if (!pending_ && gameOn && finished && disconnected) {
++      pending_ = true;
++      due_ = now + 2;
++      delay_ = 2;
++    }
++    if (!pending_ || now < due_) return false;
++    joining_ = true;
++    internalStop_ = true;
++    return true;
++  }
++
++  void OnResult(double now, bool success) {
++    if (!joining_) return; // an explicit stop/user break canceled this attempt
++    if (success) { Reset(); return; }
++    joining_ = false;
++    pending_ = true;
++    delay_ = delay_ < 5 ? delay_ * 2 : 10;
++    due_ = now + delay_;
++  }
++};
++
++} // namespace botcore
++#endif
