@@ -1,0 +1,16 @@
+diff --git a/Sources/Game/Game.cpp b/Sources/Game/Game.cpp
+--- a/Sources/Game/Game.cpp
++++ b/Sources/Game/Game.cpp
+@@ -2086,6 +2086,12 @@ static BOOL _bPlayerViewRendered = FALSE;
+ // redraw all game views (for case of split-screens and such)
+ void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
+ {
++  // Renderer sector-flag RMW also touches the ray scratch flag (0x40).
++  // Exclude the bot timer across the entire frame, not just prescanning.
++  // Thumbnail recursion and the existing inner hooks lock are recursive.
++  // Simulation and bot rays separately share ga_csNetwork (hooks -> world).
++  CTSingleLock slBotRender(&_pTimer->tm_csHooks, TRUE);
++
+   // if thumbnail saving has been required
+   if( _fnmThumb!="")
+   { // reset the need for saving thumbnail

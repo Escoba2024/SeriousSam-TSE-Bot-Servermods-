@@ -1,3 +1,7 @@
+## Aktueller kanonischer Stand – 12.10.2026
+
+Phase 1, lokale Vier-Bot-Stunde, Phase-3-Netzwerkabnahme und eigene Acht-Bot-KI-Stunde sind bestanden. Aktueller Kandidat: 61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9. Details, Grenzen, offene Ground-Sync-Versuche und Source-Provenance: [Shadow-Abschlussbericht](docs/reports/2026-10-12-shadow-development-status.md). Die folgenden Abschnitte sind die erhaltene datierte Phase-1/2-Historie; frühere nächste Schritte und damalige Veröffentlichungszustände gelten für ihren jeweiligen Zeitpunkt.
+
 <!-- PHASE2_CURRENT_START -->
 ## Phase 2 – Abnahme 02.10.2026
 
@@ -566,3 +570,14 @@ Alle Zeilen beziehen sich auf `.codex/evidence/phase1-final-20261002/`; frühere
 | `spectator-third-person60` | 60.24 s | Diagnose/Teilprüfung; keine Gatefreigabe |
 
 Unit-/Harnessprüfungen: `Test-RetailJoinState.Tests.ps1` PASS (inklusive Chunkarray-Boolean-Regression), `Test-Phase1Telemetry.Tests.ps1` PASS (Parser, Schutz vor Überschreiben, aktive/frozen Minuten, Tickduplikate/-neustarts); native Cleanup-Race-Injektion PASS. PowerShell-Syntaxchecks PASS. Standalone Botcoreprüfung bereits PASS; sie ersetzt keine native Composer-Prüfung.
+
+
+## Lokales Acht-Bot-KI-Release – 11.10.2026
+
+**BESTANDEN:** Der aktuelle GameMP-Kandidat `61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9` ist lokal mit zwei getrennten Vier-Spieler-BotClients auf einem unveränderten TSE-1.07-Dedicated-Server geprüft. Die unabhängigen Serverabfragen umfassen 3697.291299s mit allen acht erwarteten Namen; 6 CRC-Annahmen. Der eigenständige KI-Auditor bestätigt 60 vollständige 20-Hz-Minuten pro Bot, insgesamt480 Fenster, native replizierte Bewegung, gültige begrenzte Eingaben und regulär abgeschlossene Brush-Advances von mindestens2m für jeden Bot. Der gesamte Observer-Lauf enthält 1124 bezeugte Kampfkills; diese Zahl ist nicht allein dem ausgewerteten Stundenfenster zugeordnet.
+
+Menschlicher Join/Austritt/Rejoin und kontrollierter Ersatz eines BotClients wurden nativ geprüft. Das exakte sparsame Betriebsprofil `LocalBotRelease.ini` besteht einen zusätzlichen Lifecycle-Smoke mit 176.503899s unabhängigen Serverabfragen; dieser Smoke ersetzt keine zweite20-Hz-Stunde. Reale Vorbereitung und Rücknahme bestehen ebenfalls. Anschließend sind30 Original-Binärdateien,815 globale Dateizustände, die drei vorbestehenden geänderten Quellen und ältere abgenommene DLLs unverändert; null eigene Testprozesse oder Testports bleiben aktiv.
+
+13 erfasste GameMP-Anpassungen und alle32 kompilierten Game-Quelldateien stimmen mit dem vollständigen frischen Quellbuild überein. Der neu gebaute DLL-Hash unterscheidet sich; ausschließlich der oben genannte Kandidat besitzt diese native Stundenabnahme. Anleitung: `poc/LOCAL-RELEASE.md`. Vollständige Belege: `.codex/evidence/shadow-20261010/local-release/report.md`. Ziel des getrennt verifizierten Quellarchivs: `.codex/evidence/shadow-20261010/local-release/SeriousSam-TSE-LocalBotRelease-20261011-source.zip`.
+
+Die alten Sync-Fehler und die strengere KI-Ablehnung des kurzen61DC-Laufs bleiben erhalten. Abgenommen ist dieser lokale Fortress-Deathmatch-Meilenstein. Globale Wege, Item-Routen, Boden-/Abgrundsicherheit, weitere native Waffenfamilien, Coop, Internetbetrieb, zusätzliche Prozessskalierung, eine aktuelleKI-Mehrkartenstunde und24/7-Supervision bleiben eigene Folgeschritte. Kein Commit, Push, externe Veröffentlichung oder Google-Drive-Sync wurde ausgeführt.

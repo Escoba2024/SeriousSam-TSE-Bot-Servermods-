@@ -1,15 +1,18 @@
 CXX ?= g++
 CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra
 
-all: test_botcore
+TESTS = test_botcore test_botcore_ai test_bot_reconnect test_bot_combat test_bot_weapon_input test_bot_navigation
+HEADERS = $(wildcard *.h)
 
-test_botcore: test_botcore.cpp botcore.h
-	$(CXX) $(CXXFLAGS) -o $@ test_botcore.cpp
+all: $(TESTS)
 
-test: test_botcore
-	./test_botcore | tee test_output.txt
+$(TESTS): %: %.cpp $(HEADERS)
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
+test: $(TESTS)
+	@set -e; for test in $(TESTS); do ./$$test; done
 
 clean:
-	rm -f test_botcore test_output.txt
+	rm -f $(TESTS) test_output.txt test_ai_output.txt
 
 .PHONY: all test clean

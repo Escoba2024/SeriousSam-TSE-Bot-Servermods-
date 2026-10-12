@@ -1,0 +1,186 @@
+--- a/Sources/Game/BotDriver.cpp
++++ b/Sources/Game/BotDriver.cpp
+@@ -26,6 +26,9 @@
+ #include "BotDriver.h"
+ #include "botcore.h"
+ #include "bot_reconnect.h"
++#include "bot_combat.h"
++#include "bot_weapon_input.h"
++#include <Engine/World/WorldRayCasting.h>
+ #include "SessionProperties.h"
+ #include <cstdarg>
+ #include <cstdio>
+@@ -55,6 +58,8 @@
+ static INDEX bot_bDiagnostics = FALSE; // read-only player snapshots for Phase 1
+ static INDEX bot_iTestTarget = -1;     // fixed player index, -1 = original PoC
+ static INDEX bot_bTestThirdPerson = FALSE; // native view action for spectator QA
++static INDEX bot_bAutoCombat = FALSE; // optional deathmatch decisions
++static INDEX bot_bCombatSkipLocals = TRUE; // siblings share one bot client
+ 
+ static botcore::Reconnect _botReconnect;
+ static CTString _strBotReconnectAddress;
+@@ -155,6 +160,8 @@
+   _pShell->DeclareSymbol("user INDEX bot_bDiagnostics;", &bot_bDiagnostics);
+   _pShell->DeclareSymbol("user INDEX bot_iTestTarget;", &bot_iTestTarget);
+   _pShell->DeclareSymbol("user INDEX bot_bTestThirdPerson;", &bot_bTestThirdPerson);
++  _pShell->DeclareSymbol("user INDEX bot_bAutoCombat;", &bot_bAutoCombat);
++  _pShell->DeclareSymbol("user INDEX bot_bCombatSkipLocals;", &bot_bCombatSkipLocals);
+ }
+ 
+ /* ------------------------------------------------------------------------ */
+@@ -166,11 +173,48 @@
+   ANGLE  bs_aHeading;         // accumulated heading (relative to spawn direction)
+   INDEX  bs_iTick;            // ticks since (re)join
+   ANGLE  bs_aPitch;
++  INDEX  bs_iCombatTarget;
++  botcore::CombatWeaponInput bs_weaponInput;
+ };
+ 
+ static SBotState _absBots[4] = {
+   {NULL, 0.0f, 0}, {NULL, 0.0f, 0}, {NULL, 0.0f, 0}, {NULL, 0.0f, 0},
+ };
++
++static CPlacement3D BotCombatEye(CPlayer *player)
++{
++  CPlacement3D eye=player->en_plViewpoint;
++  eye.RelativeToAbsolute(player->en_plPlacement);
++  return eye;
++}
++
++static BOOL BotCombatIsLocal(CGame *game, INDEX index)
++{
++  for (INDEX i=0; i<4; ++i) {
++    CPlayerSource *source=game->gm_lpLocalPlayers[i].lp_pplsPlayerSource;
++    if (source!=NULL && source->pls_Index==index) return TRUE;
++  }
++  return FALSE;
++}
++
++static botcore::TargetInfo BotCombatSnapshot(CPlayer *player, INDEX index, BOOL local)
++{
++  const FLOAT3D position=BotCombatEye(player).pl_PositionVector;
++  const botcore::TargetInfo snapshot={index,position(1),position(2),position(3),
++    player->GetHealth(),local!=FALSE};
++  return snapshot;
++}
++
++static BOOL BotCombatVisible(CPlayer *player, CPlayer *target)
++{
++  const FLOAT3D origin=BotCombatEye(player).pl_PositionVector;
++  const FLOAT3D destination=BotCombatEye(target).pl_PositionVector;
++  CCastRay ray(player,origin,destination);
++  ray.cr_bAllowOverHit=FALSE;
++  ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;
++  ray.Cast(player->GetWorld());
++  return ray.cr_penHit==NULL || ray.cr_penHit==target;
++}
+ 
+ /* ------------------------------------------------------------------------ */
+ /* The bot driver tick                                                        */
+@@ -212,6 +256,8 @@
+       bs.bs_aHeading = 0.0f;
+       bs.bs_iTick    = 0;
+       bs.bs_aPitch   = 0.0f;
++      bs.bs_iCombatTarget = -1;
++      bs.bs_weaponInput.Reset();
+       BotLog("[BotDriver] local player %d (player index %d) is now bot-driven: %s\n",
+         iLP, ppls->pls_Index, (const char *)ppls->pls_pcCharacter.pc_strName);
+     }
+@@ -225,7 +271,69 @@
+       ? (CPlayer *)CEntity::GetPlayerEntity(bot_iTestTarget) : NULL;
+     FLOAT moveFactor = Clamp(bot_fMoveFactor, 0.0f, 1.0f);
+     BOOL testAimReady = TRUE;
+-    if (player!=NULL && target!=NULL && player!=target && target->GetHealth()>0) {
++    const BOOL automatic=bot_bAutoCombat && bot_iTestTarget<0;
++    INDEX combatWeapon=0;
++    ULONG combatSelect=0;
++    if (automatic) {
++      testAimReady=FALSE;
++      const CSessionProperties *session=(const CSessionProperties *)_pNetwork->GetSessionProperties();
++      const BOOL deathmatch=session->sp_gmGameMode==CSessionProperties::GM_SCOREMATCH ||
++        session->sp_gmGameMode==CSessionProperties::GM_FRAGMATCH;
++      botcore::CombatDecision decision={-1,1,0,0,0,false};
++      INDEX visible=0;
++      if (player!=NULL && deathmatch && player->GetHealth()>0 && player->m_penWeapons!=NULL) {
++        botcore::TargetInfo candidates[16];
++        for (INDEX index=0; index<16; ++index) {
++          CPlayer *other=(CPlayer *)CEntity::GetPlayerEntity(index);
++          const BOOL local=BotCombatIsLocal(pgame,index);
++          if (other==NULL || other==player || other->GetHealth()<=0 ||
++              (bot_bCombatSkipLocals && local)) continue;
++          const botcore::TargetInfo snapshot=BotCombatSnapshot(other,index,local);
++          if (botcore::CombatValidPlayer(snapshot) && BotCombatVisible(player,other))
++            candidates[visible++]=snapshot;
++        }
++        CPlayerWeapons *weapons=player->GetPlayerWeapons();
++        const botcore::AmmoInfo ammo={weapons->m_iBullets,weapons->m_iShells,
++          weapons->m_iNapalm,weapons->m_iElectricity,weapons->m_iSniperBullets};
++        const CPlacement3D eye=BotCombatEye(player);
++        const botcore::CombatInput input={BotCombatSnapshot(player,ppls->pls_Index,TRUE),
++          eye.pl_OrientationAngle(1),eye.pl_OrientationAngle(2),
++          std::fabs(bot_fYawSpeed)*fTick,moveFactor,
++          botcore::CombatUsableWeapons(weapons->m_iAvailableWeapons,ammo),
++          bot_bCombatSkipLocals!=FALSE,8.0};
++        decision=botcore::DecideCombat(candidates,visible,input);
++      }
++      if (decision.target>=0) {
++        target=(CPlayer *)CEntity::GetPlayerEntity(decision.target);
++        bs.bs_aHeading=player->m_aLastRotation(1)+(FLOAT)decision.yawDelta;
++        bs.bs_aPitch=player->m_aLastRotation(2)+(FLOAT)decision.pitchDelta;
++        moveFactor=(FLOAT)decision.moveFactor;
++        testAimReady=decision.fireAllowed;
++        combatWeapon=decision.weapon;
++        CPlayerWeapons *weapons=player->GetPlayerWeapons();
++        combatSelect=bs.bs_weaponInput.Poll(bs.bs_iTick,combatWeapon,
++          weapons->m_iWantedWeapon,player->m_ulLastButtons);
++        testAimReady=testAimReady && weapons->m_iCurrentWeapon==combatWeapon &&
++          weapons->m_iWantedWeapon==combatWeapon;
++        if (bot_iLogEvery>0 && bs.bs_iTick%bot_iLogEvery==0) {
++          BotLog("[BotCombatWeapon] local=%d tick=%d desired=%d current=%d wanted=%d group=%d buttons=%lu bullets=%d shells=%d napalm=%d cells=%d sniper=%d\n",
++            iLP,bs.bs_iTick,combatWeapon,weapons->m_iCurrentWeapon,weapons->m_iWantedWeapon,
++            botcore::CombatWeaponGroup(combatWeapon),(unsigned long)combatSelect,
++            weapons->m_iBullets,weapons->m_iShells,weapons->m_iNapalm,
++            weapons->m_iElectricity,weapons->m_iSniperBullets);
++        }
++      } else if (player!=NULL && player->GetHealth()>0 && deathmatch) {
++        bs.bs_aHeading+=bot_fYawSpeed*fTick; // bounded search until a visible opponent exists
++      } else { moveFactor=0; }
++      if (bs.bs_iCombatTarget!=decision.target ||
++          (bot_iLogEvery>0 && bs.bs_iTick%bot_iLogEvery==0)) {
++        BotLog("[BotCombat] local=%d tick=%d self=%d alive=%d dm=%d visible=%d target=%d weapon=%d ready=%d move=%.2f yawDelta=%.2f pitchDelta=%.2f\n",
++          iLP,bs.bs_iTick,ppls->pls_Index,player!=NULL && player->GetHealth()>0,
++          deathmatch,visible,decision.target,combatWeapon,testAimReady,moveFactor,
++          decision.yawDelta,decision.pitchDelta);
++      }
++      bs.bs_iCombatTarget=decision.target;
++    } else if (player!=NULL && target!=NULL && player!=target && target->GetHealth()>0) {
+       const FLOAT3D delta = target->en_plPlacement.pl_PositionVector
+         - player->en_plPlacement.pl_PositionVector;
+       const botcore::AimAngles aim = botcore::AimAt(delta(1), delta(2), delta(3));
+@@ -250,13 +358,16 @@
+       const INDEX iPhase = (bs.bs_iTick + iLP*ctPeriodTicks/4) % ctPeriodTicks;
+       bFire = (iPhase < ctFireTicks);
+     }
+-    bFire = bFire && testAimReady;
++    // Retail deathmatch respawns on the native Fire press/release action.
++    // The combat decision never attacks while dead; this pulse is respawn input.
++    const BOOL respawnInput=automatic && player!=NULL && player->GetHealth()<=0;
++    bFire = bFire && (testAimReady || respawnInput);
+ 
+     // 3) compose the action
+     CPlayerAction pa;
+     pa.Clear();
+     pa.pa_vTranslation(3) = -moveFactor; // normalized forward axis for native composer
+-    if (target!=NULL && botcore::TestJump(bs.bs_iTick)) {
++    if (!automatic && target!=NULL && botcore::TestJump(bs.bs_iTick)) {
+       pa.pa_vTranslation(2) = 1.0f;
+     }
+     pa.pa_aRotation(1) = bs.bs_aHeading - localInput->m_aLocalRotation(1);
+@@ -275,6 +386,7 @@
+       pa.pa_ulButtons |= BOT_PLACT_FIRE;
+     }
+     if (bot_iTestTarget>=0 && bot_iTestTarget<16) pa.pa_ulButtons |= 2L<<14; // Colt
++    if (automatic) pa.pa_ulButtons |= combatSelect;
+ 
+     // 4) hand it to the network player source (stamps pa_llCreated internally)
+     ppls->SetAction(pa);

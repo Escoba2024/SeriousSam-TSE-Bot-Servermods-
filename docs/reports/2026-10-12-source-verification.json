@@ -1,0 +1,275 @@
+{
+  "format": "SeriousSamTSE-published-source-provenance-v1",
+  "candidateDllSha256": "61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9",
+  "sdkCommit": "aa7869c2c2c4db0562281814d0ac3784e6b9d6f0",
+  "includesCommit": "94ff8cd0e63941f8601294350b616472f772ed51",
+  "sources": [
+    {
+      "name": "bot_combat.h",
+      "originalSha256": "99C5B7905E4BF804031DC30097C25982DA36283A8C7FB05FFDF1DDC129850CBF",
+      "publishedSha256": "6058FDB0CD683BFC870C637045228B5F3990A99DF0D7BD2544D89DFF1E750630",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "bot_navigation.h",
+      "originalSha256": "E1947272F39CDFA698F8410F9A05FAD5B5161CD057308404E0D815AE2792501B",
+      "publishedSha256": "4D1A460EFCFA0027516769B1CB13A7067F999C76715402131008E6B4F4E11E4A",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "bot_reconnect.h",
+      "originalSha256": "015D0484D40D7947DBDF604464F62CC694F69B79C02CE2A99DB857814C44D110",
+      "publishedSha256": "735F3B5D6533D0850FF8D13D03A9525217041950D48DC943005300C5EBB3214C",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "bot_weapon_input.h",
+      "originalSha256": "38D7E5E6C9A8DFE0CD7AC7B831A5F277298E0BBE2B9E4B25AE831FD78F7AD4A2",
+      "publishedSha256": "FA4A0453A42ADF7DF5D0461427660F51D25CFC263859E56C33601C26E3EA1277",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "botcore_ai.h",
+      "originalSha256": "EFBF725129A0726367898EC649C86B64F8989FE0A71F5D28BB55E1022FBB9017",
+      "publishedSha256": "D1538852C1255F709E374AEB23706824EEDAF8BFBE5A1BB13D92656E23F59335",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "botcore.h",
+      "originalSha256": "4F7EC1A6E0B5A5118B5B22FA1B883642FF19CAC7FFF8AA758679A021EFCC1F1C",
+      "publishedSha256": "1029714FD3732B01710A608255BB3830B406CD4FBEC0568EA9E8ECD8E3480E31",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "BotDriver.cpp",
+      "originalSha256": "80FA7400556F6F4561486B233FFB4606E54F2D6DE9AE74953690B95B1F9FE996",
+      "publishedSha256": "B5D3290391B2504CCE96529155B4072361FED0319A80AD1695707E36A9165C64",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "BotDriver.h",
+      "originalSha256": "0216D3657FCB62F3EE8B27111C053F62E707688A9A5B8941EB565563C50AA399",
+      "publishedSha256": "82C8282D1426177031CDAA3F140FD084C2DDCF51CB74BFD694E49AF90E8D0A3D",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "Game.cpp",
+      "originalSha256": "E4DEA6CDEB8587589236D3E57DE3D10721B50F622DD0E282791E963AC36B4E25",
+      "publishedSha256": "01DFA59857DF4953D3A89096CD8049B9BA022F81E388C0DFC52B4826909474B6",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "Game.vcxproj",
+      "originalSha256": "97F2AD768750ED0C79EFE59DBDFB20DB7E5CB7222CF1B98734FAFE5FECEBB923",
+      "publishedSha256": "F4A3A0A129724786CFA8CB6CB45D8754AFCB83941A08BB3A39562CA61F18FDF7",
+      "noticeOffset": 40,
+      "noticeText": "<!-- SeriousSam TSE Bot Project: GameMP-only build integration; modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12. Original/published hashes: docs/reports/2026-10-12-source-verification.json. GPL-2.0-only. -->\n",
+      "noticeBytes": 230
+    },
+    {
+      "name": "LoadingHook.cpp",
+      "originalSha256": "334AC5016E1F377A0F8E28472D4FB080FD4905FEEDC7DCE44FE6F40A0CEDF7AB",
+      "publishedSha256": "65110129FEAF15FE25630A4733855136A2CA09EF214797E16AD0DCFE8C7F4F50",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "RetailAllocator.cpp",
+      "originalSha256": "EDFE4A8D4DF6441FF76BDA9925DFAF6B9ED25BBFD9B441E628E75C0A9C5001F2",
+      "publishedSha256": "5C995C8AEBA40F252461A6D9BD89445F73D34F5A93B45CE8DCE812705ADD9072",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    },
+    {
+      "name": "StdAfx.h",
+      "originalSha256": "9417347EBF23F98BA9A0438BF1CED2FBE72269DA1C55086FF54FE42AD9099FAF",
+      "publishedSha256": "FE5BBB2ACC740688194EFEBF35C98DCBF80048164AD9BF9628140E6AE0CB0E35",
+      "noticeOffset": 0,
+      "noticeText": "/* SeriousSam TSE Bot Project: GameMP-only bot-client integration.\n * Modified 2026-10-08 through 2026-10-11; publication notice 2026-10-12.\n * Original captured source and published hashes: docs/reports/2026-10-12-source-verification.json.\n * GPL-2.0-only; existing upstream copyright notices are retained. */\n",
+      "noticeBytes": 311
+    }
+  ],
+  "compiledOriginalSources": [
+    {
+      "name": "bot_combat.h",
+      "sha256": "99C5B7905E4BF804031DC30097C25982DA36283A8C7FB05FFDF1DDC129850CBF",
+      "matched": true
+    },
+    {
+      "name": "bot_navigation.h",
+      "sha256": "E1947272F39CDFA698F8410F9A05FAD5B5161CD057308404E0D815AE2792501B",
+      "matched": true
+    },
+    {
+      "name": "bot_reconnect.h",
+      "sha256": "015D0484D40D7947DBDF604464F62CC694F69B79C02CE2A99DB857814C44D110",
+      "matched": true
+    },
+    {
+      "name": "bot_weapon_input.h",
+      "sha256": "38D7E5E6C9A8DFE0CD7AC7B831A5F277298E0BBE2B9E4B25AE831FD78F7AD4A2",
+      "matched": true
+    },
+    {
+      "name": "botcore_ai.h",
+      "sha256": "EFBF725129A0726367898EC649C86B64F8989FE0A71F5D28BB55E1022FBB9017",
+      "matched": true
+    },
+    {
+      "name": "botcore.h",
+      "sha256": "4F7EC1A6E0B5A5118B5B22FA1B883642FF19CAC7FFF8AA758679A021EFCC1F1C",
+      "matched": true
+    },
+    {
+      "name": "BotDriver.cpp",
+      "sha256": "80FA7400556F6F4561486B233FFB4606E54F2D6DE9AE74953690B95B1F9FE996",
+      "matched": true
+    },
+    {
+      "name": "BotDriver.h",
+      "sha256": "0216D3657FCB62F3EE8B27111C053F62E707688A9A5B8941EB565563C50AA399",
+      "matched": true
+    },
+    {
+      "name": "Camera.cpp",
+      "sha256": "6C99B3F02FF7ED41B78A5348F90EC7CA65D7FD62A4280F933D2490500D008051",
+      "matched": true
+    },
+    {
+      "name": "Camera.h",
+      "sha256": "3DB0B57BE3CE911B0003AF2D9CA9157E73B36B1776B03B097CF1BCB9FC2EDE6E",
+      "matched": true
+    },
+    {
+      "name": "CompMessage.cpp",
+      "sha256": "3E4768516719182764AE3C2C52206F474690C59D7634D64D7C9FB7BB0A1C4C14",
+      "matched": true
+    },
+    {
+      "name": "CompMessage.h",
+      "sha256": "E37B84ABC50BB5E2C74A45C51D3D2E1455475BE252207277B8C3AE48568488BB",
+      "matched": true
+    },
+    {
+      "name": "CompModels.cpp",
+      "sha256": "984C0098BC787684A2634B988D2AD49A3283F99776E08210D2949288427BF869",
+      "matched": true
+    },
+    {
+      "name": "Computer.cpp",
+      "sha256": "1D018726E6FB0B913A1F8E9719F1093A9B95AF030F369F8275B27B00F9A777C0",
+      "matched": true
+    },
+    {
+      "name": "Computer.h",
+      "sha256": "4934CBC7CACFEF74A59644F7A8D398D593CE12D7E4B82FE0C7FE97B98E23DC04",
+      "matched": true
+    },
+    {
+      "name": "Console.cpp",
+      "sha256": "2385872A46FAD5A6D06C3ED26FE366B472F0E39ABF06649C6011460670F08E76",
+      "matched": true
+    },
+    {
+      "name": "Controls.cpp",
+      "sha256": "5152A92913FC9000272ECFD443161102F435AAB7C683D5A3C32DC7481533EF89",
+      "matched": true
+    },
+    {
+      "name": "Game.cpp",
+      "sha256": "E4DEA6CDEB8587589236D3E57DE3D10721B50F622DD0E282791E963AC36B4E25",
+      "matched": true
+    },
+    {
+      "name": "Game.h",
+      "sha256": "E509D922710AEAD8E296F74155F4371B73C64D64AD2145D1D9CD5FE17442B3C9",
+      "matched": true
+    },
+    {
+      "name": "Game.vcxproj",
+      "sha256": "97F2AD768750ED0C79EFE59DBDFB20DB7E5CB7222CF1B98734FAFE5FECEBB923",
+      "matched": true
+    },
+    {
+      "name": "LCDDrawing.cpp",
+      "sha256": "8C6980DAECDB0D3BFACB816BAFC266F5B773EB82FD0CB2F97F08659B72F25939",
+      "matched": true
+    },
+    {
+      "name": "LCDDrawing.h",
+      "sha256": "4FF89D41EC1B71F0B4E9B46909C311AF1051F99E6350680472CBAA7679726054",
+      "matched": true
+    },
+    {
+      "name": "LoadingHook.cpp",
+      "sha256": "334AC5016E1F377A0F8E28472D4FB080FD4905FEEDC7DCE44FE6F40A0CEDF7AB",
+      "matched": true
+    },
+    {
+      "name": "Map.cpp",
+      "sha256": "439103223AF5C43A3647C9D9B62900D2380E514FD30C801B04FFDF8AB178E102",
+      "matched": true
+    },
+    {
+      "name": "PlayerSettings.h",
+      "sha256": "455627BACBEDBCB31252AD850AE650075999510ED2CE5FBB293111D6A178FF31",
+      "matched": true
+    },
+    {
+      "name": "RetailAllocator.cpp",
+      "sha256": "EDFE4A8D4DF6441FF76BDA9925DFAF6B9ED25BBFD9B441E628E75C0A9C5001F2",
+      "matched": true
+    },
+    {
+      "name": "SEColors.h",
+      "sha256": "E2EDBA6ABF4EE8BA884D684DC81F378CB6B6A83503BFBF1C7ECCA9E5A1B2DF47",
+      "matched": true
+    },
+    {
+      "name": "SessionProperties.cpp",
+      "sha256": "7A6471DB6CA576A945CAC78DDF048AC165EC73D60CEFBFA5D8A85E371AAF0194",
+      "matched": true
+    },
+    {
+      "name": "SessionProperties.h",
+      "sha256": "FB881BE5E4F2400FC75CD96A744799CD6F61CFF934E5898C90EDE2213D50C598",
+      "matched": true
+    },
+    {
+      "name": "StdAfx.cpp",
+      "sha256": "66D5CFFA3DFADC615D830D74530AF57960B56E9FECEF435C24E60C85B6BD1FBA",
+      "matched": true
+    },
+    {
+      "name": "StdAfx.h",
+      "sha256": "9417347EBF23F98BA9A0438BF1CED2FBE72269DA1C55086FF54FE42AD9099FAF",
+      "matched": true
+    },
+    {
+      "name": "WEDInterface.cpp",
+      "sha256": "BA3C22FAA07C410947490114E0BFC377EA6EF07FF6513EA5A54631A5BFC80390",
+      "matched": true
+    }
+  ],
+  "scope": "13 original captured sources / 32 original Game inputs verified before publication. Published changes are dated license notices only. No byte-identical DLL or native qualification of a rebuilt DLL is claimed."
+}

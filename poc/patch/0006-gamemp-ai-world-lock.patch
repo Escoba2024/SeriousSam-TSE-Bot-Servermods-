@@ -1,0 +1,16 @@
+diff --git a/Sources/Game/BotDriver.cpp b/Sources/Game/BotDriver.cpp
+--- a/Sources/Game/BotDriver.cpp
++++ b/Sources/Game/BotDriver.cpp
+@@ -261,6 +261,12 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+     return FALSE;
+   }
+ 
++  // Engine107 ray casting shares sector scratch data with world simulation.
++  // Keep entities and every ray (including its destructor) under the native
++  // world/network mutex. The timer already owns hooks: order 1000 -> 2000.
++  // GetLocalPlayerEntity's internal lock ends before its pointer is returned.
++  CTSingleLock slBotWorld(&_pNetwork->ga_csNetwork, TRUE);
++
+   const FLOAT fTick     = _pTimer->TickQuantum;             // 1/20 s
+ 
+   // fire pulse parameters (derived once per tick, fully deterministic)
