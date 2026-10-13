@@ -2,7 +2,9 @@
 
 Bots joinen als reguläre Netzwerkspieler über separate modifizierte BotClient-Prozesse. Dedicated Server, Engine, Entities und menschliche TSE-1.07-Clients bleiben unverändert. Eingaben entstehen ausschließlich über normale `CPlayerAction`-/`CPlayerSource::SetAction`-Pfade. Pro Prozess sind maximal vier lokale Spieler vorgesehen; acht Bots verwenden zwei getrennte Installationen.
 
-## Nachweisbarer Stand – 12.10.2026
+## Nachweisbarer Stand – 13.10.2026
+
+Die [Fortsetzung vom 13.10.2026](docs/reports/2026-10-13-serverbrowser-preflight.md) bestätigt zusätzlich das exakte sparsame Acht-Bot-Profil über 601,984 s Steady-Betrieb und 595,771 s unabhängige vollständige Spielerabfragen. Öffentliche 333networks-Listung, externe UDP-Erreichbarkeit und Vanilla-Browser bleiben offen; Shadow Neo Lite ist ein Cloud-Testsystem. Die bisherigen Abnahmen behalten ihren unten angegebenen Geltungsbereich.
 
 | Bereich | Stand |
 |---|---|
