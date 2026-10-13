@@ -1,0 +1,182 @@
+{
+  "date": "2026-10-13",
+  "baselineCommit": "3e0c8415bef056ce0b349603872180ba9e7c6b5f",
+  "scope": "Existing qualified DLL and exact sparse production startup; bounded local steady probe and external listing observations. No bot code changes.",
+  "local": {
+    "passed": true,
+    "dllSha256": "61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9",
+    "startupSha256": "2B063633CE598B787BAFDA426C30DD39125A9EA7DF1D94A37B880FA64EEC42F6",
+    "steadySeconds": 601.9843383,
+    "independentQuerySeconds": 595.771161,
+    "steadySamples": 119,
+    "crcAcceptedCount": 3,
+    "nativeJoinOnly": true,
+    "newLifecycleTest": false,
+    "observerCombatKills": 118,
+    "profilesUnique": true,
+    "players": [
+      {
+        "client": "TSE-BotClient",
+        "slot": 0,
+        "completeOneHzSamples": 604,
+        "firstTick": 20,
+        "lastTick": 12080,
+        "distinctPositionsAtLeast": 11,
+        "livingReadySamples": 109,
+        "trailingIncomplete": 0
+      },
+      {
+        "client": "TSE-BotClient",
+        "slot": 1,
+        "completeOneHzSamples": 604,
+        "firstTick": 20,
+        "lastTick": 12080,
+        "distinctPositionsAtLeast": 11,
+        "livingReadySamples": 71,
+        "trailingIncomplete": 0
+      },
+      {
+        "client": "TSE-BotClient",
+        "slot": 2,
+        "completeOneHzSamples": 604,
+        "firstTick": 20,
+        "lastTick": 12080,
+        "distinctPositionsAtLeast": 11,
+        "livingReadySamples": 78,
+        "trailingIncomplete": 0
+      },
+      {
+        "client": "TSE-BotClient",
+        "slot": 3,
+        "completeOneHzSamples": 604,
+        "firstTick": 20,
+        "lastTick": 12080,
+        "distinctPositionsAtLeast": 11,
+        "livingReadySamples": 87,
+        "trailingIncomplete": 0
+      },
+      {
+        "client": "TSE-BotClient2",
+        "slot": 0,
+        "completeOneHzSamples": 603,
+        "firstTick": 20,
+        "lastTick": 12060,
+        "distinctPositionsAtLeast": 11,
+        "livingReadySamples": 85,
+        "trailingIncomplete": 0
+      },
+      {
+        "client": "TSE-BotClient2",
+        "slot": 1,
+        "completeOneHzSamples": 603,
+        "firstTick": 20,
+        "lastTick": 12060,
+        "distinctPositionsAtLeast": 11,
+        "livingReadySamples": 79,
+        "trailingIncomplete": 0
+      },
+      {
+        "client": "TSE-BotClient2",
+        "slot": 2,
+        "completeOneHzSamples": 603,
+        "firstTick": 20,
+        "lastTick": 12060,
+        "distinctPositionsAtLeast": 11,
+        "livingReadySamples": 88,
+        "trailingIncomplete": 0
+      },
+      {
+        "client": "TSE-BotClient2",
+        "slot": 3,
+        "completeOneHzSamples": 602,
+        "firstTick": 20,
+        "lastTick": 12040,
+        "distinctPositionsAtLeast": 11,
+        "livingReadySamples": 77,
+        "trailingIncomplete": 0
+      }
+    ],
+    "resources": [
+      {
+        "role": "TSE-BotClient",
+        "samples": 119,
+        "seconds": 595.762113,
+        "averageCpuOneCorePercent": 44.255,
+        "peakPrivateMiB": 90.48,
+        "peakWorkingSetMiB": 108.121,
+        "peakHandles": 725,
+        "peakThreads": 20
+      },
+      {
+        "role": "TSE-BotClient2",
+        "samples": 119,
+        "seconds": 595.747206,
+        "averageCpuOneCorePercent": 43.881,
+        "peakPrivateMiB": 90.184,
+        "peakWorkingSetMiB": 107.652,
+        "peakHandles": 725,
+        "peakThreads": 19
+      },
+      {
+        "role": "server",
+        "samples": 119,
+        "seconds": 595.759179,
+        "averageCpuOneCorePercent": 2.659,
+        "peakPrivateMiB": 21.52,
+        "peakWorkingSetMiB": 32.086,
+        "peakHandles": 364,
+        "peakThreads": 10
+      }
+    ],
+    "restoredFileStates": 815,
+    "originalBinariesUnchanged": 30,
+    "ownedGameProcessesAfter": 0,
+    "testUdpPortsAfter": 0,
+    "shutdownScope": "Harness controlled teardown, not a new graceful-shutdown qualification.",
+    "fullTwentyHzAIHourQualified": false,
+    "perBotBrushCompletionQualified": false
+  },
+  "public": {
+    "dataProvider": "333networks",
+    "documentation": "https://333networks.com/json",
+    "game": "serioussamse",
+    "listObservedUtc": "2026-10-13T19:50:01.7754543Z",
+    "masterListEntries": 70,
+    "ownEndpointRows": 0,
+    "detailObservedUtc": "2026-10-13T19:53:06.5912412Z",
+    "detailError": "not_in_db",
+    "status": "NOT QUALIFIED",
+    "observationLimit": "Only a bounded observation window. Absence does not establish the sole cause or permanent inability to register.",
+    "externalUDPQueryVerified": false,
+    "externalGameJoinVerified": false,
+    "nativePublicBrowserVerified": false,
+    "apiRepeatIntervalGuardSeconds": 460
+  },
+  "preflight": {
+    "windowsDedicatedInboundAllowRulesPresent": true,
+    "dedicatedSocketBind": "0.0.0.0:25600 and 0.0.0.0:25601",
+    "master333DNSResolved": true,
+    "legacyMasterGamespyDNSResolved": false,
+    "storedMasterServer": "gs.ostap.eu",
+    "storedMasterServerOverride": "master.333networks.com",
+    "activeMasterRoutingPacketCaptured": false,
+    "upnpCollectionAvailable": false,
+    "defaultGatewayPrivate": true,
+    "interfaceVirtual": true,
+    "hostRole": "Shadow Neo Lite cloud development/test PC",
+    "userConfirmedNoRouterForwarding": true,
+    "soleFailureCauseProven": false,
+    "firewallChanged": false,
+    "routerChanged": false,
+    "hostFileChanged": false,
+    "gameBinariesChanged": false,
+    "temporaryMasterSettingProbeExecuted": false
+  },
+  "nextGate": [
+    "Provide an actually reachable public UDP endpoint for the unchanged dedicated server",
+    "Confirm effective native masterserver destination on that endpoint",
+    "Compare fresh external master data and direct UDP status/player query to eight exact native identities",
+    "Verify public Vanilla browser and real external Vanilla join",
+    "Keep Shadow as development and bot-client host; do not assume 24/7 capability"
+  ]
+}

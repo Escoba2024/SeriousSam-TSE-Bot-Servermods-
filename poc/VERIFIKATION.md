@@ -1,6 +1,8 @@
 # Pfad D – PoC: Quellcode-Verifikation & Implementierung
 ## Vanilla-kompatible Bots für Serious Sam: The Second Encounter v1.07
 
+> Historische Quellcode-Verifikation des ersten PoC. Der aktuelle native Entwicklungs- und Abnahmestand steht in [Shadow-Entwicklungsstand vom 12.10.2026](../docs/reports/2026-10-12-shadow-development-status.md). Quellcode-Erwartungen sind keine öffentliche Serverbrowser-Abnahme: lokale echte UDP-Status-/Player-Abfragen sind bestätigt; öffentliche Listung, externe Erreichbarkeit und Vanilla-Browser bleiben eigene offene Gates.
+
 **Status:** Der Bericht wurde anhand des echten Croteam-Sourcecode (Serious Engine v1.10, Commit `b408e88a16fd01aa1cfd0e0a999c86c2c1437c9e`) Punkt für Punkt nachgeprüft. Kernthesen bestätigt, **zwei entscheidende neue Befunde** (CRC-Check und Versions-Handshake) liefern die noch fehlenden harten Garantien für Pfad D – und töten die Alternativen endgültig. Der PoC-Patch für Pfad D ist **implementiert** (GameMP-only) und die Action-Generierungs-Logik wurde isoliert getestet (`botcore/`, alle Checks bestanden).
 
 ---
@@ -86,7 +88,7 @@ Alle Zeilenangaben: Croteam-Source v1.10, Commit `b408e88a`, **vor** Anwendung d
 | 12 | 1.10 = modifizierte 1.07-Basis | ✅ README: „source code for Serious Engine v.1.10 … modified to run correctly under the recent version of Windows" | Repo `README.md:4,26` |
 | 13 | CecilBotMod: `PlayerBot.es`, NavMesh-Entity, braucht modifizierte EntitiesMP+GameMP | ✅ `Classes/PlayerBot.ecl`, `Classes/NavMeshGenerator.ecl`, fertige `.nav`-Dateien im Repo | github.com/DreamyCecil/CecilBotMod |
 | 14 | SE1-ModSDK unterstützt TSE 1.07 | ✅ README listet TSE 1.05/1.07/1.10; `includes`-Branch liefert fertige **Engine107**-Libs (`Engine.lib`, `EntitiesV.lib`, …); warnt selbst: jede Entity-Abweichung → Desync gegen Vanilla | github.com/DreamyCecil/SE1-ModSDK (+ Branch `includes`) |
-| 15 | 333networks zählt echte Slots | ✅ (kein Code nötig; Slots sind echte `CPlayerTarget`s) | – |
+| 15 | 333networks zählt echte Slots | ◩ Quellcode-Erwartung und lokale UDP-Query bestätigt. Öffentliche 333networks-Listung und Vanilla-Browser noch nicht nativ abgenommen. | Aktueller Abnahmescope: `docs/reports/2026-10-12-shadow-development-status.md` |
 
 ---
 
@@ -168,7 +170,7 @@ Das validiert die Semantik des Generators; kompiliert wurde **nicht** gegen die 
 | 4 | 60 min Sync-Stabilität + Mapwechsel | Auto-Reconnect via `gam_strJoinAddress` |
 | 5 | 2–4 Bots pro Client (Split-Screen-Konfiguration SSC_PLAY2..4) | `JoinSession_t(…, ctLocalPlayers)` nimmt bis 4; Server bucht je Spieler einen Slot |
 | 6 | Mehrere Bot-Client-Prozesse | Bis `NET_MAXGAMEPLAYERS 16` Spieler gesamt |
-| 7 | Serverbrowser (333networks) | Zählt echte Slots |
+| 7 | Serverbrowser (333networks) | Erwartung: echte Slots zählen. Lokale UDP-Query bestanden; öffentliche Listung/Erreichbarkeit und Vanilla-Browser separat prüfen. |
 | 8 | Desync-Verhalten bei `cli_bEmulateDesync`-artigen Störungen | Sync-Check via `MSG_SYNCCHECK` (SessionState.cpp:1880+) |
 
 Offene Punkte (nicht per Source belegbar): tatsächliches Laufzeitverhalten des ModSDK-Game-Builds gegen die Vanilla-1.07-EXE (ABI-Kompatibilität der `GAME_Create`-Schnittstelle ist gegeben, aber unbewiesen im Praxistest), Langzeit-Stabilität headless/ungefokussiert, Timing-Drift über Stunden.
