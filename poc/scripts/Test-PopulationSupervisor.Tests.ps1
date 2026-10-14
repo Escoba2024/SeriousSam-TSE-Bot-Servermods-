@@ -20,6 +20,8 @@ Reject (Status 1) '\player_0\A\player_0\B\final\\queryid\2.1' (Status 1)
 Reject (Status 1) '\player_16\A\final\\queryid\2.1' (Status 1)
 Reject ((Status 0)+'\numplayers\0') (Players @()) (Status 0)
 Reject (Status 1) ((Players @('One')).Replace('\final\','')) (Status 1)
+Reject (Status 1) '\player_0\final\' (Status 1)
+Assert ((Sample @('final')).Total -eq 1) 'Valid player named final rejected'
 Reject (Status 17 16) (Players @(1..17)) (Status 17 16)
 $groups=@(
  [pscustomobject]@{Id='A';Size=4;Active=$true;EligibleAt=0},
@@ -43,4 +45,3 @@ $groups[0].Size=0
 $bad=$false;try{Get-PopulationGroupDecision $s $groups 8 2 0|Out-Null}catch{$bad=$true}
 Assert $bad 'Invalid group accepted'
 "POPULATION MODEL PASS: $checks checks"
-

@@ -1,13 +1,13 @@
 # Whole-process-group planning. No Human/Bot name classification.
 $ErrorActionPreference='Stop'
 function Get-PopulationFields([string]$Text) {
-    if($Text -notmatch '\\final\\'){throw 'Incomplete UDP response.'}
     $fields=@{}
     foreach($m in [regex]::Matches($Text,'\\([^\\]+)\\([^\\]*)')){
         $key=$m.Groups[1].Value
         if($fields.ContainsKey($key)){throw 'Duplicate query field.'}
         $fields[$key]=$m.Groups[2].Value
     }
+    if(!$fields.ContainsKey('final') -or $fields['final'] -cne ''){throw 'Incomplete UDP response.'}
     return $fields
 }
 function ConvertTo-PopulationSample([string]$StatusBefore,[string]$Players,[string]$StatusAfter) {
@@ -54,4 +54,3 @@ function Get-PopulationGroupDecision {
     }
     [pscustomobject]@{Action=$action;GroupId=$id;Reason=$reason;Cap=$cap;Total=$Sample.Total}
 }
-

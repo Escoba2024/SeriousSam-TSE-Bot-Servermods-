@@ -24,17 +24,17 @@
 ### Task1: Snapshot und Gruppenmodell
 **Files:** Create poc/scripts/PopulationSupervisorCore.ps1, Test-PopulationSupervisor.Tests.ps1.
 **Interfaces:** ConvertTo-PopulationSample(StatusBefore,Players,StatusAfter); Get-PopulationGroupDecision(Sample,Groups,TargetPopulation,ReservedHumanSlots,Now).
-- [ ] Tests für gültige/ungültige/fenced Samples und4er-Gruppenszenarien schreiben.
-- [ ] Tests ausführen: erwarteter RED „Supervisor functions are missing“.
-- [ ] Minimales Modell implementieren.
-- [ ] Tests ausführen: alle Modellfälle PASS; Commit.
+- [x] Tests für gültige/ungültige/fenced Samples und4er-Gruppenszenarien schreiben.
+- [x] Tests ausführen: erwarteter RED „Supervisor functions are missing“.
+- [x] Minimales Modell implementieren.
+- [x] Tests ausführen: alle Modellfälle PASS; Commit.
 
 ### Task2: Kontinuierlicher Adapter und Loop
 **Files:** Create PopulationSupervisor.ps1, Manage-BotPopulation.ps1, Test-PopulationSupervisorControl.Tests.ps1.
 **Interfaces:** Invoke-PopulationSupervisor(Config,StateDirectory,TargetPopulation,ReservedHumanSlots,PollMilliseconds,Iterations,ObserveOnly,FleetState), getrennte austauschbare Query/Start/Stop/Running-Adapter für Tests.
-- [ ] Controller-Tests für Stabilisierung, Pending/Timeout, Cooldown, Lock, Fehler/Cleanup schreiben und erwarteten RED prüfen.
-- [ ] Vorhandene Get-FleetConfig/Get-FleetIdentities/Invoke-FleetQuery/Start-BotFleet/Stop-BotFleet verwenden.
-- [ ] Tests, alle vorhandenen portablen Regressionen und PS-Parser ausführen; PASS; Commit.
+- [x] Controller-Tests für Stabilisierung, Pending/Timeout, Cooldown, Lock, Fehler/Cleanup schreiben und erwarteten RED prüfen.
+- [x] Vorhandene Get-FleetConfig/Get-FleetIdentities/Invoke-FleetQuery/Start-BotFleet/Stop-BotFleet verwenden.
+- [x] Tests, alle vorhandenen portablen Regressionen und PS-Parser ausführen; PASS; Commit.
 
 ### Task3: Nachweis und Publikation
 **Files:** docs/reports/2026-10-14-population-supervisor.md, poc/POPULATION-SUPERVISOR.md, README.md.
@@ -42,4 +42,3 @@
 - [ ] Grenzen/Bedienung und Prüfkommandos dokumentieren.
 - [ ] Unabhängige gesamte Branch-Prüfung; erforderliche Korrekturen durch Regression belegen.
 - [ ] Geprüften Branch/PR veröffentlichen, Remote prüfen, bestehende Drive-Handoff-Dokumente aktualisieren.
-
