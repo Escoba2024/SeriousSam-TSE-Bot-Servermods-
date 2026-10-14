@@ -2,7 +2,9 @@
 
 Bots joinen als reguläre Netzwerkspieler über separate modifizierte BotClient-Prozesse. Dedicated Server, Engine, Entities und menschliche TSE-1.07-Clients bleiben unverändert. Eingaben entstehen ausschließlich über normale `CPlayerAction`-/`CPlayerSource::SetAction`-Pfade. Pro Prozess sind maximal vier lokale Spieler vorgesehen; acht Bots verwenden zwei getrennte Installationen.
 
-## Nachweisbarer Stand – 13.10.2026
+## Nachweisbarer Stand – 14.10.2026
+
+Der [Population-Supervisor vom 14.10.2026](docs/reports/2026-10-14-population-supervisor.md) steuert vorbereitete Prozessgruppen anhand der gesamten Serverbelegung. Seine Regressionen prüfen echte Kindprozesse und UDP-Adapter; Bedienung, Cleanup und genaue native Qualifikationsgrenzen stehen in der [Supervisor-Anleitung](poc/POPULATION-SUPERVISOR.md). Die Gesamtphase Population Management bleibt teilweise offen.
 
 Die [Fortsetzung vom 13.10.2026](docs/reports/2026-10-13-serverbrowser-preflight.md) bestätigt zusätzlich das exakte sparsame Acht-Bot-Profil über 601,984 s Steady-Betrieb und 595,771 s unabhängige vollständige Spielerabfragen. Öffentliche 333networks-Listung, externe UDP-Erreichbarkeit und Vanilla-Browser bleiben offen; Shadow Neo Lite ist ein Cloud-Testsystem. Die bisherigen Abnahmen behalten ihren unten angegebenen Geltungsbereich.
 
@@ -13,7 +15,7 @@ Die [Fortsetzung vom 13.10.2026](docs/reports/2026-10-13-serverbrowser-preflight
 | Phase 3: acht Bots / 2 × 4 | LOKAL BESTANDEN: eigene Recovery-Stunde, 480 aktive Bot-Minuten, vollständige native Namen/Slots, Human-Lifecycle und BotClient-Ersatz. Kurze Mehrkarten-/Failed-Join-/Hard-Exit-Szenarien separat geprüft. |
 | AutoCombat + Hinderniserholung | LOKAL BESTANDEN mit aktuellem 61DC-Kandidaten: eigene Acht-Bot-KI-Stunde, 3697.291299 s vollständige Serverabfragen, 480 vollständige 20-Hz-Minutenfenster und 69 reguläre Brush-Advances ≥ 2 m; jeder Bot mit belegtem Fortschritt. |
 | Sparsames `LocalBotRelease.ini` | Separater Lifecycle-Smoke BESTANDEN: 176.503899 s Serverabfragen. Dieser Smoke ersetzt keine weitere KI-Stunde. |
-| Population Manager | TEILWEISE: geprüfte reine Populationsregeln und Fleet-Werkzeuge; dauerhafter automatischer Supervisor und robuste Human/Bot-Erkennung offen. |
+| Population Manager | TEILWEISE: kontinuierlicher konservativer Supervisor für ganze vorbereitete Prozessgruppen implementiert und lokal geprüft; exakte Einzelslot-Steuerung, beliebige Join-Races, externer Watchdog und Langzeitbetrieb offen. |
 | Navigation und Betrieb | Globale Wege, Items, Boden-/Abgrundsicherheit, weitere Waffenfamilien, Coop, öffentliche Serverbrowser-/333networks-Prüfung, 12/16 Bots, mehrere Server und 24/7 offen. |
 
 Der aktuell nativ qualifizierte KI-Kandidat hat DLL-SHA256 **`61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9`**. Es wird keine DLL mit diesem Repository ausgeliefert. Eine neu gebaute DLL benötigt ihre eigene Runtime-Abnahme. Die 1124 im Observer bezeugten Kampfkills gehören zum gesamten gespeicherten Lauf einschließlich Lifecycle/Vorlauf/Teardown; sie sind keine ausschließlich dem Stundenfenster zugeordnete Killzahl.

@@ -38,7 +38,7 @@
 
 ### Task3: Nachweis und Publikation
 **Files:** docs/reports/2026-10-14-population-supervisor.md, poc/POPULATION-SUPERVISOR.md, README.md.
-- [ ] Neue Funktionen gegen echte lokale Runtime nach Scope abnehmen, sofern kurze Probe sicher eingerichtet; alternativ fehlende native Abnahme ausdrücklich offen dokumentieren.
-- [ ] Grenzen/Bedienung und Prüfkommandos dokumentieren.
-- [ ] Unabhängige gesamte Branch-Prüfung; erforderliche Korrekturen durch Regression belegen.
+- [x] Neue Funktionen gegen echte lokale Runtime nach Scope abnehmen: endgültige hashgebundene 8→9→5→4→8-Probe bestanden.
+- [x] Grenzen/Bedienung und Prüfkommandos dokumentieren.
+- [x] Unabhängige gesamte Branch-Prüfung; erforderliche Korrekturen durch Regression belegen.
 - [ ] Geprüften Branch/PR veröffentlichen, Remote prüfen, bestehende Drive-Handoff-Dokumente aktualisieren.

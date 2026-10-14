@@ -14,4 +14,3 @@ ObserveOnly arbeitet ohne Starts/Stops und verwendet optional einen bestehenden 
 
 ## Abnahme und Grenzen
 Reine Modelltests: unbekannte/spoofähnliche Namen, Dubletten, unvollständige/wechselnde Antworten, Reserve, Überhang, Gruppengröße/Cooldown. Controllerprüfungen: echte Kindprozesse mit injiziertem Transport/Launch; Fehlstart, Join-Timeout, fehlender PID/Startzeit-Mismatch, zweiter Lock und Cleanup. Kurze native Probe mit derselben61DC-DLL ist eigener Gate; bis dahin keine neue native/24h-/race-freie/Einzelslot-Abnahme behaupten. Reserve mildert, garantiert keine unbegrenzten gleichzeitigen Human-Joins. Öffentliche Serverbrowser-Abnahme bleibt offen.
-
