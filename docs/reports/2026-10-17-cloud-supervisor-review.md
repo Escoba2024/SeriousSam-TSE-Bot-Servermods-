@@ -2,6 +2,8 @@
 
 Stand: 17.10.2026 (Europe/Berlin). Ausschließlich Code-/Cloud-Regression; keine Shadow-/Hetzner-Verbindung, keine Spielprozesse, keine neue DLL oder native Spielabnahme.
 
+Fortsetzung nach diesem ursprünglichen Reviewstand: [portable Publication-Prüfung](2026-10-17-cloud-publication-portability.md), Test-/Runner-Commit `711f8fd`. Dort sind vier der sieben Linux-Fehler tatsächlich portiert, der CLI-/UDP-Test separat ausführbar und die drei verbleibenden Windows-Abhängigkeiten ausdrücklich ausgewiesen. Die untenstehenden 18 PASS / 7 FAIL / 2 SKIP bleiben der historische Lauf von `d67bc6b`.
+
 ## Geprüfte Identitäten und Quellen
 
 | Referenz | Neu gelesener Commit | Bedeutung |
