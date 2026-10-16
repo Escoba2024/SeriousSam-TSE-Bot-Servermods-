@@ -23,6 +23,12 @@
 
 Nicht alle MCP-Server ohne Diagnosebedarf gleichzeitig betreiben. Vor jeder Schlussfolgerung Tool-Smoke-Test von echtem TSE-End-to-End-Nachweis trennen. Neue Einsatzentscheidungen und überprüfte Statusänderungen in `docs/decisions/` dokumentieren, nicht stillschweigend als neue Fakten behandeln.
 
+## Shadow-Werkzeugnachweis 17.10.2026 (vor Toolnutzung lesen)
+
+- [Echter Qualifikationsbericht REA/GhidraMCP/Frida](docs/reports/2026-10-17-mcp-toolchain-qualification.md) dokumentiert **bestanden**: REA-Doctor im korrekten Codex-/Ghidra-Scope; GhidraMCP-Headless über Python-MCP mit Import, Export, Funktionssuche und `GAME_Create`-Dekompilation an originaler Retail-DLL (SHA256 `1C41DA35B3FC47378C407B770E1BD1DCC2B7E6BF676C140586BC6035461D4208`); Frida-Python-Hook-Selbsttest auf eigenem Wegwerfprozess. **Noch nicht bestanden:** Codex→Ghidra GUI-E2E, REA-Sync-Hypothese, Frida-MCP-Toolcall und TSE-Runtime-Hook.
+- **Portkonflikt!** Codex-`ghidra` ist derzeit auf `http://127.0.0.1:8080/` registriert, aber dort lauscht der GMX-`tunnel-client`, nicht Ghidra. Diesen Dienst **nicht** stoppen. Ghidra separat auf freien Port konfigurieren oder über Headless-MCP-Testprojekt verbinden. `enabled` bei `codex mcp list` ist keine erfolgreiche Backend-Verbindung.
+- Ghidra-Projektverzeichnisse nicht unter dem Pfadsegment `.codex` anlegen; PyGhidra verweigert Punkte am Anfang eines Projektpfadsegments. Private Analyse liegt auf Shadow außerhalb des Git-Repository. Keine Runtime-/Dauerfreigabe aus statischen Analysen ableiten.
+
 ## Einstieg
 
 - [Repository-README und aktuelle Abnahme](README.md)
