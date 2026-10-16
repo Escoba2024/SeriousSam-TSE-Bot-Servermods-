@@ -1,7 +1,9 @@
 # Unit-Regressionen fuer PopulationCore.ps1 / Start-BotFleet.ps1 (Phase 3/5/6/7).
 # Reine Logiktests ohne Spielprozesse; ersetzen keine Runtime-Abnahme.
 $ErrorActionPreference = 'Stop'
-. "$PSScriptRoot\PopulationCore.ps1"
+$window=@{}
+if([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT){$window.WindowStyle='Hidden'}
+. "$PSScriptRoot/PopulationCore.ps1"
 $testDir = Join-Path ([IO.Path]::GetTempPath()) ('tse-fleet-' + [guid]::NewGuid())
 New-Item -ItemType Directory $testDir | Out-Null
 
@@ -57,15 +59,15 @@ $good = @{
     server = '127.0.0.1:25600'; queryPort = 25601; botNamePrefix = 'TSE_Bot'
     startStaggerSeconds = 1
     processes = @(
-        @{ clientDir = 'C:\tse\bot1'; localPlayers = 4; startupScript = 'Scripts\Phase2FourBots.ini' },
-        @{ clientDir = 'C:\tse\bot2'; localPlayers = 2; startupScript = 'Scripts\Phase2TwoBots.ini' }
+        @{ clientDir = (Join-Path $testDir 'plan-bot1'); localPlayers = 4; startupScript = 'Scripts\Phase2FourBots.ini' },
+        @{ clientDir = (Join-Path $testDir 'plan-bot2'); localPlayers = 2; startupScript = 'Scripts\Phase2TwoBots.ini' }
     )
 }
-$goodPath = "$testDir\fleet.json"
+$goodPath = "$testDir/fleet.json"
 $good | ConvertTo-Json -Depth 4 | Set-Content $goodPath
 $config = Get-FleetConfig -Path $goodPath
 $plan = Get-FleetPlan -Config $config
-if ($plan.Count -ne 2 -or $plan[0].exe -ne 'C:\tse\bot1\Bin\SeriousSam.exe' -or
+if ($plan.Count -ne 2 -or $plan[0].exe -ne (Join-Path $good.processes[0].clientDir 'Bin/SeriousSam.exe') -or
     $plan[0].arguments -ne '+connect 127.0.0.1:25600 +quickjoin +script Scripts\Phase2FourBots.ini' -or
     $plan[1].localPlayers -ne 2) {
     throw 'Fleet plan composition failed.'
@@ -74,7 +76,7 @@ if ($plan.Count -ne 2 -or $plan[0].exe -ne 'C:\tse\bot1\Bin\SeriousSam.exe' -or
 function Write-BadConfig([hashtable]$Mutation, [string]$Name) {
     $bad = $good.Clone()
     foreach ($key in $Mutation.Keys) { $bad[$key] = $Mutation[$key] }
-    $path = "$testDir\$Name.json"
+    $path = "$testDir/$Name.json"
     $bad | ConvertTo-Json -Depth 4 | Set-Content $path
     return $path
 }
@@ -83,19 +85,19 @@ Expect-Throw { Get-FleetConfig -Path (Write-BadConfig @{server='nonsense'} 'bads
 Expect-Throw { Get-FleetConfig -Path (Write-BadConfig @{processes=@()} 'empty') } 'at least one process' 'no processes'
 Expect-Throw { Get-FleetConfig -Path (Write-BadConfig @{processes=@(@{clientDir='C:\x'; localPlayers=5; startupScript='s.ini'})} 'toomany') } '1\.\.4' 'localPlayers over limit'
 Expect-Throw { Get-FleetConfig -Path (Write-BadConfig @{processes=@(
-    @{clientDir='C:\same'; localPlayers=2; startupScript='Scripts\a.ini'},
-    @{clientDir='C:\same'; localPlayers=2; startupScript='Scripts\b.ini'})} 'dupdir') } 'own bot-client installation' 'duplicate client dir'
+    @{clientDir=(Join-Path $testDir 'same'); localPlayers=2; startupScript='Scripts\a.ini'},
+    @{clientDir=(Join-Path $testDir 'same'); localPlayers=2; startupScript='Scripts\b.ini'})} 'dupdir') } 'own bot-client installation' 'duplicate client dir'
 
 # --- Start-BotFleet -DryRun: Plan ohne Prozessstart, Statusschutz ---
-$dry = & "$PSScriptRoot\Start-BotFleet.ps1" -Config $goodPath -State "$testDir\state.json" -DryRun | ConvertFrom-Json
+$dry = & "$PSScriptRoot/Start-BotFleet.ps1" -Config $goodPath -State "$testDir/state.json" -DryRun | ConvertFrom-Json
 if (!$dry.dryRun -or @($dry.plan).Count -ne 2) { throw 'Fleet dry run failed.' }
-if (Test-Path "$testDir\state.json") { throw 'Dry run must not write a state file.' }
-'{}' | Set-Content "$testDir\state.json"
-Expect-Throw { & "$PSScriptRoot\Start-BotFleet.ps1" -Config $goodPath -State "$testDir\state.json" -DryRun } 'new fleet state file' 'state protection'
+if (Test-Path "$testDir/state.json") { throw 'Dry run must not write a state file.' }
+'{}' | Set-Content "$testDir/state.json"
+Expect-Throw { & "$PSScriptRoot/Start-BotFleet.ps1" -Config $goodPath -State "$testDir/state.json" -DryRun } 'new fleet state file' 'state protection'
 
 Expect-Throw { Get-FleetConfig -Path (Write-BadConfig @{processes=@(
-    @{clientDir='C:\same'; localPlayers=2; startupScript='Scripts\a.ini'},
-    @{clientDir='C:\same\..\same\'; localPlayers=2; startupScript='Scripts\b.ini'})} 'aliasdir') } 'own bot-client installation' 'aliased client dir'
+    @{clientDir=(Join-Path $testDir 'same'); localPlayers=2; startupScript='Scripts\a.ini'},
+    @{clientDir=(Join-Path $testDir 'same/../same/'); localPlayers=2; startupScript='Scripts\b.ini'})} 'aliasdir') } 'own bot-client installation' 'aliased client dir'
 Expect-Throw { Get-FleetConfig -Path (Write-BadConfig @{processes=@(@{clientDir='C:\x'; localPlayers=1.5; startupScript='s.ini'})} 'fraction') } '1\.\.4' 'fractional players'
 Expect-Throw { Get-FleetConfig -Path (Write-BadConfig @{server='127.0.0.1:65536'} 'port') } 'port' 'invalid port'
 Expect-Throw { Get-FleetConfig -Path (Write-BadConfig @{startStaggerSeconds=-1} 'stagger') } 'stagger' 'negative stagger'
@@ -103,17 +105,17 @@ Expect-Throw { Get-FleetConfig -Path (Write-BadConfig @{startStaggerSeconds=-1} 
 $native=@{processes=@()}
 foreach($prefix in 'A','B') {
     $dir=Join-Path $testDir $prefix
-    New-Item -ItemType Directory "$dir\Data","$dir\Players" | Out-Null
+    New-Item -ItemType Directory "$dir/Data","$dir/Players" | Out-Null
     $stream=[IO.MemoryStream]::new(); $writer=[IO.BinaryWriter]::new($stream)
     $writer.Write([Text.Encoding]::ASCII.GetBytes('GAMEV012')); $writer.Write([int]0)
     foreach($value in 0,0,0,1,2,3,1) { $writer.Write([int]$value) }
-    [IO.File]::WriteAllBytes("$dir\Data\SeriousSam.gms",$stream.ToArray()); $writer.Dispose()
+    [IO.File]::WriteAllBytes("$dir/Data/SeriousSam.gms",$stream.ToArray()); $writer.Dispose()
     foreach($slot in 0,1) {
         $stream=[IO.MemoryStream]::new(); $writer=[IO.BinaryWriter]::new($stream)
         $writer.Write([Text.Encoding]::ASCII.GetBytes('PLC4')); $name=[Text.Encoding]::ASCII.GetBytes("${prefix}_$slot")
         $writer.Write([int]$name.Length); $writer.Write($name); $writer.Write([int]0)
         $writer.Write([guid]::NewGuid().ToByteArray()); $writer.Write([byte[]]::new(32))
-        [IO.File]::WriteAllBytes("$dir\Players\Player$slot.plr",$stream.ToArray()); $writer.Dispose()
+        [IO.File]::WriteAllBytes("$dir/Players/Player$slot.plr",$stream.ToArray()); $writer.Dispose()
     }
     $native.processes+=@(@{clientDir=$dir;localPlayers=2})
 }
@@ -121,19 +123,19 @@ if ((Get-FleetIdentities $native).Count -ne 4) { throw 'Native profile preflight
 $native.processes[0].localPlayers=4
 Expect-Throw { Get-FleetIdentities $native } 'split-screen count' 'native count mismatch'
 $native.processes[0].localPlayers=2
-$a=[IO.File]::ReadAllBytes("$testDir\A\Players\Player0.plr")
-$b=[IO.File]::ReadAllBytes("$testDir\B\Players\Player0.plr")
+$a=[IO.File]::ReadAllBytes("$testDir/A/Players/Player0.plr")
+$b=[IO.File]::ReadAllBytes("$testDir/B/Players/Player0.plr")
 [Array]::Copy($a,$a.Length-48,$b,$b.Length-48,16)
-[IO.File]::WriteAllBytes("$testDir\B\Players\Player0.plr",$b)
+[IO.File]::WriteAllBytes("$testDir/B/Players/Player0.plr",$b)
 Expect-Throw { Get-FleetIdentities $native } 'Duplicate fleet GUID or name' 'cloned profile GUID'
 
 # A stale state must never stop a reused PID, even with the same executable.
-$sleeping=Start-Process (Get-Process -Id $PID).Path -ArgumentList '-NoProfile -Command "Start-Sleep -Seconds 30"' -WindowStyle Hidden -PassThru
+$sleeping=Start-Process (Get-Process -Id $PID).Path -ArgumentList '-NoProfile -Command "Start-Sleep -Seconds 30"' @window -PassThru
 try {
     @{processes=@(@{pid=$sleeping.Id;exe=$sleeping.Path;startedUtc=$sleeping.StartTime.ToUniversalTime().AddSeconds(-1).ToString('o')})} |
-        ConvertTo-Json -Depth 4 | Set-Content "$testDir\stale.json"
-    & "$PSScriptRoot\Stop-BotFleet.ps1" -State "$testDir\stale.json" | Out-Null
+        ConvertTo-Json -Depth 4 | Set-Content "$testDir/stale.json"
+    & "$PSScriptRoot/Stop-BotFleet.ps1" -State "$testDir/stale.json" | Out-Null
     if ($sleeping.HasExited) { throw 'Stale state stopped an unrelated process.' }
-    Expect-Throw { & "$PSScriptRoot\Stop-BotFleet.ps1" -State "$testDir\stale.json" } 'not be overwritten' 'stop evidence protection'
+    Expect-Throw { & "$PSScriptRoot/Stop-BotFleet.ps1" -State "$testDir/stale.json" } 'not be overwritten' 'stop evidence protection'
 } finally { if(!$sleeping.HasExited) { Stop-Process -Id $sleeping.Id -Force } }
 Write-Output "ALL FLEET/POPULATION CHECKS PASSED ($testDir)"

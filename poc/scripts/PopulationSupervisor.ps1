@@ -42,15 +42,9 @@ function Invoke-PopulationLoop {
             $sample=$null
             try{$sample=& $ReadSample}catch{$stable=0;$key=$null;& $Log ([ordered]@{Event='QueryUncertain';Time=$time;Error=$_.Exception.Message})}
             $time=[double](& $Now)
-            $timedOut=@($Groups|Where-Object{$_.Active -and $_.Pending -and $time -ge $_.Deadline}|Select-Object -First 1)
-            if($timedOut.Count){
-                $g=$timedOut[0]
-                if(!$ObserveOnly){& $StopGroup $g;$g.Active=$false;$g.Pending=$false;$g.EligibleAt=[double](& $Now)+10}
-                & $Log ([ordered]@{Event='JoinTimeout';Group=$g.Id;Time=$time})
-                $stable=0;$key=$null
-            }elseif($sample -and $sample.Valid){
-                $next="$($sample.Total)|$($sample.MaxPlayers)|$($sample.Map)"
-                if($next -eq $key){$stable++}else{$key=$next;$stable=1}
+            # Fresh valid readiness cancels an outstanding deadline before timeout.
+            # The UDP round trip itself may have crossed that deadline.
+            if($sample -and $sample.Valid){
                 $allReady=$true
                 foreach($g in @($Groups|Where-Object Active)){
                     $ready=(& $IsReady $g $sample)
@@ -64,6 +58,16 @@ function Invoke-PopulationLoop {
                         }
                     }
                 }
+            }
+            $timedOut=@($Groups|Where-Object{$_.Active -and $_.Pending -and $time -ge $_.Deadline}|Select-Object -First 1)
+            if($timedOut.Count){
+                $g=$timedOut[0]
+                if(!$ObserveOnly){& $StopGroup $g;$g.Active=$false;$g.Pending=$false;$g.EligibleAt=[double](& $Now)+10}
+                & $Log ([ordered]@{Event='JoinTimeout';Group=$g.Id;Time=$time})
+                $stable=0;$key=$null
+            }elseif($sample -and $sample.Valid){
+                $next="$($sample.Total)|$($sample.MaxPlayers)|$($sample.Map)"
+                if($next -eq $key){$stable++}else{$key=$next;$stable=1}
                 $decision=Get-PopulationGroupDecision $sample $Groups $TargetPopulation $ReservedHumanSlots $time
                 if($fence){
                     $removedStillPresent=@($fence.Names|Where-Object{$_ -in $sample.Names}).Count -gt 0

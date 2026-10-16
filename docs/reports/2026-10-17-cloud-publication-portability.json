@@ -1,0 +1,732 @@
+{
+  "date": "2026-10-17",
+  "scope": "Cloud test-only continuation; no native games or runtime access",
+  "baseCommit": "b92f0bc67ae507c059e747436daf3d9087b6ce6a",
+  "testRunnerCommit": "711f8fd57f4cc0771137d72b1bd69d256902e3e1",
+  "environment": {
+    "os": "Debian 13",
+    "powershell": "7.5.4",
+    "python": "3.12.14"
+  },
+  "fixtureRedBeforePorting": [
+    "Test-FleetAndPopulation.Tests.ps1",
+    "Test-FleetLaunchFailure.Tests.ps1",
+    "Test-FleetStopCurrent.Tests.ps1",
+    "Test-FleetStopExitCode.Tests.ps1"
+  ],
+  "publication": {
+    "passed": true,
+    "validationScope": "Selected portable publication checks; native game acceptance is excluded.",
+    "windowsHost": false,
+    "windowsPortableCoverageComplete": false,
+    "powerShellSuites": [
+      "Test-FleetAndPopulation.Tests.ps1",
+      "Test-FleetIdentitySidecars.Tests.ps1",
+      "Test-FleetJoinOnlyArguments.Tests.ps1",
+      "Test-FleetLaunchFailure.Tests.ps1",
+      "Test-FleetMapAcceptance.Tests.ps1",
+      "Test-FleetQuery.Tests.ps1",
+      "Test-FleetQueryReadiness.Tests.ps1",
+      "Test-FleetReconnectAcceptance.Tests.ps1",
+      "Test-FleetRecoveryArguments.Tests.ps1",
+      "Test-FleetRoundReadiness.Tests.ps1",
+      "Test-FleetStartupArguments.Tests.ps1",
+      "Test-FleetSteadySample.Tests.ps1",
+      "Test-FleetStopCurrent.Tests.ps1",
+      "Test-FleetStopExitCode.Tests.ps1",
+      "Test-Phase1Telemetry.Tests.ps1",
+      "Test-PopulationDeadlineBoundary.Tests.ps1",
+      "Test-PopulationQueryAdapter.Tests.ps1",
+      "Test-PopulationQueryFraming.Tests.ps1",
+      "Test-PopulationReadinessRecovery.Tests.ps1",
+      "Test-PopulationSupervisor.Tests.ps1",
+      "Test-PopulationSupervisorControl.Tests.ps1",
+      "Test-RetailJoinState.Tests.ps1",
+      "Test-ShadowRuntimeLog.ps1"
+    ],
+    "powerShellFailed": 0,
+    "powerShellSkipped": 5,
+    "pythonFixtureTests": 44,
+    "publishedSourceHashes": 13,
+    "nativeRuntimeStarted": false,
+    "results": [
+      {
+        "name": "Test-FleetAndPopulation.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetIdentitySidecars.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetJoinOnlyArguments.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetLaunchFailure.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetMapAcceptance.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetProcessControl.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires Windows CIM and ntdll pause/resume."
+      },
+      {
+        "name": "Test-FleetQuery.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetQueryReadiness.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetReconnectAcceptance.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetRecoveryArguments.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetRoundReadiness.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetStartupArguments.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetSteadySample.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetStopCurrent.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetStopExitCode.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-LocalReleasePackage.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires qualified private SDK artifacts."
+      },
+      {
+        "name": "Test-LocalReleasePreparation.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires Windows release-staging path semantics."
+      },
+      {
+        "name": "Test-Phase1Telemetry.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationDeadlineBoundary.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationQueryAdapter.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationQueryFraming.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationReadinessRecovery.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationSupervisor.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationSupervisorAdapter.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires Windows CIM ownership/cleanup; portable CLI/UDP suite runs separately."
+      },
+      {
+        "name": "Test-PopulationSupervisorControl.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-RetailCleanup.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires a native game run."
+      },
+      {
+        "name": "Test-RetailJoinState.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-ShadowRuntimeLog.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "test_fleet_ai_evidence.py",
+        "kind": "Python",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "test_obstacle_evidence.py",
+        "kind": "Python",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "test_local_release_smoke.py",
+        "kind": "Python",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Verify-SourceProvenance.py",
+        "kind": "Provenance",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "PublishedSourceHashes",
+        "kind": "Provenance",
+        "status": "PASS"
+      }
+    ]
+  },
+  "freshCheckoutPublication": {
+    "passed": true,
+    "validationScope": "Selected portable publication checks; native game acceptance is excluded.",
+    "windowsHost": false,
+    "windowsPortableCoverageComplete": false,
+    "powerShellSuites": [
+      "Test-FleetAndPopulation.Tests.ps1",
+      "Test-FleetIdentitySidecars.Tests.ps1",
+      "Test-FleetJoinOnlyArguments.Tests.ps1",
+      "Test-FleetLaunchFailure.Tests.ps1",
+      "Test-FleetMapAcceptance.Tests.ps1",
+      "Test-FleetQuery.Tests.ps1",
+      "Test-FleetQueryReadiness.Tests.ps1",
+      "Test-FleetReconnectAcceptance.Tests.ps1",
+      "Test-FleetRecoveryArguments.Tests.ps1",
+      "Test-FleetRoundReadiness.Tests.ps1",
+      "Test-FleetStartupArguments.Tests.ps1",
+      "Test-FleetSteadySample.Tests.ps1",
+      "Test-FleetStopCurrent.Tests.ps1",
+      "Test-FleetStopExitCode.Tests.ps1",
+      "Test-Phase1Telemetry.Tests.ps1",
+      "Test-PopulationDeadlineBoundary.Tests.ps1",
+      "Test-PopulationQueryAdapter.Tests.ps1",
+      "Test-PopulationQueryFraming.Tests.ps1",
+      "Test-PopulationReadinessRecovery.Tests.ps1",
+      "Test-PopulationSupervisor.Tests.ps1",
+      "Test-PopulationSupervisorControl.Tests.ps1",
+      "Test-RetailJoinState.Tests.ps1",
+      "Test-ShadowRuntimeLog.ps1"
+    ],
+    "powerShellFailed": 0,
+    "powerShellSkipped": 5,
+    "pythonFixtureTests": 44,
+    "publishedSourceHashes": 13,
+    "nativeRuntimeStarted": false,
+    "results": [
+      {
+        "name": "Test-FleetAndPopulation.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetIdentitySidecars.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetJoinOnlyArguments.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetLaunchFailure.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetMapAcceptance.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetProcessControl.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires Windows CIM and ntdll pause/resume."
+      },
+      {
+        "name": "Test-FleetQuery.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetQueryReadiness.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetReconnectAcceptance.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetRecoveryArguments.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetRoundReadiness.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetStartupArguments.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetSteadySample.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetStopCurrent.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetStopExitCode.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-LocalReleasePackage.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires qualified private SDK artifacts."
+      },
+      {
+        "name": "Test-LocalReleasePreparation.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires Windows release-staging path semantics."
+      },
+      {
+        "name": "Test-Phase1Telemetry.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationDeadlineBoundary.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationQueryAdapter.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationQueryFraming.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationReadinessRecovery.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationSupervisor.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationSupervisorAdapter.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires Windows CIM ownership/cleanup; portable CLI/UDP suite runs separately."
+      },
+      {
+        "name": "Test-PopulationSupervisorControl.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-RetailCleanup.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires a native game run."
+      },
+      {
+        "name": "Test-RetailJoinState.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-ShadowRuntimeLog.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "test_fleet_ai_evidence.py",
+        "kind": "Python",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "test_obstacle_evidence.py",
+        "kind": "Python",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "test_local_release_smoke.py",
+        "kind": "Python",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Verify-SourceProvenance.py",
+        "kind": "Provenance",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "PublishedSourceHashes",
+        "kind": "Provenance",
+        "status": "PASS"
+      }
+    ]
+  },
+  "injectedPythonExitOne": {
+    "passed": false,
+    "validationScope": "Selected portable publication checks; native game acceptance is excluded.",
+    "windowsHost": false,
+    "windowsPortableCoverageComplete": false,
+    "powerShellSuites": [
+      "Test-FleetAndPopulation.Tests.ps1",
+      "Test-FleetIdentitySidecars.Tests.ps1",
+      "Test-FleetJoinOnlyArguments.Tests.ps1",
+      "Test-FleetLaunchFailure.Tests.ps1",
+      "Test-FleetMapAcceptance.Tests.ps1",
+      "Test-FleetQuery.Tests.ps1",
+      "Test-FleetQueryReadiness.Tests.ps1",
+      "Test-FleetReconnectAcceptance.Tests.ps1",
+      "Test-FleetRecoveryArguments.Tests.ps1",
+      "Test-FleetRoundReadiness.Tests.ps1",
+      "Test-FleetStartupArguments.Tests.ps1",
+      "Test-FleetSteadySample.Tests.ps1",
+      "Test-FleetStopCurrent.Tests.ps1",
+      "Test-FleetStopExitCode.Tests.ps1",
+      "Test-Phase1Telemetry.Tests.ps1",
+      "Test-PopulationDeadlineBoundary.Tests.ps1",
+      "Test-PopulationQueryAdapter.Tests.ps1",
+      "Test-PopulationQueryFraming.Tests.ps1",
+      "Test-PopulationReadinessRecovery.Tests.ps1",
+      "Test-PopulationSupervisor.Tests.ps1",
+      "Test-PopulationSupervisorControl.Tests.ps1",
+      "Test-RetailJoinState.Tests.ps1",
+      "Test-ShadowRuntimeLog.ps1"
+    ],
+    "powerShellFailed": 0,
+    "powerShellSkipped": 5,
+    "pythonFixtureTests": 0,
+    "publishedSourceHashes": 13,
+    "nativeRuntimeStarted": false,
+    "results": [
+      {
+        "name": "Test-FleetAndPopulation.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetIdentitySidecars.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetJoinOnlyArguments.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetLaunchFailure.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetMapAcceptance.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetProcessControl.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires Windows CIM and ntdll pause/resume."
+      },
+      {
+        "name": "Test-FleetQuery.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetQueryReadiness.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetReconnectAcceptance.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetRecoveryArguments.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetRoundReadiness.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetStartupArguments.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetSteadySample.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetStopCurrent.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-FleetStopExitCode.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-LocalReleasePackage.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires qualified private SDK artifacts."
+      },
+      {
+        "name": "Test-LocalReleasePreparation.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires Windows release-staging path semantics."
+      },
+      {
+        "name": "Test-Phase1Telemetry.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationDeadlineBoundary.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationQueryAdapter.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationQueryFraming.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationReadinessRecovery.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationSupervisor.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-PopulationSupervisorAdapter.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires Windows CIM ownership/cleanup; portable CLI/UDP suite runs separately."
+      },
+      {
+        "name": "Test-PopulationSupervisorControl.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-RetailCleanup.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "SKIP",
+        "reason": "Requires a native game run."
+      },
+      {
+        "name": "Test-RetailJoinState.Tests.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "Test-ShadowRuntimeLog.ps1",
+        "kind": "PowerShell",
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "name": "test_fleet_ai_evidence.py",
+        "kind": "Python",
+        "status": "FAIL",
+        "exitCode": 1
+      },
+      {
+        "name": "test_obstacle_evidence.py",
+        "kind": "Python",
+        "status": "FAIL",
+        "exitCode": 1
+      },
+      {
+        "name": "test_local_release_smoke.py",
+        "kind": "Python",
+        "status": "FAIL",
+        "exitCode": 1
+      },
+      {
+        "name": "Verify-SourceProvenance.py",
+        "kind": "Provenance",
+        "status": "FAIL",
+        "exitCode": 1
+      },
+      {
+        "name": "PublishedSourceHashes",
+        "kind": "Provenance",
+        "status": "PASS"
+      }
+    ]
+  },
+  "evidenceOverwriteRejected": true,
+  "existingEvidenceHashUnchanged": true,
+  "independentReview": {
+    "range": "b92f0bc..711f8fd",
+    "actionableFindings": 0,
+    "windowsExecution": false,
+    "windowsPowerShell51": "static review only"
+  },
+  "mainAtStart": "4ca47d31294ac1fac1b4ecb5516c53a6f857e22b",
+  "mainAtFinalRefCheck": "6216664384e9ca5f4e2da0f393f1eecd54a86884"
+}

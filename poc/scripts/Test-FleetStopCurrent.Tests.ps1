@@ -1,10 +1,12 @@
 # Actual matching child must stop; a stale timestamp must preserve another child.
 $ErrorActionPreference='Stop'
+$window=@{}
+if([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT){$window.WindowStyle='Hidden'}
 $root=Join-Path ([IO.Path]::GetTempPath()) ('tse-stop-current-'+[guid]::NewGuid())
 New-Item -ItemType Directory $root|Out-Null
 $exe=(Get-Process -Id $PID).Path
 foreach($stale in $true,$false){
-    $child=Start-Process $exe -ArgumentList '-NoProfile -Command "Start-Sleep -Seconds 60"' -WindowStyle Hidden -PassThru
+    $child=Start-Process $exe -ArgumentList '-NoProfile -Command "Start-Sleep -Seconds 60"' @window -PassThru
     try{
         $started=$child.StartTime.ToUniversalTime()
         if($stale){$started=$started.AddSeconds(-1)}

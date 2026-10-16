@@ -1,7 +1,9 @@
 $ErrorActionPreference='Stop'
+$window=@{}
+if([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT){$window.WindowStyle='Hidden'}
 $root=Join-Path ([IO.Path]::GetTempPath()) ('tse-stop-exit-'+[guid]::NewGuid())
 New-Item -ItemType Directory $root|Out-Null
-$child=Start-Process (Get-Process -Id $PID).Path -ArgumentList '-NoProfile -Command "Start-Sleep -Seconds 60"' -WindowStyle Hidden -PassThru
+$child=Start-Process (Get-Process -Id $PID).Path -ArgumentList '-NoProfile -Command "Start-Sleep -Seconds 60"' @window -PassThru
 try{
     $state=Join-Path $root 'state.json'
     @{processes=@(@{pid=$child.Id;exe=$child.Path;clientDir=$root;startedUtc=$child.StartTime.ToUniversalTime().ToString('o')})}|ConvertTo-Json -Depth 4|Set-Content $state

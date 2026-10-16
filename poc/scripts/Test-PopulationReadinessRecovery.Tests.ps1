@@ -1,4 +1,6 @@
 $ErrorActionPreference='Stop'
+$window=@{}
+if([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT){$window.WindowStyle='Hidden'}
 . "$PSScriptRoot/PopulationSupervisor.ps1"
 # A real child remains alive after its actual retail-format log says disconnected.
 function Invoke-RecoveryCase([bool]$Transient,[bool]$RetainReportedName=$false) {
@@ -10,7 +12,7 @@ function Invoke-RecoveryCase([bool]$Transient,[bool]$RetainReportedName=$false) 
  $groups=@([pscustomobject]@{Id='A';Size=1;Names=@('A1');Config=@{processes=@(@{clientDir=$tmp})};Active=$false;EligibleAt=0})
  $exe=(Get-Process -Id $PID).Path
  $start={param($g)
-  $p=Start-Process $exe -ArgumentList '-NoProfile -Command "Start-Sleep -Seconds 90"' -WindowStyle Hidden -PassThru
+  $p=Start-Process $exe -ArgumentList '-NoProfile -Command "Start-Sleep -Seconds 90"' @window -PassThru
   $ctx.children+=@($p);$ctx.starts++
   $native|Set-Content -LiteralPath $path
   return @{Entry=@{pid=$p.Id;exe=$exe;startedUtc=$p.StartTime.ToUniversalTime().ToString('o')}}

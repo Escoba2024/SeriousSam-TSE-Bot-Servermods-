@@ -2,7 +2,10 @@
 $ErrorActionPreference='Stop'
 function Get-PopulationFields([string]$Text) {
     $fields=@{}
-    foreach($m in [regex]::Matches($Text,'\\([^\\]+)\\([^\\]*)')){
+    $pairs=[regex]::Matches($Text,'\\([^\\]+)\\([^\\]*)')
+    # Never let regex scanning silently skip a prefix or a truncated trailing key.
+    if((($pairs|ForEach-Object Value) -join '') -cne $Text){throw 'Malformed UDP response framing.'}
+    foreach($m in $pairs){
         $key=$m.Groups[1].Value
         if($fields.ContainsKey($key)){throw 'Duplicate query field.'}
         $fields[$key]=$m.Groups[2].Value
