@@ -54,7 +54,15 @@ function Invoke-PopulationLoop {
                 $allReady=$true
                 foreach($g in @($Groups|Where-Object Active)){
                     $ready=(& $IsReady $g $sample)
-                    if($ready){$g.Pending=$false}else{$allReady=$false}
+                    if($ready){$g.Pending=$false}else{
+                        $allReady=$false
+                        # A joined process can survive a network/sync disconnect.
+                        # Re-arm the bounded readiness deadline instead of waiting forever.
+                        if(!$ObserveOnly -and !$g.Pending){
+                            $g.Pending=$true;$g.Deadline=$time+45
+                            & $Log ([ordered]@{Event='ReadinessLost';Group=$g.Id;Time=$time})
+                        }
+                    }
                 }
                 $decision=Get-PopulationGroupDecision $sample $Groups $TargetPopulation $ReservedHumanSlots $time
                 if($fence){
