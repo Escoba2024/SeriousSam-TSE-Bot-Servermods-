@@ -1,4 +1,6 @@
 $ErrorActionPreference='Stop'
+$window=@{}
+if([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT){$window.WindowStyle='Hidden'}
 if(Test-Path "$PSScriptRoot/PopulationSupervisor.ps1"){. "$PSScriptRoot/PopulationSupervisor.ps1"}
 if(!(Get-Command Invoke-PopulationLoop -ErrorAction SilentlyContinue)){throw 'Population loop is missing'}
 $checks=0
@@ -9,7 +11,7 @@ function RunCase($Counts,$Iterations,$Ready=$true,$FailStart=$false,$FailLog=$fa
  $pwsh=(Get-Process -Id $PID).Path
  $start={param($group)
     if($FailStart){throw 'launch fault'}
-    $p=Start-Process $pwsh -ArgumentList '-NoProfile -Command "Start-Sleep -Seconds 90"' -WindowStyle Hidden -PassThru
+    $p=Start-Process $pwsh -ArgumentList '-NoProfile -Command "Start-Sleep -Seconds 90"' @window -PassThru
     $ctx.children+=@($p);$ctx.starts++;$ctx.startTimes+=@($ctx.time)
     return $p
  }.GetNewClosure()
