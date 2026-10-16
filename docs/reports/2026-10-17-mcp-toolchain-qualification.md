@@ -34,6 +34,10 @@ Unveränderte Retail-Server-`GameMP.dll`:
 - Frida-Smoke-Test meldete `attached=true`, `hook_hits=3`, `errors=[]`, `pass=true`, `self_test_complete`, nachfolgende Aufräumroutine beendet nur den selbst gestarteten Testprozess.
 - Anmerkung: Eine nachgelagerte isolierte Erprobung der **Frida-MCP-Clientliste** konnte in diesem Durchlauf nicht ausgeführt werden; daher Frida-MCP-E2E **offen**, auch wenn die Registrierung sichtbar ist.
 
+## Anschlusskonfiguration nach dem Test
+
+Nach erfolgreichem Python-MCP-Headless-Test wurde **zusätzlich** die globale Codex-MCP-Registrierung `ghidra_tse` eingerichtet (`codex.cmd mcp add ghidra_tse`) und mit `codex.cmd mcp get ghidra_tse` geprüft: **enabled=true**, Transport `stdio`, Backend `ghidra-mcp.exe --headless`, originale Retail-Server-`GameMP.dll`, eigenes Ghidra-Projekt außerhalb des Repositorys, JAR der installierten Erweiterung und die nötigen Java/Ghidra-Umgebungsvariablen. Sie ist die bevorzugte Ghidra-Registrierung für neue TSE-Agentensitzungen; die ältere `ghidra`-GUI-Konfiguration auf dem vom GMX-Tunnel belegten Port **nicht** verwenden. Bestehende laufende Codex-Prozesse/Sitzungen wurden nicht neu gestartet. **Grenze:** Registrierung und separates MCP-E2E sind belegt; ein *Codex-Agent selbst*, der über `ghidra_tse` die Dekomposition startet, wurde noch nicht live getestet.
+
 ## Verbindliche Folgemaßnahmen
 
 1. **Ghidra-Integration für Codex reparieren, ohne GMX zu unterbrechen**: für GUI-Plugin dedizierten freien Port wählen und dort Backend starten, `codex ghidra` darauf konfigurieren; oder speziell einen separaten **Headless-MCP-Server** mit fixem eigenem Projekt/Testbinary registrieren. Kein Produktiv-Codex-MCP auf den GMX-HTML-Port zeigen lassen.
