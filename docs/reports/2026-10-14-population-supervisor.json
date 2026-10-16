@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-14",
+  "baselineCommit": "f4a1a336e271e21bc01df430847bf3fda08b122d",
+  "localTestedCodeCommit": "21ae68ef836667fe5e05ecac73c498d0560ab56c",
+  "scope": "Bounded local whole-process population lifecycle, qualified existing GameMP. No AI hour, individual-slot, concurrent-join, public UDP or 24h qualification.",
+  "portable": {
+    "pythonFixtureTests": 44,
+    "passed": true,
+    "modelChecks": 22,
+    "controllerChecks": 18,
+    "publishedSourceHashes": 13,
+    "powerShellSuites": 22,
+    "realCliUdpAndOwnedProcessAdapter": true
+  },
+  "native": {
+    "counts": [
+      8,
+      9,
+      5,
+      4,
+      8
+    ],
+    "stopEvents": 1,
+    "startupSha256": "2B063633CE598B787BAFDA426C30DD39125A9EA7DF1D94A37B880FA64EEC42F6",
+    "heldUncertainQueries": 1,
+    "humanRetained": true,
+    "passed": true,
+    "independentStagesChecked": 5,
+    "crcAcceptedCount": 5,
+    "vanillaObserver": true,
+    "dllSha256": "61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9",
+    "elapsedSeconds": 101.6624029,
+    "joinTimeouts": 0,
+    "startEvents": 3,
+    "validObservations": 84,
+    "scripts": [
+      {
+        "sha256": "3577019507A297E497F5C1E079DD32B1DEE3F8C02607A76E593442BEEC291859",
+        "file": "PopulationSupervisor.ps1"
+      },
+      {
+        "sha256": "8AEA6E5789E939223699D99D482F06992B9E013FDE307E110150B5815BD4E947",
+        "file": "PopulationSupervisorCore.ps1"
+      },
+      {
+        "sha256": "2BCD2E53BDDCCF85E83F483FB8D5D4A37C353C957D56F38D02F7048633E76C31",
+        "file": "Manage-BotPopulation.ps1"
+      }
+    ]
+  },
+  "preservation": {
+    "allThirtyExecutablesAndLibrariesPreserved": true,
+    "passed": true,
+    "historicalOriginalBinaryMatches": 28,
+    "ownedGameProcesses": 0,
+    "preparedQualifiedBotGameMPAlreadyPresent": 2,
+    "preProbeFileStates": 817,
+    "scope": "14 October pre-probe inventory, not universal equality to the older original-binary baseline",
+    "testUdpPorts": 0
+  },
+  "fullPopulationGatePassed": false,
+  "exactIndividualSlotsQualified": false,
+  "concurrentHumanJoinGuarantee": false,
+  "externalWatchdogQualified": false,
+  "nativeSupervisorMapChangeCrashAndQueryOutageQualified": false,
+  "newAIHourQualified": false,
+  "publicBrowserQualified": false,
+  "twentyFourHourQualified": false
+}
