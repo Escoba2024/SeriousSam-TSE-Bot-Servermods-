@@ -1,6 +1,8 @@
 # Cloud-Fortsetzung: portable Publication-Prüfung
 
-17.10.2026, Europe/Berlin. Folgeschritt zu [Supervisor-Review / PR #10](2026-10-17-cloud-supervisor-review.md). Basis `b92f0bc67ae507c059e747436daf3d9087b6ce6a`, Test-/Runner-Commit `711f8fd57f4cc0771137d72b1bd69d256902e3e1`. Alle Remote-Branches und PR-Refs erneut gelesen; main unverändert `4ca47d31294ac1fac1b4ecb5516c53a6f857e22b`, PR #7 weiterhin `f56bbcdb403ffd6b8cfa85d585bc62e399a9f284`. Keine neuen PR-10-Kommentare beim Start. Aktuelle main-Agenten-/MCP-Vorgaben weiter beachtet.
+17.10.2026, Europe/Berlin. Folgeschritt zu [Supervisor-Review / PR #10](2026-10-17-cloud-supervisor-review.md). Basis `b92f0bc67ae507c059e747436daf3d9087b6ce6a`, Test-/Runner-Commit `711f8fd57f4cc0771137d72b1bd69d256902e3e1`. Zu Beginn der Fortsetzung alle Remote-Branches und PR-Refs erneut gelesen; main damals weiterhin `4ca47d31294ac1fac1b4ecb5516c53a6f857e22b`, PR #7 weiterhin `f56bbcdb403ffd6b8cfa85d585bc62e399a9f284`. Keine neuen PR-10-Kommentare beim Start. Aktuelle main-Agenten-/MCP-Vorgaben weiter beachtet.
+
+Abschlussnachlese: main ist parallel auf `6216664384e9ca5f4e2da0f393f1eecd54a86884` vorgerückt. Die zwei neuen Commits betreffen nur AGENTS.md und den REA/GhidraMCP/Frida-Qualifikationsbericht. Beide Ergänzungen gelesen; keine neuen Test-/Supervisorquellen und keine Änderung an den hier geprüften PR-Basen. Kein Shadow-/MCP-Runtime-Eingriff durch diesen Cloud-Lauf.
 
 ## Konkrete Änderungen
 
