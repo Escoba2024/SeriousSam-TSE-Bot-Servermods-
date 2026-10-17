@@ -44,6 +44,13 @@ Nicht alle MCP-Server ohne Diagnosebedarf gleichzeitig betreiben. Vor jeder Schl
 - Alter `poc/scripts/Test-RetailJoin.ps1`-Harness **ersetzt** die aktive BotClient-`GameMP.dll`, sichert sie zwar vorab, **restauriert sie aber nicht automatisch**. Nie einen anderen Kandidaten darüber testen, solange keine eigenständige sichere Restore-Hülle existiert. Backup-/Restore-Fleet-Ablauf aus `poc/LOCAL-RELEASE.md` bevorzugen. Gegenwärtige qualifizierte Originale und DLLs unangetastet lassen.
 - Die experimentelle Ground-Lookahead-DLL besitzt weiterhin **keine** native Freigabe. Die kurzen deaktivierten/probe-only-Kontrollen bestanden, aber beim aktiven 600-s-Retry wurden `Too many bad syncs`-Disconnects im Clientlog festgestellt. Keine Ground-Features in die qualifizierte DLL übernehmen, bevor Ursache und native Regression geklärt sind.
 
+## Hetzner-Lowrender-Vanilla-Kontrolllauf 17.10.2026
+
+- **Neu nachgewiesen:** [Echter Retail-1.07-WAN-Observer-Test](docs/reports/2026-10-17-hetzner-lowrender-vanilla-control.md), **155,93 Sekunden**, 31/31 gültige Statusabfragen, 29/31 mit zwei Spielern, echter Client-`joined`-Log, keine beobachtete `Too many bad syncs`-Meldung. Ergebnis **PASS_LIMITED** für Vanilla-Join/Statuskontinuität – **kein** aktiver Input, keine serverseitige CRC-Vergleichs- oder Stundenabnahme.
+- Eigener temporärer Clientprozess ordnungsgemäß lokal entfernt; ursprüngliche Observer-Log-/INI-Inhalte und DLL-Hashes sind erhalten. Nach **erzwungenem** `Stop-Process -Force` stand der Observer zunächst als `ghost` in der Hetzner-Spielerliste, bis die Live-Abfrage wieder die ursprüngliche **Ein-Bot-Population** bestätigte. **Nächster Test muss Graceful-`Quit`/WM_CLOSE vor Force belegen** und remote Post-Exit-Belegung prüfen; anderen Spielern niemals den Slot entziehen.
+- Automatische Gameplay-Eingaben sind **nicht** belegt: PID-gebundener Windows-Fokusversuch ergab `focused=false; actions=none`. Bei zukünftigen KI-/Combat-Gates nur echte Gameplay-Belege anerkennen.
+- Rohlogs, Profile, GUI-Daten und Testskript bleiben lokal auf Shadow unter `.codex/evidence/hetzner-lowrender-vanilla-isolated-20261017-025403` / `.codex/evidence/mcp-toolchain-20261017`. **Nicht** in öffentliches Git committen.
+
 ## Einstieg
 
 - [Repository-README und aktuelle Abnahme](README.md)
