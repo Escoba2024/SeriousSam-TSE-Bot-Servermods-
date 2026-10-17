@@ -14,6 +14,9 @@ import urllib.error
 
 REPO = "Escoba2024/SeriousSam-TSE-Bot-Servermods-"
 PREFIX = "NOTION_BRIDGE_JOB_V1\n"
+# Only a fresh, owner-authored terminal event may invalidate an earlier WAIT.
+TERMINAL_STATES = frozenset({"Gesperrt", "Freigabe fehlt", "Review", "Läuft", "Erledigt"})
+EVENT_STATES = TERMINAL_STATES | {"Wartet"}
 ROOT = Path("/var/lib/tse-agent-control")
 CODEX = "/opt/tse-agent-control/toolchain/codex/bin/codex"
 NODE_PATH = "/opt/tse-agent-control/toolchain/node-v24.22.0-linux-x64/bin"
@@ -32,8 +35,8 @@ def parse_time(v):
     except (AttributeError, TypeError, ValueError):
         return None
 
-def parse_comment(c, current=None):
-    """Only accept fresh owner-authored, fixed-action, read-only mirror records."""
+def parse_comment(c, current=None, *, allowed_states=("Wartet",)):
+    """Accept a fresh owner-authored fixed-action mirror event for the given states."""
     current = current or utcnow()
     if not isinstance(c, dict) or (c.get("user") or {}).get("login") != "Escoba2024":
         return None
@@ -47,7 +50,7 @@ def parse_comment(c, current=None):
     if not isinstance(d, dict) or set(d) != {"source","notion_page_id","job_id","pr_number","kind","mode","status"}:
         return None
     if not (d["source"] == "notion_mcp_bridge" and d["kind"] == "pr_readonly_review"
-            and d["mode"] == "Read-only Codex" and d["status"] == "Wartet"):
+            and d["mode"] == "Read-only Codex" and d["status"] in allowed_states):
         return None
     if not isinstance(d["notion_page_id"], str) or not UUID.fullmatch(d["notion_page_id"]):
         return None
@@ -63,12 +66,14 @@ def parse_comment(c, current=None):
 def queue_from_comments(comments, current=None):
     latest = {}
     for c in comments:
-        job = parse_comment(c, current)
+        # Terminal events compete with WAIT events by GitHub ID.
+        job = parse_comment(c, current, allowed_states=EVENT_STATES)
         if job is not None and type(job["github_comment_id"]) is int:
             k = job["notion_page_id"]
             if k not in latest or job["github_comment_id"] > latest[k]["github_comment_id"]:
                 latest[k] = job
-    return sorted(latest.values(), key=lambda j: j["github_comment_id"])
+    return sorted((event for event in latest.values() if event["status"] == "Wartet"),
+                  key=lambda j: j["github_comment_id"])
 
 def github_json(path):
     req = urllib.request.Request("https://api.github.com" + path, headers={
@@ -139,11 +144,12 @@ def review(job):
             return {"status":"BLOCKED_SANDBOX"}
         prompt = (
             f"READ-ONLY source/security review of exact checked-out PR #{job['pr_number']} "
-            f"at {sha}. Inspect path scope, git symlink/gitlink index modes, Windows "
-            "junction traversal, ambiguous index stages and fail-closed behavior. "
-            "No edits, repo tests, downloads, pushes, merges or game runtime. "
-            "Findings need concrete file/line numbers. Distinguish unrun tests "
-            "from proven tests. Report NO_CONFIRMED_FINDINGS if nothing provable.")
+            f"at {sha}. Identify substantive bugs and security regressions specific to the "
+            "changed code: authority checks, path/symlink traversal, untrusted input, "
+            "stale state, cancellation and retries, subprocess and credential limits. "
+            "Examine relevant actual source; no edits, tests, downloads, pushes, merges "
+            "or game runtime. Findings require concrete file/line evidence. Distinguish "
+            "unrun tests from proven tests. Report NO_CONFIRMED_FINDINGS otherwise.")
         p = run([CODEX,"exec","--sandbox","read-only","--cd",str(w),
                  "--ignore-user-config","-"],cwd=w,stdin=prompt,limit=480)
         output = (p.stdout or "")+"\n"+(p.stderr or "")
