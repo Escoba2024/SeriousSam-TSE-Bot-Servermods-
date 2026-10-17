@@ -72,6 +72,12 @@ try {
  Check ($afterFinal.status -eq 'BLOCKED') 'unknown field after final blocked'
  $twice=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1','\final\\final\'))
  Check ($twice.status -eq 'BLOCKED') 'duplicate final blocked'
+ $rich=Invoke-Fixture ($valid.Replace('\player_0\Expected_Bot\final\\queryid\1.1','\activemod\\player_0\Expected_Bot\frags_0\2\ping_0\88\final\\queryid\1.1'))
+ Check ($rich.oneBotOnly -and $rich.status -eq 'FIXTURE_MATCH_ONLY') 'realistic extended one-bot fields allowed'
+ $extraFrags=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1','\frags_1\12\final\\queryid\1.1'))
+ Check ($extraFrags.status -eq 'BLOCKED') 'unexpected second-player frags rejected'
+ $extraPing=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1','\ping_1\33\final\\queryid\1.1'))
+ Check ($extraPing.status -eq 'BLOCKED') 'unexpected second-player ping rejected'
  Write-Output ([ordered]@{result='PASS';checks=$passes;scope='offline simulated only; never authorizes runtime'}|ConvertTo-Json -Compress)
 }finally {
  if(Test-Path -LiteralPath $root){Remove-Item -LiteralPath $root -Recurse -Force}

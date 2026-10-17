@@ -96,9 +96,12 @@ try {
   $map[$key]=$value
  }
  if(-not $seenFinal){throw 'Missing UDP final marker'}
- # numplayers=1 alone is insufficient if any other player_* field exists.
- if(@($map.Keys | Where-Object { $_ -like 'player_*' -and $_ -cne 'player_0' }).Count){
-  throw 'Unexpected UDP player index'
+ # numplayers=1 alone is insufficient if extra player, frags or ping slots exist.
+ if(@($map.Keys | Where-Object {
+  ($_ -like 'player_*' -and $_ -cne 'player_0') -or
+  ($_ -match '^(frags|ping)_' -and $_ -cnotmatch '^(frags|ping)_0$')
+ }).Count){
+  throw 'Unexpected UDP player index or per-player data'
  }
  $report.oneBotOnly=(
   $map['gamename'] -ceq 'serioussamse' -and
