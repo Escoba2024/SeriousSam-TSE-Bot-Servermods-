@@ -18,12 +18,29 @@ function New-PopulationWatchdogIdentity($Process,[string]$OwnerId,[string]$Expec
     if(!$ExpectedExe -or $path -cne $ExpectedExe){throw 'Launched process executable identity is unavailable or differs from plan.'}
     return @{Process=$Process;OwnerId=$OwnerId;Pid=$Process.Id;Exe=$path;StartedUtc=$Process.StartTime.ToUniversalTime()}
 }
+function Register-PopulationWatchdogChild($Context,[string]$Group,$Process,[string]$ExpectedExe) {
+    $record=@{Process=$Process;OwnerId=$Context.OwnerId;Pid=$Process.Id;Exe=$ExpectedExe;StartedUtc=$null;CapturePending=$false}
+    $Context.Children[$Group]=$record
+    $launchHandle=$Process.Handle
+    if($null -eq $launchHandle -or $launchHandle -eq [IntPtr]::Zero){throw 'Launch process handle is unavailable; identity capture is unproven.'}
+    # Only a successfully pinned launch may retry incomplete metadata capture.
+    $record.CapturePending=$true
+    $identity=New-PopulationWatchdogIdentity $Process $Context.OwnerId $ExpectedExe
+    $Context.Children[$Group]=$identity
+    return $identity
+}
 function Stop-PopulationWatchdogChild($Context,$Record) {
     # No PID lookup, tree kill, state-file input, window messages or name-based stop.
     $p=$Record.Process
     if($Record.OwnerId -cne $Context.OwnerId -or $Record.Pid -eq $PID){throw 'Watchdog owner identity mismatch.'}
     if($p.HasExited){return}
     [void]$p.Handle
+    if($p.Id -ne $Record.Pid){throw 'Watchdog child identity mismatch; refusing stop.'}
+    if($Record.CapturePending -eq $true){
+        $identity=New-PopulationWatchdogIdentity $p $Context.OwnerId $Record.Exe
+        $Record.StartedUtc=$identity.StartedUtc
+        $Record.CapturePending=$false
+    }
     if($p.Id -ne $Record.Pid -or $p.Path -cne $Record.Exe -or
        $p.StartTime.ToUniversalTime().Ticks -ne $Record.StartedUtc.Ticks){throw 'Watchdog child identity mismatch; refusing stop.'}
     $p.Kill()
@@ -151,11 +168,8 @@ function Invoke-PopulationWatchdog {
                             if($controller.HasExited){break}
                             $plan=$Plans[$index]
                             $p=Start-Process -FilePath $plan.exe -ArgumentList $plan.arguments -WorkingDirectory $plan.workingDir -WindowStyle Hidden -PassThru
-                            # Store actual handle BEFORE metadata/state/response work can fail.
-                            $record=@{Process=$p;OwnerId=$ctx.OwnerId;Pid=$p.Id;Exe=$plan.exe;StartedUtc=$null}
-                            $ctx.Children[$key]=$record
-                            $identity=New-PopulationWatchdogIdentity $p $ctx.OwnerId $plan.exe
-                            $ctx.Children[$key]=$identity
+                            # Retain the pinned launch even if metadata capture fails.
+                            $identity=Register-PopulationWatchdogChild $ctx $key $p $plan.exe
                             $result=@{pid=$identity.Pid;exe=$identity.Exe;startedUtc=$identity.StartedUtc.ToString('o');ownerId=$ctx.OwnerId}
                             Write-PopulationWatchdogJson (Join-Path $directory ('group-'+$key+'.json')) $result
                         }
