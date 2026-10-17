@@ -44,6 +44,57 @@ python tools/compare_sync_dumps.py --server "PFAD_ZUM_SERVER_SYNC_DUMP" --client
 - CLI-Exitcodes: `0` = gleich und ausrichtbar; `3` = ausrichtbar, aber verschieden; `2` = ungültig/nicht ausrichtbar.
 - Elf synthetische Python-3.12-Unittests (inkl. Datenschutz, Fehlformate, Sequence/Tick-Mismatch und CLI-Codes): **11/11 PASS**. `git diff --check` ohne Beanstandung.
 
+## A04-Fortsetzung 17.10.2026 – archivierte SYNCBAD-Daten und Serienvergleich
+
+**Freigabe:** A00 Issue #18, `GRANTED` für A04/PR #21, nur die drei dort benannten Dateien, `runtime_resources: NONE`. Die bereits bestehenden Rohlogs wurden ausschließlich gelesen; keine Game-/Engine-/GameMP-Dateien, Profile, Prozesse, Serverports oder privaten Rohdaten wurden verändert.
+
+### Reale vorhandene Daten (erneut geprüft, KEINE neuen Retail-Läufe)
+
+Der bereits vorhandene Parser aus Draft-PR #16 wurde am 17.10.2026 unter Shadow mit Python 3.12 und `-B` auf zwei privaten Serverlogs ausgeführt. Der Parser selbst wurde **nicht** geändert:
+
+| Historischer Lauf, 10.10.2026 | SYNCBAD | SYNCOK | frühester beobachteter Fehl-Tick | letzter Fehl-Tick | Zählermaximum | explizite Disconnects |
+|---|---:|---:|---:|---:|---:|---:|
+| `local-release/eight-hour` | 10 | 0 | 83.40 | 92.40 | 10 | 1 (Logzeile 212) |
+| `local-release/eight-combat-only` | 10 | 0 | 23.50 | 37.15 | 10 | 1 (Logzeile 177) |
+
+Verifizierter Befehl (Repository-Root mit privater `.codex/evidence`-Struktur auf Shadow; Python-Pfad ggf. an Installation anpassen):
+
+```powershell
+& "C:\Users\Shadow\AppData\Local\Programs\Python\Python312\python.exe" -B "C:\Users\Shadow\Documents\SeriousSam-TSE-Worktrees\chatgpt-sync-log-regressions-20261017\tools\analyze_sync_log.py" ".codex\evidence\shadow-20261010\local-release\eight-hour\retail\TSE-Server-Dedicated_BotTest.log" ".codex\evidence\shadow-20261010\local-release\eight-combat-only\retail\TSE-Server-Dedicated_BotTest.log"
+```
+
+Für die tatsächlich ausgeführte Kommandozeile wurden die **absoluten**, zum Shared-Root gehörigen Logpfade benutzt; obige relativ benannten Pfade erfordern Ausführung aus diesem Root. Das Ergebnis stimmt mit den zuvor dokumentierten Aggregaten überein. **Der früheste protokollierte SYNCBAD-Tick ist nicht der erste abweichende Simulationstick.** Beide Fehlerläufe sind ältere, separat fehlgeschlagene Kandidaten; die lokale Stunde des qualifizierten `61DC...`-Kandidaten wird dadurch nicht widerlegt.
+
+Eine **lesende** Suche nach Datei-Namen mit `syncdump` oder `sync.snapshot` unter dem Shadow-Repository-`.codex`-Verzeichnis und anschließend unter `C:\Users\Shadow\Documents` fand **keine echten Snapshot-Dateien** (der zweite Suchlauf traf ausschließlich den vorhandenen Markdown-Bericht mit `syncdump` im Namen). Keine ausgerichteten Server-/Client-Sync-Dump-Paare standen für einen ersten abweichenden Tick zur Verfügung.
+
+**Befund: `EVIDENCE_GAP / FIRST_DIVERGENT_GAME_TICK_NOT_DETERMINED`.** Die echten Logs beweisen wiederholte fehlerhafte Prüfungen und Disconnects, aber weder die erstmalige Divergenz innerhalb der Prüfungstakte noch deren verursachendes Action-/Entity-/Session-Feld.
+
+### Ergänztes Offline-Werkzeug (keine echte Dump-Auswertung behauptet)
+
+`tools/compare_sync_dumps.py` besitzt zusätzlich `--server-dir` / `--client-dir` für zuvor archivierte `.txt`-Snapshot-Serien. Ausgleich **nur über identisches Level, Sequence und Tick**; Ergebnis `first_observed_difference` enthält den frühesten in **beiden** Datensätzen vorhandenen Unterschied. Nicht vorhandene Gegenstücke führen zu `INCOMPLETE_ALIGNMENT` (Exitcode 2), vollständig unverbundene Serien zu `UNALIGNED` (Exitcode 2). Beobachteter unterschiedlicher CRC/Zustand: Exitcode 3. Identische vorhandene Paare: Exitcode 0, **ohne irgendeine native Stabilitätsfreigabe**.
+
+```powershell
+python -B tools/compare_sync_dumps.py --server-dir "PRIVATER_SERVER_SNAPSHOT_ORDNER" --client-dir "PRIVATER_CLIENT_SNAPSHOT_ORDNER"
+```
+
+Beide Ordner müssen je 1–128 ausschließlich für die Diagnose ausgewählte `.txt`-Snapshots auf oberster Ebene enthalten. Kein rekursives Traversieren, keine Symlinks, maximal 8 MiB pro Datei und 32 MiB pro Serie. Mehrfach vorhandene Level-/Sequence-/Tick-Metadaten, doppelte Snapshot-Identität und mehrere Levels werden fehlersicher abgewiesen; private Spieler-Rohdaten und Dateinamen werden nicht in den Bericht übernommen. Bereits fehlende Ticks in **beiden** Serien sind ohne zusätzliche Sampling-Metadaten nicht erkennbar. Deshalb gilt auch bei `complete_pairing=true`: nur **erster beobachteter Unterschied**, niemals garantierter erster abweichender Engine-Tick.
+
+Die bereits vorhandenen 11 synthetischen Testfälle und sieben neue Tests für Serienausrichtung, frühesten beobachteten Unterschied, fehlende Snapshots, doppelte Metadaten, getrennte Levels, gemischte Verzeichnisse und Directory-CLI: **18/18 PASS** auf Shadow/Python 3.12 am 17.10.2026. Testbefehl:
+
+```powershell
+python -B -m unittest discover -s tools -p test_compare_sync_dumps.py -v
+```
+
+### Technische Ursachenhypothese für A1/A08 (nicht bewiesen)
+
+**H1: Reproduzierbare unterschiedliche Simulation-/Action-/Entity-Zustände statt bloß fehlerhafter Join.** Beide historischen Läufe zeigen jeweils zehn echte aufeinanderfolgende Fehlerzählerstände bis zum Disconnect ohne protokolliertes `SYNCOK`-Reset. Dies ist **vereinbar** mit dauerhaft unterschiedlicher Checksum-Basis; es beweist weder deterministischen Fehler noch eine konkrete Struktur/ABI-/Float-/Random-Ursache. Netz-/Timing-/Action-Reihenfolge bleiben Alternativen.
+
+Die unabhängige originale Retail-1.07-Binäranalyse in diesem Bericht belegt `CPlayerAction::ChecksumForSync` bei `0x6019EC10` (vier aufeinanderfolgende Bytes pro Aufruf), `CSessionState::ChecksumForSync` bei `0x601A5B10` (zusätzliche Player-/Entity-/Session-Daten), sowie den SYNCBAD-Handler `0x601A2D10`. **A1/A08 sollte ausschließlich im eigenen freigegebenen Binärscope** nachweisen, ob die im Handler verglichenen Werte zum selben Tick/Level/Sequence gehören und welche Teilchecksummen auf dem ersten *ausgerichtet erfassten* Fehlvergleich abweichen; keine Veränderung der Engine-/GameMP-Dateien durch A04 und kein voreiliger Fix von `sizeof(this)`, CRC-Kick-Limit oder ABI.
+
+**Nächster notwendiger Beleg:** Von A2 freigegebene, isolierte und unveränderte Retail-Server-/Client-Kontrollen mit identischer Version/Karte/Sequence/Tick, paarige private One-shot-Dumps bzw. autorisierte passive Tick-Messung; erst dann ist eine gezielte erste Divergenzprüfung möglich. Ohne explizite Runtime-Lease dürfen A04/A1 keine neue native Probe starten.
+
+---
+
 ## Nächste isolierte native Messung
 
 1. Vor Start bestehende Shadow-/Hetzner-Prozesse, echte Serverbelegung, autorisierte Testinstanz, Original-Hashes und Spielversion prüfen. **Keine** bestehende fremde Partie unterbrechen. Qualifizierte Bot-DLL nicht ersetzen.

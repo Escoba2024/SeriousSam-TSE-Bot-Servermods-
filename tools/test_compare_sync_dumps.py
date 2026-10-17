@@ -6,7 +6,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from compare_sync_dumps import compare, parse_snapshot, read_limited
+from compare_sync_dumps import (compare, compare_series, load_snapshot_directory,
+                                parse_snapshot, read_limited)
 
 
 def dump(crc="A1B2C3D4", level=1, sequence=1689, tick="83.40",
@@ -113,6 +114,89 @@ class SyncSnapshotCompareTests(unittest.TestCase):
                 )
                 self.assertEqual(process.returncode, expected)
                 self.assertEqual(json.loads(process.stdout)["can_compare"], expected != 2)
+
+
+    def test_repeated_metadata_fails_closed(self):
+        for text in [dump() + "Tick: 999\n",
+                     dump() + "Sequence: 999\n",
+                     dump() + "Level: 9\n"]:
+            with self.subTest(extra=text[-20:]):
+                with self.assertRaisesRegex(ValueError, "exactly one"):
+                    parse_snapshot(text)
+
+    def test_first_observed_mismatch_in_aligned_series(self):
+        server = [dump(sequence=10, tick="1.0"),
+                  dump(sequence=11, tick="2.0"),
+                  dump(sequence=12, tick="3.0")]
+        client = [dump(sequence=12, tick="3.0", crc="DEADBEEF"),
+                  dump(sequence=10, tick="1.0"),
+                  dump(sequence=11, tick="2.0", crc="DEADBEEF")]
+        result = compare_series(server, client)
+        self.assertEqual(result["status"], "OBSERVED_DIFFERENCE")
+        self.assertEqual(result["aligned_samples"], 3)
+        self.assertEqual(result["differing_aligned_samples"], 2)
+        self.assertEqual(result["first_observed_difference"]["tick"], "2.0")
+        self.assertEqual(result["first_observed_difference"]["sequence"], 11)
+        self.assertFalse(result["first_observed_difference"]["crc_equal"])
+        self.assertNotIn("PRIVATE_PERSON", json.dumps(result))
+        self.assertIn("not establish", result["interpretation"])
+
+    def test_unpaired_capture_never_claims_complete_alignment(self):
+        server = [dump(sequence=10, tick="1"), dump(sequence=12, tick="3")]
+        client = [dump(sequence=10, tick="1"), dump(sequence=11, tick="2"),
+                  dump(sequence=12, tick="3", crc="DEADBEEF")]
+        result = compare_series(server, client)
+        self.assertEqual(result["status"], "INCOMPLETE_ALIGNMENT")
+        self.assertFalse(result["complete_pairing"])
+        self.assertEqual(result["unpaired_client_samples"], 1)
+        self.assertEqual(result["first_observed_difference"]["tick"], "3")
+        self.assertEqual(result["aligned_samples"], 2)
+
+    def test_series_without_shared_identity_is_unaligned(self):
+        result = compare_series([dump(sequence=1, tick="1")],
+                                [dump(sequence=2, tick="2")])
+        self.assertEqual(result["status"], "UNALIGNED")
+        self.assertFalse(result["can_compare"])
+        self.assertIsNone(result["first_observed_difference"])
+
+    def test_duplicate_and_multiple_levels_are_invalid(self):
+        with self.assertRaisesRegex(ValueError, "duplicate"):
+            compare_series([dump(), dump()], [dump()])
+        with self.assertRaisesRegex(ValueError, "multiple levels"):
+            compare_series([dump(level=1)], [dump(level=2)])
+
+    def test_directory_rejects_unrelated_files(self):
+        with tempfile.TemporaryDirectory(prefix="tse-dirmix-") as temp:
+            directory = Path(temp)
+            (directory / "one.txt").write_text(dump(), encoding="utf-8")
+            (directory / "note.log").write_text("not a sync dump", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "only regular"):
+                load_snapshot_directory(directory)
+
+    def test_directory_cli_exit_codes_and_no_identity_leak(self):
+        with tempfile.TemporaryDirectory(prefix="tse-series-") as temp:
+            base = Path(temp)
+            server_dir, client_dir = base / "server", base / "client"
+            server_dir.mkdir()
+            client_dir.mkdir()
+            (server_dir / "a.txt").write_text(dump(sequence=10, tick="1"), encoding="utf-8")
+            (server_dir / "b.txt").write_text(dump(sequence=11, tick="2"), encoding="utf-8")
+            (client_dir / "a.txt").write_text(dump(sequence=10, tick="1"), encoding="utf-8")
+            changed = client_dir / "b.txt"
+            for text, expected, status in [
+                (dump(sequence=11, tick="2"), 0, "MATCHED_OBSERVATIONS"),
+                (dump(sequence=11, tick="2", crc="DEADBEEF"), 3, "OBSERVED_DIFFERENCE"),
+                (dump(sequence=12, tick="3"), 2, "INCOMPLETE_ALIGNMENT"),
+            ]:
+                changed.write_text(text, encoding="utf-8")
+                proc = subprocess.run(
+                    [sys.executable, str(Path(__file__).with_name("compare_sync_dumps.py")),
+                     "--server-dir", str(server_dir), "--client-dir", str(client_dir)],
+                    capture_output=True, text=True)
+                self.assertEqual(proc.returncode, expected, proc.stderr)
+                self.assertEqual(json.loads(proc.stdout)["status"], status)
+                self.assertNotIn("PRIVATE_PERSON", proc.stdout)
+            self.assertEqual(len(load_snapshot_directory(server_dir)), 2)
 
 
 if __name__ == "__main__":
