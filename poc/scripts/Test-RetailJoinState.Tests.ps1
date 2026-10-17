@@ -45,4 +45,27 @@ try {
 } finally {
     Remove-Item -LiteralPath $tempRoot -Recurse -Force
 }
-'ALL NATIVE JOIN STATE AND DLL RESTORE CHECKS PASSED'
+# Validate cross-bitness module checks using only an owned 32-bit PowerShell test process.
+$moduleHelper=$ast.Find({param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq 'Test-NativeModuleLoaded'},$true)
+if(!$moduleHelper){throw 'Native cross-bitness module helper missing.'}
+Invoke-Expression $moduleHelper.Extent.Text
+if([Environment]::Is64BitOperatingSystem -and [Environment]::Is64BitProcess){
+    $x86=Join-Path $env:WINDIR 'SysWOW64\WindowsPowerShell\v1.0\powershell.exe'
+    if(Test-Path -LiteralPath $x86){
+        $fixture=Start-Process -FilePath $x86 -ArgumentList '-NoProfile -NonInteractive -Command "Start-Sleep -Seconds 20"' -WindowStyle Hidden -PassThru
+        try {
+            Start-Sleep -Milliseconds 1500
+            if($fixture.HasExited){throw '32-bit module fixture ended too soon.'}
+            if(!(Test-NativeModuleLoaded -GameProcessId $fixture.Id -ExpectedModule 'mscorlib.ni.dll')) {
+                throw '32-bit module check failed to detect an actual loaded module.'
+            }
+            if(Test-NativeModuleLoaded -GameProcessId $fixture.Id -ExpectedModule 'TSE_NotInstalled_Fake.dll'){
+                throw '32-bit module check falsely accepted a nonexistent DLL.'
+            }
+        } finally {
+            if(!$fixture.HasExited){$fixture.Kill();$fixture.WaitForExit(5000)|Out-Null}
+            $fixture.Dispose()
+        }
+    }
+}
+'ALL NATIVE JOIN STATE, X86 MODULE AND DLL RESTORE CHECKS PASSED'

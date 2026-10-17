@@ -8,11 +8,28 @@ param(
     [switch]$CaptureObserver,
     [ValidateRange(1,60)][int]$CaptureFps = 10,
     [switch]$AllowReconnect,
-    [switch]$ExpectedShutdown
+    [switch]$ExpectedShutdown,
+    [string]$ExpectedBotName = 'TSE_Bot_PoC'
 )
 function Test-NativeJoined([string]$Text) {
     $joins = [regex]::Matches($Text, '(?m)^\s*joined\s*$')
     return $joins.Count -gt 0 -and $joins[$joins.Count - 1].Index -gt $Text.LastIndexOf('Cannot join game:')
+}
+function Test-NativeModuleLoaded([int]$GameProcessId, [string]$ExpectedModule = 'GameMP.dll') {
+    $modules = @((Get-Process -Id $GameProcessId -ErrorAction Stop).Modules)
+    if (@($modules | Where-Object { $_.ModuleName -ieq $ExpectedModule }).Count -gt 0) { return $true }
+    # A 64-bit PowerShell can enumerate only WOW64 shims for 32-bit Retail 1.07.
+    # Recheck via the built-in 32-bit PowerShell, without injecting any game hooks.
+    if ([Environment]::Is64BitProcess -and [Environment]::Is64BitOperatingSystem) {
+        $x86 = Join-Path $env:WINDIR 'SysWOW64\WindowsPowerShell\v1.0\powershell.exe'
+        if (Test-Path -LiteralPath $x86) {
+            $moduleLiteral = $ExpectedModule.Replace("'", "''")
+            $check = '@((Get-Process -Id ' + $GameProcessId + ').Modules | Where-Object { $_.ModuleName -ieq ''' + $moduleLiteral + ''' }).Count'
+            $count = & $x86 -NoProfile -NonInteractive -Command $check
+            if ($LASTEXITCODE -eq 0 -and @($count | Where-Object { $_ -match '^\s*[1-9]\d*\s*$' }).Count -gt 0) { return $true }
+        }
+    }
+    return $false
 }
 function Restore-RetailTestDll([string]$Backup, [string]$Destination, [string]$ExpectedHash) {
     if (!(Test-Path -LiteralPath $Backup)) { throw 'Original Retail test DLL backup is missing.' }
@@ -142,7 +159,7 @@ try {
             } else { $unexpectedExit = $true }
         }
         if (!$client.HasExited -and !$loaded) {
-            try { $loaded = @((Get-Process -Id $client.Id).Modules | Where-Object {$_.ModuleName -eq 'GameMP.dll'}).Count -gt 0 }
+            try { $loaded = Test-NativeModuleLoaded -GameProcessId $client.Id }
             catch { if (!$client.HasExited) { throw } }
         }
     } until ($unexpectedExit -or (!$AllowReconnect -and !$ExpectedShutdown -and $client.HasExited) -or
@@ -168,7 +185,7 @@ try {
         $observerText = Get-Content -Raw "$observerDir\SeriousSam.log"
         $result.observerCurrentlyJoined = (Test-NativeJoined $observerText)
         $result.observerAlive = !$observerProcess.HasExited
-        $result.observerSawBotJoin = [bool]($observerText -match 'TSE_Bot_PoC.* joined')
+        $result.observerSawBotJoin = [bool]($observerText -match ('(?m)^.*' + [regex]::Escape($ExpectedBotName) + '.* joined\s*$'))
         $result.crcAcceptedCount = ([regex]::Matches($serverText, 'CRC check OK')).Count
     }
     if ($ExpectedShutdown) {
