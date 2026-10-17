@@ -74,14 +74,34 @@ try {
    $report.live=$true
   }finally{$udp.Dispose()}
  }
+ # Consume every UDP field. A syntactically damaged or truncated response
+ # must never authorize an external observer even when its early fields match.
  $tokens=$response.Split([char]'\')
+ if($tokens.Count -lt 5 -or $tokens[0] -cne '' -or (($tokens.Count-1) % 2) -ne 0){
+  throw 'Malformed UDP status field framing'
+ }
  $map=@{}
- for($i=1;$i -lt ($tokens.Count-1);$i+=2){
-  if($tokens[$i] -and -not $map.ContainsKey($tokens[$i])){
-   $map[$tokens[$i]]=$tokens[$i+1]
+ $seenFinal=$false
+ for($i=1;$i -lt $tokens.Count;$i+=2){
+  $key=$tokens[$i]; $value=$tokens[$i+1]
+  if([string]::IsNullOrEmpty($key)){throw 'Empty UDP status field key'}
+  if($map.ContainsKey($key)){throw ('Duplicate UDP status field: '+$key)}
+  if($seenFinal -and $key -cne 'queryid'){
+   throw ('Unexpected field after final marker: '+$key)
   }
+  if($key -ceq 'final'){
+   if($value -cne ''){throw 'Nonempty UDP final marker'}
+   $seenFinal=$true
+  }
+  $map[$key]=$value
+ }
+ if(-not $seenFinal){throw 'Missing UDP final marker'}
+ # numplayers=1 alone is insufficient if any other player_* field exists.
+ if(@($map.Keys | Where-Object { $_ -like 'player_*' -and $_ -cne 'player_0' }).Count){
+  throw 'Unexpected UDP player index'
  }
  $report.oneBotOnly=(
+  $map['gamename'] -ceq 'serioussamse' -and
   $map['gamever'] -eq $ExpectedVersion -and
   $map['hostport'] -eq [string]$GamePort -and
   $map['numplayers'] -eq '1' -and
