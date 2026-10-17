@@ -244,17 +244,33 @@ def timestamp(value):
     return dt.datetime.fromisoformat(value.replace('Z', '+00:00'))
 
 
-def field(text, key):
-    match = re.search(r'\\' + re.escape(key) + r'\\([^\\]*)', text)
-    return match[1] if match else None
+def query_fields(text):
+    require(isinstance(text, str), 'malformed native query framing')
+    pairs = list(re.finditer(r'\\([^\\]+)\\([^\\]*)', text))
+    require(''.join(match[0] for match in pairs) == text, 'malformed native query framing')
+    fields = {}
+    for match in pairs:
+        key, value = match.groups()
+        require(key not in fields, 'duplicate query field')
+        fields[key] = value
+    require(fields.get('final') == '', 'missing or invalid native query completion marker')
+    return fields
 
 
 def audit_queries(queries, expected_names, minimum_seconds):
     stages, steady = [], []
     for q in queries:
-        require(field(q['status'], 'gamever') == '1.07' and field(q['status'], 'activemod') == '', 'wrong native version/mod')
-        count = int(field(q['status'], 'numplayers'))
-        names = re.findall(r'\\player_\d+\\([^\\]+)', q['players'])
+        status, players = query_fields(q['status']), query_fields(q['players'])
+        require(status.get('gamever') == '1.07' and status.get('activemod') == '', 'wrong native version/mod')
+        count = int(status['numplayers'])
+        rows = []
+        for key, name in players.items():
+            match = re.fullmatch(r'player_(\d+)', key)
+            if match:
+                rows.append((int(match[1]), name))
+        require(all(0 <= index < 16 and name for index, name in rows) and
+                len({index for index, _ in rows}) == len(rows), 'invalid or duplicate native player index')
+        names = [name for _, name in rows]
         require(len(set(names)) == len(names), 'duplicate native player names')
         startup_transition = q.get('label') == 'eight-bots' and len(names) < count
         require(startup_transition or len(names) == count, 'incomplete native player list')
