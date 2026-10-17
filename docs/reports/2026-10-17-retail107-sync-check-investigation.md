@@ -23,7 +23,7 @@
 ## Echte Logbelege zu fehlerhaften Testläufen
 
 - `.codex/evidence/shadow-20261010/local-release/eight-hour/retail/TSE-Server-Dedicated_BotTest.log`: zehn aufeinanderfolgende `SYNCBAD`-Meldungen für den Client `127.0.0.1` von Sequence 1689 / Tick **83,40** (`bad 1`) bis Sequence 1869 / Tick **92,40** (`bad 10`) und danach **`Client ... ordered to disconnect: Too many bad syncs`**.
-- `.codex/evidence/shadow-20261010/local-release/eight-combat-only/retail/TSE-Server-Dedicated_BotTest.log`: Zähler **1 bis 10** zwischen Tick **23,50** und **37,15**. Auch hier anhaltende CRC-Divergenz; explizite Trennungsmeldung nicht Bestandteil des geprüften Ausschnitts.
+- `.codex/evidence/shadow-20261010/local-release/eight-combat-only/retail/TSE-Server-Dedicated_BotTest.log`: Zähler **1 bis 10** zwischen Tick **23,50** und **37,15**. Hier weist die vollständige spätere Auswertung **ebenfalls** eine ausdrückliche Trennungsanweisung `Client '127.0.0.1' ordered to disconnect: Too many bad syncs` (Zeile 177) nach.
 - `.codex/evidence/hetzner-native-crt-control-20261016/bot-previous.log`: tatsächliches `Disconnected: Too many bad syncs` um Bot-Tick 15400; weitere Bot-Meldungen nach Disconnect beweisen **keine** fortbestehende korrekte Server-Synchronisierung.
 - `.codex/evidence/hetzner-vanilla-isolated-20261016-222317/previous-SeriousSam.log`: `Disconnected: Too many bad syncs` nach Gameplay-Meldungen mit Bot/human player. Der Logname „vanilla isolated“ allein beweist nicht die vollständigen Client-/Binary-Bedingungen.
 
@@ -43,6 +43,10 @@
 3. Pro Server-/Client-Lauf `SYNCBAD`-Starttick, Sequence, fortlaufenden Zähler, `SYNCOK`-Reset, Map-/Join-/Leave-Ereignisse, Action-Ticks, Binary-Hashes, Prozessumgebung und Port erfassen. `ser_bReportSyncBad` auf isoliertem Testserver zur Beobachtung nutzen, eventuell `ser_bReportSyncOK` nur kurzfristig mit Loggrößen-/Performancekontrolle. **`ser_iKickOnSyncBad` nicht herunterregeln oder deaktivieren, um vermeintlich stabile Runs zu erzeugen**.
 4. Auf Shadow/Wine nach separatem Frida-MCP-Test nur minimal passive, x86-kompatible Hooks an der **geladenen** Engine verwenden. Statischer Handler-RVA: `0x601A2D10 - 0x600C0000 = 0x000E2D10`; nach Runtime-ASLR den Modul-Load-Base-Wert neu bestimmen. Nur nach isoliertem Baseline-Test.
 5. Den **ersten** divergenten Tick und das betroffene Sync-Feld anhand eines kontrollierten Client-Server-Logvergleichs isolieren; erst dann mögliche BotDriver-/Action- oder Engine-spezifische Korrektur vorschlagen. Eine korrigierte DLL muss anschließend komplett neu nativ abgenommen werden.
+
+## Wiederverwendbarer Log-Auditor
+
+[tools/analyze_sync_log.py](../../tools/analyze_sync_log.py) parst ohne Zusatzabhängigkeiten lokale Serverlogs und liefert pro Client `SYNCBAD`-Zähler/erste-letzte Ticks, `SYNCOK`-Einträge und tatsächliche Disconnect-Meldungen als JSON. Am 17.10. auf beiden Original-Logs mit Python 3.12.10 auf Shadow ausgeführt: **je 10 SYNCBAD und je 1 Disconnect**. Ein Testordnername ersetzt keine technische Abnahme. Unbereinigte Runtime-Logs und Spielerinformationen bleiben lokal und werden nicht ins öffentliche Git übertragen.
 
 ## Verifizierbare private Rohbelege / Toolausführung
 
