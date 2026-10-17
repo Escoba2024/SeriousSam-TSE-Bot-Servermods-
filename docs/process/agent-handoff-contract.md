@@ -1,7 +1,7 @@
 # Agent-Handoff-Vertrag – Serious Sam TSE 1.07
 
 Status: Entwurf zur Review | Owner: Agent 5 (Audit und Dokumentationskontrolle) | 2026-10-17
-Kanonsiche Projektanweisungen: [AGENTS.md](../../AGENTS.md). Dieser Prozess ergänzt, ersetzt jedoch keine vorhandenen Schutz- und Testgates.
+Kanonische Projektanweisungen: [AGENTS.md](../../AGENTS.md). Dieser Prozess ergänzt, ersetzt jedoch keine vorhandenen Schutz- und Testgates.
 
 ## Ziele
 Bei parallelen ChatGPT-, Codex-Cloud-, RDC-/Shadow- und Review-Agents darf kein Fortschritt verloren gehen und kein PR als bestanden gemeldet werden, nur weil Code gepusht ist. Projektkoordinator/technische Owners behalten ihre Aufgaben. Agent 5 prüft und dokumentiert unabhängig, **ändert keine technische Runtime ohne gesonderten Auftrag** und führt keine fremden PRs selbständig zusammen.
