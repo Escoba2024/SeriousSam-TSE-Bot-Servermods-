@@ -54,6 +54,34 @@ Bei der Planung der nächsten isolierten Native-Probe wurde `poc/scripts/Test-Re
 
 [tools/analyze_sync_log.py](../../tools/analyze_sync_log.py) parst ohne Zusatzabhängigkeiten lokale Serverlogs und liefert pro Client `SYNCBAD`-Zähler/erste-letzte Ticks, `SYNCOK`-Einträge und tatsächliche Disconnect-Meldungen als JSON. Am 17.10. auf beiden Original-Logs mit Python 3.12.10 auf Shadow ausgeführt: **je 10 SYNCBAD und je 1 Disconnect**. Ein Testordnername ersetzt keine technische Abnahme. Unbereinigte Runtime-Logs und Spielerinformationen bleiben lokal und werden nicht ins öffentliche Git übertragen.
 
+## Nachtrag: Vergleichskontrollen und sichere Fortsetzung (17.10.2026)
+
+**Wichtige Abgrenzung:** Die fehlgeschlagenen lokalen 8-Bot-Läufe vom 10.10. gehören zu **früheren DLL-Kandidaten**, nicht zur lokal qualifizierten `61DC27E0...`-Release-DLL. Die QA unter `.codex/evidence/shadow-20261010/local-release/report.md` weist für exakt `61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9` **3697,29 Sekunden unabhängige Acht-Bot-Serverabfragen** und die vollständige separate native KI-Stunde aus. Diese lokal bestandene Abnahme bleibt gültig; spätere Hetzner-/Ground-Experimente ersetzen sie nicht.
+
+### Prüfumgebungen getrennt betrachten
+
+| Privat archivierter Test | Tatsächlicher Beleg | Bewertung |
+|---|---|---|
+| Lokales qualifiziertes `eight-render-hour` | 3697,29 s, acht Bots, unabhängiger KI-Auditor, 6 CRC-Akzeptanzen | **PASS – nur lokal / exakte 61DC-DLL** |
+| `hetzner-native-crt-control-20261016` | 3661 s Monitor / 3686 s Query-Spanne, 364 Query-Samples, ein Windows-Bot und stationärer Vanilla-Client, 0 protokollierte Client-Disconnects | **PASS_LIMITED – exakte Zwei-Client-Kontrolle**, keine aktive Mehrbot-Abnahme |
+| `hetzner-builtin-active-control-20261016` | zwei Monitorsegmente mit 359 gültigen Abfragen, rund 3610 s Monitoring, ein Bot + stationärer Vanilla-Client | **PASS_LIMITED**, getrennte Umgebung |
+| `hetzner-native-crt-combat-20261016` | 242 Query-Samples über **2431,74 s** (~40,5 min), in allen 242 Samples drei Spieler, Query-Fehlerfeld immer leer, Frag-Zähler für zwei Spielerslots steigen von 2→18 und 0→14 | **Positiver aktiver Zwischenbefund, KEIN 60-Minuten-PASS** (kein abschließender Monitor-/Runtime-Audit) |
+| `hetzner-lowrender-external-20261017-rdc-requalify` | 365/365 erfolgreiche UDP-Status-/Players-Abfragen über rund 61 min für genau einen Bot **ohne Vanilla-Human** | **PASS_LIMITED_QUERY**, kein Gameplay-/SYNCCHECK-E2E |
+| Frühere lokale `eight-hour` und `eight-combat-only` | jeweils `SYNCBAD` 1→10 und echter Disconnect | **FAIL** – alte Kandidaten |
+| Ground-Lookahead, aktivierter Wiederholungslauf | `Too many bad syncs` im privaten Client-Log, keine abschließende neue Ground-Abnahme; die zwei kurzen deaktivierten/probe-only Varianten haben keine entsprechenden Treffer | **FAIL / ungeklärt**, nicht auf 61DC übertragen |
+
+Der Name `hetzner-builtin-active-control` alleine beweist keine menschliche Spielaktivität. Die aktive Drei-Spieler-Variante ist durch Frag-Änderungen belegt, aber ihre Query-Permanenz beweist **nicht**, dass keine verdeckten CRC-Warnungen auf dem Linux-Server auftraten.
+
+### Externer Vanilla-Observer: Preflight repariert und fail-closed
+
+Die private historische Preflight-Hülle `.codex/evidence/hetzner-lowrender-external-20261017-rdc-requalify/Preflight-LowrenderVanilla.ps1` hatte einen reproduzierten PowerShell-JSON-Array-Fehler: `@(Get-Content ... -Raw | ConvertFrom-Json)` erzeugte **ein Element, welches das vollständige vierteilige Array enthielt**. `Split-Path` und `Join-Path` kombinierten dadurch vier Dateinamen zu einem ungültigen Pfad. Es fehlten **keine** Originaldateien. Nach Entfernen der äußeren `@(...)`-Klammer bestehen die vier SHA256-Prüfungen für `SeriousSam.exe`, `GameMP.dll`, `Engine.dll` und `EntitiesMP.dll`. Zusätzlich prüft die private Hülle nun einen **frischen UDP-Serverstatus**.
+
+In `main` steht außerdem das wiederverwendbare, **read-only** Werkzeug [`tools/Test-TSEExternalVanillaPreflight.ps1`](../../tools/Test-TSEExternalVanillaPreflight.ps1) mit [acht bestandenen Offline-/Negativprüfungen](../../tools/Test-TSEExternalVanillaPreflight.Tests.ps1). Es akzeptiert die notwendigen Pfade, erwartete GameSpy-Daten und Serveradresse **nur als Laufzeitparameter**, startet keinen Prozess, verändert nichts und liefert `canStart=true` nur bei vier korrekten Dateien und einer aktuellen Antwort mit genau einem erwarteten Bot. Im Fixture-Modus bleibt `canStart=false` **auch bei passender Simulation**.
+
+**Tatsächlicher Live-Check am 17.10.: `BLOCKED`**, weil zwischen dem abgeschlossenen Ein-Bot-Monitoring und der neuen Abfrage ein weiterer Spieler dem separaten Lowrender-Server beigetreten war. Deshalb **keine neue Vanilla-Observer-Session gestartet**. Der Status `READY_AT_CHECK_TIME` garantiert nicht, dass die Belegung später unverändert bleibt; vor einem tatsächlichen Start erneut prüfen und währenddessen zusätzliche Spieler/Disconnects beobachten.
+
+**Folgeentscheidung:** Keine bestehende Partie auf einem gemeinsam genutzten Testserver für eine neue Diagnose unterbrechen. Bei neuer isolierter Testinstanz und belegter Freigabe die qualifizierte DLL/Originalclients, Startkonfiguration, aktive Eingaben sowie Server-`SYNCBAD`-Logs getrennt erfassen. Nur dann Grundursache eines aktuellen Fehlers am **ersten** abweichenden Tick untersuchen. Keine Änderung von `ser_iKickOnSyncBad`, kein überschreibender DLL-Test mit `Test-RetailJoin.ps1`.
+
 ## Verifizierbare private Rohbelege / Toolausführung
 
 - `.codex/evidence/mcp-toolchain-20261017/engine_sync_probe.py`: Headless-GhidraMCP, String-/Xref-/Hashprüfung.
