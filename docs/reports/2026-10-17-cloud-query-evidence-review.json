@@ -287,5 +287,13 @@
   "privateNativeEvidenceReaudited": false,
   "M4OrOneHzQualification": false,
   "priorRunnerNegativeProbeRepeated": false,
-  "mergeReadiness": "Draft pending Windows and relevant native gates"
+  "mergeReadiness": "Draft pending Windows and relevant native gates",
+  "mainAtFinalFetch": "375b995d0e3e3f0cf31da4f427b4cc1a062f0a9c",
+  "concurrentMainUpdate": {
+    "AGENTSAndSyncReportRead": true,
+    "newReadOnlySyncParserRead": true,
+    "syncParserIndependentlyQualifiedHere": false,
+    "mergedIntoCandidate": false,
+    "privateNativeSyncLogsReadHere": false
+  }
 }
