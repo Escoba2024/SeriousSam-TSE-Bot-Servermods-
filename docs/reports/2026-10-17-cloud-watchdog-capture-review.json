@@ -1,0 +1,252 @@
+{
+  "date": "2026-10-17",
+  "scope": "Cloud code/helper-process regression; no native game/runtime access",
+  "baseCommit": "9f9398ae91796cebfba667d4b8b6fcd204e90e45",
+  "fixCommit": "fb90287206a662983770d9b4790af917004e15dc",
+  "mainAtStart": "39662e3",
+  "baselinePowerShell": {
+    "PASS": 16,
+    "FAIL": 11,
+    "SKIP": 2
+  },
+  "freshPowerShell": {
+    "PASS": 17,
+    "FAIL": 11,
+    "SKIP": 2
+  },
+  "sameBaselineAndFreshFailureNames": [
+    "Test-FleetAndPopulation.Tests.ps1",
+    "Test-FleetLaunchFailure.Tests.ps1",
+    "Test-FleetProcessControl.Tests.ps1",
+    "Test-FleetStopCurrent.Tests.ps1",
+    "Test-FleetStopExitCode.Tests.ps1",
+    "Test-LocalReleasePreparation.Tests.ps1",
+    "Test-PopulationHardExitBoundary.Tests.ps1",
+    "Test-PopulationReadinessRecovery.Tests.ps1",
+    "Test-PopulationSupervisorAdapter.Tests.ps1",
+    "Test-PopulationSupervisorControl.Tests.ps1",
+    "Test-PopulationWatchdogProcess.Tests.ps1"
+  ],
+  "freshResults": [
+    {
+      "test": "Test-FleetAndPopulation.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 0.62
+    },
+    {
+      "test": "Test-FleetIdentitySidecars.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.54
+    },
+    {
+      "test": "Test-FleetJoinOnlyArguments.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.44
+    },
+    {
+      "test": "Test-FleetLaunchFailure.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 0.67
+    },
+    {
+      "test": "Test-FleetMapAcceptance.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.51
+    },
+    {
+      "test": "Test-FleetProcessControl.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 0.42
+    },
+    {
+      "test": "Test-FleetQuery.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 2.61
+    },
+    {
+      "test": "Test-FleetQueryReadiness.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.58
+    },
+    {
+      "test": "Test-FleetReconnectAcceptance.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.69
+    },
+    {
+      "test": "Test-FleetRecoveryArguments.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.58
+    },
+    {
+      "test": "Test-FleetRoundReadiness.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.56
+    },
+    {
+      "test": "Test-FleetStartupArguments.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.47
+    },
+    {
+      "test": "Test-FleetSteadySample.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.42
+    },
+    {
+      "test": "Test-FleetStopCurrent.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 0.47
+    },
+    {
+      "test": "Test-FleetStopExitCode.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 0.53
+    },
+    {
+      "test": "Test-LocalReleasePackage.Tests.ps1",
+      "status": "SKIP",
+      "reason": "Requires native Retail/private SDK"
+    },
+    {
+      "test": "Test-LocalReleasePreparation.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 0.8
+    },
+    {
+      "test": "Test-Phase1Telemetry.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 8.67
+    },
+    {
+      "test": "Test-PopulationHardExitBoundary.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 0.6
+    },
+    {
+      "test": "Test-PopulationReadinessRecovery.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 0.81
+    },
+    {
+      "test": "Test-PopulationSafetyBoundaries.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 2.32
+    },
+    {
+      "test": "Test-PopulationSupervisor.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.58
+    },
+    {
+      "test": "Test-PopulationSupervisorAdapter.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 1.11
+    },
+    {
+      "test": "Test-PopulationSupervisorControl.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 0.65
+    },
+    {
+      "test": "Test-PopulationWatchdog.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.74
+    },
+    {
+      "test": "Test-PopulationWatchdogCapture.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 4.01
+    },
+    {
+      "test": "Test-PopulationWatchdogProcess.Tests.ps1",
+      "exit": 1,
+      "status": "FAIL",
+      "seconds": 0.4
+    },
+    {
+      "test": "Test-RetailCleanup.Tests.ps1",
+      "status": "SKIP",
+      "reason": "Requires native Retail/private SDK"
+    },
+    {
+      "test": "Test-RetailJoinState.Tests.ps1",
+      "exit": 0,
+      "status": "PASS",
+      "seconds": 0.34
+    },
+    {
+      "test": "Test-ShadowRuntimeLog.ps1",
+      "exit": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "test_fleet_ai_evidence.py",
+      "exit": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "test_obstacle_evidence.py",
+      "exit": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "test_local_release_smoke.py",
+      "exit": 0,
+      "status": "PASS"
+    },
+    {
+      "test": "Verify-SourceProvenance.py",
+      "exit": 0,
+      "status": "PASS"
+    }
+  ],
+  "overallLinuxSuiteGreen": false,
+  "privateAutoCombatEvidenceRun": false,
+  "rootReproduction": "Legacy provisional StartedUtc=null record survives transient metadata failure; cleanup=false and real owned helper remains alive",
+  "retryMutationResult": "FAIL: Recoverable capture failure orphaned real child: TransientStartTime",
+  "fixedCaptureScenarios": 9,
+  "ownershipChecks": 35,
+  "safetyChecks": 4770,
+  "pythonFixtureTests": 44,
+  "sourceHashes": 13,
+  "linuxPeerProbe": {
+    "samePidAndExe": true,
+    "startTimeTickDifference": 7143,
+    "peerAccepted": false,
+    "guardRelaxed": false
+  },
+  "fullMailboxIntegrationTested": false,
+  "windowsOrPowerShell51Executed": false,
+  "nativeRuntimeStarted": false,
+  "independentReview": {
+    "actionableFindings": 0,
+    "captureSuitePass": true,
+    "ownershipSuitePass": true
+  }
+}
