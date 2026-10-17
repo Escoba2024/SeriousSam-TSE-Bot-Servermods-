@@ -13,8 +13,13 @@ function Enter-PopulationClientLocks([string[]]$Directories) {
             $held+=@($h)
             if($h.Length){
                 $reader=[IO.StreamReader]::new($h,[Text.Encoding]::UTF8,$false,1024,$true)
-                try{$old=$reader.ReadToEnd()|ConvertFrom-Json}finally{$reader.Dispose()}
-                if($old.format -ne 'SeriousSamPopulationClientLock/v1'){throw 'Unknown installation lock; left unchanged.'}
+                try{$text=$reader.ReadToEnd()}finally{$reader.Dispose()}
+                # ConvertFrom-Json unwraps single-element arrays on supported
+                # PowerShell versions; require an object in the original text.
+                if(!$text.TrimStart().StartsWith('{')){throw 'Unknown installation lock; left unchanged.'}
+                $old=$text|ConvertFrom-Json
+                if($old -isnot [pscustomobject] -or $old.format -isnot [string] -or
+                   $old.format -cne 'SeriousSamPopulationClientLock/v1'){throw 'Unknown installation lock; left unchanged.'}
             }
             $bytes=[Text.Encoding]::UTF8.GetBytes((@{format='SeriousSamPopulationClientLock/v1';pid=$PID;utc=[datetime]::UtcNow.ToString('o')}|ConvertTo-Json -Compress))
             $h.SetLength(0);$h.Position=0;$h.Write($bytes,0,$bytes.Length);$h.Flush()
