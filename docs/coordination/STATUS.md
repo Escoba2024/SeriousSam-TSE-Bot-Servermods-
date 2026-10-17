@@ -1,6 +1,6 @@
 # A00 Koordinationsboard – Snapshot vom 17.10.2026
 
-**Status:** Initiale GitHub-Inventur; GitHub-Issue für Live-Claims ist noch mit einer konkreten URL zu verlinken. Diese Datei ist ein **Snapshot**, keine Live-Synchronisierung. Nichts hiervon bestätigt, dass fremde Chats/Agenten die Regeln bereits übernommen haben.
+**Status:** Initiale GitHub-Inventur; [GitHub-Issue #18 – Agentenleitstelle](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18) ist der zentrale Ort für Live-Claims und A00-Freigaben. Diese Datei ist ein **Snapshot**, keine Live-Synchronisierung. Nichts hiervon bestätigt, dass fremde Chats/Agenten die Regeln bereits übernommen haben.
 
 ## Aktive Slots
 
