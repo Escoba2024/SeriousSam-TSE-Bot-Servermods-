@@ -1,0 +1,10 @@
+[Unit]
+Description=Poll the bounded Notion/GitHub read-only review queue
+
+[Timer]
+OnCalendar=*:0/5
+Persistent=true
+Unit=tse-notion-bridge.service
+
+[Install]
+WantedBy=timers.target
