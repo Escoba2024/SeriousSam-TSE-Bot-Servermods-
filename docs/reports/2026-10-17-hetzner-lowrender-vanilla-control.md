@@ -44,6 +44,20 @@ Der private einmalige Testwrapper stoppte den **eigenen** Client-PID mittels `St
 
 Die temporäre Testhülle ist privat unter `.codex/evidence/mcp-toolchain-20261017/run-vanilla-lowrender-control.ps1` abgelegt. Sie ist **kein** freigegebenes Produktions-/Multi-Server-Startskript.
 
+## Nachtest: reguläres Fensterschließen (separate 45-s-Sitzung)
+
+**PASS_LIMITED_45S_VANILLA_JOIN_AND_QUERY** mit deutlich saubererem Cleanup. Frischer Live-Preflight **READY_AT_CHECK_TIME** (4/4 Originaldateien korrekt, genau erwarteter Bot), danach erneuter Vanilla-Beitritt.
+
+- Eigenständiger Test: `.codex/evidence/hetzner-lowrender-vanilla-isolated-20261017-030127/` auf Shadow (private Rohbelege).
+- **45,96 s** Testdauer, **9/9** gültige UDP-Abfragen, **7/9** mit genau zwei Spielern nach Join; keine weiteren Fremdspieler/Queryfehler im beobachteten Fenster.
+- Abschluss zuerst mit **`CloseMainWindow`** statt `Stop-Process -Force`; Prozessende ohne Force-Fallback bestätigt (`shutdownMethod: "CloseMainWindow"`).
+- Das im privaten Clientlog bestätigte `Renderer buffers cleared.` belegt Game-Renderer-Cleanup; der wörtliche `-> /Quit()`-Marker fehlt. Deswegen **kein** Nachweis des exakt gleichen programm-internen `/Quit()`-Codepfades.
+- Unmittelbare externe GameSpy-Abfrage **nach** Abschluss ergab **wieder einen Bot (1/16)**. Anders als nach dem erzwungenen ersten Testende wurde beim unmittelbaren Nachtest kein „Ghost“-Spieler beobachtet.
+- Im Originalzustand: eigener Prozess nicht mehr vorhanden, Observer-`PersistentSymbols.ini` wiederhergestellt und alle getesteten DLL-Hashes unverändert (`GameMP.dll` `1C41DA35...`; qualifizierte Bot-DLL `61DC27E0...`).
+- Es handelt sich weiterhin **nicht** um aktive Gameplay-Eingaben, keinen 60-Minuten-Lauf, keine serverseitige Sync-CRC-Audit und keine 24/7-Freigabe.
+
+**Neue Standardentscheidung:** Bei autorisierten isolierten Testclients den korrekten PID **und vollen Pfad** vor jedem Schließen überprüfen, dann `CloseMainWindow()` versuchen und auf Prozessende warten; erst nach Timeout kontrolliert Force-Termination als markierten Fehler-/Fallbackpfad anwenden. Anschließend die echte Serverpopulation per UDP prüfen. Der erste 155-s-Test plus das separate 45-s-Cleanup-Gate bilden zusammen die belegte Grundlage, nicht einen künstlich addierten durchgehenden 200-s-Test.
+
 ## Weitere Gates (noch offen)
 
 1. Echte aktive Bot-/Vanilla-Interaktion auf einem **isolierten** Hetzner-Testserver (mit eigenem gezielt kontrollierbarem Eingabefenster), inklusive sichtbarer Actions/Kills/Respawns.
