@@ -5,8 +5,9 @@ import json
 import re
 from pathlib import Path
 
-BAD = re.compile(r"SYNCBAD: Client '([^']+)', Sequence (\d+) Tick ([\d.]+) - bad (\d+)")
-GOOD = re.compile(r"SYNCOK: Client '([^']+)', Tick ([\d.]+)")
+TICK = r"\d+(?:\.\d+)?"  # Reject malformed numbers such as 12..3.
+BAD = re.compile(rf"SYNCBAD: Client '([^']+)', Sequence (\d+) Tick ({TICK}) - bad (\d+)(?!\d)")
+GOOD = re.compile(rf"SYNCOK: Client '([^']+)', Tick ({TICK})(?![\d.])")
 
 def analyze(text):
     clients = {}
