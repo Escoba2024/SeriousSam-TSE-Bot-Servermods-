@@ -13,7 +13,12 @@ param(
 )
 function Test-NativeJoined([string]$Text) {
     $joins = [regex]::Matches($Text, '(?m)^\s*joined\s*$')
-    return $joins.Count -gt 0 -and $joins[$joins.Count - 1].Index -gt $Text.LastIndexOf('Cannot join game:')
+    if (!$joins.Count) { return $false }
+    $joinedAt = $joins[$joins.Count - 1].Index
+    # A historical successful join must not survive a later sync kick or timeout.
+    # A later successful rejoin supersedes an earlier disconnect.
+    $fail = [regex]::Matches($Text, '(?im)^.*(?:Disconnected:|Cannot join game:|Connection timed out|Timeout while waiting|Session has been stopped|sync lost|out of sync|bad sync|wrong crc|stopping game).*$')
+    return !$fail.Count -or $joinedAt -gt $fail[$fail.Count - 1].Index
 }
 function Test-NativeModuleLoaded([int]$GameProcessId, [string]$ExpectedModule = 'GameMP.dll') {
     $modules = @((Get-Process -Id $GameProcessId -ErrorAction Stop).Modules)
