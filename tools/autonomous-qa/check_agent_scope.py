@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import os
 import pathlib
+import stat
 import subprocess
 import sys
 
@@ -78,6 +79,61 @@ def valid_path(p: str, prefixes: tuple[str, ...]) -> bool:
     return any(p.startswith(prefix) for prefix in prefixes)
 
 
+def object_entries(repo: pathlib.Path, *args: str, index: bool) -> list[tuple[str, str, str]]:
+    """Read -z records without Git's quoted-path ambiguity."""
+    result = []
+    for record in git(repo, *args).split(b"\0"):
+        if not record:
+            continue
+        if b"\t" not in record:
+            raise ScopeError("malformed Git object record")
+        header, path_bytes = record.split(b"\t", 1)
+        fields = header.split(b" ")
+        if len(fields) != 3:
+            raise ScopeError("unexpected Git object-mode metadata")
+        mode, _, third = fields
+        try:
+            raw_mode = mode.decode("ascii")
+            raw_path = path_bytes.decode("utf-8", "surrogateescape")
+            stage = third.decode("ascii") if index else "0"
+        except UnicodeDecodeError as exc:
+            raise ScopeError("invalid object metadata") from exc
+        if not raw_mode.isdigit() or stage not in ("0", "1", "2", "3"):
+            raise ScopeError("invalid Git index stage or mode")
+        result.append((raw_path, raw_mode, stage))
+    return result
+
+
+def object_mode_gate(repo: pathlib.Path, paths: set[str]) -> set[str]:
+    """Reject non-regular object modes in index and committed HEAD."""
+    denied: set[str] = set()
+    if not paths:
+        return denied
+    entries = object_entries(repo, "ls-files", "--stage", "-z", index=True)
+    entries += object_entries(repo, "ls-tree", "-r", "-z", "HEAD", index=False)
+    for path, mode, stage in entries:
+        if path in paths and (mode not in ("100644", "100755") or stage != "0"):
+            denied.add(path)
+    for rel in paths:
+        # Reparse points also include Windows junctions, which are not symlinks.
+        candidate = repo
+        for part in pathlib.PurePosixPath(rel).parts:
+            candidate = candidate / part
+            try:
+                info = candidate.lstat()
+            except (FileNotFoundError, NotADirectoryError):
+                break
+            except OSError as exc:
+                raise ScopeError("unable to inspect path component") from exc
+            if stat.S_ISLNK(info.st_mode) or (os.name == "nt" and
+                    info.st_file_attributes & stat.FILE_ATTRIBUTE_REPARSE_POINT):
+                denied.add(rel)
+                break
+    return denied
+
+
+
+
 def inspect(repo: pathlib.Path, base: str, prefixes: tuple[str, ...]) -> tuple[list[str], list[str]]:
     if not prefixes or any(
         not p.endswith("/") or p.startswith("/") or
@@ -92,7 +148,8 @@ def inspect(repo: pathlib.Path, base: str, prefixes: tuple[str, ...]) -> tuple[l
     paths = changed_paths(repo, base)
     allowed = sorted(p for p in paths if valid_path(p, prefixes))
     denied = sorted(paths - set(allowed))
-    return allowed, denied
+    unsafe_objects = object_mode_gate(repo, set(allowed))
+    return sorted(set(allowed) - unsafe_objects), sorted(set(denied) | unsafe_objects)
 
 
 def main() -> int:
