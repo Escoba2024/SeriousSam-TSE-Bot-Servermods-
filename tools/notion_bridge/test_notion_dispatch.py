@@ -20,5 +20,20 @@ class SafeBridge(unittest.TestCase):
  def test_no_boolean_pr(self):self.assertIsNone(parse_comment(c({**D,"pr_number":True}),T))
  def test_dedupe(self):self.assertEqual(queue_from_comments([c(id=5),c(id=9)],T)[0]["github_comment_id"],9)
  def test_no_nonqueued(self):self.assertEqual(queue_from_comments([c({**D,"status":"Review"})],T),[])
+ def test_newer_review_cancels_wait(self):
+  self.assertEqual(queue_from_comments([c(id=5),c({**D,"status":"Review"},id=9)],T),[])
+ def test_all_terminal_statuses_cancel_wait(self):
+  for terminal in ("Gesperrt","Freigabe fehlt","Läuft","Review","Erledigt"):
+   with self.subTest(terminal=terminal):
+    self.assertEqual(queue_from_comments([c(id=5),c({**D,"status":terminal},id=9)],T),[])
+ def test_newer_wait_reopens_after_cancellation(self):
+  jobs=queue_from_comments([c(id=5),c({**D,"status":"Gesperrt"},id=7),c(id=9)],T)
+  self.assertEqual([x["github_comment_id"] for x in jobs],[9])
+ def test_untrusted_cancellation_cannot_override_owner_wait(self):
+  jobs=queue_from_comments([c(id=5),c({**D,"status":"Review"},id=9,user={"login":"outsider"})],T)
+  self.assertEqual([x["github_comment_id"] for x in jobs],[5])
+ def test_malformed_cancellation_cannot_override_owner_wait(self):
+  jobs=queue_from_comments([c(id=5),c({**D,"status":"Review","command":"run"},id=9)],T)
+  self.assertEqual([x["github_comment_id"] for x in jobs],[5])
  def test_no_invalid_json(self):self.assertIsNone(parse_comment(c(body="NOTION_BRIDGE_JOB_V1\\n{"),T))
 if __name__=="__main__":unittest.main()
