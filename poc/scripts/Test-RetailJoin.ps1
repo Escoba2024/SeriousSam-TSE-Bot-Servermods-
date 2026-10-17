@@ -14,6 +14,16 @@ function Test-NativeJoined([string]$Text) {
     $joins = [regex]::Matches($Text, '(?m)^\s*joined\s*$')
     return $joins.Count -gt 0 -and $joins[$joins.Count - 1].Index -gt $Text.LastIndexOf('Cannot join game:')
 }
+function Restore-RetailTestDll([string]$Backup, [string]$Destination, [string]$ExpectedHash) {
+    if (!(Test-Path -LiteralPath $Backup)) { throw 'Original Retail test DLL backup is missing.' }
+    if ((Get-FileHash -LiteralPath $Backup -Algorithm SHA256).Hash -ne $ExpectedHash) {
+        throw 'Original Retail test DLL backup hash mismatch; refusing unsafe restore.'
+    }
+    Copy-Item -LiteralPath $Backup -Destination $Destination -Force
+    if ((Get-FileHash -LiteralPath $Destination -Algorithm SHA256).Hash -ne $ExpectedHash) {
+        throw 'Original Retail test DLL restoration hash mismatch.'
+    }
+}
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 $retail = Join-Path $repo '.codex\retail'
@@ -34,11 +44,16 @@ if (Get-NetUDPEndpoint -LocalPort 25600,25601 -ErrorAction SilentlyContinue) {
 }
 if (Test-Path -LiteralPath $Evidence) { throw 'Use a new evidence directory.' }
 $out = (New-Item -ItemType Directory -Path $Evidence).FullName
-Copy-Item "$clientDir\Bin\GameMP.dll" "$out\GameMP-before.dll"
+$clientDllPath = Join-Path $clientDir 'Bin\GameMP.dll'
+$savedDll = Join-Path $out 'GameMP-before.dll'
+$originalDllHash = (Get-FileHash -LiteralPath $clientDllPath -Algorithm SHA256).Hash
+Copy-Item -LiteralPath $clientDllPath -Destination $savedDll
+if ((Get-FileHash -LiteralPath $savedDll -Algorithm SHA256).Hash -ne $originalDllHash) {
+    throw 'Retail test DLL backup hash mismatch; candidate has not been installed.'
+}
 foreach ($file in @("$serverDir\Dedicated_BotTest.log", "$clientDir\SeriousSam.log", "$clientDir\Bin\SeriousSam.RPT")) {
     if (Test-Path $file) { Move-Item -LiteralPath $file -Destination (Join-Path $out ('before-' + (Split-Path $file -Leaf))) }
 }
-Copy-Item -LiteralPath $dllPath -Destination "$clientDir\Bin\GameMP.dll"
 $server = $null
 $client = $null
 $observerProcess = $null
@@ -46,6 +61,8 @@ $loaded = $false
 $shutdownOk = $false
 $configBackups = @{}
 try {
+    # Candidate installation belongs inside try so the original is restored on any failure.
+    Copy-Item -LiteralPath $dllPath -Destination $clientDllPath -Force
     if ($CaptureObserver) {
         $frames = @(Get-ChildItem "$observerDir\ScreenShots\Anim_*.tga" -ErrorAction SilentlyContinue |
             ForEach-Object { if ($_.BaseName -match '^Anim_(\d+)$') { [int]$Matches[1] } })
@@ -192,6 +209,9 @@ try {
             try { Copy-Item -LiteralPath $configBackups[$config] -Destination $config -Force }
             catch { $cleanupErrors += $_ }
         }
+        # Restore only after our client/server processes were stopped; verify SHA256.
+        try { Restore-RetailTestDll -Backup $savedDll -Destination $clientDllPath -ExpectedHash $originalDllHash }
+        catch { $cleanupErrors += $_ }
     }
     if ($CaptureObserver -and $null -ne $frameStart) {
         $screenshots = New-Item -ItemType Directory "$out\observer-screenshots"

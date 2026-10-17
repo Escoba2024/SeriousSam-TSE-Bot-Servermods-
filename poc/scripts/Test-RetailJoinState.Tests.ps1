@@ -17,4 +17,32 @@ foreach($case in @(@{text=@('startup',"TSE_Bot_PoC joined`n");expected=$true},@{
     $value=Invoke-Expression $joinExpression
     if($value -isnot [bool] -or $value -ne $case.expected){throw 'Chunked log must produce a scalar join Boolean.'}
 }
-'ALL NATIVE JOIN STATE CHECKS PASSED'
+# Pure fixture test: no retail installation or game process may be touched.
+$restore=$ast.Find({param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq 'Restore-RetailTestDll'},$true)
+if(!$restore){throw 'Retail DLL restore helper missing.'}
+Invoke-Expression $restore.Extent.Text
+$source=Get-Content -LiteralPath "$PSScriptRoot/Test-RetailJoin.ps1" -Raw
+if($source -notmatch 'Restore-RetailTestDll -Backup \$savedDll -Destination \$clientDllPath -ExpectedHash \$originalDllHash'){
+    throw 'Main native join cleanup does not call the checked DLL restorer.'
+}
+$tempRoot=Join-Path ([IO.Path]::GetTempPath()) ('tse-joinrestore-'+[guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $tempRoot|Out-Null
+try {
+    $backup=Join-Path $tempRoot 'GameMP-before.dll'
+    $active=Join-Path $tempRoot 'GameMP.dll'
+    [IO.File]::WriteAllText($backup,'ORIGINAL_DLL_FIXTURE')
+    [IO.File]::WriteAllText($active,'CANDIDATE_DLL_FIXTURE')
+    $originalHash=(Get-FileHash -LiteralPath $backup -Algorithm SHA256).Hash
+    Restore-RetailTestDll -Backup $backup -Destination $active -ExpectedHash $originalHash
+    if((Get-FileHash -LiteralPath $active -Algorithm SHA256).Hash -ne $originalHash){throw 'Fixture DLL was not restored.'}
+    [IO.File]::WriteAllText($active,'CANDIDATE_DLL_FIXTURE')
+    [IO.File]::WriteAllText($backup,'CORRUPTED_BACKUP')
+    $blocked=$false
+    try {Restore-RetailTestDll -Backup $backup -Destination $active -ExpectedHash $originalHash} catch {$blocked=$true}
+    if(!$blocked -or [IO.File]::ReadAllText($active) -ne 'CANDIDATE_DLL_FIXTURE'){
+        throw 'Corrupt backup was not rejected before touching destination.'
+    }
+} finally {
+    Remove-Item -LiteralPath $tempRoot -Recurse -Force
+}
+'ALL NATIVE JOIN STATE AND DLL RESTORE CHECKS PASSED'
