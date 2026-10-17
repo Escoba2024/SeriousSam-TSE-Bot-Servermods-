@@ -1,0 +1,26 @@
+[Unit]
+Description=TSE Notion/GitHub Bridge (restricted read-only PR review)
+Wants=network-online.target
+After=network-online.target tse-agent-control.service
+
+[Service]
+Type=oneshot
+User=tsecontrol
+Group=tsecontrol
+WorkingDirectory=/opt/tse-agent-control/notion_bridge/repo/tools/notion_bridge
+Environment=HOME=/var/lib/tse-agent-control
+Environment=PATH=/opt/tse-agent-control/toolchain/node-v24.22.0-linux-x64/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/usr/bin/python3 -B /opt/tse-agent-control/notion_bridge/repo/tools/notion_bridge/notion_dispatch.py
+StateDirectory=tse-agent-control
+LogsDirectory=tse-agent-control
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+NoNewPrivileges=true
+InaccessiblePaths=/srv/sam
+UMask=0077
+Nice=15
+IOSchedulingClass=idle
+CPUQuota=70%
+MemoryMax=2G
+TimeoutStartSec=600
