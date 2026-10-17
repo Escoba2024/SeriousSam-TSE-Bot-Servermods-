@@ -13,6 +13,32 @@ if(!(Test-NativeJoined "Cannot join game:`nTimeout while waiting for reply`n  jo
 if(Test-NativeJoined "  joined`nDisconnected: Too many bad syncs`n"){throw 'Historical join masked a real sync disconnect.'}
 if(Test-NativeJoined "  joined`nConnection timed out`n"){throw 'Historical join masked a timeout.'}
 if(!(Test-NativeJoined "  joined`nDisconnected: Too many bad syncs`n  joined`n")){throw 'Successful rejoin after sync disconnect rejected.'}
+# Regression: the observer must identify the complete, color-normalized player name.
+# Extract the real result expression to keep this a direct harness gate test.
+$observerAssignment=$ast.Find({param($node) $node -is [Management.Automation.Language.AssignmentStatementAst] -and $node.Left.Extent.Text -eq '$result.observerSawBotJoin'},$true)
+if(!$observerAssignment){throw 'Observer bot-join gate missing.'}
+$observerExpression=$observerAssignment.Right.Extent.Text
+$observerHelper=$ast.Find({param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq 'Test-ObserverSawExactBotJoin'},$true)
+if($observerHelper){Invoke-Expression $observerHelper.Extent.Text}
+$ExpectedBotName='TSE_Bot_Client_1'
+foreach($case in @(
+    @{log="^oTSE_Bot_Client_1^r joined";expected=$true;label='actual Retail colored join'},
+    @{log="TSE_Bot_Client_1 joined";expected=$true;label='plain exact join'},
+    @{log="^o^i^cff6600TSE_Bot_Client_1^r joined";expected=$true;label='decorated exact join'},
+    @{log="Player ImpostorTSE_Bot_Client_1_Else joined";expected=$false;label='impostor substring'},
+    @{log="^oTSE_Bot_Client_1_Else^r joined";expected=$false;label='suffix impersonation'},
+    @{log="Other_Player joined";expected=$false;label='unrelated join'}
+)) {
+    $observerText=$case.log
+    $actual=[bool](Invoke-Expression $observerExpression)
+    if($actual -ne $case.expected){throw ('Observer exact-identity gate wrong for '+$case.label)}
+}
+$ExpectedBotName=''
+$observerText='Other_Player joined'
+$rejectedEmpty=$false
+try { [void](Invoke-Expression $observerExpression) } catch { $rejectedEmpty=$true }
+if(!$rejectedEmpty){throw 'An empty ExpectedBotName was not rejected.'}
+$ExpectedBotName='TSE_Bot_Client_1'
 $resultTable=$ast.Find({param($node) $node -is [Management.Automation.Language.HashtableAst] -and @($node.KeyValuePairs | Where-Object {$_.Item1.Value -eq 'clientJoined'}).Count -eq 1},$true)
 $joinExpression=($resultTable.KeyValuePairs | Where-Object {$_.Item1.Value -eq 'clientJoined'}).Item2.Extent.Text
 foreach($case in @(@{text=@('startup',"TSE_Bot_PoC joined`n");expected=$true},@{text=@('startup','not joined yet');expected=$false})) {

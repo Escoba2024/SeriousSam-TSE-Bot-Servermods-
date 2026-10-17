@@ -9,7 +9,7 @@ param(
     [ValidateRange(1,60)][int]$CaptureFps = 10,
     [switch]$AllowReconnect,
     [switch]$ExpectedShutdown,
-    [string]$ExpectedBotName = 'TSE_Bot_PoC'
+    [ValidateNotNullOrEmpty()][string]$ExpectedBotName = 'TSE_Bot_PoC'
 )
 function Test-NativeJoined([string]$Text) {
     $joins = [regex]::Matches($Text, '(?m)^\s*joined\s*$')
@@ -19,6 +19,21 @@ function Test-NativeJoined([string]$Text) {
     # A later successful rejoin supersedes an earlier disconnect.
     $fail = [regex]::Matches($Text, '(?im)^.*(?:Disconnected:|Cannot join game:|Connection timed out|Timeout while waiting|Session has been stopped|sync lost|out of sync|bad sync|wrong crc|stopping game).*$')
     return !$fail.Count -or $joinedAt -gt $fail[$fail.Count - 1].Index
+}
+function Test-ObserverSawExactBotJoin([string]$Text, [string]$ExpectedBotName) {
+    if ([string]::IsNullOrWhiteSpace($ExpectedBotName)) {
+        throw 'ExpectedBotName must be a non-empty visible player name.'
+    }
+    # Retail observer logs contain lines such as: ^oTSE_Bot_Client_1^r joined
+    # TSE display formatting is not part of the player's visible name.
+    foreach ($match in [regex]::Matches($Text, '(?m)^(?<player>[^\r\n]+?) joined[ \t]*\r?$')) {
+        $nameWithCodes = $match.Groups['player'].Value
+        $visibleName = [regex]::Replace($nameWithCodes, '\^(?:c[0-9a-fA-F]{6}|f[0-9]|[oir])', '')
+        if ([string]::Equals($visibleName, $ExpectedBotName, [StringComparison]::Ordinal)) {
+            return $true
+        }
+    }
+    return $false
 }
 function Test-NativeModuleLoaded([int]$GameProcessId, [string]$ExpectedModule = 'GameMP.dll') {
     $modules = @((Get-Process -Id $GameProcessId -ErrorAction Stop).Modules)
@@ -190,7 +205,7 @@ try {
         $observerText = Get-Content -Raw "$observerDir\SeriousSam.log"
         $result.observerCurrentlyJoined = (Test-NativeJoined $observerText)
         $result.observerAlive = !$observerProcess.HasExited
-        $result.observerSawBotJoin = [bool]($observerText -match ('(?m)^.*' + [regex]::Escape($ExpectedBotName) + '.* joined\s*$'))
+        $result.observerSawBotJoin = [bool](Test-ObserverSawExactBotJoin -Text $observerText -ExpectedBotName $ExpectedBotName)
         $result.crcAcceptedCount = ([regex]::Matches($serverText, 'CRC check OK')).Count
     }
     if ($ExpectedShutdown) {
