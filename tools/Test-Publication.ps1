@@ -20,24 +20,39 @@ $windowsOnly=@{
 }
 function Invoke-PublicationCheck([string]$Name,[string]$Kind,[string]$Executable,[object[]]$Arguments) {
     $log=Join-Path $out ($Name+'.log')
-    $code=$null;$failure=$null
+    $code=$null;$failure=$null;$stdoutLog=$null;$stderrLog=$null
     try{
         $command=Get-Command -Name $Executable -CommandType Application -ErrorAction Stop|Select-Object -First 1
-        # Windows PowerShell can wrap successful native stderr (e.g. unittest)
-        # as ErrorRecords. The child exit code, not stderr, decides its result.
-        $savedPreference=$ErrorActionPreference
-        try{
-            $ErrorActionPreference='Continue'
-            & $command.Source @Arguments > $log 2>&1
-            $code=$LASTEXITCODE
-        }finally{$ErrorActionPreference=$savedPreference}
+        if($Kind -in 'Python','Provenance'){
+            # Preserve PR #15's separated native streams on Windows PowerShell 5.1.
+            # Do not treat non-fatal stderr (e.g. unittest) as a failed test.
+            if($Arguments.Count -ne 2 -or $Arguments[0] -ne '-B'){
+                throw 'Unexpected Python arguments for publication regression.'
+            }
+            $stdoutLog=Join-Path $out ($Name+'.stdout.log')
+            $stderrLog=Join-Path $out ($Name+'.stderr.log')
+            $argumentLine='-B "'+[string]$Arguments[1]+'"'
+            $process=Start-Process -FilePath $command.Source -ArgumentList $argumentLine -WorkingDirectory $repo -NoNewWindow -Wait -PassThru -RedirectStandardOutput $stdoutLog -RedirectStandardError $stderrLog -ErrorAction Stop
+            $code=$process.ExitCode
+            # Keep the original combined log schema, used by the test counter.
+            $stdout=Get-Content -LiteralPath $stdoutLog -Raw
+            $stderr=Get-Content -LiteralPath $stderrLog -Raw
+            ($stdout+$stderr)|Set-Content -LiteralPath $log
+        }else{
+            $savedPreference=$ErrorActionPreference
+            try{
+                $ErrorActionPreference='Continue'
+                & $command.Source @Arguments > $log 2>&1
+                $code=$LASTEXITCODE
+            }finally{$ErrorActionPreference=$savedPreference}
+        }
     }catch{
         $failure=$_.Exception.Message
         $failure|Set-Content -LiteralPath $log
     }
     $status=if($null -eq $failure -and $null -ne $code -and $code -eq 0){'PASS'}else{'FAIL'}
     Write-Host "$status $Name"
-    return [pscustomobject]@{name=$Name;kind=$Kind;status=$status;exitCode=$code;error=$failure;log=$log}
+    return [pscustomobject]@{name=$Name;kind=$Kind;status=$status;exitCode=$code;error=$failure;log=$log;stdoutLog=$stdoutLog;stderrLog=$stderrLog}
 }
 foreach($test in Get-ChildItem -LiteralPath "$repo/poc/scripts" -Filter '*.Tests.ps1'|Sort-Object Name){
     $reason=$null
