@@ -27,6 +27,7 @@ Eine weitere **echte Retail-1.07-Dekompilation plus x86-Disassembly** grenzt den
 - `CSessionState::ChecksumForSync` bei `0x601A5B10` ruft für jeden aktiven Spieler die Action-Checksum zweimal auf und verarbeitet zusätzlich weitere Session-/Spieler-/Entity-Zustände. Deshalb bedeutet der Vier-Byte-Befund **nicht**, dass der gesamte Netzwerk-Sync nur acht Bytes prüft.
 - Die separate Serious-Engine-1.10-Referenz besitzt in `NetworkMessage.cpp` die auffällige Stelle `CRC_AddBlock(ulCRC, (UBYTE*)this, sizeof(this));`; der tatsächlich dekompilierte Retail-x86-Code **belegt unabhängig** die Vier-Byte-Grenze. Diese Beobachtung ist keine bestätigte CRC-Divergenzursache.
 - Konsequenz für die Snapshot-Auswertung: Die vollständigen gedruckten Action-Felder dürfen nicht mit dem tatsächlich allein durch **diese** Checksum-Methode abgedeckten Bytebereich verwechselt werden. Abweichungen können außerdem über Entity-CRC relevant sein, ohne dass diese statische Teilanalyse die komplette Feldabhängigkeit nachweist.
+- **Vanilla-ABI-Warnung:** `sizeof(this)` in einer nachgebauten Action-Checksum nicht eigenmächtig durch `sizeof(*this)` ersetzen oder den Vier-Byte-Scope erweitern. Das würde die native Prüfsummenberechnung gegenüber der unveränderten Retail-Implementierung verändern und erfordert gesonderte, ausdrücklich vanilla-kompatible Verifikation. Dies ist kein vorgeschlagener Codefix.
 
 ## Reproduzierbarer Offline-Vergleich
 
