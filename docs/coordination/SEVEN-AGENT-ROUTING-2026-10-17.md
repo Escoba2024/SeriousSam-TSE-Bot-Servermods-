@@ -1,6 +1,6 @@
 # A00 – Sieben-Agenten-Routing und Kollisionsregister (17.10.2026)
 
-**Status: Koordinationsvorschlag / PENDING_CLAIM, nicht GRANTED.** Maßgeblich sind [AGENTS.md](../../AGENTS.md), [README.md](README.md), [HANDOFF.md](HANDOFF.md), [INTEGRATION-GATES.md](INTEGRATION-GATES.md) und [Issue #18](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18). Dieses Dokument ergänzt die ältere funktionale Slot-Matrix; es ändert ohne bestätigte CLAIMs keine alten Rechte und startet keine fremden Agenten.
+**Status: A00-Routing und operative Teilfreigaben nach Issue #18.** Vorbemerkte Standardpfade sind keine eigenständige Lease. Nur ausdrücklich auf die individuellen CLAIMs antwortende A00-`GRANTED`-Kommentare gelten. Maßgeblich sind [AGENTS.md](../../AGENTS.md), [README.md](README.md), [HANDOFF.md](HANDOFF.md), [INTEGRATION-GATES.md](INTEGRATION-GATES.md) und [Issue #18](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18). Dieses Dokument ergänzt die ältere funktionale Slot-Matrix; es ändert ohne bestätigte CLAIMs keine alten Rechte und startet keine fremden Agenten.
 
 ## Wichtige ID-Übersetzung (Namenskollision vermeiden)
 
@@ -17,6 +17,14 @@ Die sieben Chat-Rollen aus dem Auftrag sind **nicht identisch** mit den historis
 | A5 (Audit) | **eigene Auditrolle aus #20**; **nicht** A05 | Remote-/Local-Push-Nachweise, SHAs, Handoffs, Notion-/Drive-Spiegel | `docs/audits/**`, `docs/process/agent-handoff-contract.md`; **keine** `docs/coordination/**`-Writes | #20 / #22 |
 
 Die Tabelle ordnet Arbeit **eindeutig zu** (vorgemerkte Ziel-Claims), ist aber **keine** nachträgliche `GRANTED`-Freigabe für bestehende Chatprozesse. Jeder Bearbeiter muss für konkrete Pfade/Branch/Worktree/Ticket einen aktuellen `CLAIM` nach `HANDOFF.md` selbst im Issue #18 veröffentlichen. A00 prüft Konflikte und vergibt dann eine auf maximal vier Stunden begrenzte Lease. Für alte `codex/*`-Branches bleibt der tatsächliche Eigentümer bis zur Bestätigung **UNKNOWN**.
+
+## Aktualisierte echte A00-GRANTED-Leases (Dateischreiben, keine Runtime)
+
+- **A1 = A08:** [Antrag](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18#issuecomment-6227908365), [A00-Teilerlaubnis](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18#issuecomment-6227925011): ausschließlich drei neue `a08`-Analyse-/Fixture-Dateien; bis **06:00 MESZ**. `GHIDRA_TSE_PROJECT` **nicht** freigegeben.
+- **A2 = A05 (Native):** [Antrag](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18#issuecomment-6227922604), [A00-Teilerlaubnis](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18#issuecomment-6227929615): nur drei exakt benannte RetailJoin-Harness-/Report-Dateien aus PR #15; bis **06:30 MESZ**. `SHADOW_RETAIL` und `SHADOW_GAME_FILES` **nicht** freigegeben. Shadow-Worktree read-only sauber @ `67a701fc03aa3a757bdea396b5aea5ea9d67ad28`.
+- **A3 = A03 (UDP):** [Antrag](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18#issuecomment-6227928766), [A00-Freigabe](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18#issuecomment-6227932628): nur drei Preflight-Parser-/Fixture-/Report-Dateien aus PR #17; bis **06:30 MESZ**. Keine Runtime. Shadow-Worktree read-only sauber @ `e0cb57252654a2fb96b99c536f79953c5e406c6f`.
+- **A4/WEB/A5 (Audit)**: ohne in diesem Snapshot geprüften eigenen CLAIM/GRANTED für neue Schreibarbeiten; veröffentlichte ältere PRs und Docs sind keine automatische Lease.
+- **Kein weiterer Schreib-/Runtime-Scope freigegeben.** Änderungen und neue CLAIMs ausschließlich über das jeweils neueste Issue-#18-Protokoll; dieses Dokument bleibt ein datierter Snapshot.
 
 ## PR-Inventur und Merge-Verantwortung
 
