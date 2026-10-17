@@ -1,6 +1,7 @@
 # Private runtime, evidence, builds and task scratch
 .codex/
 .superpowers/
+.qa-evidence/
 __pycache__/
 *.py[cod]
 *.dll

@@ -2,6 +2,7 @@ $ErrorActionPreference='Stop'
 . "$PSScriptRoot/PopulationSupervisorCore.ps1"
 . "$PSScriptRoot/PopulationCore.ps1"
 . "$PSScriptRoot/FleetQuery.ps1"
+. "$PSScriptRoot/PopulationWatchdog.ps1"
 
 function Enter-PopulationClientLocks([string[]]$Directories) {
     $held=@()
@@ -173,14 +174,17 @@ function Test-PopulationNativeReady($Group,$Sample) {
 function Invoke-PopulationSupervisor {
     param([string]$Config,[string]$StateDirectory,[ValidateRange(0,16)][int]$TargetPopulation=8,
           [ValidateRange(0,15)][int]$ReservedHumanSlots=2,[ValidateRange(100,5000)][int]$PollMilliseconds=1000,
-          [ValidateRange(0,100000)][int]$Iterations=0,[switch]$ObserveOnly,[string]$FleetState)
+          [ValidateRange(0,100000)][int]$Iterations=0,[switch]$ObserveOnly,[string]$FleetState,[string]$WatchdogSession)
     $fleet=Get-FleetConfig $Config
     $identities=Get-FleetIdentities $fleet
     if(Test-Path -LiteralPath $StateDirectory){throw 'Use a new supervisor state directory.'}
     $state=(New-Item -ItemType Directory -Path $StateDirectory).FullName
-    $groups=@();$locks=@();$clock=[Diagnostics.Stopwatch]::StartNew()
+    $groups=@();$locks=@();$clock=[Diagnostics.Stopwatch]::StartNew();$guardian=$null
     try{
-        if(!$ObserveOnly){$locks=Enter-PopulationClientLocks @($fleet.processes.clientDir)}
+        if($WatchdogSession){
+            if($ObserveOnly -or $FleetState){throw 'Watchdog session requires a fresh active controller.'}
+            $guardian=Open-PopulationWatchdogSession $WatchdogSession
+        }elseif(!$ObserveOnly){$locks=Enter-PopulationClientLocks @($fleet.processes.clientDir)}
         $existing=$null
         if($FleetState){if(!$ObserveOnly){throw 'Existing fleet state is read-only observation only.'};$existing=Get-Content -LiteralPath $FleetState -Raw|ConvertFrom-Json}
         foreach($i in 0..($fleet.processes.Count-1)){
@@ -212,6 +216,16 @@ function Invoke-PopulationSupervisor {
             $log=Join-Path $g.Config.processes[0].clientDir 'SeriousSam.log'
             if(Test-Path -LiteralPath $log){Copy-Item -LiteralPath $log -Destination ($prefix+'.before.log');Remove-Item -LiteralPath $log}
             $launchAt=[datetime]::UtcNow
+            if($guardian){
+                $owned=Invoke-PopulationWatchdogRequest $guardian Start $g.Id
+                $expectedPlan=@(Get-FleetPlan $g.Config)[0]
+                if($owned.ownerId -cne $guardian.ownerId -or $owned.exe -cne $expectedPlan.exe){throw 'Watchdog returned an unexpected owned client.'}
+                $held=@{Entry=$owned;StatePath=$sf}
+                # Receipt failure propagates; guardian already holds the child handle.
+                @{processes=@($owned);ownerId=$guardian.ownerId}|ConvertTo-Json -Depth 5|Set-Content -LiteralPath $sf
+                if(!(Test-PopulationOwnedRunning $held)){throw 'Watchdog client is not running.'}
+                return $held
+            }
             try{
                 & "$PSScriptRoot/Start-BotFleet.ps1" -Config $cfg -State $sf | Out-Null
                 $record=Get-Content -LiteralPath $sf -Raw|ConvertFrom-Json
@@ -229,6 +243,11 @@ function Invoke-PopulationSupervisor {
         }
         $stop={
             param($g)
+            if($guardian){
+                Invoke-PopulationWatchdogRequest $guardian Stop $g.Id|Out-Null
+                if(Test-PopulationOwnedRunning $g.Record){throw 'Watchdog owned group still running.'}
+                return
+            }
             if(Test-PopulationOwnedRunning $g.Record){Stop-PopulationOwnedRecord $g.Record -GracefulWaitSeconds 5 | Out-Null}
             if(Test-PopulationOwnedRunning $g.Record){throw 'Owned group still running.'}
         }
