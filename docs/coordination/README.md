@@ -5,7 +5,7 @@
 ## Ziele / Quelle der Wahrheit
 
 - **Code, Branches, Pull Requests, technische Belege:** GitHub.
-- **Live-Belegung, Schreibreservierung, Blocker, Übergaben:** GitHub-Koordinationsissue (in `STATUS.md` zu verlinken). Kein zweites konkurrierendes Notion-/Drive-Lockregister.
+- **Live-Belegung, Schreibreservierung, Blocker, Übergaben:** [GitHub-Koordinationsissue #18](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18). Kein zweites konkurrierendes Notion-/Drive-Lockregister.
 - **Gemeinsames Runtime-Labor:** Shadow und Hetzner, physisch getrennt von Git-Workspaces. Nur nach exklusiver Freigabe.
 - **Notion / Drive:** lesbare Spiegel des Status, nicht operative Autorität oder Ersatz für GitHub-Belege.
 - A00 verwaltet die Integrationswarteschlange; A00 bearbeitet **keinen** Supervisor-, DLL- oder Runtime-Code.
@@ -17,7 +17,7 @@
 | **A00** | Koordination, PR-Triage, Integrations-Gates | `docs/coordination/**`, Koordinationsissue, Review-/Integrationsentscheidungen | Kein Gameplay-/Produktions-/Supervisor-Code |
 | **A01** | Population-Supervisor, Readiness, UDP-Supervisor-Gates | `poc/scripts/PopulationSupervisor*.ps1`, `Manage-BotPopulation.ps1`; ausschließlich **ein** aktiver Supervisor-Integrationszweig | PR #3/#7/#10/#12/#13 bilden eine **sequenzierte Familie**; nicht parallel auf denselben Dateien schreiben |
 | **A02** | Watchdog / Guardian / Prozessidentität | `poc/scripts/PopulationWatchdog.ps1`, `Watch-BotPopulation.ps1`, watchdog-spezifische neue Tests | PR #8/#11 sind Vorstufen von #12; `PopulationSupervisor.ps1` nur nach Übergabe an A01 |
-| **A03** | Unabhängige portable QA, CI und Sicherheitstests | neue eigenständige Regressionen unter `tools/` / `poc/scripts/Test-*\` nach Freigabe; Review-Berichte mit eindeutigen Namen | Keine parallelen Änderungen an bereits von A01/A02 belegten Testdateien; PR #14 betrifft Fleet-Auditor |
+| **A03** | Unabhängige portable QA, CI und Sicherheitstests | neue eigenständige Regressionen unter `tools/` / `poc/scripts/Test-*` nach Freigabe; Review-Berichte mit eindeutigen Namen | Keine parallelen Änderungen an bereits von A01/A02 belegten Testdateien; PR #14 betrifft Fleet-Auditor |
 | **A04** | Retail-Sync-Root-Cause und CRC-Analyse | neue `docs/reports/*sync*` (eigene IDs), `tools/analyze_sync_log.py` und eigene Parser-Tests nach Claim | PR #16; Original-Retail-DLLs nur lesen, 61DC-Kandidat bleibt geschützt |
 | **A05** | Shadow native Retail-Abnahme, Join, Windows-Harness | neue Runtime-Berichte / Harness-Scope `poc/scripts/Test-RetailJoin*.ps1` nach Claim | PR #15/#17; **keine** Änderungen am laufenden Shadow-Test ohne Runtime-Lease |
 | **A06** | Hetzner / Wine / öffentliche UDP-/333networks-Listung | eigene WAN-/Wine-Testberichte, `poc/HETZNER-*` nach Claim | Hetzner-Instanz und produktiver Port sind **exklusiv**; keine fremden Playerslots entfernen |
