@@ -57,3 +57,7 @@ Nicht alle MCP-Server ohne Diagnosebedarf gleichzeitig betreiben. Vor jeder Schl
 - [Vollständige Toolmatrix, letzte Installationsprotokolle und Routingregeln](docs/decisions/2026-10-17-tse-ai-tools-mcp-policy.md)
 - [Cloud-Aufgaben #4](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/4)
 - [Shadow-/Hetzner-Aufgaben #5](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/5)
+
+## Agentenkoordination A00–A09 (parallel arbeitende Agenten)
+
+**Vor neuer paralleler Schreib-/Runtime-Arbeit** [Koordinationsregeln und Slot-/Worktree-Matrix](docs/coordination/README.md), [Statussnapshot](docs/coordination/STATUS.md) und [CLAIM-/Handoff-Protokoll](docs/coordination/HANDOFF.md) lesen. Gemeinsamer Registrierungs-/Freigabepunkt: [GitHub-Issue #18 – Agentenleitstelle](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18). **Keine parallelen Writer auf derselben Datei oder Retail-/Hetzner-Instanz**; neue Agenten verwenden eigene Worktrees. Vor jeder Änderung `CLAIM` und A00-`GRANTED`, für Tests separate Runtime-Lease. Vorhandene Branches und laufende Prozesse nicht ohne Prüfung anfassen. Die Koordinationsdokumente ersetzen keine echten Zugriffs-/Prozesssperren und können bereits laufende fremde Chat-Sessions nicht automatisch binden.
