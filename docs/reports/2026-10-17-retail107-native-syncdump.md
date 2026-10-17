@@ -19,6 +19,15 @@
 
 **Bewertung:** Der eingebaute **One-shot-Sync-Dump-Pfad ist in Retail 1.07 statisch bestätigt**. Ob ein konkret isolierter BotClient/Server per Shell `cli_bDumpSync=1` einen gültigen Dump schreibt, muss noch nativ bestätigt werden. `cli_bDumpSyncEachTick` ist als Symbol belegt, aber seine konkrete Funktion im Retail-Release **nicht** bestätigt; insbesondere den DEBUG-Zweig aus Serious Engine 1.10 nicht ohne Nachweis auf Retail 1.07 übertragen.
 
+## Zusatzbefund: Was der Retail-Action-CRC wirklich prüft
+
+Eine weitere **echte Retail-1.07-Dekompilation plus x86-Disassembly** grenzt den Sync-Check genauer ein:
+
+- `CPlayerAction::ChecksumForSync` bei `0x6019EC10` liest an `0x6019EC21` per `MOV CL, byte ptr [EAX + ESI*1]` jeweils ein Byte aus der **aktuellen CPlayerAction-Basisadresse plus Index**. `INC EAX` bei `0x6019EC36`, `CMP EAX,0x4` bei `0x6019EC37` und `JC` bei `0x6019EC3C` belegen **genau vier aufeinanderfolgende Bytes pro Action-Checksum-Aufruf**.
+- `CSessionState::ChecksumForSync` bei `0x601A5B10` ruft für jeden aktiven Spieler die Action-Checksum zweimal auf und verarbeitet zusätzlich weitere Session-/Spieler-/Entity-Zustände. Deshalb bedeutet der Vier-Byte-Befund **nicht**, dass der gesamte Netzwerk-Sync nur acht Bytes prüft.
+- Die separate Serious-Engine-1.10-Referenz besitzt in `NetworkMessage.cpp` die auffällige Stelle `CRC_AddBlock(ulCRC, (UBYTE*)this, sizeof(this));`; der tatsächlich dekompilierte Retail-x86-Code **belegt unabhängig** die Vier-Byte-Grenze. Diese Beobachtung ist keine bestätigte CRC-Divergenzursache.
+- Konsequenz für die Snapshot-Auswertung: Die vollständigen gedruckten Action-Felder dürfen nicht mit dem tatsächlich allein durch **diese** Checksum-Methode abgedeckten Bytebereich verwechselt werden. Abweichungen können außerdem über Entity-CRC relevant sein, ohne dass diese statische Teilanalyse die komplette Feldabhängigkeit nachweist.
+
 ## Reproduzierbarer Offline-Vergleich
 
 `tools/compare_sync_dumps.py` vergleicht zwei bereits vorhandene, vollständige Sync-Dump-Snapshots:
