@@ -36,6 +36,12 @@
 3. Wine-/Host-Timing, Action-Buffer oder Paket-Reihenfolge könnten die Divergenz begünstigen; Netzwerk-Latenz allein ist **nicht** als CRC-Fehlerursache bewiesen.
 4. Die 1.10-Referenz prüft u.a. Sequence, Level, Pause, Player-Actions und Player-Entitys im Sync-CRC (`SessionState.cpp` Zeilen 765–812); welche Felder tatsächlich bei Retail-1.07 für den Fall abweichen, ist **offen**.
 
+## Sicherheitsprüfung des vorhandenen Testharness
+
+Bei der Planung der nächsten isolierten Native-Probe wurde `poc/scripts/Test-RetailJoin.ps1` vollständig gelesen (210 Zeilen). Es sichert zuerst `TSE-BotClient/Bin/GameMP.dll` als `GameMP-before.dll`, kopiert danach die übergebene Test-DLL **in die aktive BotClient-Installation**, beendet im `finally` zwar die eigenen Prozesse und restauriert bei Capture die Ini-Dateien, kopiert die gesicherte `GameMP-before.dll` aber **nicht** wieder an ihren Ausgangsort. Dieser Harness ist **nicht** für einen reversiblen isolierten Test mit anderem DLL-Kandidaten geeignet, solange keine getrennte Wiederherstellung durchgeführt wird. Seine bestehende Semantik wurde hier nicht geändert.
+
+**Entscheidung:** Ohne explizit gesicherten Restore-Prozess keinen neuen Build damit in die qualifizierte BotClient-Kopie kopieren. Für die nächste native Probe bevorzugt den in `poc/LOCAL-RELEASE.md` dokumentierten Backup-/Stop-/Restore-Pfad (`run-shadow-fleet.ps1` plus unabhängigen Auditor) oder eine separate Testinstallation. In diesem Durchgang bewusst **keinen** Retail-Prozess gestartet; die qualifizierte DLL blieb unverändert.
+
 ## Nächster reproduzierbarer Prüfauftrag
 
 1. Bewährte DLL `61DC27E0E7B80BADCF9AE705C30FCA88EDD3935737715DFFFF59E90C26F1FEF9` und Originale unverändert lassen. Test auf **separaten privaten Kopien** mit Hashes ausführen. Keine Änderung im Produktiv-Host.
