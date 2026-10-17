@@ -162,7 +162,58 @@ class RuntimeEvidenceTests(unittest.TestCase):
             stream.assert_not_called()
 
     def queries(self):
-        return [dict(utc=f'2026-10-11T10:{minute:02d}:00Z', status=r'\gamever\1.07\activemod\\numplayers\8', players=''.join(f'\\player_{i}\\Bot{i}' for i in range(8))) for minute in range(3)]
+        return [dict(utc=f'2026-10-11T10:{minute:02d}:00Z', status=r'\gamever\1.07\activemod\\numplayers\8\final\\queryid\1.1', players=''.join(f'\\player_{i}\\Bot{i}' for i in range(8))+r'\final\\queryid\2.1') for minute in range(3)]
+
+    def test_malformed_query_framing_rejected(self):
+        for field in ('status', 'players'):
+            for mutation in (lambda s: 'garbage'+s, lambda s: s+'\\truncated', lambda s: s+'\\'):
+                with self.subTest(field=field, mutation=mutation):
+                    queries = self.queries()
+                    queries[1][field] = mutation(queries[1][field])
+                    with self.assertRaisesRegex(AssertionError, 'framing'):
+                        m.audit_queries(queries, {f'Bot{i}' for i in range(8)}, 120)
+
+    def test_query_completion_marker_required(self):
+        for field in ('status', 'players'):
+            for mutation in (lambda s: s.replace('\\final\\\\queryid', '\\queryid'), lambda s: s.replace('\\final\\\\queryid', '\\final\\not-empty\\queryid')):
+                with self.subTest(field=field, mutation=mutation):
+                    queries = self.queries()
+                    queries[1][field] = mutation(queries[1][field])
+                    with self.assertRaisesRegex(AssertionError, 'completion'):
+                        m.audit_queries(queries, {f'Bot{i}' for i in range(8)}, 120)
+
+    def test_duplicate_query_fields_rejected(self):
+        for field, suffix in (('status', r'\gamever\1.10'), ('players', r'\player_0\Bot7')):
+            queries = self.queries()
+            if field == 'players':
+                queries[1][field] = queries[1][field].replace(r'\player_7\Bot7', '')
+            queries[1][field] += suffix
+            with self.subTest(field=field), self.assertRaisesRegex(AssertionError, 'duplicate query'):
+                m.audit_queries(queries, {f'Bot{i}' for i in range(8)}, 120)
+
+    def test_alias_or_out_of_range_native_player_indices_rejected(self):
+        for index in ('00', '16'):
+            queries = self.queries()
+            queries[1]['players'] = queries[1]['players'].replace(r'\player_7\Bot7', '\\player_'+index+r'\Bot7')
+            with self.subTest(index=index), self.assertRaisesRegex(AssertionError, 'player index'):
+                m.audit_queries(queries, {f'Bot{i}' for i in range(8)}, 120)
+
+    def test_complete_reply_without_queryid_and_player_named_final_valid(self):
+        queries = self.queries()
+        for q in queries:
+            q['status'] = q['status'].replace(r'\queryid\1.1', '')
+            q['players'] = q['players'].replace(r'\queryid\2.1', '').replace(r'\player_7\Bot7', r'\player_7\final')
+        self.assertEqual(m.audit_queries(queries, {f'Bot{i}' for i in range(7)} | {'final'}, 120)[1], 120)
+
+    def test_partial_startup_transition_remains_distinct_from_steady(self):
+        queries = self.queries()
+        transition = dict(queries[0], label='eight-bots')
+        transition['players'] = transition['players'].replace(r'\player_7\Bot7', '')
+        stages, span = m.audit_queries([transition]+queries, {f'Bot{i}' for i in range(8)}, 120)
+        self.assertEqual((len(stages), span), (1, 120))
+        del transition['label']
+        with self.assertRaisesRegex(AssertionError, 'incomplete native player list'):
+            m.audit_queries([transition]+queries, {f'Bot{i}' for i in range(8)}, 120)
 
     def test_native_queries_require_duration_and_real_names(self):
         queries = self.queries()
@@ -180,7 +231,7 @@ class RuntimeEvidenceTests(unittest.TestCase):
             m.audit_queries(queries, {f'Bot{i}' for i in range(8)}, 3600)
 
     def test_wrong_native_version_or_mod_rejected(self):
-        for wrong in (r'\gamever\1.10\activemod\\numplayers\8', r'\gamever\1.07\activemod\Cecil\numplayers\8'):
+        for wrong in (r'\gamever\1.10\activemod\\numplayers\8\final\\queryid\1.1', r'\gamever\1.07\activemod\Cecil\numplayers\8\final\\queryid\1.1'):
             queries = self.queries()
             queries[0]['status'] = wrong
             with self.assertRaisesRegex(AssertionError, 'version/mod'):
