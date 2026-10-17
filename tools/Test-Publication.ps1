@@ -15,6 +15,8 @@ $windowsOnly=@{
     'Test-FleetProcessControl.Tests.ps1'='Requires Windows CIM and ntdll pause/resume.'
     'Test-LocalReleasePreparation.Tests.ps1'='Requires Windows release-staging path semantics.'
     'Test-PopulationSupervisorAdapter.Tests.ps1'='Requires Windows CIM ownership/cleanup; portable CLI/UDP suite runs separately.'
+    'Test-PopulationHardExitBoundary.Tests.ps1'='Requires Windows-oriented process fixture and exact cross-process start-time identity.'
+    'Test-PopulationWatchdogProcess.Tests.ps1'='Requires Windows guardian/mailbox process fixture; Linux transport is not qualified.'
 }
 function Invoke-PublicationCheck([string]$Name,[string]$Kind,[string]$Executable,[object[]]$Arguments) {
     $log=Join-Path $out ($Name+'.log')

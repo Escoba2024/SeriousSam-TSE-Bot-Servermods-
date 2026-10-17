@@ -6,7 +6,8 @@ param(
  [ValidateRange(100,5000)][int]$PollMilliseconds=1000,
  [ValidateRange(0,100000)][int]$Iterations=0,
  [switch]$ObserveOnly,
- [string]$FleetState
+ [string]$FleetState,
+ [string]$WatchdogSession
 )
 $ErrorActionPreference='Stop'
 . "$PSScriptRoot/PopulationSupervisor.ps1"
