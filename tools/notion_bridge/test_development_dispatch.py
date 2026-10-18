@@ -138,6 +138,16 @@ class Persistence(unittest.TestCase):
 
 class PollingAndQuota(unittest.TestCase):
     setUp=Persistence.setUp
+    def test_terminal_jobs_do_not_refetch_or_relaunch(self):
+        j=manifest();d.accept(self.db,j,31,NOW)
+        d.transition(self.db,j['id'],'REVIEW_READY',NOW,result={'commit':SHA})
+        with patch.object(d.time,'time',return_value=NOW),patch.object(d,'fetch_issue',side_effect=AssertionError('terminal job refetched')),patch.object(d,'execute') as execute:
+            d.poll(self.db,self.root,policy())
+            execute.assert_not_called()
+        record=d.job_row(self.db,j['id'])
+        self.assertEqual(record['status'],'REVIEW_READY')
+        self.assertEqual(record['attempts'],0)
+
     def test_one_poll_executes_second_job_without_restart(self):
         one=manifest();two=manifest();two['id']='accept-2';two['depends_on']=['accept-1']
         p=policy();p['grants']['accept-2']={'issue':32,'digest':d.digest(two),'expires_at':NOW+3600}
