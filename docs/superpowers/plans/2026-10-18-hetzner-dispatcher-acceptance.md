@@ -88,3 +88,23 @@
 - [ ] Confirm PR #34/#35 and their exact SHA remain unchanged, no unintended writes/game processes, systemd timer enabled/active.
 - [ ] Publish a clear review handoff in GitHub Issue #18; classify `REVIEW_READY` vs integrated `DONE`.
 - [ ] Mark goal complete only after all live acceptance criteria and rate-limit repair pass; otherwise identify exact blocker and recovery instructions.
+
+---
+### Task 6: Full-CX23 reboot acceptance for the deployed API-budget release
+
+**Files:** private evidence snapshots under `/var/lib/tse-agent-control/development/acceptance-<timestamp>-before/after-reboot-a00.json`; append to the existing persistent ledger. No source change.
+
+**Interfaces:** existing `tse-notion-bridge.service`, `tse-notion-bridge.timer`, `development_dispatch.py --status` and persisted SQLite `development/jobs.sqlite`.
+
+- [ ] Verify the exact installed release Git HEAD `a839ececab2e6ddb09087f94b84865afcde99d65` and clean worktree, active/enabled 300s timer, successful service, no outstanding jobs, model or third-party workload, and current boot ID.
+- [ ] Capture pre-reboot SQLite jobs IDs/states/attempts/commits/event count; identify Nginx and other services as reboot-visible downtime; record a ruling under the explicit owner's requirement for real reboot acceptance.
+- [ ] Confirm backups and accessible SSH, capture private pre-reboot snapshot, initiate exactly one normal OS reboot (no force, no process kill).
+- [ ] Reconnect through the existing trusted SSH host key and verify changed Linux boot ID, same source and deployed unit, enabled/active timer, Nginx recovered, jobs and events byte-for-byte logically unchanged, no duplicated model attempts.
+- [ ] Run service safely under `tsecontrol` through systemd, verify `Result=success` and `ExecMainStatus=0`; re-run the full 89-test suite against the immutable release.
+- [ ] Record all timestamps, command outputs, test counts, remaining limitations in ledger and GitHub #18, retaining `REVIEW_READY` until separate human integration acceptance. If SSH does not return or services fail, stop, avoid destructive rollback, report precise blocker.
+
+### Task 7: Final owner workflow / external integration gate
+- [ ] Confirm optional Notion server token status without reading secrets; differentiate unavailable Notion direct API from working GitHub-authorized queue.
+- [ ] Confirm deployed source commit identical to source blob in Draft PR #36 and correct order/published SHA of PRs #34/#35.
+- [ ] Final plan/ledger commit+push on own documentation branch, recheck upstream clean and GitHub Issue #18 handoff link.
+- [ ] Conclude the GitHub dispatcher technical acceptance if all contractual gates passed. Leave merges, game runtime deployment and optional Notion API token as explicit separate future approvals.
