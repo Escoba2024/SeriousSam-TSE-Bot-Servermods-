@@ -158,6 +158,22 @@ class PollingAndQuota(unittest.TestCase):
         with patch.object(d.time,'time',return_value=NOW),patch.object(d,'fetch_issue',side_effect=lambda number:issues[number]),patch.object(d,'execute',side_effect=execute):
             d.poll(self.db,self.root,p);d.poll(self.db,self.root,p)
         self.assertEqual(seen,['accept-1','accept-2'])
+    def test_github_403_rate_limit_is_persisted_and_avoids_refetch(self):
+        err=d.urllib.error.HTTPError('https://api.github.com/issue/31',403,'rate limit',
+            {'X-RateLimit-Remaining':'0','X-RateLimit-Reset':str(NOW+900)},None)
+        with patch.object(d.time,'time',return_value=NOW),patch.object(d.urllib.request,'urlopen',side_effect=err),patch.object(d,'execute') as execute:
+            d.poll(self.db,self.root,policy())
+            execute.assert_not_called()
+        saved=self.db.execute("SELECT value FROM meta WHERE key='github_rate_limit_until'").fetchone()
+        self.assertIsNotNone(saved,'HTTP 403 quota reset must persist across invocations')
+        self.assertGreaterEqual(float(saved[0]),NOW+900)
+        with patch.object(d.time,'time',return_value=NOW+10),patch.object(d,'fetch_issue',side_effect=AssertionError('fetched during cooldown')):
+            d.poll(self.db,self.root,policy())
+
+    def test_systemd_timer_respects_unauthenticated_rate_budget(self):
+        timer=(Path(__file__).parent/'systemd'/'tse-notion-bridge.timer').read_text()
+        self.assertIn('OnUnitInactiveSec=300s',timer)
+
     def test_quota_pauses_all_models_but_preserves_queue(self):
         d.accept(self.db,manifest(),31,NOW)
         d.retry(self.db,'accept-1','QUOTA',NOW,policy())
