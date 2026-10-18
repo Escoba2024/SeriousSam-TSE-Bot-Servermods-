@@ -68,6 +68,17 @@ class HTTPTests(unittest.TestCase):
     def test_network_error_deferred_and_token_not_leaked(self):
         with self.assertRaises(RetryDeferred) as e:self.client(Fake(URLError('connection reset'))).get_json('/a')
         self.assertNotIn('SECRET',str(e.exception))
+    def test_retry_after_http_date_is_honored(self):
+        from email.utils import formatdate
+        delayed=formatdate(1400,usegmt=True)
+        with self.assertRaises(RetryDeferred) as e:
+            self.client(Fake(err(429,{'Retry-After':delayed}))).get_json('/a')
+        self.assertGreaterEqual(e.exception.retry_at,1400)
+    def test_304_success_clears_prior_transient_failure(self):
+        with self.assertRaises(RetryDeferred):self.client(Fake(err(503))).get_json('/a')
+        self.now=json.loads(self.state.read_text())['cooldown_until']+1
+        self.assertIsNone(self.client(Fake(Response(304,b''))).get_json('/a'))
+        self.assertEqual(json.loads(self.state.read_text())['failures'],0)
     def test_invalid_json_rejected(self):
         with self.assertRaises(ProtocolError):self.client(Fake(Response(body=b'bad-json'))).get_json('/a')
 

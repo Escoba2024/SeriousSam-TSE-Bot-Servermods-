@@ -1,5 +1,6 @@
 """Strict read-only HTTPS transport; no credential, data or state is logged."""
 import json
+from email.utils import parsedate_to_datetime
 import os
 from pathlib import Path
 import re
@@ -82,6 +83,11 @@ class HTTPSClient:
         delay=min(3600,2**(failures-1)*30)
         after=_header(headers,'Retry-After')
         if after and after.isdigit():delay=max(delay,min(3600,int(after)))
+        elif after:
+            try:
+                target=parsedate_to_datetime(after).timestamp()
+                delay=max(delay,min(3600,max(0,target-now)))
+            except (TypeError,ValueError,OverflowError):pass
         reset=_header(headers,'X-RateLimit-Reset')
         if reset and reset.isdigit() and status in (403,429):
             delay=max(delay,min(3600,max(0,int(reset)-now)))
@@ -100,6 +106,12 @@ class HTTPSClient:
         if any(s in ('..','.') for s in segments):
             raise ProtocolError('API path traversal')
         return path
+
+    def _not_modified(self,state):
+        state['failures']=0
+        state['cooldown_until']=0
+        self._save(state)
+        return None
 
     def get_json(self,path,*,extra_headers=None):
         path=self._safe_path(path)
@@ -123,7 +135,7 @@ class HTTPSClient:
         try:
             with self.opener.open(req,timeout=20) as result:
                 code=result.status
-                if code==304:return None
+                if code==304:return self._not_modified(state)
                 if code!=200:raise ProtocolError('unexpected HTTP status')
                 data=result.read(2_000_001)
                 if len(data)>2_000_000:raise ProtocolError('oversized API response')
@@ -138,7 +150,7 @@ class HTTPSClient:
                 self._save(state)
                 return parsed
         except error.HTTPError as exc:
-            if exc.code==304:return None
+            if exc.code==304:return self._not_modified(state)
             if exc.code in (401,403) and (exc.code==401 or _header(exc.headers,'X-RateLimit-Remaining')!='0'):
                 raise AuthenticationError('API permission denied') from None
             if exc.code in (429,403) or 500<=exc.code<600:
