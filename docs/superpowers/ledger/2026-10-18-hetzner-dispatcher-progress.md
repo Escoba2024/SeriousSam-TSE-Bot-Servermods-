@@ -46,3 +46,26 @@
 - 2026-10-18 additional assertion in `test_github_403_rate_limit_is_persisted_and_avoids_refetch`: open a second independent SQLite connection after persisting HTTP 403 cooldown, advance clock beyond the GitHub reset, verify owner-authorized pending job is fetched exactly once and reaches `REVIEW_READY`. Full Linux `tsecontrol` test suite `Ran 89 tests in 4.463s — OK`, `git diff --check` exit 0, isolated candidate only.
 - Additional test-only commit `a0d69133b164682326cb9275e665b92ec5c669a0` pushed normally to Draft PR #36 (source implementation unchanged). GitHub content blob `tools/notion_bridge/development_dispatch.py` SHA `01d467457a417e030d6ac62c86ace2d6b81e2477` identical at deployed source commit `a839ece` and PR #36 HEAD `a0d6913`. Production release path and service unchanged; test-only commit does not require repointing the production unit.
 - No external independent reviewer was invoked. Human merge/release approval for the Draft PR stack remains separate from this completed dispatcher infrastructure acceptance.
+
+## Task 6 completed: deployed-release full CX23 reboot acceptance — 2026-10-18 03:33–03:35 UTC
+
+**Authority / ruling:** The project owner explicitly required demonstrated server-restart resilience and requested completion in this session. A regular reboot was done once after verifying `tse-notion-bridge.service` had `MainPID=0`, both jobs were already `REVIEW_READY`, no active Codex process or logged-in interactive users, exact release SHA `a839ececab2e6ddb09087f94b84865afcde99d65`, existing rollback copy. Nginx was the only nonstandard active application service; its brief interruption was a known cost of the owner's requested real reboot test. No SIGKILL, merge, production game or foreign worker modification. Shell call `systemd-run --unit=goal-a00-reboot --on-active=3s /usr/bin/systemctl reboot` scheduled exactly one reboot.
+
+**Private reproducible evidence files on CX23:**
+- `/var/lib/tse-agent-control/development/acceptance-goal-a00-before-reboot.json`; recorded 2026-10-18T03:33:01Z, SHA256 `6ae3a2f73a135a6afc94cf6f9f72970c654df1b7691435d038a91d6b5585a05c`.
+- `/var/lib/tse-agent-control/development/acceptance-goal-a00-after-reboot.json`; recorded 2026-10-18T03:34:09Z, SHA256 `fd35b99ff870037ccba0354874c6b94a82ef19c5f815fb84c6959c6f7d7bb2ea`.
+- `/var/lib/tse-agent-control/development/acceptance-goal-a00-reboot-comparison.json`, locally generated independent comparison with `passed=true`, 15 checks true, exit 0.
+- Actual Linux boot ID changed **`a3cc2ce3-7581-4bcb-b397-2c910ab0a8ad` → `e2fdd025-c547-450d-bd5d-cab0f846e649`**. Trusted SSH host key remained unchanged; connection recovered without host-key bypass.
+- Exactly two SQLite jobs and 12 transition events identical before/after reboot. Jobs: `dispatch-review-output`, `REVIEW_READY`, attempts=1, commit `4012d3e6d6f4df5b53da86f76036b534af7f58c6`; `dispatch-fetch-recovery`, `REVIEW_READY`, attempts=1, commit `a6415ea41677f1b74ec1903f9e944ecc4ce7dbfc`.
+- Immutable release Git HEAD `a839ececab2e6ddb09087f94b84865afcde99d65`, clean status, deployed source SHA256 identical before/after; owner source_errors `{}`. Both `tse-notion-bridge.timer` and Nginx `active`, timer `enabled` after reboot.
+- Real automatic timer fired at **03:34:22Z**, `Result=success`, `ExecMainStatus=0`; additional manual `systemctl start tse-notion-bridge.service` at **03:34:28Z**, exit 0. Journal reported both `REVIEW_READY` after both invocations; no new Codex model process. 300-second next timer trigger 03:39:28Z observed.
+- Actual post-reboot full suite as `tsecontrol` against immutable release: `python3 -B -m unittest discover -s tools/notion_bridge -p test_*.py -v`, **89 tests / OK, 4.514s, exit 0**; `git diff --check` exit 0 and release checkout clean. Log: `/var/lib/tse-agent-control/goal-api-a00/test-after-reboot.log`.
+
+**Task result:** Full restart, persistence and deduplication gates now PASS on the deployed API-budget release, not merely the old baseline.
+
+## Task 7 / integration boundary
+- GitHub-only owner-granted development dispatcher technical acceptance: **PASSED**. Two real sequential published code jobs, 74/82 tests in per-job checkouts, no duplicate attempts, process SIGKILL fail-closed controlled fixture, Git fetch recovery, live two-boot retention, new-release reboot, active persisted timer, published PRs #34/#35 and infrastructure PR #36.
+- No merge into main: job `REVIEW_READY` is correct and *not* `DONE`; semantic review/merge remains an external explicit release gate, not part of this infrastructure acceptance.
+- Optional direct Notion data-source ingestion: **BLOCKED_SERVER_TOKEN_MISSING**. Server's connector credential was not present and may not be copied from ChatGPT, so direct Notion E2E was not asserted. Separate D1 agent has submitted Claim in Issue #18, currently status requested; A00 coordination still required.
+- Project game runtime/WAN/native Retail-1.07 functionality is **not** qualified by dispatcher software results; these are independent future gates.
+- Handoff published to Issue #18 with these fresh claims; no new code or production processes necessary for this checkpoint.
