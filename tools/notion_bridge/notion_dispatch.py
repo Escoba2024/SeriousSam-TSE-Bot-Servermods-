@@ -131,11 +131,86 @@ def read_json(path):
     except (OSError, ValueError):
         return {}
 
+def prepare_review_checkout(worktree, remote, pr_number, head_sha, base_sha):
+    """Prepare a pinned comparison; return a legacy error record on refusal.
+
+    The caller validates the approved repository URL. Empty repositories left by
+    failed fetches are retryable; existing worktree contents are never reset.
+    """
+    mismatch = {"status": "BLOCKED_SHA_MISMATCH"}
+    if not all(isinstance(sha, str) and SHA.fullmatch(sha)
+               for sha in (head_sha, base_sha)):
+        return mismatch
+    worktree = Path(worktree)
+    if worktree.is_symlink():
+        return mismatch
+    worktree.mkdir(parents=True, mode=0o700, exist_ok=True)
+
+    def git(*args):
+        return run(["git", *args], cwd=worktree, limit=90)
+
+    def failure(result):
+        return {"status": "BLOCKED_GIT_FETCH", "detail": result.stderr[-150:]}
+
+    metadata = worktree / ".git"
+    if not metadata.exists():
+        if any(worktree.iterdir()):
+            return mismatch
+        result = git("init", "-q")
+        if result.returncode:
+            return failure(result)
+    if metadata.is_symlink() or not metadata.is_dir():
+        return mismatch
+    top = git("rev-parse", "--show-toplevel")
+    if top.returncode or Path(top.stdout.strip()).resolve() != worktree.resolve():
+        return mismatch
+    status = git("status", "--porcelain", "--untracked-files=all", "--ignored")
+    if status.returncode or status.stdout.strip():
+        return mismatch
+    current = git("rev-parse", "--verify", "HEAD")
+    if not current.returncode:
+        if current.stdout.strip() != head_sha:
+            return mismatch
+    elif any(entry.name != ".git" for entry in worktree.iterdir()):
+        return mismatch
+
+    # Resolve the PR ref from this very remote, not a preexisting local ref.
+    shallow = git("rev-parse", "--is-shallow-repository")
+    options = ["--unshallow"] if shallow.stdout.strip() == "true" else []
+    result = git("fetch", "-q", "--no-tags", *options, remote,
+                 f"refs/pull/{pr_number}/head")
+    if result.returncode:
+        return failure(result)
+    fetched = git("rev-parse", "--verify", "FETCH_HEAD^{commit}")
+    if fetched.returncode or fetched.stdout.strip() != head_sha:
+        return mismatch
+    result = git("fetch", "-q", "--no-tags", remote, head_sha, base_sha)
+    if result.returncode:
+        return failure(result)
+    for sha in (head_sha, base_sha):
+        result = git("rev-parse", "--verify", sha + "^{commit}")
+        if result.returncode or result.stdout.strip() != sha:
+            return mismatch
+    result = git("diff", "--no-ext-diff", "--stat", f"{base_sha}...{head_sha}")
+    if result.returncode:
+        return failure(result)
+    result = git("checkout", "-q", "--detach", head_sha)
+    if result.returncode:
+        return failure(result)
+    checked = git("rev-parse", "HEAD")
+    if checked.returncode or checked.stdout.strip() != head_sha:
+        return mismatch
+    return None
+
 def review(job):
     pr, _ = github_json(f"/repos/{REPO}/pulls/{job['pr_number']}")
     sha = (pr.get("head") or {}).get("sha","")
     head_repo = ((pr.get("head") or {}).get("repo") or {}).get("full_name")
-    if pr.get("state") != "open" or not SHA.fullmatch(sha) or head_repo != REPO:
+    base_sha = (pr.get("base") or {}).get("sha", "")
+    base_repo = ((pr.get("base") or {}).get("repo") or {}).get("full_name")
+    if (pr.get("state") != "open" or head_repo != REPO or base_repo != REPO
+            or not all(isinstance(value, str) and SHA.fullmatch(value)
+                       for value in (sha, base_sha))):
         return {"status":"BLOCKED_PR_ORIGIN_OR_SHA"}
     # Must not compete with existing 30-minute Codex review worker.
     shared = ROOT/"state"/"codex"/"worker.lock"
@@ -143,26 +218,17 @@ def review(job):
         try: fcntl.flock(l.fileno(), fcntl.LOCK_EX|fcntl.LOCK_NB)
         except BlockingIOError: return {"status":"DEFERRED_CODEX_BUSY"}
         w = ROOT/"notion-dispatch"/"worktrees"/("pr"+str(job["pr_number"])+"-"+sha[:16])
-        if not w.exists():
-            w.mkdir(parents=True,mode=0o700)
-            commands = [
-                ["git","init","-q"],
-                ["git","fetch","-q","--no-tags","--depth=1",
-                 "https://github.com/"+REPO+".git",f"refs/pull/{job['pr_number']}/head"],
-                ["git","checkout","-q","--detach","FETCH_HEAD"]]
-            for cmd in commands:
-                p = run(cmd,cwd=w,limit=90)
-                if p.returncode: return {"status":"BLOCKED_GIT_FETCH","detail":p.stderr[-150:]}
-        checked = run(["git","rev-parse","HEAD"],cwd=w)
-        if checked.returncode or checked.stdout.strip() != sha:
-            return {"status":"BLOCKED_SHA_MISMATCH"}
+        checkout_error = prepare_review_checkout(
+            w, "https://github.com/" + REPO + ".git", job["pr_number"], sha, base_sha)
+        if checkout_error:
+            return checkout_error
         sandbox = run([CODEX,"--sandbox","read-only","sandbox","--",
                        "/usr/bin/python3","-c","print('SANDBOX_READ_OK')"],cwd=w)
         if sandbox.returncode or sandbox.stdout.strip() != "SANDBOX_READ_OK":
             return {"status":"BLOCKED_SANDBOX"}
         prompt = (
             f"READ-ONLY source/security review of exact checked-out PR #{job['pr_number']} "
-            f"at {sha}. Identify substantive bugs and security regressions specific to the "
+            f"at {sha}, comparing git diff {base_sha}...{sha}. Identify substantive bugs and security regressions specific to the "
             "changed code: authority checks, path/symlink traversal, untrusted input, "
             "stale state, cancellation and retries, subprocess and credential limits. "
             "Examine relevant actual source; no edits, tests, downloads, pushes, merges "
