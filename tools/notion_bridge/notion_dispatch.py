@@ -25,6 +25,24 @@ SHA = re.compile(r"[0-9a-f]{40}\Z")
 QUOTA = re.compile(r"usage limit|quota exceeded|429 too many requests", re.I)
 SANDBOX_ERROR = re.compile(r"bwrap:|sandbox.*(?:failure|blocked)|operation not permitted", re.I)
 
+def classify_codex_result(returncode, stdout, stderr):
+    """Do not interpret quoted model/source text as an actual provider error."""
+    output = (stdout or "") + "\n" + (stderr or "")
+    if returncode == 0:
+        return "REVIEW_READY" if len(output.strip()) > 100 else "REVIEW_FAILED"
+    provider_errors = stderr or ""
+    if QUOTA.search(provider_errors):
+        return "BLOCKED_QUOTA"
+    if SANDBOX_ERROR.search(provider_errors):
+        return "BLOCKED_SANDBOX"
+    return "REVIEW_FAILED"
+
+def skip_completed_review(old, job, current_sha):
+    """Dedupe only an identical authorized event against an identical PR revision."""
+    return (old.get("status") == "REVIEW_READY"
+            and old.get("head_sha") == current_sha
+            and old.get("github_comment_id") == job.get("github_comment_id"))
+
 def utcnow():
     return dt.datetime.now(dt.timezone.utc)
 
@@ -157,9 +175,7 @@ def review(job):
         logs.mkdir(parents=True,exist_ok=True)
         log = logs/f"job{job['job_id']}-pr{job['pr_number']}-{sha[:12]}.log"
         log.write_text(output[-50000:],encoding="utf-8")
-        status = "REVIEW_READY" if p.returncode == 0 and len(output.strip()) > 100 else "REVIEW_FAILED"
-        if SANDBOX_ERROR.search(output): status = "BLOCKED_SANDBOX"
-        if QUOTA.search(output): status = "BLOCKED_QUOTA"
+        status = classify_codex_result(p.returncode, p.stdout, p.stderr)
         return {"status":status,"head_sha":sha,"exit_code":p.returncode,"log_file":str(log)}
 
 def main():
@@ -185,7 +201,11 @@ def main():
             for job in jobs:
                 key=job["notion_page_id"]+":pr:"+str(job["pr_number"])
                 old=history.get(key,{})
-                if old.get("status")=="REVIEW_READY": continue
+                if old.get("status") == "REVIEW_READY":
+                    current_pr, _ = github_json(f"/repos/{REPO}/pulls/{job['pr_number']}")
+                    current_sha = ((current_pr.get("head") or {}).get("sha") or "")
+                    if SHA.fullmatch(current_sha) and skip_completed_review(old, job, current_sha):
+                        continue
                 retry=parse_time(old.get("retry_after"))
                 if retry and utcnow()<retry: continue
                 entry={**job,"attempted_at":utcnow().isoformat()}
