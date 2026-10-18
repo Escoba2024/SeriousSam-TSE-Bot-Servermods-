@@ -41,6 +41,7 @@ def authorize(issue,policy,now):
     if issue.get('state')!='open':raise Blocked('CANCELLED_OR_CLOSED')
     if (issue.get('user') or {}).get('login')!='Escoba2024':raise Blocked('FOREIGN_AUTHOR')
     body=issue.get('body','')
+    if isinstance(body,str):body=body.replace('\r\n','\n')
     if not isinstance(body,str) or not body.startswith(PREFIX) or len(body)>20000:raise Blocked('INVALID_MANIFEST')
     try:j=json.loads(body[len(PREFIX):])
     except ValueError:raise Blocked('INVALID_JSON')
@@ -386,17 +387,19 @@ def execute(db,r,root,policy):
 def poll(db,root,policy):
     policy=fresh_policy(policy)
     recover(db,time.time())
-    authorized=set()
+    authorized=set();source_errors={}
     for id,g in policy.get('grants',{}).items():
         try:
             raw=fetch_issue(g['issue']);j=authorize(raw,policy,time.time())
             if j['id']!=id:raise Blocked('GRANT_ID_MISMATCH')
             accept(db,j,g['issue'],time.time());authorized.add(id)
-        except Transient:
-            continue
+        except Transient as e:
+            source_errors[id]=str(e);continue
         except Blocked as e:
+            source_errors[id]=str(e)
             if job_row(db,id) and job_row(db,id)['status'] not in ('REVIEW_READY','DONE','FAILED'):
                 transition(db,id,'BLOCKED',time.time(),str(e))
+    with db:db.execute('INSERT OR REPLACE INTO meta(key,value) VALUES(?,?)',('source_errors',json.dumps(source_errors)))
     # A live orphan blocks all model work, even in a different scope.
     if occupied(db):return
     for _ in range(min(4,policy.get('jobs_per_poll',4))):
@@ -426,7 +429,7 @@ def sync_notion(db,policy):
 
 def status(db,root,notion_status='BLOCKED_SERVER_TOKEN_MISSING',write=True):
     jobs=[{**{k:r[k] for k in ('id','issue','digest','status','attempts','next_at','updated','reason','result')},'base_sha':r['manifest']['base_sha'],'scope':r['manifest']['scope']} for x in db.execute('SELECT id FROM jobs ORDER BY id') for r in [job_row(db,x['id'])]]
-    value={'at':time.time(),'mode':'GITHUB_OWNER_GRANTED_DEVELOPMENT','worker_limit':1,'direct_notion_api':notion_status=='LIVE_READ_WRITE_OK','notion_status':notion_status,'cooldown_until':cooldown(db),'jobs':jobs}
+    value={'at':time.time(),'mode':'GITHUB_OWNER_GRANTED_DEVELOPMENT','worker_limit':1,'direct_notion_api':notion_status=='LIVE_READ_WRITE_OK','notion_status':notion_status,'cooldown_until':cooldown(db),'source_errors':json.loads((db.execute("SELECT value FROM meta WHERE key='source_errors'").fetchone() or ['{}'])[0]),'jobs':jobs}
     if write:
         p=root/'status.json';tmp=p.with_suffix('.tmp');tmp.write_text(json.dumps(value,indent=2)+'\n');tmp.replace(p)
     return value

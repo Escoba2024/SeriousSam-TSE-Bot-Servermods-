@@ -239,7 +239,7 @@ class SandboxCleanup(unittest.TestCase):
    self.assertFalse(d.identity_alive(identities[0]))
   finally:d.cleanup_children(baseline)
 
-if __name__=='__main__':unittest.main()
+
 
 class StickyRecovery(unittest.TestCase):
  setUp=Persistence.setUp
@@ -249,3 +249,10 @@ class StickyRecovery(unittest.TestCase):
   d.accept(self.db,one,31,NOW);d.transition(self.db,one['id'],'RUNNING',NOW,result={'pid':99999999,'start_ticks':'0','boot_id':'old','phase':'MODEL'})
   with patch.object(d.time,'time',return_value=NOW),patch.object(d,'fetch_issue',side_effect=lambda n:issue(one) if n==31 else {**issue(two),'number':32}),patch.object(d,'execute') as execute:
    d.poll(self.db,self.root,p);execute.assert_not_called()
+
+class WindowsGitHubManifest(unittest.TestCase):
+ def test_github_crlf_body_preserves_exact_manifest_digest(self):
+  i=issue();i['body']=i['body'].replace('\n','\r\n')
+  self.assertEqual(d.digest(d.authorize(i,policy(),NOW)),d.digest(manifest()))
+
+if __name__=='__main__':unittest.main()
