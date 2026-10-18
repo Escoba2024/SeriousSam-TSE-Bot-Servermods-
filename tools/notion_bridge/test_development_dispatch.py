@@ -240,3 +240,12 @@ class SandboxCleanup(unittest.TestCase):
   finally:d.cleanup_children(baseline)
 
 if __name__=='__main__':unittest.main()
+
+class StickyRecovery(unittest.TestCase):
+ setUp=Persistence.setUp
+ def test_expired_grant_cannot_erase_uninspected_recovery_lock(self):
+  one=manifest();two=manifest();two['id']='accept-2'
+  p=policy(two);p['grants'][one['id']]={'issue':31,'digest':d.digest(one),'expires_at':NOW-1};p['grants'][two['id']]['issue']=32
+  d.accept(self.db,one,31,NOW);d.transition(self.db,one['id'],'RUNNING',NOW,result={'pid':99999999,'start_ticks':'0','boot_id':'old','phase':'MODEL'})
+  with patch.object(d.time,'time',return_value=NOW),patch.object(d,'fetch_issue',side_effect=lambda n:issue(one) if n==31 else {**issue(two),'number':32}),patch.object(d,'execute') as execute:
+   d.poll(self.db,self.root,p);execute.assert_not_called()

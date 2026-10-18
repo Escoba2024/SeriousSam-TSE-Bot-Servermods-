@@ -234,7 +234,7 @@ def cleanup_children(baseline):
 
 def occupied(db):
     rows=[job_row(db,r['id']) for r in db.execute('SELECT id FROM jobs WHERE status IN ("RUNNING","BLOCKED")')]
-    return any(identity_alive(r['result']) or (r['reason']=='RECOVERY_INSPECTION_REQUIRED' and r['result'].get('phase') in ('MODEL','TEST')) for r in rows)
+    return any(identity_alive(r['result']) or r['result'].get('recovery_required',False) for r in rows)
 
 def process_identity(pid):
     try:
@@ -250,7 +250,7 @@ def recover(db,now):
     for row in list(db.execute('SELECT id FROM jobs WHERE status="RUNNING"')):
         r=job_row(db,row['id'])
         if identity_alive(r['result']):continue
-        transition(db,r['id'],'BLOCKED',now,'RECOVERY_INSPECTION_REQUIRED')
+        transition(db,r['id'],'BLOCKED',now,'RECOVERY_INSPECTION_REQUIRED',result=r['result']|{'recovery_required':r['result'].get('phase') in ('MODEL','TEST')})
 
 def classify_failure(code,stdout,stderr):
     if code==0:return 'OK'
