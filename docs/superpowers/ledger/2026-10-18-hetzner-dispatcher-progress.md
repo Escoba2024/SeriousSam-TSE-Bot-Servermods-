@@ -12,12 +12,29 @@
 - `acceptance-faults.json`: controlled worker SIGKILL produced `BLOCKED` and recovery inspection lock; real local Git failure/backoff/retry fixture passed. This is a controlled fault fixture, not an unrelated production crash.
 - New live defect: GitHub unauthenticated API call from same VPS returned HTTP 403; `X-RateLimit-Limit: 60`, `Remaining: 0`, `Used: 60`. Current source_errors for both terminal jobs `GITHUB_SOURCE_UNAVAILABLE`; completed-job repeat polling consumes quota.
 
-## Task progress
-- Task 1: evidence gathered; publish/verify this ledger then mark complete.
-- Task 2: NOT STARTED. First write RED tests for unnecessary GitHub API consumption and persistent 403 cooldown.
-- Task 3: NOT STARTED.
-- Task 4: NOT STARTED; production left unchanged.
-- Task 5: NOT STARTED.
+## Task progress — accepted checkpoint, 2026-10-18 03:14:24 UTC
+- Task 1: complete — SHA-pin/boot/SQLite/journal and exact PR #34/#35 commits verified against live server and GitHub; baseline source clean.
+- Task 2: complete — RED baseline regressions individually reproduced on CX23: `test_terminal_jobs_do_not_refetch_or_relaunch` failed with terminal job fetched; `test_github_403_rate_limit_is_persisted_and_avoids_refetch` failed missing persistent cooldown. GREEN implementation in `a839ececab2e6ddb09087f94b84865afcde99d65`. The new pending-job sequential execution regression from the original 86-test suite still passes. HTTP 403 reset logic was tested by a synthetic HTTPError, not by deliberate exhaustion after deploying.
+- Task 3: complete — RED `test_systemd_timer_respects_unauthenticated_rate_budget` expected 300s but observed 60s; GREEN timer set to `OnUnitInactiveSec=300s`.
+- Task 4: complete — isolated Linux candidate tree and immutable GitHub release tree tested as `tsecontrol`; 89/89 PASS in 3.790s (candidate) and 4.469s (release), `git diff --check` clean after normalizing transferred CRLF. Root-only backup of old unit/timer and SQLite state: `/opt/tse-agent-control/backups/20261018-goal-a00-api/`. Stopped only own timer; verified no active own worker before deployment; root-owned release created at `/opt/tse-agent-control/releases/a00-api-budget-20261018` with clean HEAD `a839ece...`. Repointed only own service unit to that independent release directory and installed 300s timer, `systemd-analyze verify` PASS. Original production Git checkout remains clean and pinned to `38ab237...`. New service 2026-10-18 03:12:47 UTC Exit 0, `Result=success`; repeat manual run 03:14:24 UTC Exit 0. Both job attempts stay at 1, both states `REVIEW_READY`, `source_errors={}`. Timer enabled/active, list-timers next trigger 03:17:47 UTC. One API header probe after original rate reset returned 55/60 remaining. No new model, merge, game runtime or foreign process action.
+- Task 5: complete — Draft PR #36 published with exact scoped implementation and RED/GREEN evidence. See GitHub issue #18 Handoff for operational resumption. Independent external code-review agent unavailable here; Final review: self-review (no subagent tool), PR diff and exact changed paths inspected. No Critical/Important findings in this bounded diff; no asserted independent approval.
+
+## New commits and publication
+- Plan `2701a34`, baseline ledger `f5e9704`, failing regressions `bcb359d` and `108bc91`, GREEN fix `a839ece`.
+- Branch `agent/A00/18-dispatcher-api-budget-20261018`, review candidate [PR #36](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/36). No merge requested or performed.
+- Two actual development acceptance outputs remain [PR #34](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/34) and [PR #35](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/35), not integrated into main. Their recorded `REVIEW_READY` is correct and must not be relabeled `DONE` without separate integration acceptance.
+
+## Rulings
+- Ruling: keep terminal jobs immutable and skip live issue re-fetch — existing published commits and SQLite authorization digest provide completed acceptance, while each future distinct job requires fresh owner-granted manifest and exact administrator policy; if historical issue is edited after completion the old result remains archival, not implicitly revoked.
+- Ruling: 5-minute baseline polling plus SQLite cooldown — avoids unauthenticated API exhaustion without introducing token sharing or a second worker. If many simultaneously pending jobs exhaust 60/hour, the worker fail-closes until reset; throughput is bounded intentionally.
+- Ruling: deploy via independent immutable root-owned release checkout and switch only the dedicated systemd unit — preserves A03 source worktree and existing job worktrees; it adds an alternate release directory and requires that path in the service unit. Restore original unit/timer from root-only backup on failed rollout.
+- Ruling: do not repeat a full VPS reboot solely for this source-level patch — real before/after reboot preservation already exists for this dispatcher family, while a second reboot could disrupt unrelated VPS workloads. The new release itself passed full test suite, service restart and repeat polling, but a fresh full machine reboot against `a839ece` was not performed.
+
+## Resume / future work
+1. Current dispatcher service is `tse-notion-bridge.service`; enabled active timer `tse-notion-bridge.timer`. Installed root-owned source SHA `a839ece` under `/opt/tse-agent-control/releases/a00-api-budget-20261018`. Old clean source remains under `/opt/tse-agent-control/notion-bridge`.
+2. Persistent database and job logs under `/var/lib/tse-agent-control/development`; progress tracked here and in issue #18. Inspect `systemctl status`, `journalctl -u tse-notion-bridge.service`, CLI `--status`, and both PRs before new work.
+3. New tasks require separate, exact owner-signed GitHub manifest and root-held grant; do not reuse #32/#33 IDs, expired grants, job worktrees or published branches. A failed model mid-execution intentionally requires recovery inspection before relaunch; pre-model fetch and failed Git publication support bounded retries.
+4. Notion server API token still absent (`BLOCKED_SERVER_TOKEN_MISSING`): optional connector mirror not provisioned, do not copy credentials to solve it. Game native/24-7-bot correctness not established by this dispatcher acceptance.
 
 ## Boundaries / residual limitations
 - No Notion API token on VPS: `BLOCKED_SERVER_TOKEN_MISSING`. Optional Notion mirror not part of GitHub-only dispatcher acceptance.
