@@ -40,3 +40,9 @@
 - No Notion API token on VPS: `BLOCKED_SERVER_TOKEN_MISSING`. Optional Notion mirror not part of GitHub-only dispatcher acceptance.
 - GitHub issues #32/#33 grants are time-bounded and their completed work should not be re-run. New development jobs need distinct owner-approved manifests and root policy grants.
 - PRs #31/#34/#35 are Draft, not merged; tests are for dispatcher infrastructure, not native TSE game/runtime.
+
+
+## Focused persistence regression added after first production verification
+- 2026-10-18 additional assertion in `test_github_403_rate_limit_is_persisted_and_avoids_refetch`: open a second independent SQLite connection after persisting HTTP 403 cooldown, advance clock beyond the GitHub reset, verify owner-authorized pending job is fetched exactly once and reaches `REVIEW_READY`. Full Linux `tsecontrol` test suite `Ran 89 tests in 4.463s — OK`, `git diff --check` exit 0, isolated candidate only.
+- Additional test-only commit `a0d69133b164682326cb9275e665b92ec5c669a0` pushed normally to Draft PR #36 (source implementation unchanged). GitHub content blob `tools/notion_bridge/development_dispatch.py` SHA `01d467457a417e030d6ac62c86ace2d6b81e2477` identical at deployed source commit `a839ece` and PR #36 HEAD `a0d6913`. Production release path and service unchanged; test-only commit does not require repointing the production unit.
+- No external independent reviewer was invoked. Human merge/release approval for the Draft PR stack remains separate from this completed dispatcher infrastructure acceptance.
