@@ -1,7 +1,7 @@
 import datetime as dt
 import json
 import unittest
-from notion_dispatch import parse_comment,queue_from_comments
+from notion_dispatch import parse_comment,queue_from_comments,classify_codex_result,skip_completed_review
 T=dt.datetime(2026,10,17,9,0,tzinfo=dt.timezone.utc)
 D={"source":"notion_mcp_bridge","notion_page_id":"3fc90f11-bec8-818d-9c36-f344c353d454","job_id":3,"pr_number":28,"kind":"pr_readonly_review","mode":"Read-only Codex","status":"Wartet"}
 def c(d=None,**extras):
@@ -36,4 +36,36 @@ class SafeBridge(unittest.TestCase):
   jobs=queue_from_comments([c(id=5),c({**D,"status":"Review","command":"run"},id=9)],T)
   self.assertEqual([x["github_comment_id"] for x in jobs],[5])
  def test_no_invalid_json(self):self.assertIsNone(parse_comment(c(body="NOTION_BRIDGE_JOB_V1\\n{"),T))
+
+LONG_OUTPUT = "Completed review with a clear review conclusion and evidence. " * 3
+class DispatcherOutcomeRegressions(unittest.TestCase):
+ def test_complete_review_ready(self):
+  self.assertEqual(classify_codex_result(0,LONG_OUTPUT,""),"REVIEW_READY")
+ def test_quoted_quota_regex_not_provider_failure(self):
+  self.assertEqual(classify_codex_result(0,LONG_OUTPUT+" QUOTA = re.compile('usage limit')",""),"REVIEW_READY")
+ def test_quoted_sandbox_regex_not_provider_failure(self):
+  self.assertEqual(classify_codex_result(0,LONG_OUTPUT+" SANDBOX_ERROR = re.compile('bwrap:')",""),"REVIEW_READY")
+ def test_short_success_not_accepted(self):
+  self.assertEqual(classify_codex_result(0,"ok",""),"REVIEW_FAILED")
+ def test_failed_cli_actual_quota_on_stderr(self):
+  self.assertEqual(classify_codex_result(1,"","Error: quota exceeded"),"BLOCKED_QUOTA")
+ def test_failed_cli_actual_sandbox_on_stderr(self):
+  self.assertEqual(classify_codex_result(1,"","Error: bwrap: operation not permitted"),"BLOCKED_SANDBOX")
+ def test_nonzero_stdout_quote_not_blocked_quota(self):
+  self.assertEqual(classify_codex_result(1,"source: QUOTA = re.compile('usage limit')","unknown CLI error"),"REVIEW_FAILED")
+ def test_unclassified_failure(self):
+  self.assertEqual(classify_codex_result(1,"","other failure"),"REVIEW_FAILED")
+ def test_missing_output_fails_closed(self):
+  self.assertEqual(classify_codex_result(0,None,None),"REVIEW_FAILED")
+ def test_ready_exact_sha_and_event_is_deduplicated(self):
+  self.assertTrue(skip_completed_review({"status":"REVIEW_READY","head_sha":"a"*40,"github_comment_id":123},{"github_comment_id":123},"a"*40))
+ def test_ready_new_sha_rechecks(self):
+  self.assertFalse(skip_completed_review({"status":"REVIEW_READY","head_sha":"a"*40,"github_comment_id":123},{"github_comment_id":123},"b"*40))
+ def test_ready_new_event_rechecks(self):
+  self.assertFalse(skip_completed_review({"status":"REVIEW_READY","head_sha":"a"*40,"github_comment_id":123},{"github_comment_id":124},"a"*40))
+ def test_ready_missing_sha_rechecks(self):
+  self.assertFalse(skip_completed_review({"status":"REVIEW_READY","github_comment_id":123},{"github_comment_id":123},"a"*40))
+ def test_not_ready_is_not_deduplicated(self):
+  self.assertFalse(skip_completed_review({"status":"REVIEW_FAILED","head_sha":"a"*40,"github_comment_id":123},{"github_comment_id":123},"a"*40))
+
 if __name__=="__main__":unittest.main()
