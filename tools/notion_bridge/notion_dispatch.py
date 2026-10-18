@@ -27,9 +27,18 @@ SANDBOX_ERROR = re.compile(r"bwrap:|sandbox.*(?:failure|blocked)|operation not p
 
 def classify_codex_result(returncode, stdout, stderr):
     """Do not interpret quoted model/source text as an actual provider error."""
-    output = (stdout or "") + "\n" + (stderr or "")
     if returncode == 0:
-        return "REVIEW_READY" if len(output.strip()) > 100 else "REVIEW_FAILED"
+        try:
+            result = json.loads(stdout or "")
+        except (ValueError, TypeError):
+            return "REVIEW_FAILED"
+        valid = (isinstance(result, dict)
+                 and set(result) == {"status", "summary", "findings"}
+                 and result["status"] == "reviewed"
+                 and isinstance(result["summary"], str)
+                 and bool(result["summary"].strip())
+                 and isinstance(result["findings"], list))
+        return "REVIEW_READY" if valid else "REVIEW_FAILED"
     provider_errors = stderr or ""
     if QUOTA.search(provider_errors):
         return "BLOCKED_QUOTA"
@@ -167,15 +176,26 @@ def review(job):
             "stale state, cancellation and retries, subprocess and credential limits. "
             "Examine relevant actual source; no edits, tests, downloads, pushes, merges "
             "or game runtime. Findings require concrete file/line evidence. Distinguish "
-            "unrun tests from proven tests. Report NO_CONFIRMED_FINDINGS otherwise.")
-        p = run([CODEX,"exec","--sandbox","read-only","--cd",str(w),
-                 "--ignore-user-config","-"],cwd=w,stdin=prompt,limit=480)
-        output = (p.stdout or "")+"\n"+(p.stderr or "")
+            "unrun tests from proven tests. Return JSON with status='reviewed', a nonempty "
+            "summary, and a findings array of strings with concrete file/line evidence; "
+            "use an empty findings array when there are no confirmed findings.")
         logs = ROOT/"notion-dispatch"/"logs"
         logs.mkdir(parents=True,exist_ok=True)
         log = logs/f"job{job['job_id']}-pr{job['pr_number']}-{sha[:12]}.log"
+        final = log.with_suffix(".review.json")
+        # A retry must never accept an earlier invocation's final message.
+        final.unlink(missing_ok=True)
+        p = run([CODEX,"exec","--sandbox","read-only","--cd",str(w),
+                 "--ignore-user-config",
+                 "--output-schema",str(Path(__file__).resolve().with_name("review_schema.json")),
+                 "--output-last-message",str(final),"-"],cwd=w,stdin=prompt,limit=480)
+        output = (p.stdout or "")+"\n"+(p.stderr or "")
         log.write_text(output[-50000:],encoding="utf-8")
-        status = classify_codex_result(p.returncode, p.stdout, p.stderr)
+        try:
+            final_output = final.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            final_output = ""
+        status = classify_codex_result(p.returncode, final_output, p.stderr)
         return {"status":status,"head_sha":sha,"exit_code":p.returncode,"log_file":str(log)}
 
 def main():

@@ -1,6 +1,12 @@
 import datetime as dt
 import json
 import unittest
+import os
+from pathlib import Path
+import tempfile
+from types import SimpleNamespace
+from unittest.mock import patch
+import notion_dispatch as dispatcher
 from notion_dispatch import parse_comment,queue_from_comments,classify_codex_result,skip_completed_review
 T=dt.datetime(2026,10,17,9,0,tzinfo=dt.timezone.utc)
 D={"source":"notion_mcp_bridge","notion_page_id":"3fc90f11-bec8-818d-9c36-f344c353d454","job_id":3,"pr_number":28,"kind":"pr_readonly_review","mode":"Read-only Codex","status":"Wartet"}
@@ -37,14 +43,17 @@ class SafeBridge(unittest.TestCase):
   self.assertEqual([x["github_comment_id"] for x in jobs],[5])
  def test_no_invalid_json(self):self.assertIsNone(parse_comment(c(body="NOTION_BRIDGE_JOB_V1\\n{"),T))
 
-LONG_OUTPUT = "Completed review with a clear review conclusion and evidence. " * 3
+def review_json(summary="Review complete"):
+ return json.dumps({"status":"reviewed","summary":summary,"findings":[]})
+
+VALID_OUTPUT = review_json()
 class DispatcherOutcomeRegressions(unittest.TestCase):
  def test_complete_review_ready(self):
-  self.assertEqual(classify_codex_result(0,LONG_OUTPUT,""),"REVIEW_READY")
+  self.assertEqual(classify_codex_result(0,VALID_OUTPUT,""),"REVIEW_READY")
  def test_quoted_quota_regex_not_provider_failure(self):
-  self.assertEqual(classify_codex_result(0,LONG_OUTPUT+" QUOTA = re.compile('usage limit')",""),"REVIEW_READY")
+  self.assertEqual(classify_codex_result(0,review_json("QUOTA = re.compile('usage limit')"),""),"REVIEW_READY")
  def test_quoted_sandbox_regex_not_provider_failure(self):
-  self.assertEqual(classify_codex_result(0,LONG_OUTPUT+" SANDBOX_ERROR = re.compile('bwrap:')",""),"REVIEW_READY")
+  self.assertEqual(classify_codex_result(0,review_json("SANDBOX_ERROR = re.compile('bwrap:')"),""),"REVIEW_READY")
  def test_short_success_not_accepted(self):
   self.assertEqual(classify_codex_result(0,"ok",""),"REVIEW_FAILED")
  def test_failed_cli_actual_quota_on_stderr(self):
@@ -57,6 +66,48 @@ class DispatcherOutcomeRegressions(unittest.TestCase):
   self.assertEqual(classify_codex_result(1,"","other failure"),"REVIEW_FAILED")
  def test_missing_output_fails_closed(self):
   self.assertEqual(classify_codex_result(0,None,None),"REVIEW_FAILED")
+ def test_invalid_final_results_fail_closed(self):
+  valid=json.loads(VALID_OUTPUT)
+  cases=["arbitrary review prose "*20, "{", "[]", "null"]
+  for field in valid:
+   cases.append(json.dumps({k:v for k,v in valid.items() if k!=field}))
+  for field,values in {"status":[None,True,"done"],"summary":[None,42,[],"","  "],"findings":[None,{},"none"]}.items():
+   cases.extend(json.dumps({**valid,field:value}) for value in values)
+  cases.append(json.dumps({**valid,"extra":True}))
+  for output in cases:
+   with self.subTest(output=output):
+    self.assertEqual(classify_codex_result(0,output,""),"REVIEW_FAILED")
+ def test_stderr_only_success_fails(self):
+  for stderr in ("diagnostic "*30,VALID_OUTPUT):
+   self.assertEqual(classify_codex_result(0,"",stderr),"REVIEW_FAILED")
+ def test_review_uses_only_fresh_final_artifact(self):
+  with tempfile.TemporaryDirectory(dir=os.environ["TMPDIR"]) as tmp:
+   root=Path(tmp)
+   (root/"state/codex").mkdir(parents=True)
+   sha="a"*40
+   checkout=root/"notion-dispatch/worktrees"/("pr28-"+sha[:16])
+   checkout.mkdir(parents=True)
+   pr={"state":"open","head":{"sha":sha,"repo":{"full_name":dispatcher.REPO}}}
+   final_paths=[]
+   mode=["valid"]
+   def fake_run(argv,**kwargs):
+    if argv[0]=="git": return SimpleNamespace(returncode=0,stdout=sha,stderr="")
+    if "exec" not in argv: return SimpleNamespace(returncode=0,stdout="SANDBOX_READ_OK",stderr="")
+    self.assertIn("--output-schema",argv)
+    schema=json.loads(Path(argv[argv.index("--output-schema")+1]).read_text())
+    self.assertEqual(set(schema["required"]),{"status","summary","findings"})
+    self.assertIs(schema["additionalProperties"],False)
+    final=Path(argv[argv.index("--output-last-message")+1])
+    self.assertFalse(final.is_relative_to(checkout))
+    self.assertFalse(final.exists())
+    final_paths.append(final)
+    if mode[0]=="valid": final.write_text(VALID_OUTPUT)
+    return SimpleNamespace(returncode=0,stdout=VALID_OUTPUT,stderr="diagnostic "*30)
+   with patch.object(dispatcher,"ROOT",root), patch.object(dispatcher,"github_json",return_value=(pr,"")), patch.object(dispatcher,"run",side_effect=fake_run):
+    self.assertEqual(dispatcher.review(D)["status"],"REVIEW_READY")
+    self.assertTrue(final_paths[0].exists())
+    mode[0]="missing"
+    self.assertEqual(dispatcher.review(D)["status"],"REVIEW_FAILED")
  def test_ready_exact_sha_and_event_is_deduplicated(self):
   self.assertTrue(skip_completed_review({"status":"REVIEW_READY","head_sha":"a"*40,"github_comment_id":123},{"github_comment_id":123},"a"*40))
  def test_ready_new_sha_rechecks(self):

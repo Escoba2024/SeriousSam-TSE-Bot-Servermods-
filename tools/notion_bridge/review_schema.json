@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {"type": "string", "enum": ["reviewed"]},
+    "summary": {"type": "string", "minLength": 1, "pattern": "\\S"},
+    "findings": {"type": "array", "items": {"type": "string"}}
+  },
+  "required": ["status", "summary", "findings"],
+  "additionalProperties": false
+}
