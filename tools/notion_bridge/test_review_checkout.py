@@ -10,7 +10,7 @@ import notion_dispatch as dispatch
 
 class ReviewCheckoutTests(unittest.TestCase):
     def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory(dir=os.environ['TMPDIR'])
+        self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         self.remote = self.root / 'remote'

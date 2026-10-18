@@ -81,13 +81,13 @@ class DispatcherOutcomeRegressions(unittest.TestCase):
   for stderr in ("diagnostic "*30,VALID_OUTPUT):
    self.assertEqual(classify_codex_result(0,"",stderr),"REVIEW_FAILED")
  def test_review_uses_only_fresh_final_artifact(self):
-  with tempfile.TemporaryDirectory(dir=os.environ["TMPDIR"]) as tmp:
+  with tempfile.TemporaryDirectory() as tmp:
    root=Path(tmp)
    (root/"state/codex").mkdir(parents=True)
    sha="a"*40
    checkout=root/"notion-dispatch/worktrees"/("pr28-"+sha[:16])
    checkout.mkdir(parents=True)
-   pr={"state":"open","head":{"sha":sha,"repo":{"full_name":dispatcher.REPO}}}
+   pr={"state":"open","head":{"sha":sha,"repo":{"full_name":dispatcher.REPO}},"base":{"sha":"b"*40,"repo":{"full_name":dispatcher.REPO}}}
    final_paths=[]
    mode=["valid"]
    def fake_run(argv,**kwargs):
@@ -103,7 +103,7 @@ class DispatcherOutcomeRegressions(unittest.TestCase):
     final_paths.append(final)
     if mode[0]=="valid": final.write_text(VALID_OUTPUT)
     return SimpleNamespace(returncode=0,stdout=VALID_OUTPUT,stderr="diagnostic "*30)
-   with patch.object(dispatcher,"ROOT",root), patch.object(dispatcher,"github_json",return_value=(pr,"")), patch.object(dispatcher,"run",side_effect=fake_run):
+   with patch.object(dispatcher,"ROOT",root), patch.object(dispatcher,"github_json",return_value=(pr,"")), patch.object(dispatcher,"prepare_review_checkout",return_value=None), patch.object(dispatcher,"run",side_effect=fake_run):
     self.assertEqual(dispatcher.review(D)["status"],"REVIEW_READY")
     self.assertTrue(final_paths[0].exists())
     mode[0]="missing"
