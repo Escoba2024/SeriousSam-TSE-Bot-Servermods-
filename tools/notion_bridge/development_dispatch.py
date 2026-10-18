@@ -29,6 +29,10 @@ SCHEMA={'type':'object','properties':{'status':{'type':'string','enum':['impleme
 
 class Blocked(RuntimeError):pass
 class Transient(RuntimeError):pass
+class GitHubRateLimited(Transient):
+    def __init__(self,reset_at):
+        self.reset_at=reset_at
+        super().__init__('GITHUB_RATE_LIMIT')
 
 def digest(value):
     return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()).hexdigest()
@@ -285,6 +289,13 @@ def fetch_issue(number):
     request=urllib.request.Request(f'https://api.github.com/repos/{REPO}/issues/{number}',headers={'User-Agent':'TSE-Development-Dispatcher/1.0','Accept':'application/vnd.github+json'})
     try:
         with urllib.request.urlopen(request,timeout=25) as response:return json.load(response)
+    except urllib.error.HTTPError as e:
+        if e.code==429 or (e.code==403 and e.headers.get('X-RateLimit-Remaining')=='0'):
+            now=time.time()
+            try:reset=float(e.headers.get('X-RateLimit-Reset',now+300))
+            except (ValueError,TypeError):reset=now+300
+            raise GitHubRateLimited(max(now+60,min(reset,now+3600))) from e
+        raise Transient('GITHUB_SOURCE_UNAVAILABLE') from e
     except (OSError,ValueError) as e:raise Transient('GITHUB_SOURCE_UNAVAILABLE') from e
 
 def run_model(db,r,root,work,policy):
@@ -386,13 +397,26 @@ def execute(db,r,root,policy):
 
 def poll(db,root,policy):
     policy=fresh_policy(policy)
-    recover(db,time.time())
+    now=time.time()
+    recover(db,now)
+    rate_row=db.execute("SELECT value FROM meta WHERE key='github_rate_limit_until'").fetchone()
+    rate_until=float(rate_row[0]) if rate_row else 0
+    if rate_until>now:
+        with db:db.execute('INSERT OR REPLACE INTO meta(key,value) VALUES(?,?)',('source_errors',json.dumps({'github_api':'GITHUB_RATE_LIMIT_UNTIL_'+str(int(rate_until))})))
+        return
     authorized=set();source_errors={}
     for id,g in policy.get('grants',{}).items():
+        prior=job_row(db,id)
+        if prior and prior['status'] in ('REVIEW_READY','DONE','FAILED'):
+            continue
         try:
             raw=fetch_issue(g['issue']);j=authorize(raw,policy,time.time())
             if j['id']!=id:raise Blocked('GRANT_ID_MISMATCH')
             accept(db,j,g['issue'],time.time());authorized.add(id)
+        except GitHubRateLimited as e:
+            with db:db.execute('INSERT OR REPLACE INTO meta(key,value) VALUES(?,?)',('github_rate_limit_until',str(e.reset_at)))
+            source_errors[id]='GITHUB_RATE_LIMIT_UNTIL_'+str(int(e.reset_at))
+            break
         except Transient as e:
             source_errors[id]=str(e);continue
         except Blocked as e:

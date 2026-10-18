@@ -3,7 +3,7 @@ Description=Poll owner-authorized TSE development jobs
 
 [Timer]
 OnBootSec=45s
-OnUnitInactiveSec=60s
+OnUnitInactiveSec=300s
 Persistent=true
 Unit=tse-notion-bridge.service
 
