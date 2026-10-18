@@ -1,26 +1,30 @@
 [Unit]
-Description=TSE Notion/GitHub Bridge (restricted read-only PR review)
+Description=TSE owner-authorized single development dispatcher
 Wants=network-online.target
-After=network-online.target tse-agent-control.service
+After=network-online.target
 
 [Service]
 Type=oneshot
 User=tsecontrol
 Group=tsecontrol
-WorkingDirectory=/opt/tse-agent-control/notion_bridge/repo/tools/notion_bridge
+WorkingDirectory=/opt/tse-agent-control/notion-bridge/tools/notion_bridge
 Environment=HOME=/var/lib/tse-agent-control
-Environment=PATH=/opt/tse-agent-control/toolchain/node-v24.22.0-linux-x64/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-ExecStart=/usr/bin/python3 -B /opt/tse-agent-control/notion_bridge/repo/tools/notion_bridge/notion_dispatch.py
+Environment=PATH=/opt/tse-agent-control/toolchain/node-v24.22.0-linux-x64/bin:/usr/local/bin:/usr/bin:/bin
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -B /opt/tse-agent-control/notion-bridge/tools/notion_bridge/development_dispatch.py
 StateDirectory=tse-agent-control
-LogsDirectory=tse-agent-control
 ProtectSystem=strict
 ProtectHome=true
 PrivateTmp=true
 NoNewPrivileges=true
-InaccessiblePaths=/srv/sam
+InaccessiblePaths=-/srv/sam
 UMask=0077
-Nice=15
-IOSchedulingClass=idle
-CPUQuota=70%
-MemoryMax=2G
-TimeoutStartSec=600
+Nice=10
+CPUQuota=150%
+MemoryMax=2500M
+TasksMax=192
+TimeoutStartSec=2700
+TimeoutStopSec=20
+KillMode=control-group
+StandardOutput=journal
+StandardError=journal
