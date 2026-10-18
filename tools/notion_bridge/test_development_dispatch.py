@@ -169,6 +169,19 @@ class PollingAndQuota(unittest.TestCase):
         self.assertGreaterEqual(float(saved[0]),NOW+900)
         with patch.object(d.time,'time',return_value=NOW+10),patch.object(d,'fetch_issue',side_effect=AssertionError('fetched during cooldown')):
             d.poll(self.db,self.root,policy())
+        other=d.open_db(self.root/'jobs.sqlite')
+        try:
+            observed=[]
+            def finish(db,row,root,current_policy):
+                observed.append(row['id'])
+                d.transition(db,row['id'],'REVIEW_READY',NOW+901,result={'commit':SHA})
+            with patch.object(d.time,'time',return_value=NOW+901),patch.object(d,'fetch_issue',return_value=issue()) as fetch,patch.object(d,'execute',side_effect=finish):
+                d.poll(other,self.root,policy())
+                fetch.assert_called_once_with(31)
+            self.assertEqual(observed,['accept-1'])
+            self.assertEqual(d.job_row(other,'accept-1')['status'],'REVIEW_READY')
+        finally:
+            other.close()
 
     def test_systemd_timer_respects_unauthenticated_rate_budget(self):
         timer=(Path(__file__).parent/'systemd'/'tse-notion-bridge.timer').read_text()
