@@ -39,5 +39,5 @@
 
 ## Publication
 - Source commits: `91f6aad565185a616799e3d9c0412a9319c2189e`, `f176fec86468e7c3bf362b3e8f69dcac6c51c559`, `97c3a9f71cde10b2c235d6eabaeb4e619dfa383f`.
-- Final documentation commit / remote HEAD / PR link are recorded in GitHub Issue #18 HANDOFF after publication.
+- Published documentation commit / verified GitHub remote HEAD: `4fdf57dd87c8d4097e59ad86e659fb48156cbcb7`; Draft PR #37: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/37 (14/14 exactly permitted changed files, 4 commits, base A00 add3518a7). Final docs-only follow-up commit and Issue #18 Handoff recorded after publication.
 - **Result:** source adapters and offline contract integration tests prepared. Live API authentication and complete Notion→D0→GitHub status E2E remain BLOCKED by credentials and separate D0 integration authorization.

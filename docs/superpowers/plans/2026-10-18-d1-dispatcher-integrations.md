@@ -44,6 +44,6 @@
 
 ### Task 4: Review and Handoff
 **Files:** `docs/reports/2026-10-18-d1-dispatcher-integrations-handoff.md`, `docs/superpowers/ledger/2026-10-18-d1-dispatcher-integrations.md`
-- [ ] Verify exact changed paths, full Python suite, `git diff --check`, fresh SHA and clean state.
-- [ ] Commit and push own branch only; create Draft PR targeting A00's current API-budget branch, avoid integrating into D0 worker.
-- [ ] Record tests, commits, PR URL, limits and integration requirements for D0. Post Handoff in #18.
+- [x] Verify exact changed paths, full Python suite, `git diff --check`, fresh SHA and clean state.
+- [x] Commit and push own branch only; create Draft PR targeting A00's current API-budget branch, avoid integrating into D0 worker.
+- [x] Record tests, commits, PR URL, limits and integration requirements for D0. Post Handoff in #18.
