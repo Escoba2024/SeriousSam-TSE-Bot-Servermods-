@@ -90,3 +90,13 @@ Host-Handoff: Nach unabhängiger Prüfung im vertrauenswürdigen Host-Kontext au
 
 
 **Abschluss des aktuellen Blockeraudits:** Derselbe read-only `.git`-Mount über drei aufeinanderfolgende aktuelle Zielturns bestätigt. Goals-Status `blocked`, nicht `complete`; Commit-Task bleibt unerledigt. Fortsetzung erfordert externe Mountkorrektur oder Host-Übernahme. Keine wiederholten Schreibversuche und keine Umgehung.
+
+
+## Wiederaufnahme nach externer Host-Übernahme
+
+Lokal verifiziert: Plancommit `41394216c307d775c36d055a412d8f0989bb607f`, Ledgercommit/HEAD `d9fcd0954f8b6a1420f251e5379b02af7d287838`, eigener Branch unverändert. Gegen Basis `eeb40426` ausschließlich die zwei Scope-Dateien geändert, Diffprüfung Exit 0, Checkout bei Wiederaufnahme sauber. Frühere Commitblockerabschnitte bleiben historisch erhalten; der Host hat die ursprünglichen Dokumente inzwischen versioniert.
+
+- [x] Ursprüngliche zwei Dokumente lokal auf eigenem Branch committed; tatsächliche SHAs frisch geprüft und im Ledger nachgetragen.
+- [ ] Abschließenden SHA-/Statusnachtrag in Plan/Ledger versionieren: weiterhin nur durch Host-Übernahme möglich, da `.git` in dieser Sandbox unverändert read-only gemountet ist.
+
+Keine weitere Testwiederholung erforderlich: erhaltenes Manifest und Exporthashes geprüft, seit der Qualifikation nur Dokumentationsänderungen. Portable QUALIFIED; echte Retail-Sync-/WAN-/Wine-/24h-Gates und BLOCKED_EVIDENCE bleiben unverändert. Kein Push behauptet.
