@@ -1,77 +1,50 @@
-# Agenten-Handoff und Claim-Protokoll
+# TSE-Agenten: Start und Handoff ohne manuelle A00-Freigabe
 
-Alle Vorlagen als **Issue-Kommentar** im zentralen Koordinationsissue posten; Geheimnisse, personenbezogene Spielernamen, Rohlogs und Retail-Dateien nicht veröffentlichen. Die Claims werden durch A00 **manuell** geprüft; ein Kommentar erteilt keine Freigabe.
+**Stand: 19.10.2026.** Die alten `CLAIM_REQUESTED → A00-GRANTED`-Freigabestufen und vierstündigen Code-Leases sind aufgehoben. `STARTED` und `HANDOFF` sind Informationsnachweise, **keine Erlaubnisanfragen**. Kein Agent wartet für konfliktfreie Code-, Offline-Test-, Analyse- oder Dokumentationsarbeit auf A00.
 
-## Arbeitsanforderung
-
-```text
-CLAIM
-slot: A01-A09
-ticket: #<Issue oder PR>
-purpose: <ein eindeutiges Ergebnis>
-branch: agent/Axx/<ticket>-<name> (oder existierender Branch)
-worktree: <vollständiger eigener Pfad>
-write_paths: <exakte Dateien oder enges Muster>
-runtime_resources: NONE | SHADOW_RETAIL | SHADOW_GAME_FILES | HETZNER_RUNTIME | GHIDRA_TSE_PROJECT
-planned_tests: <portable / Windows / Retail / WAN, nur beabsichtigt>
-lease_until: <ISO-8601 mit Zeitzone, maximal +4 Stunden>
-known_dependencies: <PRs/Dateien/Prozesse>
-status: CLAIM_REQUESTED
-```
-
-## Autorisierung nur durch A00
+## Optionaler Startstatus (ins Issue #18)
 
 ```text
-GRANTED
-slot: Axx
-ticket: #...
+STARTED
+slot: Axx (nur falls sinnvoll)
+ticket_or_pr: #...
+goal: ...
 branch: ...
-write_paths: ...
-runtime_resources: ...
-lease_until: ...
-conditions: <z.B. nur read-only während laufender Tests>
+worktree: ...
+write_scope: ...
+runtime_scope: NONE | ISOLATED_COPY | SHARED_RESOURCE (nur mit technischem exklusivem Nachweis)
+check: existing_worktrees_and_writers_checked
 ```
 
-Ohne passendes `GRANTED`, bei abgelaufener Lease, Unsicherheit über Prozesse oder fremden Änderungen => `BLOCKED`, **keine Schreibaktion**. A00 kann `REJECTED` mit engerem Scope zurückgeben. A00 soll nie zwei überschneidende Schreib-/Runtime-Leases parallel erteilen.
+Eine Nachricht ist optional; sichere Arbeit kann sofort beginnen. GitHub-Kommentare oder Slot-Labels bilden **keinen** technischen Lock.
 
-## Konflikt/Blocker
+## Nur bei echtem Konflikt
 
 ```text
-BLOCKED
-slot: Axx
-ticket: #...
-conflict: <Pfad / PID / Git-Branch / Runtime / PR>
-observed_state: <read-only Feststellung>
-action_taken: NONE
-needed_from_A00: <Entscheidung>
+CONFLICT
+scope: <Datei / Worktree / PID / Installation / Port>
+observed_owner_or_state: ...
+safe_alternative: <eigener Worktree / separater Port / Offline-Fixture>
+needs_decision: <nur falls sich Konflikt nicht sicher auflösen lässt>
 ```
 
-## Übergabe/Abschluss
+Gemeinsame Runtime mit unbekanntem Eigentümer bleibt unangetastet; **die restliche Arbeit wird fortgesetzt**. Ein manueller A00-`GRANTED`-Kommentar löst einen fehlenden technischen Runtime-Lock ohnehin nicht.
+
+## Handoff nach der Arbeit
 
 ```text
 HANDOFF
 slot: Axx
-ticket: #...
+ticket_or_pr: #...
 branch: ...
-head_sha: <40-stelliger Commit-SHA>
+head_sha: ...
 paths_changed: ...
-tests: <exakte Befehle, PASS/FAIL/SKIP mit Plattform>
+tests: <Befehle/Umgebung/PASS/FAIL/SKIP>
 retail_runtime: NOT_TESTED | PASS_LIMITED | FAIL | PASS_SCOPED
-safety: <DLL SHA, Backup, keine fremden PIDs gestoppt>
-dependencies: ...
+resource_cleanup: <nur eigene Prozesse, eigene Kopien, Ports>
 known_issues: ...
 pr_url: ...
-status: REVIEW
+status: COMPLETE | REVIEW | BLOCKED_SPECIFIC_RESOURCE
 ```
 
-```text
-RELEASE
-slot: Axx
-ticket: #...
-write_paths: ...
-runtime_resources: ...
-cleanup_verified: <eigene Prozesse / Profile / aktive Spieler>
-status: RELEASED
-```
-
-**Kritisch:** `RELEASE` erst nach Prüfung lokaler Prozesse, laufender Proben und Git-Status. A00 markiert eine Leasesperre erst nach Prüfung als frei. Kein Anspruch auf automatische Live-Überwachung aus diesen Vorlagen.
+Keine gesonderte `RELEASE`-Genehmigung für reine Codearbeiten. Bei gemeinsam genutzten Runtime-Ressourcen nach eigenen Tests Prozessende, Portbelegung, Restore und ggf. Freigabe des **technischen** Locks prüfen. Keine fremden laufenden Sessions stoppen, keine historischen Testgates als bestanden umdeuten. Die Projektregel ersetzt weder technische Sperren noch plattformseitige Zugriffs-/MCP-Freigaben.
