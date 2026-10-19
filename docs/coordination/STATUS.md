@@ -1,8 +1,8 @@
-# A00 Koordinationsboard – Snapshot vom 17.10.2026
+# A00 Koordinationsboard – historischer Snapshot vom 17.10.2026
 
-**Status:** Initiale GitHub-Inventur; [GitHub-Issue #18 – Agentenleitstelle](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18) ist der zentrale Ort für Live-Claims und A00-Freigaben. Diese Datei ist ein **Snapshot**, keine Live-Synchronisierung. Nichts hiervon bestätigt, dass fremde Chats/Agenten die Regeln bereits übernommen haben.
+**Regeländerung vom 19.10.2026:** A00 ist **keine obligatorische Freigabeinstanz** mehr. Die untenstehenden `Kein Claim/GRANTED`-Einträge sind historische Inventurangaben, **keine Schreib- oder Startverbote**. Siehe [Koordination](README.md) und [Handoff](HANDOFF.md). [Issue #18](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18) dient Transparenz und Konfliktklärung, nicht der Genehmigungswarteschlange. Diese Datei ist ein Snapshot, keine Live-Synchronisierung; sie sagt nichts über aktuelle Prozessbelegung.
 
-## Aktive Slots
+## Slots zum historischen Inventurzeitpunkt (keine aktuellen Freigabestatus)
 
 | Slot | Agent / Aktivität | Arbeitsrecht |
 |---|---|---|
@@ -49,4 +49,4 @@ Die Existenz eines Worktrees ist kein Nachweis, dass er inaktiv oder sauber ist.
 5. **P1:** Öffentlichen Browser-/WAN-Nachweis strikt vom Direkt-IP-Join unterscheiden.
 6. **P2:** Bot-AI, Skalierung und Alpha-Gaming-Webseite auf getrennten Quellzweigen ohne Einfluss auf Retail-Baseline.
 
-**Live-Fragen und Freigaben gehören in das Koordinationsissue; diese Datei nur bei nachweisbarer neuer Inventur aktualisieren.**
+**Aktuelle Konflikte und Handoffs können in Issue #18 protokolliert werden; keine A00-Freigabe abwarten. Diese Datei nur bei nachweisbarer neuer Inventur aktualisieren.**
