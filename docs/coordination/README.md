@@ -1,44 +1,43 @@
 # TSE 1.07: Zentrale Agentenkoordination (A00–A09)
 
-**Stand: 17.10.2026.** Dieses Dokument ergänzt `AGENTS.md` und die [verbindliche Toolpolicy](../decisions/2026-10-17-tse-ai-tools-mcp-policy.md). Bei Widersprüchen gelten die konservativeren Schutz-/Abnahmeregeln. **Agenten laufen nicht durch das bloße Anlegen dieser Dateien an und können andere Chat-Sessions nicht automatisch steuern.** Jeder aktive Agent muss die Regeln selbst übernehmen. Vor PR-Merge gelten diese Regeln als zur Übernahme vorgeschlagene Koordination.
+**Arbeitsmodus aktualisiert am 19.10.2026.** Dieses Dokument ergänzt `AGENTS.md` und die [Toolpolicy](../decisions/2026-10-17-tse-ai-tools-mcp-policy.md). Die frühere manuelle A00-CLAIM/GRANTED-Pflicht ist ausdrücklich aufgehoben. Unverändert gelten technische Kollisionssicherheit, Tests, Versionsnachweise und Schutz fremder laufender Prozesse. Die Dateien starten oder steuern keine anderen Chats automatisch.
 
 ## Ziele / Quelle der Wahrheit
 
 - **Code, Branches, Pull Requests, technische Belege:** GitHub.
-- **Live-Belegung, Schreibreservierung, Blocker, Übergaben:** [GitHub-Koordinationsissue #18](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18). Kein zweites konkurrierendes Notion-/Drive-Lockregister.
-- **Gemeinsames Runtime-Labor:** Shadow und Hetzner, physisch getrennt von Git-Workspaces. Nur nach exklusiver Freigabe.
+- **Transparenz über laufende Arbeiten, Konflikte und Übergaben:** [GitHub-Issue #18](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18). Das Issue ist ein Informationsboard, **kein Freigabe- oder Lock-Server**. GitHub-Kommentare sind keine atomaren Sperren.
+- **Gemeinsames Runtime-Labor:** Shadow und Hetzner. Gemeinsame Installation/Port/Prozess nur bei technisch nachgewiesener exklusiver Belegung; bevorzugt separate isolierte Testkopien. Keine manuelle A00-Freigabe nötig.
 - **Notion / Drive:** lesbare Spiegel des Status, nicht operative Autorität oder Ersatz für GitHub-Belege.
-- A00 verwaltet die Integrationswarteschlange; A00 bearbeitet **keinen** Supervisor-, DLL- oder Runtime-Code.
+- A00 hilft bei Konflikten und Integrationsreihenfolge, blockiert aber keine unabhängigen Arbeiten. Keine zusätzliche Dispatcher- oder Agenteninstanz erforderlich.
 
 ## Maximal zehn Slots – eine zuständige Schreibinstanz pro Modul
 
 | Slot | Verantwortungsbereich | Exklusiver Standardscope (Schreiben) | Bestehende Arbeit / Grenze |
 |---|---|---|---|
-| **A00** | Koordination, PR-Triage, Integrations-Gates | `docs/coordination/**`, Koordinationsissue, Review-/Integrationsentscheidungen | Kein Gameplay-/Produktions-/Supervisor-Code |
+| **A00** | Koordination, Konflikthinweise, Integration | `docs/coordination/**`, Koordinationsissue, Review- und Integrationshinweise | Kein Gameplay-/Produktions-/Supervisor-Code |
 | **A01** | Population-Supervisor, Readiness, UDP-Supervisor-Gates | `poc/scripts/PopulationSupervisor*.ps1`, `Manage-BotPopulation.ps1`; ausschließlich **ein** aktiver Supervisor-Integrationszweig | PR #3/#7/#10/#12/#13 bilden eine **sequenzierte Familie**; nicht parallel auf denselben Dateien schreiben |
 | **A02** | Watchdog / Guardian / Prozessidentität | `poc/scripts/PopulationWatchdog.ps1`, `Watch-BotPopulation.ps1`, watchdog-spezifische neue Tests | PR #8/#11 sind Vorstufen von #12; `PopulationSupervisor.ps1` nur nach Übergabe an A01 |
-| **A03** | Unabhängige portable QA, CI und Sicherheitstests | neue eigenständige Regressionen unter `tools/` / `poc/scripts/Test-*` nach Freigabe; Review-Berichte mit eindeutigen Namen | Keine parallelen Änderungen an bereits von A01/A02 belegten Testdateien; PR #14 betrifft Fleet-Auditor |
-| **A04** | Retail-Sync-Root-Cause und CRC-Analyse | neue `docs/reports/*sync*` (eigene IDs), `tools/analyze_sync_log.py` und eigene Parser-Tests nach Claim | PR #16; Original-Retail-DLLs nur lesen, 61DC-Kandidat bleibt geschützt |
-| **A05** | Shadow native Retail-Abnahme, Join, Windows-Harness | neue Runtime-Berichte / Harness-Scope `poc/scripts/Test-RetailJoin*.ps1` nach Claim | PR #15/#17; **keine** Änderungen am laufenden Shadow-Test ohne Runtime-Lease |
-| **A06** | Hetzner / Wine / öffentliche UDP-/333networks-Listung | eigene WAN-/Wine-Testberichte, `poc/HETZNER-*` nach Claim | Hetzner-Instanz und produktiver Port sind **exklusiv**; keine fremden Playerslots entfernen |
+| **A03** | Unabhängige portable QA, CI und Sicherheitstests | neue eigenständige Regressionen unter `tools/` / `poc/scripts/Test-*` im eigenen isolierten Zweig; Review-Berichte mit eindeutigen Namen | Keine parallelen Änderungen an bereits von A01/A02 belegten Testdateien; PR #14 betrifft Fleet-Auditor |
+| **A04** | Retail-Sync-Root-Cause und CRC-Analyse | neue `docs/reports/*sync*` (eigene IDs), `tools/analyze_sync_log.py` und eigene Parser-Tests mit eigenem Scope | PR #16; Original-Retail-DLLs nur lesen, 61DC-Kandidat bleibt geschützt |
+| **A05** | Shadow native Retail-Abnahme, Join, Windows-Harness | neue Runtime-Berichte / Harness-Scope `poc/scripts/Test-RetailJoin*.ps1` nach Eigenprüfung | PR #15/#17; **keine** Änderungen am laufenden Shadow-Test ohne Runtime-Lease |
+| **A06** | Hetzner / Wine / öffentliche UDP-/333networks-Listung | eigene WAN-/Wine-Testberichte, `poc/HETZNER-*` # nach Eigenprüfung | Hetzner-Instanz und produktiver Port sind **exklusiv**; keine fremden Playerslots entfernen |
 | **A07** | Bot-AI, Navigation, Combat | eigene `poc/release/gamemp/**`-Quellen und Botcore nach eigener Branch-/Runtime-Abnahme | keine Überschreibung der bekannten qualifizierten 61DC-DLL, keine unbelegte 1.07↔1.10-Annahme |
 | **A08** | REA / GhidraMCP / Frida, reproduzierbare Binärdiagnose | neue Toolchain-/Analyseberichte, **eigene lokale Analyseprojekte** | REA, `ghidra_tse`, Frida nur isoliert; A04/A07 erhalten Findings statt gemeinsam in der DLL zu schreiben |
 | **A09** | Alpha-Gaming-Webseite und Design | **separate** Repositories `AlphaWebBolt`, `alphawebgemini` bzw. separater Web-Ziel-Branch | Website heißt Alpha-Gaming; `#SamIsBack`/`#newSam` nur Kampagnen. Keine TSE-Runtime-Dateien |
 
 **Wichtig:** Slots A01–A09 sind **vorgesehene Rollen**, keine Behauptung, dass neun Agenten verbunden, gestartet oder persönlich zugewiesen sind. Existierende PRs zeigen Arbeitsprodukte, nicht den Live-Status eines Chat-/Codex-Prozesses.
 
-## Harte Kollisionsregeln
+## Autonomer Arbeitsbeginn – keine Genehmigungswarteschlange
 
-1. **Niemals** zwei Agenten im selben Git-Worktree. **Nie** das gemeinsam genutzte Shadow-Root-Checkout als Schreibworkspace eines neuen Agenten. Zulässiger Pfad: `C:\Users\Shadow\Documents\SeriousSam-TSE-Worktrees\agent-Axx-<ticket>`. Vor Anlage `git worktree list --porcelain`, `git status --short` und vorhandene Verzeichnisse prüfen; keine bestehenden Worktrees automatisch zurücksetzen/löschen.
-2. Jede Arbeit besitzt ein Ticket/Issue, eine **eindeutige** Branch `agent/Axx/<ticket>-<kurzname>`, explizite Dateipfade und Akzeptanzkriterien. Alte `codex/*`-Branches bleiben unverändert, bis ihre Arbeit kontrolliert übernommen wird.
-3. Ein Modul wird nur von **einem aktiven Writer** verändert. Für gemeinsam berührte Dateien (v.a. `PopulationSupervisor.ps1`, `tools/Test-Publication.ps1`, `poc/POPULATION-SUPERVISOR.md`) braucht es vorherige A00-Freigabe und serialisierte Übergabe. Dateieigentum ist eine **Schreibreservierung**, nicht das Verbot von Read-only-Review.
-4. Vor schreibender Arbeit den Koordinationsissue lesen. `CLAIM` mit Slot/Ticket/Branch/Worktree/Dateien/Ressourcen/Laufzeit posten; **erst nach A00-`GRANTED`** beginnen. Kein eigener `GRANTED`-Kommentar; bei fehlender Antwort nur Read-only-Analyse.
-5. Lease gilt maximal **4 Stunden**, Erneuerung vor Ablauf; `RELEASE` nach Handoff. Abgelaufene Lease autorisiert **keine** automatische Übernahme: A00 muss erst Prozessstatus, offenen Git-Status und Laufzeitbesitz prüfen. Bei unsicherem Zustand **BLOCKED / no write**.
-6. **Runtime-Locks**: `SHADOW_RETAIL`, `SHADOW_GAME_FILES`, `HETZNER_RUNTIME`, `GHIDRA_TSE_PROJECT`, `RELEASE_MERGE`. Exklusiv pro konkreter Installation/Instanz, auch wenn Git-Dateipfade verschieden sind. Selbst eine bestehende Git-Lease erlaubt **nicht** automatisch Runtime-Zugriff.
-7. **Passiver Review** ohne Schreib-/Runtimezugriff darf parallel laufen; Findings gehen ins eigene Ticket/PR-Kommentar. Falsche Belege/Schlüssel/Spielerprofile/Prozesslogs nicht öffentlich veröffentlichen.
-8. Kein Agent führt selbstständig Merge, Force-Push, Rebase fremder Branches, laufende Prozesskills oder Bot-/Server-Deploy auf gemeinsam genutzten Instanzen aus. A00 prüft Merge-Gates; Runtime-Besitzer stimmt Test-/Deployzeitpunkt ab.
-9. Statuswerte: `FREE` / `CLAIM_REQUESTED` / `GRANTED` / `RUNNING` / `BLOCKED` / `REVIEW` / `RELEASED`. Im Zweifel `UNKNOWN`, nie „frei“ aus fehlendem Signal ableiten.
-10. Jede Übergabe nennt Commit-SHA, Branch, tatsächliche Tests, SKIPs, veränderte Dateien, Laufzeitfolgen, offenen Blocker und Folgeticket. Kein „PASS“ ohne zugehörige nachprüfbare Ebene.
+1. **Code, Offline-QA, Berichte und statische Analysen starten sofort** in einem eigenen Branch/Worktree. Bestehende Worktrees, Status, aktive Prozesse und Pfadüberschneidungen zuvor lesend prüfen. `CLAIM`, `GRANTED`, Ablauf/Erneuerung einer Code-Lease und A00-Antwort sind **keine Voraussetzungen**.
+2. Ein Agent dokumentiert seinen konkreten Scope und das Ergebnis spätestens bei PR/Handoff. Für längere oder parallele Arbeiten ist ein kurzer `STARTED`-Eintrag in Issue #18 hilfreich, aber optional. Ein Ticket ist sinnvoll, jedoch keine Startblockade für kleine unabhängige Arbeit.
+3. **Niemals zwei Writer im selben Worktree oder gleichzeitig an derselben gemeinsam genutzten Datei.** Neuen Worktree außerhalb des Shadow-Root-Checkouts anlegen; vorher `git worktree list --porcelain`, `git status --short` und existierende Verzeichnisse prüfen. Bestehende `codex/*`-Branches nicht überschreiben. Kollision: zunächst auf separaten Teilbereich ausweichen oder seriell integrieren, statt auf eine A00-Freigabe zu warten.
+4. **Runtime nur bei technischer Exklusivität:** Vor Zugriff auf `SHADOW_RETAIL`, `SHADOW_GAME_FILES`, `HETZNER_RUNTIME`, `GHIDRA_TSE_PROJECT` oder gemeinsam genutzte Ports/Dateien Prozesse, Eigentümer und tatsächliche Instanz identifizieren. Wo ein verlässlicher atomarer Lock/Owner-Nachweis verfügbar ist, diesen nutzen; ein GitHub-Kommentar allein reicht nicht. Ist die exklusive Kontrolle nicht belegbar, **nur diese gemeinsame Ressource meiden**, eine eigene isolierte Kopie bzw. Offline-Test verwenden und übrige Arbeit fortsetzen. Keine abgelaufene Text-Lease als Freigabe interpretieren.
+5. **Eigenständig testen und integrieren** ist bei konfliktfreier Änderung, nachvollziehbarem Review und bestandenen dafür relevanten Tests möglich, soweit Repository-Schutzregeln und tatsächliche Berechtigungen es erlauben. A00-Zustimmung ist nicht notwendig. Gestapelte Supervisor-PRs und überlappende Dateien werden seriell zusammengeführt, keine blinden Mehrfach-Merges.
+6. **Unveränderte Schutzregeln:** keine fremden Prozesse stoppen, keine unbestätigten produktiven Deployments, keinen Force-Push/Rebase fremder Branches, keine qualifizierte Retail-`GameMP.dll` austauschen, keine fremden Spieler oder privaten Rohlogs beeinflussen. Plattform-/MCP-Berechtigungen und gegebenenfalls nötige Sicherheits-, Kosten- oder Veröffentlichungsfreigaben bleiben bestehen.
+7. **Handoff statt Blockade:** Änderungen, Commit/Branch, Tests mit PASS/FAIL/SKIP, Umgebung, Ressourcen-Folgen, offene Probleme und PR dokumentieren. Die Stufen portable/Windows/native Retail/WAN/Soak sind **Testevidenz**, keine separaten A00-Genehmigungsstufen. Fehlende Nachweise ehrlich als `NOT_TESTED` kennzeichnen.
+
+A00 fungiert als **nicht blockierende Koordination**. Ein inaktiver, nicht erreichbarer oder nicht gestarteter A00 verhindert keine sichere isolierte Arbeit. Diese Regeln wirken bei anderen bereits laufenden Agentensitzungen erst, nachdem sie die aktualisierten Projektanweisungen eingelesen haben.
 
 ## Integrationsreihenfolge und Konfliktzonen
 
@@ -48,12 +47,11 @@
 
 **Entscheidungs-Gates:** (1) portable Tests und Versionsprovenienz, (2) sicherer Windows/PS5.1-Test, (3) isolierte echte Retail-1.07-Join-/Action-/Sync-Probe, (4) unabhängiger externer UDP-/Browser-Test, (5) lange Soak-/Skalierungsprüfung – jede Ebene gesondert dokumentieren. Keine 24/7-/16-Bot-Freigabe durch reine CI.
 
-## Einweisung eines weiteren Agenten
+## Einstieg eines weiteren Agenten
 
-1. `AGENTS.md`, Toolpolicy, dieses Dokument, `STATUS.md` und das Koordinationsissue lesen.
-2. Slot **beantragen**, nicht eigenmächtig als frei behandeln; `CLAIM` posten und A00-`GRANTED` abwarten.
-3. Eigenes Ticket/Branch/Worktree anlegen, bestehende Branches/aktive Prozesse unangetastet lassen.
-4. Nur freigegebene Pfade/Ressourcen bearbeiten; bei unerwarteter Überschneidung **STOP / BLOCKED / A00 kontaktieren**.
-5. Änderungsstand mit Tests/Handoff dokumentieren, PR eröffnen, `RELEASE` posten.
+1. `AGENTS.md`, diese Koordination und laufende Worktrees/Branches prüfen.
+2. Eigenen Scope, Branch und Worktree nutzen; ohne `GRANTED` direkt mit konfliktfreien Code-/Offline-Arbeiten beginnen.
+3. Bei belegten gemeinsamen Laufzeitressourcen isolierte Kopien oder Offline-Arbeit vorziehen. Niemals bei unbekanntem Besitz in fremde Prozesse/Dateien eingreifen.
+4. Ergebnis, Tests, PR und Handoff dokumentieren. A00 nur für reale Konflikte oder schwierige Integration einbeziehen, **nicht** als Pflicht-Freigabestufe.
 
-**Technische Einschränkung:** GitHub-Issue-Kommentare sind kein transaktionssicherer verteilter Mutex. Exklusivität entsteht hier durch **eine** entscheidungsbefugte A00-Instanz, konsequente Übernahme der Regeln und OS-seitige Prozess-/Dateisperren für konkrete Runtime-Proben. Bei unklarer oder fehlender A00-Freigabe keine Schreib-/Runtime-Aktion. Branch-Protection/Required Checks müssen separat in den Repository-Einstellungen aktiviert werden.
+**Einschränkung:** GitHub-Kommentare sind keine transaktionssicheren Locks. Wo technische Exklusivität nötig ist, muss sie am jeweiligen Host/Prozess überprüft und durchgesetzt werden. Die Änderung der Projektregeln deaktiviert keine Plattform-Approvals oder GitHub-Branch-Protection.
