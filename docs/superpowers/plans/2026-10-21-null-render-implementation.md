@@ -20,8 +20,10 @@ Remove the expensive client game-render call from opt-in four-bot client instanc
 - [x] Reversible opt-in null-render source and profile authored.
 - [x] Static guard tests (4/4) and `git diff --check` passed 2026-10-21.
 - [x] Windows MSBuild Release_TSE107 produced new candidate `GameMP.dll` (SHA256 `4F74146E...`, 225280 bytes); shadow native smoke and private Hetzner transfer hash verified. No replacement of accepted DLL.
-- [x] Preliminary native Shadow one-bot 12s samples: null render 1.7% one core vs render enabled 4.4% at the same FPS20 on map DM_LittleTrouble; see report. **Not** Wine/8-bot benchmark.\n- [ ] Required isolated Hetzner Wine 4/8-bot A/B and 10-minute CPU/95p workload profile.
-- [x] Isolated Windows dedicated CRC OK, native bot join and tick/movement continuity in both A/B variants; brief local logs show no bad-sync signs.\n- [ ] Unmodified human observer join, full combat and 60-minute sync/latency acceptance on new DLL.
+- [x] Preliminary native Shadow one-bot 12s samples: null render 1.7% one core vs render enabled 4.4% at the same FPS20 on map DM_LittleTrouble; see report. **Not** Wine/8-bot benchmark.
+- [ ] Required isolated Hetzner Wine 4/8-bot A/B and 10-minute CPU/95p workload profile.
+- [x] Isolated Windows dedicated CRC OK, native bot join and tick/movement continuity in both A/B variants; brief local logs show no bad-sync signs.
+- [ ] Unmodified human observer join, full combat and 60-minute sync/latency acceptance on new DLL.
 - [ ] Only after native acceptance, decide whether to deploy with explicit backup, rollback and CPU headroom. No current production deployment authorization is inferred from a passing static test.
 
 ## Known limits
