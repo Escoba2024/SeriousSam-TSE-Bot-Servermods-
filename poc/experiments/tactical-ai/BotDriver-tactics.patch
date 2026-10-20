@@ -1,0 +1,34 @@
+--- a/BotDriver.cpp
++++ b/BotDriver.cpp
+@@ -33,0 +34 @@
++#include "bot_tactics.h"
+@@ -68,0 +70,2 @@
++static INDEX bot_bTacticalAI = FALSE; // experimental CecilBot-inspired combat, opt-in
++static INDEX bot_iTacticalDifficulty = 1; // 0 easy, 1 normal, 2 hard
+@@ -175,0 +179,2 @@
++  _pShell->DeclareSymbol("user INDEX bot_bTacticalAI;", &bot_bTacticalAI);
++  _pShell->DeclareSymbol("user INDEX bot_iTacticalDifficulty;", &bot_iTacticalDifficulty);
+@@ -188,0 +194 @@
++  botcore::TacticalState bs_tactics;
+@@ -200,0 +207 @@
++    _absBots[slot].bs_tactics.Reset();
+@@ -306,0 +314 @@
++      bs.bs_tactics.Reset();
+@@ -323,0 +332 @@
++    FLOAT combatStrafe=0.0f;
+@@ -355 +364,9 @@
+-        decision=botcore::DecideCombat(candidates,visible,input);
++        if (bot_bTacticalAI) {
++          const botcore::TacticalDecision tactics=botcore::DecideTacticalCombat(
++            candidates,visible,input,bs.bs_tactics,bs.bs_iTick,iLP,bot_iTacticalDifficulty);
++          decision=tactics.combat;
++          combatStrafe=(FLOAT)tactics.strafeFactor;
++        } else {
++          bs.bs_tactics.Reset();
++          decision=botcore::DecideCombat(candidates,visible,input);
++        }
+@@ -455,0 +473 @@
++    if (automatic && bot_bTacticalAI) pa.pa_vTranslation(1) = combatStrafe; // normalized side axis
+@@ -481,0 +500,2 @@
++      if (automatic && bot_bTacticalAI) BotLog("[BotTactical] bot=%d target=%d forward=%.2f strafe=%.2f\n",
++        iLP,bs.bs_iCombatTarget,moveFactor,combatStrafe);
