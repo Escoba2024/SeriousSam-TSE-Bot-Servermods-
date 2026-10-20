@@ -146,8 +146,8 @@ inline int SelectWeapon(uint32_t available_mask, double distance_m) {
 
 class WaypointGraph {
  public:
-  static const int kMaxNodes = 256;
-  static const int kMaxEdgesPerNode = 8;
+  static const int kMaxNodes = 512; // CecilBotMod map reference: up to 335
+  static const int kMaxEdgesPerNode = 16; // CecilBotMod map reference: up to 13
 
   WaypointGraph() : node_count_(0) { std::memset(edge_count_, 0, sizeof(edge_count_)); }
 
@@ -165,6 +165,10 @@ class WaypointGraph {
   bool Link(int a, int b) {  // bidirectional
     if (!Valid(a) || !Valid(b) || a == b) return false;
     return AddEdge(a, b) && AddEdge(b, a);
+  }
+
+  bool Arc(int from, int to) { // directed: drop/jump paths must not become reversible
+    return Valid(from) && Valid(to) && from != to && AddEdge(from, to);
   }
 
   bool NodePosition(int i, double* x, double* y, double* z) const {
@@ -236,6 +240,9 @@ class WaypointGraph {
     }
     if (std::sscanf(line, "edge %d %d %c", &a, &b, &extra) == 2) {
       return Link(a, b);
+    }
+    if (std::sscanf(line, "arc %d %d %c", &a, &b, &extra) == 2) {
+      return Arc(a, b);
     }
     return false;
   }

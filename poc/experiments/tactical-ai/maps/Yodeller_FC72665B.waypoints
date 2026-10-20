@@ -1,0 +1,610 @@
+# CecilBotMod derived waypoints (Dreamy Cecil; GPL-2.0).
+# Source: Yodeller_FC72665B.nav; BNMV v6; map hash must match the Retail world.
+# Directed arcs retained. Door locks, jump/crouch flags and pit safety
+# require runtime validation before any automatic path following.
+# points=111 arcs=485 locked=0
+node 350 76.3810196 -224
+node 342.75 76.7810745 -209.75
+node 331.75 75.8047333 -190.75
+node 329.25 76.75 -162.5
+node 339.372589 76.5412521 -233.699188
+node 364.25 76.5713882 -251
+node 328.552917 77.1681976 -211.969223
+node 321 76.4881134 -180
+node 372.045868 76.6431351 -228.937439
+node 374.462708 76.3811035 -195.525116
+node 350 76.2213135 -164.75
+node 359.85141 75.982605 -182.100739
+node 370.75 76.3307266 -179.5
+node 369.25 76.2847595 -174.75
+node 422.75 75.8933334 -261.5
+node 364.75 76.4120789 -163.75
+node 355.5 77.6659546 -137.25
+node 342.25 76.6598434 -145.25
+node 344.25 76.9435196 -134.75
+node 328.75 77.1081314 -149.75
+node 497.25 74.8903122 -183.75
+node 495 74.7584152 -188
+node 490 74.5834045 -198.75
+node 510 75.1241302 -189.5
+node 500 75.0202866 -170.25
+node 486.25 75.1458359 -169.75
+node 475.5 75.3654175 -178
+node 440.895264 82.0083237 -168.646957
+node 448.75 82.0052185 -173
+node 451.75 82.0051804 -180.5
+node 448 82.0051804 -188.25
+node 441.022156 82.0039825 -191.173981
+node 433.25 82.0039825 -188
+node 431.138885 82.0013123 -181.342026
+node 432.461823 82.0013123 -173.65831
+node 377.75 76.3900223 -167.25
+node 391.5 76.4324951 -182.75
+node 390.5 76.641777 -152.25
+node 375.75 77.6864929 -136.75
+node 441.25 77.5005417 -151.75
+node 429.5 78.4309235 -137
+node 406.086029 77.8244705 -137.919296
+node 457.712097 77.4608612 -145.158859
+node 473.5 77.1851501 -132
+node 488 75.87883 -142.25
+node 481.268158 75.9178467 -153.885773
+node 492.5 75.1364822 -159.25
+node 453.75 77.3950806 -154.75
+node 465.5 76.5237885 -162.5
+node 457.5 75.6554337 -197
+node 461.5 76.4362106 -172.5
+node 438.651001 76.5896759 -192.793976
+node 450.25 77.077095 -167.75
+node 427.25 77.0054932 -168.25
+node 420 76.7168961 -186
+node 471.75 74.5726852 -216.5
+node 479.5 74.7129517 -206
+node 451.5 74.9058685 -232.5
+node 434.75 75.4540634 -248.25
+node 444.25 75.8249817 -257.75
+node 425.5 76.1254349 -241.5
+node 433.75 76.376709 -222.25
+node 440.75 76 -209
+node 423.25 76.4319534 -203
+node 417 77.5510788 -151.25
+node 409.667633 76.7014694 -178.975174
+node 385 76.3801804 -210.5
+node 400.5 76.627037 -213.75
+node 415.125153 76.7720413 -216.586395
+node 401.25 77.18573 -237
+node 413.516022 76.4729843 -250.409058
+node 383 76.961586 -244.5
+node 382.75 76.8317413 -258.25
+node 407.645447 76.456665 -270.146088
+node 342.25 79 -153.75
+node 343.5 81.7249069 -152.25
+node 345.25 86.4370117 -156
+node 343.94577 90.2460251 -172.306091
+node 341.98233 91.2667694 -177.510437
+node 342.599457 94.9516907 -181.266724
+node 343.5 92.2578049 -186.25
+node 348 91.4378204 -195.5
+node 350.75 91.6655121 -201.5
+node 360.919342 92.4477386 -210.769226
+node 436.25 103.878807 -180.25
+node 440.75 104.074524 -184.75
+node 445.25 104.285423 -180.5
+node 440.75 103.788582 -175.5
+node 426.5 76.8021164 -180.25
+node 343 78 -153
+node 348.363068 91.7403183 -178.567291
+node 356.75 92.4433975 -214.75
+node 462.25 77.4074249 -138.5
+node 440.75 82.25 -180.25
+node 441 93.25 -180
+node 437.5 93.5 -180.25
+node 440.5 93.5 -176.75
+node 444.75 93.5 -180.25
+node 440.75 93.5 -183.75
+node 430.75 96.1311493 -180.5
+node 430 96.1264267 -182.5
+node 430 96.1264267 -178.5
+node 452.5 76.75 -180.25
+node 449.75 76.3131256 -189.5
+node 440.75 77 -168.5
+node 440.75 79 -197
+node 441 79.25 -164.25
+node 432.25 77 -172.75
+node 432.25 76.75 -188.5
+node 431.5 94.0619202 -180.5
+node 343.25 78 -155
+arc 0 1
+arc 0 4
+arc 0 5
+arc 0 6
+arc 0 8
+arc 0 71
+arc 0 72
+arc 1 0
+arc 1 2
+arc 1 6
+arc 1 9
+arc 1 11
+arc 2 1
+arc 2 3
+arc 2 7
+arc 2 6
+arc 2 9
+arc 2 11
+arc 3 2
+arc 3 7
+arc 3 10
+arc 3 17
+arc 3 19
+arc 3 74
+arc 4 0
+arc 4 5
+arc 4 6
+arc 4 8
+arc 5 4
+arc 5 0
+arc 5 8
+arc 5 71
+arc 5 72
+arc 6 4
+arc 6 7
+arc 6 2
+arc 6 1
+arc 6 0
+arc 7 6
+arc 7 3
+arc 7 2
+arc 8 5
+arc 8 0
+arc 8 4
+arc 8 9
+arc 8 11
+arc 8 66
+arc 8 69
+arc 8 71
+arc 9 8
+arc 9 1
+arc 9 2
+arc 9 11
+arc 9 12
+arc 9 36
+arc 9 66
+arc 10 3
+arc 10 11
+arc 10 15
+arc 10 19
+arc 11 10
+arc 11 2
+arc 11 9
+arc 11 8
+arc 11 1
+arc 11 12
+arc 11 15
+arc 12 11
+arc 12 13
+arc 12 9
+arc 13 12
+arc 14 58
+arc 14 59
+arc 14 60
+arc 14 70
+arc 14 73
+arc 14 72
+arc 15 10
+arc 15 11
+arc 15 16
+arc 15 35
+arc 15 37
+arc 16 15
+arc 16 17
+arc 16 18
+arc 16 38
+arc 17 16
+arc 17 3
+arc 17 18
+arc 17 19
+arc 18 17
+arc 18 16
+arc 18 19
+arc 19 18
+arc 19 17
+arc 19 3
+arc 19 10
+arc 19 74
+arc 20 21
+arc 21 20
+arc 21 22
+arc 21 26
+arc 22 21
+arc 22 23
+arc 22 25
+arc 22 56
+arc 23 22
+arc 23 24
+arc 24 23
+arc 24 25
+arc 24 26
+arc 24 46
+arc 25 24
+arc 25 26
+arc 25 22
+arc 25 46
+arc 25 48
+arc 25 86
+arc 26 25
+arc 26 21
+arc 26 24
+arc 26 48
+arc 26 49
+arc 26 50
+arc 27 28
+arc 27 34
+arc 27 39
+arc 28 27
+arc 28 29
+arc 28 50
+arc 29 28
+arc 29 30
+arc 29 50
+arc 29 49
+arc 30 29
+arc 30 31
+arc 30 49
+arc 30 50
+arc 31 30
+arc 31 32
+arc 31 62
+arc 31 63
+arc 31 93
+arc 32 31
+arc 32 33
+arc 32 54
+arc 32 63
+arc 33 32
+arc 33 34
+arc 33 54
+arc 34 33
+arc 34 27
+arc 34 54
+arc 35 15
+arc 35 36
+arc 35 37
+arc 36 35
+arc 36 9
+arc 36 65
+arc 37 35
+arc 37 15
+arc 37 38
+arc 37 41
+arc 37 64
+arc 37 65
+arc 38 37
+arc 38 16
+arc 38 41
+arc 39 27
+arc 39 40
+arc 39 42
+arc 39 47
+arc 39 52
+arc 39 53
+arc 39 64
+arc 39 87
+arc 40 39
+arc 40 41
+arc 40 42
+arc 40 64
+arc 41 40
+arc 41 37
+arc 41 38
+arc 41 64
+arc 42 39
+arc 42 40
+arc 42 43
+arc 42 47
+arc 42 92
+arc 43 42
+arc 43 44
+arc 43 45
+arc 43 92
+arc 44 43
+arc 44 45
+arc 44 46
+arc 45 44
+arc 45 43
+arc 45 46
+arc 45 48
+arc 45 86
+arc 45 87
+arc 46 45
+arc 46 25
+arc 46 24
+arc 46 44
+arc 46 48
+arc 47 42
+arc 47 39
+arc 47 48
+arc 47 52
+arc 48 47
+arc 48 45
+arc 48 46
+arc 48 25
+arc 48 26
+arc 48 50
+arc 48 52
+arc 49 26
+arc 49 50
+arc 49 51
+arc 49 52
+arc 49 56
+arc 49 55
+arc 49 61
+arc 49 62
+arc 49 103
+arc 50 49
+arc 50 26
+arc 50 48
+arc 50 52
+arc 51 49
+arc 51 54
+arc 51 63
+arc 51 88
+arc 51 103
+arc 52 39
+arc 52 47
+arc 52 48
+arc 52 50
+arc 52 49
+arc 52 53
+arc 53 52
+arc 53 39
+arc 53 54
+arc 53 64
+arc 53 65
+arc 53 88
+arc 54 53
+arc 54 51
+arc 54 63
+arc 54 65
+arc 54 67
+arc 54 68
+arc 54 88
+arc 55 56
+arc 55 49
+arc 55 57
+arc 56 55
+arc 56 49
+arc 56 22
+arc 57 55
+arc 57 58
+arc 57 59
+arc 57 61
+arc 57 62
+arc 58 57
+arc 58 14
+arc 58 59
+arc 58 60
+arc 58 62
+arc 59 58
+arc 59 57
+arc 59 14
+arc 60 58
+arc 60 14
+arc 60 61
+arc 60 70
+arc 61 60
+arc 61 57
+arc 61 49
+arc 61 62
+arc 61 63
+arc 61 68
+arc 61 85
+arc 62 61
+arc 62 31
+arc 62 49
+arc 62 57
+arc 62 58
+arc 62 63
+arc 62 68
+arc 62 103
+arc 63 62
+arc 63 51
+arc 63 54
+arc 63 61
+arc 63 65
+arc 63 67
+arc 63 68
+arc 63 88
+arc 64 53
+arc 64 40
+arc 64 39
+arc 64 41
+arc 64 37
+arc 64 65
+arc 64 87
+arc 64 84
+arc 65 36
+arc 65 54
+arc 65 63
+arc 65 53
+arc 65 64
+arc 65 37
+arc 65 67
+arc 65 68
+arc 65 84
+arc 66 9
+arc 66 8
+arc 66 67
+arc 67 66
+arc 67 65
+arc 67 54
+arc 67 63
+arc 67 68
+arc 67 69
+arc 68 67
+arc 68 61
+arc 68 62
+arc 68 63
+arc 68 54
+arc 68 65
+arc 68 69
+arc 69 68
+arc 69 67
+arc 69 8
+arc 69 70
+arc 69 71
+arc 69 73
+arc 70 14
+arc 70 60
+arc 70 69
+arc 70 71
+arc 70 73
+arc 70 72
+arc 71 70
+arc 71 69
+arc 71 8
+arc 71 5
+arc 71 0
+arc 71 72
+arc 72 71
+arc 72 5
+arc 72 0
+arc 72 73
+arc 72 70
+arc 72 14
+arc 73 72
+arc 73 14
+arc 73 70
+arc 73 69
+arc 74 75
+arc 74 3
+arc 74 19
+arc 75 76
+arc 75 17
+arc 75 19
+arc 75 3
+arc 75 18
+arc 76 77
+arc 77 78
+arc 77 79
+arc 77 90
+arc 78 79
+arc 78 90
+arc 79 80
+arc 79 77
+arc 79 90
+arc 80 81
+arc 80 7
+arc 80 2
+arc 80 1
+arc 80 6
+arc 80 9
+arc 80 90
+arc 81 80
+arc 81 82
+arc 81 2
+arc 81 6
+arc 81 1
+arc 81 9
+arc 81 11
+arc 82 81
+arc 82 83
+arc 82 1
+arc 82 6
+arc 82 2
+arc 82 9
+arc 82 11
+arc 83 9
+arc 83 66
+arc 83 11
+arc 83 91
+arc 88 53
+arc 88 54
+arc 88 63
+arc 88 51
+arc 89 17
+arc 89 16
+arc 89 18
+arc 90 78
+arc 90 77
+arc 90 80
+arc 91 83
+arc 91 6
+arc 91 4
+arc 91 5
+arc 91 8
+arc 92 42
+arc 92 43
+arc 93 31
+arc 93 94
+arc 94 95
+arc 94 98
+arc 94 97
+arc 94 96
+arc 95 94
+arc 95 96
+arc 95 99
+arc 96 95
+arc 96 97
+arc 96 94
+arc 96 27
+arc 96 39
+arc 97 96
+arc 97 98
+arc 97 94
+arc 97 29
+arc 98 97
+arc 98 94
+arc 98 31
+arc 98 62
+arc 99 95
+arc 99 100
+arc 99 101
+arc 100 65
+arc 100 54
+arc 100 63
+arc 100 95
+arc 100 31
+arc 101 65
+arc 101 54
+arc 101 64
+arc 101 95
+arc 101 27
+arc 102 50
+arc 102 52
+arc 102 49
+arc 102 103
+arc 103 49
+arc 103 51
+arc 103 62
+arc 104 52
+arc 104 53
+arc 105 31
+arc 105 62
+arc 105 63
+arc 105 49
+arc 106 27
+arc 106 39
+arc 106 47
+arc 106 53
+arc 107 88
+arc 107 53
+arc 107 39
+arc 108 51
+arc 108 88
+arc 108 54
+arc 108 63
+arc 108 62
+arc 109 34
+arc 109 32
+arc 110 3
+arc 110 10
+# flags 74 0x0000000A
+# flags 77 0x0000000A
+# flags 79 0x00000004
+# flags 82 0x00000002
+# flags 84 0x00000010
+# flags 85 0x00000010
+# flags 86 0x00000010
+# flags 87 0x00000010
+# flags 99 0x0000000A
