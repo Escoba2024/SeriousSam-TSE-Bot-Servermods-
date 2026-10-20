@@ -33,3 +33,14 @@ Static source checks cannot prove ABI compatibility, `IsIconic` behavior, frame-
 ## Evidence 2026-10-21
 
 See `docs/reports/2026-10-21-null-render-native-smoke-ab.md`. Shadow game-server and client test processes stopped after testing. The protected public eight-bot Wine fleet remains unchanged and is not yet qualified with this new DLL.
+
+## Hetzner-only runtime A/B gate status (2026-10-21)
+
+- [x] Native test run **on Hetzner only** in copied Wine runtime with isolated network namespace, ":116" Xvfb display and public fleet hashes unchanged.
+- [x] Four test players joined dedicated, CRC passed for both `bot_bNullRender=0` and `1`.
+- [ ] **FAILED TO QUALIFY:** At strict 45%-one-core shared cgroup cap both clients used 35.56% core (18s each), cgroup was heavily throttled. This is not a demonstrated 0% difference or saving.
+- [ ] **FAILED TO QUALIFY:** neither branch produced BotDriver tick/position evidence in those samples. Investigate action loop and lower-load, non-throttled test design before quoting CPU improvements.
+- [ ] Do not deploy or merge. Preserve the original public `GameMP.dll` with SHA `61DC...`.
+- [ ] Hetzner-only SDK/toolchain for future DLL builds is an open requirement; Shadow is unavailable and must not be used.
+
+See `docs/reports/2026-10-21-hetzner-wine-null-render-ab-unqualified.md` for raw sample metrics and limitations. The prior Shadow A/B does not qualify as Hetzner CPU savings.
