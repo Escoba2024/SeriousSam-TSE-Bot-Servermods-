@@ -19,11 +19,15 @@ Remove the expensive client game-render call from opt-in four-bot client instanc
 - [x] Isolated Git clone/branch established against `main` 30a6747.
 - [x] Reversible opt-in null-render source and profile authored.
 - [x] Static guard tests (4/4) and `git diff --check` passed 2026-10-21.
-- [ ] Build **new** Retail 1.07 `GameMP.dll` with complete source and dependencies in isolated Windows SDK build tree; record SHA256 and build log. No replacement of accepted DLL.
-- [ ] A/B baseline vs 20 FPS alone vs null render at same map and client population in isolated Wine prefix and distinct ports/display; record per-process median/p95 CPU and memory, timer/input continuity and sync.
-- [ ] Unmodified human Retail 1.07 join, CRC, visible combat/kill confirmation, 60-minute clean sync/latency test on the new DLL.
+- [x] Windows MSBuild Release_TSE107 produced new candidate `GameMP.dll` (SHA256 `4F74146E...`, 225280 bytes); shadow native smoke and private Hetzner transfer hash verified. No replacement of accepted DLL.
+- [x] Preliminary native Shadow one-bot 12s samples: null render 1.7% one core vs render enabled 4.4% at the same FPS20 on map DM_LittleTrouble; see report. **Not** Wine/8-bot benchmark.\n- [ ] Required isolated Hetzner Wine 4/8-bot A/B and 10-minute CPU/95p workload profile.
+- [x] Isolated Windows dedicated CRC OK, native bot join and tick/movement continuity in both A/B variants; brief local logs show no bad-sync signs.\n- [ ] Unmodified human observer join, full combat and 60-minute sync/latency acceptance on new DLL.
 - [ ] Only after native acceptance, decide whether to deploy with explicit backup, rollback and CPU headroom. No current production deployment authorization is inferred from a passing static test.
 
 ## Known limits
 
 Static source checks cannot prove ABI compatibility, `IsIconic` behavior, frame-pacing correctness, `SwapBuffers` overhead, rendering independence of native 1.07, or multiplayer sync. Compare with the independent eight-bot baseline report. Do not use fake sync/bad-CRC suppression. Existing live Codex sync-agent works separately in `/srv/tse-main-agent-20261019` and must not be interrupted.
+
+## Evidence 2026-10-21
+
+See `docs/reports/2026-10-21-null-render-native-smoke-ab.md`. Shadow game-server and client test processes stopped after testing. The protected public eight-bot Wine fleet remains unchanged and is not yet qualified with this new DLL.
