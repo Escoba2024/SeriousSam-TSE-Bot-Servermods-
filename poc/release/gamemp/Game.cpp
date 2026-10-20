@@ -129,6 +129,9 @@ extern INDEX gam_bGibs  = TRUE;
 extern INDEX gam_bUseExtraEnemies = TRUE;
 #endif
 
+// Opt-in for non-visual bot clients only. Never enabled for vanilla observers.
+static INDEX bot_bNullRender = FALSE;
+
 static INDEX hud_iEnableStats = 1;
 static FLOAT hud_fEnableFPS   = 1;
 static INDEX hud_iStats    = 0;
@@ -911,6 +914,7 @@ void CGame::InitInternal( void)
   _pShell->DeclareSymbol("user void SaveScreenShot(void);",       &SaveScreenShot);
   _pShell->DeclareSymbol("user void DumpProfileToConsole(void);", &DumpProfileToConsole);
   _pShell->DeclareSymbol("user void DumpProfileToFile(void);",    &DumpProfileToFile);
+  _pShell->DeclareSymbol("user INDEX bot_bNullRender;", &bot_bNullRender);
   _pShell->DeclareSymbol("user INDEX hud_iStats;", &hud_iStats);
   _pShell->DeclareSymbol("user INDEX hud_bShowResolution;", &hud_bShowResolution);
   _pShell->DeclareSymbol("persistent user INDEX hud_bShowTime;",  &hud_bShowTime);
@@ -2090,6 +2094,13 @@ static BOOL _bPlayerViewRendered = FALSE;
 // redraw all game views (for case of split-screens and such)
 void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
 {
+  // The real engine/network timer runs independently of the visual callback.
+  // Do not take tm_csHooks: doing so lets software rendering stall bot actions.
+  // Keep menus, server sessions and explicit screenshot requests untouched.
+  if (bot_bNullRender && gm_bGameOn && !_pNetwork->IsServer() && _fnmThumb=="") {
+    return;
+  }
+
   // Renderer sector-flag RMW also touches the ray scratch flag (0x40).
   // Exclude the bot timer across the entire frame, not just prescanning.
   // Thumbnail recursion and the existing inner hooks lock are recursive.
