@@ -27,9 +27,9 @@ CSV-Feldverschiebung, Profil-/Entity-Neuzuordnung nach Respawn, Human-KI trotz T
 
 ## Aufgaben
 1. [x] Quellen/Prozesse/PRs prüfen, eigenen Worktree und Plan anlegen.
-2. [ ] CSV-Fehler mit erzeugter C++-Zeile reproduzieren; Header/Feldtypen/21 Werte prüfen; minimale Korrektur; Parser-Regression.
-3. [ ] #42/#44 als unveränderte Vorschläge übernehmen; konfliktfreien integrierten Overlay herstellen. Legacy + Human + Telemetrie + NullRender + Diagnose gemeinsam erhalten; Default-Flags aus.
-4. [ ] Portable KI-/Smoke-/Parser-/Overlay-/Provenienztests. In Messfenstern keine schweren Tests.
+2. [x] CSV-Fehler mit erzeugter C++-Zeile reproduzieren; Header/Feldtypen/21 Werte prüfen; minimale Korrektur; Parser-Regression.
+3. [x] #42/#44 als unveränderte Vorschläge übernehmen; konfliktfreien integrierten Overlay herstellen. Legacy + Human + Telemetrie + NullRender + Diagnose gemeinsam erhalten; Default-Flags aus.
+4. [x] Portable KI-/Smoke-/Parser-/Overlay-/Provenienztests. In Messfenstern keine schweren Tests.
 5. [ ] Serienmessungen auswerten; erst danach integrierte DLL mit MSVC bauen, Quelle/Hash/Toolchain protokollieren.
 6. [ ] Eigene Runtime/Ports: 1→4→8 Bots, originale Retail-Gegenstelle, 60min aktive KI/Sync; A/B/C CPU ohne Überlappung; Ressourcen/Kapazität.
 7. [ ] Nur bei allen PASS: Backup/Rollback + öffentlich 8 Bots, Browser/Join prüfen; Commit/Push/PR/Drive/Handoff aktualisieren.
@@ -51,3 +51,5 @@ Jedes Gate bleibt OFFEN bis zum tatsächlichen Nachweis.
 
 - 01:05 UTC: korrigierter Target-Build 9a0a71a1d3dbf4d873a3a083287ea7d5e40cad476cb556e2d84cfc7ba492bea3 verbindet Bot und originalen Retail-Client (beide CRC OK), aktive Human-KI/20Hz nachgewiesen. Erstprobe NICHT qualifiziert: Harness hatte Heartbeat=0 und damit keinen GameSpy-Querylistener; Timeout trotz zwei echter Joins. Außerdem war CSV-#config vor dem späteren CLI-Skript geschrieben (falsches bot_enabled=0). Alle eigenen Prozesse/Mounts bereinigt; rohe Belege bleiben privat.
 - 01:06 UTC: Header-Lifecycle-Regression RED→GREEN: GameMainLoop aktualisiert effektive Konfiguration nur bei Änderungen. 54 Benchmark-/Overlay-/Anschluss-Tests PASS, geschützte 13 Release-Hashes PASS. Isolierter Testserver aktiviert Querylistener mit ausschließlich lokalem Master 127.0.0.1. Dritter Build/Ein-Bot-Wiederholung folgt im selben abgeschlossenen CPU-Messfenster-Zwischenraum. Eigenen Controller 109275 vorübergehend angehalten; Benchmark 103292 ebenfalls T; Fortsetzung nach Probe zwingend.
+
+- 08:59 UTC: Ein-Bot-Probe Build03 ausgewertet: echte Original-Retail-Gegenstelle, CRC, effektive Konfiguration, 20Hz/2643 Aktionen und NullRender nachgewiesen, alle Mounts sauber ausgehängt. Kein Bewegung-/Feuernachweis; daher Gameplay-Gate weiterhin OFFEN. Benchmark PID103292 nach Identitäts-/Lastprüfung fortgesetzt, letzte zwei Fenster laufen. PR45 mit effektivem Telemetrie-Fix auf cb7fa64 aktualisiert. Serialcontroller /srv/tse-integration-serial-20261021.py wartet auf vollständige Baseline, führt erst danach Suchpfad-RED/GREEN, Regressionen, Build04 und gestufte Laufzeittests aus.
