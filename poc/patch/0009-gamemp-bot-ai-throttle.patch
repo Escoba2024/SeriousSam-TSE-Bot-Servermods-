@@ -1,0 +1,102 @@
+diff --git a/poc/release/gamemp/BotDriver.cpp b/poc/release/gamemp/BotDriver.cpp
+--- a/poc/release/gamemp/BotDriver.cpp
++++ b/poc/release/gamemp/BotDriver.cpp
+@@ -70,6 +70,10 @@
+ static INDEX bot_iDiagEvery = 100;     // P0: heartbeat every N timer calls (100 = 5 s)
+ static INDEX bot_iDiagTicks = 0;       // P0: observed GameHandleTimer calls
+ static BOOL _botDiagLoggedFirst = FALSE;
++static INDEX bot_iScanInterval = 1;     // full target scan every N ticks (1 = every tick)
++static FLOAT bot_fTargetRange  = 0.0f;  // max combat target distance in m (0 = unlimited)
++static INDEX bot_iMaxLosRays   = 0;     // max LOS raycasts per bot and full scan (0 = unlimited)
++static INDEX bot_iObstacleInterval = 1; // side obstacle rays every N ticks (1 = every tick)
+ 
+ static botcore::Reconnect _botReconnect;
+ static CTString _strBotReconnectAddress;
+@@ -179,6 +183,10 @@
+   _pShell->DeclareSymbol("user INDEX bot_bObstacleAvoidance;", &bot_bObstacleAvoidance);
+   _pShell->DeclareSymbol("user INDEX bot_bDiag;",      &bot_bDiag);
+   _pShell->DeclareSymbol("user INDEX bot_iDiagEvery;", &bot_iDiagEvery);
++  _pShell->DeclareSymbol("user INDEX bot_iScanInterval;", &bot_iScanInterval);
++  _pShell->DeclareSymbol("user FLOAT bot_fTargetRange;",  &bot_fTargetRange);
++  _pShell->DeclareSymbol("user INDEX bot_iMaxLosRays;",   &bot_iMaxLosRays);
++  _pShell->DeclareSymbol("user INDEX bot_iObstacleInterval;", &bot_iObstacleInterval);
+   // P0 diagnostics: proves that this exact GameMP build loaded and Init ran.
+   BotLog("[BotDiag] init: bot symbols declared\n");
+ }
+@@ -366,14 +374,55 @@
+       INDEX visible=0;
+       if (player!=NULL && deathmatch && player->GetHealth()>0 && player->m_penWeapons!=NULL) {
+         botcore::TargetInfo candidates[16];
+-        for (INDEX index=0; index<16; ++index) {
+-          CPlayer *other=(CPlayer *)CEntity::GetPlayerEntity(index);
+-          const BOOL local=BotCombatIsLocal(pgame,index);
+-          if (other==NULL || other==player || other->GetHealth()<=0 ||
+-              (bot_bCombatSkipLocals && local)) continue;
+-          const botcore::TargetInfo snapshot=BotCombatSnapshot(other,index,local);
+-          if (botcore::CombatValidPlayer(snapshot) && BotCombatVisible(player,other))
+-            candidates[visible++]=snapshot;
++        const FLOAT3D selfPos=BotCombatEye(player).pl_PositionVector;
++        // Full target scans may be throttled; between scans only the cached
++        // target is re-verified (1 ray) while the 20 Hz aim keeps tracking it.
++        const BOOL bFullScan=bot_iScanInterval<=1 || (bs.bs_iTick%bot_iScanInterval)==1;
++        if (!bFullScan && bs.bs_iCombatTarget>=0 && bs.bs_iCombatTarget<16) {
++          CPlayer *cached=(CPlayer *)CEntity::GetPlayerEntity(bs.bs_iCombatTarget);
++          const BOOL local=BotCombatIsLocal(pgame,bs.bs_iCombatTarget);
++          if (cached!=NULL && cached!=player && cached->GetHealth()>0 &&
++              !(bot_bCombatSkipLocals && local) &&
++              (bot_fTargetRange<=0 ||
++               (BotCombatEye(cached).pl_PositionVector-selfPos).Length()<=bot_fTargetRange)) {
++            const botcore::TargetInfo snapshot=BotCombatSnapshot(cached,bs.bs_iCombatTarget,local);
++            if (botcore::CombatValidPlayer(snapshot) && BotCombatVisible(player,cached))
++              candidates[visible++]=snapshot;
++          }
++        } else if (bFullScan) {
++          // pass 1: distance-filtered collection, no rays yet
++          struct ScanEntry { FLOAT fDist; INDEX index; BOOL local; };
++          ScanEntry entries[16];
++          INDEX ctEntries=0;
++          for (INDEX index=0; index<16; ++index) {
++            CPlayer *other=(CPlayer *)CEntity::GetPlayerEntity(index);
++            const BOOL local=BotCombatIsLocal(pgame,index);
++            if (other==NULL || other==player || other->GetHealth()<=0 ||
++                (bot_bCombatSkipLocals && local)) continue;
++            const FLOAT fDist=(BotCombatEye(other).pl_PositionVector-selfPos).Length();
++            if (bot_fTargetRange>0 && fDist>bot_fTargetRange) continue;
++            entries[ctEntries].fDist=fDist;
++            entries[ctEntries].index=index;
++            entries[ctEntries].local=local;
++            ++ctEntries;
++          }
++          // deterministic nearest-first order (insertion sort, N<=16)
++          for (INDEX i=1; i<ctEntries; ++i) {
++            const ScanEntry se=entries[i];
++            INDEX j=i;
++            while (j>0 && entries[j-1].fDist>se.fDist) { entries[j]=entries[j-1]; --j; }
++            entries[j]=se;
++          }
++          // pass 2: LOS verification nearest-first (optional ray budget)
++          INDEX ctRays=0;
++          for (INDEX i=0; i<ctEntries; ++i) {
++            if (bot_iMaxLosRays>0 && ctRays>=bot_iMaxLosRays) break;
++            ++ctRays;
++            CPlayer *other=(CPlayer *)CEntity::GetPlayerEntity(entries[i].index);
++            const botcore::TargetInfo snapshot=BotCombatSnapshot(other,entries[i].index,entries[i].local);
++            if (botcore::CombatValidPlayer(snapshot) && BotCombatVisible(player,other))
++              candidates[visible++]=snapshot;
++          }
+         }
+         CPlayerWeapons *weapons=player->GetPlayerWeapons();
+         const botcore::AmmoInfo ammo={weapons->m_iBullets,weapons->m_iShells,
+@@ -446,8 +495,10 @@
+       INDEX frontHitType=0;
+       if (alive && !combatHold) {
+         front=BotObstacleDistance(player,yaw,&frontHitType);
+-        left=BotObstacleDistance(player,yaw+60.0f);
+-        right=BotObstacleDistance(player,yaw-60.0f);
++        if (bot_iObstacleInterval<=1 || (bs.bs_iTick%bot_iObstacleInterval)==0) {
++          left=BotObstacleDistance(player,yaw+60.0f);
++          right=BotObstacleDistance(player,yaw-60.0f);
++        }
+       }
+       const FLOAT3D &position=player->en_plPlacement.pl_PositionVector;
+       const botcore::NavigationInput input={position(1),position(3),yaw,
