@@ -48,6 +48,31 @@
 - [ ] Produktions-Supervisor erst nach Integration an session desired-state binden; keine doppelte Wiederherstellung.
 - [ ] Poolfarbe erst nach Native-Gate aktivierbar machen.
 
+#### Fortsetzung 21.10., Task 3a: portabler Adaptervertrag
+**Files:** `tools/bot_session_runtime.py`, `tools/test_bot_session_runtime.py`.
+**Consumes:** `Planner.identities()/states()` und unveränderte PLC4-Vorlage.
+**Produces:** `profile_bytes(template, identity) -> bytes`,
+`startup_script(identity) -> str`, `ControllerLock(database)` als Contextmanager,
+`reconcile(state, observation) -> str` ohne Prozessnebenwirkungen.
+- [x] RED/GREEN: PLC4-Name/GUID ändern, Team/Appearance bytegenau erhalten; beschädigte
+  Längen, gefährliche Namen und Farben verweigern. Wiederkehr identisch.
+- [x] RED/GREEN: Profil/Seed müssen die vorhandenen BotDriver-Symbole erreichen.
+- [x] RED/GREEN: zweiter Controller auf derselben DB (auch Symlink) gesperrt;
+  Freigabe nach Contextende/Prozessende. Kein zeitbasiertes Lock-Stehlen.
+- [x] RED/GREEN: Join nur mit bestätigtem Prozess UND Verbindung; Ghosts/unklarer
+  Prozess blockieren; geplanter Leave erzeugt keinen Wiederanlauf;
+  Exit/Disconnect bleiben bis bestätigter Abwesenheit in Quarantäne.
+- [x] GREEN: `python3 -m unittest discover -s tools -p 'test_*.py'`.
+- [ ] Commit/Push mit präzisem Umfang; echte Ausführung bleibt separates Gate.
+
+#### Fortsetzung, Task 3b: isolierter Einzelverbindungsnachweis
+Erst nach belegtem Ende der PR46-Messung: private Overlay-/Wine-Prefix-/Port-
+und cgroup-Umgebung, immutable Build04. Eine Identität per Prozess, Profile
+aus SQLite statt zufälliger Neuerzeugung. Regulärer WM_DELETE_WINDOW-Pfad,
+Prozessende UND vollständige Query-Abwesenheit, danach gleicher GUID-Hash
+bei Rückkehr. Keine Verwendung des fixen PR46-Wiederanlaufs. Farben bleiben
+gesperrt bis HUD/Scoreboard/Kill/Query/Vanilla-Darstellung einzeln geprüft.
+
 ### Task 4: Verhalten, Kapazität und Abnahme
 **Files:** gezielte vorhandene Human-KI-Erweiterungen, Tests, Berichte.
 - [ ] Fehlende Ressourceninteressen und zeitlich zusammenhängende Orientierungspausen gezielt anbinden.
@@ -66,3 +91,12 @@
 Portabler Kern 8467149: 72 Python-Tests (29 neu) OK, unabhängiger Review ohne belegten blockierenden Kernfehler. Echte gleichzeitige Controller und 200 virtuelle Sitzungen mit normalen Zeitbändern geprüft; keine reale Stundenabnahme. Task3/4 BLOCKED_NATIVE_ACTIVE_PR46_QUALIFICATION: fremder MEASURING_3600-Lauf und kollidierende Supervisor-Lebenszyklusarbeit. Keine Runtime-Anbindung oder Gameplay-Erweiterung fertig behauptet. Vollständiger Befund, private Belegorte und kleinster nächster Schritt: docs/reports/2026-10-21-identities-sessions-handoff.md. PR bleibt Draft, Produktion unverändert.
 
 Draft-PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/47. Veröffentlichung über verbundenen GitHub-Connector nach fehlgeschlagener HTTPS-Push-Anmeldung; veröffentlichter Implementierungsbaum b1bcf596beeacdceecbe8f109c64efb011a881d3 entspricht exakt dem geprüften lokalen f9d8a40. Lokale Beleggeschichte unter agent/identities/20261021-sessions-local-proof erhalten. Kein Merge, keine Aktivierung. Task3/4 weiterhin offen.
+
+### Fortsetzung 21.10. 17:54 UTC – Umsetzung Task 3a (chat/RDC Hetzner)
+- Neuer ausschließlich portabler Adapter: `tools/bot_session_runtime.py`; 17 neue Tests in `tools/test_bot_session_runtime.py`.
+- Read-only echte PLC4-Vorlagenstruktur von `install/vanilla/Players/Player0.plr` gegenüber dessen .guid-Sidecar geprüft; ausschließlich Nickname-Länge/ASCII-Name/GUID werden im Ergebnis verändert; restliche Team-/Appearance-Bytes gleich. Die aktive Retail-Kopie wird NICHT geschrieben.
+- Derselbe UUIDv5 und BotDriver-Seed bleiben bei Wiederkehr identisch; `bot_iProfile0`, `bot_iProfileSeed` und `bot_iRosterOffset` sind im integrierten BotDriver-Quelltext vorhanden und offline geprüft. Farbwert wird NICHT in einen nativen Namen umgesetzt.
+- Pro DB kanonisches `flock` inkl. Symlink-Gleichheit, verweigerter Hardlink-DB/Lock-Symlink und Prozess-Exit-Freigabe; `claim_launch(identity,epoch)` persistiert eine einmalig beanspruchte JOINING-Epoch transaktional in SQLite. Kein automatischer Retry eines unklaren Starts.
+- `reconcile` ist ohne Prozessseitenwirkungen; verlangt explizite gleiche Identität/Epoch, belegte Eigentümerschaft, frische Query und klare Ghost-/Fremdprozessgrenzen. Ohne Native-Probe nie Starten, Töten oder `Planner.record` ausführen.
+- **89/89** komplette `python3 -m unittest discover -s tools -p 'test_*.py'` PASS (3.634 s), davon 17 neue Runtime-Adapter-Tests. Keine zusätzliche CPU-/C++-/Wine-/Native-Qualifikation, solange PR46 `MEASURING_3600` läuft.
+- Diese Umsetzung vervollständigt ausschließlich den portablen Task3a-Vertrag; Task3b/4 und Gesamtziel weiterhin offen.

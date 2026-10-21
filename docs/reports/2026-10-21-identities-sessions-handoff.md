@@ -2,6 +2,7 @@
 
 **Gesamtauftrag NICHT abgeschlossen.** Status: `PORTABLE_CORE_PASS / NATIVE_BLOCKED_ACTIVE_PR46_QUALIFICATION`.
 Kein produktiver Einsatz, keine neue Retail-DLL, keine behauptete Verbesserung der tatsächlich spielenden KI.
+Seit 17:54 UTC ist Task3a mit einem **rein portablen** Adapter ergänzt; die ältere Bilanz 72 Tests beschreibt den vorigen Stand.
 
 ## Veröffentlichung
 [Draft-PR #47](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/47), offen und nicht merge-/aktivierungsbereit.
@@ -96,3 +97,14 @@ Deshalb kein neues Runtime-Experiment. Es gibt **keine** Freigabe zur vorzeitige
 
 **Produktionsstatus:** acht vorhandene qualifizierte Build04-Bots bleiben aktiv.
 Dieser PR liefert keine produktive Aktivierung und keine isoliert vollständig qualifizierte Gesamtänderung.
+
+## Fortsetzung im Chat über Hetzner RDC, 2026-10-21 17:54 UTC
+Task 3a (portabler Adapter) programmiert in eigenem Branch/Worktree.
+Dateien: `tools/bot_session_runtime.py` und `tools/test_bot_session_runtime.py`.
+Neu: PLC4-Profilbyte-Patch ohne Team-/Appearance-Veränderung, fester UUIDv5-Sidecar, BotDriver-Seed/Profil-INI-Overrides nur für späteren Einzelspieler-Test, `flock` über realpath, transaktional genau einmal reservierbarer Launch-Epoch in SQLite, reine fail-closed Prozess-/Query-/Ghost-Reconciliation.
+Die neuen 17 Tests prüfen unter anderem die unveränderte originale Retail-Vorlage **nur lesend**, Hardlink-/Symlink-Grenzen, Kernel-Lock-Recovery, Claim-Persistenz über Neuöffnung, falsche Epoch/Identität und Ghost-/Human-/Unknown-Holds.
+Test-Ergebnis: volle Python-Tools-Suite **89 Tests OK (3.634 s)**, zusätzlich `git diff --check` PASS; privates Log `.codex/evidence/adapter-python-suite.log`.
+Grenze: `reconcile` liefert ausschließlich eine Entscheidung; **keine** native PID-Discovery, Launch-/Quit-Automation oder PR46-Supervisor-Integration. `claim_launch` muss vor jedem künftigen Prozessstart unter ControllerLock atomar verbraucht werden. Unerwarteter Abbruch nach Claim verlangt Recovery/Quarantäne statt eines automatischen Zweitstarts.
+Farbcodes bleiben bis zu originaler HUD-/Scoreboard-/Query-/Name-Limit-Abnahme gesperrt. Individuelle echte Retail-Verbindung, Quit/Rückkehr, neue Human-KI-Verbesserungen und 2×8-Tests sind **nicht** abgeschlossen.
+Produktive Acht-Bot-Instanz, Spielbinaries, Profile, Ports, Dienste, fremder PR46-Supervisor/Qualifier und Backups unverändert.
+Nächster Schritt nach tatsächlichem Ende der fremden nativen PR46-Stundenmessung: neuen Eigentums-/Ressourcencheck, isolierter einzelner Botprozess und nachweisliche Join-/Leave-/Profil-ID-/GUID-Abnahme, ohne die öffentliche Flotte zu unterbrechen.

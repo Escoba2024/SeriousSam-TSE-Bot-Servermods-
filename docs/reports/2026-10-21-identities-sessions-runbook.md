@@ -1,6 +1,6 @@
 # Identitäten und Sitzungen – Benutzung und Integrationsvertrag
 
-**Status: portabler Kern, kein Runtime-Adapter, keine Aktivierungsfreigabe.**
+**Status: portabler Kern und offline Runtime-Vertrag Task3a, keine native Runtime-Steuerung oder Aktivierungsfreigabe.**
 Dieser Code verändert weder die laufende öffentliche Flotte noch deren Supervisor.
 Er erzeugt nur persistierte Absichten; keine Spiele, Eingaben, Prozesse, Ports oder Services.
 
@@ -83,3 +83,12 @@ Rollback dieses Teilstands: keinen Planer aktivieren; Bibliothek entfernen oder 
 Da weder Runtime- noch Servicekonfiguration geändert wird, ist hier kein Spiel-Restore nötig.
 Bei später aktiver Anbindung: Admin-Off, eigene Verbindungen kontrolliert schließen, Abwesenheit/Ports nachweisen,
 gesicherte Konfiguration zurücksetzen; Identitätsdatenbank/GUIDs erhalten. Nur dann bisherigen Supervisor wieder allein betreiben.
+
+## Ergänzung Task3a – reine Profil- und Prozessentscheidung, nicht aktiviert
+- `from bot_session_runtime import profile_bytes, guid_bytes, startup_script, ControllerLock, reconcile` (mit `PYTHONPATH=tools`).
+- `profile_bytes(template, identity)` erwartet eine **originalgetreu gelesene PLC4-Vorlage** im verifizierten Format und liefert neue Bytes; `guid_bytes(identity)` liefert genau die 16 Bytes für die `.plr.guid`-Sidecar. Der künftige native Adapter muss die beiden Outputs **ausschließlich in ein eigenes Overlay** schreiben und dann beide verifizieren.
+- `startup_script(identity)` liefert nur sichere Human-BotDriver-Overrides für den vorhandenen qualifizierten `Integrated.ini`-Basisinhalt. Erst in einem getrennten **Ein-Spieler-pro-Prozess**-Wine-Overlay und mit entsprechend konfiguriertem Local-Player-Count verwendbar. Die CPU-/RAM-Kapazität dieses Modus ist noch unbewiesen.
+- `ControllerLock(database)` schützt den exklusiven Live-Executor; nur `claim_launch(identity_id,epoch)` darf eine frische JOINING-Epoch einmalig beanspruchen. Nach Absturz/unklarer Ausführung nicht automatisch ein zweites Mal starten. SQLite-DB und Lock müssen auf lokalem, eigenem Runtime-Speicher liegen; keine Hardlinks oder geteilten Volume-Aliase.
+- `reconcile(state,observation)` verlangt gleiche Identität/Epoch und vom späteren eigentumsbewussten nativen Prozessprüfer frisch bestätigte Beobachtungen. Der Rückgabewert `claim_launch` ist **keine Startfreigabe für sich allein**: nur nach erfolgreichem atomaren Claim unter dem exklusiven Lock darf ein späterer qualifizierter Adapter den eigenen Prozess starten. `quarantine` bedeutet: weder Auto-Start noch blindes Stop/Reset.
+- Es existiert **noch kein** Prozessprobe-Konsument dieser Bibliothek. Insbesondere NICHT die laufende öffentliche Acht-Bot-Flotte oder den separaten PR46-Supervisor an die neue Sollzustandslogik binden. Farben bleiben trotz vorhandener RGB-Metadaten bewusst ohne `^c`-Ausgabe.
+- Portabler Nachweis auf Hetzner: 17 neue Adapter-Tests, gesamte Tools-Python-Suite 89/89 PASS; keine native Anwendungs- oder Multiplayer-Qualifikation.
