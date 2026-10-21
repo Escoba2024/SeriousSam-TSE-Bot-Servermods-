@@ -56,6 +56,7 @@ struct CPlayerWeapons {
   INDEX m_iNapalm = 20;
   INDEX m_iElectricity = 20;
   INDEX m_iSniperBullets = 10;
+  INDEX m_iRockets = 10, m_iGrenades = 10, m_iIronBalls = 10;
   uint32_t m_iAvailableWeapons = 0x3FFFu;
   INDEX m_iCurrentWeapon = 2;
 };

@@ -564,6 +564,7 @@ struct SBotState {
   botcore::ObstacleRecovery bs_navigation;
   CPlayer *bs_navPlayer;
   FLOAT  bs_lastHealth;       // previous tick health, for the damage alert
+  ULONG  bs_ulCombatFireActions; // cumulative emitted combat input, not respawn
 };
 
 static SBotState _absBots[4] = {
@@ -682,6 +683,18 @@ static botcore::TargetInfo BotCombatSnapshot(CPlayer *player, INDEX index, BOOL 
   const botcore::TargetInfo snapshot={index,position(1),position(2),position(3),
     player->GetHealth(),local!=FALSE};
   return snapshot;
+}
+
+static uint32_t BotCombatUsableWeapons(CPlayerWeapons *weapons)
+{
+  const botcore::AmmoInfo ammo={weapons->m_iBullets,weapons->m_iShells,
+    weapons->m_iNapalm,weapons->m_iElectricity,weapons->m_iSniperBullets};
+  uint32_t usable=botcore::CombatUsableWeapons(weapons->m_iAvailableWeapons,ammo);
+  // The inherited five-reserve helper omits these three finite ammo pools.
+  if (weapons->m_iRockets<=0) usable &= ~(1u<<7);
+  if (weapons->m_iGrenades<=0) usable &= ~(1u<<8);
+  if (weapons->m_iIronBalls<=0) usable &= ~(1u<<13);
+  return usable;
 }
 
 static BOOL BotCombatVisible(CPlayer *player, CPlayer *target)
@@ -813,6 +826,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
       bs.bs_ppls     = ppls;
       bs.bs_aHeading = 0.0f;
       bs.bs_iTick    = 0;
+      bs.bs_ulCombatFireActions=0;
       bs.bs_aPitch   = 0.0f;
       bs.bs_iCombatTarget = -1;
       bs.bs_weaponInput.Reset();
@@ -871,10 +885,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           world.health=player->GetHealth();
           world.max_health=100.0;
           world.deathmatch=deathmatch!=FALSE;
-          const botcore::AmmoInfo humanAmmo={hw->m_iBullets,hw->m_iShells,
-            hw->m_iNapalm,hw->m_iElectricity,hw->m_iSniperBullets};
-          world.usable_weapons=botcore::CombatUsableWeapons(
-            hw->m_iAvailableWeapons,humanAmmo);
+          world.usable_weapons=BotCombatUsableWeapons(hw);
           world.current_weapon=hw->m_iCurrentWeapon;
 
           if (bs.bs_lastHealth>0.0f && world.health<bs.bs_lastHealth) {
@@ -1001,13 +1012,11 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           }
         }
         CPlayerWeapons *weapons=player->GetPlayerWeapons();
-        const botcore::AmmoInfo ammo={weapons->m_iBullets,weapons->m_iShells,
-          weapons->m_iNapalm,weapons->m_iElectricity,weapons->m_iSniperBullets};
         const CPlacement3D eye=BotCombatEye(player);
         const botcore::CombatInput input={BotCombatSnapshot(player,ppls->pls_Index,TRUE),
           eye.pl_OrientationAngle(1),eye.pl_OrientationAngle(2),
           std::fabs(bot_fYawSpeed)*fTick,moveFactor,
-          botcore::CombatUsableWeapons(weapons->m_iAvailableWeapons,ammo),
+          BotCombatUsableWeapons(weapons),
           bot_bCombatSkipLocals!=FALSE,8.0};
         decision=botcore::DecideCombat(candidates,visible,input);
       }
@@ -1037,11 +1046,11 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
             weapons->m_iElectricity,weapons->m_iSniperBullets);
         }
       } else if (bot_bHumanAI) {
-        // No perceived opponent: use the profile's scan rate and stand still.
+        // Search with the configured travel input and existing obstacle recovery.
+        // No opponent position is used; perception/aim/fire remain profile-driven.
         if (player!=NULL && player->GetHealth()>0 && deathmatch) {
           bs.bs_aHeading+=humanScanYaw;
-        }
-        moveFactor=0.0f;
+        } else { moveFactor=0.0f; }
       } else if (player!=NULL && player->GetHealth()>0 && deathmatch) {
         bs.bs_aHeading+=bot_fYawSpeed*fTick; // bounded search until a visible opponent exists
       } else { moveFactor=0; }
@@ -1159,6 +1168,8 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
 
     // 4) hand it to the network player source (stamps pa_llCreated internally)
     ppls->SetAction(pa);
+    // Count emitted combat fire input independently of sampled status logs.
+    if (bFire && automatic && !respawnInput) ++bs.bs_ulCombatFireActions;
     BotTelemetry_Action(iLP);
     BotDriver_NoteConfigOnce();
     bActed = TRUE;
@@ -1170,8 +1181,9 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
       CEntity *pen = _pNetwork->GetLocalPlayerEntity(ppls);
       if (pen!=NULL) {
         const FLOAT3D &vPos = pen->en_plPlacement.pl_PositionVector;
-        BotLog("[BotDriver] bot%d tick=%d pos=(%.1f,%.1f,%.1f) heading=%.1f fire=%d\n",
-          iLP, bs.bs_iTick, vPos(1), vPos(2), vPos(3), bs.bs_aHeading, bFire);
+        BotLog("[BotDriver] bot%d tick=%d pos=(%.1f,%.1f,%.1f) heading=%.1f fire=%d combat_fire_actions=%lu\n",
+          iLP, bs.bs_iTick, vPos(1), vPos(2), vPos(3), bs.bs_aHeading, bFire,
+          (unsigned long)bs.bs_ulCombatFireActions);
       } else {
         BotLog("[BotDriver] bot%d tick=%d (no entity yet) heading=%.1f fire=%d\n",
           iLP, bs.bs_iTick, bs.bs_aHeading, bFire);

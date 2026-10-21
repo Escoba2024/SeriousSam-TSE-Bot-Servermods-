@@ -46,3 +46,11 @@ Tests, neuer MSVC-Build und Runtime-Stufen werden nach Abschluss dieser Serie na
 Aktives Spiel aller Human-Bots, vergleichbare CPU-Messung der fertigen Version, 60-Minuten-Sync mit acht Bots, sichtbare Retail-Spielkontrolle, öffentliche Aktivierung/Erreichbarkeit und Masterlisteneintrag. Produktionsdateien und Rollback-DLL wurden bisher nicht ersetzt.
 
 Masterserver-Prüfung: Die offizielle 333networks-Dokumentation nennt die JSON-Serverliste unter https://master.333networks.com/json/serioussamse. Daten einer späteren Listenprüfung sind 333networks zuzuordnen; ein lokaler Query ist kein unabhängiger WAN-Nachweis.
+
+## Baseline abgeschlossen / weitere Laufzeitkorrekturen
+
+Alle sechs A/B-Fenster bestanden: vier bewegte Legacy-Bots, 20Hz je Slot, 12000 Ticks je Messfenster, null SYNCBAD/Throttling. Client-CPU im Mittel 116.01% → 24.67% eines Kerns (78.74% weniger), gesamte Test-cgroup 129.88% → 43.05% (66.85% weniger). Diese Messungen gelten ausschließlich für die ältere A/B-DLL. Vollständige aggregierte Werte: 2026-10-21-qualified-cpu-ab.json.
+
+Suchpfad-Regressionsfall und realer vollständiger Munitionsadapter RED→GREEN. Der frühere Adapter ließ Raketen/Granaten/Kanonenkugeln mit leerem Vorrat als nutzbar gelten. Neuer Engine-Adapter filtert alle endlichen Vorräte für Human- und Legacy-Pfad; geschützte Release-Header bleiben unverändert. Das echte integrierte Block-Smoke extrahiert auch diesen Adapter.
+
+Schusspulse der lokalen Legacy-Slots sind zeitversetzt; 1Hz-Statuszeilen können sie systematisch verpassen. Ein kumulativer Zähler erfasst nun ausgegebene Kampf-Feueraktionen nach SetAction, ohne Respawn-Pulse. Die Runtime-Auswertung betrachtet nur Zählerdifferenz/Bewegung innerhalb des Messfensters. Fünf gezielte Anschluss-/Nachweistests bestanden. Neuer Build und Runtime-Nachweis stehen noch aus.

@@ -29,6 +29,13 @@ def main(argv):
         return 2
     start = text.index(START)
     end = text.index(END, start)
+    # Keep any engine adapter called by the block in the same source of truth.
+    helper = 'static uint32_t BotCombatUsableWeapons('
+    if helper in text:
+        hstart = text.index(helper)
+        body = text.index('{', hstart) + 1
+        hend = text.index('\n}\n', body)
+        sys.stdout.write('const auto BotCombatUsableWeapons=[](CPlayerWeapons *weapons) {' + text[body:hend] + '\n};\n')
     sys.stdout.write(text[start:end])
     return 0
 

@@ -56,6 +56,18 @@ def configure_count(game,count):
     for i in range(4):struct.pack_into("<i",b,start+8+4*i,i if i<count else -1)
     struct.pack_into("<i",b,start+24,count-1)
     p.write_bytes(b)
+def slot_activity(logs,count):
+    slots={}
+    for slot in range(count):
+        markers=re.findall(r"\[BotDriver\] bot"+str(slot)+r" tick=(\d+) pos=\(([^)]+)\).*?fire=(\d) combat_fire_actions=(\d+)",logs)
+        assert len(markers)>2,"missing measured per-slot activity/counters"
+        ticks=[int(m[0]) for m in markers];fires=[int(m[3]) for m in markers]
+        assert all(b>a for a,b in zip(ticks,ticks[1:])),"tick reset/stall"
+        assert all(b>=a for a,b in zip(fires,fires[1:])),"fire counter reset"
+        delta=fires[-1]-fires[0]
+        slots[str(slot)]={"max_tick":ticks[-1],"tick_span":ticks[-1]-ticks[0],"samples":len(markers),"moved":len(set(m[1] for m in markers))>1,"fired":delta>0,"fire_actions_delta":delta}
+    return slots
+
 def close_window(pid,display):
     listing=subprocess.check_output(["xwininfo","-display",display,"-root","-tree"],text=True)
     x=ctypes.CDLL("libX11.so.6")
@@ -167,6 +179,14 @@ def main():
             time.sleep(2)
         assert r.get("gamever")=="1.07" and not r.get("activemod")
         save(status="WARMUP");time.sleep(180 if args.duration>=600 else 30)
+        # Preserve the final warmup row as each slot's counter boundary.
+        activity_offsets={};activity_boundaries={}
+        for role,game in roles.items():
+            if role.startswith("bot"):
+                logs=text(game/"SeriousSam.log")
+                activity_offsets[role]=len(logs)
+                count=1 if expected==1 else 4
+                activity_boundaries[role]="\n".join(re.findall(r"^\[BotDriver\].*$",logs,re.M)[-count:])
         def cgstat():return {k:int(v) for k,v in (line.split() for line in (cg/"cpu.stat").read_text().splitlines())}
         cgstart=cgstat()
         def hostcpu():return list(map(int,Path("/proc/stat").read_text().splitlines()[0].split()[1:9]))
@@ -204,11 +224,8 @@ def main():
                     profiles=re.findall(r"\[BotHuman\] local=(\d+) profile=(\S+) tier=(\d+) persona=(\S+)",logs)
                     assert len(set(p[0] for p in profiles))==count
                     assert "[BotHuman] local=0 tick=" in logs
-                slots={}
-                for slot in range(count):
-                    markers=re.findall(r"\[BotDriver\] bot"+str(slot)+r" tick=(\d+) pos=\(([^)]+)\).*?fire=(\d)",logs)
-                    assert len(markers)>2
-                    slots[str(slot)]={"max_tick":max(int(m[0]) for m in markers),"moved":len(set(m[1] for m in markers))>1,"fired":any(m[2]=="1" for m in markers)}
+                measured_logs=activity_boundaries[role]+"\n"+logs[activity_offsets[role]:]
+                slots=slot_activity(measured_logs,count)
                 if expected>=4:assert all(v["moved"] and v["fired"] for v in slots.values()),"inactive movement/combat"
                 checks[role]={"telemetry":telemetry,"slots":slots}
             elif role=="vanilla":assert "joined" in logs,"original client did not join"

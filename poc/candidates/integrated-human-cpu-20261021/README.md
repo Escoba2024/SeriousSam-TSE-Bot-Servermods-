@@ -30,7 +30,7 @@ Der Materialisierer kopiert die gepinnten Release-Dateien sowie alle fünf neuen
 | bot_iRosterOffset | 0 | Client A: 0, Client B: 4 |
 | bot_iProfile0..3 | -1 | Explizite Rosterwahl oder Offset + lokaler Slot |
 
-Human-KI wird einmal pro normalem 20-Hz-Bot-Tick aufgerufen; Legacy-Scanthrottling umschließt sie nicht. Fähigkeitsstufen 1–5 und sechs Personas aggressor, survivor, duelist, controller, marksman, flaky stammen unverändert aus #44. Acht Rosterplätze decken alle Stufen und Personas ab. Ohne sichtbares Ziel scannt die übernommene Policy zunächst im Stand; globale Wege-/Itemnavigation ist nicht hinzugefügt.
+Human-KI wird einmal pro normalem 20-Hz-Bot-Tick aufgerufen; Legacy-Scanthrottling umschließt sie nicht. Fähigkeitsstufen 1–5 und sechs Personas aggressor, survivor, duelist, controller, marksman, flaky stammen unverändert aus #44. Acht Rosterplätze decken alle Stufen und Personas ab. Ohne wahrgenommenes Ziel liefert die Policy nur den Suchwinkel. Der integrierte Driver erhält dann den konfigurierten Vorwärtsinput und die bestehende Hinderniserholung; tote oder unbewaffnete Spieler bleiben stehen. Globale Wege-/Itemnavigation ist nicht hinzugefügt.
 
 ## Abnahme
 
