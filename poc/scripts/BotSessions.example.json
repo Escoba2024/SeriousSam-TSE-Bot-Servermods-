@@ -1,0 +1,210 @@
+{
+  "enabled": false,
+  "colors_enabled": false,
+  "accelerated": false,
+  "pool_id": "alpha-gaming-fictional-v1",
+  "seed": 20261021,
+  "servers": [
+    "alpha-one",
+    "alpha-two"
+  ],
+  "max_bots": 8,
+  "reserved_human_slots": 2,
+  "join_interval_s": 60,
+  "leave_interval_s": 15,
+  "startup_delay_s": [
+    10,
+    180
+  ],
+  "pause_s": [
+    900,
+    7200
+  ],
+  "session_bands": [
+    [
+      0.1,
+      300,
+      1199
+    ],
+    [
+      0.8,
+      1200,
+      5400
+    ],
+    [
+      0.1,
+      5401,
+      10800
+    ]
+  ],
+  "identities": [
+    {
+      "id": "player-01",
+      "nickname": "Mika",
+      "color": "80D8FF",
+      "profile": 0,
+      "regular_weight": 3
+    },
+    {
+      "id": "player-02",
+      "nickname": "Nox7",
+      "color": "DDEEFF",
+      "profile": 1,
+      "regular_weight": 3
+    },
+    {
+      "id": "player-03",
+      "nickname": "[AG] Lea",
+      "color": "FFD180",
+      "profile": 2,
+      "regular_weight": 3
+    },
+    {
+      "id": "player-04",
+      "nickname": "Kai",
+      "color": "A5D6A7",
+      "profile": 3,
+      "regular_weight": 3
+    },
+    {
+      "id": "player-05",
+      "nickname": "Jo",
+      "color": "80D8FF",
+      "profile": 4,
+      "regular_weight": 3
+    },
+    {
+      "id": "player-06",
+      "nickname": "Fen",
+      "color": "DDEEFF",
+      "profile": 5,
+      "regular_weight": 3
+    },
+    {
+      "id": "player-07",
+      "nickname": "Rudi",
+      "color": "FFD180",
+      "profile": 6,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-08",
+      "nickname": "Mara",
+      "color": "A5D6A7",
+      "profile": 7,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-09",
+      "nickname": "Ash",
+      "color": "80D8FF",
+      "profile": 0,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-10",
+      "nickname": "Sven42",
+      "color": "DDEEFF",
+      "profile": 1,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-11",
+      "nickname": "Lumi",
+      "color": "FFD180",
+      "profile": 2,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-12",
+      "nickname": "Tess",
+      "color": "A5D6A7",
+      "profile": 3,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-13",
+      "nickname": "Nils",
+      "color": "80D8FF",
+      "profile": 4,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-14",
+      "nickname": "[Q] Pip",
+      "color": "DDEEFF",
+      "profile": 5,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-15",
+      "nickname": "Rin",
+      "color": "FFD180",
+      "profile": 6,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-16",
+      "nickname": "Milo",
+      "color": "A5D6A7",
+      "profile": 7,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-17",
+      "nickname": "Otto",
+      "color": "80D8FF",
+      "profile": 0,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-18",
+      "nickname": "Nova9",
+      "color": "DDEEFF",
+      "profile": 1,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-19",
+      "nickname": "Juna",
+      "color": "FFD180",
+      "profile": 2,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-20",
+      "nickname": "Keno",
+      "color": "A5D6A7",
+      "profile": 3,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-21",
+      "nickname": "Ada",
+      "color": "80D8FF",
+      "profile": 4,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-22",
+      "nickname": "Birk",
+      "color": "DDEEFF",
+      "profile": 5,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-23",
+      "nickname": "Mo",
+      "color": "FFD180",
+      "profile": 6,
+      "regular_weight": 1
+    },
+    {
+      "id": "player-24",
+      "nickname": "Lars",
+      "color": "A5D6A7",
+      "profile": 7,
+      "regular_weight": 1
+    }
+  ]
+}
