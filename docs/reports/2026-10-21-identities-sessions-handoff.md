@@ -1,6 +1,6 @@
 # Identitäten/Sitzungen – Handoff und Ergebnisstand, 21.10.2026
 
-**Gesamtauftrag NICHT abgeschlossen.** Status: `PORTABLE_CORE_PASS / NATIVE_BLOCKED_ACTIVE_PR46_QUALIFICATION`.
+**Gesamtauftrag NICHT abgeschlossen.** Neuer Stand: `NATIVE_INPLACE_ONE_BOT_REJOIN_PASS / MULTI_BOT_SCHEDULER_NOT_IMPLEMENTED`. Der frühere Blocker `NATIVE_BLOCKED_ACTIVE_PR46_QUALIFICATION` ist seit 18:09 UTC erledigt.
 Kein produktiver Einsatz, keine neue Retail-DLL, keine behauptete Verbesserung der tatsächlich spielenden KI.
 Seit 17:54 UTC ist Task3a mit einem **rein portablen** Adapter ergänzt; die ältere Bilanz 72 Tests beschreibt den vorigen Stand.
 
@@ -117,3 +117,16 @@ Native PR46-Qualifikation 18:00:22 UTC weiterhin `MEASURING_3600` (3044 s); weit
 ### Vorbereitung eines wirklich isolierten Retail-Single-Smokes, 18:07 UTC
 Der bestehende Harness `tools/qualify_integrated_wine.py` besitzt einen zusätzlichen strikt privaten `--identity-record`-Pfad für `stage one`, dessen Build04-Overlay vor jedem PLC4-/Sidecar-Write als Mount geprüft wird. Alte Stufen ohne Flag haben ihren bisherigen Codepfad. Die echte Quelle und Public-Build04 sind nicht angefasst.
 Statische Probe ohne Wine und mit ausschließlich simulierter Mountprüfung bestanden; volle Tools-Python-Suite **92/92 PASS (3.740 s)**. Noch keine zweite Live-Instanz, kein echter individueller Beitritt, kein bestätigter Farbcode. Vor Native-Start PR46-Abschluss, Prozesse/Mounts/Ports/CPU/Disk/Human-Hold frisch prüfen.
+
+## Native Fortsetzung 18:29 UTC – bestätigter privater Einzel-Bot-Lebenszyklus
+Der zuvor belegte PR46-Hour-Blocker ist weggefallen: `PASS_ISOLATED_LIFECYCLE_AND_60MIN` (3600.004 s, null neue Throttles, 8 Public + 8 Privat gleichzeitig, alle fremden Testmounts aufgeräumt). Öffentliche acht Build04-Bots durch eigene Tests unverändert auf 25600/25601.
+
+Eigene isolierte Original-Retail-1.07-Läufe auf 26980/26981, Xvfb :119: Preflight Plain, dann 120s + 70s Plain mit byte-identischem GUID-Profil, Preflight Color + 45s isolierter Colorprobe, danach **echter Same-Server WM_DELETE_WINDOW-Abgang und Rückkehr** sowie 45s Stabilität. Vier native Läufe: alle PASS_LIMITED, alle `ACTIVE_OK`, 0 neue CPU-Throttles, sämtliche sechs Mounts pro Lauf sauber ausgehängt. Rejoin-Probe: 3 Query-Abwesenheiten, Server und Vanilla beobachten durchgehend, alte/neue Bot-PIDs verschieden, GUID- und Profilhash stabil. Beweisdaten ohne Rohlogs/Player-GUIDs: `docs/reports/2026-10-21-identities-native-smokes.json`; vollständige private Nachweise nur auf Hetzner unter `/srv/tse-identity-native-runtime-20261021`.
+
+**Farbstatus:** Die private PLC4-Formatierung `^c80D8FFMika^r` wurde vom Original-Retail-1.07-Server als Spieler akzeptiert und GameSpy gab `Mika` aus. Echter HUD-/Scoreboard-Farbeindruck konnte nicht belegt werden (privater Xvfb-Screenshot zeigte Splash). Keine Produktionsfarbe freigeben.
+
+**Grenze des Fortschritts:** Die native Probe ist **manuell isoliert**, nicht mit SQLite-JOINING/LEAVING-Policy und nicht mit PR46-Produktionssupervisor als einheitlichem Desired State verdrahtet. Acht unabhängige Einzelprozesse, normale 20–90-Minuten-Sitzungen und Human-Konflikte nativ noch nicht qualifiziert. Die bisherigen 8+8 vom PR46-Stundentest sind zwei Clients je 4 Bots, **nicht** 8 einzelne Sessions je Instanz. Nutzerziel NICHT vollständig.
+
+**Eingriffsschutz:** Original-Referenz-DLL auf dem Template SHA256 `61dc27e0e7b80badcf9ae705c30fca88edd3935737715dffff59e90c26f1fef9` unverändert, Test-DLL SHA256 `7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835`; Public-Prozesse/PIDs und Ports unverändert, Besitzer-SYNCBAD 0. Kein externes Backend geändert.
+
+Nächster eigentumsbewusster Schritt: native PLC4-Profile und Start-/Stopprozesse pro SQLite-Identität verwalten, unter ControllerLock transaktionalen Launch-Claim verbrauchen; Join/Leave-Ack nur nach überprüfter Prozessidentität und vollständiger GameSpy-Query, eigens isoliert 1→4→8 messen; PR46-Supervisor-Sollzustand erst nach kollisionsfreier Integration ändern; Farb-Gate gesperrt lassen.

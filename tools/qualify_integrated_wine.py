@@ -50,7 +50,7 @@ def change_profile(p,name):
     new=os.urandom(16);name=name.encode("ascii")
     p.write_bytes(b[:4]+struct.pack("<I",len(name))+name+b[8+n:])
     p.write_bytes(p.read_bytes().replace(old,new,1));side.write_bytes(new)
-def change_profile_identity(game, identity):
+def change_profile_identity(game, identity, *, color_probe=False):
     """Only after game has been mounted as a fresh isolated overlay."""
     assert game.is_mount(), "never write a lower/native or live installation"
     p=game/"Players/Player0.plr"; side=p.with_suffix(".plr.guid")
@@ -58,7 +58,7 @@ def change_profile_identity(game, identity):
     assert len(old)==16 and source.count(old)==1, "profile/sidecar provenance mismatch"
     length=struct.unpack_from("<I",source,4)[0]
     assert source[12+length:28+length]==old, "unknown PLC4 GUID layout"
-    rewritten=profile_bytes(source,identity);new=guid_bytes(identity)
+    rewritten=profile_bytes(source,identity,color_probe=color_probe);new=guid_bytes(identity)
     p.write_bytes(rewritten);side.write_bytes(new)
     assert p.read_bytes()==rewritten and side.read_bytes()==new
     return hashlib.sha256(rewritten).hexdigest()
@@ -163,6 +163,8 @@ def main():
     parser.add_argument("--public-address",help="Public IPv4; requires a passed same-DLL hour and leaves successful eight-bot smoke running")
     parser.add_argument("--acceptance-report",type=Path)
     parser.add_argument("--identity-record",type=Path,help="isolated one-bot smoke only; private serialized Planner identity")
+    parser.add_argument("--color-probe",action="store_true",help="private one-bot native markup test, NEVER production activation")
+    parser.add_argument("--identity-rejoin-smoke",action="store_true",help="private in-place orderly bot disconnect and rejoin on the SAME live test server")
     args=parser.parse_args()
     expected={"one":1,"four":4,"eight":8,"legacy-four":4,"reference-four":4}[args.stage];human=args.stage in ("one","four","eight")
     reference=args.stage=="reference-four"
@@ -175,11 +177,15 @@ def main():
         assert args.acceptance_report is not None
     observer=args.stage in ("one","eight") and not public;population=expected+int(observer)
     identity=None
+    assert not args.color_probe or args.identity_record, "color probe requires private identity"
+    assert not args.identity_rejoin_smoke or (args.identity_record and args.stage=="one" and not public and not reference and not args.color_probe), "identity rejoin requires private one-bot plain-name isolation"
     if args.identity_record:
         assert args.stage=="one" and not reference and not public, "identity record only for private single-bot stage"
         identity=json.loads(args.identity_record.read_text())
         # Validate all identity fields before mounting or creating any test resources.
         guid_bytes(identity);startup_script(identity)
+        if args.color_probe:
+            profile_bytes(b"PLC4"+struct.pack("<I",3)+b"Old"+b"TEAM"+bytes(range(16))+b"TAIL",identity,color_probe=True)
     assert args.duration>0 and (args.stage!="eight" or public or args.duration>=3600)
     runtime=args.runtime.resolve();runtime.mkdir(exist_ok=True);os.chmod(runtime,0o755);os.chown(runtime,65534,65534)
     lock=open(runtime/"runtime.lock","w");fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
@@ -235,8 +241,8 @@ def main():
                 offset=4 if role=="botB" else 0
                 if identity:
                     assert role=="botA" and expected==1
-                    result["identity_profile_sha256"]=change_profile_identity(game,identity)
-                    result["identity_mode"]="SINGLE_BOT_PRIVATE_NO_COLORS"
+                    result["identity_profile_sha256"]=change_profile_identity(game,identity,color_probe=args.color_probe)
+                    result["identity_mode"]="SINGLE_BOT_PRIVATE_COLOR_PROBE" if args.color_probe else "SINGLE_BOT_PRIVATE_NO_COLORS"
                 else:
                     for i in range(4):change_profile(game/"Players"/("Player%d.plr"%i),ROSTER[offset+i])
                 configure_count(game,1 if expected==1 else 4)
@@ -292,6 +298,64 @@ def main():
             if time.monotonic()>deadline:raise RuntimeError("population readiness timeout")
             time.sleep(2)
         assert r.get("gamever")=="1.07" and not r.get("activemod")
+        if args.identity_rejoin_smoke:
+            own=procs["botA"]
+            own_record=result["processes"]["botA"].copy()
+            assert own_record["pid"]==own.pid
+            assert Path("/proc/%d/cwd"%own.pid).resolve()==roles["botA"]
+            original_profile=sha(roles["botA"]/"Players/Player0.plr")
+            original_guid=sha(roles["botA"]/"Players/Player0.plr.guid")
+            assert original_profile==result["identity_profile_sha256"]
+            sent=close_window(own.pid,args.display)
+            assert sent>0,"own bot had no regular WM_DELETE_WINDOW"
+            own.wait(timeout=25)
+            assert own.poll() is not None
+            absence_queries=0
+            absent_start=time.monotonic()
+            while time.monotonic()-absent_start<35:
+                state=query(args.port+1)
+                observed=[v for k,v in state.items() if re.fullmatch(r"player_\d+",k)]
+                if (state.get("gamever")=="1.07" and observed==["Retail_Control"]
+                        and state.get("numplayers")=="1"):
+                    absence_queries+=1
+                    if absence_queries>=3:break
+                else:absence_queries=0
+                time.sleep(2)
+            assert absence_queries>=3,"own quit was not durably absent from original Retail query"
+            assert procs["server"].poll() is None and procs["vanilla"].poll() is None
+            assert sha(roles["botA"]/"Players/Player0.plr")==original_profile
+            assert sha(roles["botA"]/"Players/Player0.plr.guid")==original_guid
+            # Keep both private raw phases; restarting must never hide first-run evidence.
+            for old,new in (("SeriousSam.log","botA-before-rejoin.log"),
+                            ("Bin/BotTelemetry.csv","botA-before-rejoin-telemetry.csv"),
+                            ("botA-wine.log","botA-before-rejoin-wine.log")):
+                source=(E/old) if old=="botA-wine.log" else (roles["botA"]/old)
+                if source.exists():shutil.move(str(source),str(E/new))
+            launch("botA")
+            deadline=time.monotonic()+100
+            while time.monotonic()<deadline:
+                assert procs["server"].poll() is None and procs["vanilla"].poll() is None
+                assert procs["botA"].poll() is None,"rejoined client exited"
+                try:
+                    state=query(args.port+1)
+                    observed=[v for k,v in state.items() if re.fullmatch(r"player_\d+",k)]
+                    if (state.get("numplayers")=="2" and set(observed)==
+                            {identity["nickname"],"Retail_Control"}):break
+                except (OSError,RuntimeError):pass
+                time.sleep(2)
+            else:raise RuntimeError("same GUID rejoin did not show in original Retail query")
+            result["identity_rejoin"]=dict(old_pid=own.pid,
+                       new_pid=procs["botA"].pid,
+                       old_start_ticks=own_record["start_ticks"],
+                       old_exitcode=own.returncode,
+                       old_wm_close_sent=sent,absence_queries=absence_queries,
+                       profile_sha256=original_profile,guid_sidecar_sha256=original_guid,
+                       same_server_pid=procs["server"].pid,
+                       returned_name=identity["nickname"],
+                       new_guid_stable=sha(roles["botA"]/"Players/Player0.plr.guid")==original_guid)
+            assert result["identity_rejoin"]["new_guid_stable"]
+            assert result["identity_rejoin"]["new_pid"]!=own.pid
+            save(status="REJOINED_ON_SAME_SERVER")
         save(status="WARMUP");time.sleep(180 if args.duration>=600 else 30)
         # Preserve the final warmup row as each slot's counter boundary.
         activity_offsets={};activity_boundaries={}

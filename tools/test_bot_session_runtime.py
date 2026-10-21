@@ -76,6 +76,18 @@ class ProfileAdapter(unittest.TestCase):
         self.assertNotIn("80D8FF", script)  # color gate off
         self.assertNotIn("^c", script)
         self.assertNotIn("Mika", script)  # nickname set in PLC4, never via unsafe shell
+    def test_native_rejoin_probe_rejects_unsafe_flag_combination_without_io(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)/"must-not-exist"
+            args=[sys.executable,str(wine_harness.__file__),
+                  "--runtime",str(root),"--template","/nonexistent/template",
+                  "--vanilla","/nonexistent/vanilla",
+                  "--build-manifest","/nonexistent/build.json",
+                  "--stage","one","--duration","1","--identity-rejoin-smoke"]
+            bad=subprocess.run(args,capture_output=True,text=True,timeout=5)
+            self.assertNotEqual(bad.returncode,0)
+            self.assertIn("private one-bot plain-name isolation",bad.stderr)
+            self.assertFalse(root.exists())
     def test_private_overlay_profile_pair_patch_and_mount_gate(self):
         who=identity()
         with tempfile.TemporaryDirectory() as temp:
@@ -98,6 +110,21 @@ class ProfileAdapter(unittest.TestCase):
             self.assertEqual(digest,__import__("hashlib").sha256(p.read_bytes()).hexdigest())
             self.assertEqual(side.read_bytes(),r.guid_bytes(who))
             self.assertEqual(p.read_bytes(),r.profile_bytes(original,who))
+    def test_explicit_private_color_probe_only(self):
+        base,_=fixture()
+        who=identity()
+        ordinary=r.profile_bytes(base,who)
+        probe=r.profile_bytes(base,who,color_probe=True)
+        self.assertNotEqual(ordinary,probe)
+        length=struct.unpack_from("<I",probe,4)[0]
+        self.assertEqual(probe[8:8+length],b"^c80D8FFMika^r")
+        self.assertEqual(probe[12+length:28+length],r.guid_bytes(who))
+        self.assertEqual(probe[28+length:],base[28+3:])
+        for bad in [dict(who,color="00GGFF"),dict(who,color=None),
+                    dict(who,nickname="Mika"*6)]:
+            with self.assertRaises(ValueError):
+                r.profile_bytes(base,bad,color_probe=True)
+        self.assertEqual(r.profile_bytes(base,who),ordinary)
     def test_sidecar_equal_exact_new_guid(self):
         self.assertEqual(len(r.guid_bytes(identity())), 16)
         self.assertEqual(r.guid_bytes(identity()), uuid.UUID(hex=identity()["guid"]).bytes)

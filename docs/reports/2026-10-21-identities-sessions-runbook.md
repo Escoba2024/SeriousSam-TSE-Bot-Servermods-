@@ -97,3 +97,9 @@ gesicherte Konfiguration zurücksetzen; Identitätsdatenbank/GUIDs erhalten. Nur
 
 ### Privat-Testharness (noch keine Runtime-Freigabe)
 `tools/qualify_integrated_wine.py --identity-record <privater JSON-Export aus Planner.identities()>` ist nur mit `--stage one` und ohne `--public-address`/Reference gültig. Er nutzt die bisherige private Overlay-/Originalhash-Absicherung, ein Local-Player-Profil, die feste GUID-Sidecar und den bereits qualifizierten Build04-Quellhash. Der Flag-Pfad wurde bislang **ausschließlich statisch mit einem temporären Testfixture** geprüft; vor nativer Nutzung alle aktuellen fremden Qualifikationen beenden lassen, isolierte Ports/Xvfb/cgroup/Pfade wählen, private Belege außerhalb Git bewahren und die reale Rückkehr mit gleicher GUID separat verifizieren.
+
+## Native Tests 18:29 UTC, nur private Umgebung
+- Native Same-Server-Sessionprüfung mit `tools/qualify_integrated_wine.py --identity-record <eigene persistierte Identität> --identity-rejoin-smoke --stage one`, zwingend ohne Public-/Reference-/Color-Flags; echte Profile/GUID nur im eigenen Overlay, reguläres WM_DELETE_WINDOW auf **nachweislich eigene** Bot-PID, 3 Query-Abwesenheiten, erneuter Join auf gleicher Server-PID, Hash-Gleichheit, CGroup/CPU/0 Throttles. Private Rohdaten nie in Git.
+- Option `--color-probe` ist ausschließlich eine **isolierte Syntaxprobe**, keine dauerhafte Freigabe: native Query entfernt `^cRRGGBB` und `^r` aus sichtbarem Namen, HUD/Scoreboard nicht geprüft; `bot_sessions.validate_config` verweigert weiterhin `colors_enabled=true`.
+- Das Testharness ist nicht der fehlende produktionsfähige Zeitplaner: native Einzel-Session war nur eine Probe; für echte zufällige Beitritts-/Abgangsintervalle ist die ControllerLock/Planner-Integration mit verifiziertem Prozess-/GameSpy-Eigentum noch offen.
+- Native Resultate und Grenzen in `docs/reports/2026-10-21-identities-native-smokes.json`.

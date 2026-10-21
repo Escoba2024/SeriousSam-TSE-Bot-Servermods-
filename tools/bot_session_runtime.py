@@ -47,7 +47,7 @@ def guid_bytes(identity):
     return _identity(identity)[1]
 
 
-def profile_bytes(template, identity):
+def profile_bytes(template, identity, *, color_probe=False):
     """Return new profile bytes; caller must also write guid_bytes to .plr.guid.
 
     The observed Retail PLC4 layout is signature + u32 name bytes + name +
@@ -55,6 +55,15 @@ def profile_bytes(template, identity):
     Unlike old tooling, no random GUID is allocated on each login.
     """
     name, new_guid = _identity(identity)
+    if type(color_probe) is not bool:
+        raise ValueError("explicit boolean color_probe required")
+    if color_probe:
+        rgb = identity.get("color")
+        if not isinstance(rgb, str) or not re.fullmatch(r"[0-9a-fA-F]{6}", rgb):
+            raise ValueError("validated RGB required for private color probe")
+        name = b"^c" + rgb.upper().encode("ascii") + name + b"^r"
+        if len(name) > 32:
+            raise ValueError("decorated private probe name too long")
     if not isinstance(template, bytes) or not 32 <= len(template) <= MAX_TEMPLATE_BYTES:
         raise ValueError("invalid PLC4 template size")
     if template[:4] != b"PLC4":

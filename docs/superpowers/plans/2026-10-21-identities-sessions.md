@@ -42,9 +42,9 @@
 ### Task 3: Retail-Lebenszyklus und Farbsyntax
 **Files:** eigener späterer Runtime-Adapter nach belegter Schnittstelle, zugehörige Tests/Runbook.
 **Interfaces:** Task2-Intents; PR46-Supervisor abgestimmter Sollzustand. Keine parallele Änderung am aktiven Supervisor.
-- [ ] Nach Ende fremder Qualifikation Ressourcen/Prozesse/Ports erneut prüfen.
-- [ ] Einzelverbindungs-Smoke ohne neue DLL und Farbe/visible/Query/Meldung/Name-Limit messen.
-- [ ] Echte individuelle Join/Quit/Rückkehr mit stabiler GUID; Crash vs. geplant nachweisen.
+- [x] Nach Ende fremder Qualifikation Ressourcen/Prozesse/Ports erneut prüfen.
+- [x] Einzelverbindungs-Smoke ohne neue DLL; Plain-Nickname und isolierte Query verifiziert. Farb-HUD/Limit noch offen.
+- [x] Echte individuelle Join/Quit/Rückkehr mit stabiler GUID am selben isolierten Server nachgewiesen; Crash-vs-geplant im produktiven Controller noch offen.
 - [ ] Produktions-Supervisor erst nach Integration an session desired-state binden; keine doppelte Wiederherstellung.
 - [ ] Poolfarbe erst nach Native-Gate aktivierbar machen.
 
@@ -112,3 +112,12 @@ Draft-PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/47. 
 - Die vorhandene Build04-Human-KI erhält im separaten Einzelspieler-Startskript den festen Nickname über PLC4, `bot_iProfile0` und `bot_iProfileSeed`. Farbe bleibt deaktiviert.
 - Statischer Verweigerungs-/Private-Mount-Fixture-Test: Versuch auf Nicht-Mount verweigert ohne Schreibzugriff, simuliertes Mount-Fixture patcht nur die private Kopie und verifiziert Sidecar/Hash. **Keine native Abnahme dadurch.**
 - Suite: **92/92 PASS**, davon 20 Runtime-Adapter-Tests; ursprünglich laufende PR46-Messung hatte bei 18:07 noch Ressourcenpriorität. Erst nach tatsächlicher Qualifikation und erneuter Prüfung isolierten Single-Retail-Smoke erwägen.
+
+### Fortsetzung 18:29 UTC – native Einzelverbindungs-Gates erfüllt, Gesamtziel weiterhin offen
+- Fremde PR46-Abnahme: `PASS_ISOLATED_LIFECYCLE_AND_60MIN` / 3600 s / 0 neue Throttles / öffentlicher 8er und privater 8er gleichzeitig. Private fremde Prozesse und Mounts danach beendet, Public bleibt aktiv.
+- Eigene isolated Retail Stage-one: 2 Plain-Läufe mit *derselben* SQLite-Identität je 120+70 s, jeweils `PASS_LIMITED`, `ACTIVE_OK`, volle Query-Vanilla 1.07, identischer PLC4-SHA, 0 CPU-Throttles und 6/6 ausgehängte Overlay-Mounts.
+- Separater Farbmarkup-**Probe**lauf `^c80D8FFMika^r`: 45 s `PASS_LIMITED` und GameSpy-Name `Mika` ohne Rohcodes. HUD/Scoreboard **nicht** bewiesen, ein privater Xvfb-Screenshot zeigte Splash, deshalb `colors_enabled` weiterhin unverändert deaktiviert.
+- Same-Server-Rejoin-Probe: eigens gestarteter Bot-Prozess verlässt nach regulären WM_DELETE_WINDOW-Signalen den **laufenden** isolierten Dedicated, GameSpy meldet seine Abwesenheit 3× während Originalclient im Server bleibt; neuer Bot-PID tritt mit identischem Profil und GUID-Sidecar wieder bei, Server-PID unverändert. Danach 45 s `PASS_LIMITED` / `ACTIVE_OK` / 0 neue Throttles; alle 6 Mounts zurückgebaut. Daten: `docs/reports/2026-10-21-identities-native-smokes.json`.
+- In diesem Branch ausschließlich private opt-in Testflags `--identity-record`, `--color-probe`, `--identity-rejoin-smoke` vorbereitet; normale alte Harness-Modi bleiben unverändert. **Weder produktive Farbnamen noch 8 Einzelprozesse, kein Live-Supervisor-Sollzustand** eingeführt.
+- Gesamte Python-Tools-Suite **94/94 PASS**, davon 22 Adaptertests; native und portable Beweise strikt getrennt. Aus Zeit-/Kapazitätsgründen nicht fälschlich vollständige 24/7/2x8-Einzelprozesse oder realistische Sessionzeiten behaupten.
+- Nächster Umsetzungsschritt: eine wirklich eigentumsgebundene Exec-/Query-Bridge zum SQLite Planner, Integration mit PR46-desired-state statt Doppel-Supervisor, isoliert 1→4→8 **Einzelprozesse** mit Human-Reserve und Abbruchschwellen; erst nach echten HUD-/Query-Limit-Belegen kontrollierte Farbe.
