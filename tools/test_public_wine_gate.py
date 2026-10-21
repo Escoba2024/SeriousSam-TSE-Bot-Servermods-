@@ -4,6 +4,11 @@ import qualify_integrated_wine as q
 def evidence():
     return {"status":"PASS_60MIN_WINE","bots":8,"human_ai":True,"elapsed_s":3600,"dll_sha256":"candidate","new_throttled_periods":0,"checks":{r:{"telemetry":{"verdict":"ACTIVE_OK"},"slots":{str(i):{"moved":True,"fired":True} for i in range(4)}} for r in ["botA","botB"]},"unmounts":[{"exitcode":0}]}
 class PublicGate(unittest.TestCase):
+    def test_public_master_override_is_explicit(self):
+        script=q.dedicated_script("existing;", "91.99.75.33",25600,True)
+        self.assertIn('net_strMasterServer="master.333networks.com";',script)
+        self.assertIn('net_strMasterServerOverride="master.333networks.com";',script)
+        self.assertIn('net_strMasterServerOverride="127.0.0.1";',q.dedicated_script("", "127.0.0.1",26980,False))
     def test_public_humans_are_allowed_but_all_bot_names_are_required(self):
         bots=list(q.ROSTER)
         self.assertTrue(q.population_ready({"numplayers":"9"},bots+["Human"],8,True))

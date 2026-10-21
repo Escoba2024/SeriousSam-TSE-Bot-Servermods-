@@ -69,6 +69,10 @@ def validate_public_evidence(report,dll_sha):
         assert set(check["slots"])=={"0","1","2","3"}
         assert all(x["moved"] and x["fired"] for x in check["slots"].values())
 
+def dedicated_script(base,host,port,public):
+    master="master.333networks.com" if public else "127.0.0.1"
+    return base+'\nnet_strLocalHost="%s";\nnet_iPort=%d;\nnet_strMasterServer="%s";\nnet_strMasterServerOverride="%s";\nser_bHeartbeatGameSpy=1;\nser_bEnumeration=1;\nser_bReportSyncBad=1;\nser_bReportSyncOK=%d;\n'%(host,port,master,master,int(public))
+
 def population_ready(status,names,expected,public):
     count=int(status.get("numplayers",-1))
     if public:
@@ -217,7 +221,7 @@ def main():
                 if (game/"SeriousSam.log").exists():(game/"SeriousSam.log").unlink()
             else:
                 p=game/"Scripts/Dedicated_startup.ini"
-                p.write_text(text(p)+"\nnet_strLocalHost=\"%s\";\nnet_iPort=%d;\nnet_strMasterServer=\"%s\";\nser_bHeartbeatGameSpy=1;\nser_bEnumeration=1;\nser_bReportSyncBad=1;\nser_bReportSyncOK=%d;\n"%(connect_host,args.port,"master.333networks.com" if public else "127.0.0.1",int(public)))
+                p.write_text(dedicated_script(text(p),connect_host,args.port,public))
                 if (game/"Dedicated_BotTest.log").exists():(game/"Dedicated_BotTest.log").unlink()
             if role.startswith("bot"):os.chown(game/"Scripts/Integrated.ini",65534,65534)
         os.chown(E,65534,65534)
@@ -308,8 +312,8 @@ def main():
         if expected>=4:assert score_changed,"no scoring activity"
         save(status="PASS_PUBLIC_SMOKE" if public else ("PASS_LIMITED" if expected<8 else "PASS_60MIN_WINE"),elapsed_s=elapsed,samples=len(rows),checks=checks,score_changed=score_changed,rss_kib={role:rss(p.pid) for role,p in procs.items()},cpu_core_percent={role:round((cpu(p.pid)-cpustart[role])/elapsed*100,3) for role,p in procs.items()})
         keep_running=public
-    except Exception as exc:
-        save(status="FAIL",error=str(exc))
+    except (Exception,KeyboardInterrupt) as exc:
+        save(status="FAIL",error=str(exc) or type(exc).__name__)
         raise
     finally:
         if keep_running:

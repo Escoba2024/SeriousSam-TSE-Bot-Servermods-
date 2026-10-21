@@ -12,7 +12,7 @@ Stand während der laufenden Abnahme am 21.10.2026. Ergänzt die Toolrichtlinie 
 
 ## Testniveaus getrennt
 
-Portable Suiten: sieben C++-Suiten mit 555 Human-AI-Checks, realer extrahierter Integrationsblock einschließlich Munitionsadapter, 59 Benchmark-/Anschlusstests sowie 40 Parser-/Query-/Preflight-/Betriebsguardtests bestanden.
+Portable Suiten: sieben C++-Suiten mit 555 Human-AI-Checks, realer extrahierter Integrationsblock einschließlich Munitionsadapter, 59 Benchmark-/Anschlusstests sowie 41 Parser-/Query-/Preflight-/Betriebsguardtests bestanden.
 
 MSVC-Build04: GameMP.dll SHA256 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835. Quellbaum 9d7512dc2db395688f7ec0ec116b998d2f4cd764, veröffentlichter Quellcommit 65219c355c08c6859150a9aa9d596f476da5247c. Ein Rebuild ist weiterhin ein eigener Kandidat; die Build-Zeitstempel sind Bestandteil des konkreten Artefakts.
 
@@ -39,3 +39,5 @@ Source-of-Truth: Integrationsplan und Berichte unter docs/reports. Drive-Dokumen
 Aktuelle Referenzmessung: unveränderte 61DC-DLL mit vier bewegten Bots, 20Hz und Scoreänderungen über 600s: Client 103,593% / Server 9,768% eines Kerns. Integriert Legacy 22,658%, Human 21,305%. Je ein Fenster, keine isolierte Human-CPU-Kausalität. Alle eigenen Mounts entfernt.
 
 Öffentlicher Betrieb verwendet nach bestandenem Same-DLL-Stundengate einen separaten Overlay-Lauf; ursprüngliche Installation und DLL bleiben als Rückfall erhalten. Öffentliche Population darf zusätzliche Menschen enthalten, verlangt aber alle acht Botnamen. PID-, Startzeit- und CWD-geprüftes Stopwerkzeug schützt fremde Prozesse. Vorbereitungsprobe bestanden; Backup mit 415 bytegenau restaurierten Dateien geprüft.
+
+Masterserver-Konfiguration enthält net_strMasterServer UND net_strMasterServerOverride explizit. Ein geerbter localhost-Override führte zum kontrollierten Abbruch des ersten öffentlichen Versuchs, ohne fremde Spieler und mit vollständigem Unmount. Keine Listungsabnahme aus einer lokalen Query.
