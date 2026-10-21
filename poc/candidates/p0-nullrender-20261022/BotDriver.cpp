@@ -206,7 +206,7 @@ static DWORD WINAPI BotTelemetry_Watchdog(LPVOID)
 
     if (bot_iTelemetry != 0) {
       BotTelemetry_WriteLine(
-        "%llu,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%.3f,%.3f,%.3f,%.3f,%llu,%llu,%d,%ld",
+        "%llu,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%.3f,%.3f,%.3f,%.3f,%llu,%llu,%d,%ld",
         BotTelemetry_WallMs(),
         lTicks - lPrevTicks, lActions - lPrevActions, lFrames - lPrevFrames,
         lSkip - lPrevSkip, lDraw - lPrevDraw,
@@ -271,6 +271,16 @@ void BotTelemetry_Start(void)
 
 void BotTelemetry_Config(int iNullRender, int iNullRenderFps, int iDedicatedServer)
 {
+  // Startup scripts and command-line scripts run at different lifecycle points.
+  // Emit the effective state after changes, without adding per-frame I/O.
+  static int lastNull=-1, lastFps=-1, lastDedicated=-1;
+  static int lastEnabled=-1, lastLog=-1, lastTelemetry=-1;
+  if (lastNull==iNullRender && lastFps==iNullRenderFps &&
+      lastDedicated==iDedicatedServer && lastEnabled==(int)bot_bEnabled &&
+      lastLog==(int)bot_iLogEvery && lastTelemetry==(int)bot_iTelemetry) return;
+  lastNull=iNullRender; lastFps=iNullRenderFps; lastDedicated=iDedicatedServer;
+  lastEnabled=(int)bot_bEnabled; lastLog=(int)bot_iLogEvery;
+  lastTelemetry=(int)bot_iTelemetry;
   double fTickMs = 0.0;
   if (_pTimer != NULL) { fTickMs = (double)_pTimer->TickQuantum * 1000.0; }
   BotTelemetry_WriteLine("#config,nullrender=%d,nullrender_fps=%d,dedicated=%d,"

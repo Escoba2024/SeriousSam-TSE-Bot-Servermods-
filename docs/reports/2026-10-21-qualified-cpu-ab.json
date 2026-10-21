@@ -1,0 +1,239 @@
+{
+  "qualification": "CPU_AB_ONLY_PASSED_PENDING_60MIN_VANILLA_ACCEPTANCE",
+  "completed": true,
+  "finished_utc": "2026-10-21T09:26:09Z",
+  "scope": "one client with four active legacy bots plus isolated original dedicated; separate network namespace; Wine llvmpipe; 20fps config; three alternating pairs",
+  "dll_sha256": "4f74146eb4e8b640e1d5a080d61d311c6965f1bfb071160f0753c370929c54fb",
+  "unit": "CPU percent of one core; host has two cores; RSS in KiB",
+  "runs": [
+    {
+      "stage": "repeat1-render_on",
+      "null_render": 0,
+      "elapsed_s": 600.0009183360089,
+      "warmup_s": 180,
+      "cpu_core_percent": 115.79,
+      "client_cpu_median": 116.951,
+      "client_cpu_p95": 122.954,
+      "server_cpu_core_percent": 9.517,
+      "whole_test_cgroup_cpu_core_percent": 129.678,
+      "memory_rss_kib": 254240,
+      "server_rss_kib": 51032,
+      "host_busy_percent": 65.855,
+      "host_steal_percent": 0.0,
+      "new_throttled_periods": 0,
+      "p0_tick_delta": 12000,
+      "joined": 4,
+      "local_bot_slots": 4,
+      "syncbad": 0,
+      "actions": {
+        "rates_hz": [
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "moved": [
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "stage": "repeat1-null_render",
+      "null_render": 1,
+      "elapsed_s": 600.0007801369939,
+      "warmup_s": 180,
+      "cpu_core_percent": 24.38,
+      "client_cpu_median": 23.989,
+      "client_cpu_p95": 30.979,
+      "server_cpu_core_percent": 12.515,
+      "whole_test_cgroup_cpu_core_percent": 42.451,
+      "memory_rss_kib": 186772,
+      "server_rss_kib": 50960,
+      "host_busy_percent": 21.728,
+      "host_steal_percent": 0.0,
+      "new_throttled_periods": 0,
+      "p0_tick_delta": 12000,
+      "joined": 4,
+      "local_bot_slots": 4,
+      "syncbad": 0,
+      "actions": {
+        "rates_hz": [
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "moved": [
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "stage": "repeat2-null_render",
+      "null_render": 1,
+      "elapsed_s": 600.0003854009847,
+      "warmup_s": 180,
+      "cpu_core_percent": 25.37,
+      "client_cpu_median": 24.987,
+      "client_cpu_p95": 31.976,
+      "server_cpu_core_percent": 12.948,
+      "whole_test_cgroup_cpu_core_percent": 43.913,
+      "memory_rss_kib": 187044,
+      "server_rss_kib": 51100,
+      "host_busy_percent": 23.992,
+      "host_steal_percent": 0.0,
+      "new_throttled_periods": 0,
+      "p0_tick_delta": 12000,
+      "joined": 4,
+      "local_bot_slots": 4,
+      "syncbad": 0,
+      "actions": {
+        "rates_hz": [
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "moved": [
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "stage": "repeat2-render_on",
+      "null_render": 0,
+      "elapsed_s": 600.0010180159879,
+      "warmup_s": 180,
+      "cpu_core_percent": 115.96,
+      "client_cpu_median": 117.706,
+      "client_cpu_p95": 124.854,
+      "server_cpu_core_percent": 9.67,
+      "whole_test_cgroup_cpu_core_percent": 130.004,
+      "memory_rss_kib": 252228,
+      "server_rss_kib": 51040,
+      "host_busy_percent": 65.995,
+      "host_steal_percent": 0.0,
+      "new_throttled_periods": 0,
+      "p0_tick_delta": 12000,
+      "joined": 4,
+      "local_bot_slots": 4,
+      "syncbad": 0,
+      "actions": {
+        "rates_hz": [
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "moved": [
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "stage": "repeat3-render_on",
+      "null_render": 0,
+      "elapsed_s": 600.0004186540027,
+      "warmup_s": 180,
+      "cpu_core_percent": 116.29,
+      "client_cpu_median": 117.932,
+      "client_cpu_p95": 123.938,
+      "server_cpu_core_percent": 9.355,
+      "whole_test_cgroup_cpu_core_percent": 129.97,
+      "memory_rss_kib": 250092,
+      "server_rss_kib": 51120,
+      "host_busy_percent": 65.581,
+      "host_steal_percent": 0.0,
+      "new_throttled_periods": 0,
+      "p0_tick_delta": 12000,
+      "joined": 4,
+      "local_bot_slots": 4,
+      "syncbad": 0,
+      "actions": {
+        "rates_hz": [
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "moved": [
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "stage": "repeat3-null_render",
+      "null_render": 1,
+      "elapsed_s": 600.0013722719741,
+      "warmup_s": 180,
+      "cpu_core_percent": 24.25,
+      "client_cpu_median": 23.99,
+      "client_cpu_p95": 30.977,
+      "server_cpu_core_percent": 12.847,
+      "whole_test_cgroup_cpu_core_percent": 42.788,
+      "memory_rss_kib": 184848,
+      "server_rss_kib": 51240,
+      "host_busy_percent": 21.85,
+      "host_steal_percent": 0.0,
+      "new_throttled_periods": 0,
+      "p0_tick_delta": 12000,
+      "joined": 4,
+      "local_bot_slots": 4,
+      "syncbad": 0,
+      "actions": {
+        "rates_hz": [
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "moved": [
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    }
+  ],
+  "means": {
+    "render": {
+      "cpu_core_percent": 116.01333333333334,
+      "whole_test_cgroup_cpu_core_percent": 129.884,
+      "memory_rss_kib": 252186.66666666666,
+      "server_cpu_core_percent": 9.514
+    },
+    "null_render": {
+      "cpu_core_percent": 24.666666666666668,
+      "whole_test_cgroup_cpu_core_percent": 43.050666666666665,
+      "memory_rss_kib": 186221.33333333334,
+      "server_cpu_core_percent": 12.77
+    }
+  },
+  "client_cpu_reduction_percent": 78.73807608320882,
+  "whole_test_cgroup_cpu_reduction_percent": 66.85452660322544,
+  "limitations": [
+    "Not the integrated Human-AI DLL",
+    "CPU divided by four includes shared client cost; not measured incremental bot cost",
+    "Paused only between fully saved measurements; pause excluded from elapsed windows",
+    "No public/60-minute acceptance inferred"
+  ],
+  "runner_source_commit": "8c6e93e50ead19e717b4160d63f1ac736e7d9fd9",
+  "runner_source_sha256": "100b2435a342f90a1fadbda83f17e9c9e3d9b6c5822d9ce426e26cfafafff1e9",
+  "runner_available_in_pr41_head": "d64e4a87186199a589b15c5c764ccf0c50e7e742"
+}
