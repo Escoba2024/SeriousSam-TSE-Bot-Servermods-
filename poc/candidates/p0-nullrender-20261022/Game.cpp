@@ -2653,6 +2653,7 @@ CTFileName CGame::GetQuickSaveName(BOOL bSave)
 void CGame::GameMainLoop(void)
 {
   BotTelemetry_Frame();
+  BotTelemetry_Config(bot_bNullRender, bot_iNullRenderFps, _bDedicatedServer);
   if (gam_bQuickSave && GetSP()->sp_gmGameMode!=CSessionProperties::GM_FLYOVER) {
     if (gam_bQuickSave==2) {
       _tvMenuQuickSave = _pTimer->GetHighPrecisionTimer();

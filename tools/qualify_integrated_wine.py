@@ -136,7 +136,7 @@ def main():
                 if (game/"SeriousSam.log").exists():(game/"SeriousSam.log").unlink()
             else:
                 p=game/"Scripts/Dedicated_startup.ini"
-                p.write_text(text(p)+"\nnet_strLocalHost=\"127.0.0.1\";\nnet_iPort=%d;\nser_bHeartbeatGameSpy=0;\nser_bEnumeration=1;\nser_bReportSyncBad=1;\nser_bReportSyncOK=0;\n"%args.port)
+                p.write_text(text(p)+"\nnet_strLocalHost=\"127.0.0.1\";\nnet_iPort=%d;\nnet_strMasterServer=\"127.0.0.1\";\nser_bHeartbeatGameSpy=1;\nser_bEnumeration=1;\nser_bReportSyncBad=1;\nser_bReportSyncOK=0;\n"%args.port)
                 if (game/"Dedicated_BotTest.log").exists():(game/"Dedicated_BotTest.log").unlink()
             if role.startswith("bot"):os.chown(game/"Scripts/Integrated.ini",65534,65534)
         os.chown(E,65534,65534)
