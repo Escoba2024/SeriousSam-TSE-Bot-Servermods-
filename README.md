@@ -2,6 +2,19 @@
 
 Bots joinen als reguläre Netzwerkspieler über separate modifizierte BotClient-Prozesse. Dedicated Server, Engine, Entities und menschliche TSE-1.07-Clients bleiben unverändert. Eingaben entstehen ausschließlich über normale `CPlayerAction`-/`CPlayerSource::SetAction`-Pfade. Pro Prozess sind maximal vier lokale Spieler vorgesehen; acht Bots verwenden zwei getrennte Installationen.
 
+## Aktuelle Integration – 21.10.2026
+
+[Abnahmebericht mit 12 Punkten](docs/reports/2026-10-21-human-cpu-final.md),
+[bereinigte Messwerte](docs/reports/2026-10-21-integrated-runtime-results.json),
+[CPU-A/B mit drei Paaren](docs/reports/2026-10-21-qualified-cpu-ab.json),
+[Buildbeleg](docs/reports/2026-10-21-integrated-gamemp-build.json).
+
+Neue integrierte DLL `7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835`: MSVC unter Wine gebaut, neue Retail-Multiplayer-Abnahme mit einem/vier/acht Bots bestanden. Die Acht-Bot-Stunde mit Originalclient dauerte 3600s; alle acht Bots in jedem Fünfminutenabschnitt aktiv, null SYNCBAD/Disconnects und null Throttling. Human-KI mit fünf Spielstärken und sechs Personas sowie NullRender tatsächlich aktiv. Vier Bots: unveränderte alte DLL 103,593%, integrierte Legacy-Policy 22,658%, Human-Policy 21,305% eines CPU-Kerns; je ein Fenster, keine isolierte Human-Kausalität. Acht Bots sind die höchste neu gemessene Anzahl.
+
+Der öffentliche Produktions-Smoke läuft noch. Eine lokale Query ersetzt keinen frischen Masterlisteneintrag; eine Wine-Originalgegenstelle ersetzt keinen unabhängigen Windows-Spieler-PC. Kein 24/7- oder 16+-Bot-PASS. Geschütztes 61DC-Release und frühere Installation bleiben bytegenau erhalten. [Betrieb und Rückfall](docs/reports/2026-10-21-hetzner-operations.md).
+
+Die folgenden datierten Abschnitte beschreiben historische Kandidaten und ihren damaligen Nachweisumfang.
+
 ## Nachweisbarer Stand – 13.10.2026
 
 Die [Fortsetzung vom 13.10.2026](docs/reports/2026-10-13-serverbrowser-preflight.md) bestätigt zusätzlich das exakte sparsame Acht-Bot-Profil über 601,984 s Steady-Betrieb und 595,771 s unabhängige vollständige Spielerabfragen. Öffentliche 333networks-Listung, externe UDP-Erreichbarkeit und Vanilla-Browser bleiben offen; Shadow Neo Lite ist ein Cloud-Testsystem. Die bisherigen Abnahmen behalten ihren unten angegebenen Geltungsbereich.
@@ -20,13 +33,13 @@ Der aktuell nativ qualifizierte KI-Kandidat hat DLL-SHA256 **`61DC27E0E7B80BADCF
 
 Der Ground-Lookahead-Versuch vom 11.–12.10. hat nach BotClient-Ersatz native Sync-Fehler und **keine bestandene Abnahme**. Seine Quellen und Rohbelege sind lokal privat gesichert und außerhalb dieses qualifizierten Quellreleases. Der aktuelle Bericht dokumentiert den offenen Versuch.
 
-## Laufende CPU-Optimierung – unqualifiziert (Stand 22.10.2026)
+## Historischer eigenständiger P0-Kandidat (ursprünglich 22.10.2026 bezeichnet)
 
 Der P0-Kandidat `poc/candidates/p0-nullrender-20261022/` ergänzt die
 GameMP-Quelle um eine timerunabhängige Evidenzspur (`BotTelemetry.csv`) und
 einen opt-in Null-Renderer (Rücksprung vor `tm_csHooks`). Der Quellstand wird
 per `apply.sh` aus dem qualifizierten Release-Baum erzeugt (Hash-geprüft), nie
-in ihn hineingeschrieben. **Nichts davon ist gebaut, gemessen oder abgenommen**;
+in ihn hineingeschrieben. **Die damalige eigenständige Kandidatenbeschreibung enthielt keine Build-/Runtime-Abnahme**; aktuelle Integration und Messungen stehen oben.
 die qualifizierte DLL `61DC...` und der öffentliche Server bleiben unverändert.
 Analyse und Verfahren:
 [P0-Diagnose](docs/reports/2026-10-22-p0-bot-tick-diagnosis.md),

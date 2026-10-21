@@ -11,7 +11,7 @@ import bot_telemetry as bt
 
 PINS={"DedicatedServer.exe":"9596f53c260c6fe5f6b7b6666fdf210bcac9952e4eec4b2ee2ee82f37153052d","Engine.dll":"b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f","EntitiesMP.dll":"7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350","GameMP.dll":"1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208","SeriousSam.exe":"9f8f9a0b8fd718616036ed2c3584904e2dfd58e49515bf4c8ecc45175d02cc53"}
 ROSTER=["BOT-Rookie-Rush","BOT-Rookie-Guard","BOT-Casual-Flaky","BOT-Casual-Holder","BOT-Average-Duelist","BOT-Average-Rifle","BOT-Veteran-Push","BOT-Expert-Rifle"]
-BAD=re.compile(r"SYNCBAD|Too many bad syncs|CRC check failed|Cannot load script|[Uu]nknown symbol|[Uu]nrecognized symbol|Permission denied|[Ff]atal [Ee]rror")
+BAD=re.compile(r"Identifier '(?!sam_strTechTestLevel')[^']+' is not declared|SYNCBAD|Too many bad syncs|CRC check failed|Cannot load script|[Uu]nknown symbol|[Uu]nrecognized symbol|Permission denied|[Ff]atal [Ee]rror")
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def text(p):return p.read_text(errors="replace") if p.exists() else ""
 def params(raw):
@@ -69,9 +69,15 @@ def validate_public_evidence(report,dll_sha):
         assert set(check["slots"])=={"0","1","2","3"}
         assert all(x["moved"] and x["fired"] for x in check["slots"].values())
 
+def validate_master_resolution(resolve=socket.gethostbyname):
+    target=resolve("master.333networks.com")
+    assert ipaddress.ip_address(target).is_global,"public master must resolve globally"
+    assert resolve("master.gamespy.com")==target,"Retail hardcoded master.gamespy.com must resolve to selected 333networks master; see official HOSTS guidance"
+    return target
+
 def dedicated_script(base,host,port,public):
-    master="master.333networks.com" if public else "127.0.0.1"
-    return base+'\nnet_strLocalHost="%s";\nnet_iPort=%d;\nnet_strMasterServer="%s";\nnet_strMasterServerOverride="%s";\nser_bHeartbeatGameSpy=1;\nser_bEnumeration=1;\nser_bReportSyncBad=1;\nser_bReportSyncOK=%d;\n'%(host,port,master,master,int(public))
+    # Retail 1.07 GameSpy uses a hardcoded hostname; newer patch symbols do not apply.
+    return base+'\nnet_strLocalHost="%s";\nnet_iPort=%d;\nser_bHeartbeatGameSpy=1;\nser_bEnumeration=1;\nser_bReportSyncBad=1;\nser_bReportSyncOK=%d;\n'%(host,port,int(public))
 
 def population_ready(status,names,expected,public):
     count=int(status.get("numplayers",-1))
@@ -164,7 +170,9 @@ def main():
         assert args.build_manifest is not None,"integrated stages require --build-manifest"
         build=json.loads(args.build_manifest.read_text());assert build["build_ok"] and not build["qualified"]
         dll=Path(build["candidate"]);assert sha(dll)==build["dll_sha256"]
-    if public:validate_public_evidence(json.loads(args.acceptance_report.read_text()),sha(dll))
+    if public:
+        validate_public_evidence(json.loads(args.acceptance_report.read_text()),sha(dll))
+        master_ipv4=validate_master_resolution()
     E=make_run_directory(runtime,args.stage)
     result={"status":"PREPARING","stage":args.stage,"human_ai":human,"bots":expected,"required_s":args.duration,"dll_sha256":sha(dll),"processes":{},"scope":"ISOLATED_LOCAL_RETAIL_WINE_NOT_PUBLIC_ACCEPTANCE"}
     def save(**kw):
@@ -174,7 +182,9 @@ def main():
     result["public_address"]=args.public_address
     result["game_port"]=args.port;result["query_port"]=args.port+1
     result["display"]=args.display
-    if public:result["scope"]="PUBLIC_HETZNER_EIGHT_BOT_SMOKE_NOT_INDEPENDENT_WINDOWS_JOIN"
+    if public:
+        result["scope"]="PUBLIC_HETZNER_EIGHT_BOT_SMOKE_NOT_INDEPENDENT_WINDOWS_JOIN"
+        result["legacy_master_ipv4"]=master_ipv4
     result["storage"]="private overlayfs copy-on-write; lower installations unchanged"
     result["artifact_kind"]="immutable_prior_qualified_reference" if reference else "integrated_msvc_candidate"
     def overlay(src,target,label):

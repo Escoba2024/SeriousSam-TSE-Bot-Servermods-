@@ -12,7 +12,7 @@ Stand während der laufenden Abnahme am 21.10.2026. Ergänzt die Toolrichtlinie 
 
 ## Testniveaus getrennt
 
-Portable Suiten: sieben C++-Suiten mit 555 Human-AI-Checks, realer extrahierter Integrationsblock einschließlich Munitionsadapter, 59 Benchmark-/Anschlusstests sowie 41 Parser-/Query-/Preflight-/Betriebsguardtests bestanden.
+Portable Suiten: sieben C++-Suiten mit 555 Human-AI-Checks, realer extrahierter Integrationsblock einschließlich Munitionsadapter, 59 Benchmark-/Anschlusstests sowie 43 Parser-/Query-/Preflight-/Betriebsguardtests bestanden.
 
 MSVC-Build04: GameMP.dll SHA256 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835. Quellbaum 9d7512dc2db395688f7ec0ec116b998d2f4cd764, veröffentlichter Quellcommit 65219c355c08c6859150a9aa9d596f476da5247c. Ein Rebuild ist weiterhin ein eigener Kandidat; die Build-Zeitstempel sind Bestandteil des konkreten Artefakts.
 
@@ -40,4 +40,4 @@ Aktuelle Referenzmessung: unveränderte 61DC-DLL mit vier bewegten Bots, 20Hz un
 
 Öffentlicher Betrieb verwendet nach bestandenem Same-DLL-Stundengate einen separaten Overlay-Lauf; ursprüngliche Installation und DLL bleiben als Rückfall erhalten. Öffentliche Population darf zusätzliche Menschen enthalten, verlangt aber alle acht Botnamen. PID-, Startzeit- und CWD-geprüftes Stopwerkzeug schützt fremde Prozesse. Vorbereitungsprobe bestanden; Backup mit 415 bytegenau restaurierten Dateien geprüft.
 
-Masterserver-Konfiguration enthält net_strMasterServer UND net_strMasterServerOverride explizit. Ein geerbter localhost-Override führte zum kontrollierten Abbruch des ersten öffentlichen Versuchs, ohne fremde Spieler und mit vollständigem Unmount. Keine Listungsabnahme aus einer lokalen Query.
+Die erste Override-Hypothese wurde durch echte Retail-Belege korrigiert: net_strMasterServerOverride ist nicht deklariert. Originale Engine.dll enthält master.gamespy.com fest; DNS lieferte NXDOMAIN und eine passive 60s-Probe keine Beacon-Pakete. Laut offizieller 333networks-Anleitung besitzt Retail keine konfigurierbare Masteradresse. Statt Patch/Engineänderung wurde die dokumentierte HOSTS-Methode verwendet: ausschließlich master.gamespy.com auf die frisch aufgelöste 333networks-IP 81.205.81.173, ursprüngliche Hosts-Datei gesichert. Public-Preflight verlangt jetzt diese tatsächliche Auflösung; kein unbekanntes Override-Symbol im generierten Skript. Unbekannte Identifier scheitern als Laufzeitfehler; einzige bekannte Ausnahme ist die alte sam_strTechTestLevel-Zeile des geerbten SDK-Startskripts. Beide frühen öffentlichen Versuche kontrolliert beendet, keine fremden Spieler, alle eigenen Mounts entfernt; keine davon als PASS gezählt. Quellen: https://333networks.com/instructions/hosts und https://333networks.com/instructions/serioussam/s. Ghidra/Frida auf Hetzner nicht als callable Backend verfügbar; keine Installation und keine neue Binär-/ABI- oder Hook-Abnahme behauptet.
