@@ -94,3 +94,6 @@ gesicherte Konfiguration zurücksetzen; Identitätsdatenbank/GUIDs erhalten. Nur
 - Portabler Nachweis auf Hetzner: 17 neue Adapter-Tests, gesamte Tools-Python-Suite 89/89 PASS; keine native Anwendungs- oder Multiplayer-Qualifikation.
 
 **Zusätzlicher Beleg 18:00 UTC:** 19 reine Adapter-Tests inklusive echter multiprozessübergreifender Lock-Sperre und simulierter End-to-End-Join/Leave/Cooldown-Kette; gesamte Python-Suite **91/91 PASS**. Keine echte Spielausführung daraus abgeleitet.
+
+### Privat-Testharness (noch keine Runtime-Freigabe)
+`tools/qualify_integrated_wine.py --identity-record <privater JSON-Export aus Planner.identities()>` ist nur mit `--stage one` und ohne `--public-address`/Reference gültig. Er nutzt die bisherige private Overlay-/Originalhash-Absicherung, ein Local-Player-Profil, die feste GUID-Sidecar und den bereits qualifizierten Build04-Quellhash. Der Flag-Pfad wurde bislang **ausschließlich statisch mit einem temporären Testfixture** geprüft; vor nativer Nutzung alle aktuellen fremden Qualifikationen beenden lassen, isolierte Ports/Xvfb/cgroup/Pfade wählen, private Belege außerhalb Git bewahren und die reale Rückkehr mit gleicher GUID separat verifizieren.

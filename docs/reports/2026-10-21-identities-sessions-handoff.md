@@ -113,3 +113,7 @@ Nächster Schritt nach tatsächlichem Ende der fremden nativen PR46-Stundenmessu
 GitHub #47 auf erstem Adaptercommit `507217ccfd82407ffcb5e3ded473d51309e16d64` aktualisiert und lokale Branch-Referenz nach Prüfung des identischen Trees sauber mit `origin` synchronisiert; lokaler Beweiscommit `9e960aa` bleibt unter `agent/identities/20261021-adapter-local-proof` erhalten.
 Zwei ergänzende Tests belegen reale zweite Prozesssperre und rein simulierten lückenlosen Planner-/Adapter-/SQLite-Claim-Lebenszyklus. Volle Python-Suite: **91/91 PASS (3.985 s)**, davon **19 Runtime-Adapter-Tests**.
 Native PR46-Qualifikation 18:00:22 UTC weiterhin `MEASURING_3600` (3044 s); weitere Retail-Prozesse deshalb weiterhin gesperrt.
+
+### Vorbereitung eines wirklich isolierten Retail-Single-Smokes, 18:07 UTC
+Der bestehende Harness `tools/qualify_integrated_wine.py` besitzt einen zusätzlichen strikt privaten `--identity-record`-Pfad für `stage one`, dessen Build04-Overlay vor jedem PLC4-/Sidecar-Write als Mount geprüft wird. Alte Stufen ohne Flag haben ihren bisherigen Codepfad. Die echte Quelle und Public-Build04 sind nicht angefasst.
+Statische Probe ohne Wine und mit ausschließlich simulierter Mountprüfung bestanden; volle Tools-Python-Suite **92/92 PASS (3.740 s)**. Noch keine zweite Live-Instanz, kein echter individueller Beitritt, kein bestätigter Farbcode. Vor Native-Start PR46-Abschluss, Prozesse/Mounts/Ports/CPU/Disk/Human-Hold frisch prüfen.

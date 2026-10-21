@@ -7,10 +7,12 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 import uuid
 
 import bot_session_runtime as r
 import bot_sessions as planner_module
+import qualify_integrated_wine as wine_harness
 
 
 def identity():
@@ -74,6 +76,28 @@ class ProfileAdapter(unittest.TestCase):
         self.assertNotIn("80D8FF", script)  # color gate off
         self.assertNotIn("^c", script)
         self.assertNotIn("Mika", script)  # nickname set in PLC4, never via unsafe shell
+    def test_private_overlay_profile_pair_patch_and_mount_gate(self):
+        who=identity()
+        with tempfile.TemporaryDirectory() as temp:
+            game=Path(temp)
+            players=game/"Players"
+            players.mkdir()
+            p=players/"Player0.plr"
+            side=p.with_suffix(".plr.guid")
+            original,old_guid=fixture()
+            p.write_bytes(original)
+            side.write_bytes(old_guid)
+            # The helper MUST reject non-overlay paths before writing.
+            with self.assertRaises(AssertionError):
+                wine_harness.change_profile_identity(game,who)
+            self.assertEqual(p.read_bytes(),original)
+            self.assertEqual(side.read_bytes(),old_guid)
+            # Simulate only mountpoint predicate; never mount a real FS or start Wine.
+            with patch.object(Path,"is_mount",return_value=True):
+                digest=wine_harness.change_profile_identity(game,who)
+            self.assertEqual(digest,__import__("hashlib").sha256(p.read_bytes()).hexdigest())
+            self.assertEqual(side.read_bytes(),r.guid_bytes(who))
+            self.assertEqual(p.read_bytes(),r.profile_bytes(original,who))
     def test_sidecar_equal_exact_new_guid(self):
         self.assertEqual(len(r.guid_bytes(identity())), 16)
         self.assertEqual(r.guid_bytes(identity()), uuid.UUID(hex=identity()["guid"]).bytes)

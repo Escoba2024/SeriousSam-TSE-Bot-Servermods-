@@ -106,3 +106,9 @@ Draft-PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/47. 
 - Gesamtsuite `python3 -m unittest discover -s tools -p 'test_*.py'`: **91/91 PASS, 3.985 s**, jetzt 19 Runtime-Adapter-Tests.
 - Vorheriger Adapterstand unter PR #47, GitHub Commit `507217ccfd82407ffcb5e3ded473d51309e16d64` publiziert; veröffentlichter Tree `a79f824f7c15e64c0e89802698a6fc9800c3cb60` lokal verifiziert. Dieser Follow-up erhält gesonderten Commit. PR verbleibt Draft.
 - PR46-Runtime zur Probezeit 18:00:22 UTC: `MEASURING_3600`, 3044 s erfasst, keine Kollision erzeugt.
+
+### Task3b Vorbereitung 18:07 UTC – native, aber noch nicht gestartet
+- `tools/qualify_integrated_wine.py` erweitert um Opt-in `--identity-record`, ausschließlich `--stage one` und niemals Public-/Reference-Modus. Profil0 und GUID-Sidecar dürfen nur **nach bestätigtem eigenem Overlay-Mount** geschrieben werden; originäre Profile/Standardeinstellungen und die alten Stufen ohne Flag bleiben unverändert.
+- Die vorhandene Build04-Human-KI erhält im separaten Einzelspieler-Startskript den festen Nickname über PLC4, `bot_iProfile0` und `bot_iProfileSeed`. Farbe bleibt deaktiviert.
+- Statischer Verweigerungs-/Private-Mount-Fixture-Test: Versuch auf Nicht-Mount verweigert ohne Schreibzugriff, simuliertes Mount-Fixture patcht nur die private Kopie und verifiziert Sidecar/Hash. **Keine native Abnahme dadurch.**
+- Suite: **92/92 PASS**, davon 20 Runtime-Adapter-Tests; ursprünglich laufende PR46-Messung hatte bei 18:07 noch Ressourcenpriorität. Erst nach tatsächlicher Qualifikation und erneuter Prüfung isolierten Single-Retail-Smoke erwägen.
