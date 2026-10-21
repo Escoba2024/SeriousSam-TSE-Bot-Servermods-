@@ -8,11 +8,58 @@ param(
     [switch]$CaptureObserver,
     [ValidateRange(1,60)][int]$CaptureFps = 10,
     [switch]$AllowReconnect,
-    [switch]$ExpectedShutdown
+    [switch]$ExpectedShutdown,
+    [ValidateNotNullOrEmpty()][string]$ExpectedBotName = 'TSE_Bot_PoC'
 )
 function Test-NativeJoined([string]$Text) {
     $joins = [regex]::Matches($Text, '(?m)^\s*joined\s*$')
-    return $joins.Count -gt 0 -and $joins[$joins.Count - 1].Index -gt $Text.LastIndexOf('Cannot join game:')
+    if (!$joins.Count) { return $false }
+    $joinedAt = $joins[$joins.Count - 1].Index
+    # A historical successful join must not survive a later sync kick or timeout.
+    # A later successful rejoin supersedes an earlier disconnect.
+    $fail = [regex]::Matches($Text, '(?im)^.*(?:Disconnected:|Cannot join game:|Connection timed out|Timeout while waiting|Session has been stopped|sync lost|out of sync|bad sync|wrong crc|stopping game).*$')
+    return !$fail.Count -or $joinedAt -gt $fail[$fail.Count - 1].Index
+}
+function Test-ObserverSawExactBotJoin([string]$Text, [string]$ExpectedBotName) {
+    if ([string]::IsNullOrWhiteSpace($ExpectedBotName)) {
+        throw 'ExpectedBotName must be a non-empty visible player name.'
+    }
+    # Retail observer logs contain lines such as: ^oTSE_Bot_Client_1^r joined
+    # TSE display formatting is not part of the player's visible name.
+    foreach ($match in [regex]::Matches($Text, '(?m)^(?<player>[^\r\n]+?) joined[ \t]*\r?$')) {
+        $nameWithCodes = $match.Groups['player'].Value
+        $visibleName = [regex]::Replace($nameWithCodes, '\^(?:c[0-9a-fA-F]{6}|f[0-9]|[oir])', '')
+        if ([string]::Equals($visibleName, $ExpectedBotName, [StringComparison]::Ordinal)) {
+            return $true
+        }
+    }
+    return $false
+}
+function Test-NativeModuleLoaded([int]$GameProcessId, [string]$ExpectedModule = 'GameMP.dll') {
+    $modules = @((Get-Process -Id $GameProcessId -ErrorAction Stop).Modules)
+    if (@($modules | Where-Object { $_.ModuleName -ieq $ExpectedModule }).Count -gt 0) { return $true }
+    # A 64-bit PowerShell can enumerate only WOW64 shims for 32-bit Retail 1.07.
+    # Recheck via the built-in 32-bit PowerShell, without injecting any game hooks.
+    if ([Environment]::Is64BitProcess -and [Environment]::Is64BitOperatingSystem) {
+        $x86 = Join-Path $env:WINDIR 'SysWOW64\WindowsPowerShell\v1.0\powershell.exe'
+        if (Test-Path -LiteralPath $x86) {
+            $moduleLiteral = $ExpectedModule.Replace("'", "''")
+            $check = '@((Get-Process -Id ' + $GameProcessId + ').Modules | Where-Object { $_.ModuleName -ieq ''' + $moduleLiteral + ''' }).Count'
+            $count = & $x86 -NoProfile -NonInteractive -Command $check
+            if ($LASTEXITCODE -eq 0 -and @($count | Where-Object { $_ -match '^\s*[1-9]\d*\s*$' }).Count -gt 0) { return $true }
+        }
+    }
+    return $false
+}
+function Restore-RetailTestDll([string]$Backup, [string]$Destination, [string]$ExpectedHash) {
+    if (!(Test-Path -LiteralPath $Backup)) { throw 'Original Retail test DLL backup is missing.' }
+    if ((Get-FileHash -LiteralPath $Backup -Algorithm SHA256).Hash -ne $ExpectedHash) {
+        throw 'Original Retail test DLL backup hash mismatch; refusing unsafe restore.'
+    }
+    Copy-Item -LiteralPath $Backup -Destination $Destination -Force
+    if ((Get-FileHash -LiteralPath $Destination -Algorithm SHA256).Hash -ne $ExpectedHash) {
+        throw 'Original Retail test DLL restoration hash mismatch.'
+    }
 }
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
@@ -34,11 +81,16 @@ if (Get-NetUDPEndpoint -LocalPort 25600,25601 -ErrorAction SilentlyContinue) {
 }
 if (Test-Path -LiteralPath $Evidence) { throw 'Use a new evidence directory.' }
 $out = (New-Item -ItemType Directory -Path $Evidence).FullName
-Copy-Item "$clientDir\Bin\GameMP.dll" "$out\GameMP-before.dll"
+$clientDllPath = Join-Path $clientDir 'Bin\GameMP.dll'
+$savedDll = Join-Path $out 'GameMP-before.dll'
+$originalDllHash = (Get-FileHash -LiteralPath $clientDllPath -Algorithm SHA256).Hash
+Copy-Item -LiteralPath $clientDllPath -Destination $savedDll
+if ((Get-FileHash -LiteralPath $savedDll -Algorithm SHA256).Hash -ne $originalDllHash) {
+    throw 'Retail test DLL backup hash mismatch; candidate has not been installed.'
+}
 foreach ($file in @("$serverDir\Dedicated_BotTest.log", "$clientDir\SeriousSam.log", "$clientDir\Bin\SeriousSam.RPT")) {
     if (Test-Path $file) { Move-Item -LiteralPath $file -Destination (Join-Path $out ('before-' + (Split-Path $file -Leaf))) }
 }
-Copy-Item -LiteralPath $dllPath -Destination "$clientDir\Bin\GameMP.dll"
 $server = $null
 $client = $null
 $observerProcess = $null
@@ -46,6 +98,8 @@ $loaded = $false
 $shutdownOk = $false
 $configBackups = @{}
 try {
+    # Candidate installation belongs inside try so the original is restored on any failure.
+    Copy-Item -LiteralPath $dllPath -Destination $clientDllPath -Force
     if ($CaptureObserver) {
         $frames = @(Get-ChildItem "$observerDir\ScreenShots\Anim_*.tga" -ErrorAction SilentlyContinue |
             ForEach-Object { if ($_.BaseName -match '^Anim_(\d+)$') { [int]$Matches[1] } })
@@ -125,7 +179,7 @@ try {
             } else { $unexpectedExit = $true }
         }
         if (!$client.HasExited -and !$loaded) {
-            try { $loaded = @((Get-Process -Id $client.Id).Modules | Where-Object {$_.ModuleName -eq 'GameMP.dll'}).Count -gt 0 }
+            try { $loaded = Test-NativeModuleLoaded -GameProcessId $client.Id }
             catch { if (!$client.HasExited) { throw } }
         }
     } until ($unexpectedExit -or (!$AllowReconnect -and !$ExpectedShutdown -and $client.HasExited) -or
@@ -151,7 +205,7 @@ try {
         $observerText = Get-Content -Raw "$observerDir\SeriousSam.log"
         $result.observerCurrentlyJoined = (Test-NativeJoined $observerText)
         $result.observerAlive = !$observerProcess.HasExited
-        $result.observerSawBotJoin = [bool]($observerText -match 'TSE_Bot_PoC.* joined')
+        $result.observerSawBotJoin = [bool](Test-ObserverSawExactBotJoin -Text $observerText -ExpectedBotName $ExpectedBotName)
         $result.crcAcceptedCount = ([regex]::Matches($serverText, 'CRC check OK')).Count
     }
     if ($ExpectedShutdown) {
@@ -192,6 +246,9 @@ try {
             try { Copy-Item -LiteralPath $configBackups[$config] -Destination $config -Force }
             catch { $cleanupErrors += $_ }
         }
+        # Restore only after our client/server processes were stopped; verify SHA256.
+        try { Restore-RetailTestDll -Backup $savedDll -Destination $clientDllPath -ExpectedHash $originalDllHash }
+        catch { $cleanupErrors += $_ }
     }
     if ($CaptureObserver -and $null -ne $frameStart) {
         $screenshots = New-Item -ItemType Directory "$out\observer-screenshots"
