@@ -49,6 +49,7 @@ A00 fungiert als **nicht blockierende Koordination**. Ein inaktiver, nicht errei
 
 ## Einstieg eines weiteren Agenten
 
+0. Aktuelle Rundenaufteilung (Stand 21.10.2026): [PARALLEL-GPT-AGENT-2026-10-21.md](PARALLEL-GPT-AGENT-2026-10-21.md) – PR-Iststand, priorisierte Queue für den GPT-Agenten (Shadow/Hetzner) und Schreib-Scopes der parallel laufenden Arena-Sitzung.
 1. `AGENTS.md`, diese Koordination und laufende Worktrees/Branches prüfen.
 2. Eigenen Scope, Branch und Worktree nutzen; ohne `GRANTED` direkt mit konfliktfreien Code-/Offline-Arbeiten beginnen.
 3. Bei belegten gemeinsamen Laufzeitressourcen isolierte Kopien oder Offline-Arbeit vorziehen. Niemals bei unbekanntem Besitz in fremde Prozesse/Dateien eingreifen.
