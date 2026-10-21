@@ -58,9 +58,11 @@
 - [ ] Eigene Ressourcen schließen, Hash-/Restore-Nachweis.
 
 ### Task 5: Review, PR und Handoff
-- [ ] Review, Konfigurations-/Aktivierungs-/Rollback-Anleitung und präzise offene Gates.
-- [ ] Eigenen Branch pushen und PR erstellen. Bei externem Blocker ausdrücklich Draft/Teilstand.
-- [ ] Handoff mit SHA, Tests, Produktionsstatus, belegtem Blocker und kleinstem nächsten Schritt aktualisieren.
+- [x] Review, Konfigurations-/Aktivierungs-/Rollback-Anleitung und präzise offene Gates.
+- [x] Eigenen Branch pushen und PR erstellen. Bei externem Blocker ausdrücklich Draft/Teilstand.
+- [x] Handoff mit SHA, Tests, Produktionsstatus, belegtem Blocker und kleinstem nächsten Schritt aktualisieren.
 
 ## Ausführungsstand / Handoff
 Portabler Kern 8467149: 72 Python-Tests (29 neu) OK, unabhängiger Review ohne belegten blockierenden Kernfehler. Echte gleichzeitige Controller und 200 virtuelle Sitzungen mit normalen Zeitbändern geprüft; keine reale Stundenabnahme. Task3/4 BLOCKED_NATIVE_ACTIVE_PR46_QUALIFICATION: fremder MEASURING_3600-Lauf und kollidierende Supervisor-Lebenszyklusarbeit. Keine Runtime-Anbindung oder Gameplay-Erweiterung fertig behauptet. Vollständiger Befund, private Belegorte und kleinster nächster Schritt: docs/reports/2026-10-21-identities-sessions-handoff.md. PR bleibt Draft, Produktion unverändert.
+
+Draft-PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/47. Veröffentlichung über verbundenen GitHub-Connector nach fehlgeschlagener HTTPS-Push-Anmeldung; veröffentlichter Implementierungsbaum b1bcf596beeacdceecbe8f109c64efb011a881d3 entspricht exakt dem geprüften lokalen f9d8a40. Lokale Beleggeschichte unter agent/identities/20261021-sessions-local-proof erhalten. Kein Merge, keine Aktivierung. Task3/4 weiterhin offen.

@@ -3,6 +3,13 @@
 **Gesamtauftrag NICHT abgeschlossen.** Status: `PORTABLE_CORE_PASS / NATIVE_BLOCKED_ACTIVE_PR46_QUALIFICATION`.
 Kein produktiver Einsatz, keine neue Retail-DLL, keine behauptete Verbesserung der tatsächlich spielenden KI.
 
+## Veröffentlichung
+[Draft-PR #47](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/47), offen und nicht merge-/aktivierungsbereit.
+HTTPS-Push auf Hetzner hat keine Git-Anmeldung. Der verbundene GitHub-Connector veröffentlichte stattdessen den byteidentischen Implementierungsbaum `b1bcf596beeacdceecbe8f109c64efb011a881d3` als `a94f36aea4560095da097c912103cb14582823a5`.
+Alle neun Blob-Hashes und der vollständige Tree wurden mit dem lokal geprüften `f9d8a40519f9419efe173a1216de4cbf9bdb0ed7` abgeglichen.
+Lokale Belegcommits bleiben unter `agent/identities/20261021-sessions-local-proof` erhalten. Der eigene Worktree folgt dem veröffentlichten PR-Branch; spätere Dokumentationscommits ändern keinen getesteten Code.
+Keine Änderung von Zugangsdaten, Credential-Helpern oder fremder Git-Konfiguration.
+
 ## Eigene Arbeit
 - Hetzner: `/srv/tse-identities-20261021`, Branch `agent/identities/20261021-sessions`.
 - Basis: `fdfc46eae8ba5557af427c1b36fc91b0d95aec37` (gemergter PR #45).
