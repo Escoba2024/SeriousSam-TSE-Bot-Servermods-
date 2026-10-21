@@ -62,3 +62,21 @@ MSVC-Build SHA256 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d308
 Ein Bot + originale Retail-Gegenstelle: 300,000s Messfenster, 6000 Tickspanne / 301 Statuszeilen, Position verändert, 92 neue Kampf-Feueraktionen, Scoreänderung. Originalclient sichtbar im gerenderten Retail-Spiel geprüft: normale Bewegung, Kill durch Rookie-Bot, Gesundheit 0, Score 1/0 vs 0/1; normale Respawn-Eingabe stellt 100 Gesundheit wieder her. Dies ist ein echter lokaler Retail-Multiplayer-Lauf unter Wine, kein unabhängiger WAN- oder menschlicher Windows-Test. Private Bildhashes und Beobachtungen stehen im Buildreport; Rohbilder/Logs bleiben auf Hetzner.
 
 Ein-Bot-CPU: Bot 9,980%, Server 8,423%, Originalrenderer 95,420% eines Kerns; Host 61,752% ausgelastet. Noch keine Vergleichsmessung der fertigen Vier-/Acht-Bot-Version.
+
+## Vier-Bot-Human-/Legacy-Gates bestanden; Acht-Bot-Stunde läuft
+
+Dieselbe neue DLL und 600s-Fenster mit 180s Warm-up: Human 21,305% Client-CPU / 10,255% Server, Legacy 22,658% / 10,785% eines Kerns. Beide Varianten: vier bewegte Bots, je 12000 Tickspanne, neue Kampf-Feueraktionen, Scoreänderung, keine protokollierten Sync-Fehler und kein neues Throttling. Ein Fenster je Variante; daraus wird keine kausale Ersparnis durch die Human-Policy abgeleitet. Vollständige Werte: integrated-runtime-results.json.
+
+Acht Human-Bots + Original-Retail-Gegenstelle sind seit 10:05 UTC verbunden; Messfenster begann nach dem Warm-up um 10:09 UTC und ist noch NICHT als Stunden-PASS gewertet. Alle fünf Skillstufen/sechs Personas sind im nativen BotDriver protokolliert und alle acht Slots bewegen sich/feuern. Drei echte Client-CRC-Akzeptanzen, bisher keine SYNCBAD/Disconnects.
+
+Die GameSpy-Regelfelder dürfen nicht naiv als Standard-Booleans interpretiert werden: Im gepinnten SDK schreibt GetGameSpyStatusInfo mehrere Regeln mit TRUE→0. Die Serverkonfiguration der älteren A/B-Serie und des aktuellen Laufs enthält gam_bInfiniteAmmo=1; die aktuelle Rohquery liefert entsprechend infiniteammo=0. Gleiche tatsächliche Spielregeln wurden zusätzlich anhand der persistenten Konfiguration geprüft.
+
+Nach der Stunde folgt für Phase H noch ein separates CPU-Fenster mit der unveränderten früher qualifizierten 61DC-DLL. Der erfolgreiche ältere Renderer-A/B-Kandidat 4f7414... wird dadurch nicht fälschlich mit dem früheren Release gleichgesetzt. Ein Reader für dessen unveränderte Statuslogs muss ohne neue CSV-/Feuerzähler 20Hz/Bewegung belegen; keine erfundenen Schusszahlen für den alten Binärstand.
+
+## Abschließende private Gates / öffentlicher Preflight
+
+Acht-Bot-Stunde PASS_60MIN_WINE nach 3600,000s, alle acht Bots in allen zwölf Fünfminutenintervallen aktiv bewegt und mit echten Combat-Fire-Aktionen, drei CRC-Akzeptanzen, null SYNCBAD/Disconnects/Throttling. Alle acht Mounts entfernt.
+
+Unveränderte 61DC-Referenz über 600s: Client 103,593%, Server 9,768%; alle vier bewegt mit 20Hz und Scoreänderung. Null Throttling/Sync-Fehler, vier Mounts entfernt. Frühere Timestamp-Verzeichniskollision vor jedem Spielstart durch eindeutige mkdtemp-Pfade behoben und RED→GREEN geprüft.
+
+Öffentliche Population akzeptiert menschliche Beitritte, verlangt aber alle acht Botnamen (RED→GREEN). Frisch: 40 root Python-Tests, 59 Benchmark-/Adaptertests, sieben C++-Suiten einschließlich 555 Human-Checks und realer Integrations-Smoke bestanden. Vorbereitungsprobe auf öffentlichen Ports bestanden, sechs Mounts entfernt. 415 alte DLL-/Konfigurations-/Profil-/Log-/Launcher-Dateien gesichert und aus Archiv bytegenau restauriert. Noch kein öffentlicher Lauf-PASS.
