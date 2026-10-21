@@ -10,6 +10,7 @@ import unittest
 import uuid
 
 import bot_session_runtime as r
+import bot_sessions as planner_module
 
 
 def identity():
@@ -115,6 +116,36 @@ class ControllerOwnership(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 with r.ControllerLock(db):
                     pass
+    def test_second_real_process_is_excluded_while_owner_alive(self):
+        with tempfile.TemporaryDirectory() as temp:
+            db = Path(temp) / "sessions.db"
+            db.touch()
+            program = (
+                "from bot_session_runtime import ControllerLock\n"
+                f"with ControllerLock({str(db)!r}):\n"
+                " print('locked',flush=True)\n"
+                " input()\n"
+            )
+            p = subprocess.Popen([sys.executable, "-c", program], cwd=Path(__file__).parent,
+                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                 stderr=subprocess.PIPE, text=True)
+            try:
+                self.assertEqual(p.stdout.readline().strip(), "locked")
+                with self.assertRaises(RuntimeError):
+                    with r.ControllerLock(db):
+                        pass
+                p.stdin.write("\n")
+                p.stdin.flush()
+                self.assertEqual(p.wait(timeout=5), 0)
+                with r.ControllerLock(db):
+                    pass
+            finally:
+                if p.poll() is None:
+                    p.kill()
+                    p.wait(timeout=5)
+                p.stdin.close()
+                p.stdout.close()
+                p.stderr.close()
     def test_kernel_unlocks_on_child_exit(self):
         with tempfile.TemporaryDirectory() as temp:
             db = Path(temp) / "sessions.db"
@@ -146,6 +177,51 @@ def observation(**kw):
                   human_conflict=False)
     sample.update(kw)
     return sample
+
+
+class PlannerAdapterEndToEndOffline(unittest.TestCase):
+    def test_intent_journal_join_leave_cooldown_no_processes(self):
+        with tempfile.TemporaryDirectory() as temp:
+            db = Path(temp) / "sessions.db"
+            cfg = dict(enabled=True, pool_id="runtime-test", seed=123,
+                       accelerated=True, max_bots=1, reserved_human_slots=2,
+                       join_interval_s=1, leave_interval_s=1,
+                       startup_delay_s=[0, 0], pause_s=[40, 40],
+                       session_bands=[[1, 20, 20]], servers=["one"],
+                       identities=[{"id": "mika", "nickname": "Mika", "profile": 3}])
+            p = planner_module.Planner(db, cfg)
+            try:
+                intents = p.plan("one", {"observed_at":100, "maxplayers":16,
+                                        "human_names":[]}, 100)
+                self.assertEqual(len(intents), 1)
+                action = intents[0]
+                self.assertEqual(action["action"], "join")
+                state = p.states()["mika"]
+                evidence = observation(epoch=action["epoch"], verified_absence=True)
+                self.assertEqual(r.reconcile(state, evidence), "claim_launch")
+                with r.ControllerLock(db) as ctl:
+                    self.assertTrue(ctl.claim_launch("mika", action["epoch"]))
+                with r.ControllerLock(db) as ctl:
+                    self.assertFalse(ctl.claim_launch("mika", action["epoch"]))
+                self.assertEqual(r.reconcile(state, observation(epoch=action["epoch"],
+                    process_alive=True, connected=True)), "ack_join")
+                self.assertTrue(p.record("mika", action["epoch"], "joined", 101))
+                self.assertEqual(p.states()["mika"]["status"], "PLAYING")
+                leaves = p.plan("one", {"observed_at":122, "maxplayers":16,
+                                        "human_names":[]}, 122)
+                self.assertEqual([(x["action"], x["reason"]) for x in leaves],
+                                 [("leave", "planned")])
+                state = p.states()["mika"]
+                self.assertEqual(r.reconcile(state, observation(epoch=action["epoch"],
+                    process_alive=True, connected=True)), "graceful_leave")
+                self.assertEqual(r.reconcile(state, observation(epoch=action["epoch"],
+                    query_absence_confirmed=True)), "ack_left")
+                self.assertTrue(p.record("mika", action["epoch"], "left", 123))
+                self.assertEqual(p.states()["mika"]["status"], "COOLDOWN")
+                self.assertEqual(p.plan("one", {"observed_at":124,
+                    "maxplayers":16, "human_names":[]}, 124), [])
+            finally:
+                p.close()
 
 
 class Reconciliation(unittest.TestCase):

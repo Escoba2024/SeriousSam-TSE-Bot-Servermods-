@@ -63,7 +63,7 @@
   Prozess blockieren; geplanter Leave erzeugt keinen Wiederanlauf;
   Exit/Disconnect bleiben bis bestätigter Abwesenheit in Quarantäne.
 - [x] GREEN: `python3 -m unittest discover -s tools -p 'test_*.py'`.
-- [ ] Commit/Push mit präzisem Umfang; echte Ausführung bleibt separates Gate.
+- [x] Commit/Push mit präzisem Umfang; echte Ausführung bleibt separates Gate.
 
 #### Fortsetzung, Task 3b: isolierter Einzelverbindungsnachweis
 Erst nach belegtem Ende der PR46-Messung: private Overlay-/Wine-Prefix-/Port-
@@ -100,3 +100,9 @@ Draft-PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/47. 
 - `reconcile` ist ohne Prozessseitenwirkungen; verlangt explizite gleiche Identität/Epoch, belegte Eigentümerschaft, frische Query und klare Ghost-/Fremdprozessgrenzen. Ohne Native-Probe nie Starten, Töten oder `Planner.record` ausführen.
 - **89/89** komplette `python3 -m unittest discover -s tools -p 'test_*.py'` PASS (3.634 s), davon 17 neue Runtime-Adapter-Tests. Keine zusätzliche CPU-/C++-/Wine-/Native-Qualifikation, solange PR46 `MEASURING_3600` läuft.
 - Diese Umsetzung vervollständigt ausschließlich den portablen Task3a-Vertrag; Task3b/4 und Gesamtziel weiterhin offen.
+
+### Follow-up 18:00 UTC – separate-process contention and full planner-adapter lifecycle
+- Zwei zusätzliche Tests: echter zweiter OS-Prozess bleibt während gehaltener Kernel-Sperre ausgeschlossen; kompletter **simulierter** Pfad Intent → durable Launch-Claim → Join-Ack → geplantes Leave → bestätigte Abwesenheit → Cooldown. Keine Wine-/Native-Prozesse gestartet.
+- Gesamtsuite `python3 -m unittest discover -s tools -p 'test_*.py'`: **91/91 PASS, 3.985 s**, jetzt 19 Runtime-Adapter-Tests.
+- Vorheriger Adapterstand unter PR #47, GitHub Commit `507217ccfd82407ffcb5e3ded473d51309e16d64` publiziert; veröffentlichter Tree `a79f824f7c15e64c0e89802698a6fc9800c3cb60` lokal verifiziert. Dieser Follow-up erhält gesonderten Commit. PR verbleibt Draft.
+- PR46-Runtime zur Probezeit 18:00:22 UTC: `MEASURING_3600`, 3044 s erfasst, keine Kollision erzeugt.

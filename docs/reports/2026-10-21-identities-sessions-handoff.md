@@ -108,3 +108,8 @@ Grenze: `reconcile` liefert ausschließlich eine Entscheidung; **keine** native 
 Farbcodes bleiben bis zu originaler HUD-/Scoreboard-/Query-/Name-Limit-Abnahme gesperrt. Individuelle echte Retail-Verbindung, Quit/Rückkehr, neue Human-KI-Verbesserungen und 2×8-Tests sind **nicht** abgeschlossen.
 Produktive Acht-Bot-Instanz, Spielbinaries, Profile, Ports, Dienste, fremder PR46-Supervisor/Qualifier und Backups unverändert.
 Nächster Schritt nach tatsächlichem Ende der fremden nativen PR46-Stundenmessung: neuen Eigentums-/Ressourcencheck, isolierter einzelner Botprozess und nachweisliche Join-/Leave-/Profil-ID-/GUID-Abnahme, ohne die öffentliche Flotte zu unterbrechen.
+
+### Follow-up 18:00 UTC
+GitHub #47 auf erstem Adaptercommit `507217ccfd82407ffcb5e3ded473d51309e16d64` aktualisiert und lokale Branch-Referenz nach Prüfung des identischen Trees sauber mit `origin` synchronisiert; lokaler Beweiscommit `9e960aa` bleibt unter `agent/identities/20261021-adapter-local-proof` erhalten.
+Zwei ergänzende Tests belegen reale zweite Prozesssperre und rein simulierten lückenlosen Planner-/Adapter-/SQLite-Claim-Lebenszyklus. Volle Python-Suite: **91/91 PASS (3.985 s)**, davon **19 Runtime-Adapter-Tests**.
+Native PR46-Qualifikation 18:00:22 UTC weiterhin `MEASURING_3600` (3044 s); weitere Retail-Prozesse deshalb weiterhin gesperrt.
