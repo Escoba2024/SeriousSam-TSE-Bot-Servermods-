@@ -1,8 +1,9 @@
 {
   "qualified": false,
   "build_ok": true,
-  "started_utc": "2026-10-21T00:44:28Z",
-  "repo_commit": "9dcb725339b945d9fb04b24bea5d8bd83193aa1e",
+  "started_utc": "2026-10-21T09:30:58Z",
+  "repo_commit": "ba7d0e65b99e1e586abcbc8e9b075e58519a2696",
+  "repo_tree": "9d7512dc2db395688f7ec0ec116b998d2f4cd764",
   "source_sha256": {
     "SessionProperties.cpp": "26ea32ab4ca15c28dde0c772eca4ec5e56c1f828651c5ce3640af5e3bd0b5ee6",
     "Map.cpp": "567fb36f6fda0e1cdf15212ba2414506e54c4122f04799693151bdd2566f26ee",
@@ -21,9 +22,9 @@
     "StdAfx.cpp": "1a1e4d1b55c6b454a71f431079ab560231a13bf42ea8c3604f76005bd1b2b050",
     "WEDInterface.cpp": "25019c6d5880b6b717683187fd19e639849b82453813560489a17caa238af673",
     "CompMessage.h": "508d53c2e02536cd96c5e24516c2c87949615debe4cb659cc960b82d0c3f5674",
-    "BotDriver.cpp": "5eb5770799b4f839aa67c6a46be2eb5b23435097a150838c6858a991cb1c5ad9",
+    "BotDriver.cpp": "e4ebf21d35b7cc1fdee7a47c663e7cc1fb607836dcee16e0d67ad3acb3ef81b0",
     "CompMessage.cpp": "2b5d03c361357b1a1d496612c7c4e6c9454e1e400fa08175d964845f7f2f7b89",
-    "Game.cpp": "9635cf293c1817ccde23b36e8512457192f2271efde20ac106b962874d86e394",
+    "Game.cpp": "43e14e8d0cb5270211436d203bc5aba4abce64fb8cb4b39c80d2bb0bcbea53d7",
     "bot_profile.h": "f78fe5ad8e1eeb054c72fcc8f08f29820815b56696975be5f71814b5938fdce6",
     "botcore.h": "1029714fd3732b01710a608255bb3830b406cd4fbec0568ea9e8ecd8e3480e31",
     "Console.cpp": "6d2967a5c34f16359f9a186bf43c81ff11d461d751e42e9ef9e956f00de17f89",
@@ -77,19 +78,137 @@
   ],
   "sdk_commit": "aa7869c2c2c4db0562281814d0ac3784e6b9d6f0",
   "include_commit": "94ff8cd0e63941f8601294350b616472f772ed51",
-  "dll_sha256": "84e7ce725b0c00806c2c538ac96bb9b69a78cb34021efaae25b99743e64fb771",
+  "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
   "source_count": 15,
   "configuration": "Release_TSE107 equivalent direct cl/link, Win32",
-  "finished_utc": "2026-10-21T00:45:20Z",
+  "finished_utc": "2026-10-21T09:31:52Z",
   "compiler_version": "cl 19.44.35229.0; link 14.44.35229.0; MSVC distribution 14.44.35207; x86",
+  "published_source_commit": "65219c355c08c6859150a9aa9d596f476da5247c",
+  "published_source_tree_equals_local_build_tree": true,
   "validation": {
     "botcore_suites": 7,
     "human_checks": 555,
-    "human_smoke": "PASS",
-    "benchmark_python_tests": 52,
-    "telemetry_parser_tests": 20,
-    "gamespy_query_tests": 6,
-    "runtime_preflight_tests": 5,
+    "human_smoke": "PASS including real full-ammo adapter",
+    "benchmark_python_tests": 59,
+    "telemetry_query_preflight_tests": 31,
     "release_provenance_hashes": 13
-  }
+  },
+  "build_history": [
+    {
+      "repo_commit": "9dcb725339b945d9fb04b24bea5d8bd83193aa1e",
+      "repo_tree": null,
+      "dll_sha256": "84e7ce725b0c00806c2c538ac96bb9b69a78cb34021efaae25b99743e64fb771",
+      "build_ok": true,
+      "finished_utc": "2026-10-21T00:45:20Z"
+    },
+    {
+      "repo_commit": "ef4675e52d2b29774858609548a15b9062dfc347",
+      "repo_tree": "bbead369fe022798afc69d3ddca4ec6c24d93895",
+      "dll_sha256": "9a0a71a1d3dbf4d873a3a083287ea7d5e40cad476cb556e2d84cfc7ba492bea3",
+      "build_ok": true,
+      "finished_utc": "2026-10-21T01:01:51Z"
+    },
+    {
+      "repo_commit": "183f8d1c02aa3f5d7ad0464bd449aebdab1e8a16",
+      "repo_tree": "ff32d22d732e33a0a3978c18bb4f760c4d6f268f",
+      "dll_sha256": "d4f71d7be5efafa872f8e8a9d19c69921f6b90eaf08eeffc036662a226781511",
+      "build_ok": true,
+      "finished_utc": "2026-10-21T01:06:14Z"
+    }
+  ],
+  "runtime_one": {
+    "status": "PASS_LIMITED",
+    "required_s": 300,
+    "elapsed_s": 300.0004698780249,
+    "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+    "score_changed": true,
+    "host_busy_percent": 61.751797711083356,
+    "host_steal_percent": 0.0,
+    "new_throttled_periods": 0,
+    "cpu_core_percent": {
+      "server": 8.423,
+      "botA": 9.98,
+      "vanilla": 95.42
+    },
+    "rss_kib": {
+      "server": 50696,
+      "botA": 186996,
+      "vanilla": 215368
+    },
+    "checks": {
+      "botA": {
+        "telemetry": {
+          "samples": 312,
+          "warmup_s": 40,
+          "build": {
+            "tag": "p0-telemetry-20261022",
+            "built": "Oct 21 2026 09:31:27"
+          },
+          "config": {
+            "nullrender": "1",
+            "nullrender_fps": "20",
+            "dedicated": "0",
+            "bot_enabled": "1",
+            "bot_iLogEvery": "20",
+            "bot_iTelemetry": "1",
+            "tick_ms": "50.000"
+          },
+          "states": [],
+          "notes": [
+            "CONFIG,bot_bEnabled=1,bot_fYawSpeed=45.00,bot_fMoveFactor=1.00,bot_fFirePeriod=1.00,bot_iFireTicks=3,bot_iLogEvery=20,bot_bDiagnostics=0,bot_bAutoCombat=1,bot_bObstacleAvoidance=1,bot_iTelemetry=1,bot_bTelemetryConsole=0"
+          ],
+          "reasons": {
+            "ACTIVE": 312
+          },
+          "warnings": [],
+          "tick_hz_median": 20.0,
+          "tick_hz_min": 20,
+          "action_total": 6248,
+          "actions_per_s_median": 20.0,
+          "actions_per_bot_s": 20.0,
+          "action_ratio": 1.0,
+          "lp_median": 1.0,
+          "frames_per_s_median": 20.0,
+          "render_skip_total": 6248,
+          "render_draw_total": 0,
+          "lock_ms_max": 14.914,
+          "lock_ms_last_last": 0.001,
+          "tick_ms_max": 56.028,
+          "stall_max": 0,
+          "stall_rows": 0,
+          "cpu_user_ms_total": 28150,
+          "cpu_kernel_ms_total": 2600,
+          "verdict": "ACTIVE_OK",
+          "exit_code": 0
+        },
+        "slots": {
+          "0": {
+            "max_tick": 6940,
+            "tick_span": 6000,
+            "samples": 301,
+            "moved": true,
+            "fired": true,
+            "fire_actions_delta": 92
+          }
+        }
+      }
+    },
+    "retail_visual_observation": {
+      "scope": "original Retail 1.07 client under Wine on Hetzner; local multiplayer; normal XTest keyboard/mouse inputs; not an external human/WAN test",
+      "binary_pins": "original SeriousSam.exe, Engine.dll, EntitiesMP.dll and GameMP.dll verified by staged harness",
+      "observed": [
+        "640x480 rendered game with Retail_Control and BOT-Rookie-Rush in HUD",
+        "Normal W/S/D movement changed the rendered viewpoint",
+        "Kill message: BOT-Rookie-Rush poured lead into Retail_Control; health 0; scoreboard bot 1/0, Retail 0/1",
+        "Native fire-button respawn restored health 100, score unchanged; bot model visible at left edge"
+      ],
+      "screenshots": {
+        "retail-view-0933.png": "3b8895f8a73c8f7c394febdd7faa1a58b1d061c68fa3cf52a2e37d39544439d7",
+        "retail-view-after-move.png": "249ea2342a3e2c76499d63ea39a219045ec2d8ff625fe88161999b89dfe60402",
+        "retail-view-respawn.png": "c92fa33b0661e510d2cd1af5c034f8de3ce99f0fbd9e8be25ab10d96fed34d3e",
+        "retail-view-0936.png": "208ed60ba5564d62c176fdc43ef107d18ca18955dd6b747a49e2cca57baa57c9"
+      }
+    }
+  },
+  "acceptance": "ONE_BOT_RETAIL_GAMEPLAY_PASS; four/eight/60-minute/final CPU/public still pending"
 }

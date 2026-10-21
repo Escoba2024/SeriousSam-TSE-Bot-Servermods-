@@ -232,5 +232,8 @@
     "CPU divided by four includes shared client cost; not measured incremental bot cost",
     "Paused only between fully saved measurements; pause excluded from elapsed windows",
     "No public/60-minute acceptance inferred"
-  ]
+  ],
+  "runner_source_commit": "8c6e93e50ead19e717b4160d63f1ac736e7d9fd9",
+  "runner_source_sha256": "100b2435a342f90a1fadbda83f17e9c9e3d9b6c5822d9ce426e26cfafafff1e9",
+  "runner_available_in_pr41_head": "d64e4a87186199a589b15c5c764ccf0c50e7e742"
 }

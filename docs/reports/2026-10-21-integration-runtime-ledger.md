@@ -54,3 +54,11 @@ Alle sechs A/B-Fenster bestanden: vier bewegte Legacy-Bots, 20Hz je Slot, 12000 
 Suchpfad-Regressionsfall und realer vollständiger Munitionsadapter RED→GREEN. Der frühere Adapter ließ Raketen/Granaten/Kanonenkugeln mit leerem Vorrat als nutzbar gelten. Neuer Engine-Adapter filtert alle endlichen Vorräte für Human- und Legacy-Pfad; geschützte Release-Header bleiben unverändert. Das echte integrierte Block-Smoke extrahiert auch diesen Adapter.
 
 Schusspulse der lokalen Legacy-Slots sind zeitversetzt; 1Hz-Statuszeilen können sie systematisch verpassen. Ein kumulativer Zähler erfasst nun ausgegebene Kampf-Feueraktionen nach SetAction, ohne Respawn-Pulse. Die Runtime-Auswertung betrachtet nur Zählerdifferenz/Bewegung innerhalb des Messfensters. Fünf gezielte Anschluss-/Nachweistests bestanden. Neuer Build und Runtime-Nachweis stehen noch aus.
+
+## Build04 / erstes Gameplay-Gate bestanden
+
+MSVC-Build SHA256 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835, Quellbaum 9d7512dc2db395688f7ec0ec116b998d2f4cd764, lokal ba7d0e6 / identischer veröffentlichter Quellbaum 65219c3. 59 Benchmark-/Adaptertests, 31 Parser-/Query-/Preflighttests, sieben C++-Suiten und realer Integrations-Smoke bestanden.
+
+Ein Bot + originale Retail-Gegenstelle: 300,000s Messfenster, 6000 Tickspanne / 301 Statuszeilen, Position verändert, 92 neue Kampf-Feueraktionen, Scoreänderung. Originalclient sichtbar im gerenderten Retail-Spiel geprüft: normale Bewegung, Kill durch Rookie-Bot, Gesundheit 0, Score 1/0 vs 0/1; normale Respawn-Eingabe stellt 100 Gesundheit wieder her. Dies ist ein echter lokaler Retail-Multiplayer-Lauf unter Wine, kein unabhängiger WAN- oder menschlicher Windows-Test. Private Bildhashes und Beobachtungen stehen im Buildreport; Rohbilder/Logs bleiben auf Hetzner.
+
+Ein-Bot-CPU: Bot 9,980%, Server 8,423%, Originalrenderer 95,420% eines Kerns; Host 61,752% ausgelastet. Noch keine Vergleichsmessung der fertigen Vier-/Acht-Bot-Version.
