@@ -20,6 +20,20 @@ Der aktuell nativ qualifizierte KI-Kandidat hat DLL-SHA256 **`61DC27E0E7B80BADCF
 
 Der Ground-Lookahead-Versuch vom 11.–12.10. hat nach BotClient-Ersatz native Sync-Fehler und **keine bestandene Abnahme**. Seine Quellen und Rohbelege sind lokal privat gesichert und außerhalb dieses qualifizierten Quellreleases. Der aktuelle Bericht dokumentiert den offenen Versuch.
 
+## Laufende CPU-Optimierung – unqualifiziert (Stand 22.10.2026)
+
+Der P0-Kandidat `poc/candidates/p0-nullrender-20261022/` ergänzt die
+GameMP-Quelle um eine timerunabhängige Evidenzspur (`BotTelemetry.csv`) und
+einen opt-in Null-Renderer (Rücksprung vor `tm_csHooks`). Der Quellstand wird
+per `apply.sh` aus dem qualifizierten Release-Baum erzeugt (Hash-geprüft), nie
+in ihn hineingeschrieben. **Nichts davon ist gebaut, gemessen oder abgenommen**;
+die qualifizierte DLL `61DC...` und der öffentliche Server bleiben unverändert.
+Analyse und Verfahren:
+[P0-Diagnose](docs/reports/2026-10-22-p0-bot-tick-diagnosis.md),
+[Messprotokoll](docs/reports/2026-10-22-cpu-measurement-protocol.md),
+[Null-Render/Headless-Pfade](docs/research/2026-10-22-nullrender-and-headless-paths.md).
+PR #40 bleibt Draft.
+
 ## Einstieg / Übergabe an eine andere KI
 
 1. [Aktueller Entwicklungsstand und Belege](docs/reports/2026-10-12-shadow-development-status.md): Meilensteine, exakte Kandidaten, Messwerte, Fehlerhistorie, Einschränkungen und Prioritäten.
