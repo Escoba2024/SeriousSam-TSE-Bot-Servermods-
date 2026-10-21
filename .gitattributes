@@ -5,3 +5,9 @@ poc/release/gamemp/** whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab
 poc/patch/*.patch whitespace=-blank-at-eol,-blank-at-eof
 poc/scripts/LocalBotRelease.ini -text
 poc/scripts/Phase1ObstacleAvoidance.ini -text
+
+# Candidate overlays and imported review copies retain upstream CRLF bytes.
+poc/candidates/** whitespace=cr-at-eol
+poc/ai-integration/gamemp/** -text whitespace=cr-at-eol
+# Unmodified upstream body copied from the P0 overlay.
+poc/candidates/integrated-human-cpu-20261021/Game.cpp whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab

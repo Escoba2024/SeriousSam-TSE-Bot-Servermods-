@@ -206,7 +206,7 @@ static DWORD WINAPI BotTelemetry_Watchdog(LPVOID)
 
     if (bot_iTelemetry != 0) {
       BotTelemetry_WriteLine(
-        "%llu,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%.3f,%.3f,%.3f,%.3f,%llu,%llu,%d,%ld",
+        "%llu,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%.3f,%.3f,%.3f,%.3f,%llu,%llu,%d,%ld",
         BotTelemetry_WallMs(),
         lTicks - lPrevTicks, lActions - lPrevActions, lFrames - lPrevFrames,
         lSkip - lPrevSkip, lDraw - lPrevDraw,

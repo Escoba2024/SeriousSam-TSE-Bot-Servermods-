@@ -1,0 +1,56 @@
+diff --git a/poc/release/gamemp/BotDriver.cpp b/poc/release/gamemp/BotDriver.cpp
+--- a/poc/release/gamemp/BotDriver.cpp
++++ b/poc/release/gamemp/BotDriver.cpp
+@@ -66,6 +66,10 @@
+ static INDEX bot_bAutoCombat = FALSE; // optional deathmatch decisions
+ static INDEX bot_bCombatSkipLocals = TRUE; // siblings share one bot client
+ static INDEX bot_bObstacleAvoidance = FALSE; // optional reactive movement recovery
++static INDEX bot_bDiag = FALSE;        // P0: timer/config heartbeat (opt-in)
++static INDEX bot_iDiagEvery = 100;     // P0: heartbeat every N timer calls (100 = 5 s)
++static INDEX bot_iDiagTicks = 0;       // P0: observed GameHandleTimer calls
++static BOOL _botDiagLoggedFirst = FALSE;
+ 
+ static botcore::Reconnect _botReconnect;
+ static CTString _strBotReconnectAddress;
+@@ -173,6 +177,10 @@
+   _pShell->DeclareSymbol("user INDEX bot_bAutoCombat;", &bot_bAutoCombat);
+   _pShell->DeclareSymbol("user INDEX bot_bCombatSkipLocals;", &bot_bCombatSkipLocals);
+   _pShell->DeclareSymbol("user INDEX bot_bObstacleAvoidance;", &bot_bObstacleAvoidance);
++  _pShell->DeclareSymbol("user INDEX bot_bDiag;",      &bot_bDiag);
++  _pShell->DeclareSymbol("user INDEX bot_iDiagEvery;", &bot_iDiagEvery);
++  // P0 diagnostics: proves that this exact GameMP build loaded and Init ran.
++  BotLog("[BotDiag] init: bot symbols declared\n");
+ }
+ 
+ /* ------------------------------------------------------------------------ */
+@@ -258,6 +266,30 @@
+ 
+ BOOL BotDriver_HandleTimer(CGame *pgame)
+ {
++  // P0 diagnostics: this heartbeat sits BEFORE every gate and proves that the
++  // WinMM timer thread actually reaches GameHandleTimer (also in menus).
++  // CShell::GetINDEX returns -666 for symbols missing from this binary
++  // (release build); it never aborts, so the values are read defensively.
++  if (bot_bDiag) {
++    bot_iDiagTicks++;
++    const BOOL bFirst = !_botDiagLoggedFirst;
++    if (bFirst || (bot_iDiagEvery>0 && (bot_iDiagTicks%bot_iDiagEvery)==0)) {
++      _botDiagLoggedFirst = TRUE;
++      INDEX iMask = 0;
++      if (pgame!=NULL) {
++        for (INDEX iLP=0; iLP<4; ++iLP) {
++          if (pgame->gm_lpLocalPlayers[iLP].lp_pplsPlayerSource!=NULL) iMask|=(1L<<iLP);
++        }
++      }
++      const INDEX iFpsActive   = _pShell->GetINDEX("sam_iMaxFPSActive");
++      const INDEX iFpsInactive = _pShell->GetINDEX("sam_iMaxFPSInactive");
++      const INDEX iSndFormat   = _pShell->GetINDEX("snd_iFormat");
++      BotLog("[BotDiag] call=%d gameon=%d enabled=%d locals=%d%d%d%d fpsActive=%d fpsInactive=%d snd=%d%s\n",
++        bot_iDiagTicks, (pgame!=NULL && pgame->gm_bGameOn)?1:0, bot_bEnabled?1:0,
++        (iMask&1)?1:0,(iMask&2)?1:0,(iMask&4)?1:0,(iMask&8)?1:0,
++        iFpsActive,iFpsInactive,iSndFormat, bFirst?" firstcall":"");
++    }
++  }
+   if (InterlockedExchange(&_botNavigationResetRequested,FALSE)) BotResetNavigation();
+   if (!bot_bEnabled || pgame==NULL || !pgame->gm_bGameOn) {
+     BotResetNavigation();

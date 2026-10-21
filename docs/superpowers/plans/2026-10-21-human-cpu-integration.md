@@ -1,0 +1,44 @@
+# Human-KI und CPU-Integration – Ausführungsplan
+> Ausführung durch den Hauptagenten mit superpowers:executing-plans; keine zusätzlichen Agenten.
+
+**Ziel:** Retail 1.07, acht aktive Bots, fünf Skillstufen/sechs Persönlichkeiten, CPU-Optimierung und öffentliche 60-Minuten-Abnahme.
+**Architektur:** Eigener Kandidaten-Overlay; qualifizierte Release-Dateien bleiben unverändert. P0-Telemetrie aus main, Diagnostik/Throttling aus #42, Human-KI aus #44.
+**Tech Stack:** Hetzner Ubuntu/Wine, MSVC 14.44 x86, gepinntes SE1-ModSDK.
+**Spec:** docs/superpowers/specs/2026-10-21-human-cpu-master-goal.md (vollständiger Nutzerauftrag).
+
+## Globale Grenzen
+- Ausschließlich Hetzner; keine neuen Agenten, Lizenzannahmen, Kosten oder Shadow.
+- Laufende Benchmarkfenster nicht durch Builds/Lasttests verfälschen.
+- Original-Dedicated/Vanilla und qualifizierte 61DC-DLL erhalten.
+- Kein Merge/Deployment vor Build, Runtime und bestandenem Sync.
+- Keine Abschaltung der Sync-Prüfung; keine privaten Binaries/Logs in GitHub.
+
+## Bestandsprüfung 21.10.2026 00:34 UTC
+Drive-Protokoll/Handoff zuletzt 20.10.22:12 UTC, Reviewboard 16.10.; gelesen.
+main 67f1977 enthält #43. #41 d64e4a8 offen; #42 f3c9384 offen; #44 7d9e695 offen.
+Eigener Worktree /srv/tse-integration-20261021, Branch agent/integration/20261021-human-cpu.
+Benchmark PID103292, Serienmessung mit 180s Warmup/600s Messfenster; erste zwei Fenster gespeichert.
+Zwischenfenster-Build abgeschlossen: 15 Quellen, MSVC x86, DLL a54053e7a29b7b6c1de9ca724bec8bf5a6acdab50acef7b981c1575605b2dfeb.
+Dieser Build ist eine Release-Quelle mit Renderänderung, keine integrierte Human-KI.
+Öffentlicher Server gestoppt; qualifizierte Binaries erhalten.
+
+## Review-Fokus
+CSV-Feldverschiebung, Profil-/Entity-Neuzuordnung nach Respawn, Human-KI trotz Throttling mit 20Hz, Locks/Watchdog-Lebensdauer, Build-/DLL-/Testidentität.
+
+## Aufgaben
+1. [x] Quellen/Prozesse/PRs prüfen, eigenen Worktree und Plan anlegen.
+2. [ ] CSV-Fehler mit erzeugter C++-Zeile reproduzieren; Header/Feldtypen/21 Werte prüfen; minimale Korrektur; Parser-Regression.
+3. [ ] #42/#44 als unveränderte Vorschläge übernehmen; konfliktfreien integrierten Overlay herstellen. Legacy + Human + Telemetrie + NullRender + Diagnose gemeinsam erhalten; Default-Flags aus.
+4. [ ] Portable KI-/Smoke-/Parser-/Overlay-/Provenienztests. In Messfenstern keine schweren Tests.
+5. [ ] Serienmessungen auswerten; erst danach integrierte DLL mit MSVC bauen, Quelle/Hash/Toolchain protokollieren.
+6. [ ] Eigene Runtime/Ports: 1→4→8 Bots, originale Retail-Gegenstelle, 60min aktive KI/Sync; A/B/C CPU ohne Überlappung; Ressourcen/Kapazität.
+7. [ ] Nur bei allen PASS: Backup/Rollback + öffentlich 8 Bots, Browser/Join prüfen; Commit/Push/PR/Drive/Handoff aktualisieren.
+
+## Abnahme
+Konflikte gelöst; echte CSV korrekt; qualifizierte CPU-Werte; fünf Skills/sechs Personas im aktiven BotDriver; MSVC/Wine PASS; acht kämpfende Bots; Originalclient-Join; 60min Sync; öffentlich erreichbar/gelistet; Rollback; GitHub/Drive aktuell.
+Jedes Gate bleibt OFFEN bis zum tatsächlichen Nachweis.
+
+## Fortschrittsledger
+- 00:34 UTC: Bestandsprüfung und isolierte Integration begonnen. Erste Messpaarung zeigt deutlich weniger CPU bei NullRender; noch kein abschließender Seriennachweis.
+
+- 00:39 UTC: CSV-Regression RED→GREEN; 20 Parser-Tests PASS; 3 Overlay-Tests PASS; 13 Provenienz-Hashes und PR44-Patch-Verifikation PASS. #42/#44 unverändert importiert; Konflikte in separatem Kandidaten vereinigt. Vollsuite/MSVC-Build über zeitlich begrenzte Pause nach drittem abgeschlossenem Benchmarkfenster geplant.
