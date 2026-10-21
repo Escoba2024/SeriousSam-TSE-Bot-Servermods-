@@ -41,6 +41,7 @@ def build(args):
                 # SDK root may list a prepared external EntitiesTSE directory.
                 if directory!=sdk: raise RuntimeError("modified include SDK")
         report["repo_commit"]=subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD"],text=True).strip()
+        report["repo_tree"]=subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD^{tree}"],text=True).strip()
         archive=out/"sdk-game.tar"
         subprocess.run(["git","-C",str(sdk),"archive","--format=tar","-o",str(archive),"HEAD","Sources/Game","Sources/Properties"],check=True)
         with tarfile.open(archive) as t: t.extractall(out,filter="data")

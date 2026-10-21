@@ -235,6 +235,7 @@ def main():
         for role in procs:
             prefix=E/("prefix-"+role)
             subprocess.run(["runuser","-u","nobody","--","env","WINEPREFIX="+str(prefix),"wineserver","-k"],capture_output=True,timeout=15)
+            subprocess.run(["runuser","-u","nobody","--","env","WINEPREFIX="+str(prefix),"wineserver","-w"],capture_output=True,timeout=15)
         unmounts=[]
         for target in reversed(mounts):
             proc=subprocess.run(["umount",str(target)],capture_output=True,text=True)

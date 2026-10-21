@@ -830,6 +830,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     BOOL humanFire=FALSE;      // set only by the profile-driven path
     FLOAT humanStrafe=0.0f;    // -1..1, applied only when bot_fStrafeScale > 0
     FLOAT humanScanYaw=0.0f;   // scan delta while no opponent is perceived
+    FLOAT humanTargetDistance=0.0f; // frozen last-seen distance from the policy
     if (automatic) {
       testAimReady=FALSE;
       const CSessionProperties *session=(const CSessionProperties *)_pNetwork->GetSessionProperties();
@@ -916,6 +917,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           humanFire=command.fire?TRUE:FALSE;
           humanStrafe=(FLOAT)command.strafe;
           humanScanYaw=(FLOAT)command.yaw_delta_deg;
+          humanTargetDistance=(FLOAT)command.distance_m;
 
           if (bot_iLogEvery>0 && bs.bs_iTick%bot_iLogEvery==0) {
             BotLog("[BotHuman] local=%d tick=%d profile=%s target=%d vis=%d fire=%d weapon=%d dist=%.1f pref=%.1f move=%.2f strafe=%.2f err=%.2f rays=%d skipped=%d switches=%d overshoots=%d\n",
@@ -1005,9 +1007,12 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         bs.bs_aPitch=player->m_aLastRotation(2)+(FLOAT)decision.pitchDelta;
         moveFactor=(FLOAT)decision.moveFactor;
         testAimReady=decision.fireAllowed;
+        if (target==NULL) testAimReady=FALSE; // a remembered player may have left
         combatWeapon=decision.weapon;
-        const FLOAT distance=(BotCombatEye(target).pl_PositionVector-
-          BotCombatEye(player).pl_PositionVector).Length();
+        // Human decisions use the frozen perceived position, never hidden live state.
+        const FLOAT distance=bot_bHumanAI ? humanTargetDistance
+          : (target!=NULL ? (BotCombatEye(target).pl_PositionVector-
+              BotCombatEye(player).pl_PositionVector).Length() : 0.0f);
         combatHold=combatHold || distance<=((combatWeapon==1 || combatWeapon==10)?1.5f:8.0f);
         CPlayerWeapons *weapons=player->GetPlayerWeapons();
         combatSelect=bs.bs_weaponInput.Poll(bs.bs_iTick,combatWeapon,

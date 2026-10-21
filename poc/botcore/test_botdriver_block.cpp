@@ -112,6 +112,7 @@ static void HumanBlock(CPlayer* player, void* pgame, BOOL deathmatch, INDEX iLP,
   BOOL humanFire = FALSE;
   FLOAT humanStrafe = 0.0f;
   FLOAT humanScanYaw = 0.0f;
+  FLOAT humanTargetDistance = 0.0f;
   (void)testAimReady;
 
 #include "block.inc"
@@ -120,6 +121,7 @@ static void HumanBlock(CPlayer* player, void* pgame, BOOL deathmatch, INDEX iLP,
   outStrafe = humanStrafe;
   outFire = humanFire;
   (void)humanScanYaw;
+  (void)humanTargetDistance;
   (void)visible;
 }
 
