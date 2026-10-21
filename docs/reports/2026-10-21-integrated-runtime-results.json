@@ -1,5 +1,5 @@
 {
-  "updated_utc": "2026-10-21T11:36:20.946557+00:00",
+  "updated_utc": "2026-10-21T12:28:33.568475+00:00",
   "cpu_unit": "percent of one core; host has 2 vCPU; RSS in KiB",
   "conditions": {
     "map": "Yodeller",
@@ -622,5 +622,266 @@
     "C_vs_A_observed_reduction_percent": 79.43393858658403,
     "repetitions_each": 1,
     "interpretation": "Different gameplay decisions; observed whole candidate improvement, not causal Human-policy saving. Separate P0 render A/B has three pairs."
+  },
+  "public_smoke": {
+    "status": "PASS_PUBLIC_SMOKE",
+    "stage": "eight",
+    "human_ai": true,
+    "bots": 8,
+    "required_s": 600,
+    "elapsed_s": 600.0002237730077,
+    "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+    "scope": "PUBLIC_HETZNER_EIGHT_BOT_SMOKE_NOT_INDEPENDENT_WINDOWS_JOIN",
+    "host_busy_percent": 35.33329364033036,
+    "host_steal_percent": 0.0,
+    "new_throttled_periods": 0,
+    "whole_test_cgroup_cpu_core_percent": 69.03112142116389,
+    "cpu_core_percent": {
+      "server": 13.75,
+      "botA": 23.82,
+      "botB": 22.835
+    },
+    "rss_kib": {
+      "server": 51368,
+      "botA": 188436,
+      "botB": 188820
+    },
+    "score_changed": true,
+    "checks": {
+      "botA": {
+        "telemetry": {
+          "samples": 605,
+          "warmup_s": 190,
+          "build": {
+            "tag": "p0-telemetry-20261022",
+            "built": "Oct 21 2026 09:31:27"
+          },
+          "config": {
+            "nullrender": "1",
+            "nullrender_fps": "20",
+            "dedicated": "0",
+            "bot_enabled": "1",
+            "bot_iLogEvery": "200",
+            "bot_iTelemetry": "1",
+            "tick_ms": "50.000"
+          },
+          "states": [],
+          "notes": [
+            "CONFIG,bot_bEnabled=1,bot_fYawSpeed=45.00,bot_fMoveFactor=1.00,bot_fFirePeriod=1.00,bot_iFireTicks=3,bot_iLogEvery=200,bot_bDiagnostics=0,bot_bAutoCombat=1,bot_bObstacleAvoidance=1,bot_iTelemetry=1,bot_bTelemetryConsole=0"
+          ],
+          "reasons": {
+            "ACTIVE": 605
+          },
+          "warnings": [],
+          "tick_hz_median": 20,
+          "tick_hz_min": 20,
+          "action_total": 48455,
+          "actions_per_s_median": 80,
+          "actions_per_bot_s": 20.0,
+          "action_ratio": 1.0000619169487328,
+          "lp_median": 4,
+          "frames_per_s_median": 20,
+          "render_skip_total": 12114,
+          "render_draw_total": 0,
+          "lock_ms_max": 3.198,
+          "lock_ms_last_last": 0.002,
+          "tick_ms_max": 59.239,
+          "stall_max": 0,
+          "stall_rows": 0,
+          "cpu_user_ms_total": 136580,
+          "cpu_kernel_ms_total": 7830,
+          "verdict": "ACTIVE_OK",
+          "exit_code": 0
+        },
+        "slots": {
+          "0": {
+            "max_tick": 15800,
+            "tick_span": 12000,
+            "samples": 61,
+            "moved": true,
+            "fired": true,
+            "fire_actions_delta": 151
+          },
+          "1": {
+            "max_tick": 15800,
+            "tick_span": 12000,
+            "samples": 61,
+            "moved": true,
+            "fired": true,
+            "fire_actions_delta": 500
+          },
+          "2": {
+            "max_tick": 15800,
+            "tick_span": 12000,
+            "samples": 61,
+            "moved": true,
+            "fired": true,
+            "fire_actions_delta": 567
+          },
+          "3": {
+            "max_tick": 15800,
+            "tick_span": 12000,
+            "samples": 61,
+            "moved": true,
+            "fired": true,
+            "fire_actions_delta": 641
+          }
+        }
+      },
+      "botB": {
+        "telemetry": {
+          "samples": 601,
+          "warmup_s": 190,
+          "build": {
+            "tag": "p0-telemetry-20261022",
+            "built": "Oct 21 2026 09:31:27"
+          },
+          "config": {
+            "nullrender": "1",
+            "nullrender_fps": "20",
+            "dedicated": "0",
+            "bot_enabled": "1",
+            "bot_iLogEvery": "200",
+            "bot_iTelemetry": "1",
+            "tick_ms": "50.000"
+          },
+          "states": [],
+          "notes": [
+            "CONFIG,bot_bEnabled=1,bot_fYawSpeed=45.00,bot_fMoveFactor=1.00,bot_fFirePeriod=1.00,bot_iFireTicks=3,bot_iLogEvery=200,bot_bDiagnostics=0,bot_bAutoCombat=1,bot_bObstacleAvoidance=1,bot_iTelemetry=1,bot_bTelemetryConsole=0"
+          ],
+          "reasons": {
+            "ACTIVE": 601
+          },
+          "warnings": [],
+          "tick_hz_median": 20,
+          "tick_hz_min": 20,
+          "action_total": 48132,
+          "actions_per_s_median": 80,
+          "actions_per_bot_s": 20.0,
+          "action_ratio": 1.0,
+          "lp_median": 4,
+          "frames_per_s_median": 20,
+          "render_skip_total": 12033,
+          "render_draw_total": 0,
+          "lock_ms_max": 23.331,
+          "lock_ms_last_last": 4.184,
+          "tick_ms_max": 54.985,
+          "stall_max": 0,
+          "stall_rows": 0,
+          "cpu_user_ms_total": 130060,
+          "cpu_kernel_ms_total": 7290,
+          "verdict": "ACTIVE_OK",
+          "exit_code": 0
+        },
+        "slots": {
+          "0": {
+            "max_tick": 15400,
+            "tick_span": 12000,
+            "samples": 61,
+            "moved": true,
+            "fired": true,
+            "fire_actions_delta": 2368
+          },
+          "1": {
+            "max_tick": 15400,
+            "tick_span": 12000,
+            "samples": 61,
+            "moved": true,
+            "fired": true,
+            "fire_actions_delta": 2204
+          },
+          "2": {
+            "max_tick": 15400,
+            "tick_span": 12000,
+            "samples": 61,
+            "moved": true,
+            "fired": true,
+            "fire_actions_delta": 1664
+          },
+          "3": {
+            "max_tick": 15400,
+            "tick_span": 12000,
+            "samples": 61,
+            "moved": true,
+            "fired": true,
+            "fire_actions_delta": 2625
+          }
+        }
+      }
+    },
+    "left_running": true,
+    "legacy_master_ipv4": "81.205.81.173"
+  },
+  "public_acceptance": {
+    "status": "PASS_PUBLIC_BROWSER_JOIN_AND_WAN_QUERY",
+    "utc": "2026-10-21T12:26:11.040969+00:00",
+    "public_address": "91.99.75.33:25600",
+    "query_port": 25601,
+    "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+    "native_browser": {
+      "external_master": "master.gamespy.com resolved to master.333networks.com",
+      "saw_hostname": "Alpha-Gaming",
+      "map": "Yodeller",
+      "players": 8,
+      "maxplayers": 16,
+      "version": "1.07",
+      "joined_directly_from_internet_list": true
+    },
+    "original_client": {
+      "all_original_hashes_pinned": true,
+      "gameplay_client_not_observer_mode": true,
+      "population_after_join": 9,
+      "normal_controls": [
+        "mouse fire/respawn",
+        "w",
+        "s",
+        "d"
+      ],
+      "seen_health_sequence": [
+        60,
+        0,
+        100
+      ],
+      "death_counter": 1,
+      "bot_models_and_live_kill_messages_seen": true,
+      "scope": "original Retail under Wine on Hetzner public-IP route; not independent Windows WAN game client",
+      "normal_wm_close_and_own_unmount": true,
+      "population_after_close": 8
+    },
+    "sync": {
+      "crc_ok": 3,
+      "sync_ok": 6430,
+      "sync_bad": 0,
+      "disconnect_error": 0
+    },
+    "external_udp_query": {
+      "distinct_external_ipv4_peers": 4,
+      "requests": 4,
+      "complete_responses": 4,
+      "request_bytes_each": 8,
+      "response_bytes": [
+        881,
+        885,
+        881,
+        886
+      ],
+      "response_version": "1.07",
+      "response_players": 9,
+      "responses_include_all_eight_bots_and_original_client": true,
+      "scope": "actual eth0 inbound/outbound exchanges, independent of local public-IP game route"
+    },
+    "json_api": {
+      "status": "NOT_IN_DB_OR_EMPTY_WHILE_REAL_GAME_BROWSER_AND_WAN_QUERIES_PASS",
+      "interpretation": "secondary HTTP API does not override direct successful native browser/WAN packet evidence"
+    },
+    "private_image_hashes": {
+      "browser-alpha-filter.png": "cef4f0953ee076dbfbf1d9d2d481870a53e1a4d6d87ef0563827fdf775326fd8",
+      "browser-join-selected.png": "7952e926349a879e4a91405ac1b440be1351a64950b37b43531744da8d821536",
+      "public-original-joined.png": "5aefba22989fc0a45dad9c1219d57cd3c56b5a07934db85e5afcdeed757a07c5",
+      "public-before-controls.png": "5cbe4a0af868f73dce6744dff33bf0550fbcc390e208bac703cb0419212493e2",
+      "public-movement.png": "3610a2778c8738b061891f69a4f567d61c3ee47249f3ea55148a0247b8066887",
+      "public-fire-control.png": "33556f4842a97c20fb7300bccd2db2281d5a32ecfb65a7acac0fb2f1b31b74c8"
+    },
+    "private_external_capture_sha256": "89f6d9eb70e1946a218f902a57883c74a5d4ff2163770762776d66ed57509e10"
   }
 }

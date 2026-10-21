@@ -2,7 +2,7 @@
 
 ## 1. Gesamtstatus
 
-Retail-Abnahme unter Wine bestanden; öffentliche Inbetriebnahme und abschließende Integration noch in Arbeit. Keine pauschale Windows-, WAN-Spieler-PC- oder 24/7-Abnahme.
+Retail-Abnahme unter Wine und öffentliche Inbetriebnahme bestanden. Acht Human-Bots bleiben auf 91.99.75.33:25600 aktiv; Original-Internetbrowser, Beitritt daraus, aktives Originalspiel und unabhängige WAN-UDP-Queries belegt. Keine pauschale Windows-Spieler-PC- oder 24/7-Abnahme.
 
 ## 2. Integrierte Änderungen
 
@@ -15,7 +15,7 @@ MSVC cl 19.44.35229.0 / Win32 unter vorhandenem Wine. 15 Übersetzungen und Link
 
 ## 4. GitHub
 
-Konsolidierung in [PR #45](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/45). #43 bereits in main. #41 wurde unabhängig und hashgepinnt ausgeführt; dessen älterer Prozess-Cleanup wird nicht ungeprüft als Produktionswerkzeug übernommen. #42/#44 bleiben als ursprüngliche Vorschläge nachvollziehbar. Merge noch ausstehend.
+Konsolidierung in [PR #45](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/45). #43 bereits in main. #41 wurde unabhängig und hashgepinnt ausgeführt; dessen älterer Prozess-Cleanup wird nicht ungeprüft als Produktionswerkzeug übernommen. #42/#44 bleiben als ursprüngliche Vorschläge nachvollziehbar. Abschließender Quell-/Nachweisstand wird über #45 integriert; tatsächlicher Merge-Commit und Zeitpunkt sind im verlinkten GitHub-PR maßgeblich dokumentiert. Keine entfernten CI-Checks konfiguriert; qualifizierte lokale Tests und reale Hetzner-Läufe sind separat belegt.
 
 ## 5. KI-Eigenschaften
 
@@ -23,9 +23,9 @@ Fünf Skillstufen und sechs Persönlichkeiten in der echten Human-Policy. Acht v
 
 ## 6. CPU vorher/nachher
 
-Alle Prozesswerte in Prozent eines CPU-Kerns, Host mit zwei vCPU. Vier Bots, Yodeller, Fragmatch, 20Hz, 180s Warm-up und 600s Messung. Aktuelle Legacy-Policy: 22,658%; aktuelle Human-Policy: 21,305%; Server 10,785% bzw. 10,255%. Je nur ein Fenster: keine kausale CPU-Ersparnis durch Human-KI behauptet.
+Alle Prozesswerte in Prozent eines CPU-Kerns, Host mit zwei vCPU. Vier Bots, Yodeller, Fragmatch, 20 Hz, 180 s Warm-up und 600 s Messung. Aktuelle Legacy-Policy: 22,658%; aktuelle Human-Policy: 21,305%; Server 10,785% bzw. 10,255%. Je nur ein Fenster: keine kausale CPU-Ersparnis durch Human-KI behauptet.
 
-Separater älterer NullRender-A/B-Kandidat: drei Paare à 600s, Clientmittel 116,013% → 24,667% (−78,74%), gesamte Test-cgroup −66,85%. Dieser DLL-Hash unterscheidet sich von Build04 und dem geschützten 61DC-Referenzartefakt. Unveränderte 61DC-Referenz: 103,593% Client /9,768% Server. Alle vier bewegt, 20Hz, Scoreänderung, keine Sync-Fehler/Throttling. A/B/C je ein Fenster: 103,593% /22,658% /21,305%; beobachtete Gesamtreduktion C gegen A 79,43%. Keine erfundenen Combat-Zähler für die alte DLL.
+Separater älterer NullRender-A/B-Kandidat: drei Paare à 600 s, Clientmittel 116,013% → 24,667% (−78,74%), gesamte Test-cgroup −66,85%. Dieser DLL-Hash unterscheidet sich von Build04 und dem geschützten 61DC-Referenzartefakt. Unveränderte 61DC-Referenz: 103,593% Client /9,768% Server. Alle vier bewegt, 20 Hz, Scoreänderung, keine Sync-Fehler/Throttling. A/B/C je ein Fenster: 103,593% /22,658% /21,305%; beobachtete Gesamtreduktion C gegen A 79,43%. Keine erfundenen Combat-Zähler für die alte DLL.
 
 Acht-Bot-Stunde einschließlich softwaregerendertem Originalclient: Botprozesse 20,548% +20,505%, Server 14,686%, Originalclient 88,162%; Host 83,193%, Steal und neues Throttling null. Der Originalrenderer ist eigener Testaufwand und kein Bestandteil der dauerhaften Botflotte.
 
@@ -39,15 +39,19 @@ Acht aktive Bots qualifiziert. Betriebliche Empfehlung derzeit acht; keine höhe
 
 ## 9. Multiplayer
 
-Originale Retail-EXE/Engine/Entities/Vanilla-GameMP per Hash gepinnt. Ein Bot plus Originalclient 300s; vier Human- und vier Legacy-Bots je 600s. Native Aktionen, Scoreänderungen und Originalbeitritt belegt. Kein hochgesetzter oder deaktivierter ursprünglicher Sync-Kickgrenzwert 10.
+Originale Retail-EXE/Engine/Entities/Vanilla-GameMP per Hash gepinnt. Ein Bot plus Originalclient 300 s; vier Human- und vier Legacy-Bots je 600 s. Native Aktionen, Scoreänderungen und Originalbeitritt belegt. Kein hochgesetzter oder deaktivierter ursprünglicher Sync-Kickgrenzwert 10.
 
 ## 10. Stabilität
 
-3600,000s mit acht Human-Bots und einem Originalclient; alle acht in allen zwölf Fünfminutenintervallen bewegt und echte Combat-Fire-Aktionen. Median 20Hz, keine Render-Draws bei Bots, keine Telemetrie-Stalls, drei erfolgreiche CRC-Checks, null SYNCBAD/Disconnects, reguläres eigenes Cleanup und acht erfolgreiche Unmounts. Rohbelege bleiben privat auf Hetzner; bereinigte Werte in `2026-10-21-integrated-runtime-results.json`.
+3600,000 s mit acht Human-Bots und einem Originalclient; alle acht in allen zwölf Fünfminutenintervallen bewegt und echte Combat-Fire-Aktionen. Median 20 Hz, keine Render-Draws bei Bots, keine Telemetrie-Stalls, drei erfolgreiche CRC-Checks, null SYNCBAD/Disconnects, reguläres eigenes Cleanup und acht erfolgreiche Unmounts. Rohbelege bleiben privat auf Hetzner; bereinigte Werte in `2026-10-21-integrated-runtime-results.json`.
 
 ## 11. Produktivstatus
 
-Noch in Arbeit. Geplant ist ein eigener persistenter Overlay-Lauf mit acht Bots auf 91.99.75.33:25600, ohne Überschreiben der bisherigen Installation. Öffentliche Query, frische Masterlistung, Originalbeitritt und kontrollierter Produktions-Smoke werden separat nachgewiesen. Vorab: öffentliche Ports frei, reale Overlay-Vorbereitung bestanden, alle sechs Mounts entfernt; 415 Dateien mit DLL/Konfiguration/Profilen/Logs/Launchern gesichert und nach Extraktion bytegenau geprüft. Unveränderte große Spieldateien bleiben im erhaltenen Lower-Verzeichnis.
+Aktiv: acht Bots auf 91.99.75.33:25600, Query 25601, private persistente Overlays ohne Überschreiben der bisherigen Installation. Zusätzlicher öffentlicher Smoke 600,000 s bestanden: alle acht bewegen sich/kämpfen, Median 20 Hz, keine Render-Draws/Stalls/Sync-Fehler/Throttling. Server 13,750%, BotA 23,820%, BotB 22,835% eines Kerns; gesamte Test-cgroup 69,031%, gesamter Zwei-vCPU-Host 35,333%, Steal 0. RSS: Server 51368 KiB, BotA 188436 KiB, BotB 188820 KiB.
+
+Originaler In-Game-Internetbrowser zeigte Alpha-Gaming/Yodeller/8 von 16/Version 1.07, tatsächliche externe TCP-Masterantwort und anschließender Beitritt direkt aus der Liste bestätigt. Originalclient war normaler Spieler: neun Serverteilnehmer, Botmodell/Killmeldungen, Gesundheit 60→0→100, Tod und normaler Respawn sowie W/S/D und normale Feuereingabe. Anschließend nur eigener Observer per WM_CLOSE beendet, beide Observer-Mounts entfernt und öffentliche Acht-Bot-Population erneut bestätigt. Serverlog nach dieser Kontrolle: drei CRC-OK, 6430 SYNCOK, 0 SYNCBAD; keine fehlerbedingten Disconnects.
+
+Unabhängige WAN-Erreichbarkeit: vier unterschiedliche externe IPv4-Rechner sendeten echte Statusqueries an eth0/25601 und erhielten vier vollständige Antworten mit Version 1.07, allen acht Bots plus Originalclient, korrekt neun Spielern und final-Marker (881/885/881/886 Bytes). Die unbekannten Peeradressen und Rohpakete werden nicht veröffentlicht. Dies ist zusätzlicher WAN-UDP-Nachweis; der Spielclient selbst befand sich auf Hetzner. Vorab: öffentliche Ports frei, reale Overlay-Vorbereitung bestanden, alle sechs Mounts entfernt; 415 Dateien mit DLL/Konfiguration/Profilen/Logs/Launchern gesichert und nach Extraktion bytegenau geprüft. Unveränderte große Spieldateien bleiben im erhaltenen Lower-Verzeichnis.
 
 ## 12. Einschränkungen
 
@@ -55,4 +59,27 @@ Keine unabhängige neue Windows-/GPU-Spieler-PC-Probe, keine 24/7-Abnahme, keine
 
 ## Abschließende Pflichtkriterien
 
-Wird nach dem öffentlichen Smoke mit konkreten Nachweisen abgeschlossen. Öffentliche Erreichbarkeit, Serverlistung, Rückrollprobe, finale GitHub- und Dokumentationsaktualisierung bleiben bis dahin offen.
+| Pflichtkriterium | Status | Konkreter Nachweis |
+|---|---|---|
+| PR-Konflikte beseitigt | ERLEDIGT | Separater integrierter Kandidat; Alternativen erhalten; main enthält #43 |
+| CSV-Telemetriefehler behoben | ERLEDIGT | Echter printf-/Parser-Roundtrip, 21 typgerechte Felder |
+| CPU-Messungen qualifiziert | ERLEDIGT | Drei ältere Render-A/B-Paare plus getrennte aktuelle A/B/C-Fenster |
+| CPU-Optimierungen integriert | ERLEDIGT | NullRender tatsächlich aktiv, Draws=0, 20 Hz native Actions |
+| Fünf KI-Fähigkeitsstufen | ERLEDIGT | 555 Checks und native Profilzuordnung |
+| Sechs Persönlichkeiten | ERLEDIGT | Policy-Spezifikation, Checks, vollständiges natives Roster |
+| KI im BotDriver aktiv | ERLEDIGT | Human-Tick-/Waffen-/Aktionstelemetrie im Retail-Lauf |
+| GameMP mit MSVC gebaut | ERLEDIGT | 15 Quellen und Link; gepinnte Build04-DLL |
+| GameMP unter Wine funktionsfähig | ERLEDIGT | Gestufte reale Retail-Läufe |
+| Acht Bots verbunden | ERLEDIGT | Vollständige Queries/CRC/acht native Slots |
+| Acht Bots bewegen sich/kämpfen | ERLEDIGT | Alle acht in jedem von zwölf Fünfminutenabschnitten |
+| CPU/RAM dokumentiert | ERLEDIGT | Mess-JSON und getrennte Kapazitätshochrechnung |
+| Originalclient beigetreten | ERLEDIGT | 300 s- und 3600 s-Originalgegenstelle, Gameplay-GUI |
+| Multiplayer-Sync geprüft | ERLEDIGT | Original CRC und erfolgreiche SYNCOK, null SYNCBAD/Disconnects |
+| 60-Minuten-Stabilität | ERLEDIGT | 3600,000 s unter Wine; keine Windows-/24/7-Ausdehnung |
+| Öffentlicher Server erreichbar | ERLEDIGT | Vier echte unabhängige eth0-WAN-Queries und vier vollständige Antworten |
+| In Serverliste sichtbar | ERLEDIGT | Frische externe Master-TCP-Liste, Originalbrowser Alpha-Gaming 8/16 und Beitritt daraus |
+| Rollback sichergestellt | ERLEDIGT | Alte DLL unverändert; 415 Dateien bytegenau restauriert; normale eigene Abbruch-/Unmount-Probe |
+| GitHub aktualisiert | ERLEDIGT | Konsolidierter Source-/Nachweisstand in #45; tatsächlicher Mergestatus im PR |
+| Dokumentation aktualisiert | ERLEDIGT | Dieser 12-Punkte-Bericht, Mess-JSON, Betrieb, Kapazität, Entscheidungen und Plan; Drive als abschließend verifizierter Spiegel |
+
+Alle 20 Kriterien sind durch die angegebenen Nachweise im Hetzner-/Retail-Wine-Umfang erfüllt. Rohlogs und Screenshots bleiben privat. Der separate HTTP-JSON-Endpunkt meldete weiterhin leere Ergebnisse/not_in_db trotz erfolgreicher echter Master-TCP-Liste, Originalbrowser und unabhängiger WAN-Antworten. Daraus wird kein HTTP-API-PASS behauptet; maßgeblich sind die direkten funktionierenden Spiel-/Netzwerkbelege.

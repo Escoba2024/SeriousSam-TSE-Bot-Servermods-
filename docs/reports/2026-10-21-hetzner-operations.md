@@ -2,9 +2,9 @@
 
 ## Nachgewiesene Architektur
 
-Ein unveränderter Retail-1.07-Dedicated-Server, zwei BotClient-Prozesse mit je vier lokalen Spielern. Bot-GameMP Build04, HumanAI=1, NullRender=1, 20Hz, RosterOffset 0/4, Telemetrie=1, LogEvery=200, Diagnostik reduziert, StrafeScale=0. Yodeller/Fragmatch, acht Bots, 16 Slots. Native Netzwerk-/Physik-/Sync-Pfade bleiben aktiv. Originalclients benötigen keine Modifikation.
+Ein unveränderter Retail-1.07-Dedicated-Server, zwei BotClient-Prozesse mit je vier lokalen Spielern. Bot-GameMP Build04, HumanAI=1, NullRender=1, 20 Hz, RosterOffset 0/4, Telemetrie=1, LogEvery=200, Diagnostik reduziert, StrafeScale=0. Yodeller/Fragmatch, acht Bots, 16 Slots. Native Netzwerk-/Physik-/Sync-Pfade bleiben aktiv. Originalclients benötigen keine Modifikation.
 
-Jede Rolle und jedes Wine-Präfix verwendet einen eigenen Overlayfs-Mount. Originalinstallation, Spielebinaries und vorherige 61DC-DLL bleiben im Lower-Verzeichnis erhalten. Der explizite öffentliche Modus verlangt ein erfolgreiches gleiches DLL-Stundenergebnis; nur ein erfolgreicher zusätzlicher 600s-Smoke lässt die eigenen Prozesse laufen. Öffentliche Population muss alle acht Botnamen enthalten und darf weitere Menschen aufnehmen. Die originale Engine verwendet fest master.gamespy.com. Dieser heute nicht mehr auflösbare Name wird gemäß offizieller HOSTS-Anleitung auf die aktuell DNS-geprüfte Adresse von master.333networks.com umgeleitet (am Testtag 81.205.81.173). Ein neuer Patch-Override ist in Original-Retail nicht verfügbar. Der Harness prüft die tatsächliche Legacy-Namensauflösung vor jedem öffentlichen Start. ser_bReportSyncBad=1, ser_bReportSyncOK=1; Kickgrenzwert bleibt 10.
+Jede Rolle und jedes Wine-Präfix verwendet einen eigenen Overlayfs-Mount. Originalinstallation, Spielebinaries und vorherige 61DC-DLL bleiben im Lower-Verzeichnis erhalten. Der explizite öffentliche Modus verlangt ein erfolgreiches gleiches DLL-Stundenergebnis; nur ein erfolgreicher zusätzlicher 600 s-Smoke lässt die eigenen Prozesse laufen. Öffentliche Population muss alle acht Botnamen enthalten und darf weitere Menschen aufnehmen. Die originale Engine verwendet fest master.gamespy.com. Dieser heute nicht mehr auflösbare Name wird gemäß offizieller HOSTS-Anleitung auf die aktuell DNS-geprüfte Adresse von master.333networks.com umgeleitet (am Testtag 81.205.81.173). Ein neuer Patch-Override ist in Original-Retail nicht verfügbar. Der Harness prüft die tatsächliche Legacy-Namensauflösung vor jedem öffentlichen Start. ser_bReportSyncBad=1, ser_bReportSyncOK=1; Kickgrenzwert bleibt 10.
 
 ## Start und Status
 
@@ -31,7 +31,7 @@ Zusätzliche eigene Originalobserver zuerst per WM_CLOSE beenden; fremden Spiele
 
 ```sh
 python3 /srv/tse-integration-20261021/tools/stop_integrated_public_wine.py \
-  --result /ABSOLUTER/AKTUELLER/LAUF/result.json
+  --result /srv/tse-integration-public-20261021/eight-115115-z44oq5ua/result.json
 ```
 
 Das Werkzeug prüft PID, Linux-Startzeit und CWD vor jedem Signal, registrierte Spielprogramme und Displaybelegung. Zuerst WM_CLOSE, begrenztes TERM/KILL nur für eigene Prozesse, prefix-spezifischer wineserver-Abschluss, anschließend ausschließlich eigene Overlay-Mounts. Die ursprüngliche Installation braucht keine DLL-Rückkopie, weil sie unverändert bleibt. Ein eigener abgebrochener öffentlicher Versuch hat das normale Cleanup einschließlich aller sechs Unmounts tatsächlich durchlaufen.
@@ -47,3 +47,7 @@ Acht aktive Bots sind mit zwei Viererprozessen gemessen. Zusätzliche Botprozess
 ## Legacy-Master-DNS und dessen Rücknahme
 
 Offizielle Grundlage: https://333networks.com/instructions/hosts und https://333networks.com/instructions/serioussam/s. Keine Engine-/Dedicated-/Originalclient-Binary gepatcht, kein Zusatzprogramm installiert. Originale `/etc/hosts` liegt als `hosts.before` im privaten Sicherungsverzeichnis; `legacy-master-resolution.json` enthält Originalhash, exakt hinzugefügte markierte Zeile und Ziel. Zur Rücknahme ausschließlich die eigene Zeile mit Marker `alpha-gaming-retail107-20261021` nach Gegenprüfung entfernen; spätere fremde Hosts-Änderungen erhalten. Danach ist die Legacy-Masterverbindung erwartbar wieder ohne Auflösung. Für Spieler-PCs mit unverändertem alten Retail kann entsprechend eine eigene HOSTS-Einrichtung notwendig sein; dies ist keine Änderung der Spielbinaries.
+
+## Aktiver geprüfter Lauf
+
+`/srv/tse-integration-public-20261021/CURRENT_PUBLIC.json` verweist nach PID-/Startzeit-/CWD-/Queryprüfung auf den aktuellen retenierten Lauf. Am 21.10.: `eight-115115-z44oq5ua`, Display118, acht Bots auf 25600/Query 25601.600 s-Smoke bestanden, Original-Internetbrowser zeigt8/16, Version 1.07; Beitritt direkt aus der Liste und normale Bewegung/Tod/Respawn geprüft. Nur eigener Originalclient danach per WM_CLOSE beendet und zwei eigene Mounts entfernt. Acht Bots bleiben laufen. Vier unabhängige WAN-Statusqueries/Antworten auf eth0 separat erfasst. Die HTTP-JSON-API lieferte dennoch leer/not_in_db und ist keine verlässliche aktuelle Abnahmequelle dieses Laufs; native GameSpy-Liste/Browser und direkte WAN-Pakete sind maßgeblich.
