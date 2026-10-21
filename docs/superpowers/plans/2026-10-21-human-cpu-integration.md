@@ -42,3 +42,7 @@ Jedes Gate bleibt OFFEN bis zum tatsächlichen Nachweis.
 - 00:34 UTC: Bestandsprüfung und isolierte Integration begonnen. Erste Messpaarung zeigt deutlich weniger CPU bei NullRender; noch kein abschließender Seriennachweis.
 
 - 00:39 UTC: CSV-Regression RED→GREEN; 20 Parser-Tests PASS; 3 Overlay-Tests PASS; 13 Provenienz-Hashes und PR44-Patch-Verifikation PASS. #42/#44 unverändert importiert; Konflikte in separatem Kandidaten vereinigt. Vollsuite/MSVC-Build über zeitlich begrenzte Pause nach drittem abgeschlossenem Benchmarkfenster geplant.
+
+- 00:50 UTC: Vollsuite PASS: sieben C++-Suiten (555 Human-KI-Checks), realer integrierter KI-Block-Smoke, 52 Benchmark-/Overlay-Tests, 20 Parser-Tests, 6 Query-Tests; zusätzlicher Runtime-Preflight 5 Tests PASS. MSVC kompiliert alle 15 Quellen und linkt integrierte PE32-DLL SHA256 84e7ce725b0c00806c2c538ac96bb9b69a78cb34021efaae25b99743e64fb771. Noch keine Runtime-Freigabe.
+- Speichergrenze erkannt: 1,9GiB frei. Overlayfs-Isolation mit eigenem synthetischem Schreibtest bestätigt; kompletter Acht-Bot-/Vanilla-Datei-Preflight ohne Spieleprozess bestanden, alle acht eigenen Mounts wieder ausgehängt. Ursprünglicher Vanilla-GMS-Provider war TCP/IP Server; privater Client-Overlay setzt ihn reproduzierbar auf TCP/IP Client (neue Regression RED→GREEN).
+- Nächstes Gate: nach viertem vollständig gespeichertem Benchmarkfenster isolierter Ein-Bot-/Originalclient-Lauf (120s), danach Benchmark fortsetzen. Controller /srv/tse-integration-one-gate-20261021.py und Status-JSON; keine andere Messung überlappend.
