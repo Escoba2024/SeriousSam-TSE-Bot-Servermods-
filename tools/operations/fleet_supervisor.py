@@ -1,0 +1,340 @@
+#!/usr/bin/env python3
+"""Owner-guarded, loopback-only Wine lifecycle. Public fleet is monitor-only."""
+import argparse,fcntl,gzip,hashlib,json,os,re,select,shutil,signal,subprocess,sys,time
+from pathlib import Path
+import fleet_health as h
+q=h.q
+BASE=Path('/srv/tse-ops-runtime-20261021')
+TEMPLATE=Path('/srv/tse-wine-runtime-20261020/public-eight-20261020-2140')
+VANILLA=Path('/srv/tse-wine-runtime-20261020/install/vanilla')
+BUILD=Path('/srv/tse-integrated-build-20261021-04/manifest.json')
+HOUR=Path('/srv/tse-integration-runtime-20261021/eight-100513/result.json')
+
+def owned_pidfd(info):
+ fd=os.pidfd_open(info['pid'])
+ if h.verify_process(info)!='LIVE':os.close(fd);raise RuntimeError('process identity changed before action')
+ return fd
+
+def wait_pidfd(fd,seconds):
+ return bool(select.select([fd],[],[],seconds)[0])
+
+def atomic(path,value):
+ path=Path(path);tmp=path.with_name(path.name+'.tmp');tmp.write_text(json.dumps(value,indent=2)+'\n');os.chmod(tmp,0o600);os.replace(tmp,path)
+
+def event(path,value,limit=1000):
+ p=Path(path);rows=json.loads(p.read_text()) if p.exists() else [];rows.append(dict(value,utc=time.time()));atomic(p,rows[-limit:])
+
+def acquire_lock(path):
+ f=Path(path).open('a')
+ try:fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB)
+ except BaseException:f.close();raise
+ return f
+
+def validate_config(c):
+ try:
+  root=Path(c['root']);port=c['port'];display=c['display'];bots=c['bots']
+  if not root.is_absolute() or not root.resolve().is_relative_to(BASE) or root.resolve()==BASE:raise ValueError('private root required')
+  if type(port)!=int or not 26800<=port<=26998 or port%2:raise ValueError('private even port required')
+  if not re.fullmatch(r':12[0-9]',display) or bots not in (1,4,8):raise ValueError('invalid display/population')
+  if Path(c.get('build_manifest',''))!=BUILD or Path(c.get('template',''))!=TEMPLATE:raise ValueError('unpinned dependencies')
+  build=json.loads(BUILD.read_text())
+  if not build['build_ok'] or build['dll_sha256']!=h.DLL or q.sha(Path(build['candidate']))!=h.DLL:raise ValueError('invalid candidate')
+  q.validate_public_evidence(json.loads(HOUR.read_text()),h.DLL)
+  return root
+ except (KeyError,TypeError,OSError,AssertionError) as e:raise ValueError('invalid instance manifest: '+str(e)) from e
+
+def validate_state(c,r):
+ root=Path(c['root']);roles=['server','botA']+(['botB'] if c['bots']==8 else [])
+ cg='/sys/fs/cgroup/tse-ops-'+hashlib.sha256(str(root).encode()).hexdigest()[:12]
+ if r.get('cgroup',cg)!=cg:raise ValueError('state cgroup outside owned instance')
+ for role,info in r.get('processes',{}).items():
+  if role not in roles or info.get('cwd')!=str(root/role):raise ValueError('state process outside owned instance')
+  expected='DedicatedServer.exe' if role=='server' else 'SeriousSam.exe'
+  if info.get('command','').replace('\\','/').split('/')[-1]!=expected or info.get('cgroup')!='0::'+cg.removeprefix('/sys/fs/cgroup'):raise ValueError('state command/cgroup outside owned instance')
+ x=r.get('xvfb')
+ if x and (x.get('cwd')!=str(root) or x.get('command')!='Xvfb' or x.get('cgroup')!='0::'+cg.removeprefix('/sys/fs/cgroup')):raise ValueError('state display outside owned instance')
+ allowed={str(root/x) for role in roles for x in [role,'prefix-'+role]}
+ if any(x not in allowed for x in r.get('mounts',[])):raise ValueError('state mount outside owned instance')
+
+def recovery_action(role,names,bots,missing_seconds):
+ if any(n not in q.ROSTER[:bots] for n in names):return 'HOLD_HUMANS'
+ offset=4 if role=='botB' else 0;owned=q.ROSTER[offset:offset+(1 if bots==1 else 4)]
+ if not set(owned)&set(names):return 'RESTART_ROLE'
+ return 'WAIT_GHOSTS' if missing_seconds<30 else 'RESTART_FLEET'
+
+def maintenance_action(over_limit,safe,humans,retry):
+ if not over_limit:return 'NONE'
+ if not safe or humans:return 'HOLD'
+ return 'RESTART_FLEET' if retry else 'STOP_BUDGET_HOLD'
+
+def retry_allowed(state,now=None):
+ now=time.time() if now is None else now;recent=[t for t in state.get('attempts',[]) if 0<=now-t<3600]
+ return len(recent)<3 and (not recent or now-max(recent)>=30*(2**(len(recent)-1)))
+
+def open_writers(paths):
+ targets={str(Path(p).resolve()) for p in paths};found=[]
+ for proc in Path('/proc').glob('[0-9]*'):
+  try:
+   for fd in (proc/'fd').iterdir():
+    try:
+     if os.readlink(fd) in targets:found.append(int(proc.name))
+    except FileNotFoundError:pass
+  except (FileNotFoundError,ProcessLookupError):pass
+  except PermissionError:raise RuntimeError('cannot verify all open handles')
+ return found
+
+def archive_closed(paths,directory,budget=256*1024**2):
+ paths=[Path(p) for p in paths if Path(p).exists()]
+ if open_writers(paths):raise RuntimeError('live file handle; no copytruncate permitted')
+ directory=Path(directory);directory.mkdir(exist_ok=True)
+ used=sum(p.stat().st_size for p in directory.iterdir() if p.is_file())
+ # Worst-case raw+gzip overhead: do not delete old evidence to make room.
+ if used+sum(p.stat().st_size+1024 for p in paths)>budget:raise RuntimeError('archive budget exceeded; maintenance required')
+ rows=[]
+ for p in paths:
+  digest=q.sha(p);name=p.parent.name+'-'+p.name+'-'+str(time.time_ns())+'.gz';dst=directory/name;tmp=dst.with_suffix('.tmp')
+  with p.open('rb') as source,gzip.open(tmp,'wb',compresslevel=6) as out:shutil.copyfileobj(source,out)
+  check=hashlib.sha256()
+  with gzip.open(tmp,'rb') as f:
+   for chunk in iter(lambda:f.read(1048576),b''):check.update(chunk)
+  if check.hexdigest()!=digest or open_writers([p]) or q.sha(p)!=digest:tmp.unlink();raise RuntimeError('archive verification changed')
+  os.replace(tmp,dst);p.unlink();row=dict(source=str(p),sha256=digest,archive=str(dst));rows.append(row)
+  event(directory/'manifest.json',row,limit=10000)
+ return rows
+
+def master_rule(port,owner):
+ if type(port)!=int or not 26800<=port<=26998 or port%2:raise ValueError('private port required')
+ if not re.fullmatch('[A-Za-z0-9-]+',owner):raise ValueError('invalid owner')
+ return ['OUTPUT','-p','udp','--sport',str(port+1),'--dport','27900','-m','comment','--comment','tse-ops-'+owner,'-j','DROP']
+
+def close_prefix(prefix):
+ alive=False
+ for proc in Path('/proc').glob('[0-9]*'):
+  try:alive |= ('WINEPREFIX='+str(prefix)).encode() in (proc/'environ').read_bytes().split(b'\0')
+  except (FileNotFoundError,PermissionError,ProcessLookupError):pass
+ # Wine 9 returns 1 for -k when no server exists. Never turn that normal
+ # first-start state into a launch failure, or ignore a genuine command error.
+ for arg in (['-k','-w'] if alive else ['-w']):
+  subprocess.run(['runuser','-u','nobody','--','env','WINEPREFIX='+str(prefix),'wineserver',arg],check=True,capture_output=True,timeout=15)
+
+def _demote(cg):
+ def child():
+  (cg/'cgroup.procs').write_text(str(os.getpid()));os.setgid(65534);os.setuid(65534)
+ return child
+
+class Runtime:
+ def __init__(self,config):
+  self.config=Path(config);self.c=json.loads(self.config.read_text());self.root=validate_config(self.c);self.result=self.root/'result.json';self.r=json.loads(self.result.read_text());self.lock=acquire_lock(self.root/'supervisor.lock');self.roles=['server','botA']+(['botB'] if self.c['bots']==8 else []);self.cg=Path('/sys/fs/cgroup')/('tse-ops-'+hashlib.sha256(str(self.root).encode()).hexdigest()[:12]);self.boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+ def save(self):atomic(self.result,self.r)
+ def log(self,kind,**kw):event(self.root/'events.json',dict(kind=kind,**kw))
+ def specs(self):
+  return [h.mount_spec(self.root,role,TEMPLATE/('prefix-botA' if role=='prefix-botB' else role)) for game in self.roles for role in [game,'prefix-'+game]]
+ def ownership(self):
+  validate_state(self.c,self.r)
+  for role,info in self.r.get('processes',{}).items():
+   status=h.verify_process(info)
+   if status not in ['LIVE','ABSENT']:raise RuntimeError(role+':'+status)
+   if status=='LIVE' and self.r.get('boot_id')!=self.boot:raise RuntimeError('boot identity mismatch with live PID')
+  x=self.r.get('xvfb')
+  if x and h.verify_process(x) not in ['LIVE','ABSENT']:raise RuntimeError('Xvfb identity mismatch')
+  for m in self.specs():
+   mounted=any(l.split()[4]==m['target'] for l in Path('/proc/self/mountinfo').read_text().splitlines())
+   if mounted and not h.mount_matches(m):raise RuntimeError('foreign/replaced mount')
+  allowed=set(map(int,(self.cg/'cgroup.procs').read_text().split())) if self.cg.exists() else set()
+  for port in [self.c['port'],self.c['port']+1]:
+   if not h.udp_owners(port)<=allowed:raise RuntimeError('foreign port owner')
+  for proc in Path('/proc').glob('[0-9]*'):
+   try:
+    env=(proc/'environ').read_bytes().split(b'\0')
+    own=any(x.startswith(b'WINEPREFIX='+str(self.root).encode()+b'/prefix-') for x in env)
+    if own and int(proc.name) not in allowed:raise RuntimeError('foreign process uses own Wine prefix')
+   except (FileNotFoundError,PermissionError,ProcessLookupError):pass
+ def mounts(self):
+  self.ownership()
+  for m in self.specs():
+   if not h.mount_matches(m):
+    target=Path(m['target'])
+    if not target.is_dir() or any(target.iterdir()):raise RuntimeError('mount target not empty')
+    subprocess.run(['mount','-t','overlay','overlay','-o',','.join(k+'='+m[v] for k,v in [('lowerdir','lower'),('upperdir','upper'),('workdir','work')]),m['target']],check=True,capture_output=True)
+   if not h.mount_matches(m):raise RuntimeError('mount replay failed')
+  self.r['mounts']=[m['target'] for m in self.specs()];self.r['template']=str(TEMPLATE);self.save()
+ def launch(self,role):
+  self.ownership();info=self.r.get('processes',{}).get(role)
+  if info and h.verify_process(info)=='LIVE':raise RuntimeError('refusing duplicate launch')
+  game=self.root/role
+  for name,want in q.PINS.items():
+   if name=='GameMP.dll' and role.startswith('bot'):want=h.DLL
+   if q.sha(game/'Bin'/name)!=want:raise RuntimeError('runtime binary mismatch '+role+'/'+name)
+  if role=='server':
+   for port in [self.c['port'],self.c['port']+1]:
+    with h.socket.socket(h.socket.AF_INET,h.socket.SOCK_DGRAM) as s:s.bind(('0.0.0.0',port))
+  prefix=self.root/('prefix-'+role)
+  close_prefix(prefix)
+  logs=[self.root/(role+'-wine.log'),game/('Dedicated_BotTest.log' if role=='server' else 'SeriousSam.log')]
+  if role.startswith('bot'):logs.append(game/'Bin/BotTelemetry.csv')
+  archive_closed(logs,self.root/'archives')
+  env=dict(os.environ,HOME=str(self.root.parent),WINEARCH='win32',WINEDEBUG='-all',DISPLAY=self.c['display'],LIBGL_ALWAYS_SOFTWARE='1',GALLIUM_DRIVER='llvmpipe',LP_NUM_THREADS='1',XDG_CACHE_HOME=str(self.root.parent/'cache'),WINEPREFIX=str(prefix))
+  cmd=['wine','Bin/DedicatedServer.exe','BotTest'] if role=='server' else ['wine','Bin/SeriousSam.exe','+connect','127.0.0.1:'+str(self.c['port']),'+quickjoin','+script','Scripts\\Integrated.ini']
+  with (self.root/(role+'-wine.log')).open('wb') as out:p=subprocess.Popen(cmd,cwd=game,env=env,stdout=out,stderr=subprocess.STDOUT,stdin=subprocess.DEVNULL,start_new_session=True,preexec_fn=_demote(self.cg))
+  expected='DedicatedServer.exe' if role=='server' else 'SeriousSam.exe'
+  deadline=time.monotonic()+15
+  while True:
+   info=h.process_identity(p.pid)
+   if info['command'].replace('\\','/').endswith('/'+expected):break
+   if p.poll() is not None or time.monotonic()>deadline:raise RuntimeError('native executable did not settle')
+   time.sleep(.1)
+  self.r.setdefault('processes',{})[role]=info;self.save();self.log('LAUNCH',role=role,pid=p.pid)
+ def start(self):
+  validate_config(self.c)
+  if os.statvfs('/').f_bavail*os.statvfs('/').f_frsize<h.MIN_FREE:raise RuntimeError('disk reserve below 8 GiB')
+  q.validate_master_resolution();self.ownership()
+  live=[role for role,info in self.r.get('processes',{}).items() if h.verify_process(info)=='LIVE']
+  if live:
+   if set(live)!=set(self.roles):raise RuntimeError('partial fleet: reconcile with monitor; no duplicate startup')
+   for m in self.specs():
+    if not h.mount_matches(m):raise RuntimeError('live fleet lost own mount')
+   self.log('ADOPT');return
+  rule=master_rule(self.c['port'],self.cg.name)
+  probe=subprocess.run(['iptables','-w','-C']+rule,capture_output=True)
+  if probe.returncode==1:subprocess.run(['iptables','-w','-I']+rule,check=True,capture_output=True)
+  elif probe.returncode:raise RuntimeError('cannot verify private master-beacon rule')
+  self.r['private_master_guard']=rule;self.save()
+  self.mounts();self.cg.mkdir(exist_ok=True);(self.cg/'cpu.max').write_text('max 100000');self.r.update(cgroup=str(self.cg),boot_id=self.boot,game_port=self.c['port'],query_port=self.c['port']+1,display=self.c['display'],bots=self.c['bots'],dll_sha256=h.DLL)
+  xinfo=self.r.get('xvfb')
+  if xinfo and h.verify_process(xinfo) not in ['ABSENT','LIVE']:raise RuntimeError('display PID mismatch')
+  if not xinfo or h.verify_process(xinfo)=='ABSENT':
+   display=self.c['display'][1:]
+   if Path('/tmp/.X'+display+'-lock').exists() or Path('/tmp/.X11-unix/X'+display).exists():raise RuntimeError('display is occupied/stale; no blind lock deletion')
+   with (self.root/'xvfb.log').open('ab') as out:x=subprocess.Popen(['Xvfb',self.c['display'],'-screen','0','640x480x24','-nolisten','tcp','-noreset'],cwd=self.root,stdout=out,stderr=subprocess.STDOUT,preexec_fn=_demote(self.cg),start_new_session=True)
+   self.r['xvfb']=h.process_identity(x.pid);self.save();time.sleep(2)
+   if h.verify_process(self.r['xvfb'])!='LIVE':raise RuntimeError('Xvfb failed')
+  self.launch('server');time.sleep(8);self.launch('botA')
+  if 'botB' in self.roles:time.sleep(5);self.launch('botB')
+  self.r.update(status='OWNED_ISOLATED_RUNNING',left_running=True);self.save()
+ def signal_role(self,role,sig):
+  self.ownership();info=self.r['processes'][role]
+  if h.verify_process(info)=='LIVE':
+   # pidfd binds the signal to the checked kernel process, closing PID reuse races.
+   fd=os.pidfd_open(info['pid'])
+   try:
+    if h.verify_process(info)!='LIVE':raise RuntimeError('identity changed before signal')
+    signal.pidfd_send_signal(fd,sig)
+   finally:os.close(fd)
+ def stop_role(self,role):
+  info=self.r['processes'].get(role)
+  if not info or h.verify_process(info)=='ABSENT':return
+  self.ownership();fd=owned_pidfd(info)
+  try:
+   if role!='server':
+    try:q.close_window(info['pid'],self.c['display'])
+    except (OSError,subprocess.SubprocessError):self.log('WM_CLOSE_FAILED',role=role)
+    if wait_pidfd(fd,15):return
+   if h.verify_process(info)!='LIVE':raise RuntimeError('identity changed before TERM')
+   signal.pidfd_send_signal(fd,signal.SIGTERM)
+   if wait_pidfd(fd,10):return
+   if h.verify_process(info)!='LIVE':raise RuntimeError('identity changed before KILL')
+   signal.pidfd_send_signal(fd,signal.SIGKILL)
+   if not wait_pidfd(fd,5):raise RuntimeError('owned process did not exit')
+  finally:os.close(fd)
+ def no_humans(self):
+  status=q.query(self.c['port']+1);names=[v for k,v in status.items() if re.fullmatch(r'player_\d+',k)]
+  if status.get('gamever')!='1.07' or int(status.get('numplayers',-1))!=len(names) or any(n not in q.ROSTER[:self.c['bots']] for n in names):raise RuntimeError('human/unknown player hold')
+ def stop(self):
+  self.ownership()
+  if any(h.verify_process(i)=='LIVE' for role,i in self.r.get('processes',{}).items() if role=='server'):self.no_humans()
+  for role in reversed(self.roles):self.stop_role(role)
+  for role in self.roles:
+   prefix=self.root/('prefix-'+role)
+   close_prefix(prefix)
+  x=self.r.get('xvfb')
+  if x and h.verify_process(x)=='LIVE':
+   fd=owned_pidfd(x)
+   try:
+    signal.pidfd_send_signal(fd,signal.SIGTERM)
+    if not wait_pidfd(fd,10):raise RuntimeError('Xvfb exit timeout')
+   finally:os.close(fd)
+  self.ownership()
+  if self.cg.exists() and (self.cg/'cgroup.procs').read_text().strip():raise RuntimeError('owned cgroup not empty; no unmount')
+  for m in reversed(self.specs()):
+   if h.mount_matches(m):subprocess.run(['umount',m['target']],check=True,capture_output=True)
+  rule=master_rule(self.c['port'],self.cg.name)
+  probe=subprocess.run(['iptables','-w','-C']+rule,capture_output=True)
+  if probe.returncode==0:subprocess.run(['iptables','-w','-D']+rule,check=True,capture_output=True)
+  elif probe.returncode!=1:raise RuntimeError('cannot verify private master-beacon cleanup')
+  self.r.update(status='OWNED_ISOLATED_STOPPED',left_running=False);self.save();self.log('STOP')
+ def reconcile(self):
+  self.ownership();snap,health=h.collect(self.result);atomic(self.root/'health.json',health)
+  if health['status']=='HEALTHY':self.r['last_no_humans']=time.time();self.save()
+  maintenance=maintenance_action(snap['logs_over_limit'],health['safe_recovery'],bool(health['humans']),retry_allowed(self.r))
+  if maintenance in ['RESTART_FLEET','STOP_BUDGET_HOLD']:
+   self.no_humans();self.stop()
+   if maintenance=='RESTART_FLEET':
+    self.r.setdefault('attempts',[]).append(time.time());self.save();self.start()
+   self.log('LOG_MAINTENANCE',action=maintenance);return health
+  if health['safe_recovery'] and health['recover_roles']:
+   if not retry_allowed(self.r):self.log('CIRCUIT_OPEN');return health
+   self.no_humans();now=time.time();names=[n for k,n in snap['query'].items() if re.fullmatch(r'player_\d+',k)];plans={}
+   for role in health['recover_roles']:
+    since=self.r.setdefault('missing_since',{}).setdefault(role,now);plans[role]=recovery_action(role,names,self.c['bots'],now-since)
+   self.save()
+   if 'WAIT_GHOSTS' in plans.values() or 'HOLD_HUMANS' in plans.values():return health
+   self.r.setdefault('attempts',[]).append(now);self.r['attempts']=self.r['attempts'][-3:];self.save()
+   if 'RESTART_FLEET' in plans.values():
+    self.stop();self.start();self.r['missing_since']={};self.save();self.log('RECOVER_GHOST_FLEET',roles=health['recover_roles']);return health
+   for role in health['recover_roles']:self.launch(role)
+   self.r['missing_since']={};self.save();self.log('RECOVER',roles=health['recover_roles'])
+  if 'server' in snap['missing']:
+   # Query uncertainty alone cannot restart anything. A confirmed exited server,
+   # recent no-human snapshot and empty own ports are all necessary.
+   now=time.time()
+   if not snap['identity_errors'] and snap['disk_free']>=h.MIN_FREE and snap['dll_valid'] and snap['mounts_owned'] and snap['master_ok'] and 0<=now-self.r.get('last_no_humans',0)<=20 and not h.udp_owners(self.c['port']) and not h.udp_owners(self.c['port']+1) and retry_allowed(self.r):
+    self.r.setdefault('attempts',[]).append(now);self.save();self.stop();self.start();self.log('RECOVER_SERVER')
+  return health
+
+def prepare(parent,port,display,bots):
+ parent=Path(parent).resolve()
+ if not parent.is_relative_to(BASE) or parent==BASE:raise ValueError('private preparation parent required')
+ validate_config(dict(root=str(parent/'preflight'),port=port,display=display,bots=bots,build_manifest=str(BUILD),template=str(TEMPLATE)))
+ BASE.mkdir(mode=0o755,exist_ok=True)
+ if BASE.is_symlink() or BASE.stat().st_uid!=0:raise ValueError('private base ownership mismatch')
+ os.chmod(BASE,0o755)
+ parent.mkdir(parents=True,exist_ok=True);stage={1:'one',4:'four',8:'eight'}[bots]
+ before=set(parent.glob(stage+'-*/result.json'))
+ cmd=[sys.executable,str(Path(q.__file__)), '--runtime',str(parent),'--template',str(TEMPLATE),'--vanilla',str(VANILLA),'--build-manifest',str(BUILD),'--stage',stage,'--duration','3600','--port',str(port),'--display',display,'--prepare-only']
+ subprocess.run(cmd,check=True,capture_output=True);after=set(parent.glob(stage+'-*/result.json'))-before
+ if len(after)!=1:raise RuntimeError('ambiguous prepared result')
+ result=after.pop();root=result.parent;c=dict(root=str(root),port=port,display=display,bots=bots,build_manifest=str(BUILD),template=str(TEMPLATE));validate_config(c)
+ # Overlay upper files already contain only private changes. No live mount is modified.
+ startup=root/'layers/server/upper/Scripts/Dedicated_startup.ini'
+ with startup.open('a') as f:f.write('\nser_bHeartbeatGameSpy=1;\nser_bReportSyncOK=1;\n')
+ for role in ['botA']+(['botB'] if bots==8 else []):
+  script=root/('layers/'+role+'/upper/Scripts/Integrated.ini')
+  with script.open('a') as f:f.write('\nbot_iLogEvery=200;\nbot_bDiag=0;\n')
+ os.chown(parent,0,0);os.chmod(parent,0o755);os.chown(root,0,0);os.chmod(root,0o755)
+ cache=parent/'cache';cache.mkdir(exist_ok=True);os.chown(cache,65534,65534)
+ atomic(root/'instance.json',c);r=json.loads(result.read_text());r.update(template=str(TEMPLATE),mounts=[],boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip());atomic(result,r);print(str(root/'instance.json'))
+
+def monitor(result,output,interval):
+ output=Path(output);output.mkdir(parents=True,exist_ok=True);lock=acquire_lock(output/'monitor.lock')
+ while True:
+  try:_,status=h.collect(result)
+  except Exception as e:status=dict(status='BLOCKED',alerts=['MONITOR_EXCEPTION:'+type(e).__name__],safe_recovery=False,utc=time.time())
+  atomic(output/'health.json',status);event(output/'events.json',status,limit=256);time.sleep(interval)
+
+def main():
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['prepare','start','stop','run','health','monitor']);p.add_argument('--config',type=Path);p.add_argument('--parent',type=Path);p.add_argument('--port',type=int,default=26820);p.add_argument('--display',default=':125');p.add_argument('--bots',type=int,choices=[1,4,8],default=8);p.add_argument('--result',type=Path);p.add_argument('--output',type=Path);p.add_argument('--interval',type=float,default=10);a=p.parse_args()
+ if a.action=='prepare':prepare(a.parent,a.port,a.display,a.bots);return
+ if a.action=='health':print(json.dumps(h.collect(a.result)[1],indent=2));return
+ if a.action=='monitor':monitor(a.result,a.output,a.interval);return
+ runtime=Runtime(a.config)
+ try:
+  if a.action=='stop':runtime.stop()
+  else:
+   runtime.start()
+   if a.action=='run':
+    while True:
+     try:health=runtime.reconcile()
+     except Exception as e:runtime.log('BLOCKED',error=str(e));health=dict(status='BLOCKED',alerts=[str(e)],safe_recovery=False);atomic(runtime.root/'health.json',health)
+     time.sleep(a.interval)
+ finally:runtime.lock.close()
+if __name__=='__main__':main()

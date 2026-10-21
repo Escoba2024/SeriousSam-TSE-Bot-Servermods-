@@ -40,13 +40,13 @@
 **Files:** New `docs/reports/2026-10-21-hetzner-disk-inventory.md`, later optional `tools/operations/...` under own worktree only.
 **Interfaces:** Existing runtime result/manifest, `CURRENT_PUBLIC.json`, `/proc/<pid>`, `findmnt`, `df`.
 - [x] Observe free bytes/inodes and identify largest trees read-only.
-- [ ] Map all live overlay lower/upper/work dependencies, mounted source paths and PID/CWD references. Explicitly exempt current production tree, protected 61DC files, public rollback tar and master-DNS backup.
-- [ ] Identify inactive copies with provenance and verified alternative backup/checksums; quantify recoverable bytes without mutations.
-- [ ] Rehearse archiving/checksum validation and exact restore on a small disposable test fixture.
-- [ ] Only after independent retention/restore validation, execute a bounded candidate cleanup; never recursively erase a shared parent or live mount.
-- [ ] After cleanup, require `df -B1 /` free >= 8 GiB, protected hash invariant, live 8/16 query, correct PID/start/CWD, and successful read-only telemetry/sync check. If target unreachable without unsafe cleanup, mark BLOCKED_NEEDS_STORAGE rather than improvising.
+- [x] Map all live overlay lower/upper/work dependencies, mounted source paths and PID/CWD references. Explicitly exempt current production tree, protected 61DC files, public rollback tar and master-DNS backup.
+- [x] Identify inactive copies with provenance and verified alternative backup/checksums; quantify recoverable bytes without mutations.
+- [x] Rehearse archiving/checksum validation and exact restore on a small disposable test fixture.
+- [x] Only after independent retention/restore validation, execute a bounded candidate cleanup; never recursively erase a shared parent or live mount.
+- [x] After cleanup, require `df -B1 /` free >= 8 GiB, protected hash invariant, live complete eight-bot roster query (humans permitted), correct PID/start/CWD, and successful read-only telemetry/sync check. If target unreachable without unsafe cleanup, mark BLOCKED_NEEDS_STORAGE rather than improvising.
 
-## Task 2 – P0: Restart and monitoring safeguards (new subsystem; separate design approval before changing runtime)
+## Task 2 – P0: Restart and monitoring safeguards (new subsystem; user-authorized isolated implementation, production remains gated)
 **Files:** Own `tools/operations/` module/tests and `docs/reports/` smoke evidence; no writes to integrated production tool in this stage.
 **Interfaces:** Consume existing `qualify_integrated_wine.py`, `stop_integrated_public_wine.py`, `CURRENT_PUBLIC.json` and immutable manifest without bypassing gates.
 - [ ] Design idempotent read-only live-health assessment: expected port, exactly owned fleet, DLL SHA, GameSpy eight bot names, fresh telemetric ticks/actions, no SYNCBAD/disconnects and disk/cgroup alerts.
@@ -74,3 +74,6 @@
 **Next:** Task 1 live-mount/dependency/backup inventory and small disposable restore fixture. No deletion requested or performed at plan creation.
 **Blocker:** Free space 1.8 GiB (96% used) means additional full-copy scale tests are not safe yet.
 **Evidence:** `docs/reports/2026-10-21-human-cpu-final.md`, `docs/reports/2026-10-21-hetzner-operations.md`, actual GameSpy query and RDC read-only inventory on 21.10.
+
+## Execution update — 2026-10-21
+Task1 PASS: 10387 verified duplicate payloads, 14369226752 net bytes reclaimed, 16175489024 bytes free, all raw evidence/415 protected files/rollback preserved. See disk-inventory report. Task2 in isolated TDD/native qualification; production monitor-only. Design: `docs/superpowers/specs/2026-10-21-reliability-operations-design.md`. Native failed probes are retained: absent Wine server is not a kill failure; disabling GameSpy heartbeat removes query socket; immediate same-GUID recovery can collide with ghost characters. These are being qualified before any production recovery rollout.
