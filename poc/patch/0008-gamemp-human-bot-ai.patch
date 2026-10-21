@@ -1,0 +1,269 @@
+diff --git a/poc/release/gamemp/BotDriver.cpp b/poc/release/gamemp/BotDriver.cpp
+index 655dbe4..753324c 100644
+--- a/poc/release/gamemp/BotDriver.cpp
++++ b/poc/release/gamemp/BotDriver.cpp
+@@ -33,6 +33,7 @@
+ #include "bot_combat.h"
+ #include "bot_weapon_input.h"
+ #include "bot_navigation.h"
++#include "bot_human.h"
+ #include <Engine/World/WorldRayCasting.h>
+ #include "SessionProperties.h"
+ #include <cstdarg>
+@@ -66,6 +67,14 @@ static INDEX bot_bTestThirdPerson = FALSE; // native view action for spectator Q
+ static INDEX bot_bAutoCombat = FALSE; // optional deathmatch decisions
+ static INDEX bot_bCombatSkipLocals = TRUE; // siblings share one bot client
+ static INDEX bot_bObstacleAvoidance = FALSE; // optional reactive movement recovery
++static INDEX bot_bHumanAI      = FALSE; // profile-driven perception/aim/loadout (new path)
++static INDEX bot_iRosterOffset = 0;     // 0 or 4: which half of the 8-bot roster this client uses
++static INDEX bot_iProfile0     = -1;    // explicit roster index per local slot (-1 = offset+iLP)
++static INDEX bot_iProfile1     = -1;
++static INDEX bot_iProfile2     = -1;
++static INDEX bot_iProfile3     = -1;
++static INDEX bot_iProfileSeed  = 20261020; // per-client seed; slots/tiers are mixed in
++static FLOAT bot_fStrafeScale  = 0.0f;  // 0 = strafe disabled; see the migration notes
+ 
+ static botcore::Reconnect _botReconnect;
+ static CTString _strBotReconnectAddress;
+@@ -173,6 +182,14 @@ void BotDriver_Init(void)
+   _pShell->DeclareSymbol("user INDEX bot_bAutoCombat;", &bot_bAutoCombat);
+   _pShell->DeclareSymbol("user INDEX bot_bCombatSkipLocals;", &bot_bCombatSkipLocals);
+   _pShell->DeclareSymbol("user INDEX bot_bObstacleAvoidance;", &bot_bObstacleAvoidance);
++  _pShell->DeclareSymbol("user INDEX bot_bHumanAI;",      &bot_bHumanAI);
++  _pShell->DeclareSymbol("user INDEX bot_iRosterOffset;", &bot_iRosterOffset);
++  _pShell->DeclareSymbol("user INDEX bot_iProfile0;",     &bot_iProfile0);
++  _pShell->DeclareSymbol("user INDEX bot_iProfile1;",     &bot_iProfile1);
++  _pShell->DeclareSymbol("user INDEX bot_iProfile2;",     &bot_iProfile2);
++  _pShell->DeclareSymbol("user INDEX bot_iProfile3;",     &bot_iProfile3);
++  _pShell->DeclareSymbol("user INDEX bot_iProfileSeed;",  &bot_iProfileSeed);
++  _pShell->DeclareSymbol("user FLOAT bot_fStrafeScale;",  &bot_fStrafeScale);
+ }
+ 
+ /* ------------------------------------------------------------------------ */
+@@ -188,12 +205,50 @@ struct SBotState {
+   botcore::CombatWeaponInput bs_weaponInput;
+   botcore::ObstacleRecovery bs_navigation;
+   CPlayer *bs_navPlayer;
++  FLOAT  bs_lastHealth;       // previous tick health, for the damage alert
+ };
+ 
+ static SBotState _absBots[4] = {
+   {NULL, 0.0f, 0}, {NULL, 0.0f, 0}, {NULL, 0.0f, 0}, {NULL, 0.0f, 0},
+ };
+ 
++// Per-slot human-AI state. Function-local statics keep construction lazy, so
++// no engine-side global constructor ordering is involved.
++static botcore::HumanBotPolicy &BotHumanPolicy(INDEX iLP)
++{
++  static botcore::HumanBotPolicy s_policies[4];
++  return s_policies[iLP & 3];
++}
++
++static botcore::BotProfile &BotHumanProfile(INDEX iLP)
++{
++  static botcore::BotProfile s_profiles[4];
++  return s_profiles[iLP & 3];
++}
++
++static INDEX *const _apiProfileSlot[4] = {
++  &bot_iProfile0, &bot_iProfile1, &bot_iProfile2, &bot_iProfile3
++};
++
++// Build (or rebuild) the profile for one local slot. Called on join, rejoin
++// and map change, i.e. exactly where the action state is reset anyway.
++static void BotHumanAttach(INDEX iLP)
++{
++  INDEX profile_index=*_apiProfileSlot[iLP];
++  if (profile_index<0) profile_index=bot_iRosterOffset+iLP;
++  botcore::BotProfile &profile=BotHumanProfile(iLP);
++  profile=botcore::BotProfile();
++  if (!botcore::BuildRosterProfile(profile_index,iLP,(uint32_t)bot_iProfileSeed,&profile)) {
++    botcore::BuildProfile(3,0,(uint32_t)bot_iProfileSeed,"BOT-Fallback",&profile);
++    BotLog("[BotHuman] local=%d roster index %d rejected, average fallback\n",iLP,profile_index);
++  }
++  BotHumanPolicy(iLP).Configure(&profile);
++  _absBots[iLP].bs_lastHealth=0.0f;
++  BotLog("[BotHuman] local=%d profile=%s tier=%d persona=%s seed=%lu\n",
++    iLP,profile.name,profile.tier,botcore::PersonalityName(profile.persona),
++    (unsigned long)profile.seed);
++}
++
+ static void BotResetNavigation(void)
+ {
+   for (INDEX slot=0; slot<4; ++slot) {
+@@ -306,6 +361,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+       bs.bs_weaponInput.Reset();
+       bs.bs_navigation.Reset();
+       bs.bs_navPlayer=NULL;
++      BotHumanAttach(iLP);
+       BotLog("[BotDriver] local player %d (player index %d) is now bot-driven: %s\n",
+         iLP, ppls->pls_Index, (const char *)ppls->pls_pcCharacter.pc_strName);
+     }
+@@ -324,6 +380,9 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+     ULONG combatSelect=0;
+     BOOL combatDeathmatch=FALSE;
+     BOOL combatHold=bot_fMoveFactor<=0;
++    BOOL humanFire=FALSE;      // set only by the profile-driven path
++    FLOAT humanStrafe=0.0f;    // -1..1, applied only when bot_fStrafeScale > 0
++    FLOAT humanScanYaw=0.0f;   // scan delta while no opponent is perceived
+     if (automatic) {
+       testAimReady=FALSE;
+       const CSessionProperties *session=(const CSessionProperties *)_pNetwork->GetSessionProperties();
+@@ -332,7 +391,105 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+       combatDeathmatch=deathmatch;
+       botcore::CombatDecision decision={-1,1,0,0,0,false};
+       INDEX visible=0;
+-      if (player!=NULL && deathmatch && player->GetHealth()>0 && player->m_penWeapons!=NULL) {
++      if (bot_bHumanAI) {
++        // ---------------------------------------------------------------
++        // Profile-driven path: perception -> target -> aim -> loadout.
++        // The policy only ever sees what this client can actually observe;
++        // all ray casts are budgeted by PlanLosQueries().
++        // ---------------------------------------------------------------
++        botcore::HumanBotPolicy &human=BotHumanPolicy(iLP);
++        CPlayerWeapons *hw=(player!=NULL && player->m_penWeapons!=NULL)
++          ? player->GetPlayerWeapons() : NULL;
++        if (player!=NULL && deathmatch && player->GetHealth()>0 && hw!=NULL) {
++          const CPlacement3D eye=BotCombatEye(player);
++          botcore::WorldView world;
++          world.tick=bs.bs_iTick;
++          world.pose.x=eye.pl_PositionVector(1);
++          world.pose.y=eye.pl_PositionVector(2);
++          world.pose.z=eye.pl_PositionVector(3);
++          world.pose.yaw_deg=eye.pl_OrientationAngle(1);
++          world.pose.pitch_deg=eye.pl_OrientationAngle(2);
++          world.alive=TRUE;
++          world.health=player->GetHealth();
++          world.max_health=100.0;
++          world.deathmatch=deathmatch!=FALSE;
++          const botcore::AmmoInfo humanAmmo={hw->m_iBullets,hw->m_iShells,
++            hw->m_iNapalm,hw->m_iElectricity,hw->m_iSniperBullets};
++          world.usable_weapons=botcore::CombatUsableWeapons(
++            hw->m_iAvailableWeapons,humanAmmo);
++          world.current_weapon=hw->m_iCurrentWeapon;
++
++          if (bs.bs_lastHealth>0.0f && world.health<bs.bs_lastHealth) {
++            human.NotifyDamage(bs.bs_lastHealth,world.health);
++          }
++          bs.bs_lastHealth=(FLOAT)world.health;
++
++          human.BeginTick(world);
++
++          botcore::SenseInput sensed[16];
++          CPlayer *candidate[16];
++          INDEX count=0;
++          for (INDEX index=0; index<16; ++index) {
++            CPlayer *other=(CPlayer *)CEntity::GetPlayerEntity(index);
++            if (other==NULL || other==player || other->GetHealth()<=0) continue;
++            const BOOL local=BotCombatIsLocal(pgame,index);
++            if (local && bot_bCombatSkipLocals) continue;
++            const CPlacement3D otherEye=BotCombatEye(other);
++            botcore::SenseInput &si=sensed[count];
++            si.index=index;
++            si.x=otherEye.pl_PositionVector(1);
++            si.y=otherEye.pl_PositionVector(2);
++            si.z=otherEye.pl_PositionVector(3);
++            si.vx=other->en_vCurrentTranslationAbsolute(1);
++            si.vy=other->en_vCurrentTranslationAbsolute(2);
++            si.vz=other->en_vCurrentTranslationAbsolute(3);
++            si.health=other->GetHealth();
++            si.alive=TRUE;
++            si.local=local!=FALSE;
++            candidate[count]=other;
++            ++count;
++          }
++
++          bool needsLos[16];
++          human.PlanLosQueries(sensed,count,needsLos);
++          bool hasLos[16];
++          for (INDEX i=0; i<count; ++i) {
++            hasLos[i]=needsLos[i] && BotCombatVisible(player,candidate[i])!=FALSE;
++            if (hasLos[i]) ++visible;
++          }
++
++          const botcore::BotCommand command=human.Step(world,sensed,hasLos,count,fTick);
++
++          decision.target=command.target;
++          decision.weapon=command.weapon;
++          decision.yawDelta=command.yaw_delta_deg;
++          decision.pitchDelta=command.pitch_delta_deg;
++          decision.moveFactor=command.forward;
++          decision.fireAllowed=command.fire;
++          humanFire=command.fire?TRUE:FALSE;
++          humanStrafe=(FLOAT)command.strafe;
++          humanScanYaw=(FLOAT)command.yaw_delta_deg;
++
++          if (bot_iLogEvery>0 && bs.bs_iTick%bot_iLogEvery==0) {
++            BotLog("[BotHuman] local=%d tick=%d profile=%s target=%d vis=%d fire=%d weapon=%d dist=%.1f pref=%.1f move=%.2f strafe=%.2f err=%.2f rays=%d skipped=%d switches=%d overshoots=%d\n",
++              iLP,bs.bs_iTick,BotHumanProfile(iLP).label,command.target,
++              command.target_visible?1:0,command.fire?1:0,command.weapon,
++              command.distance_m,command.preferred_range_m,command.forward,
++              command.strafe,command.aim_error_deg,human.los_queries_last_tick(),
++              human.ray_budget_skips(),human.target_switches(),
++              human.aim().overshoot_events());
++          }
++        } else {
++          // Dead or unarmed: keep the policy clock in sync so it clears its
++          // memory on the death transition, but move and shoot nothing.
++          botcore::WorldView fallen;
++          fallen.tick=bs.bs_iTick;
++          fallen.alive=FALSE;
++          human.BeginTick(fallen);
++          moveFactor=0.0f;
++          bs.bs_lastHealth=0.0f;
++        }
++      } else if (player!=NULL && deathmatch && player->GetHealth()>0 && player->m_penWeapons!=NULL) {
+         botcore::TargetInfo candidates[16];
+         for (INDEX index=0; index<16; ++index) {
+           CPlayer *other=(CPlayer *)CEntity::GetPlayerEntity(index);
+@@ -376,6 +533,12 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+             weapons->m_iBullets,weapons->m_iShells,weapons->m_iNapalm,
+             weapons->m_iElectricity,weapons->m_iSniperBullets);
+         }
++      } else if (bot_bHumanAI) {
++        // No perceived opponent: use the profile's scan rate and stand still.
++        if (player!=NULL && player->GetHealth()>0 && deathmatch) {
++          bs.bs_aHeading+=humanScanYaw;
++        }
++        moveFactor=0.0f;
+       } else if (player!=NULL && player->GetHealth()>0 && deathmatch) {
+         bs.bs_aHeading+=bot_fYawSpeed*fTick; // bounded search until a visible opponent exists
+       } else { moveFactor=0; }
+@@ -438,7 +601,10 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+       }
+     } else { bs.bs_navigation.Reset(); bs.bs_navPlayer=NULL; }
+ 
+-    // 2) periodic fire pulse (with a small per-bot phase offset)
++    // 2) fire decision
++    // The legacy path uses a periodic pulse; the profile-driven path fires
++    // exactly when its aim policy allows it (fresh line of sight, settled
++    // crosshair) and never otherwise.
+     BOOL bFire = FALSE;
+     if (ctPeriodTicks>0 && ctFireTicks>0) {
+       const INDEX iPhase = (bs.bs_iTick + iLP*ctPeriodTicks/4) % ctPeriodTicks;
+@@ -447,12 +613,24 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
+     // Retail deathmatch respawns on the native Fire press/release action.
+     // The combat decision never attacks while dead; this pulse is respawn input.
+     const BOOL respawnInput=automatic && player!=NULL && player->GetHealth()<=0;
+-    bFire = bFire && (testAimReady || respawnInput);
++    if (bot_bHumanAI && automatic) {
++      // A press/release cadence, so the native respawn edge really occurs.
++      const BOOL respawnPulse=respawnInput && ((bs.bs_iTick&4)==0);
++      bFire = (humanFire && testAimReady) || respawnPulse;
++    } else {
++      bFire = bFire && (testAimReady || respawnInput);
++    }
+ 
+     // 3) compose the action
+     CPlayerAction pa;
+     pa.Clear();
+     pa.pa_vTranslation(3) = -moveFactor; // normalized forward axis for native composer
++    // Lateral component is the same normalized [-1..1] convention as forward:
++    // ctl_ComposeActionPacket multiplies it by plr_fSpeedSide. Disabled by
++    // default because it is not native-verified yet (see the migration notes).
++    if (bot_bHumanAI && automatic && bot_fStrafeScale>0.0f) {
++      pa.pa_vTranslation(1) = Clamp(humanStrafe*bot_fStrafeScale,-1.0f,1.0f);
++    }
+     if (!automatic && target!=NULL && botcore::TestJump(bs.bs_iTick)) {
+       pa.pa_vTranslation(2) = 1.0f;
+     }
