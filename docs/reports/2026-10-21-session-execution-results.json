@@ -1,0 +1,131 @@
+{
+  "scope": "ISOLATED_HETZNER_WINE_RETAIL_107_NOT_PRODUCTION",
+  "code_commit": "1c3a965",
+  "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+  "four": {
+    "run_id": "tse-session-qualification-four-r3-20261021",
+    "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+    "measurement_s": 360,
+    "lifecycle_s": 389.4594976360095,
+    "peak_bots": 4,
+    "events": {
+      "join_requested": 8,
+      "joined": 8,
+      "leave_requested": 8,
+      "crashed": 1,
+      "left": 7
+    },
+    "db_reopens": 2,
+    "telemetry": {
+      "player-01": [
+        {
+          "epoch": 1,
+          "verdict": "ACTIVE_OK",
+          "tick_hz_median": 20.0,
+          "action_ratio": 1.0
+        },
+        {
+          "epoch": 2,
+          "verdict": "ACTIVE_OK",
+          "tick_hz_median": 20.0,
+          "action_ratio": 1.0
+        }
+      ],
+      "player-02": [
+        {
+          "epoch": 1,
+          "verdict": "ACTIVE_OK",
+          "tick_hz_median": 20,
+          "action_ratio": 1.0
+        },
+        {
+          "epoch": 2,
+          "verdict": "ACTIVE_OK",
+          "tick_hz_median": 20,
+          "action_ratio": 1.0
+        }
+      ],
+      "player-03": [
+        {
+          "epoch": 1,
+          "verdict": "ACTIVE_OK",
+          "tick_hz_median": 20,
+          "action_ratio": 1.0
+        },
+        {
+          "epoch": 2,
+          "verdict": "ACTIVE_OK",
+          "tick_hz_median": 20.0,
+          "action_ratio": 1.0
+        }
+      ],
+      "player-04": [
+        {
+          "epoch": 1,
+          "verdict": "ACTIVE_OK",
+          "tick_hz_median": 20,
+          "action_ratio": 1.0
+        },
+        {
+          "epoch": 2,
+          "verdict": "ACTIVE_OK",
+          "tick_hz_median": 20,
+          "action_ratio": 1.0
+        }
+      ]
+    },
+    "cgroup_peak_mib": 1157.9921875,
+    "cgroup_cpu_core_percent": 72.49504077994075,
+    "host_busy_mean_percent": 65.6023133932424,
+    "host_busy_p95_percent": 84.39716312056737,
+    "min_available_mib": 1178.95703125,
+    "new_throttled_periods": 0,
+    "unmounts_ok": 12,
+    "unmounts_total": 12,
+    "public_processes_unchanged": true,
+    "profiles": {
+      "player-01": {
+        "profile_sha256": "d90502c695cb6daaed780b395a1cc1645f8d204cde26a5368f082777a141e98e",
+        "guid_sha256": "9639fa9a81cb0efa6e100a9b4634f792b526a48f292d8145e732e0a84b905d1b",
+        "unchanged_after_rejoin": true
+      },
+      "player-02": {
+        "profile_sha256": "4432f64c839678929eac49d0ac4bb9f53b52dbfa5eea714edb49a657d2deb851",
+        "guid_sha256": "6f0c8834aa71ae669053927897c5cb6b11890767c25ee17bf87123a5281ed9a9",
+        "unchanged_after_rejoin": true
+      },
+      "player-03": {
+        "profile_sha256": "99e0a1c5ee1458cd81d9304c9cb289d394b00b059e85e96ff9a3dbf9e1ecf683",
+        "guid_sha256": "d8ad375b577206d3862630e16eab06cbd9f19f72dd490eabec84497840627a14",
+        "unchanged_after_rejoin": true
+      },
+      "player-04": {
+        "profile_sha256": "81a6988768bf97684e9a58f6b8e8964b50d8e42bf5e217d85cd64ab1a12717bd",
+        "guid_sha256": "8e9a1ff93881daa162a5e0e9c06735205731ae6e07ebecec94f0a14da8ca72d5",
+        "unchanged_after_rejoin": true
+      }
+    },
+    "crash_note": "one deliberate own PID-bound SIGTERM; ghost held until server absence; crash recorded before cooldown/rejoin; journal time until absence is not continuous active play"
+  },
+  "colors": {
+    "scoreboard_four_palette_verified": true,
+    "raw_markup_visible": false,
+    "private_image_sha256": "3777c19717314f331f684ae7a8a7f8d7579ac9c587b20cb46cc8ff045d9d2807",
+    "boundary_32_bytes": "PENDING",
+    "production_activation": false
+  },
+  "tests": {
+    "root_python": 120,
+    "benchmark_python": 59,
+    "cpp_make_test": "PASS",
+    "human_ai_cpp_checks": 555,
+    "integration_block": "PASS"
+  },
+  "open": [
+    "eight independent bots capacity",
+    "60 minute stability",
+    "normal policy timing qualification",
+    "active independent human client",
+    "production desired state integration"
+  ]
+}

@@ -1,6 +1,8 @@
 # Identitäten/Sitzungen – Handoff und Ergebnisstand, 21.10.2026
 
-**Gesamtauftrag NICHT abgeschlossen.** Neuer Stand: `NATIVE_INPLACE_ONE_BOT_REJOIN_PASS / MULTI_BOT_SCHEDULER_NOT_IMPLEMENTED`. Der frühere Blocker `NATIVE_BLOCKED_ACTIVE_PR46_QUALIFICATION` ist seit 18:09 UTC erledigt.
+**Fortsetzung ab 23:14 UTC:** Native Mehrbot-Bridge, individuelle Vierbot-Sessions, Crash/Ghost/Rejoin und Farb-/Namensprüfung inzwischen implementiert und begrenzt bestanden. Achtbot-/Stundenqualifikation läuft noch; Produktion unverändert. Maßgeblich: [aktueller Bericht](2026-10-21-session-execution.md) und [Messwerte](2026-10-21-session-execution-results.json).
+
+**Historischer Stand vor dieser Fortsetzung:** Neuer Stand: `NATIVE_INPLACE_ONE_BOT_REJOIN_PASS / MULTI_BOT_SCHEDULER_NOT_IMPLEMENTED`. Der frühere Blocker `NATIVE_BLOCKED_ACTIVE_PR46_QUALIFICATION` ist seit 18:09 UTC erledigt.
 Kein produktiver Einsatz, keine neue Retail-DLL, keine behauptete Verbesserung der tatsächlich spielenden KI.
 Seit 17:54 UTC ist Task3a mit einem **rein portablen** Adapter ergänzt; die ältere Bilanz 72 Tests beschreibt den vorigen Stand.
 

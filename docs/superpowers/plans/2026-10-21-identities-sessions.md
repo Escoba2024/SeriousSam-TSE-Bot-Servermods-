@@ -121,3 +121,12 @@ Draft-PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/47. 
 - In diesem Branch ausschließlich private opt-in Testflags `--identity-record`, `--color-probe`, `--identity-rejoin-smoke` vorbereitet; normale alte Harness-Modi bleiben unverändert. **Weder produktive Farbnamen noch 8 Einzelprozesse, kein Live-Supervisor-Sollzustand** eingeführt.
 - Gesamte Python-Tools-Suite **94/94 PASS**, davon 22 Adaptertests; native und portable Beweise strikt getrennt. Aus Zeit-/Kapazitätsgründen nicht fälschlich vollständige 24/7/2x8-Einzelprozesse oder realistische Sessionzeiten behaupten.
 - Nächster Umsetzungsschritt: eine wirklich eigentumsgebundene Exec-/Query-Bridge zum SQLite Planner, Integration mit PR46-desired-state statt Doppel-Supervisor, isoliert 1→4→8 **Einzelprozesse** mit Human-Reserve und Abbruchschwellen; erst nach echten HUD-/Query-Limit-Belegen kontrollierte Farbe.
+
+### Task 3c: autonome Fortsetzung ab 23:20 UTC
+- [x] Host/Worktree/PRs/Prozesse/Backups geprüft; 94 Bestandstests erneut PASS.
+- [ ] Ausführende Bridge mit durable Launch/Leave-Claims, PID/start/CWD/cgroup und vollständigen Query-Abwesenheiten (RED/GREEN).
+- [ ] Ein/four/eight individuelle private Retail-Prozesse, gestaffelte Joins/Quits/Rejoin, unveränderte Human-KI.
+- [ ] Ressourcen-/Public-Guards; mindestens 60 Minuten nur bei bestandenen Kapazitätsgates.
+- [ ] Farb-Sichtbeleg auf eigener Vanilla-Gegenstelle, weiterhin deaktiviert ohne Beleg.
+- [ ] Recovery/Review, Ergebnisse und PR aktualisieren; kein Merge ohne alle Abschlussgates.
+Ruling: vorhandene Human-KI/DLL beibehalten; keine parallele KI oder zusätzliche Gameplay-Features für diesen Abnahmelauf. Private Session-Bridge ist alleiniger Desired-State-Owner ihrer Runtime; PR46 bleibt unberührt.

@@ -9,6 +9,11 @@
     "alpha-two"
   ],
   "max_bots": 8,
+  "min_bots": 0,
+  "debug_logging": false,
+  "log_every_ticks": 20,
+  "max_log_mib": 32,
+  "low_memory_rendering": false,
   "reserved_human_slots": 2,
   "join_interval_s": 60,
   "leave_interval_s": 15,

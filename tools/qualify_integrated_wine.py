@@ -50,7 +50,7 @@ def change_profile(p,name):
     new=os.urandom(16);name=name.encode("ascii")
     p.write_bytes(b[:4]+struct.pack("<I",len(name))+name+b[8+n:])
     p.write_bytes(p.read_bytes().replace(old,new,1));side.write_bytes(new)
-def change_profile_identity(game, identity, *, color_probe=False):
+def change_profile_identity(game, identity, *, color_probe=False, colors_enabled=False):
     """Only after game has been mounted as a fresh isolated overlay."""
     assert game.is_mount(), "never write a lower/native or live installation"
     p=game/"Players/Player0.plr"; side=p.with_suffix(".plr.guid")
@@ -58,7 +58,7 @@ def change_profile_identity(game, identity, *, color_probe=False):
     assert len(old)==16 and source.count(old)==1, "profile/sidecar provenance mismatch"
     length=struct.unpack_from("<I",source,4)[0]
     assert source[12+length:28+length]==old, "unknown PLC4 GUID layout"
-    rewritten=profile_bytes(source,identity,color_probe=color_probe);new=guid_bytes(identity)
+    rewritten=profile_bytes(source,identity,color_probe=color_probe,colors_enabled=colors_enabled);new=guid_bytes(identity)
     p.write_bytes(rewritten);side.write_bytes(new)
     assert p.read_bytes()==rewritten and side.read_bytes()==new
     return hashlib.sha256(rewritten).hexdigest()

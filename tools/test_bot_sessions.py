@@ -26,6 +26,16 @@ def snap(now, humans=(), slots=16):
     return {"observed_at": now, "maxplayers": slots, "human_names": list(humans)}
 
 class Names(unittest.TestCase):
+    def test_central_logging_options_are_typed_and_bounded(self):
+        c=dict(config(),debug_logging=True,log_every_ticks=50,max_log_mib=4)
+        self.assertEqual(b.validate_config(c)['log_every_ticks'],50)
+        for key,value in [('debug_logging','yes'),('log_every_ticks',True),
+                          ('log_every_ticks',0),('max_log_mib',129)]:
+            with self.subTest(key=key),self.assertRaises(ValueError):
+                b.validate_config(dict(c,**{key:value}))
+    def test_low_memory_rendering_is_explicit_boolean(self):
+        self.assertTrue(b.validate_config(dict(config(),low_memory_rendering=True))['low_memory_rendering'])
+        with self.assertRaises(ValueError):b.validate_config(dict(config(),low_memory_rendering='true'))
     def test_readable_safe_names(self):
         self.assertEqual(b.clean_name("^c80D8FFMika^r\n\x00"), "Mika")
         self.assertEqual(b.clean_name('  [AG]  Lea;/"\\\\  '), "[AG] Lea")
@@ -37,10 +47,13 @@ class Names(unittest.TestCase):
         c["identities"][1]["nickname"] = "^cFF0000mIKA^r"
         with tempfile.TemporaryDirectory() as d, self.assertRaises(ValueError):
             b.Planner(Path(d)/"state.db", c)
-    def test_no_unqualified_color_activation(self):
-        c = config(); c["colors_enabled"] = True
-        with tempfile.TemporaryDirectory() as d, self.assertRaises(ValueError):
-            b.Planner(Path(d)/"state.db", c)
+    def test_native_qualified_colors_are_opt_in_and_decorated_name_is_bounded(self):
+        c=config();c['identities'][0]['color']='80D8FF'
+        self.assertFalse(b.validate_config(c)['colors_enabled'])
+        c['colors_enabled']=True
+        self.assertTrue(b.validate_config(c)['colors_enabled'])
+        c['identities'][0]['nickname']='A'*23
+        with self.assertRaises(ValueError):b.validate_config(c)
 
 class Sessions(unittest.TestCase):
     def setUp(self):
@@ -65,6 +78,22 @@ class Sessions(unittest.TestCase):
             p = b.Planner(Path(d)/"state.db", c)
             self.assertEqual(p.plan("one", snap(100), 100), [])
             p.close()
+    def test_minimum_population_defers_only_planned_leave(self):
+        c=config();c['servers']=['one'];c['min_bots']=1;c['max_bots']=1
+        with tempfile.TemporaryDirectory() as d:
+            p=b.Planner(Path(d)/'minimum.db',c)
+            try:
+                action=p.plan('one',snap(100),100)[0]
+                p.record(action['identity_id'],action['epoch'],'joined',100)
+                self.assertEqual(p.plan('one',snap(125),125),[])
+                self.assertEqual(p.states()[action['identity_id']]['status'],'PLAYING')
+                p.set_enabled('one',False,126)
+                leave=p.plan('one',snap(126),126)
+                self.assertEqual([(x['action'],x['reason']) for x in leave],[('leave','admin')])
+            finally:p.close()
+    def test_minimum_population_cannot_exceed_maximum(self):
+        c=config();c['min_bots']=3
+        with self.assertRaises(ValueError):b.validate_config(c)
     def test_identity_guid_seed_survive_restart(self):
         before = self.p.identities()
         self.p.close(); self.p = b.Planner(self.path, self.c)

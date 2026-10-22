@@ -26,6 +26,13 @@ def fixture():
 
 
 class ProfileAdapter(unittest.TestCase):
+    def test_qualified_color_configuration_encodes_native_profile(self):
+        base,_=fixture();who=identity()
+        value=r.profile_bytes(base,who,colors_enabled=True)
+        count=struct.unpack_from('<I',value,4)[0]
+        self.assertEqual(value[8:8+count],b'^c80D8FFMika^r')
+        self.assertEqual(value[12+count:28+count],r.guid_bytes(who))
+        self.assertEqual(r.profile_bytes(base,who,colors_enabled=False),r.profile_bytes(base,who))
     def test_name_guid_changed_appearance_byte_identical(self):
         source, old_guid = fixture()
         who = identity()

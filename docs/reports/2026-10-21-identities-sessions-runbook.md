@@ -1,3 +1,5 @@
+> Aktuelle Fortsetzung: [ausführende Bridge und Native-Runner](2026-10-21-session-execution.md), [Tool-/Isolationsentscheidung](../decisions/2026-10-21-isolated-session-execution.md). Der ältere Offline-Vertrag unten bleibt als Architekturhistorie erhalten. Jetzt vorhanden: `SessionExecutor`, eigener Wine-Transport und `qualify_bot_sessions.py`; standardmäßig kein Runtime-Start. `colors_enabled=true` ist nach nativer Prüfung innerhalb des konservativen 32-Byte-Policy-Limits möglich; Standard bleibt false. Neue zentrale Optionen: `min_bots`, `debug_logging`, `log_every_ticks`, `max_log_mib`. Kein produktiver Fixed-Slot-Supervisor darf dieselben Session-Prozesse steuern.
+
 # Identitäten und Sitzungen – Benutzung und Integrationsvertrag
 
 **Status: portabler Kern und offline Runtime-Vertrag Task3a, keine native Runtime-Steuerung oder Aktivierungsfreigabe.**

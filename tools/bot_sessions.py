@@ -39,7 +39,8 @@ def number(value, minimum=0):
 def validate_config(config):
     allowed = {"enabled", "colors_enabled", "accelerated", "max_bots", "pool_id", "seed",
                "reserved_human_slots", "join_interval_s", "leave_interval_s",
-               "startup_delay_s", "pause_s", "session_bands", "servers", "identities"}
+               "startup_delay_s", "pause_s", "session_bands", "servers", "identities", "min_bots",
+               "debug_logging", "log_every_ticks", "max_log_mib", "low_memory_rendering"}
     if not isinstance(config, dict) or set(config) - allowed:
         raise ValueError("configuration must be an object with known keys")
     c = dict(config)
@@ -47,17 +48,22 @@ def validate_config(config):
     c.setdefault("colors_enabled", False)
     c.setdefault("accelerated", False)
     c.setdefault("max_bots", 8)
+    c.setdefault("min_bots", 0)
+    c.setdefault('debug_logging', False)
+    c.setdefault('log_every_ticks', 20)
+    c.setdefault('max_log_mib', 32)
+    c.setdefault('low_memory_rendering', False)
     c.setdefault("reserved_human_slots", 2)
     c.setdefault("join_interval_s", 60)
     c.setdefault("leave_interval_s", 15)
     c.setdefault("startup_delay_s", [10, 180])
     c.setdefault("pause_s", [900, 7200])
     c.setdefault("session_bands", DEFAULT_BANDS)
-    for key in ("enabled", "colors_enabled", "accelerated"):
+    for key in ("enabled", "colors_enabled", "accelerated", "debug_logging", "low_memory_rendering"):
         if type(c[key]) is not bool:
             raise ValueError(key + " must be boolean")
-    if c["colors_enabled"]:
-        raise ValueError("colors require native Retail syntax/length/HUD/query qualification")
+    for key,high in [('log_every_ticks',1200),('max_log_mib',128)]:
+        if type(c[key]) is not int or not 1<=c[key]<=high:raise ValueError('invalid '+key)
     if not isinstance(c.get("pool_id"), str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", c["pool_id"]):
         raise ValueError("pool_id required")
     if type(c.get("seed")) is not int or not 0 <= c["seed"] < 2**63:
@@ -65,6 +71,8 @@ def validate_config(config):
     for key, low, high in (("max_bots", 0, 16), ("reserved_human_slots", 1, 16)):
         if type(c[key]) is not int or not low <= c[key] <= high:
             raise ValueError("invalid " + key)
+    if type(c['min_bots']) is not int or not 0 <= c['min_bots'] <= c['max_bots']:
+        raise ValueError('invalid min_bots')
     for key in ("join_interval_s", "leave_interval_s"):
         if not number(c[key], 1):
             raise ValueError("invalid " + key)
@@ -106,6 +114,8 @@ def validate_config(config):
             raise ValueError("invalid RGB color")
         if color:
             i["color"] = color.upper()
+            if c['colors_enabled'] and len(i['nickname'])+10>32:
+                raise ValueError('decorated native name exceeds qualified 32-byte policy cap')
         ids.add(ident); names.add(key); normalized.append(i)
     c["identities"] = normalized
     return c
@@ -244,7 +254,9 @@ class Planner:
             # Unknown population blocks joins, but never overrides an own planned/admin leave.
             due = [r for r in active if (not enabled or
                    (observed is not None and (len(active) > capacity or identities[r["id"]]["nickname"].casefold() in humans)) or
-                   (r["status"] == "PLAYING" and now >= r["until"])) and r["status"] != "LEAVING"]
+                   (r["status"] == "PLAYING" and now >= r["until"] and
+                    sum(a['status'] == 'PLAYING' for a in active) > self.config['min_bots']))
+                   and r["status"] != "LEAVING"]
             actions = []
             if due and not any(r["status"] == "LEAVING" for r in all_rows.values()) and now >= self.meta("leave_at"):
                 row = min(due, key=lambda r: (r["until"], r["id"]))
@@ -285,7 +297,7 @@ class Planner:
             else:
                 status = "COOLDOWN"
                 until = now + self.rng("pause", ident, epoch).randint(*self.config["pause_s"])
-                reason = row["reason"] if row["status"] == "LEAVING" else event
+                reason = row["reason"] if event == 'left' and row["status"] == "LEAVING" else event
             self.db.execute("UPDATE session SET status=?,until=?,reason=?,last_event=? WHERE id=?", (status, until, reason, event, ident))
             self.db.execute("INSERT INTO event (id,epoch,event,reason,at) VALUES (?,?,?,?,?)", (ident, epoch, event, reason, now))
             return True

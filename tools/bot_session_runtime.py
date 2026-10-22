@@ -28,7 +28,7 @@ def _identity(identity):
             or not re.fullmatch(r"[A-Za-z0-9 ._\[\]-]+", name)
             or name.strip() != name or not any(ch.isalnum() for ch in name)):
         raise ValueError("unqualified or dangerous native nickname")
-    # Any configured RGB color remains inactive metadata in this adapter.
+    # RGB remains inactive unless the caller explicitly enables qualified markup.
     if type(identity.get("profile")) is not int or not 0 <= identity["profile"] <= 7:
         raise ValueError("invalid original Human-KI roster index")
     seed = identity.get("gameplay_seed")
@@ -47,7 +47,7 @@ def guid_bytes(identity):
     return _identity(identity)[1]
 
 
-def profile_bytes(template, identity, *, color_probe=False):
+def profile_bytes(template, identity, *, color_probe=False, colors_enabled=False):
     """Return new profile bytes; caller must also write guid_bytes to .plr.guid.
 
     The observed Retail PLC4 layout is signature + u32 name bytes + name +
@@ -57,13 +57,15 @@ def profile_bytes(template, identity, *, color_probe=False):
     name, new_guid = _identity(identity)
     if type(color_probe) is not bool:
         raise ValueError("explicit boolean color_probe required")
-    if color_probe:
+    if type(colors_enabled) is not bool:
+        raise ValueError('explicit boolean colors_enabled required')
+    if color_probe or (colors_enabled and identity.get('color') is not None):
         rgb = identity.get("color")
         if not isinstance(rgb, str) or not re.fullmatch(r"[0-9a-fA-F]{6}", rgb):
-            raise ValueError("validated RGB required for private color probe")
+            raise ValueError("validated RGB required for native color markup")
         name = b"^c" + rgb.upper().encode("ascii") + name + b"^r"
         if len(name) > 32:
-            raise ValueError("decorated private probe name too long")
+            raise ValueError("decorated native name exceeds qualified 32-byte policy cap")
     if not isinstance(template, bytes) or not 32 <= len(template) <= MAX_TEMPLATE_BYTES:
         raise ValueError("invalid PLC4 template size")
     if template[:4] != b"PLC4":
