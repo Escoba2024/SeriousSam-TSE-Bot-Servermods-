@@ -1,0 +1,43 @@
+[Unit]
+Description=TSE Alpha-Gaming read-only fleet health (no game restart)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=root
+Group=root
+UMask=0077
+WorkingDirectory=/srv/tse-ops-monitor-release-20261022/b5a6cba
+ExecStartPre=/usr/bin/sha256sum --status --check /etc/tse-public-health-20261022.sha256
+ExecStart=/usr/bin/python3 /srv/tse-ops-monitor-release-20261022/b5a6cba/tools/operations/fleet_supervisor.py monitor --result /srv/tse-integration-public-20261021/eight-115115-z44oq5ua/result.json --output /srv/tse-public-health-20261021 --interval 10
+Restart=on-failure
+RestartSec=10
+KillMode=process
+TimeoutStopSec=15
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/srv/tse-public-health-20261021
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=CAP_DAC_READ_SEARCH CAP_SYS_PTRACE
+SystemCallFilter=~@mount @reboot @module @swap @raw-io @obsolete
+IPAddressDeny=any
+IPAddressAllow=127.0.0.0/8
+IPAddressAllow=::1
+CPUQuota=5%
+MemoryMax=128M
+TasksMax=16
+StandardOutput=journal
+StandardError=journal
+LogRateLimitIntervalSec=30
+LogRateLimitBurst=20
+
+[Install]
+WantedBy=multi-user.target

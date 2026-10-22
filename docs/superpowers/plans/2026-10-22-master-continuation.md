@@ -33,6 +33,8 @@ Owner: lead; dependencies: none. Files: own report `docs/reports/2026-10-22-mast
 - [x] Compare current native-hour evidence and source hashes; distinguish qualifier PASS from outer cleanup FAIL.
 - [x] Report actual root-cause limits and next reproducible experiment. Commit sanitized report.
 
+- [ ] Additional P0 control after the exclusive native hour/cleanup: original Wine client + one bot,300s baseline and300s isolated netem; preserve real CRC outcomes and verify namespace cleanup.
+
 ## Task 2: Resolve demonstrated reliability regressions
 Owner: lead; depends on Task1. Files: `tools/operations/fleet_supervisor.py`, `fleet_health.py`, focused new regression tests, existing PR49 report/plan in this worktree only.
 - [x] Reproduce closed-prefix duplicate-stop failure and any additional safety findings as failing behavior tests.
