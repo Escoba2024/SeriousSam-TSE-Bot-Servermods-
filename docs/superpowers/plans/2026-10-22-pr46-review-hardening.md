@@ -21,3 +21,12 @@ Do not modify live service source /srv/tse-reliability-20261021, its /etc SHA pi
 - [ ] Following PR46 approval, coordinate PR47 RAM-capacity blocker; then independently assess two-server rollout.
 
 Stop criteria: qualified gates or documented constraint; protected public service unchanged.
+
+## Native execution checkpoint, 2026-10-22 09:20 UTC
+- [x] Native isolated one-bot real-failure/ghost-aware recovery with the new reviewed source: PASS_LIMITED, owned cleanup PASS, public PIDs/startticks unchanged.
+- [x] New private eight-bot runtime prepared on 26860/26861, display :127.
+- [x] Harness-only config newline failure preserved and fixed without changing operational supervisor code; cleanup confirmed.
+- [x] R2 independent qualifier launched under tse-pr46-native-qa-r2-20261022.service; first double-start guard PASS.
+- [ ] R2 genuine eight-bot 3600-second result, per-bot activity, CPU/RAM/Sync, cleanup, and original source hash verification still PENDING.
+- [ ] Only after clean native acceptance revisit PR46 integration and deployment gates. Production unchanged.
+Private output: /srv/tse-reliability-qa-evidence-20261022/soak/orchestrator-status.json, native-qualification.json, qualifier-stdout.log. First failed harness attempt retained separately.
