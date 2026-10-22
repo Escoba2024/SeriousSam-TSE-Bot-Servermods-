@@ -30,9 +30,23 @@ def acquire_lock(path):
  except BaseException:f.close();raise
  return f
 
+def validate_log_limit(c):
+ limit=c.get('log_limit_bytes',32*1024**2)
+ if type(limit)!=int or not 65536<=limit<=32*1024**2:raise ValueError('log limit must be 64 KiB..32 MiB')
+ return limit
+
+def validate_window_owners(seen,allowed):
+ if any(pid not in allowed for pid in seen):raise RuntimeError('unregistered Retail window; close own observer first')
+
+def retail_window_owners(display):
+ listing=subprocess.check_output(['xwininfo','-display',display,'-root','-tree'],text=True);seen=[]
+ for wid in re.findall(r'(0x[0-9a-fA-F]+) "Serious Sam \(',listing):
+  prop=subprocess.check_output(['xprop','-display',display,'-id',wid,'_NET_WM_PID'],text=True);m=re.search(r'=\s*(\d+)\s*$',prop);seen.append(int(m[1]) if m else None)
+ return seen
+
 def validate_config(c):
  try:
-  root=Path(c['root']);port=c['port'];display=c['display'];bots=c['bots']
+  root=Path(c['root']);port=c['port'];display=c['display'];bots=c['bots'];validate_log_limit(c)
   if not root.is_absolute() or not root.resolve().is_relative_to(BASE) or root.resolve()==BASE:raise ValueError('private root required')
   if type(port)!=int or not 26800<=port<=26998 or port%2:raise ValueError('private even port required')
   if not re.fullmatch(r':12[0-9]',display) or bots not in (1,4,8):raise ValueError('invalid display/population')
@@ -68,7 +82,9 @@ def maintenance_action(over_limit,safe,humans,retry):
  return 'RESTART_FLEET' if retry else 'STOP_BUDGET_HOLD'
 
 def retry_allowed(state,now=None):
- now=time.time() if now is None else now;recent=[t for t in state.get('attempts',[]) if 0<=now-t<3600]
+ now=time.time() if now is None else now
+ if any(t>now for t in state.get('attempts',[])):return False
+ recent=[t for t in state.get('attempts',[]) if 0<=now-t<3600]
  return len(recent)<3 and (not recent or now-max(recent)>=30*(2**(len(recent)-1)))
 
 def open_writers(paths):
@@ -77,7 +93,9 @@ def open_writers(paths):
   try:
    for fd in (proc/'fd').iterdir():
     try:
-     if os.readlink(fd) in targets:found.append(int(proc.name))
+     if os.readlink(fd) in targets:
+      info=(proc/'fdinfo'/fd.name).read_text();flags=int(re.search(r'^flags:\s+(\d+)',info,re.M).group(1),8)
+      if flags&os.O_ACCMODE != os.O_RDONLY:found.append(int(proc.name))
     except FileNotFoundError:pass
   except (FileNotFoundError,ProcessLookupError):pass
   except PermissionError:raise RuntimeError('cannot verify all open handles')
@@ -124,7 +142,7 @@ def _demote(cg):
 
 class Runtime:
  def __init__(self,config):
-  self.config=Path(config);self.c=json.loads(self.config.read_text());self.root=validate_config(self.c);self.result=self.root/'result.json';self.r=json.loads(self.result.read_text());self.lock=acquire_lock(self.root/'supervisor.lock');self.roles=['server','botA']+(['botB'] if self.c['bots']==8 else []);self.cg=Path('/sys/fs/cgroup')/('tse-ops-'+hashlib.sha256(str(self.root).encode()).hexdigest()[:12]);self.boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+  self.config=Path(config);self.c=json.loads(self.config.read_text());self.root=validate_config(self.c);self.result=self.root/'result.json';self.r=json.loads(self.result.read_text());self.lock=acquire_lock(self.root/'supervisor.lock');self.roles=['server','botA']+(['botB'] if self.c['bots']==8 else []);self.cg=Path('/sys/fs/cgroup')/('tse-ops-'+hashlib.sha256(str(self.root).encode()).hexdigest()[:12]);self.boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip();self.r['log_limit_bytes']=validate_log_limit(self.c)
  def save(self):atomic(self.result,self.r)
  def log(self,kind,**kw):event(self.root/'events.json',dict(kind=kind,**kw))
  def specs(self):
@@ -205,6 +223,7 @@ class Runtime:
   if not xinfo or h.verify_process(xinfo)=='ABSENT':
    display=self.c['display'][1:]
    if Path('/tmp/.X'+display+'-lock').exists() or Path('/tmp/.X11-unix/X'+display).exists():raise RuntimeError('display is occupied/stale; no blind lock deletion')
+   archive_closed([self.root/'xvfb.log'],self.root/'archives')
    with (self.root/'xvfb.log').open('ab') as out:x=subprocess.Popen(['Xvfb',self.c['display'],'-screen','0','640x480x24','-nolisten','tcp','-noreset'],cwd=self.root,stdout=out,stderr=subprocess.STDOUT,preexec_fn=_demote(self.cg),start_new_session=True)
    self.r['xvfb']=h.process_identity(x.pid);self.save();time.sleep(2)
    if h.verify_process(self.r['xvfb'])!='LIVE':raise RuntimeError('Xvfb failed')
@@ -241,6 +260,8 @@ class Runtime:
   if status.get('gamever')!='1.07' or int(status.get('numplayers',-1))!=len(names) or any(n not in q.ROSTER[:self.c['bots']] for n in names):raise RuntimeError('human/unknown player hold')
  def stop(self):
   self.ownership()
+  xinfo=self.r.get('xvfb')
+  if xinfo and h.verify_process(xinfo)=='LIVE':validate_window_owners(retail_window_owners(self.c['display']),{i['pid'] for i in self.r.get('processes',{}).values()})
   if any(h.verify_process(i)=='LIVE' for role,i in self.r.get('processes',{}).items() if role=='server'):self.no_humans()
   for role in reversed(self.roles):self.stop_role(role)
   for role in self.roles:

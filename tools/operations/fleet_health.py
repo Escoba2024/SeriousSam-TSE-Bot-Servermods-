@@ -42,7 +42,7 @@ def tail(path,limit=131072):
  with Path(path).open('rb') as f:
   f.seek(0,2);size=f.tell();f.seek(max(0,size-limit));return f.read().decode(errors='replace')
 
-def telemetry_valid(path,now=None):
+def telemetry_valid(path,now=None,expected_local=None):
  now=time.time() if now is None else now
  try:
   p=Path(path);text=tail(p);header=None
@@ -54,7 +54,7 @@ def telemetry_valid(path,now=None):
   rows=[l.split(',') for l in text.splitlines() if l and not l.startswith('#') and len(l.split(','))==len(header)]
   if not rows:return False
   r=dict(zip(header,rows[-1]));age=now-int(r['t_ms'])/1000;lp=int(r['lp']);ticks=int(r['ticks']);actions=int(r['actions'])
-  return -3<=age<=12 and 18<=ticks<=23 and lp in (1,4) and 18*lp<=actions<=23*lp and int(r['renderdraw'])==0 and int(r['gameon'])==1 and int(r['enabled'])==1 and int(r['stall_s'])==0
+  return -3<=age<=12 and 18<=ticks<=23 and lp in (1,4) and (expected_local is None or lp==expected_local) and 18*lp<=actions<=23*lp and int(r['renderdraw'])==0 and int(r['gameon'])==1 and int(r['enabled'])==1 and int(r['stall_s'])==0
  except (OSError,ValueError,KeyError):return False
 
 def assess(s):
@@ -62,7 +62,8 @@ def assess(s):
  for key,code in [('ports_owned','FOREIGN_PORT'),('mounts_owned','FOREIGN_MOUNT'),('dll_valid','INVALID_ARTIFACT'),('master_ok','MASTER_DNS'),('telemetry_ok','TELEMETRY_STALE')]:
   if not s.get(key):blocked.append(code)
  if s.get('disk_free',0)<MIN_FREE:blocked.append('LOW_DISK')
- blocked+=s.get('identity_errors',[])
+ blocked+=s.get('identity_errors',[])+s.get('cgroup_issues',[])
+ if not s.get('sync_scan_complete',True):blocked.append('SYNC_LOG_SCAN_PENDING')
  if s.get('owned_sync_bad',0):blocked.append('OWNED_CLIENT_SYNC')
  if s.get('external_sync_bad',0):alerts.append('EXTERNAL_CLIENT_SYNC')
  query=s.get('query')
@@ -85,6 +86,32 @@ def mount_spec(root,role,source):
 def mount_matches(m):
  lines=[l for l in Path('/proc/self/mountinfo').read_text().splitlines() if l.split()[4]==m['target']]
  return len(lines)==1 and ' - overlay ' in lines[0] and all(k+'='+m[v] in lines[0].split(' - ',1)[1].split()[2].split(',') for k,v in [('lowerdir','lower'),('upperdir','upper'),('workdir','work')])
+
+_SYNC_CACHE={}
+def sync_counts(path,max_bytes=4*1024**2,generation=None):
+ p=Path(path);st=p.stat();key=str(p);c=_SYNC_CACHE.get(key)
+ if c is None or c['inode']!=(st.st_dev,st.st_ino) or c['generation']!=generation or st.st_size<c['offset'] or (st.st_size==c['offset'] and st.st_mtime_ns!=c['mtime']):
+  c=dict(inode=(st.st_dev,st.st_ino),generation=generation,offset=0,partial=b'',owned=0,external=0,valid=True,mtime=st.st_mtime_ns)
+ with p.open('rb') as f:
+  f.seek(c['offset']);data=f.read(min(max_bytes,max(0,st.st_size-c['offset'])))
+ c['offset']+=len(data);parts=(c['partial']+data).split(b'\n');c['partial']=parts.pop()
+ if len(c['partial'])>65536:c['valid']=False;c['partial']=c['partial'][-65536:]
+ for line in parts:
+  m=re.search(rb"SYNCBAD: Client '([^']+)'",line)
+  if m:c['owned' if m[1] in [b'127.0.0.1',b'91.99.75.33',b'Local machine'] else 'external']+=1
+ c['mtime']=st.st_mtime_ns;_SYNC_CACHE[key]=c
+ return dict(owned=c['owned'],external=c['external'],complete=c['offset']>=st.st_size and c['valid'],bytes_scanned=len(data))
+
+def log_paths(root,r):
+ paths=[root/'xvfb.log',root/'server/Dedicated_BotTest.log']
+ for role in r['processes']:
+  paths.append(root/(role+'-wine.log'))
+  if role.startswith('bot'):paths.extend([root/role/'SeriousSam.log',root/role/'Bin/BotTelemetry.csv'])
+ return paths
+
+def logs_over_limit(root,r):
+ limit=r.get('log_limit_bytes',32*1024**2)
+ return any(p.exists() and p.stat().st_size>limit for p in log_paths(root,r))
 
 def collect(result_path):
  result_path=Path(result_path);r=json.loads(result_path.read_text());root=result_path.parent;now=time.time();missing=[];errors=[];infos=r['processes'];cg=Path(r['cgroup']);allowed={int(p) for p in (cg/'cgroup.procs').read_text().split()} if cg.exists() else set()
@@ -109,16 +136,17 @@ def collect(result_path):
   except OSError:dll_ok=False
  try:master_ok=bool(q.validate_master_resolution())
  except (OSError,AssertionError):master_ok=False
- logs=root/'server/Dedicated_BotTest.log';owned=external=0
- if logs.exists():
-  # Scan full current generation, preserving historical alerts instead of silently resetting.
-  for client in re.findall(r"SYNCBAD: Client '([^']+)'",logs.read_text(errors='replace')):
-   if client in ['127.0.0.1','91.99.75.33','Local machine']:owned+=1
-   else:external+=1
- telemetry=all(telemetry_valid(root/role/'Bin/BotTelemetry.csv') for role in infos if role.startswith('bot') and role not in missing)
- paths=[root/'server/Dedicated_BotTest.log']+[root/role/'SeriousSam.log' for role in infos if role.startswith('bot')]+[root/role/'Bin/BotTelemetry.csv' for role in infos if role.startswith('bot')]
- snap=dict(now=time.time(),query=query,query_time=qt,identity_errors=errors,missing=missing,ports_owned=all(udp_owners(port)<=allowed for port in [r['game_port'],r['query_port']]),mounts_owned=mounts_ok,dll_valid=bool(dll_ok),disk_free=os.statvfs('/').f_bavail*os.statvfs('/').f_frsize,master_ok=master_ok,telemetry_ok=telemetry,owned_sync_bad=owned,external_sync_bad=external,logs_over_limit=any(p.exists() and p.stat().st_size>32*1024**2 for p in paths),expected_names=q.ROSTER[:r.get('bots',8)])
+ logs=root/'server/Dedicated_BotTest.log';counts=dict(owned=0,external=0,complete=True)
+ if logs.exists():counts=sync_counts(logs,generation=infos.get('server',{}).get('start_ticks'))
+ owned=counts['owned'];external=counts['external']
+ telemetry=all(telemetry_valid(root/role/'Bin/BotTelemetry.csv',expected_local=1 if r.get('bots')==1 else 4) for role in infos if role.startswith('bot') and role not in missing)
+ cpu_stat={k:int(v) for k,v in (line.split() for line in (cg/'cpu.stat').read_text().splitlines())} if cg.exists() else {}
+ memory_events={k:int(v) for k,v in (line.split() for line in (cg/'memory.events').read_text().splitlines())} if cg.exists() else {}
+ cgroup_issues=[]
+ if cpu_stat.get('nr_throttled',0):cgroup_issues.append('CGROUP_THROTTLED')
+ if memory_events.get('oom_kill',0) or memory_events.get('oom',0):cgroup_issues.append('CGROUP_OOM')
+ snap=dict(now=time.time(),query=query,query_time=qt,identity_errors=errors,missing=missing,ports_owned=all(udp_owners(port)<=allowed for port in [r['game_port'],r['query_port']]),mounts_owned=mounts_ok,dll_valid=bool(dll_ok),disk_free=os.statvfs('/').f_bavail*os.statvfs('/').f_frsize,master_ok=master_ok,telemetry_ok=telemetry,owned_sync_bad=owned,external_sync_bad=external,logs_over_limit=logs_over_limit(root,r),cgroup_issues=cgroup_issues,sync_scan_complete=counts['complete'],expected_names=q.ROSTER[:r.get('bots',8)])
  verdict=assess(snap)
  # No player names or peer addresses in persisted public-facing health status.
- verdict.update(utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),players=int(query['numplayers']) if query else None,expected_bots=r.get('bots',8),missing_roles=missing,disk_free_bytes=snap['disk_free'],owned_sync_bad=owned,external_sync_bad=external,processes_verified=not errors,query_fresh=query is not None,telemetry_fresh=telemetry)
+ verdict.update(utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),players=int(query['numplayers']) if query else None,expected_bots=r.get('bots',8),missing_roles=missing,disk_free_bytes=snap['disk_free'],owned_sync_bad=owned,external_sync_bad=external,processes_verified=not errors,query_fresh=query is not None,telemetry_fresh=telemetry,cgroup_cpu=cpu_stat,cgroup_memory_events=memory_events,sync_scan_complete=counts['complete'])
  return snap,verdict
