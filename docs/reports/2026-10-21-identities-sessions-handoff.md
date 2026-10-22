@@ -1,6 +1,6 @@
 # Identitäten/Sitzungen – Handoff und Ergebnisstand, 21.10.2026
 
-**Fortsetzung ab 23:14 UTC:** Native Mehrbot-Bridge, individuelle Vierbot-Sessions, Crash/Ghost/Rejoin und Farb-/Namensprüfung inzwischen implementiert und begrenzt bestanden. Achtbot-/Stundenqualifikation läuft noch; Produktion unverändert. Maßgeblich: [aktueller Bericht](2026-10-21-session-execution.md) und [Messwerte](2026-10-21-session-execution-results.json).
+**Fortsetzung ab 23:14 UTC:** Native Mehrbot-Bridge, individuelle Vierbot-Sessions, Crash/Ghost/Rejoin und Farb-/Namensprüfung inzwischen implementiert und begrenzt bestanden. Achtbot-/Stundenqualifikation ist nach zwei dokumentierten RAM-Guards blockiert; alle eigenen Tests beendet, Produktion unverändert. Aktueller Code `9bc8908`, 124+59 Python-Tests und C++-Regressionen bestanden. Maßgeblich: [aktueller Bericht](2026-10-21-session-execution.md) und [Messwerte](2026-10-21-session-execution-results.json).
 
 **Historischer Stand vor dieser Fortsetzung:** Neuer Stand: `NATIVE_INPLACE_ONE_BOT_REJOIN_PASS / MULTI_BOT_SCHEDULER_NOT_IMPLEMENTED`. Der frühere Blocker `NATIVE_BLOCKED_ACTIVE_PR46_QUALIFICATION` ist seit 18:09 UTC erledigt.
 Kein produktiver Einsatz, keine neue Retail-DLL, keine behauptete Verbesserung der tatsächlich spielenden KI.

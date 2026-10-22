@@ -91,3 +91,16 @@ ist trotzdem erforderlich. Ein Einzelbotlauf über 90 s bestand mit Peak
 546,148 MiB privater cgroup; daraus folgt noch keine Achtbot-Kapazität.
 Vierbot-/Achtbot-Gegenprüfung bleiben nachweispflichtig. Guards werden nicht
 abgesenkt, die Produktionsflotte bleibt unverändert.
+
+## Abschließender Status 22.10.2026
+
+Vierbot-Grafikgegenprüfung 150 s begrenzt bestanden (1047,352 MiB Peak,
+12/12 Unmounts). Erneuter Achtbot-Versuch nach sechs verbundenen Bots vor
+Client sieben bei 921,137 MiB verfügbarem RAM verweigert; 1068 MiB erforderlich.
+20/20 Unmounts, Public unverändert. Der Host bietet unter diesen Schutzvorgaben
+keine belegte Kapazität für den geforderten Achtbot-Stundenlauf. Keine Reserve
+abgesenkt, kein produktiver Bot entfernt. Ergebnis BLOCKED_CAPACITY.
+Alle eigenen Tests beendet; leere eigene cgroups manuell bereinigt. Für die
+fehlende Abnahme werden ausreichend isolierte zusätzliche Testressourcen
+benötigt; die Begrenzung wird nicht durch geringere Qualitätsanforderungen
+oder einen unbelegten Stunden-PASS umgangen.

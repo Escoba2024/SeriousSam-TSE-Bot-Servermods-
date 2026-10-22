@@ -1,6 +1,5 @@
 {
   "scope": "ISOLATED_HETZNER_WINE_RETAIL_107_NOT_PRODUCTION",
-  "code_commit": "1c3a965",
   "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
   "four": {
     "run_id": "tse-session-qualification-four-r3-20261021",
@@ -111,21 +110,152 @@
     "scoreboard_four_palette_verified": true,
     "raw_markup_visible": false,
     "private_image_sha256": "3777c19717314f331f684ae7a8a7f8d7579ac9c587b20cb46cc8ff045d9d2807",
-    "boundary_32_bytes": "PENDING",
-    "production_activation": false
+    "boundary_32_bytes": "PASS_LIMITED_NATIVE_PROFILE_QUERY_HUD",
+    "production_activation": false,
+    "enabled_by_configuration": true,
+    "default_enabled": false,
+    "boundary_image_sha256": "e34e755f5ecdde4061a2615b085c0c7da631c1575cefec92df092ac721f4dc80"
   },
   "tests": {
-    "root_python": 120,
+    "root_python": 124,
     "benchmark_python": 59,
     "cpp_make_test": "PASS",
     "human_ai_cpp_checks": 555,
     "integration_block": "PASS"
   },
   "open": [
-    "eight independent bots capacity",
-    "60 minute stability",
-    "normal policy timing qualification",
-    "active independent human client",
-    "production desired state integration"
-  ]
+    "eight simultaneous independent bots with adequate protected host reserve",
+    ">=3600 seconds native stability with normal sessions",
+    "active independent human Retail client coexistence",
+    "full native controller-loss recovery/adoption",
+    "PR46 desired-state production integration",
+    "multi-hour soak/24x7"
+  ],
+  "status": "BLOCKED_CAPACITY_NOT_COMPLETE",
+  "updated_utc": "2026-10-22T00:13:32Z",
+  "published_source_commit": "9bc890816ac9bf45e5f84e7b4464811421771365",
+  "published_source_tree": "1df46c18fbb6724887f1fa0821d91a95cac8d70d",
+  "four_measured_code_commit_local": "1c3a965",
+  "low_memory_four": {
+    "run_id": "tse-session-qualification-four-lowmem-20261021",
+    "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+    "measurement_s": 150,
+    "lifecycle_s": 177.68744505697396,
+    "peak_bots": 4,
+    "cgroup_peak_mib": 1047.3515625,
+    "cgroup_cpu_core_percent": 71.92329260641242,
+    "new_throttled_periods": 0,
+    "events": {
+      "join_requested": 4,
+      "joined": 4,
+      "leave_requested": 4,
+      "left": 4
+    },
+    "unmounts_total": 12,
+    "unmounts_ok": 12,
+    "guard": "FINISHED"
+  },
+  "boundary": {
+    "run_id": "tse-session-qualification-color-boundary-20261021",
+    "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+    "measurement_s": 90,
+    "lifecycle_s": 97.17815344501287,
+    "peak_bots": 1,
+    "cgroup_peak_mib": 555.796875,
+    "cgroup_cpu_core_percent": 51.54544680483994,
+    "new_throttled_periods": 0,
+    "events": {
+      "join_requested": 2,
+      "joined": 2,
+      "leave_requested": 2,
+      "left": 2
+    },
+    "unmounts_total": 6,
+    "unmounts_ok": 6,
+    "guard": "FINISHED"
+  },
+  "eight_attempts": [
+    {
+      "run_id": "tse-session-qualification-eight-20261021",
+      "status": "BLOCKED_CAPACITY",
+      "native_status": "FAIL",
+      "elapsed_s": 105.58537287998479,
+      "peak_bots": 5,
+      "low_memory_rendering": false,
+      "accelerated": false,
+      "colors_enabled": true,
+      "error": "HOST_RESOURCE_RESERVE_FOR_NEXT_CLIENT: available_mib=970.5, required=1068, disk_gib=14.85",
+      "resources": {
+        "available_mib": 970.46484375,
+        "disk_free_gib": 14.847694396972656,
+        "cgroup_peak_mib": 1322.78125
+      },
+      "unmounts_total": 20,
+      "unmounts_ok": 20,
+      "cleanup_errors": [],
+      "public_processes_unchanged": true,
+      "guard": "FINISHED"
+    },
+    {
+      "run_id": "tse-session-qualification-eight-lowmem-20261021",
+      "status": "BLOCKED_CAPACITY",
+      "native_status": "FAIL",
+      "elapsed_s": 129.33104867802467,
+      "peak_bots": 6,
+      "low_memory_rendering": true,
+      "accelerated": false,
+      "colors_enabled": true,
+      "error": "HOST_RESOURCE_RESERVE_FOR_NEXT_CLIENT: available_mib=921.1, required=1068, disk_gib=14.80",
+      "resources": {
+        "available_mib": 921.13671875,
+        "disk_free_gib": 14.803619384765625,
+        "cgroup_peak_mib": 1389.92578125
+      },
+      "unmounts_total": 20,
+      "unmounts_ok": 20,
+      "cleanup_errors": [],
+      "public_processes_unchanged": true,
+      "guard": "FINISHED"
+    }
+  ],
+  "production_protection": {
+    "utc": "2026-10-22T00:11:30Z",
+    "host": "ubuntu-4gb-nbg1-2",
+    "public_bindings": {
+      "server": {
+        "pid": 124818,
+        "start_ticks": 28905984,
+        "unchanged": true
+      },
+      "botA": {
+        "pid": 124882,
+        "start_ticks": 28906785,
+        "unchanged": true
+      },
+      "botB": {
+        "pid": 124950,
+        "start_ticks": 28907286,
+        "unchanged": true
+      }
+    },
+    "original_binary_pins": {
+      "DedicatedServer.exe": true,
+      "Engine.dll": true,
+      "EntitiesMP.dll": true,
+      "GameMP.dll": true,
+      "SeriousSam.exe": true
+    },
+    "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+    "players": 8,
+    "owned_sync_bad": 0,
+    "external_sync_bad": 56,
+    "humans_count": 0,
+    "query_fresh": true,
+    "telemetry_fresh": true,
+    "private_mounts_remaining": 0,
+    "empty_own_cgroups_removed": 13,
+    "backup_sha256": "d7b3650d55a21fc88614d5b969e126ac1cfcc52585262a1ef139eb0be1632b7d",
+    "backup_hash_in_manifest": true,
+    "test_processes_remaining": 0
+  }
 }

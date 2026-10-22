@@ -1,7 +1,8 @@
 # PR #47 – autonome Fortsetzung der individuellen Sitzungen
 
 Arbeitsbeginn: 21.10.2026, ca. 23:14 UTC. **Gesamtqualifizierung offen.**
-Dieser Bericht wird mit den tatsächlichen Native-Ergebnissen fortgeschrieben.
+Abschluss dieser Ausführung: 22.10.2026, 00:11 UTC. **BLOCKED_CAPACITY – nicht vollständig abgeschlossen, kein Merge/Rollout.**
+Code veröffentlicht: `9bc890816ac9bf45e5f84e7b4464811421771365`, Tree `1df46c18fbb6724887f1fa0821d91a95cac8d70d`. [Maschinenlesbare Nachweise](2026-10-21-session-execution-results.json).
 
 ## Rekonstruktion
 
@@ -46,10 +47,9 @@ Private Belege: `/srv/tse-session-qualification-*`, zusätzlich
 | `one-stable-20261021` | PASS_LIMITED | 180 s Messfenster, 2 Joins/2 reguläre Leaves, 2× ACTIVE_OK mit 20 Hz, echte DB-Neuöffnung bei laufenden Clients; 558,688 MiB private cgroup-Spitze, 45,589 % eines Kerns einschließlich Aufbau/Drain; 6/6 Unmounts. Nachträgliche Prüfung aller vier vollständigen aktuellen/archivierten Generationen: 0 Sync-/Fatalfehler |
 | `one-color-20261021` | INTERRUPTED/FAIL | Äußerer Controller endete mit Signal 143; genaue Signalquelle nicht belegt. Innerer Parent-Death-Pfad schloss eigene Clients und hängte 6/6 Overlays aus. Kein Farb-Sicht-PASS |
 
-Die erste private Aufnahme zeigte das Originalspiel, aber noch keinen Bot im
-Scoreboard; eine weitere Aufnahme zeigte einen Splash. Kein Farberfolg daraus
-abgeleitet. Der überarbeitete Originalclient-Fenster-/FPS-Pfad benötigt eine
-eigene neue Native-Prüfung. Die Konsolen-FPS-Vorgabe allein belegt keine wirksame
+Frühe private Aufnahmen waren kein Farbbeleg. Spätere PID-gebundene Aufnahmen
+des korrekt konfigurierten Originalclients belegen die vier Farben sowie den
+vollständigen 22-Zeichen-Namen; diese positiven Belege sind oben getrennt ausgewiesen. Die Konsolen-FPS-Vorgabe allein belegt keine wirksame
 Bildratenbegrenzung.
 
 ## Unabhängiger Code-Review
@@ -133,5 +133,66 @@ statt erforderlicher 1068 MiB. Private cgroup-Spitze 1322,781 MiB. Cleanup: 20/2
 Unmounts, keine Cleanup-Fehler, Public unverändert. Die eigenen Schutzschwellen
 bleiben erhalten. Anschließend begrenzter opt-in Grafikversuch im eigenen
 Native-Runner: `one-lowmem-20261021` über 90 s PASS_LIMITED, 546,148 MiB Peak,
-null neue Throttles und sechs Unmounts. Eine Vierbot- und erneute Achtbotprüfung
-folgen seriell; eine ausreichende Kapazitätsverbesserung ist noch nicht belegt.
+null neue Throttles und sechs Unmounts. Die folgenden Gegenprüfungen sind ebenfalls beendet; eine ausreichende
+Kapazitätsverbesserung für acht Bots wurde nicht erreicht.
+
+## Abschließende Kapazitätsgrenze und Produktionsschutz
+
+Der reduzierte Grafikpfad bestand auch mit vier Bots: **150 s Messung /
+177,687 s einschließlich Drain**, vier Joins/vier reguläre Leaves, Peak vier,
+1047,352 MiB private cgroup-Spitze, 71,923 % eines CPU-Kerns einschließlich
+Aufbau/Drain, null neue Throttles und 12/12 erfolgreiche Unmounts. Die
+beobachteten Spitzen verschiedener Läufe sind kein kontrolliertes CPU-/RAM-A/B.
+
+Der erneute Achtbot-Versuch mit normalen Zeitbändern und diesem Grafikpfad
+wurde **nach 129,331 s bei sechs verbundenen Bots vor Client sieben** am
+unveränderten RAM-Gate verweigert: **921,137 MiB verfügbar, 1068 MiB erforderlich**
+(768 MiB Schutzreserve plus 300 MiB Budget für den nächsten Client). Die private
+cgroup erreichte 1389,926 MiB. Ergebnis **BLOCKED_CAPACITY**, kein Achtbot-/
+Stunden-PASS. Auch dieser Lauf endete mit **20/20 Unmounts**, ohne Cleanup-Fehler
+oder Eingriff in Public. Normale Zeitbänder wurden nur gestartet und sind über
+dieses kurze Fenster nicht langfristig qualifiziert. Kein gemeinsamer 2×8- oder
+24/7-Nachweis für diese Architektur.
+
+Final erneut ausgeführt: **124/124 Root-Python-Tests** (6,244 s) und **59/59
+Benchmark-Werkzeugtests** (2,492 s) bestanden. C++-Quellen blieben seit ihren
+bestandenen Regressionen unverändert. Keine neue DLL gebaut.
+
+Abschlussaudit 22.10.2026, 00:11:30 UTC: Public-PIDs 124818/124882/124950 mit
+unveränderten Startticks/CWD; acht Produktionsbots, eigene Syncfehler 0,
+frische Query und Telemetrie. Separater historischer External-Sync-Zähler 56;
+daraus wird keine neue Human-/Sync-Abnahme abgeleitet. Alle fünf originalen
+Retail-Binärpins stimmen; beide Public-Bot-DLLs haben unverändert Build04-SHA
+`7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835`.
+Rollback-Archiv SHA256 `d7b3650d55a21fc88614d5b969e126ac1cfcc52585262a1ef139eb0be1632b7d`
+stimmt mit dem vorhandenen Manifest überein. Keine eigenen Spielprozesse oder
+Test-Mounts übrig; 13 nachweislich eigene leere cgroups manuell entfernt.
+Der bestehende Public-Monitor läuft weiter. PR #46 und dessen vorhandene
+uncommittete Dateien bleiben unverändert.
+
+## Entscheidungen, Restumfang und kleinster nächster Schritt
+
+- Qualifizierte Human-KI und Build04-DLL erhalten; keine zusätzliche Gameplay-
+  Verbesserung oder Item-Navigation behauptet. Ein neuer Kandidat würde neue
+  Native-Abnahme erfordern.
+- RAM-/CPU-/Public-Guards unverändert; keine Verringerung der Reserve und keine
+  Produktionsunterbrechung für mehr Testbots. Weitere unabhängige Clients auf
+  diesem belegten Host überschreiten die gemessene sichere Startreserve.
+- Grafik-RAM-Option bleibt opt-in/standardmäßig aus. Ihre begrenzten 1-/4-Bot-
+  Nachweise ersetzen keine Achtbot-Kapazität. Farben bleiben ebenfalls
+  standardmäßig aus, sind innerhalb des gemessenen Policy-Caps zuschaltbar.
+- Vollständiger Controllerverlust/Native-Adoption, aktive unabhängige menschliche
+  Gegenstelle, mindestens 60 Minuten normale Mehrbot-Sessions und abgestimmte
+  PR46-Produktionsintegration bleiben offen. Eine DB-Neuöffnung im selben
+  Controller ersetzt keinen Prozess-/Host-Neustart. PR #46 ist weiterhin Draft
+  und enthält fremde offene lokale Änderungen; diese wurden nicht übernommen.
+- Kleiner zurückgestellter Codepunkt: der Runner entfernt künftig leere
+  cgroups noch nicht automatisch; diese Ausführung hat ihre eigenen manuell
+  bereinigt. Keine fremde oder produktive cgroup angefasst.
+
+Fortsetzung erst mit ausreichend isolierten Testressourcen auf dem autorisierten
+Hetzner-Kontext: Public-Inventur/Originalpins/Agentenstand erneut prüfen,
+kleinen Preflight wiederholen, dann acht Einzelprozesse und >=3600 s normale
+Sessions samt aktiver Originalclient-Gegenstelle und Recovery qualifizieren.
+Feste PR46-Slot-Recovery niemals parallel auf dieselben Session-Prozesse
+anwenden. Kein Merge oder produktiver Rollout aus den begrenzten Belegen.

@@ -36,7 +36,7 @@
 - [x] Tests für Namen, GUID/Seed-Stabilität und getrennte reproduzierbare Ströme schreiben; RED protokollieren.
 - [x] Minimale SQLite-Implementierung und gewichtete Bänder.
 - [x] Zustands-/Restart-/Human-/Rate-/Doppelcontroller-/Admin-Tests RED/GREEN.
-- [ ] Ganze vorhandene Python-/C++-Regressionen außerhalb fremder Lastmessungen; Ergebnisse dokumentieren.
+- [x] Ganze vorhandene Python-/C++-Regressionen außerhalb fremder Lastmessungen; Ergebnisse dokumentieren.
 - [x] Portablen Kern samt Konfigurationsbeispiel und expliziter Nichtaktivierung committen.
 
 ### Task 3: Retail-Lebenszyklus und Farbsyntax
@@ -46,7 +46,7 @@
 - [x] Einzelverbindungs-Smoke ohne neue DLL; Plain-Nickname und isolierte Query verifiziert. Farb-HUD/Limit noch offen.
 - [x] Echte individuelle Join/Quit/Rückkehr mit stabiler GUID am selben isolierten Server nachgewiesen; Crash-vs-geplant im produktiven Controller noch offen.
 - [ ] Produktions-Supervisor erst nach Integration an session desired-state binden; keine doppelte Wiederherstellung.
-- [ ] Poolfarbe erst nach Native-Gate aktivierbar machen.
+- [x] Poolfarbe nach begrenztem Native-Gate innerhalb des konservativen 32-Byte-Caps opt-in aktivierbar; Default aus.
 
 #### Fortsetzung 21.10., Task 3a: portabler Adaptervertrag
 **Files:** `tools/bot_session_runtime.py`, `tools/test_bot_session_runtime.py`.
@@ -124,9 +124,26 @@ Draft-PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/47. 
 
 ### Task 3c: autonome Fortsetzung ab 23:20 UTC
 - [x] Host/Worktree/PRs/Prozesse/Backups geprüft; 94 Bestandstests erneut PASS.
-- [ ] Ausführende Bridge mit durable Launch/Leave-Claims, PID/start/CWD/cgroup und vollständigen Query-Abwesenheiten (RED/GREEN).
+- [x] Ausführende Bridge mit durable Launch/Leave-Claims, PID/start/CWD/cgroup und vollständigen Query-Abwesenheiten (RED/GREEN).
 - [ ] Ein/four/eight individuelle private Retail-Prozesse, gestaffelte Joins/Quits/Rejoin, unveränderte Human-KI.
 - [ ] Ressourcen-/Public-Guards; mindestens 60 Minuten nur bei bestandenen Kapazitätsgates.
-- [ ] Farb-Sichtbeleg auf eigener Vanilla-Gegenstelle, weiterhin deaktiviert ohne Beleg.
+- [x] Farb-Sichtbeleg auf eigener Vanilla-Gegenstelle und 22 sichtbare Zeichen / 32 dekorierte Bytes; Default aus, nach Beleg opt-in.
 - [ ] Recovery/Review, Ergebnisse und PR aktualisieren; kein Merge ohne alle Abschlussgates.
 Ruling: vorhandene Human-KI/DLL beibehalten; keine parallele KI oder zusätzliche Gameplay-Features für diesen Abnahmelauf. Private Session-Bridge ist alleiniger Desired-State-Owner ihrer Runtime; PR46 bleibt unberührt.
+
+### Abschluss dieser Fortsetzung – 22.10.2026
+- Code auf GitHub als `9bc890816ac9bf45e5f84e7b4464811421771365`, Tree exakt
+  gleich dem lokalen geprüften Stand; Einzelcommits im lokalen Proof-Branch.
+- Vierbot-Lifecycle 360 s mit Crash/Ghost/Cooldown/Rejoin, zwei echten DB-
+  Neuöffnungen und byteidentischen Profilen bestanden; Farben-/Namensgrenze
+  90 s separat bestanden. Reduzierter Grafikpfad 1/4 begrenzt bestanden.
+- Achtbot-Versuche bei 5 bzw. 6 verbundenen Bots am RAM-Startgate verweigert;
+  **BLOCKED_CAPACITY**, kein Achtbot-/60-Minuten-/Multi-Hour-PASS. Alle eigenen
+  Prozesse/Mounts beendet, Public und fremde Arbeit unverändert.
+- Final 124 Root-Python + 59 Benchmark-Werkzeugtests sowie C++-Regressionen
+  (555 Human-KI-Checks / Integrationsblock) bestanden.
+- Gesamtauftrag offen. Hardware-/Isolationsressourcen für >=3600 s acht
+  Einzelclients, aktive Originalclient-Gegenstelle, vollständiger Controller-
+  Wiederanlauf und PR46-Desired-State-Integration bleiben Voraussetzung.
+- Maßgeblich sind aktueller Fortsetzungsbericht und JSON-Ergebnisse; frühere
+  BLOCKED_PR46-/Offline-Vermerke in diesem Plan sind historische Zeitpunkte.
