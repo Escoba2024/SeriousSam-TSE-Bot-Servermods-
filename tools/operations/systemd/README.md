@@ -30,3 +30,17 @@ The root-owned deployment bundle contains `tools/operations/fleet_health.py`,
 `CPUQuota=5%` is a service budget, not a game CPU limit. Read-only quota probes
 have qualified the incremental warm scan; a first incomplete scan stays blocked.
 No boot/recovery, host reboot or 24/7 qualification follows from this service.
+
+## Incident repair24 October2026
+
+The unit is now the actual deployed read-only monitor: immutable `b5a6cba`
+bundle, original CPUQuota5% and MemoryMax128M. A separate probe preserved207
+historical faults and stayed below34MiB with zero OOM. Existing failed whole-log
+monitor was replaced; public game processes were not signalled. This narrow
+read-only outage repair bypasses only the healthy-roster migration precondition
+above. It grants no recovery/reboot/rollout permission. The output's timestamp
+and failure booleans now reflect the present Dedicated exception/query outage.
+See `docs/decisions/2026-10-24-readonly-monitor-incident-repair.md` and the
+24October incident handoff for exact pins, preserved configuration rollback
+and its known old-reader OOM limitation. The newer private supervisor fix
+`83d2bec...` is not in this production bundle and lacks new native qualification.

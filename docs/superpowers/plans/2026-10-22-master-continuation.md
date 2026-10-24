@@ -60,3 +60,35 @@ Owner: lead; depends on reliability qualification for execution changes. Reuse P
 2026-10-22 21:42 UTC: Task1 in progress. Public query 8/16, bots8, humans0; own SYNCBAD0/external105; monitor BLOCKED (QUERY_UNCERTAIN, historical external sync, log hold). Two production clients ~201 MiB RSS each, host MemAvailable ~2274 MiB, root free ~14.3 GiB. Existing native PR49 qualifier 3600.0039s with 648 samples passed; outer duplicate-stop failed. Foreign PR46 worktree has four dirty artifacts; foreign QA plan has an uncommitted result update: preserve both. No production changes.
 
 2026-10-22 21:58 UTC: Task2 source fixes verified85 root/59 benchmark tests, C++ regression/smoke including555 Human-AI checks. Fresh independent review findings corrected through RED/GREEN. PR50 published b5a6cba, identical tree to local proof; direct shell credentials unavailable, GitHub connector publication works. Private final-source R2 double-start/client recovery/controller adoption/server recovery/six-unmount gates PASS; boot replay and full hour pending. Candidate monitor under actual5% quota catches all105 historical faults then ALERT, fresh UDP. Public old monitor/game processes unchanged. PR47 fresh124 tests PASS in isolated source snapshot, eight-client capacity still blocked; recommendation is4vCPU/8GiB test envelope, no order.
+
+## Autonomous continuation — 24 October 2026
+
+Owner: single lead, no subagents. Isolated worktree `/srv/tse-live-reliability-20261024`; starts at PR50 `a2b4ee1`. Foreign dirty worktrees remain unchanged. Evidence: `/srv/tse-live-evidence-20261024`. Current user instruction is the binding continuation spec. Available skill guidance is applied inline; skill helper scripts are not installed on this host, so ledger tracking is manual.
+
+### Task 5: P0 outage and safe read-only monitoring repair
+- [x] Identify host, PR45/46/47/49/50 heads, worktrees, locks, public process identities and ports.
+- [x] Reproduce local and configured-address query timeouts; preserve Dedicated/Wine exception evidence.
+- [x] Find stale monitor root cause: repeated 128 MiB cgroup OOM kills, restart limit, last update 2026-10-23T23:57:34Z.
+- [ ] Verify incremental collector under unchanged memory/CPU protections, restore only read-only monitoring reversibly, verify output timestamps and public PID/start identities. Recovery stays disabled.
+- [ ] Attribute each oversized log; preserve errors. No live copytruncate, deletion, threshold relaxation or public restart.
+
+### Task 6: Exact-version evidence and missing isolated gates
+- [ ] Audit retained final-source hour against hashes and closed evidence, publish sanitized result and distinguish later failed drills.
+- [ ] Run available portable regressions and isolated native fault, log/archive, circuit, human/foreign-window and Originalclient/GameSpy checks without touching old failed runtime.
+- [ ] Measure resources for PR47; do not start scales that fail reserve.
+- [ ] Retain exact blockers and concrete next commands for unavailable WAN/Windows or necessary public maintenance approval. No merge/rollout on failed gates.
+
+Pre-flight interfaces: Task5 consumes PR50 health collector unchanged; Task6 maps its exact hashes to existing native-hour records. Read-only monitor remediation does not qualify or enable public recovery. Existing native-hour PASS is scoped separately from subsequent FAILs and partial cleanup. A dead public query cannot establish no-human state.
+
+Task6 ruling: retained helper-failure cleanup is a reproducible implementation defect: any remaining prefix client incorrectly triggers `wineserver -k` after its server has exited (Wine9 returns1, while `-w` returns0). Two preliminary diagnostic fixtures failed on permissions; the corrected nobody-owned fixture reproduces the empty-stderr exit1. Add exact-live-server detection, retain all actual command failures, and settle Xvfb exec identity before saving. Tests: `tools/test_operations_live_recovery.py` RED then GREEN, full root suite; repeat native fault gates and >=3600s for the new supervisor hash. Health collector stays unchanged and keeps its independently tested monitor provenance.
+
+### Verified checkpoint —24 October,17:50 UTC
+- [x] Task5 read-only monitoring repair: same immutable PR50 health collector, unchanged5%/128MiB guards; seven warm probe samples, production fresh writes/complete207-fault scan, no OOM; public game identities preserved.
+- [x] Oversized four logs identified at32MiB threshold; crash copies/hash retained. No live maintenance or threshold change.
+- [x] Prior final-source3600.002140s/654-sample/96-window hour reverified through closed raw hashes; later two FAILs and residual resources recorded.
+- [x] Minimal Wine-server/exec-identity fix committed0ec97b4; SHA83d2bec6507d9de87fa7c42a97af69501f8f77b4608122a6f954dbfae20c1242. Three RED failures,92 final root/59 benchmark tests and555 C++Human-AI checks PASS.
+- [ ] New-source native fault/Originalclient/network/hour: BLOCKED by six samples99.5–100% host CPU; no new Retail processes. The old source hour is not transferred. Staged new hour at private26920/26921/:125, not executed.
+- [x] PR47 existing low-memory four-bot evidence and eight-client RAM failures reviewed; current CPU also blocks scaling.
+- [x] All415 retained source/archive members and12 active pins freshly verified,61DC intact.
+- [ ] Public manual maintenance/restoration requires a decision with unknown current human roster. No auto-recovery/reboot/rollout permission inferred.
+Full handoff: `docs/reports/2026-10-24-live-reliability-handoff.md`; machine-readable sanitized results alongside it. Next action is the bounded same-Build04 public restoration described there, followed by fresh admission and new-source isolated gates.

@@ -144,12 +144,25 @@ def host_resources():
 def close_prefix(prefix):
  alive=False
  for proc in Path('/proc').glob('[0-9]*'):
-  try:alive |= ('WINEPREFIX='+str(prefix)).encode() in (proc/'environ').read_bytes().split(b'\0')
-  except (FileNotFoundError,PermissionError,ProcessLookupError):pass
- # Wine 9 returns 1 for -k when no server exists. Never turn that normal
- # first-start state into a launch failure, or ignore a genuine command error.
+  try:
+   # Clients/helpers can outlive a crashed server. Only a live wineserver
+   # makes -k valid; Wine9 returns1 for -k without a server, but -w returns0.
+   if (proc/'comm').read_text().strip() not in ('wineserver','wineserver64'):continue
+   if (proc/'stat').read_text().rsplit(') ',1)[1].split()[0]=='Z':continue
+   alive |= ('WINEPREFIX='+str(prefix)).encode() in (proc/'environ').read_bytes().split(b'\0')
+  except (FileNotFoundError,ProcessLookupError):pass
+ # Preserve inaccessible-prefix and real command errors before any unmount.
  for arg in (['-k','-w'] if alive else ['-w']):
   subprocess.run(['runuser','-u','nobody','--','env','WINEPREFIX='+str(prefix),'wineserver',arg],check=True,capture_output=True,timeout=15)
+
+def settled_process(process,executable,timeout=15):
+ deadline=time.monotonic()+timeout
+ while process.poll() is None:
+  info=h.process_identity(process.pid)
+  if info['command'].replace('\\','/').rsplit('/',1)[-1]==executable:return info
+  if time.monotonic()>=deadline:break
+  time.sleep(.1)
+ raise RuntimeError('native executable did not settle: '+executable)
 
 def _demote(cg):
  def child():
@@ -228,12 +241,7 @@ class Runtime:
   cmd=['wine','Bin/DedicatedServer.exe','BotTest'] if role=='server' else ['wine','Bin/SeriousSam.exe','+connect','127.0.0.1:'+str(self.c['port']),'+quickjoin','+script','Scripts\\Integrated.ini']
   with (self.root/(role+'-wine.log')).open('wb') as out:p=subprocess.Popen(cmd,cwd=game,env=env,stdout=out,stderr=subprocess.STDOUT,stdin=subprocess.DEVNULL,start_new_session=True,preexec_fn=_demote(self.cg))
   expected='DedicatedServer.exe' if role=='server' else 'SeriousSam.exe'
-  deadline=time.monotonic()+15
-  while True:
-   info=h.process_identity(p.pid)
-   if info['command'].replace('\\','/').endswith('/'+expected):break
-   if p.poll() is not None or time.monotonic()>deadline:raise RuntimeError('native executable did not settle')
-   time.sleep(.1)
+  info=settled_process(p,expected)
   self.r.setdefault('processes',{})[role]=info;self.save();self.log('LAUNCH',role=role,pid=p.pid)
  def start(self):
   with self.admission():self._start()
@@ -261,7 +269,7 @@ class Runtime:
    if Path('/tmp/.X'+display+'-lock').exists() or Path('/tmp/.X11-unix/X'+display).exists():raise RuntimeError('display is occupied/stale; no blind lock deletion')
    archive_closed([self.root/'xvfb.log'],self.root/'archives')
    with (self.root/'xvfb.log').open('ab') as out:x=subprocess.Popen(['Xvfb',self.c['display'],'-screen','0','640x480x24','-nolisten','tcp','-noreset'],cwd=self.root,stdout=out,stderr=subprocess.STDOUT,preexec_fn=_demote(self.cg),start_new_session=True)
-   self.r['xvfb']=h.process_identity(x.pid);self.save();time.sleep(2)
+   self.r['xvfb']=settled_process(x,'Xvfb');self.save();time.sleep(2)
    if h.verify_process(self.r['xvfb'])!='LIVE':raise RuntimeError('Xvfb failed')
   self.launch('server');time.sleep(8);self.launch('botA')
   if 'botB' in self.roles:time.sleep(5);self.launch('botB')
