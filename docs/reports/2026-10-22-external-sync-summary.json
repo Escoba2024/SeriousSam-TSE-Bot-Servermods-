@@ -1,0 +1,145 @@
+{
+  "capture_utc": "2026-10-22T21:42:35Z",
+  "own_syncbad": 0,
+  "external_syncbad": 105,
+  "sync_disconnects": 9,
+  "bad_groups": [
+    {
+      "first_seq": 290425,
+      "first_tick": 14482.64,
+      "last_tick": 14492.05,
+      "count": 10,
+      "last_bad": 10,
+      "disconnect": true,
+      "later_syncok": false
+    },
+    {
+      "first_seq": 310818,
+      "first_tick": 15498.21,
+      "last_tick": 15498.21,
+      "count": 1,
+      "last_bad": 1,
+      "disconnect": false,
+      "later_syncok": true
+    },
+    {
+      "first_seq": 310881,
+      "first_tick": 15501.34,
+      "last_tick": 15510.76,
+      "count": 10,
+      "last_bad": 10,
+      "disconnect": true,
+      "later_syncok": false
+    },
+    {
+      "first_seq": 718220,
+      "first_tick": 36168.46,
+      "last_tick": 36177.6,
+      "count": 10,
+      "last_bad": 10,
+      "disconnect": true,
+      "later_syncok": false
+    },
+    {
+      "first_seq": 729862,
+      "first_tick": 36759.55,
+      "last_tick": 36763.61,
+      "count": 5,
+      "last_bad": 5,
+      "disconnect": false,
+      "later_syncok": true
+    },
+    {
+      "first_seq": 730022,
+      "first_tick": 36767.68,
+      "last_tick": 36776.82,
+      "count": 10,
+      "last_bad": 10,
+      "disconnect": true,
+      "later_syncok": false
+    },
+    {
+      "first_seq": 734184,
+      "first_tick": 36978.93,
+      "last_tick": 36988.07,
+      "count": 10,
+      "last_bad": 10,
+      "disconnect": true,
+      "later_syncok": false
+    },
+    {
+      "first_seq": 1516106,
+      "first_tick": 75828.13,
+      "last_tick": 75828.13,
+      "count": 1,
+      "last_bad": 1,
+      "disconnect": false,
+      "later_syncok": true
+    },
+    {
+      "first_seq": 1516150,
+      "first_tick": 75830.19,
+      "last_tick": 75830.19,
+      "count": 1,
+      "last_bad": 1,
+      "disconnect": false,
+      "later_syncok": true
+    },
+    {
+      "first_seq": 1516304,
+      "first_tick": 75837.41,
+      "last_tick": 75837.41,
+      "count": 1,
+      "last_bad": 1,
+      "disconnect": false,
+      "later_syncok": true
+    },
+    {
+      "first_seq": 1516414,
+      "first_tick": 75842.56,
+      "last_tick": 75851.84,
+      "count": 10,
+      "last_bad": 10,
+      "disconnect": true,
+      "later_syncok": false
+    },
+    {
+      "first_seq": 1799230,
+      "first_tick": 89099.28,
+      "last_tick": 89108.56,
+      "count": 10,
+      "last_bad": 10,
+      "disconnect": true,
+      "later_syncok": false
+    },
+    {
+      "first_seq": 1804138,
+      "first_tick": 89329.25,
+      "last_tick": 89338.53,
+      "count": 10,
+      "last_bad": 10,
+      "disconnect": true,
+      "later_syncok": false
+    },
+    {
+      "first_seq": 2122596,
+      "first_tick": 104256.59,
+      "last_tick": 104265.88,
+      "count": 6,
+      "last_bad": 6,
+      "disconnect": false,
+      "later_syncok": false
+    },
+    {
+      "first_seq": 2244242,
+      "first_tick": 109958.38,
+      "last_tick": 109968.69,
+      "count": 10,
+      "last_bad": 10,
+      "disconnect": true,
+      "later_syncok": false
+    }
+  ],
+  "bad_ticks_with_owned_syncok": 105,
+  "bad_group_count": 15
+}

@@ -6,6 +6,9 @@ import qualify_integrated_wine as q
 MIN_FREE=8*1024**3
 DLL='7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835'
 
+def available_memory():
+ return int(re.search(r'^MemAvailable:\s+(\d+) kB$',Path('/proc/meminfo').read_text(),re.M)[1])*1024
+
 def process_identity(pid):
  p=Path('/proc')/str(pid);s=(p/'stat').read_text().rsplit(') ',1)[1].split()
  return dict(pid=pid,start_ticks=int(s[19]),cwd=str((p/'cwd').resolve()),command=(p/'cmdline').read_bytes().split(b'\0')[0].decode(errors='replace'),cgroup=(p/'cgroup').read_text().strip())
@@ -57,12 +60,20 @@ def telemetry_valid(path,now=None,expected_local=None):
   return -3<=age<=12 and 18<=ticks<=23 and lp in (1,4) and (expected_local is None or lp==expected_local) and 18*lp<=actions<=23*lp and int(r['renderdraw'])==0 and int(r['gameon'])==1 and int(r['enabled'])==1 and int(r['stall_s'])==0
  except (OSError,ValueError,KeyError):return False
 
+def query_roster(query):
+ try:
+  names=[v for k,v in query.items() if re.fullmatch(r'player_\d+',k)]
+  valid=query.get('gamever')=='1.07' and not query.get('activemod') and int(query.get('maxplayers',0))==16 and int(query.get('numplayers',-1))==len(names) and len(names)<=16 and len(names)==len(set(names))
+ except (AttributeError,TypeError,ValueError):valid=False
+ if not valid:raise ValueError('invalid Retail query roster')
+ return names
+
 def assess(s):
  alerts=[];blocked=[];humans=[];recover=[];expected=s.get('expected_names',q.ROSTER)
  for key,code in [('ports_owned','FOREIGN_PORT'),('mounts_owned','FOREIGN_MOUNT'),('dll_valid','INVALID_ARTIFACT'),('master_ok','MASTER_DNS'),('telemetry_ok','TELEMETRY_STALE')]:
   if not s.get(key):blocked.append(code)
  if s.get('disk_free',0)<MIN_FREE:blocked.append('LOW_DISK')
- blocked+=s.get('identity_errors',[])+s.get('cgroup_issues',[])
+ blocked+=s.get('identity_errors',[])+s.get('cgroup_issues',[])+s.get('resource_issues',[])
  if not s.get('sync_scan_complete',True):blocked.append('SYNC_LOG_SCAN_PENDING')
  if s.get('owned_sync_bad',0):blocked.append('OWNED_CLIENT_SYNC')
  if s.get('external_sync_bad',0):alerts.append('EXTERNAL_CLIENT_SYNC')
@@ -71,8 +82,8 @@ def assess(s):
  else:
   names=[v for k,v in query.items() if re.fullmatch(r'player_\d+',k)]
   humans=[n for n in names if n not in expected]
-  try:valid=query.get('gamever')=='1.07' and not query.get('activemod') and int(query.get('maxplayers',0))==16 and int(query.get('numplayers',-1))==len(names) and len(names)<=16 and len(names)==len(set(names))
-  except (TypeError,ValueError):valid=False
+  try:query_roster(query);valid=True
+  except ValueError:valid=False
   if not valid:blocked.append('INVALID_QUERY')
   if not set(expected).issubset(names) and not s.get('missing'):blocked.append('MISSING_ROSTER')
  if humans:alerts.append('HUMAN_HOLD')
@@ -145,8 +156,10 @@ def collect(result_path):
  cgroup_issues=[]
  if cpu_stat.get('nr_throttled',0):cgroup_issues.append('CGROUP_THROTTLED')
  if memory_events.get('oom_kill',0) or memory_events.get('oom',0):cgroup_issues.append('CGROUP_OOM')
- snap=dict(now=time.time(),query=query,query_time=qt,identity_errors=errors,missing=missing,ports_owned=all(udp_owners(port)<=allowed for port in [r['game_port'],r['query_port']]),mounts_owned=mounts_ok,dll_valid=bool(dll_ok),disk_free=os.statvfs('/').f_bavail*os.statvfs('/').f_frsize,master_ok=master_ok,telemetry_ok=telemetry,owned_sync_bad=owned,external_sync_bad=external,logs_over_limit=logs_over_limit(root,r),cgroup_issues=cgroup_issues,sync_scan_complete=counts['complete'],expected_names=q.ROSTER[:r.get('bots',8)])
+ available=available_memory();memory_current=int((cg/'memory.current').read_text()) if cg.exists() else None;memory_peak=int((cg/'memory.peak').read_text()) if cg.exists() else None
+ resource_issues=['HOST_RAM_RESERVE'] if available<768*1024**2 else []
+ snap=dict(now=time.time(),query=query,query_time=qt,identity_errors=errors,missing=missing,ports_owned=all(udp_owners(port)<=allowed for port in [r['game_port'],r['query_port']]),mounts_owned=mounts_ok,dll_valid=bool(dll_ok),disk_free=os.statvfs('/').f_bavail*os.statvfs('/').f_frsize,master_ok=master_ok,telemetry_ok=telemetry,owned_sync_bad=owned,external_sync_bad=external,logs_over_limit=logs_over_limit(root,r),cgroup_issues=cgroup_issues,resource_issues=resource_issues,sync_scan_complete=counts['complete'],expected_names=q.ROSTER[:r.get('bots',8)])
  verdict=assess(snap)
  # No player names or peer addresses in persisted public-facing health status.
- verdict.update(utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),players=int(query['numplayers']) if query else None,expected_bots=r.get('bots',8),missing_roles=missing,disk_free_bytes=snap['disk_free'],owned_sync_bad=owned,external_sync_bad=external,processes_verified=not errors,query_fresh=query is not None,telemetry_fresh=telemetry,cgroup_cpu=cpu_stat,cgroup_memory_events=memory_events,sync_scan_complete=counts['complete'])
+ verdict.update(utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),players=int(query['numplayers']) if query else None,expected_bots=r.get('bots',8),missing_roles=missing,disk_free_bytes=snap['disk_free'],owned_sync_bad=owned,external_sync_bad=external,processes_verified=not errors,query_fresh=query is not None and 0<=snap['now']-qt<=5,query_age_s=snap['now']-qt if query is not None else None,telemetry_fresh=telemetry,cgroup_cpu=cpu_stat,cgroup_memory_events=memory_events,cgroup_memory_current=memory_current,cgroup_memory_peak=memory_peak,host_memory_available=available,sync_scan_complete=counts['complete'])
  return snap,verdict

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Owner-guarded, loopback-only Wine lifecycle. Public fleet is monitor-only."""
-import argparse,fcntl,gzip,hashlib,json,os,re,select,shutil,signal,subprocess,sys,time
+import argparse,fcntl,gzip,hashlib,json,math,os,re,select,shutil,signal,subprocess,sys,time
+from contextlib import contextmanager
 from pathlib import Path
 import fleet_health as h
 q=h.q
@@ -125,15 +126,43 @@ def master_rule(port,owner):
  if not re.fullmatch('[A-Za-z0-9-]+',owner):raise ValueError('invalid owner')
  return ['OUTPUT','-p','udp','--sport',str(port+1),'--dport','27900','-m','comment','--comment','tse-ops-'+owner,'-j','DROP']
 
+def private_rules(port,owner):
+ master=master_rule(port,owner)
+ return [master,['INPUT','!','-i','lo','-p','udp','-m','multiport','--dports',str(port)+':'+str(port+1),'-m','comment','--comment','tse-ops-'+owner,'-j','DROP']]
+
+def check_resource_reserve(sample,additional_bytes):
+ available=sample.get('available_bytes');busy=sample.get('busy_percent')
+ if type(available)!=int or available<0 or type(busy) not in (int,float) or not math.isfinite(busy) or not 0<=busy<=100 or type(additional_bytes)!=int or additional_bytes<0:raise RuntimeError('unverified host reserve')
+ if available<768*1024**2+additional_bytes or busy>70:raise RuntimeError('host reserve below admission budget')
+
+def host_resources():
+ def cpu():return list(map(int,Path('/proc/stat').read_text().splitlines()[0].split()[1:9]))
+ before=cpu();time.sleep(1);delta=[b-a for a,b in zip(before,cpu())]
+ if sum(delta)<=0 or any(x<0 for x in delta):raise RuntimeError('unverified host CPU sample')
+ return dict(available_bytes=h.available_memory(),busy_percent=100*(sum(delta)-delta[3]-delta[4])/sum(delta))
+
 def close_prefix(prefix):
  alive=False
  for proc in Path('/proc').glob('[0-9]*'):
-  try:alive |= ('WINEPREFIX='+str(prefix)).encode() in (proc/'environ').read_bytes().split(b'\0')
-  except (FileNotFoundError,PermissionError,ProcessLookupError):pass
- # Wine 9 returns 1 for -k when no server exists. Never turn that normal
- # first-start state into a launch failure, or ignore a genuine command error.
+  try:
+   # Clients/helpers can outlive a crashed server. Only a live wineserver
+   # makes -k valid; Wine9 returns1 for -k without a server, but -w returns0.
+   if (proc/'comm').read_text().strip() not in ('wineserver','wineserver64'):continue
+   if (proc/'stat').read_text().rsplit(') ',1)[1].split()[0]=='Z':continue
+   alive |= ('WINEPREFIX='+str(prefix)).encode() in (proc/'environ').read_bytes().split(b'\0')
+  except (FileNotFoundError,ProcessLookupError):pass
+ # Preserve inaccessible-prefix and real command errors before any unmount.
  for arg in (['-k','-w'] if alive else ['-w']):
   subprocess.run(['runuser','-u','nobody','--','env','WINEPREFIX='+str(prefix),'wineserver',arg],check=True,capture_output=True,timeout=15)
+
+def settled_process(process,executable,timeout=15):
+ deadline=time.monotonic()+timeout
+ while process.poll() is None:
+  info=h.process_identity(process.pid)
+  if info['command'].replace('\\','/').rsplit('/',1)[-1]==executable:return info
+  if time.monotonic()>=deadline:break
+  time.sleep(.1)
+ raise RuntimeError('native executable did not settle: '+executable)
 
 def _demote(cg):
  def child():
@@ -145,6 +174,17 @@ class Runtime:
   self.config=Path(config);self.c=json.loads(self.config.read_text());self.root=validate_config(self.c);self.result=self.root/'result.json';self.r=json.loads(self.result.read_text());self.lock=acquire_lock(self.root/'supervisor.lock');self.roles=['server','botA']+(['botB'] if self.c['bots']==8 else []);self.cg=Path('/sys/fs/cgroup')/('tse-ops-'+hashlib.sha256(str(self.root).encode()).hexdigest()[:12]);self.boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip();self.r['log_limit_bytes']=validate_log_limit(self.c)
  def save(self):atomic(self.result,self.r)
  def log(self,kind,**kw):event(self.root/'events.json',dict(kind=kind,**kw))
+ def resources(self,additional_bytes):
+  sample=host_resources();check_resource_reserve(sample,additional_bytes);self.log('RESOURCE_ADMISSION',additional_bytes=additional_bytes,**sample)
+ @contextmanager
+ def admission(self):
+  if getattr(self,'_admitting',False):yield;return
+  # Host-wide admission serializes separate instance controllers, including
+  # their full startup, not just the instant when memory was sampled.
+  with acquire_lock('/run/tse-ops-admission.lock'):
+   self._admitting=True
+   try:yield
+   finally:self._admitting=False
  def specs(self):
   return [h.mount_spec(self.root,role,TEMPLATE/('prefix-botA' if role=='prefix-botB' else role)) for game in self.roles for role in [game,'prefix-'+game]]
  def ownership(self):
@@ -155,6 +195,9 @@ class Runtime:
    if status=='LIVE' and self.r.get('boot_id')!=self.boot:raise RuntimeError('boot identity mismatch with live PID')
   x=self.r.get('xvfb')
   if x and h.verify_process(x) not in ['LIVE','ABSENT']:raise RuntimeError('Xvfb identity mismatch')
+  if any(h.verify_process(i)=='LIVE' for i in list(self.r.get('processes',{}).values())+([x] if x else [])):
+   for rule in private_rules(self.c['port'],self.cg.name):
+    if subprocess.run(['iptables','-w','-C']+rule,capture_output=True).returncode:raise RuntimeError('private isolation rule missing/unverified')
   for m in self.specs():
    mounted=any(l.split()[4]==m['target'] for l in Path('/proc/self/mountinfo').read_text().splitlines())
    if mounted and not h.mount_matches(m):raise RuntimeError('foreign/replaced mount')
@@ -177,8 +220,11 @@ class Runtime:
    if not h.mount_matches(m):raise RuntimeError('mount replay failed')
   self.r['mounts']=[m['target'] for m in self.specs()];self.r['template']=str(TEMPLATE);self.save()
  def launch(self,role):
+  with self.admission():self._launch(role)
+ def _launch(self,role):
   self.ownership();info=self.r.get('processes',{}).get(role)
   if info and h.verify_process(info)=='LIVE':raise RuntimeError('refusing duplicate launch')
+  self.resources((192 if role=='server' else 384)*1024**2)
   game=self.root/role
   for name,want in q.PINS.items():
    if name=='GameMP.dll' and role.startswith('bot'):want=h.DLL
@@ -195,14 +241,11 @@ class Runtime:
   cmd=['wine','Bin/DedicatedServer.exe','BotTest'] if role=='server' else ['wine','Bin/SeriousSam.exe','+connect','127.0.0.1:'+str(self.c['port']),'+quickjoin','+script','Scripts\\Integrated.ini']
   with (self.root/(role+'-wine.log')).open('wb') as out:p=subprocess.Popen(cmd,cwd=game,env=env,stdout=out,stderr=subprocess.STDOUT,stdin=subprocess.DEVNULL,start_new_session=True,preexec_fn=_demote(self.cg))
   expected='DedicatedServer.exe' if role=='server' else 'SeriousSam.exe'
-  deadline=time.monotonic()+15
-  while True:
-   info=h.process_identity(p.pid)
-   if info['command'].replace('\\','/').endswith('/'+expected):break
-   if p.poll() is not None or time.monotonic()>deadline:raise RuntimeError('native executable did not settle')
-   time.sleep(.1)
+  info=settled_process(p,expected)
   self.r.setdefault('processes',{})[role]=info;self.save();self.log('LAUNCH',role=role,pid=p.pid)
  def start(self):
+  with self.admission():self._start()
+ def _start(self):
   validate_config(self.c)
   if os.statvfs('/').f_bavail*os.statvfs('/').f_frsize<h.MIN_FREE:raise RuntimeError('disk reserve below 8 GiB')
   q.validate_master_resolution();self.ownership()
@@ -212,11 +255,12 @@ class Runtime:
    for m in self.specs():
     if not h.mount_matches(m):raise RuntimeError('live fleet lost own mount')
    self.log('ADOPT');return
-  rule=master_rule(self.c['port'],self.cg.name)
-  probe=subprocess.run(['iptables','-w','-C']+rule,capture_output=True)
-  if probe.returncode==1:subprocess.run(['iptables','-w','-I']+rule,check=True,capture_output=True)
-  elif probe.returncode:raise RuntimeError('cannot verify private master-beacon rule')
-  self.r['private_master_guard']=rule;self.save()
+  self.resources((128+192+384*(len(self.roles)-1))*1024**2)
+  for rule in private_rules(self.c['port'],self.cg.name):
+   probe=subprocess.run(['iptables','-w','-C']+rule,capture_output=True)
+   if probe.returncode==1:subprocess.run(['iptables','-w','-I']+rule,check=True,capture_output=True)
+   elif probe.returncode:raise RuntimeError('cannot verify private isolation rule')
+  self.r['private_network_guards']=private_rules(self.c['port'],self.cg.name);self.save()
   self.mounts();self.cg.mkdir(exist_ok=True);(self.cg/'cpu.max').write_text('max 100000');self.r.update(cgroup=str(self.cg),boot_id=self.boot,game_port=self.c['port'],query_port=self.c['port']+1,display=self.c['display'],bots=self.c['bots'],dll_sha256=h.DLL)
   xinfo=self.r.get('xvfb')
   if xinfo and h.verify_process(xinfo) not in ['ABSENT','LIVE']:raise RuntimeError('display PID mismatch')
@@ -225,7 +269,7 @@ class Runtime:
    if Path('/tmp/.X'+display+'-lock').exists() or Path('/tmp/.X11-unix/X'+display).exists():raise RuntimeError('display is occupied/stale; no blind lock deletion')
    archive_closed([self.root/'xvfb.log'],self.root/'archives')
    with (self.root/'xvfb.log').open('ab') as out:x=subprocess.Popen(['Xvfb',self.c['display'],'-screen','0','640x480x24','-nolisten','tcp','-noreset'],cwd=self.root,stdout=out,stderr=subprocess.STDOUT,preexec_fn=_demote(self.cg),start_new_session=True)
-   self.r['xvfb']=h.process_identity(x.pid);self.save();time.sleep(2)
+   self.r['xvfb']=settled_process(x,'Xvfb');self.save();time.sleep(2)
    if h.verify_process(self.r['xvfb'])!='LIVE':raise RuntimeError('Xvfb failed')
   self.launch('server');time.sleep(8);self.launch('botA')
   if 'botB' in self.roles:time.sleep(5);self.launch('botB')
@@ -256,8 +300,9 @@ class Runtime:
    if not wait_pidfd(fd,5):raise RuntimeError('owned process did not exit')
   finally:os.close(fd)
  def no_humans(self):
-  status=q.query(self.c['port']+1);names=[v for k,v in status.items() if re.fullmatch(r'player_\d+',k)]
-  if status.get('gamever')!='1.07' or int(status.get('numplayers',-1))!=len(names) or any(n not in q.ROSTER[:self.c['bots']] for n in names):raise RuntimeError('human/unknown player hold')
+  try:names=h.query_roster(q.query(self.c['port']+1))
+  except ValueError as e:raise RuntimeError('human/unknown player hold') from e
+  if any(n not in q.ROSTER[:self.c['bots']] for n in names):raise RuntimeError('human/unknown player hold')
  def stop(self):
   self.ownership()
   xinfo=self.r.get('xvfb')
@@ -266,7 +311,9 @@ class Runtime:
   for role in reversed(self.roles):self.stop_role(role)
   for role in self.roles:
    prefix=self.root/('prefix-'+role)
-   close_prefix(prefix)
+   # A repeated stop sees empty, unmounted prefix targets. Never ask Wine
+   # to enter those directories; ownership/cgroup checks still hold below.
+   if h.mount_matches(h.mount_spec(self.root,'prefix-'+role,TEMPLATE/('prefix-botA' if role=='botB' else 'prefix-'+role))):close_prefix(prefix)
   x=self.r.get('xvfb')
   if x and h.verify_process(x)=='LIVE':
    fd=owned_pidfd(x)
@@ -278,10 +325,10 @@ class Runtime:
   if self.cg.exists() and (self.cg/'cgroup.procs').read_text().strip():raise RuntimeError('owned cgroup not empty; no unmount')
   for m in reversed(self.specs()):
    if h.mount_matches(m):subprocess.run(['umount',m['target']],check=True,capture_output=True)
-  rule=master_rule(self.c['port'],self.cg.name)
-  probe=subprocess.run(['iptables','-w','-C']+rule,capture_output=True)
-  if probe.returncode==0:subprocess.run(['iptables','-w','-D']+rule,check=True,capture_output=True)
-  elif probe.returncode!=1:raise RuntimeError('cannot verify private master-beacon cleanup')
+  for rule in reversed(private_rules(self.c['port'],self.cg.name)):
+   probe=subprocess.run(['iptables','-w','-C']+rule,capture_output=True)
+   if probe.returncode==0:subprocess.run(['iptables','-w','-D']+rule,check=True,capture_output=True)
+   elif probe.returncode!=1:raise RuntimeError('cannot verify private isolation cleanup')
   self.r.update(status='OWNED_ISOLATED_STOPPED',left_running=False);self.save();self.log('STOP')
  def reconcile(self):
   self.ownership();snap,health=h.collect(self.result);atomic(self.root/'health.json',health)
@@ -308,7 +355,11 @@ class Runtime:
    # Query uncertainty alone cannot restart anything. A confirmed exited server,
    # recent no-human snapshot and empty own ports are all necessary.
    now=time.time()
-   if not snap['identity_errors'] and snap['disk_free']>=h.MIN_FREE and snap['dll_valid'] and snap['mounts_owned'] and snap['master_ok'] and 0<=now-self.r.get('last_no_humans',0)<=20 and not h.udp_owners(self.c['port']) and not h.udp_owners(self.c['port']+1) and retry_allowed(self.r):
+   # Only loss-of-server observations are expected here. All other safety
+   # holds, including OOM/throttle, owned sync faults and incomplete scans,
+   # must also block this separate recovery path.
+   blocking=set(health['alerts'])-{'QUERY_UNCERTAIN','TELEMETRY_STALE','EXTERNAL_CLIENT_SYNC','LOG_LIMIT_MAINTENANCE_HOLD'}
+   if not blocking and not health['humans'] and not snap['identity_errors'] and snap['disk_free']>=h.MIN_FREE and snap['dll_valid'] and snap['mounts_owned'] and snap['master_ok'] and 0<=now-self.r.get('last_no_humans',0)<=20 and not h.udp_owners(self.c['port']) and not h.udp_owners(self.c['port']+1) and retry_allowed(self.r):
     self.r.setdefault('attempts',[]).append(now);self.save();self.stop();self.start();self.log('RECOVER_SERVER')
   return health
 

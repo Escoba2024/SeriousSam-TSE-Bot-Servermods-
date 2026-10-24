@@ -1,0 +1,199 @@
+{
+  "status": "BLOCKED_PUBLIC_MAINTENANCE_AND_HOST_CPU",
+  "observed_utc": "2026-10-24T17:53:50Z",
+  "supervisor_source_commit": "0ec97b4606496e71bfbbca6f9588a9789fabea29",
+  "supervisor_sha256": "83d2bec6507d9de87fa7c42a97af69501f8f77b4608122a6f954dbfae20c1242",
+  "health_sha256": "152d2b71865d0649f977016701267ed17a086eb15a506c4113173a28f45e1800",
+  "public_query": "TIMEOUT_LOOPBACK_AND_CONFIGURED_ADDRESS",
+  "public_gameplay": "NOT_VERIFIED_SERVER_UNHANDLED_EXCEPTION",
+  "current_confirmed_bots": null,
+  "current_confirmed_humans": null,
+  "public_processes_present": {
+    "server": 1,
+    "bot_clients": 2
+  },
+  "monitor": {
+    "status": "BLOCKED",
+    "updated_utc": "2026-10-24T17:53:49Z",
+    "query_fresh": false,
+    "telemetry_fresh": false,
+    "sync_scan_complete": true,
+    "source_bundle": "b5a6cba",
+    "probe_peak_bytes": 33984512,
+    "cpu_quota": "5%",
+    "memory_max": "128M"
+  },
+  "resource_samples": [
+    {
+      "available_bytes": 2092802048,
+      "busy_percent": 99.49748743718592,
+      "utc": "2026-10-24T17:47:01Z",
+      "public_cpu_one_core_percent": {
+        "server": 0.0,
+        "botA": 94.91242962275095,
+        "botB": 91.91519500319227
+      },
+      "one_admission": "host reserve below admission budget",
+      "eight_admission": "host reserve below admission budget",
+      "eight_individual_clients_admission": "host reserve below admission budget"
+    },
+    {
+      "available_bytes": 2104266752,
+      "busy_percent": 100.0,
+      "utc": "2026-10-24T17:47:05Z",
+      "public_cpu_one_core_percent": {
+        "server": 0.0,
+        "botA": 97.93161630661947,
+        "botB": 94.93370968368248
+      },
+      "one_admission": "host reserve below admission budget",
+      "eight_admission": "host reserve below admission budget",
+      "eight_individual_clients_admission": "host reserve below admission budget"
+    },
+    {
+      "available_bytes": 2105982976,
+      "busy_percent": 100.0,
+      "utc": "2026-10-24T17:47:09Z",
+      "public_cpu_one_core_percent": {
+        "server": 0.0,
+        "botA": 97.89866939975771,
+        "botB": 98.89763541205325
+      },
+      "one_admission": "host reserve below admission budget",
+      "eight_admission": "host reserve below admission budget",
+      "eight_individual_clients_admission": "host reserve below admission budget"
+    },
+    {
+      "available_bytes": 2096988160,
+      "busy_percent": 100.0,
+      "utc": "2026-10-24T17:47:13Z",
+      "public_cpu_one_core_percent": {
+        "server": 0.0,
+        "botA": 96.92362204727158,
+        "botB": 98.92204724307322
+      },
+      "one_admission": "host reserve below admission budget",
+      "eight_admission": "host reserve below admission budget",
+      "eight_individual_clients_admission": "host reserve below admission budget"
+    },
+    {
+      "available_bytes": 2104279040,
+      "busy_percent": 99.5,
+      "utc": "2026-10-24T17:47:17Z",
+      "public_cpu_one_core_percent": {
+        "server": 0.0,
+        "botA": 89.93491006014858,
+        "botB": 93.93201717477312
+      },
+      "one_admission": "host reserve below admission budget",
+      "eight_admission": "host reserve below admission budget",
+      "eight_individual_clients_admission": "host reserve below admission budget"
+    },
+    {
+      "available_bytes": 2111832064,
+      "busy_percent": 99.49748743718592,
+      "utc": "2026-10-24T17:47:21Z",
+      "public_cpu_one_core_percent": {
+        "server": 0.0,
+        "botA": 92.90502950682692,
+        "botB": 97.89992356513015
+      },
+      "one_admission": "host reserve below admission budget",
+      "eight_admission": "host reserve below admission budget",
+      "eight_individual_clients_admission": "host reserve below admission budget"
+    }
+  ],
+  "sync": {
+    "server_start_ticks": 28905984,
+    "log_bytes": 37429241,
+    "sha256": "a71c149ccd861e978df8f34a5a740038ce2bdbe969dd6ee783f6034788a64b08",
+    "owned_sync_bad": 0,
+    "external_sync_bad": 207,
+    "syncbad_with_owned_syncok_same_tick": 207,
+    "owned_sync_ok": 749712,
+    "external_sync_ok": 10602,
+    "kick_instructions": 19,
+    "first_bad": {
+      "owned": false,
+      "sequence": 290425,
+      "tick": 14482.64,
+      "counter": 1
+    },
+    "last_bad": {
+      "owned": false,
+      "sequence": 4711130,
+      "tick": 225591.41,
+      "counter": 10
+    },
+    "last_sync_tick": 256953.78,
+    "crash_log_mtime_utc": "2026-10-24T14:35:22Z",
+    "wall_clock_per_sync_record": "NOT_AVAILABLE",
+    "interpretation": "Counters/ticks cannot identify people or causal fields; crash exception is distinct from reported checksum mismatches."
+  },
+  "historical_hour": {
+    "status": "REVERIFIED_HISTORICAL_PASS_EXACT_OLD_SOURCE_ONLY",
+    "source_hashes": {
+      "tools/operations/fleet_supervisor.py": "d83a81e3a26d08a2f718e6b6c3fddaf8e3d650e3784707c90b56fba60ee00c28",
+      "tools/operations/fleet_health.py": "152d2b71865d0649f977016701267ed17a086eb15a506c4113173a28f45e1800"
+    },
+    "elapsed_s": 3600.002140296041,
+    "samples": 654,
+    "action_windows_passed": 96,
+    "private_syncok_closed_generation": 11268,
+    "private_syncbad": 0,
+    "host_busy_p95": 66.3265306122449,
+    "min_memory_available": 1714479104,
+    "memory_peak": 601755648,
+    "new_throttled": 0,
+    "closed_files_sha256": {
+      "server-Dedicated_BotTest.log": {
+        "sha256": "86d725ce5d297b91ac71591414a99714334a10fab488d65f74d0568157492d52",
+        "bytes": 516157
+      },
+      "botA-SeriousSam.log": {
+        "sha256": "d410b22d7e112782efb22df2f82e6c152e71eadb26c6a1d4512b747dc7c3bc91",
+        "bytes": 2030774
+      },
+      "botA-BotTelemetry.csv": {
+        "sha256": "fb82d57ecd68b292518ba0da4e9aaa06146703fd9cb706a4a43ebcee2e4be854",
+        "bytes": 300673
+      },
+      "botB-SeriousSam.log": {
+        "sha256": "3e6a00820dc3fd05a179a55c574c2cbac1eafa8f98f45695359d1330e764366b",
+        "bytes": 2171757
+      },
+      "botB-BotTelemetry.csv": {
+        "sha256": "bb4438c14dbc553c9bd1707c879e9d5951ca2f8f798c63fa742d83b0baeb193f",
+        "bytes": 300244
+      }
+    },
+    "gates": [
+      "PASS_NO_DOUBLE_START",
+      "PASS_CLIENT_FAILURE_RECOVERY",
+      "PASS_CONTROLLER_ADOPTION_NO_GAME_RESTART",
+      "PASS_SERVER_FAILURE_RECOVERY",
+      "PASS_SAFE_STOP_ALL_SIX_UNMOUNTS",
+      "PASS_BOOT_SIMULATION_OVERLAY_REPLAY",
+      "PASS_ACTIVE_HOUR",
+      "TEST_RUNTIME_STOPPED_PUBLIC_UNTOUCHED"
+    ],
+    "new_supervisor_sha256": "83d2bec6507d9de87fa7c42a97af69501f8f77b4608122a6f954dbfae20c1242",
+    "new_source_native_status": "BLOCKED_HOST_CPU_PUBLIC_MAINTENANCE_REQUIRED"
+  },
+  "regressions": {
+    "root_python": 92,
+    "benchmark_python": 59,
+    "cpp": "PASS including555 Human AI checks; existing unused Clamp warning",
+    "native_wine_cli_absent_server": "PASS_NO_RETAIL_STARTED",
+    "native_new_source_retail_hour": "NOT_RUN_RESOURCE_GATE",
+    "native_new_source_fault_originalclient_netem": "NOT_RUN_RESOURCE_GATE"
+  },
+  "backup": {
+    "archive_sha256": "d7b3650d55a21fc88614d5b969e126ac1cfcc52585262a1ef139eb0be1632b7d",
+    "retained_source_files": 415,
+    "verified_archive_members": 415,
+    "utc": "2026-10-24T17:49:58Z"
+  },
+  "scope": "Hetzner only; no public game signals, DLL/config changes, foreign cleanup, new Retail processes, upgrades or recovery activation",
+  "supervisor_source_commit_scope": "LOCAL_PROOF; publication must match final local tree"
+}
