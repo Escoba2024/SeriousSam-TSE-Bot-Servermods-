@@ -49,6 +49,9 @@ class SsamPublicMessagesTests(unittest.TestCase):
   self.assertIn('300',startup)
   self.assertIn('Say(',startup)
   self.assertIn('tmp_ai[9]',startup)
+  self.assertIn('(FLOAT)cmd_tmTick<(FLOAT)1',startup)
+  self.assertIn('(INDEX)cmd_tmTick>=(INDEX)300',startup)
+  self.assertIn('tmp_ai[9]=(INDEX)-1',startup)
   self.assertNotIn('user INDEX tmp_ai[9]',startup)
  def test_dedicated_config_server_only(self):
   from pathlib import Path
