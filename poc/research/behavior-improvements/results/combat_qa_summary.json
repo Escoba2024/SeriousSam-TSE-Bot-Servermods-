@@ -1,0 +1,1552 @@
+{
+ "seeds_per_cell": 16,
+ "retail_status": "NOT_TESTED_RETAIL",
+ "invariants": [
+  {
+   "id": "I1-beginner-floor",
+   "pass": true,
+   "detail": "t1 mirror draws base=6 cand=3, hitrate 0.213->0.302 (F-2)"
+  },
+  {
+   "id": "I2-skill-monotonicity",
+   "pass": true,
+   "detail": "candidate mirror aim-err deg t1..t5: 3.54, 2.74, 2.22, 1.66, 1.33; hitrates: 0.302, 0.373, 0.382, 0.449, 0.569"
+  },
+  {
+   "id": "I3-ladder",
+   "pass": true,
+   "detail": "t2>t1: 14-2; t3>t2: 11-4; t4>t3: 12-4; t5>t4: 15-1; t5>t1: 15-1"
+  },
+  {
+   "id": "I4-cross-policy",
+   "pass": true,
+   "detail": "candidate beats baseline in 7/7 same-tier cells: t1p2@18m 15-0 D1; t2p2@18m 12-2 D2; t3p2@18m 12-1 D3; t4p2@18m 14-2 D0; t5p2@18m 13-3 D0; t3p0@10m 13-3 D0; t3p4@40m 10-6 D0"
+  },
+  {
+   "id": "I5-weapon-diversity",
+   "pass": true,
+   "detail": "laser share mirrors base=['0.98', '0.97', '0.93', '0.94', '0.94'] cand=['0.01', '0.02', '0.01', '0.00', '0.00']; distinct weapons cand=[6, 5, 6, 3, 3] (F-1)"
+  },
+  {
+   "id": "I6-latency-lead",
+   "pass": true,
+   "detail": "mover t5 hitrate 0->200ms base 0.798->0.381, cand 0.781->0.768 (F-3)"
+  },
+  {
+   "id": "I7-strafe-active",
+   "pass": true,
+   "detail": "strafe ticks/duel cand=[462, 227, 199, 157, 137] base=0 (shipped bot_fStrafeScale=0, F-5)"
+  },
+  {
+   "id": "I8-cover-retreat",
+   "pass": true,
+   "detail": "cover probe: baseline  los_break_s=-1.00 final=(-140.0,0.0) | candidate los_break_s=2.40 final=(-15.2,7.0) (F-4)"
+  },
+  {
+   "id": "I9-persona-difference",
+   "pass": true,
+   "detail": "weapon-histogram L1 aggressor-vs-marksman cand=0.89 base=0.02; mean-range spread=8.0 m; tops={0: 'minigun', 1: 'minigun', 2: 'minigun', 3: 'minigun', 4: 'laser', 5: 'minigun'}"
+  },
+  {
+   "id": "I10-reaction-ordering",
+   "pass": true,
+   "detail": "candidate first-fire s t1..t5: 2.94, 1.56, 0.98, 0.68, 0.55"
+  },
+  {
+   "id": "I11-ttk-ordering",
+   "pass": true,
+   "detail": "candidate mirror duration t1=26.3s t5=7.0s"
+  }
+ ],
+ "invariants_pass": "11/11",
+ "mover_hitrates": {
+  "baseline_t3_0ms": 0.4732,
+  "baseline_t3_100ms": 0.4602,
+  "baseline_t3_200ms": 0.3393,
+  "baseline_t5_0ms": 0.7982,
+  "baseline_t5_100ms": 0.5439,
+  "baseline_t5_200ms": 0.3805,
+  "candidate_t3_0ms": 0.5135,
+  "candidate_t3_100ms": 0.5137,
+  "candidate_t3_200ms": 0.5054,
+  "candidate_t5_0ms": 0.7806,
+  "candidate_t5_100ms": 0.7742,
+  "candidate_t5_200ms": 0.7677
+ },
+ "cover_probe": [
+  "baseline  los_break_s=-1.00 final=(-140.0,0.0)",
+  "candidate los_break_s=2.40 final=(-15.2,7.0)"
+ ],
+ "bench": [
+  "baseline  policy+overlay: 0.264 us/tick (sink=1916322.2) -> 0.0005% of one core @20Hz/bot",
+  "candidate policy+overlay: 0.424 us/tick (sink=729007.5) -> 0.0008% of one core @20Hz/bot"
+ ],
+ "battery": [
+  {
+   "policy": "baseline",
+   "seeds_per_cell": 16,
+   "duels": [
+    {
+     "kind": "mirror",
+     "tA": 1,
+     "pA": 2,
+     "tB": 1,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 7,
+     "winB": 3,
+     "draws": 6,
+     "mean_duration_s": 24.63,
+     "hitrateA": 0.2135,
+     "hitrateB": 0.1904,
+     "first_fireA_s": 2.0,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 22.41,
+     "aim_errA_deg": 4.079,
+     "weaponsA": {
+      "knife": 176,
+      "laser": 7707
+     },
+     "weaponsB": {
+      "knife": 176,
+      "laser": 7707
+     }
+    },
+    {
+     "kind": "mirror",
+     "tA": 2,
+     "pA": 2,
+     "tB": 2,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 5,
+     "winB": 8,
+     "draws": 3,
+     "mean_duration_s": 14.37,
+     "hitrateA": 0.2355,
+     "hitrateB": 0.2416,
+     "first_fireA_s": 1.16,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 25.37,
+     "aim_errA_deg": 3.061,
+     "weaponsA": {
+      "knife": 128,
+      "laser": 4471
+     },
+     "weaponsB": {
+      "knife": 128,
+      "laser": 4471
+     }
+    },
+    {
+     "kind": "mirror",
+     "tA": 3,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 11,
+     "winB": 5,
+     "draws": 0,
+     "mean_duration_s": 4.29,
+     "hitrateA": 0.3971,
+     "hitrateB": 0.3185,
+     "first_fireA_s": 0.74,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 20.33,
+     "aim_errA_deg": 2.101,
+     "weaponsA": {
+      "knife": 96,
+      "laser": 1276
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 1276
+     }
+    },
+    {
+     "kind": "mirror",
+     "tA": 4,
+     "pA": 2,
+     "tB": 4,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 8,
+     "winB": 8,
+     "draws": 0,
+     "mean_duration_s": 3.3,
+     "hitrateA": 0.4862,
+     "hitrateB": 0.4599,
+     "first_fireA_s": 0.53,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 20.97,
+     "aim_errA_deg": 1.455,
+     "weaponsA": {
+      "knife": 64,
+      "laser": 993
+     },
+     "weaponsB": {
+      "knife": 64,
+      "laser": 993
+     }
+    },
+    {
+     "kind": "mirror",
+     "tA": 5,
+     "pA": 2,
+     "tB": 5,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 8,
+     "winB": 7,
+     "draws": 1,
+     "mean_duration_s": 2.58,
+     "hitrateA": 0.6234,
+     "hitrateB": 0.5739,
+     "first_fireA_s": 0.44,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 23.77,
+     "aim_errA_deg": 0.934,
+     "weaponsA": {
+      "knife": 48,
+      "laser": 779
+     },
+     "weaponsB": {
+      "knife": 48,
+      "laser": 779
+     }
+    },
+    {
+     "kind": "ladder",
+     "tA": 2,
+     "pA": 2,
+     "tB": 1,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 12,
+     "winB": 1,
+     "draws": 3,
+     "mean_duration_s": 15.47,
+     "hitrateA": 0.2718,
+     "hitrateB": 0.1722,
+     "first_fireA_s": 1.16,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 24.13,
+     "aim_errA_deg": 2.878,
+     "weaponsA": {
+      "knife": 128,
+      "laser": 4821
+     },
+     "weaponsB": {
+      "knife": 176,
+      "laser": 4773
+     }
+    },
+    {
+     "kind": "ladder",
+     "tA": 3,
+     "pA": 2,
+     "tB": 2,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 13,
+     "winB": 2,
+     "draws": 1,
+     "mean_duration_s": 7.47,
+     "hitrateA": 0.3907,
+     "hitrateB": 0.1956,
+     "first_fireA_s": 0.74,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 23.35,
+     "aim_errA_deg": 2.072,
+     "weaponsA": {
+      "knife": 96,
+      "laser": 2295
+     },
+     "weaponsB": {
+      "knife": 128,
+      "laser": 2263
+     }
+    },
+    {
+     "kind": "ladder",
+     "tA": 4,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 13,
+     "winB": 3,
+     "draws": 0,
+     "mean_duration_s": 3.83,
+     "hitrateA": 0.4777,
+     "hitrateB": 0.3088,
+     "first_fireA_s": 0.53,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 21.59,
+     "aim_errA_deg": 1.438,
+     "weaponsA": {
+      "knife": 64,
+      "laser": 1161
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 1129
+     }
+    },
+    {
+     "kind": "ladder",
+     "tA": 5,
+     "pA": 2,
+     "tB": 4,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 11,
+     "winB": 5,
+     "draws": 0,
+     "mean_duration_s": 2.69,
+     "hitrateA": 0.6271,
+     "hitrateB": 0.4226,
+     "first_fireA_s": 0.43,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 23.06,
+     "aim_errA_deg": 0.963,
+     "weaponsA": {
+      "knife": 48,
+      "laser": 814
+     },
+     "weaponsB": {
+      "knife": 64,
+      "laser": 798
+     }
+    },
+    {
+     "kind": "ladder",
+     "tA": 5,
+     "pA": 2,
+     "tB": 1,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 15,
+     "winB": 0,
+     "draws": 1,
+     "mean_duration_s": 5.69,
+     "hitrateA": 0.6163,
+     "hitrateB": 0.0705,
+     "first_fireA_s": 0.44,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 25.13,
+     "aim_errA_deg": 0.964,
+     "weaponsA": {
+      "knife": 48,
+      "laser": 1363,
+      "sniper": 179,
+      "cannon": 231
+     },
+     "weaponsB": {
+      "knife": 165,
+      "laser": 1656
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 0,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 9,
+     "winB": 7,
+     "draws": 0,
+     "mean_duration_s": 3.81,
+     "hitrateA": 0.4668,
+     "hitrateB": 0.3716,
+     "first_fireA_s": 0.76,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 17.11,
+     "aim_errA_deg": 2.066,
+     "weaponsA": {
+      "knife": 96,
+      "laser": 1123
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 1123
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 1,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 9,
+     "winB": 7,
+     "draws": 0,
+     "mean_duration_s": 4.88,
+     "hitrateA": 0.331,
+     "hitrateB": 0.2844,
+     "first_fireA_s": 0.73,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 24.47,
+     "aim_errA_deg": 2.086,
+     "weaponsA": {
+      "knife": 96,
+      "laser": 1465
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 1465
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 11,
+     "winB": 5,
+     "draws": 0,
+     "mean_duration_s": 4.29,
+     "hitrateA": 0.3971,
+     "hitrateB": 0.3185,
+     "first_fireA_s": 0.74,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 20.33,
+     "aim_errA_deg": 2.101,
+     "weaponsA": {
+      "knife": 96,
+      "laser": 1276
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 1276
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 3,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 10,
+     "winB": 6,
+     "draws": 0,
+     "mean_duration_s": 4.53,
+     "hitrateA": 0.3722,
+     "hitrateB": 0.2962,
+     "first_fireA_s": 0.73,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 22.62,
+     "aim_errA_deg": 2.071,
+     "weaponsA": {
+      "knife": 96,
+      "laser": 1354
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 1354
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 4,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 9,
+     "winB": 7,
+     "draws": 0,
+     "mean_duration_s": 4.97,
+     "hitrateA": 0.3202,
+     "hitrateB": 0.2858,
+     "first_fireA_s": 0.73,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 25.32,
+     "aim_errA_deg": 2.053,
+     "weaponsA": {
+      "knife": 96,
+      "laser": 1495
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 1495
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 5,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 11,
+     "winB": 5,
+     "draws": 0,
+     "mean_duration_s": 4.29,
+     "hitrateA": 0.3971,
+     "hitrateB": 0.3185,
+     "first_fireA_s": 0.74,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 20.37,
+     "aim_errA_deg": 2.1,
+     "weaponsA": {
+      "knife": 96,
+      "laser": 1276
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 1276
+     }
+    },
+    {
+     "kind": "latency",
+     "tA": 5,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 13,
+     "winB": 3,
+     "draws": 0,
+     "mean_duration_s": 3.13,
+     "hitrateA": 0.6133,
+     "hitrateB": 0.3019,
+     "first_fireA_s": 0.44,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 23.55,
+     "aim_errA_deg": 0.967,
+     "weaponsA": {
+      "knife": 48,
+      "laser": 955
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 907
+     }
+    },
+    {
+     "kind": "latency",
+     "tA": 5,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 100,
+     "winA": 14,
+     "winB": 2,
+     "draws": 0,
+     "mean_duration_s": 3.11,
+     "hitrateA": 0.623,
+     "hitrateB": 0.3061,
+     "first_fireA_s": 0.44,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 23.54,
+     "aim_errA_deg": 0.958,
+     "weaponsA": {
+      "knife": 48,
+      "laser": 946
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 898
+     }
+    },
+    {
+     "kind": "latency",
+     "tA": 5,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 200,
+     "winA": 13,
+     "winB": 3,
+     "draws": 0,
+     "mean_duration_s": 3.08,
+     "hitrateA": 0.6255,
+     "hitrateB": 0.3006,
+     "first_fireA_s": 0.44,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 23.6,
+     "aim_errA_deg": 0.938,
+     "weaponsA": {
+      "knife": 48,
+      "laser": 936
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 888
+     }
+    },
+    {
+     "kind": "range",
+     "tA": 3,
+     "pA": 0,
+     "tB": 3,
+     "pB": 4,
+     "dist": 45,
+     "lat_ms": 0,
+     "winA": 9,
+     "winB": 7,
+     "draws": 0,
+     "mean_duration_s": 2.34,
+     "hitrateA": 0.3667,
+     "hitrateB": 0.3021,
+     "first_fireA_s": 6.31,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 36.81,
+     "aim_errA_deg": 2.074,
+     "weaponsA": {
+      "knife": 96,
+      "cannon": 654
+     },
+     "weaponsB": {
+      "knife": 96,
+      "cannon": 654
+     }
+    },
+    {
+     "kind": "range",
+     "tA": 3,
+     "pA": 0,
+     "tB": 3,
+     "pB": 4,
+     "dist": 8,
+     "lat_ms": 0,
+     "winA": 9,
+     "winB": 7,
+     "draws": 0,
+     "mean_duration_s": 3.57,
+     "hitrateA": 0.4846,
+     "hitrateB": 0.4223,
+     "first_fireA_s": 0.71,
+     "strafe_ticksA": 0,
+     "mean_rangeA": 15.46,
+     "aim_errA_deg": 2.106,
+     "weaponsA": {
+      "knife": 96,
+      "laser": 1047
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 1047
+     }
+    }
+   ]
+  },
+  {
+   "policy": "candidate",
+   "seeds_per_cell": 16,
+   "duels": [
+    {
+     "kind": "mirror",
+     "tA": 1,
+     "pA": 2,
+     "tB": 1,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 10,
+     "winB": 3,
+     "draws": 3,
+     "mean_duration_s": 26.28,
+     "hitrateA": 0.3024,
+     "hitrateB": 0.1846,
+     "first_fireA_s": 2.94,
+     "strafe_ticksA": 462,
+     "mean_rangeA": 15.5,
+     "aim_errA_deg": 3.536,
+     "weaponsA": {
+      "knife": 160,
+      "tommygun": 1307,
+      "minigun": 5850,
+      "laser": 108,
+      "sniper": 880,
+      "cannon": 104
+     },
+     "weaponsB": {
+      "knife": 160,
+      "tommygun": 2359,
+      "minigun": 4804,
+      "laser": 187,
+      "sniper": 840,
+      "cannon": 59
+     }
+    },
+    {
+     "kind": "mirror",
+     "tA": 2,
+     "pA": 2,
+     "tB": 2,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 14,
+     "winB": 1,
+     "draws": 1,
+     "mean_duration_s": 13.38,
+     "hitrateA": 0.3734,
+     "hitrateB": 0.2493,
+     "first_fireA_s": 1.56,
+     "strafe_ticksA": 227,
+     "mean_rangeA": 17.08,
+     "aim_errA_deg": 2.741,
+     "weaponsA": {
+      "knife": 128,
+      "tommygun": 687,
+      "minigun": 2773,
+      "laser": 89,
+      "sniper": 605
+     },
+     "weaponsB": {
+      "knife": 128,
+      "tommygun": 256,
+      "minigun": 3207,
+      "laser": 71,
+      "sniper": 539,
+      "cannon": 81
+     }
+    },
+    {
+     "kind": "mirror",
+     "tA": 3,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 10,
+     "winB": 4,
+     "draws": 2,
+     "mean_duration_s": 13.2,
+     "hitrateA": 0.3817,
+     "hitrateB": 0.2913,
+     "first_fireA_s": 0.98,
+     "strafe_ticksA": 199,
+     "mean_rangeA": 20.13,
+     "aim_errA_deg": 2.224,
+     "weaponsA": {
+      "knife": 96,
+      "tommygun": 441,
+      "minigun": 2424,
+      "laser": 48,
+      "sniper": 1183,
+      "cannon": 32
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 502,
+      "minigun": 2343,
+      "laser": 78,
+      "sniper": 1205
+     }
+    },
+    {
+     "kind": "mirror",
+     "tA": 4,
+     "pA": 2,
+     "tB": 4,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 12,
+     "winB": 4,
+     "draws": 0,
+     "mean_duration_s": 8.08,
+     "hitrateA": 0.4491,
+     "hitrateB": 0.4108,
+     "first_fireA_s": 0.68,
+     "strafe_ticksA": 157,
+     "mean_rangeA": 19.59,
+     "aim_errA_deg": 1.659,
+     "weaponsA": {
+      "knife": 64,
+      "minigun": 2471,
+      "rocket": 52
+     },
+     "weaponsB": {
+      "knife": 64,
+      "tommygun": 82,
+      "minigun": 2380,
+      "rocket": 53,
+      "cannon": 8
+     }
+    },
+    {
+     "kind": "mirror",
+     "tA": 5,
+     "pA": 2,
+     "tB": 5,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 8,
+     "winB": 8,
+     "draws": 0,
+     "mean_duration_s": 7.02,
+     "hitrateA": 0.5692,
+     "hitrateB": 0.6273,
+     "first_fireA_s": 0.55,
+     "strafe_ticksA": 137,
+     "mean_rangeA": 19.71,
+     "aim_errA_deg": 1.328,
+     "weaponsA": {
+      "knife": 48,
+      "minigun": 2163,
+      "rocket": 36
+     },
+     "weaponsB": {
+      "knife": 48,
+      "minigun": 2163,
+      "rocket": 36
+     }
+    },
+    {
+     "kind": "ladder",
+     "tA": 2,
+     "pA": 2,
+     "tB": 1,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 14,
+     "winB": 2,
+     "draws": 0,
+     "mean_duration_s": 13.91,
+     "hitrateA": 0.384,
+     "hitrateB": 0.1694,
+     "first_fireA_s": 1.23,
+     "strafe_ticksA": 270,
+     "mean_rangeA": 14.16,
+     "aim_errA_deg": 2.917,
+     "weaponsA": {
+      "knife": 128,
+      "tommygun": 645,
+      "minigun": 3678
+     },
+     "weaponsB": {
+      "knife": 160,
+      "tommygun": 1763,
+      "minigun": 2528
+     }
+    },
+    {
+     "kind": "ladder",
+     "tA": 3,
+     "pA": 2,
+     "tB": 2,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 11,
+     "winB": 4,
+     "draws": 1,
+     "mean_duration_s": 11.61,
+     "hitrateA": 0.3782,
+     "hitrateB": 0.2587,
+     "first_fireA_s": 0.82,
+     "strafe_ticksA": 202,
+     "mean_rangeA": 18.55,
+     "aim_errA_deg": 2.27,
+     "weaponsA": {
+      "knife": 96,
+      "tommygun": 655,
+      "minigun": 2262,
+      "rocket": 27,
+      "sniper": 643,
+      "cannon": 32
+     },
+     "weaponsB": {
+      "knife": 128,
+      "tommygun": 288,
+      "minigun": 2591,
+      "laser": 40,
+      "sniper": 655,
+      "cannon": 13
+     }
+    },
+    {
+     "kind": "ladder",
+     "tA": 4,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 12,
+     "winB": 4,
+     "draws": 0,
+     "mean_duration_s": 9.07,
+     "hitrateA": 0.4495,
+     "hitrateB": 0.329,
+     "first_fireA_s": 0.62,
+     "strafe_ticksA": 177,
+     "mean_rangeA": 18.46,
+     "aim_errA_deg": 1.769,
+     "weaponsA": {
+      "knife": 64,
+      "minigun": 2755,
+      "rocket": 72,
+      "cannon": 10
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 364,
+      "minigun": 2369,
+      "rocket": 32,
+      "laser": 33,
+      "cannon": 7
+     }
+    },
+    {
+     "kind": "ladder",
+     "tA": 5,
+     "pA": 2,
+     "tB": 4,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 15,
+     "winB": 1,
+     "draws": 0,
+     "mean_duration_s": 7.66,
+     "hitrateA": 0.5606,
+     "hitrateB": 0.4028,
+     "first_fireA_s": 0.48,
+     "strafe_ticksA": 150,
+     "mean_rangeA": 19.65,
+     "aim_errA_deg": 1.313,
+     "weaponsA": {
+      "knife": 48,
+      "minigun": 2360,
+      "rocket": 36,
+      "cannon": 6
+     },
+     "weaponsB": {
+      "knife": 64,
+      "tommygun": 64,
+      "minigun": 2292,
+      "rocket": 30
+     }
+    },
+    {
+     "kind": "ladder",
+     "tA": 5,
+     "pA": 2,
+     "tB": 1,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 15,
+     "winB": 1,
+     "draws": 0,
+     "mean_duration_s": 9.56,
+     "hitrateA": 0.5272,
+     "hitrateB": 0.1814,
+     "first_fireA_s": 0.58,
+     "strafe_ticksA": 188,
+     "mean_rangeA": 17.38,
+     "aim_errA_deg": 1.493,
+     "weaponsA": {
+      "knife": 48,
+      "minigun": 2938,
+      "rocket": 43,
+      "sniper": 12,
+      "cannon": 19
+     },
+     "weaponsB": {
+      "knife": 152,
+      "tommygun": 975,
+      "minigun": 1933
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 0,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 14,
+     "winB": 2,
+     "draws": 0,
+     "mean_duration_s": 6.38,
+     "hitrateA": 0.5327,
+     "hitrateB": 0.3719,
+     "first_fireA_s": 1.19,
+     "strafe_ticksA": 88,
+     "mean_rangeA": 15.79,
+     "aim_errA_deg": 1.975,
+     "weaponsA": {
+      "knife": 96,
+      "tommygun": 234,
+      "minigun": 1708,
+      "cannon": 4
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 396,
+      "minigun": 1546,
+      "laser": 3,
+      "cannon": 1
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 1,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 10,
+     "winB": 3,
+     "draws": 3,
+     "mean_duration_s": 11.45,
+     "hitrateA": 0.3841,
+     "hitrateB": 0.2708,
+     "first_fireA_s": 1.29,
+     "strafe_ticksA": 148,
+     "mean_rangeA": 23.8,
+     "aim_errA_deg": 2.167,
+     "weaponsA": {
+      "knife": 96,
+      "tommygun": 201,
+      "minigun": 1599,
+      "laser": 211,
+      "sniper": 1554,
+      "cannon": 2
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 238,
+      "minigun": 1664,
+      "rocket": 2,
+      "laser": 122,
+      "sniper": 1501,
+      "cannon": 40
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 10,
+     "winB": 4,
+     "draws": 2,
+     "mean_duration_s": 13.2,
+     "hitrateA": 0.3817,
+     "hitrateB": 0.2913,
+     "first_fireA_s": 0.98,
+     "strafe_ticksA": 199,
+     "mean_rangeA": 20.13,
+     "aim_errA_deg": 2.224,
+     "weaponsA": {
+      "knife": 96,
+      "tommygun": 441,
+      "minigun": 2424,
+      "laser": 48,
+      "sniper": 1183,
+      "cannon": 32
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 502,
+      "minigun": 2343,
+      "laser": 78,
+      "sniper": 1205
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 3,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 11,
+     "winB": 5,
+     "draws": 0,
+     "mean_duration_s": 6.09,
+     "hitrateA": 0.4151,
+     "hitrateB": 0.2792,
+     "first_fireA_s": 1.19,
+     "strafe_ticksA": 115,
+     "mean_rangeA": 18.72,
+     "aim_errA_deg": 2.224,
+     "weaponsA": {
+      "knife": 96,
+      "minigun": 1586,
+      "rocket": 266,
+      "sniper": 2
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 264,
+      "minigun": 1512,
+      "rocket": 5,
+      "laser": 73
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 4,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 9,
+     "winB": 6,
+     "draws": 1,
+     "mean_duration_s": 8.38,
+     "hitrateA": 0.3641,
+     "hitrateB": 0.3154,
+     "first_fireA_s": 0.9,
+     "strafe_ticksA": 114,
+     "mean_rangeA": 22.69,
+     "aim_errA_deg": 2.021,
+     "weaponsA": {
+      "knife": 96,
+      "minigun": 199,
+      "laser": 1527,
+      "sniper": 858
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 196,
+      "minigun": 1380,
+      "laser": 165,
+      "sniper": 795,
+      "cannon": 48
+     }
+    },
+    {
+     "kind": "persona",
+     "tA": 3,
+     "pA": 5,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 13,
+     "winB": 3,
+     "draws": 0,
+     "mean_duration_s": 6.83,
+     "hitrateA": 0.4333,
+     "hitrateB": 0.3178,
+     "first_fireA_s": 1.03,
+     "strafe_ticksA": 130,
+     "mean_rangeA": 18.07,
+     "aim_errA_deg": 2.04,
+     "weaponsA": {
+      "knife": 96,
+      "tommygun": 238,
+      "minigun": 1790,
+      "rocket": 61
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 241,
+      "minigun": 1810,
+      "rocket": 17,
+      "laser": 21
+     }
+    },
+    {
+     "kind": "latency",
+     "tA": 5,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 13,
+     "winB": 3,
+     "draws": 0,
+     "mean_duration_s": 8.79,
+     "hitrateA": 0.4912,
+     "hitrateB": 0.2875,
+     "first_fireA_s": 0.53,
+     "strafe_ticksA": 172,
+     "mean_rangeA": 18.61,
+     "aim_errA_deg": 1.442,
+     "weaponsA": {
+      "knife": 48,
+      "minigun": 2745,
+      "rocket": 20
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 255,
+      "minigun": 2462
+     }
+    },
+    {
+     "kind": "latency",
+     "tA": 5,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 100,
+     "winA": 15,
+     "winB": 1,
+     "draws": 0,
+     "mean_duration_s": 9.85,
+     "hitrateA": 0.4771,
+     "hitrateB": 0.2393,
+     "first_fireA_s": 0.47,
+     "strafe_ticksA": 194,
+     "mean_rangeA": 18.62,
+     "aim_errA_deg": 1.803,
+     "weaponsA": {
+      "knife": 48,
+      "minigun": 3092,
+      "rocket": 13
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 355,
+      "minigun": 2702
+     }
+    },
+    {
+     "kind": "latency",
+     "tA": 5,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 200,
+     "winA": 11,
+     "winB": 3,
+     "draws": 2,
+     "mean_duration_s": 17.97,
+     "hitrateA": 0.3249,
+     "hitrateB": 0.1957,
+     "first_fireA_s": 0.66,
+     "strafe_ticksA": 329,
+     "mean_rangeA": 21.75,
+     "aim_errA_deg": 3.674,
+     "weaponsA": {
+      "knife": 48,
+      "minigun": 4625,
+      "rocket": 36,
+      "sniper": 1005,
+      "cannon": 36
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 622,
+      "minigun": 3969,
+      "laser": 64,
+      "sniper": 999
+     }
+    },
+    {
+     "kind": "range",
+     "tA": 3,
+     "pA": 0,
+     "tB": 3,
+     "pB": 4,
+     "dist": 45,
+     "lat_ms": 0,
+     "winA": 5,
+     "winB": 8,
+     "draws": 3,
+     "mean_duration_s": 12.22,
+     "hitrateA": 0.1817,
+     "hitrateB": 0.2616,
+     "first_fireA_s": 0.75,
+     "strafe_ticksA": 57,
+     "mean_rangeA": 36.65,
+     "aim_errA_deg": 3.324,
+     "weaponsA": {
+      "knife": 96,
+      "minigun": 783,
+      "rocket": 307,
+      "sniper": 1864,
+      "cannon": 861
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 1051,
+      "sniper": 2255,
+      "cannon": 509
+     }
+    },
+    {
+     "kind": "range",
+     "tA": 3,
+     "pA": 0,
+     "tB": 3,
+     "pB": 4,
+     "dist": 8,
+     "lat_ms": 0,
+     "winA": 16,
+     "winB": 0,
+     "draws": 0,
+     "mean_duration_s": 3.43,
+     "hitrateA": 0.9252,
+     "hitrateB": 0.5485,
+     "first_fireA_s": 0.7,
+     "strafe_ticksA": 29,
+     "mean_rangeA": 10.82,
+     "aim_errA_deg": 2.142,
+     "weaponsA": {
+      "knife": 96,
+      "shotgun": 841,
+      "minigun": 91,
+      "flamer": 68,
+      "cannon": 1
+     },
+     "weaponsB": {
+      "knife": 96,
+      "tommygun": 126,
+      "minigun": 813,
+      "laser": 62
+     }
+    },
+    {
+     "kind": "cross",
+     "tA": 1,
+     "pA": 2,
+     "tB": 1,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 15,
+     "winB": 0,
+     "draws": 1,
+     "mean_duration_s": 11.72,
+     "hitrateA": 0.3303,
+     "hitrateB": 0.1437,
+     "first_fireA_s": 1.88,
+     "strafe_ticksA": 194,
+     "mean_rangeA": 15.18,
+     "aim_errA_deg": 3.586,
+     "weaponsA": {
+      "knife": 160,
+      "tommygun": 388,
+      "minigun": 2643,
+      "laser": 57,
+      "sniper": 322,
+      "cannon": 180
+     },
+     "weaponsB": {
+      "knife": 176,
+      "laser": 3574
+     }
+    },
+    {
+     "kind": "cross",
+     "tA": 2,
+     "pA": 2,
+     "tB": 2,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 12,
+     "winB": 2,
+     "draws": 2,
+     "mean_duration_s": 11.94,
+     "hitrateA": 0.2906,
+     "hitrateB": 0.2498,
+     "first_fireA_s": 1.15,
+     "strafe_ticksA": 158,
+     "mean_rangeA": 18.39,
+     "aim_errA_deg": 3.109,
+     "weaponsA": {
+      "knife": 128,
+      "tommygun": 282,
+      "minigun": 2016,
+      "laser": 89,
+      "sniper": 1262,
+      "cannon": 44
+     },
+     "weaponsB": {
+      "knife": 128,
+      "laser": 3693
+     }
+    },
+    {
+     "kind": "cross",
+     "tA": 3,
+     "pA": 2,
+     "tB": 3,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 12,
+     "winB": 1,
+     "draws": 3,
+     "mean_duration_s": 11.55,
+     "hitrateA": 0.3623,
+     "hitrateB": 0.2282,
+     "first_fireA_s": 0.87,
+     "strafe_ticksA": 158,
+     "mean_rangeA": 21.51,
+     "aim_errA_deg": 2.472,
+     "weaponsA": {
+      "knife": 96,
+      "tommygun": 166,
+      "minigun": 1946,
+      "laser": 118,
+      "sniper": 1369
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 3599
+     }
+    },
+    {
+     "kind": "cross",
+     "tA": 4,
+     "pA": 2,
+     "tB": 4,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 14,
+     "winB": 2,
+     "draws": 0,
+     "mean_duration_s": 7.97,
+     "hitrateA": 0.3727,
+     "hitrateB": 0.3016,
+     "first_fireA_s": 0.67,
+     "strafe_ticksA": 155,
+     "mean_rangeA": 19.92,
+     "aim_errA_deg": 2.033,
+     "weaponsA": {
+      "knife": 64,
+      "minigun": 2451,
+      "rocket": 36
+     },
+     "weaponsB": {
+      "knife": 64,
+      "laser": 2487
+     }
+    },
+    {
+     "kind": "cross",
+     "tA": 5,
+     "pA": 2,
+     "tB": 5,
+     "pB": 2,
+     "dist": 18,
+     "lat_ms": 0,
+     "winA": 13,
+     "winB": 3,
+     "draws": 0,
+     "mean_duration_s": 5.59,
+     "hitrateA": 0.4576,
+     "hitrateB": 0.3788,
+     "first_fireA_s": 0.61,
+     "strafe_ticksA": 108,
+     "mean_rangeA": 22.02,
+     "aim_errA_deg": 1.483,
+     "weaponsA": {
+      "knife": 48,
+      "minigun": 1700,
+      "rocket": 38,
+      "cannon": 2
+     },
+     "weaponsB": {
+      "knife": 48,
+      "laser": 1740
+     }
+    },
+    {
+     "kind": "cross",
+     "tA": 3,
+     "pA": 0,
+     "tB": 3,
+     "pB": 0,
+     "dist": 10,
+     "lat_ms": 0,
+     "winA": 13,
+     "winB": 3,
+     "draws": 0,
+     "mean_duration_s": 3.16,
+     "hitrateA": 0.7731,
+     "hitrateB": 0.4866,
+     "first_fireA_s": 0.77,
+     "strafe_ticksA": 28,
+     "mean_rangeA": 12.81,
+     "aim_errA_deg": 2.008,
+     "weaponsA": {
+      "knife": 96,
+      "shotgun": 616,
+      "tommygun": 23,
+      "minigun": 136,
+      "flamer": 68,
+      "sniper": 4,
+      "cannon": 69
+     },
+     "weaponsB": {
+      "knife": 96,
+      "laser": 916
+     }
+    },
+    {
+     "kind": "cross",
+     "tA": 3,
+     "pA": 4,
+     "tB": 3,
+     "pB": 4,
+     "dist": 40,
+     "lat_ms": 0,
+     "winA": 10,
+     "winB": 6,
+     "draws": 0,
+     "mean_duration_s": 4.44,
+     "hitrateA": 0.4462,
+     "hitrateB": 0.1687,
+     "first_fireA_s": 0.73,
+     "strafe_ticksA": 71,
+     "mean_rangeA": 36.13,
+     "aim_errA_deg": 1.554,
+     "weaponsA": {
+      "knife": 96,
+      "sniper": 108,
+      "cannon": 1218
+     },
+     "weaponsB": {
+      "knife": 96,
+      "cannon": 1326
+     }
+    }
+   ]
+  }
+ ]
+}

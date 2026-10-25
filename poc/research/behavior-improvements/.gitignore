@@ -1,0 +1,5 @@
+build
+*.o
+combat_sim
+test_combat2
+__pycache__/
