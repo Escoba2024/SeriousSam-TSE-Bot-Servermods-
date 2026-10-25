@@ -1,0 +1,2 @@
+# built simulator binary - never commit; results/*.json and *.ndjson ARE evidence
+qa_sim
