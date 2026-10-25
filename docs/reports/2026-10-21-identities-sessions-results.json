@@ -1,0 +1,53 @@
+{
+  "status": "PORTABLE_CORE_PASS_NATIVE_BLOCKED",
+  "implemented_commit": "8467149777c86303aebe67c75f65d9f766bdae89",
+  "environment": "Hetzner only",
+  "tests": {
+    "baseline_python": 43,
+    "final_python": 72,
+    "new_session_tests": 29,
+    "final_seconds": 3.227,
+    "result": "OK",
+    "independent_review": {
+      "tests": 29,
+      "failed": 0,
+      "skipped": 0,
+      "result": "OK",
+      "scope": "portable core only"
+    }
+  },
+  "simulation": {
+    "kind": "OFFLINE_VIRTUAL_CLOCK_ONLY",
+    "sessions": 200,
+    "bands": {
+      "short": 19,
+      "medium": 163,
+      "long": 18
+    },
+    "min_s": 306.0,
+    "max_s": 10508.0,
+    "retail_processes_started": 0
+  },
+  "native": {
+    "new_retail_processes": 0,
+    "new_dll": false,
+    "colors_verified": false,
+    "individual_join_quit_verified": false,
+    "runtime_adapter_implemented": false,
+    "gameplay_extensions_implemented": false,
+    "eight_bot_qualification": false,
+    "two_by_eight_3600s": false,
+    "real_normal_sessions": false,
+    "blocker": "foreign PR46 RUNNING/MEASURING_3600; no competing runtime or load work"
+  },
+  "production": {
+    "changed": false,
+    "bots": 8,
+    "humans_at_last_snapshot": 1,
+    "last_snapshot_utc": "2026-10-21T17:24:31Z",
+    "own_sync_bad": 0,
+    "historical_external_sync_bad": 21,
+    "monitor_human_hold": true,
+    "bot_dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+  }
+}
