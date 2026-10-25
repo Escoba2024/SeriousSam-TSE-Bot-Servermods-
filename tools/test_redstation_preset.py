@@ -36,3 +36,33 @@ class RedStationPresetTests(unittest.TestCase):
   for pool in [[dict(nickname='bad;Quit()',color='80D8FF')]*8,[dict(nickname='Same',color='80D8FF')]*8]:
    with self.assertRaises(ValueError):p.roster(pool,1)
 if __name__=='__main__':unittest.main()
+
+class SsamPublicMessagesTests(unittest.TestCase):
+ def test_server_identity_and_motd(self):
+  self.assertIn('gam_strSessionName="ssam.ai | Red Station | Human Bots";',p.server_begin())
+  self.assertIn('ser_strMOTD="Welcome to ssam.ai',p.server_startup(''))
+  self.assertIn('#SamIsBack',p.server_startup(''))
+ def test_five_minute_announcement_has_guard(self):
+  startup=p.server_startup('ORIGINAL;\n')
+  self.assertTrue(startup.startswith('ORIGINAL;\n'))
+  self.assertIn('cmd_cmdOnTick=',startup)
+  self.assertIn('300',startup)
+  self.assertIn('Say(',startup)
+  self.assertIn('tmp_ai[9]',startup)
+  self.assertIn('(FLOAT)cmd_tmTick<(FLOAT)1',startup)
+  self.assertIn('(INDEX)cmd_tmTick>=(INDEX)300',startup)
+  self.assertIn('tmp_ai[9]=(INDEX)-1',startup)
+  self.assertNotIn('user INDEX tmp_ai[9]',startup)
+ def test_dedicated_config_server_only(self):
+  from pathlib import Path
+  import tempfile
+  with tempfile.TemporaryDirectory() as temp:
+   base=Path(temp)
+   for d in ['Scripts/Dedicated/BotTest']:(base/d).mkdir(parents=True)
+   (base/'Scripts/PersistentSymbols.ini').write_text('\n'.join('persistent user INDEX '+k+'=(INDEX)0;' for k in p.VALUES))
+   (base/'Scripts/Dedicated/BotTest/1_begin.ini').write_text('previous')
+   (base/'Scripts/Dedicated_startup.ini').write_text('base=1;\n')
+   with patch.object(Path,'is_mount',return_value=True):p.configure_overlay(base,'server')
+   self.assertIn('ssam.ai', (base/'Scripts/Dedicated/BotTest/1_begin.ini').read_text())
+   self.assertIn('ser_strMOTD', (base/'Scripts/Dedicated_startup.ini').read_text())
+   self.assertEqual((base/'Scripts/PersistentSymbols.ini').read_text().count('gam_bInfiniteAmmo'),1)
