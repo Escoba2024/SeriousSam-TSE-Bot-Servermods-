@@ -1,0 +1,6 @@
+# build artifacts (regenerate with `make test` / `make bench`)
+test_item_utility
+test_scoring_terms
+test_botcore_adapter
+bench_item_utility
+*.o
