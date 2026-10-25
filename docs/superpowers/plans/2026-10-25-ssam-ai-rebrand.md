@@ -15,13 +15,13 @@
 - [x] Inspect live Hetzner project and concurrent worktrees before changes.
 - [x] Create isolated GitHub branding branch in TSE repository.
 - [x] Set ssam.ai as the primary TSE repository display identity and retain existing technical documentation.
-- [ ] Update separate website source (header, title, metadata, page copy, demo server names), build/test, create isolated PR.
-- [ ] Update deployed read-only MCP UI display labels, preserve stable MCP protocol identifiers, run test/build/handshake, verify tunnel health.
-- [ ] Update installed read-only ChatGPT plugin display instructions where permitted by package ownership; preserve read-only safety.
-- [ ] Inventory live server name/config and change display name only with safety checks (never start/stop gameplay to rebrand).
+- [x] Update website source (header, title, metadata, page copy, demo server names) in private Website PR #1 (draft); **website build and visual test pending**.
+- [x] Update deployed read-only MCP UI display labels, preserve stable MCP protocol identifiers, run unit/build/branding handshake, verify tunnel health (HTTP 200). Legacy online-only integration test fails at live.online when game server offline.
+- [x] Update separate owned skill plugin to 0.1.1 as ssam.ai Control (read-back verified); App-backed plugin's original ChatGPT listing title requires separate App configuration.
+- [x] Update MCP human-readable registry name only to `ssam.ai | Red Station | 8 Human Bots`, preserve all other registry fields. The actual GameSpy broadcast session name still needs to be verified at the next safe game start.
 - [ ] Verify ssam.ai domain ownership/registrar and brand rights before configuring DNS, email, SSL or publishing a site.
 - [ ] Rename GitHub repository slugs only after audits of remote URLs, workflows and active agent branches; GitHub redirects alone are not sufficient.
-- [ ] Confirm final branding in runtime/website/ChatGPT and document any blockers honestly.
+- [ ] Verify final production website build and GameSpy broadcast, update App-backed listing, rename repos after dependency audit, and document final blockers.
 
 ## Decision record
 
@@ -40,3 +40,14 @@
 ## Handoff
 
 All uncompleted checkbox items must be reconciled against actual output and evidence in the final rebranding status report. No unrelated engineering changes in branding commits.
+
+## Verified actions (2026-10-25)
+
+- TSE branding GitHub PR [#59](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/59); branch `branding/ssam-ai-20261025`, no merge or runtime change.
+- Website brand changed in 15 tracked files; private repo PR [#1](https://github.com/Escoba2024/Alpha-Gaming-Website/pull/1) is a draft until npm/TypeScript/Vite and visual tests. Legacy image asset and git/build paths still exist intentionally.
+- Ubuntu standalone MCP local commit `fcb1177` with new UI text, title, tool titles and offline-safe test: 6/6 backend tests PASS, TypeScript/Vite build PASS, 1/1 offline-safe MCP branding/read-only test PASS. Previous `test:integration` failed solely at `live.online === true` while TSE server offline.
+- MCP and tunnel systemd descriptions show ssam.ai Control; after coordinated tunnel restart, `127.0.0.1:3977/healthz` = HTTP 200 and `127.0.0.1:3979/readyz` = HTTP 200.
+- Human-readable registry name changed **without** changing server ID or other JSON fields. The runtime `servers.json` had pre-existing uncommitted changes; original was backed up and not committed.
+- Owned ChatGPT skill plugin updated and read back as version 0.1.1 with `ssam.ai Control` displayName and read-only guard intact. The separate App-backed plugin still reports original App-side name, which is not editable via Plugin Creator source update.
+- Domain `ssam.ai` has public Cloudflare NS records; this does **not** prove domain ownership. No DNS or public website deployment performed.
+- Technical unit names, paths and GitHub repo slugs remain unchanged for compatibility until verified migration.
