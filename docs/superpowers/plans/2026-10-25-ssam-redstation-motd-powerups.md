@@ -46,3 +46,5 @@
 - Preflight-only (overlay, no game started) PASS on isolated port 27050; generated server `1_begin.ini` and Dedicated_startup.ini inspected.
 - Actual private native first attempt: FAIL `population readiness timeout`; server log pointed to unsupported custom `user INDEX` declaration; replaced with built-in `tmp_ai[9]` guard and tested offline. Native regression after correction is still required.
 - Power-up removal NOT IMPLEMENTED: no stock Retail 1.07 global disable switch identified; change to world/entity code requires isolated vanilla join + sync qualification.
+
+- Third isolated native startup: corrected `(FLOAT)`/`(INDEX)` casts accepted without timer `Type mismatch`, correct GameSpy session name in native server log. Test was intentionally stopped before 300 seconds, so one-message-per-5-minutes and actual MOTD presentation remain **unproven**. All child processes cleaned up.
