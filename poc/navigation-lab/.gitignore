@@ -1,0 +1,6 @@
+test_nav_graph
+test_nav_astar
+test_nav_agent
+test_nav_seam
+bench_nav
+dbg
