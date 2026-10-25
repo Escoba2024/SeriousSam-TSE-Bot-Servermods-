@@ -34,6 +34,8 @@ struct SenseInput {
   double health;      // replicated health
   bool alive;         // health > 0 and not respawning
   bool local;         // sibling bot of the same client process
+  double yaw_deg = 0.0;
+  bool facing_known = false;
 };
 
 struct TrackState {
@@ -47,8 +49,22 @@ struct TrackState {
   double x = 0.0, y = 0.0, z = 0.0;   // last confirmed position (frozen on loss)
   double vx = 0.0, vy = 0.0, vz = 0.0;  // last confirmed velocity
   double confidence = 0.0;   // 1.0 fresh sighting -> 0.0 forgotten
+  double health = 100.0;
+  double yaw_deg = 0.0;
+  bool facing_known = false;
 };
 
+// Fresh replicated yaw only. Unknown orientation must not affect priority.
+inline bool AimsAtMe(double self_x,double self_z,double enemy_x,double enemy_z,
+                     double enemy_yaw_deg,double tolerance_deg) {
+  if(!std::isfinite(self_x)||!std::isfinite(self_z)||
+     !std::isfinite(enemy_x)||!std::isfinite(enemy_z)||
+     !std::isfinite(enemy_yaw_deg)) return false;
+  const double dx=self_x-enemy_x,dz=self_z-enemy_z;
+  if(dx*dx+dz*dz<0.01) return false;
+  const double desired=std::atan2(-dx,-dz)*kRadToDeg;
+  return std::fabs(std::remainder(desired-enemy_yaw_deg,360.0))<=tolerance_deg;
+}
 class Perception {
  public:
   Perception() { Configure(SkillFor(3), 1u); }
@@ -156,6 +172,9 @@ class Perception {
       t.vy = in.vy;
       t.vz = in.vz;
       t.confidence = 1.0;
+      t.health = std::isfinite(in.health)?in.health:100.0;
+      t.yaw_deg = in.yaw_deg;
+      t.facing_known = in.facing_known && std::isfinite(in.yaw_deg);
     } else if (t.occupied) {
       // Lost sight this tick: freeze the position, drop velocity so nothing
       // is extrapolated through geometry.

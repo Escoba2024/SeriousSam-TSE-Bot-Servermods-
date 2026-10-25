@@ -15,7 +15,7 @@ typedef float FLOAT;
 struct Player {float health=100;float GetHealth(){return health;}} self;
 Player*player=&self;
 struct State {float bs_aHeading=0;}bs;
-float humanScanYaw=0.5f,moveFactor=1;
+float humanScanYaw=0.5f,moveFactor=1,humanEscapeForward=-1;
 bool deathmatch=true;
 void search(){
 '''
@@ -26,6 +26,11 @@ int main(){
  if(moveFactor!=1 || bs.bs_aHeading!=0.5f){puts("FAIL healthy search never reaches obstacle navigation");return 1;}
  moveFactor=0;search();
  if(moveFactor!=0){puts("FAIL stationary/unarmed input overridden");return 1;}
+ humanEscapeForward=0;moveFactor=1;search();
+ if(moveFactor!=0){puts("FAIL escape turn must hold forward input");return 1;}
+ humanEscapeForward=.9f;moveFactor=1;search();
+ if(moveFactor!=.9f){puts("FAIL escape travel ignored");return 1;}
+ humanEscapeForward=-1;
  self.health=0;moveFactor=1;search();
  if(moveFactor!=0){puts("FAIL dead movement");return 1;}
  player=nullptr;moveFactor=1;search();

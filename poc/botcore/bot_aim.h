@@ -33,6 +33,31 @@
 
 namespace botcore {
 
+// Earliest positive solution of |relative_position + velocity*t| = speed*t.
+// No solution or speculative flight beyond max_s: aim at the observed point.
+inline double InterceptTime(double x, double y, double z, double vx, double vy,
+                            double vz, double speed, double max_s = 2.0) {
+  if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(z) ||
+      !std::isfinite(vx) || !std::isfinite(vy) || !std::isfinite(vz) ||
+      !std::isfinite(speed) || speed <= 0 || !std::isfinite(max_s) || max_s <= 0)
+    return 0;
+  const double a = vx*vx + vy*vy + vz*vz - speed*speed;
+  const double b = 2*(x*vx + y*vy + z*vz);
+  const double c = x*x + y*y + z*z;
+  double t = 0;
+  if (std::fabs(a) < 1e-9) {
+    if (b < -1e-9) t = -c/b;
+  } else {
+    const double discriminant = b*b - 4*a*c;
+    if (!std::isfinite(discriminant) || discriminant < 0) return 0;
+    const double root = std::sqrt(discriminant);
+    const double first = (-b-root)/(2*a), second = (-b+root)/(2*a);
+    if (first > 0) t = first;
+    if (second > 0 && (t == 0 || second < t)) t = second;
+  }
+  return std::isfinite(t) && t > 0 && t <= max_s ? t : 0;
+}
+
 struct AimPose {
   double x = 0.0, y = 0.0, z = 0.0;  // eye position (absolute)
   double yaw_deg = 0.0;              // current absolute view angles

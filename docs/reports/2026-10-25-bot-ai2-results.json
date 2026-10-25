@@ -1,0 +1,1407 @@
+{
+  "scope": "HETZNER_ONLY_NO_PRODUCTION_ROLLOUT",
+  "goal_status": "CONTINUING_PUBLIC_DISABLED",
+  "nickname_pool_count": 208,
+  "runs": {
+    "baseline": {
+      "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+      "scope": "ISOLATED_NETNS_RETAIL_WINE",
+      "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+      "preset": "redstation",
+      "elapsed_s": 613.4887091179844,
+      "measured_s": 600,
+      "peak_playing": 2,
+      "controller_db_reopens": 4,
+      "all_bots_drained": true,
+      "new_throttled_periods": 0,
+      "cgroup_cpu_core_percent": 48.90732539873389,
+      "cgroup_peak_mib": 720.27734375,
+      "unmounts_clean": 8,
+      "cleanup_errors": [],
+      "config": {
+        "escape_in_compiled_candidate": false,
+        "accelerated": false,
+        "strafe_scale": 0,
+        "exploratory_search": false,
+        "session_bands": [
+          [
+            1,
+            900,
+            1000
+          ]
+        ],
+        "pause_s": [
+          900,
+          1200
+        ]
+      },
+      "event_counts": {
+        "joined": 2,
+        "left": 2,
+        "crashed": 0,
+        "join_requested": 2,
+        "leave_requested": 2
+      },
+      "epochs": {
+        "duelist": [
+          1
+        ],
+        "marksman": [
+          1
+        ]
+      },
+      "combat": {
+        "players": {
+          "duelist": {
+            "kills": 0,
+            "deaths": 0,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 0,
+            "kill_types": {}
+          },
+          "marksman": {
+            "kills": 1,
+            "deaths": 0,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 1,
+            "kill_types": {
+              "bullet": 1
+            }
+          }
+        },
+        "current_sessions": {
+          "duelist": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          },
+          "marksman": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 1,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 1,
+              "kill_types": {
+                "bullet": 1
+              }
+            }
+          }
+        },
+        "bot_vs_bot_kills": 0,
+        "recognized_deaths": 1,
+        "shots": null,
+        "hits": null,
+        "damage": null,
+        "hit_accuracy": null,
+        "evidence": "native_death_messages; verify frag_delta against queries"
+      },
+      "syncbad_matches": 0,
+      "native_query_frag_ranges": {
+        "duelist": {
+          "min": 0,
+          "max": 0,
+          "last": 0
+        },
+        "marksman": {
+          "min": 0,
+          "max": 1,
+          "last": 1
+        }
+      },
+      "client_metrics": {
+        "duelist": {
+          "playing_s": 569.4134469032288,
+          "telemetry_samples": 566,
+          "cpu_core_percent_from_1hz_telemetry": 5.280918727915195,
+          "tick_hz_medians": [
+            20.0
+          ],
+          "all_active": true
+        },
+        "marksman": {
+          "playing_s": 582.060656785965,
+          "telemetry_samples": 578,
+          "cpu_core_percent_from_1hz_telemetry": 9.73356401384083,
+          "tick_hz_medians": [
+            20.0
+          ],
+          "all_active": true
+        }
+      },
+      "host_busy_mean": 57.72363826358628,
+      "host_busy_max": 88.78787878787878,
+      "host_available_mib_min": 1340.1875
+    },
+    "exploration_b2": {
+      "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+      "scope": "ISOLATED_NETNS_RETAIL_WINE",
+      "dll_sha256": "a7fcd310a8b6086a1bc3235d1f595ff7850ff37c9388049d478f3b4b494f8c33",
+      "preset": "redstation",
+      "elapsed_s": 612.8264660290442,
+      "measured_s": 600,
+      "peak_playing": 2,
+      "controller_db_reopens": 4,
+      "all_bots_drained": true,
+      "new_throttled_periods": 0,
+      "cgroup_cpu_core_percent": 57.16484597999093,
+      "cgroup_peak_mib": 772.84765625,
+      "unmounts_clean": 8,
+      "cleanup_errors": [],
+      "config": {
+        "escape_in_compiled_candidate": false,
+        "accelerated": false,
+        "strafe_scale": 0,
+        "exploratory_search": true,
+        "session_bands": [
+          [
+            1,
+            900,
+            1000
+          ]
+        ],
+        "pause_s": [
+          900,
+          1200
+        ]
+      },
+      "event_counts": {
+        "joined": 2,
+        "left": 2,
+        "crashed": 0,
+        "join_requested": 2,
+        "leave_requested": 2
+      },
+      "epochs": {
+        "duelist": [
+          1
+        ],
+        "marksman": [
+          1
+        ]
+      },
+      "combat": {
+        "players": {
+          "duelist": {
+            "kills": 2,
+            "deaths": 15,
+            "suicides": 0,
+            "world_deaths": 13,
+            "frag_delta": -11,
+            "kill_types": {
+              "bullet": 2
+            }
+          },
+          "marksman": {
+            "kills": 2,
+            "deaths": 7,
+            "suicides": 0,
+            "world_deaths": 6,
+            "frag_delta": -4,
+            "kill_types": {
+              "bullet": 2
+            }
+          }
+        },
+        "current_sessions": {
+          "duelist": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 2,
+              "deaths": 15,
+              "suicides": 0,
+              "world_deaths": 13,
+              "frag_delta": -11,
+              "kill_types": {
+                "bullet": 2
+              }
+            }
+          },
+          "marksman": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 2,
+              "deaths": 7,
+              "suicides": 0,
+              "world_deaths": 6,
+              "frag_delta": -4,
+              "kill_types": {
+                "bullet": 2
+              }
+            }
+          }
+        },
+        "bot_vs_bot_kills": 3,
+        "recognized_deaths": 23,
+        "shots": null,
+        "hits": null,
+        "damage": null,
+        "hit_accuracy": null,
+        "evidence": "native_death_messages; verify frag_delta against queries"
+      },
+      "syncbad_matches": 0,
+      "native_query_frag_ranges": {
+        "duelist": {
+          "min": -11,
+          "max": 1,
+          "last": -11
+        },
+        "marksman": {
+          "min": -6,
+          "max": 0,
+          "last": -4
+        }
+      },
+      "client_metrics": {
+        "duelist": {
+          "playing_s": 566.5828268527985,
+          "telemetry_samples": 563,
+          "cpu_core_percent_from_1hz_telemetry": 9.468916518650088,
+          "tick_hz_medians": [
+            20
+          ],
+          "all_active": true
+        },
+        "marksman": {
+          "playing_s": 580.9362649917603,
+          "telemetry_samples": 577,
+          "cpu_core_percent_from_1hz_telemetry": 8.651646447140381,
+          "tick_hz_medians": [
+            20
+          ],
+          "all_active": true
+        }
+      },
+      "host_busy_mean": 59.72639377674456,
+      "host_busy_max": 88.29465186680122,
+      "host_available_mib_min": 1295.29296875
+    },
+    "escape_b4": {
+      "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+      "scope": "ISOLATED_NETNS_RETAIL_WINE",
+      "dll_sha256": "da8568cf87123cb41d9365ad737f7f2e5baf2be8ef52faf35d6e96967fb89e01",
+      "preset": "redstation",
+      "elapsed_s": 614.1294747240609,
+      "measured_s": 600,
+      "peak_playing": 2,
+      "controller_db_reopens": 4,
+      "all_bots_drained": true,
+      "new_throttled_periods": 0,
+      "cgroup_cpu_core_percent": 53.76386417583768,
+      "cgroup_peak_mib": 701.90234375,
+      "unmounts_clean": 8,
+      "cleanup_errors": [],
+      "config": {
+        "escape_in_compiled_candidate": true,
+        "accelerated": false,
+        "strafe_scale": 0,
+        "exploratory_search": true,
+        "session_bands": [
+          [
+            1,
+            900,
+            1000
+          ]
+        ],
+        "pause_s": [
+          900,
+          1200
+        ]
+      },
+      "event_counts": {
+        "joined": 2,
+        "left": 2,
+        "crashed": 0,
+        "join_requested": 2,
+        "leave_requested": 2
+      },
+      "epochs": {
+        "duelist": [
+          1
+        ],
+        "marksman": [
+          1
+        ]
+      },
+      "combat": {
+        "players": {
+          "duelist": {
+            "kills": 0,
+            "deaths": 4,
+            "suicides": 0,
+            "world_deaths": 4,
+            "frag_delta": -4,
+            "kill_types": {}
+          },
+          "marksman": {
+            "kills": 1,
+            "deaths": 2,
+            "suicides": 0,
+            "world_deaths": 2,
+            "frag_delta": -1,
+            "kill_types": {
+              "bullet": 1
+            }
+          }
+        },
+        "current_sessions": {
+          "duelist": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 4,
+              "suicides": 0,
+              "world_deaths": 4,
+              "frag_delta": -4,
+              "kill_types": {}
+            }
+          },
+          "marksman": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 1,
+              "deaths": 2,
+              "suicides": 0,
+              "world_deaths": 2,
+              "frag_delta": -1,
+              "kill_types": {
+                "bullet": 1
+              }
+            }
+          }
+        },
+        "bot_vs_bot_kills": 0,
+        "recognized_deaths": 7,
+        "shots": null,
+        "hits": null,
+        "damage": null,
+        "hit_accuracy": null,
+        "evidence": "native_death_messages; verify frag_delta against queries"
+      },
+      "syncbad_matches": 0,
+      "native_query_frag_ranges": {
+        "duelist": {
+          "min": -4,
+          "max": 0,
+          "last": -4
+        },
+        "marksman": {
+          "min": -1,
+          "max": 1,
+          "last": -1
+        }
+      },
+      "client_metrics": {
+        "duelist": {
+          "playing_s": 569.9180314540863,
+          "telemetry_samples": 566,
+          "cpu_core_percent_from_1hz_telemetry": 7.454063604240282,
+          "tick_hz_medians": [
+            20.0
+          ],
+          "all_active": true
+        },
+        "marksman": {
+          "playing_s": 582.6686906814575,
+          "telemetry_samples": 579,
+          "cpu_core_percent_from_1hz_telemetry": 7.447322970639033,
+          "tick_hz_medians": [
+            20
+          ],
+          "all_active": true
+        }
+      },
+      "host_busy_mean": 58.54501394752925,
+      "host_busy_max": 85.91691995947315,
+      "host_available_mib_min": 1325.8671875
+    },
+    "styles_normal": {
+      "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+      "scope": "ISOLATED_NETNS_RETAIL_WINE",
+      "dll_sha256": "a7fcd310a8b6086a1bc3235d1f595ff7850ff37c9388049d478f3b4b494f8c33",
+      "preset": "redstation",
+      "elapsed_s": 360.30956569709815,
+      "measured_s": 360,
+      "peak_playing": 2,
+      "controller_db_reopens": 2,
+      "all_bots_drained": true,
+      "new_throttled_periods": 0,
+      "cgroup_cpu_core_percent": 53.44924854990652,
+      "cgroup_peak_mib": 696.1875,
+      "unmounts_clean": 8,
+      "cleanup_errors": [],
+      "config": {
+        "escape_in_compiled_candidate": false,
+        "accelerated": false,
+        "strafe_scale": 0,
+        "exploratory_search": true,
+        "session_bands": [
+          [
+            1,
+            300,
+            300
+          ]
+        ],
+        "pause_s": [
+          900,
+          1200
+        ]
+      },
+      "event_counts": {
+        "joined": 2,
+        "left": 2,
+        "crashed": 0,
+        "join_requested": 2,
+        "leave_requested": 2
+      },
+      "epochs": {
+        "duelist": [
+          1
+        ],
+        "marksman": [
+          1
+        ]
+      },
+      "combat": {
+        "players": {
+          "duelist": {
+            "kills": 0,
+            "deaths": 5,
+            "suicides": 0,
+            "world_deaths": 4,
+            "frag_delta": -4,
+            "kill_types": {}
+          },
+          "marksman": {
+            "kills": 2,
+            "deaths": 7,
+            "suicides": 0,
+            "world_deaths": 7,
+            "frag_delta": -5,
+            "kill_types": {
+              "bullet": 2
+            }
+          }
+        },
+        "current_sessions": {
+          "duelist": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 5,
+              "suicides": 0,
+              "world_deaths": 4,
+              "frag_delta": -4,
+              "kill_types": {}
+            }
+          },
+          "marksman": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 2,
+              "deaths": 7,
+              "suicides": 0,
+              "world_deaths": 7,
+              "frag_delta": -5,
+              "kill_types": {
+                "bullet": 2
+              }
+            }
+          }
+        },
+        "bot_vs_bot_kills": 1,
+        "recognized_deaths": 13,
+        "shots": null,
+        "hits": null,
+        "damage": null,
+        "hit_accuracy": null,
+        "evidence": "native_death_messages; verify frag_delta against queries"
+      },
+      "syncbad_matches": 0,
+      "native_query_frag_ranges": {
+        "duelist": {
+          "min": -4,
+          "max": 0,
+          "last": -4
+        },
+        "marksman": {
+          "min": -6,
+          "max": 1,
+          "last": -5
+        }
+      },
+      "client_metrics": {
+        "duelist": {
+          "playing_s": 300.8438560962677,
+          "telemetry_samples": 297,
+          "cpu_core_percent_from_1hz_telemetry": 8.707070707070708,
+          "tick_hz_medians": [
+            20
+          ],
+          "all_active": true
+        },
+        "marksman": {
+          "playing_s": 301.11301350593567,
+          "telemetry_samples": 297,
+          "cpu_core_percent_from_1hz_telemetry": 9.205387205387206,
+          "tick_hz_medians": [
+            20
+          ],
+          "all_active": true
+        }
+      },
+      "host_busy_mean": 59.42363780659125,
+      "host_busy_max": 93.43434343434343,
+      "host_available_mib_min": 1267.91015625
+    },
+    "joining_cancel": {
+      "status": "PASS_LIMITED_JOINING_CANCEL",
+      "scope": "ISOLATED_NETNS_RETAIL_WINE",
+      "dll_sha256": "11306a51f1f2fd2784ac9f740c4d6c8fd86cf3d0a31e5b30ab02fd785a402728",
+      "preset": "redstation",
+      "elapsed_s": 24.949050090974197,
+      "measured_s": 10,
+      "peak_playing": 0,
+      "controller_db_reopens": 0,
+      "all_bots_drained": true,
+      "new_throttled_periods": 0,
+      "cgroup_cpu_core_percent": 55.62702597850151,
+      "cgroup_peak_mib": 518.109375,
+      "unmounts_clean": 6,
+      "cleanup_errors": [],
+      "config": {
+        "escape_in_compiled_candidate": false,
+        "accelerated": false,
+        "strafe_scale": 0,
+        "exploratory_search": false,
+        "session_bands": [
+          [
+            1,
+            900,
+            1000
+          ]
+        ],
+        "pause_s": [
+          900,
+          1200
+        ]
+      },
+      "event_counts": {
+        "joined": 0,
+        "left": 1,
+        "crashed": 0,
+        "join_requested": 1,
+        "leave_requested": 1
+      },
+      "epochs": {
+        "duelist": []
+      },
+      "combat": {
+        "players": {
+          "duelist": {
+            "kills": 0,
+            "deaths": 0,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 0,
+            "kill_types": {}
+          }
+        },
+        "current_sessions": {
+          "duelist": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          }
+        },
+        "bot_vs_bot_kills": 0,
+        "recognized_deaths": 0,
+        "shots": null,
+        "hits": null,
+        "damage": null,
+        "hit_accuracy": null,
+        "evidence": "native_death_messages; verify frag_delta against queries"
+      },
+      "syncbad_matches": 0,
+      "native_query_frag_ranges": {
+        "duelist": {
+          "min": 0,
+          "max": 0,
+          "last": 0
+        }
+      },
+      "client_metrics": {},
+      "host_busy_mean": 59.06373824672771,
+      "host_busy_max": 83.60323886639677,
+      "host_available_mib_min": 1535.828125
+    },
+    "four_lifecycle": {
+      "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+      "scope": "ISOLATED_NETNS_RETAIL_WINE",
+      "dll_sha256": "da8568cf87123cb41d9365ad737f7f2e5baf2be8ef52faf35d6e96967fb89e01",
+      "preset": "redstation",
+      "elapsed_s": 387.92259434005246,
+      "measured_s": 360,
+      "peak_playing": 4,
+      "controller_db_reopens": 2,
+      "all_bots_drained": true,
+      "new_throttled_periods": 0,
+      "cgroup_cpu_core_percent": 78.94635924819676,
+      "cgroup_peak_mib": 1054.26171875,
+      "unmounts_clean": 12,
+      "cleanup_errors": [],
+      "config": {
+        "escape_in_compiled_candidate": true,
+        "accelerated": true,
+        "strafe_scale": 0.5,
+        "exploratory_search": true,
+        "session_bands": [
+          [
+            1,
+            120,
+            180
+          ]
+        ],
+        "pause_s": [
+          30,
+          45
+        ]
+      },
+      "event_counts": {
+        "joined": 8,
+        "left": 7,
+        "crashed": 1,
+        "join_requested": 8,
+        "leave_requested": 8
+      },
+      "epochs": {
+        "duelist": [
+          1,
+          2
+        ],
+        "marksman": [
+          1,
+          2
+        ],
+        "rusher": [
+          1,
+          2
+        ],
+        "tactician": [
+          1,
+          2
+        ]
+      },
+      "combat": {
+        "players": {
+          "duelist": {
+            "kills": 1,
+            "deaths": 1,
+            "suicides": 0,
+            "world_deaths": 1,
+            "frag_delta": 0,
+            "kill_types": {
+              "bullet": 1
+            }
+          },
+          "marksman": {
+            "kills": 3,
+            "deaths": 1,
+            "suicides": 0,
+            "world_deaths": 1,
+            "frag_delta": 2,
+            "kill_types": {
+              "bullet": 3
+            }
+          },
+          "rusher": {
+            "kills": 0,
+            "deaths": 7,
+            "suicides": 0,
+            "world_deaths": 3,
+            "frag_delta": -3,
+            "kill_types": {}
+          },
+          "tactician": {
+            "kills": 1,
+            "deaths": 1,
+            "suicides": 0,
+            "world_deaths": 1,
+            "frag_delta": 0,
+            "kill_types": {
+              "bullet": 1
+            }
+          }
+        },
+        "current_sessions": {
+          "duelist": {
+            "epoch": 2,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          },
+          "marksman": {
+            "epoch": 2,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 2,
+              "deaths": 1,
+              "suicides": 0,
+              "world_deaths": 1,
+              "frag_delta": 1,
+              "kill_types": {
+                "bullet": 2
+              }
+            }
+          },
+          "rusher": {
+            "epoch": 2,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 2,
+              "suicides": 0,
+              "world_deaths": 1,
+              "frag_delta": -1,
+              "kill_types": {}
+            }
+          },
+          "tactician": {
+            "epoch": 2,
+            "observed_join": true,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          }
+        },
+        "bot_vs_bot_kills": 4,
+        "recognized_deaths": 11,
+        "shots": null,
+        "hits": null,
+        "damage": null,
+        "hit_accuracy": null,
+        "evidence": "native_death_messages; verify frag_delta against queries"
+      },
+      "syncbad_matches": 0,
+      "native_query_frag_ranges": {
+        "duelist": {
+          "min": 0,
+          "max": 1,
+          "last": 0
+        },
+        "marksman": {
+          "min": 0,
+          "max": 2,
+          "last": 1
+        },
+        "rusher": {
+          "min": -2,
+          "max": 0,
+          "last": -1
+        },
+        "tactician": {
+          "min": -1,
+          "max": 0,
+          "last": 0
+        }
+      },
+      "client_metrics": {
+        "duelist": {
+          "playing_s": 129.2422161102295,
+          "telemetry_samples": 123,
+          "cpu_core_percent_from_1hz_telemetry": 7.4471544715447155,
+          "tick_hz_medians": [
+            20,
+            20.0
+          ],
+          "all_active": true
+        },
+        "marksman": {
+          "playing_s": 215.69298338890076,
+          "telemetry_samples": 209,
+          "cpu_core_percent_from_1hz_telemetry": 12.38755980861244,
+          "tick_hz_medians": [
+            20,
+            20.0
+          ],
+          "all_active": true
+        },
+        "rusher": {
+          "playing_s": 273.3589551448822,
+          "telemetry_samples": 267,
+          "cpu_core_percent_from_1hz_telemetry": 12.153558052434457,
+          "tick_hz_medians": [
+            20,
+            20.0
+          ],
+          "all_active": true
+        },
+        "tactician": {
+          "playing_s": 277.6914529800415,
+          "telemetry_samples": 271,
+          "cpu_core_percent_from_1hz_telemetry": 12.07749077490775,
+          "tick_hz_medians": [
+            20.0,
+            20
+          ],
+          "all_active": true
+        }
+      },
+      "host_busy_mean": 69.15619240356257,
+      "host_busy_max": 85.41033434650456,
+      "host_available_mib_min": 992.46875
+    },
+    "eight_capacity": {
+      "status": "FAIL",
+      "scope": "ISOLATED_NETNS_RETAIL_WINE",
+      "dll_sha256": "da8568cf87123cb41d9365ad737f7f2e5baf2be8ef52faf35d6e96967fb89e01",
+      "preset": "redstation",
+      "elapsed_s": 83.33885919104796,
+      "peak_playing": 4,
+      "error": "HOST_RESOURCE_RESERVE_FOR_NEXT_CLIENT: available_mib=1029.1, required=1068, disk_gib=10.86",
+      "failure_resources": {
+        "available_mib": 1029.05078125,
+        "disk_free_gib": 10.861186981201172,
+        "cgroup_peak_mib": 1070.640625
+      },
+      "unmounts_clean": 20,
+      "cleanup_errors": [],
+      "config": {
+        "escape_in_compiled_candidate": true,
+        "accelerated": false,
+        "strafe_scale": 0.5,
+        "exploratory_search": true,
+        "session_bands": [
+          [
+            1,
+            600,
+            900
+          ]
+        ],
+        "pause_s": [
+          900,
+          1200
+        ]
+      },
+      "event_counts": {
+        "joined": 0,
+        "left": 0,
+        "crashed": 0,
+        "join_requested": 0,
+        "leave_requested": 0
+      },
+      "epochs": {
+        "gamer-000": [],
+        "gamer-001": [],
+        "gamer-002": [],
+        "gamer-003": [],
+        "gamer-004": [],
+        "gamer-005": [],
+        "gamer-006": [],
+        "gamer-007": []
+      },
+      "combat": {
+        "players": {
+          "gamer-000": {
+            "kills": 0,
+            "deaths": 0,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 0,
+            "kill_types": {}
+          },
+          "gamer-001": {
+            "kills": 0,
+            "deaths": 0,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 0,
+            "kill_types": {}
+          },
+          "gamer-002": {
+            "kills": 0,
+            "deaths": 0,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 0,
+            "kill_types": {}
+          },
+          "gamer-003": {
+            "kills": 0,
+            "deaths": 0,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 0,
+            "kill_types": {}
+          },
+          "gamer-004": {
+            "kills": 0,
+            "deaths": 0,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 0,
+            "kill_types": {}
+          },
+          "gamer-005": {
+            "kills": 0,
+            "deaths": 0,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 0,
+            "kill_types": {}
+          },
+          "gamer-006": {
+            "kills": 0,
+            "deaths": 1,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 0,
+            "kill_types": {}
+          },
+          "gamer-007": {
+            "kills": 2,
+            "deaths": 0,
+            "suicides": 0,
+            "world_deaths": 0,
+            "frag_delta": 2,
+            "kill_types": {
+              "bullet": 2
+            }
+          }
+        },
+        "current_sessions": {
+          "gamer-000": {
+            "epoch": 0,
+            "observed_join": false,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          },
+          "gamer-001": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": true,
+            "stats": {
+              "kills": 0,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          },
+          "gamer-002": {
+            "epoch": 0,
+            "observed_join": false,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          },
+          "gamer-003": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": true,
+            "stats": {
+              "kills": 0,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          },
+          "gamer-004": {
+            "epoch": 0,
+            "observed_join": false,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          },
+          "gamer-005": {
+            "epoch": 0,
+            "observed_join": false,
+            "active": false,
+            "stats": {
+              "kills": 0,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          },
+          "gamer-006": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": true,
+            "stats": {
+              "kills": 0,
+              "deaths": 1,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 0,
+              "kill_types": {}
+            }
+          },
+          "gamer-007": {
+            "epoch": 1,
+            "observed_join": true,
+            "active": true,
+            "stats": {
+              "kills": 2,
+              "deaths": 0,
+              "suicides": 0,
+              "world_deaths": 0,
+              "frag_delta": 2,
+              "kill_types": {
+                "bullet": 2
+              }
+            }
+          }
+        },
+        "bot_vs_bot_kills": 1,
+        "recognized_deaths": 2,
+        "shots": null,
+        "hits": null,
+        "damage": null,
+        "hit_accuracy": null,
+        "evidence": "native_death_messages; verify frag_delta against queries"
+      },
+      "syncbad_matches": 0,
+      "native_query_frag_ranges": {
+        "gamer-000": null,
+        "gamer-001": {
+          "min": 0,
+          "max": 0,
+          "last": 0
+        },
+        "gamer-002": null,
+        "gamer-003": {
+          "min": 0,
+          "max": 0,
+          "last": 0
+        },
+        "gamer-004": null,
+        "gamer-005": null,
+        "gamer-006": {
+          "min": 0,
+          "max": 0,
+          "last": 0
+        },
+        "gamer-007": {
+          "min": 0,
+          "max": 2,
+          "last": 2
+        }
+      },
+      "client_metrics": {},
+      "host_busy_mean": 63.55777580214067,
+      "host_busy_max": 82.28105906313645,
+      "host_available_mib_min": 1029.04296875
+    }
+  },
+  "original_decoder": {
+    "exitcode": 0,
+    "engine_sha256": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+    "cases": [
+      {
+        "raw": "PlainName",
+        "native_visible": "PlainName",
+        "native_length": 9
+      },
+      {
+        "raw": "^cFF0000ReaPer^r",
+        "native_visible": "ReaPer",
+        "native_length": 6
+      },
+      {
+        "raw": "^bRaven^B^r",
+        "native_visible": "Raven",
+        "native_length": 5
+      },
+      {
+        "raw": "^iRaven^I^r",
+        "native_visible": "Raven",
+        "native_length": 5
+      },
+      {
+        "raw": "^b^iNeCrO^I^B^r",
+        "native_visible": "NeCrO",
+        "native_length": 5
+      },
+      {
+        "raw": "^f3NIGHT^F^r",
+        "native_visible": "IGHT",
+        "native_length": 4
+      },
+      {
+        "raw": "^f3^c00FF00NIGHT^F^r",
+        "native_visible": "c00FF00NIGHT",
+        "native_length": 12
+      },
+      {
+        "raw": "^cFFFFFFxX_^cFF0000RaVeN^r",
+        "native_visible": "xX_RaVeN",
+        "native_length": 8
+      },
+      {
+        "raw": "^f0X^F^r",
+        "native_visible": "",
+        "native_length": 0
+      }
+    ]
+  },
+  "passive_native_probe": {
+    "frida_version": "17.24.3",
+    "original_server_binary_sha256": {
+      "Engine.dll": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+      "EntitiesMP.dll": "7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350",
+      "GameMP.dll": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+      "DedicatedServer.exe": "9596f53c260c6fe5f6b7b6666fdf210bcac9952e4eec4b2ee2ee82f37153052d"
+    },
+    "export_rvas": {
+      "?ReceiveDamage@CPlayer@@UAEXPAVCEntity@@W4DamageType@@MABV?$Vector@M$02@@2@Z": 971648,
+      "?LaunchBullet@CBullet@@QAEXHHH@Z": 324912
+    },
+    "runtime_module_base": "0x60310000",
+    "arch": "ia32",
+    "duration_s": 90.1596358299721,
+    "detached": true,
+    "js_errors": [],
+    "server_cpu_core_percent": 8.240938344085478,
+    "native_hitscan_traces": 5,
+    "traces_with_player_hp_damage": 2,
+    "scoped_hitscan_trace_ratio": 0.4,
+    "damage_calls_by_type": {
+      "9": 10,
+      "4": 2
+    },
+    "hp_loss_including_overkill_by_type": {
+      "9": 750,
+      "4": 60
+    },
+    "causal_hook_overhead": "NOT_MEASURED",
+    "overall_projectile_accuracy": null,
+    "per_weapon_shot_distribution": null
+  },
+  "public_baseline": {
+    "players": {
+      "0": {
+        "kills": 33,
+        "deaths": 226,
+        "suicides": 2,
+        "world_deaths": 30,
+        "frag_delta": 1,
+        "kill_types": {
+          "bullet": 14,
+          "explosive": 19
+        }
+      },
+      "1": {
+        "kills": 26,
+        "deaths": 211,
+        "suicides": 0,
+        "world_deaths": 62,
+        "frag_delta": -36,
+        "kill_types": {
+          "explosive": 18,
+          "bullet": 6,
+          "other": 2
+        }
+      },
+      "2": {
+        "kills": 81,
+        "deaths": 220,
+        "suicides": 6,
+        "world_deaths": 47,
+        "frag_delta": 28,
+        "kill_types": {
+          "bullet": 46,
+          "explosive": 35
+        }
+      },
+      "3": {
+        "kills": 86,
+        "deaths": 178,
+        "suicides": 1,
+        "world_deaths": 47,
+        "frag_delta": 38,
+        "kill_types": {
+          "bullet": 55,
+          "explosive": 31
+        }
+      },
+      "4": {
+        "kills": 149,
+        "deaths": 161,
+        "suicides": 4,
+        "world_deaths": 36,
+        "frag_delta": 109,
+        "kill_types": {
+          "bullet": 85,
+          "explosive": 58,
+          "cannon": 5,
+          "other": 1
+        }
+      },
+      "5": {
+        "kills": 99,
+        "deaths": 185,
+        "suicides": 1,
+        "world_deaths": 63,
+        "frag_delta": 35,
+        "kill_types": {
+          "explosive": 42,
+          "bullet": 57
+        }
+      },
+      "6": {
+        "kills": 241,
+        "deaths": 156,
+        "suicides": 6,
+        "world_deaths": 32,
+        "frag_delta": 203,
+        "kill_types": {
+          "bullet": 170,
+          "explosive": 63,
+          "other": 1,
+          "cannon": 7
+        }
+      },
+      "7": {
+        "kills": 299,
+        "deaths": 144,
+        "suicides": 0,
+        "world_deaths": 43,
+        "frag_delta": 256,
+        "kill_types": {
+          "bullet": 282,
+          "explosive": 11,
+          "cannon": 6
+        }
+      }
+    },
+    "recognized_deaths": 1483,
+    "shots": null,
+    "hits": null,
+    "damage": null,
+    "hit_accuracy": null,
+    "evidence": "native_death_messages; verify frag_delta against queries",
+    "native_query_scores": {
+      "0": "1",
+      "1": "-36",
+      "2": "28",
+      "3": "38",
+      "4": "109",
+      "5": "35",
+      "6": "203",
+      "7": "256"
+    },
+    "query_utc": "2026-10-25T09:32:19Z"
+  },
+  "protected": {
+    "active_binary_pins": 12,
+    "original_files": 415,
+    "archive_members": 415,
+    "archive_sha256": "d7b3650d55a21fc88614d5b969e126ac1cfcc52585262a1ef139eb0be1632b7d",
+    "public_generations_unchanged": true
+  },
+  "public_health": {
+    "utc": "2026-10-25T11:04:38Z",
+    "status": "HEALTHY",
+    "alerts": [],
+    "players": 8,
+    "expected_bots": 8,
+    "owned_sync_bad": 0,
+    "external_sync_bad": 0,
+    "query_fresh": true,
+    "telemetry_fresh": true,
+    "processes_verified": true,
+    "host_memory_available": 2163843072,
+    "disk_free_bytes": 11650560000
+  },
+  "historical_phase_goal_status": "BLOCKED_EIGHT_INDIVIDUAL_CLIENT_RESERVE_AND_AI_QUALITY_NOT_QUALIFIED",
+  "continuation_shutdown": {
+    "utc": "2026-10-25T11:37:12Z",
+    "available_mib": 2775.734375,
+    "disk_free_gib": 10.845390319824219,
+    "host_busy_percent": 20.537525354969574,
+    "live_tse_processes": [],
+    "monitor_enabled": "disabled",
+    "public_disabled_marker_sha256": "571a4a1b4627f7a406a4e879f3fc9304895d8e2e8c13e404373f89ea6c5e2538",
+    "status": "USER_DISABLED",
+    "human_players_before": 0,
+    "public_clients_wm_close": 2,
+    "dedicated_sigterm": true,
+    "sigkill": false,
+    "unmounted": 12,
+    "protected_original_files": 415,
+    "archive_unchanged": true
+  }
+}

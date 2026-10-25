@@ -18,7 +18,7 @@ class IntegrationTests(unittest.TestCase):
             self.assertEqual(proc.returncode,0,proc.stderr)
             for name in ("Game.cpp","BotDriver.cpp","BotTelemetry.h"):
                 self.assertEqual((target/name).read_bytes(),(CAND/name).read_bytes())
-            for name in ("bot_profile.h","bot_perception.h","bot_aim.h","bot_loadout.h","bot_human.h"):
+            for name in ("bot_profile.h","bot_perception.h","bot_aim.h","bot_loadout.h","bot_human.h","bot_route.h"):
                 self.assertTrue((target/name).is_file(),name+" absent from materialized build")
                 self.assertEqual((target/name).read_bytes(),(ROOT/"poc/botcore"/name).read_bytes())
             for name in before:

@@ -152,6 +152,11 @@ def close_window(pid,display):
     finally:x.XCloseDisplay(d)
     return sent
 
+def assert_public_launch_allowed(marker=Path('/srv/tse-public-disabled.json')):
+    if os.path.lexists(marker):
+        raise RuntimeError('public server disabled by user; explicit user authorization required before restart')
+
+
 def main():
     global ROSTER
     parser=argparse.ArgumentParser(description=__doc__)
@@ -179,6 +184,7 @@ def main():
     assert not reference or args.duration>=600,"reference CPU minimum is 600s"
     public=args.public_address is not None
     if public:
+        assert_public_launch_allowed()
         assert args.stage=="eight" and args.duration>=600 and args.port==25600
         address=ipaddress.ip_address(args.public_address)
         assert address.version==4 and address.is_global,"a public IPv4 is required"

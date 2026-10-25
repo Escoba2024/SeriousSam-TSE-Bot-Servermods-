@@ -26,6 +26,61 @@ def snap(now, humans=(), slots=16):
     return {"observed_at": now, "maxplayers": slots, "human_names": list(humans)}
 
 class Names(unittest.TestCase):
+    def test_plain_identity_accepts_22_visible_characters_and_rejects_longer_names(self):
+        c=config();c['identities']=[dict(id='boundary',nickname='A'*22,profile=0)]
+        self.assertEqual(b.validate_config(c)['identities'][0]['nickname'],'A'*22)
+        for length in (23,24,25,300):
+            c['identities'][0]['nickname']='A'*length
+            with self.subTest(length=length),self.assertRaises(ValueError):
+                b.validate_config(c)
+    def test_longer_human_query_names_keep_distinct_keys_and_reserved_slots(self):
+        c=config();c['servers']=['one'];c['max_bots']=1
+        c['identities']=[dict(id='boundary',nickname='A'*22,profile=0)]
+        human='A'*22+'XY'
+        with tempfile.TemporaryDirectory() as d:
+            p=b.Planner(Path(d)/'human.db',c)
+            try:
+                # A human's 24-character name is not shortened to an owned
+                # 22-character alias; the human still consumes a reserved slot.
+                self.assertEqual(p.snapshot(snap(100,[human],slots=3),100),(3,[human.lower()]))
+                self.assertEqual(p.plan('one',snap(100,[human],slots=3),100),[])
+                actions=p.plan('one',snap(101,[human],slots=4),101)
+                self.assertEqual([a['identity_id'] for a in actions],['boundary'])
+            finally:p.close()
+    def test_strafe_scale_is_explicit_bounded_native_probe(self):
+        self.assertEqual(b.validate_config(dict(config(),strafe_scale=.5))['strafe_scale'],.5)
+        for value in [True,-.01,1.01,float('nan'),'0.5']:
+            with self.subTest(value=value),self.assertRaises(ValueError):
+                b.validate_config(dict(config(),strafe_scale=value))
+    def test_individual_time_patterns_and_utc_login_window(self):
+        c=config();c['servers']=['one'];c['max_bots']=1
+        c['identities']=[dict(id='night',nickname='Nightjar',profile=6,
+                              session_bands=[[1,40,40]],pause_s=[70,70],active_hours_utc=[22,23])]
+        with tempfile.TemporaryDirectory() as d:
+            p=b.Planner(str(Path(d)/'times.db'),c)
+            self.assertEqual(p.plan('one',snap(3600),3600), [])
+            now=22*3600
+            action=p.plan('one',snap(now),now)[0]
+            p.record('night',action['epoch'],'joined',now)
+            self.assertEqual(p.states()['night']['until'],now+40)
+            p.plan('one',snap(now+40),now+40)
+            p.record('night',action['epoch'],'left',now+41)
+            self.assertEqual(p.states()['night']['until'],now+111)
+            p.close()
+        for field,value in [('active_hours_utc',[24]),('active_hours_utc',[True]),('active_hours_utc',[[2]]),
+                            ('session_bands',[[1,0,1]]),('pause_s',[0,1])]:
+            with self.subTest(field=field),self.assertRaises(ValueError):
+                b.validate_config(dict(c,identities=[dict(c['identities'][0],**{field:value})]))
+    def test_native_name_is_persistent_and_must_match_visible_identity(self):
+        c = config(); c['colors_enabled'] = True
+        c['identities'][0]['native_name'] = '^b^c80D8FFMika^B^r'
+        with tempfile.TemporaryDirectory() as d:
+            p = b.Planner(str(Path(d)/'native.db'), c)
+            self.assertEqual(next(i for i in p.identities() if i['id']=='mika')['native_name'], '^b^c80D8FFMika^B^r')
+            p.close()
+        for value in ['^c80D8FFOther^r', '^bMika', '^xMika^r', 'Mika;Quit()']:
+            c['identities'][0]['native_name'] = value
+            with self.subTest(value=value), self.assertRaises(ValueError): b.validate_config(c)
     def test_central_logging_options_are_typed_and_bounded(self):
         c=dict(config(),debug_logging=True,log_every_ticks=50,max_log_mib=4)
         self.assertEqual(b.validate_config(c)['log_every_ticks'],50)
@@ -42,6 +97,10 @@ class Names(unittest.TestCase):
         self.assertLessEqual(len(b.clean_name("A" * 300)), b.VISIBLE_CAP)
     def test_no_empty_identity(self):
         with self.assertRaises(ValueError): b.clean_name("\x00^r")
+    def test_effects_do_not_become_visible_letters_or_hide_collisions(self):
+        self.assertEqual(b.clean_name('^b^i^f3Raven^F^I^B^r'), 'Raven')
+        c=config();c['identities'][1]['nickname']='^bMika^B^r'
+        with self.assertRaises(ValueError):b.validate_config(c)
     def test_visible_casefolded_collisions(self):
         c = config()
         c["identities"][1]["nickname"] = "^cFF0000mIKA^r"
@@ -106,7 +165,8 @@ class Sessions(unittest.TestCase):
     def test_weighted_normal_session_defaults(self):
         c = self.p.config
         # Accelerated tests do not pretend to establish normal-time stability.
-        self.assertEqual(b.DEFAULT_BANDS, [[0.1, 300, 1199], [0.8, 1200, 5400], [0.1, 5401, 10800]])
+        self.assertEqual(b.DEFAULT_BANDS, [[0.15,300,900], [0.55,900,2700],
+                                          [0.25,2700,5400], [0.05,5400,9000]])
         with self.assertRaises(ValueError):
             b.validate_config(dict(self.c, accelerated=False))
         self.assertTrue(c["accelerated"])

@@ -10,6 +10,7 @@ import argparse
 import ctypes
 from dataclasses import replace
 import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -35,8 +36,108 @@ MANIFEST = Path('/srv/tse-integrated-build-20261021-04/manifest.json')
 PUBLIC = Path('/srv/tse-integration-public-20261021/eight-115115-z44oq5ua/result.json')
 
 
+def select_artifact(manifest):
+    build=json.loads(Path(manifest).read_text())
+    if build.get('build_ok') is not True or build.get('qualified') is not False:
+        raise ValueError('explicit successful unqualified build manifest required')
+    dll=Path(build['candidate']).resolve()
+    digest=q.sha(dll)
+    if digest!=build.get('dll_sha256'):
+        raise ValueError('candidate hash drift')
+    return dll,digest
+
+
+def joining_cancel_evidence(events,peak):
+    return (peak==0 and not any(e['event']=='joined' for e in events) and
+            any(e['event']=='join_requested' for e in events) and
+            any(e['event']=='leave_requested' and e.get('reason')=='admin' for e in events) and
+            any(e['event']=='left' for e in events))
+
+
+def crash_probe_candidate(states,elapsed,count):
+    playing=[i for i,s in states.items() if s['status']=='PLAYING']
+    return min(playing) if elapsed>=90 and len(playing)==count else None
+
+
 def resource_gate(*, available_mib, disk_free_gib, busy_percent, launch=False):
     return available_mib >= 768+(300 if launch else 0) and disk_free_gib >= 8 and busy_percent < 85
+
+
+def process_resources(record):
+    state=probe_process(record)
+    if state=='ABSENT':return None
+    if state!='LIVE':raise RuntimeError('resource sample process generation mismatch')
+    p=Path('/proc')/str(record['pid'])
+    try:
+        fields=(p/'stat').read_text().rsplit(') ',1)[1].split()
+        pss=re.search(r'^Pss:\s+(\d+)',(p/'smaps_rollup').read_text(),re.M)
+        if int(fields[19])!=record['start_ticks'] or probe_process(record)!='LIVE':
+            raise RuntimeError('resource sample ownership changed')
+        return dict(start_ticks=int(fields[19]),cpu_s=(int(fields[11])+int(fields[12]))/os.sysconf('SC_CLK_TCK'),
+                    rss_mib=int(fields[21])*os.sysconf('SC_PAGE_SIZE')/1024**2,
+                    pss_mib=int(pss[1])/1024)
+    except (FileNotFoundError,ProcessLookupError):return None
+
+
+def sample_resources(records, states):
+    # A launch claim is not a confirmed Retail participant. The executor keeps
+    # JOINING observations quarantined until its full ownership/readiness gate
+    # passes. Never turn those unqualified samples into CPU/RAM evidence.
+    return {role:None if states.get(role,{}).get('status')=='JOINING' else process_resources(record)
+            for role,record in records.items()}
+
+
+def host_public_runtime_state():
+    """Host namespace only: private netns games must not trip the offline guard."""
+    host_net=os.readlink('/proc/1/ns/net')
+    games=[]
+    for p in Path('/proc').glob('[0-9]*'):
+        try:
+            name=(p/'comm').read_text().strip()
+            if name not in ('DedicatedServer','SeriousSam.exe'):continue
+            if os.readlink(p/'ns/net')!=host_net:continue
+            # Wine can leave a zombie leader while its other threads stay live.
+            if any(t.read_text().rsplit(') ',1)[1].split()[0]!='Z'
+                   for t in (p/'task').glob('*/stat')):
+                games.append(name)
+        except FileNotFoundError:continue  # process exited during census
+    ports=set()
+    for table in ('udp','udp6'):
+        for line in Path('/proc/net',table).read_text().splitlines()[1:]:
+            ports.add(int(line.split()[1].rsplit(':',1)[1],16))
+    return games,ports
+
+
+def offline_public_guard(marker, expected_sha):
+    try:
+        data=Path(marker).read_bytes()
+        state=json.loads(data)
+    except (OSError,ValueError) as exc:
+        raise RuntimeError('public shutdown marker unavailable') from exc
+    if (hashlib.sha256(data).hexdigest()!=expected_sha or
+        state.get('status')!='DISABLED_BY_USER' or state.get('host')!='ubuntu-4gb-nbg1-2'):
+        raise RuntimeError('public shutdown authorization changed')
+    games,ports=host_public_runtime_state()
+    if games or ports & {25600,25601}:
+        raise RuntimeError('public process/listener active during offline development')
+
+
+def live_public_guard(public):
+    before=json.loads(public.read_text())
+    records={role:process_record(info['pid']) for role,info in before['processes'].items()}
+    for role,record in records.items():
+        if record['cwd']!=before['processes'][role]['cwd'] or record['start_ticks']!=before['processes'][role]['start_ticks']:
+            raise RuntimeError('public process baseline changed')
+    expected={n.casefold() for n in q.ROSTER}
+    def check():
+        if any(probe_process(r)!='LIVE' for r in records.values()):raise RuntimeError('public process changed')
+        names=player_names(q.query(25601))
+        if not expected.issubset({clean_name(n).casefold() for n in names}):raise RuntimeError('public bot disappeared')
+        live=json.loads(Path('/srv/tse-public-health-20261021/health.json').read_text())
+        if (live.get('owned_sync_bad')!=0 or not live.get('telemetry_fresh') or
+            not live.get('query_fresh') or not live.get('processes_verified')):
+            raise RuntimeError('public telemetry/sync guard')
+    return check
 
 
 def arm_parent_death(parent_pid):
@@ -171,10 +272,13 @@ def stop_owned(record, process=None, *, allow_force=False):
 
 class WineTransport:
     """Private one-player clients. Durable bindings allow executor re-adoption."""
-    def __init__(self, root, planner, port, display, cgroup, *, color_probe=False):
+    def __init__(self, root, planner, port, display, cgroup, *, color_probe=False, preset='existing', cecil_p1=False):
         self.root, self.p, self.port, self.display = root, planner, port, display
         self.cgroup=cgroup
         self.color_probe=color_probe
+        self.cecil_p1=cecil_p1
+        if preset not in ('existing','redstation'):raise ValueError('unknown private preset')
+        self.preset=preset
         self.roles={}
         self.procs={}
         self.launched={}
@@ -228,7 +332,13 @@ class WineTransport:
                 script=(Path(__file__).resolve().parents[1]/'poc/scripts/Phase1HumanAI.ini').read_text()
                 script+='\nbot_bNullRender=1;\nbot_iNullRenderFps=20;\nbot_iTelemetry=1;\nbot_iLogEvery=20;\nbot_bDiagnostics=0;\nbot_bDiag=1;\nsam_iMaxFPSActive=20;\nsam_iMaxFPSInactive=10;\nsam_bPauseOnMinimize=0;\nnet_strLocalHost="";\n'
                 script+=f"\nbot_iLogEvery={self.p.config['log_every_ticks']};\nbot_bDiag={int(self.p.config['debug_logging'])};\n"
+                script+=f"bot_bDiagnostics={int(self.p.config['debug_logging'])};\n"
+                if self.p.config['exploratory_search']:
+                    script+='bot_bExploratorySearch=1;\n'
+                if self.p.config['strafe_scale']>0:
+                    script+=f"bot_fStrafeScale={self.p.config['strafe_scale']};\n"
                 script+=startup_script(self.identities[role])
+                if self.cecil_p1:script+='bot_bCecilP1=1;\n'
                 (game/'Scripts/Session.ini').write_text(script)
                 os.chown(game/'Scripts/Session.ini',65534,65534)
             elif role=='server':
@@ -247,6 +357,9 @@ class WineTransport:
             for name in ('Dedicated_BotTest.log','SeriousSam.log','Bin/BotTelemetry.csv'):
                 path=game/name
                 if path.exists():path.unlink()
+            if self.preset=='redstation':
+                from redstation_preset import configure_overlay
+                configure_overlay(game,role)
 
     def start(self, role, epoch=0):
         game=self.roles[role]
@@ -292,6 +405,8 @@ class WineTransport:
         self.query_valid=True
         self.invalid_since=None
         self.query_at=now
+        with (self.root/'combat-queries.jsonl').open('a') as stream:
+            stream.write(json.dumps(dict(at=now,query=self.query))+'\n')
         for record in self.fixed.values():
             if probe_process(record)!='LIVE':raise RuntimeError('server/original client exited')
         keys={clean_name(n).casefold() for n in names}
@@ -415,12 +530,15 @@ def run_inner(args, config, root):
     cgstart=cgstat();cgtime=time.monotonic()
     cgroup=Path('/proc/self/cgroup').read_text()
     p=Planner(root/'sessions.db',config)
-    transport=WineTransport(root,p,args.port,args.display,cgroup,color_probe=args.color_probe)
+    transport=WineTransport(root,p,args.port,args.display,cgroup,color_probe=args.color_probe,
+                            preset=getattr(args,'preset','existing'),cecil_p1=args.cecil_p1)
     result=dict(status='PREPARING',scope='ISOLATED_NETNS_RETAIL_WINE',dll_sha256=DLL,
                 max_bots=config['max_bots'],accelerated=config['accelerated'],cgroup=str(cg),
                 original_client=True,colors_enabled=config['colors_enabled'],private_color_probe=args.color_probe,
+                cecil_p1=args.cecil_p1,
                 low_memory_rendering=config['low_memory_rendering'],
                 observer_fps_cap=5,network_namespace=os.readlink('/proc/self/ns/net'))
+    result['preset']=getattr(args,'preset','existing')
     def save():
         result['utc']=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())
         (root/'result.json').write_text(json.dumps(result,indent=2)+'\n')
@@ -443,19 +561,32 @@ def run_inner(args, config, root):
                 if match:raise RuntimeError(role+' startup failure: '+match.group())
             try:
                 state=q.query(args.port+1)
-                if player_names(state)==['Retail_Control']:break
+                if player_names(state)==['Retail_Control']:
+                    if getattr(args,'preset','existing')=='redstation' and state.get('mapname')!='Red Station':
+                        raise RuntimeError('private Red Station preset did not reach native query')
+                    break
             except (OSError,ValueError,RuntimeError):pass
             if time.monotonic()>deadline:raise RuntimeError('original Retail join timeout')
             time.sleep(2)
         started=time.monotonic();last_reopen=started
         result['status']='MEASURING';save()
-        peak=0;samples=0;reopens=0
+        peak=0;samples=0;reopens=0;fault=None
         with (root/'samples.jsonl').open('w') as out, ControllerLock(root/'sessions.db') as lock:
             executor=SessionExecutor(p,lock,transport)
             while time.monotonic()-started<args.duration:
                 now=time.time()
                 decisions=executor.tick(config['servers'][0],now)
                 active=sum(s['status']=='PLAYING' for s in p.states().values());peak=max(peak,active)
+                if getattr(args,'crash_one_probe',False) and fault is None:
+                    ident=crash_probe_candidate(p.states(),time.monotonic()-started,config['max_bots'])
+                    if ident:
+                        state=p.states()[ident]
+                        row=p.db.execute('SELECT epoch,record FROM native_process WHERE id=?',(ident,)).fetchone()
+                        if not row or row['epoch']!=state['epoch']:raise RuntimeError('fault probe epoch drift')
+                        record=json.loads(row['record'])
+                        stop_owned(record,transport.procs[ident],allow_force=False)
+                        fault=dict(id=ident,epoch=state['epoch'],event='owned_crash_probe_SIGTERM',at=now)
+                        transport.events.append(fault);result['fault_probe']=fault;save()
                 runtime_log_gate(transport)
                 for state in p.states().values():
                     if state['status']=='JOINING':
@@ -466,8 +597,17 @@ def run_inner(args, config, root):
                         row=p.db.execute('SELECT at FROM runtime_leave_claim WHERE identity_id=? AND epoch=?',
                                          (state['id'],state['epoch'])).fetchone()
                         if row and now-row[0]>45:raise RuntimeError('bounded orderly leave timeout')
+                current_states=p.states()
+                process_samples=sample_resources(transport.launched,current_states)
+                for role,record in transport.launched.items():
+                    if current_states.get(role,{}).get('status')!='JOINING':continue
+                    try:observed=process_record(record['pid'])
+                    except (OSError,ValueError):observed=None
+                    with (root/'joining-process-bindings.jsonl').open('a') as held:
+                        held.write(json.dumps(dict(at=now,role=role,expected=record,observed=observed))+'\n')
                 out.write(json.dumps(dict(elapsed_s=time.monotonic()-started,active=active,
-                                          population=len(transport.current_names),decisions=decisions))+'\n');out.flush()
+                                          population=len(transport.current_names),decisions=decisions,
+                                          processes=process_samples))+'\n');out.flush()
                 samples+=1
                 if time.monotonic()-last_reopen>120:
                     # Reopen the real DB/executor while every native process stays running.
@@ -487,16 +627,25 @@ def run_inner(args, config, root):
                 if time.monotonic()>deadline:raise RuntimeError('admin drain timeout')
                 time.sleep(1)
             events=[dict(r) for r in p.db.execute('SELECT * FROM event')]
+            if getattr(args,'crash_one_probe',False):
+                if (not fault or not any(e['id']==fault['id'] and e['epoch']==fault['epoch'] and e['event']=='crashed' for e in events) or
+                    not any(e['id']==fault['id'] and e['epoch']>fault['epoch'] and e['event']=='joined' for e in events)):
+                    raise RuntimeError('owned crash/ghost/cooldown/rejoin was not demonstrated')
             result.update(status='PASS_LIMITED_SESSION_LIFECYCLE',elapsed_s=time.monotonic()-started,
                           measured_s=args.duration,samples=samples,peak_playing=peak,
                           controller_db_reopens=reopens,events=events,
                           process_events=transport.events,all_bots_drained=True,
                           guid_sidecars={i:q.sha(transport.roles[i]/'Players/Player0.plr.guid') for i in transport.identities})
-            if peak!=config['max_bots']:raise RuntimeError('did not reach requested simultaneous bots')
-            for ident in transport.identities:
-                if not any(e['id']==ident and e['event']=='joined' for e in events):
-                    raise RuntimeError('identity never joined')
-            result['telemetry']=telemetry_windows(transport,events)
+            if getattr(args,'join_cancel_probe',False):
+                if not joining_cancel_evidence(events,peak):raise RuntimeError('probe missed JOINING cancellation window')
+                result['status']='PASS_LIMITED_JOINING_CANCEL'
+                result['telemetry_scope']='NOT_MEASURED_NO_JOURNAL_PLAYING_INTERVAL'
+            else:
+                if peak!=config['max_bots']:raise RuntimeError('did not reach requested simultaneous bots')
+                for ident in transport.identities:
+                    if not any(e['id']==ident and e['event']=='joined' for e in events):
+                        raise RuntimeError('identity never joined')
+                result['telemetry']=telemetry_windows(transport,events)
             runtime_log_gate(transport)
             cgend=cgstat()
             result['new_throttled_periods']=cgend['nr_throttled']-cgstart['nr_throttled']
@@ -535,23 +684,51 @@ def run_inner(args, config, root):
             save();p.close()
 
 
+def create_private_runtime_root(root):
+    # Explicit chmod: root's umask may otherwise remove the traverse bits
+    # needed by Wine clients running unprivileged in our private namespace.
+    root.mkdir(mode=0o711)
+    root.chmod(0o711)
+    if (root.stat().st_mode & 0o777) != 0o711:
+        raise RuntimeError('private runtime directory traverse permissions not established')
+    return root
+
 def main():
+    global PUBLIC, MANIFEST, DLL
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--config',type=Path,required=True)
     parser.add_argument('--runtime',type=Path,required=True)
     parser.add_argument('--duration',type=int,required=True)
     parser.add_argument('--execute',action='store_true')
+    parser.add_argument('--cecil-p1',action='store_true',help='activate experimental P1 policy ONLY in isolated native tests')
     parser.add_argument('--color-probe',action='store_true',help='private native markup probe only; production colors stay gated')
     parser.add_argument('--inner',action='store_true',help=argparse.SUPPRESS)
     parser.add_argument('--port',type=int,default=27080)
     parser.add_argument('--display',default=':137')
+    parser.add_argument('--preset',choices=('existing','redstation'),default='existing')
+    parser.add_argument('--join-cancel-probe',action='store_true',help='private one-client admin cancellation DURING join, not combat acceptance')
+    parser.add_argument('--crash-one-probe',action='store_true',help='one explicitly owned private client fault after full population; require real rejoin')
+    parser.add_argument('--build-manifest',type=Path,help='explicit new private candidate; never deploys')
+    public_mode=parser.add_mutually_exclusive_group()
+    public_mode.add_argument('--public-result',type=Path,help='exact current public generation for read-only guards')
+    public_mode.add_argument('--offline-public-marker',type=Path,help='explicit user shutdown marker; continuously require public processes/ports absent')
     args=parser.parse_args()
     config=validate_config(json.loads(args.config.read_text()))
     if len(config['servers'])!=1 or not 1<=config['max_bots']<=8 or len(config['identities'])!=config['max_bots']:
         raise ValueError('one isolated server and 1..8 identities required')
     if not 10<=args.duration<=14400:raise ValueError('duration must be 10..14400 seconds')
+    if args.join_cancel_probe and (config['max_bots']!=1 or not 10<=args.duration<=15):
+        raise ValueError('join cancellation probe requires one identity and 10..15 seconds')
+    if args.crash_one_probe and (args.join_cancel_probe or args.duration<300):
+        raise ValueError('crash/rejoin probe requires >=300 seconds and excludes join cancellation mode')
     if not args.execute:
         print(json.dumps(dict(status='DRY_RUN_NO_RUNTIME',identities=len(config['identities']))));return
+    if args.build_manifest:
+        MANIFEST=args.build_manifest.resolve()
+        _,DLL=select_artifact(MANIFEST)
+    if args.public_result:
+        PUBLIC=args.public_result.resolve()
+        q.ROSTER=[clean_name(n) for n in json.loads(PUBLIC.read_text())['expected_names']]
     validate_native_config(config)
     root=args.runtime.resolve()
     if (os.uname().nodename!='ubuntu-4gb-nbg1-2' or os.geteuid()!=0 or
@@ -566,30 +743,17 @@ def main():
                                  os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW|os.O_CLOEXEC,0o600),'w')
     fcntl.flock(global_lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
     if root.exists():raise RuntimeError('fresh runtime directory required; never overwrite/adopt unknown run')
-    before=json.loads(PUBLIC.read_text())
-    public_records={role:process_record(info['pid']) for role,info in before['processes'].items()}
-    for role,record in public_records.items():
-        if record['cwd']!=before['processes'][role]['cwd'] or record['start_ticks']!=before['processes'][role]['start_ticks']:
-            raise RuntimeError('public process baseline changed')
-    health=json.loads(Path('/srv/tse-public-health-20261021/health.json').read_text())
-    if (health.get('owned_sync_bad')!=0 or not health.get('query_fresh') or
-        not health.get('processes_verified') or not health.get('telemetry_fresh')):
-        raise RuntimeError('public fleet unhealthy before test')
-    expected={n.casefold() for n in q.ROSTER}
-    def public_guard():
-        if any(probe_process(r)!='LIVE' for r in public_records.values()):raise RuntimeError('public process changed')
-        names=player_names(q.query(25601))
-        if not expected.issubset({clean_name(n).casefold() for n in names}):raise RuntimeError('public bot disappeared')
-        live=json.loads(Path('/srv/tse-public-health-20261021/health.json').read_text())
-        if (live.get('owned_sync_bad')!=0 or not live.get('telemetry_fresh') or
-            not live.get('query_fresh') or not live.get('processes_verified')):
-            raise RuntimeError('public telemetry/sync guard')
+    if args.offline_public_marker:
+        marker_sha=q.sha(args.offline_public_marker)
+        def public_guard():offline_public_guard(args.offline_public_marker,marker_sha)
+    else:
+        public_guard=live_public_guard(PUBLIC)
     public_guard()
     cpu_before=host_cpu();time.sleep(2);busy=busy_between(cpu_before,host_cpu())
     mem,disk=resources()
     if not resource_gate(available_mib=mem,disk_free_gib=disk,busy_percent=busy):
         raise RuntimeError('insufficient host reserve before qualification')
-    root.mkdir(mode=0o755)
+    create_private_runtime_root(root)
     (root/'source-sha256.json').write_text(json.dumps({name:q.sha(Path(__file__).parent/name)
         for name in ('qualify_bot_sessions.py','bot_session_executor.py','bot_session_runtime.py',
                      'bot_sessions.py','qualify_integrated_wine.py')},indent=2))
@@ -616,7 +780,10 @@ def main():
             child.wait(timeout=180)
             public_guard()
             (root/'host-guard.json').write_text(json.dumps(dict(status='STOPPED_GUARD' if error else 'FINISHED',
-                error=error,child_exitcode=child.returncode,samples=samples,public_processes_unchanged=True),indent=2))
+                error=error,child_exitcode=child.returncode,samples=samples,
+                public_guard_mode='USER_DISABLED' if args.offline_public_marker else 'LIVE_PUBLIC',
+                public_disabled=bool(args.offline_public_marker),
+                public_processes_unchanged=not bool(args.offline_public_marker)),indent=2))
         report=json.loads((root/'result.json').read_text())
         if error or child.returncode or not report['status'].startswith('PASS_'):
             raise RuntimeError(error or 'native child/cleanup failed; see private result.json/native.log')

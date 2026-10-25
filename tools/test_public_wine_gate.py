@@ -1,9 +1,16 @@
 """Pure validation only: no games, mounts, sockets or deployment in these tests."""
-import copy,unittest
+import copy,unittest,tempfile
+from pathlib import Path
 import qualify_integrated_wine as q
 def evidence():
     return {"status":"PASS_60MIN_WINE","bots":8,"human_ai":True,"elapsed_s":3600,"dll_sha256":"candidate","new_throttled_periods":0,"checks":{r:{"telemetry":{"verdict":"ACTIVE_OK"},"slots":{str(i):{"moved":True,"fired":True} for i in range(4)}} for r in ["botA","botB"]},"unmounts":[{"exitcode":0}]}
 class PublicGate(unittest.TestCase):
+    def test_explicit_user_shutdown_blocks_public_launch(self):
+        with tempfile.TemporaryDirectory() as d:
+            marker=Path(d)/'disabled.json'
+            q.assert_public_launch_allowed(marker)
+            marker.write_text('{"status":"DISABLED_BY_USER"}')
+            with self.assertRaises(RuntimeError):q.assert_public_launch_allowed(marker)
     def test_retail_script_avoids_unavailable_master_override(self):
         script=q.dedicated_script("existing;", "91.99.75.33",25600,True)
         self.assertNotIn("net_strMasterServerOverride",script)

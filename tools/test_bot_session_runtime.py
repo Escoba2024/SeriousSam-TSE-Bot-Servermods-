@@ -26,6 +26,33 @@ def fixture():
 
 
 class ProfileAdapter(unittest.TestCase):
+    def test_plain_native_identity_has_22_visible_character_limit(self):
+        base,_=fixture();who=dict(identity(),nickname='A'*22)
+        result=r.profile_bytes(base,who)
+        self.assertEqual(struct.unpack_from('<I',result,4)[0],22)
+        self.assertEqual(result[8:30],b'A'*22)
+        self.assertIn('bot_iProfile0=3;',r.startup_script(who))
+        for length in (23,24,25,300):
+            too_long=dict(who,nickname='A'*length)
+            with self.subTest(length=length),self.assertRaises(ValueError):
+                r.profile_bytes(base,too_long)
+            with self.subTest(length=length),self.assertRaises(ValueError):
+                r.startup_script(too_long)
+    def test_22_character_identity_with_native_color_fits_32_bytes(self):
+        base,_=fixture();who=dict(identity(),nickname='A'*22)
+        result=r.profile_bytes(base,who,colors_enabled=True)
+        self.assertEqual(struct.unpack_from('<I',result,4)[0],32)
+        self.assertEqual(result[8:40],b'^c80D8FF'+b'A'*22+b'^r')
+    def test_weighted_native_style_reaches_profile_only_when_explicitly_enabled(self):
+        base,_=fixture();who=dict(identity(),native_name='^b^i^c80D8FFMika^I^B^r')
+        plain=r.profile_bytes(base,who)
+        self.assertEqual(plain[8:12], b'Mika')
+        styled=r.profile_bytes(base,who,colors_enabled=True)
+        count=struct.unpack_from('<I',styled,4)[0]
+        self.assertEqual(styled[8:8+count], b'^b^i^c80D8FFMika^I^B^r')
+        self.assertEqual(styled[12+count:28+count],r.guid_bytes(who))
+        with self.assertRaises(ValueError):
+            r.profile_bytes(base,dict(who,native_name='^bSomeoneElse^B^r'),colors_enabled=True)
     def test_qualified_color_configuration_encodes_native_profile(self):
         base,_=fixture();who=identity()
         value=r.profile_bytes(base,who,colors_enabled=True)

@@ -92,6 +92,22 @@ class ExecutorContract(unittest.TestCase):
         self.assertTrue(all(len([r for r in events if r['event']=='leave_requested' and r['at']==t])<=1
                             for t in range(100,170)))
 
+    def test_admin_drain_waits_for_native_join_before_consuming_close_claim(self):
+        self.tick(100)
+        ident=self.transport.launches[0][0]
+        self.transport.names.clear()  # process is alive, still loading the map
+        self.p.set_enabled('test',False,101)
+        self.tick(101)
+        self.assertEqual(self.transport.leaves, [])
+        self.assertEqual(list(self.p.db.execute('SELECT * FROM runtime_leave_claim')), [])
+        self.assertEqual(self.p.states()[ident]['status'], 'LEAVING')
+        self.transport.names.add(ident)  # native join + query now proved by transport
+        self.tick(102)
+        self.assertEqual(self.transport.leaves, [(ident,1)])
+        self.transport.names.clear()
+        self.tick(103)
+        self.assertEqual(self.p.states()[ident]['status'], 'COOLDOWN')
+
     def test_crash_ghost_outlives_session_deadline_without_becoming_planned_leave(self):
         self.tick(100);self.tick(101)
         ident=self.transport.launches[0][0]

@@ -37,6 +37,7 @@ typedef int BOOL;
 
 static void BotLog(const char* fmt, ...) { (void)fmt; }
 static FLOAT Clamp(FLOAT v, FLOAT lo, FLOAT hi) { return v < lo ? lo : (v > hi ? hi : v); }
+static FLOAT bot_fStrafeScale=0.5f;
 
 // The engine's FLOAT3D uses 1-based component access: (1)=x, (2)=y, (3)=z.
 struct FLOAT3D {
@@ -114,6 +115,7 @@ static void HumanBlock(CPlayer* player, void* pgame, BOOL deathmatch, INDEX iLP,
   FLOAT humanStrafe = 0.0f;
   FLOAT humanScanYaw = 0.0f;
   FLOAT humanTargetDistance = 0.0f;
+  FLOAT humanEscapeForward = -1.0f;
   (void)testAimReady;
 
 #include "block.inc"
@@ -123,6 +125,7 @@ static void HumanBlock(CPlayer* player, void* pgame, BOOL deathmatch, INDEX iLP,
   outFire = humanFire;
   (void)humanScanYaw;
   (void)humanTargetDistance;
+  (void)humanEscapeForward;
   (void)visible;
 }
 

@@ -16,10 +16,8 @@
 //  - it produces *intent* only: delta angles, forward/strafe factor, fire bit,
 //    weapon number. The caller turns that into a CPlayerAction and leaves the
 //    existing network/action pipeline untouched.
-//  - navigation is not solved here: without a visible target the bot turns in
-//    place and scans, exactly like the qualified build does today. The
-//    waypoint graph and ObstacleRecovery from botcore_ai.h / bot_navigation.h
-//    remain the movement-recovery layer underneath.
+//  - optional route memory retains own travel and damage warnings. Unknown
+//    ground remains unknown; qualified obstacle recovery still handles walls.
 
 #ifndef BOTCORE_BOT_HUMAN_H
 #define BOTCORE_BOT_HUMAN_H
@@ -30,6 +28,7 @@
 #include "bot_loadout.h"
 #include "bot_perception.h"
 #include "bot_profile.h"
+#include "bot_route.h"
 
 namespace botcore {
 
@@ -42,6 +41,7 @@ struct WorldView {
   uint32_t usable_weapons = 0;  // after ammo filtering
   int current_weapon = 1;
   bool deathmatch = true;
+  double strafe_scale = 1.0; // actual adapter scaling, used only for movement safety
 };
 
 struct BotCommand {
@@ -56,6 +56,8 @@ struct BotCommand {
   double aim_error_deg = 90.0;
   double preferred_range_m = 12.0;
   double distance_m = 0.0;
+  bool escape = false;         // bounded retreat along own recent travel history
+  bool travel = false;         // explicit movement/turn hold for own route memory
 };
 
 inline int IntMax(int a, int b) { return a > b ? a : b; }
@@ -65,13 +67,16 @@ class HumanBotPolicy {
  public:
   HumanBotPolicy() { Configure(nullptr); }
 
-  void Configure(const BotProfile* profile) {
+  void Configure(const BotProfile* profile, bool exploratory_search=false,
+                 bool cecil_p1=false) {
     BotProfile fallback{};
     if (profile == nullptr) {
       BuildProfile(3, 0, 0x1234567u, "BOT-Default", &fallback);
       profile = &fallback;
     }
     profile_ = *profile;
+    exploratory_search_ = exploratory_search;
+    cecil_p1_ = cecil_p1;
     perception_.Configure(profile_.skill, profile_.seed ^ 0x5DEECE66u);
     aim_.Configure(profile_.skill, profile_.seed ^ 0x1B54u);
     weapons_.Configure(profile_.skill);
@@ -85,12 +90,23 @@ class HumanBotPolicy {
     target_ = -1;
     target_since_tick_ = 0;
     strafe_sign_ = (profile_.seed & 1u) ? 1.0 : -1.0;
+    movement_rng_ = Lcg(profile_.seed ^ 0x79B1u);
+    next_strafe_tick_ = 20 + static_cast<int>(movement_rng_.Next()%61u);
+    search_rng_ = Lcg(profile_.seed ^ 0xA4D3u);
+    search_turn_until_ = next_search_tick_ = 0;
+    search_sign_ = 1.0;
     los_queries_last_tick_ = 0;
     ray_budget_skips_ = 0;
     target_switches_ = 0;
     planned_tick_ = -1;
     was_alive_ = true;
+    dead_since_tick_ = -1;
+    self_health_fraction_ = 1.0;
+    for(int i=0;i<=kWeaponCount;++i) next_shot_tick_[i]=0;
     self_x_ = self_y_ = self_z_ = 0.0;
+    history_count_=history_next_=0; escape_until_=0; last_health_=0;
+    escape_active_=retreat_motion_allowed_=false;
+    route_.Configure(profile_.seed ^ 0x3A97u);
   }
 
   const BotProfile& profile() const { return profile_; }
@@ -104,6 +120,28 @@ class HumanBotPolicy {
   int target_switches() const { return target_switches_; }
 
   void BeginTick(const WorldView& w) {
+    retreat_motion_allowed_=false;
+    const bool saw_threat=target_>=0 && perception_.Visible(target_);
+    if (exploratory_search_) route_.Observe(w.tick,w.pose.x,w.pose.y,w.pose.z,w.alive,w.health,saw_threat,w.max_health);
+    if (w.alive && std::isfinite(w.health) && std::isfinite(w.pose.x) && std::isfinite(w.pose.z)) {
+      if (history_count_ && DistanceTo(w.pose.x,w.pose.y,w.pose.z)>15.0) history_count_=history_next_=0;
+      if (!escape_active_ && !saw_threat && was_alive_ && last_health_-w.health>=25.0 && history_count_>=2) {
+        const AimPose& old=history_[history_count_==21?history_next_:0];
+        const double dx=old.x-w.pose.x,dz=old.z-w.pose.z;
+        if (dx*dx+dz*dz>2.25) {
+          escape_x_=old.x;escape_z_=old.z;escape_until_=w.tick+100;escape_active_=true;
+        }
+      }
+      if (w.tick%5==0) {
+        history_[history_next_]=w.pose;history_next_=(history_next_+1)%21;
+        if (history_count_<21)++history_count_;
+      }
+      last_health_=w.health;
+    }
+    if(was_alive_ && !w.alive) dead_since_tick_=w.tick;
+    if(w.alive) dead_since_tick_=-1;
+    self_health_fraction_=w.max_health>0 && std::isfinite(w.health) ?
+      std::fmax(0.0,std::fmin(1.0,w.health/w.max_health)) : 1.0;
     self_x_ = w.pose.x;
     self_y_ = w.pose.y;
     self_z_ = w.pose.z;
@@ -115,6 +153,7 @@ class HumanBotPolicy {
       perception_.Reset();
       aim_.Reset();
       target_ = -1;
+      escape_active_=false;history_count_=history_next_=0;last_health_=0;
     }
     was_alive_ = w.alive;
   }
@@ -184,6 +223,24 @@ class HumanBotPolicy {
       return cmd;
     }
 
+    if (escape_active_) {
+      const double dx=escape_x_-w.pose.x,dz=escape_z_-w.pose.z;
+      if (w.tick>=escape_until_ || dx*dx+dz*dz<2.25) escape_active_=false;
+      else {
+        // Only own observations: no hidden damage-source coordinates or map
+        // content reads. Face the previous path before moving; never fire here.
+        const double wanted=std::atan2(-dx,-dz)*kRadToDeg;
+        const double error=AimController::WrapDeg(wanted-w.pose.yaw_deg);
+        cmd.escape=true;
+        const double limit=profile_.skill.turn_rate_deg_s*dt;
+        cmd.yaw_delta_deg=error < -limit ? -limit : (error > limit ? limit : error);
+        cmd.forward=std::fabs(error)<35.0?0.9:0.0;
+        retreat_motion_allowed_=cmd.forward>0;
+        aim_.Step(w.pose,AimPoint(),dt);
+        return cmd;
+      }
+    }
+
     const int chosen = ChooseTarget(w.tick);
     if (chosen != target_) {
       if (target_ >= 0 || chosen >= 0) ++target_switches_;
@@ -193,13 +250,31 @@ class HumanBotPolicy {
     cmd.target = target_;
 
     if (target_ < 0) {
-      // Nothing to fight: scan at the profile's search rate, stand still.
+      // Bounded visual sweeps separated by straight travel in the adapter.
+      // Constant yaw plus forward input traps a searching bot in small circles.
       aim_.Step(w.pose, AimPoint(), dt);
-      cmd.yaw_delta_deg = profile_.skill.search_rate_deg_s * dt;
+      if (w.tick >= next_search_tick_) {
+        search_turn_until_ = w.tick + 10 + static_cast<int>(search_rng_.Next()%21u);
+        next_search_tick_ = search_turn_until_ + 40 + static_cast<int>(search_rng_.Next()%61u);
+        search_sign_ = (search_rng_.Next()&1u) ? 1.0 : -1.0;
+      }
+      cmd.yaw_delta_deg = w.tick < search_turn_until_
+          ? search_sign_ * profile_.skill.search_rate_deg_s * dt : 0.0;
+      if (!exploratory_search_) cmd.yaw_delta_deg = profile_.skill.search_rate_deg_s * dt;
       cmd.fire = false;
       cmd.forward = 0.0;
       cmd.strafe = 0.0;
       cmd.weapon = weapons_.Update(BuildLoadout(w, false), w.tick);
+      if (exploratory_search_) {
+        cmd.travel=true;
+        // The bounded retreat has ended. An injured bot scans/defends in place
+        // until observed healing or a new life; elapsed time is no safety proof.
+        if (!route_.InjuryHold()) {
+          const TravelIntent travel=route_.Travel(w.tick,w.pose.x,w.pose.y,w.pose.z,
+                                                  w.pose.yaw_deg,profile_.skill.turn_rate_deg_s*dt);
+          cmd.forward=travel.forward;cmd.yaw_delta_deg=travel.yaw_delta_deg;
+        }
+      }
       return cmd;
     }
 
@@ -232,7 +307,8 @@ class HumanBotPolicy {
     if (visible) {
       const WeaponProfile& wp = WeaponAt(cmd.weapon);
       if (wp.proj_speed > 0.0) {
-        const double lead_time = distance / wp.proj_speed;
+        const double lead_time = InterceptTime(dx, dy, dz, tr->vx, tr->vy, tr->vz,
+                                                wp.proj_speed);
         const double g = profile_.skill.prediction_gain;
         aim_point.x += tr->vx * lead_time * g;
         aim_point.y += tr->vy * lead_time * g;
@@ -244,14 +320,56 @@ class HumanBotPolicy {
     cmd.yaw_delta_deg = aim.yaw_delta_deg;
     cmd.pitch_delta_deg = aim.pitch_delta_deg;
     cmd.aim_error_deg = aim.residual_error_deg;
-    cmd.fire = aim.fire_allowed && visible;
+    const WeaponProfile& firing_weapon = WeaponAt(cmd.weapon);
+    const bool blast_safe = firing_weapon.self_blast_m <= 0.0 ||
+                            distance > firing_weapon.self_blast_m + 1.0;
+    cmd.fire = aim.fire_allowed && visible && blast_safe;
+    if(cecil_p1_ && cmd.fire && cmd.weapon>=1 && cmd.weapon<=kWeaponCount) {
+      const double period=firing_weapon.shot_period_s;
+      if(period>0.0){
+        const int delay=static_cast<int>(period*kProfileTickHz+0.5);
+        if(w.tick<next_shot_tick_[cmd.weapon]) cmd.fire=false;
+        else next_shot_tick_[cmd.weapon]=w.tick+(delay>0?delay:1);
+      }
+    }
 
     MoveIntent(w, visible, distance, cmd);
+    const double bearing=std::atan2(-dx,-dz)*kRadToDeg;
+    if (cmd.forward>0 && std::fabs(AimController::WrapDeg(bearing-w.pose.yaw_deg))>45) {
+      cmd.forward=0;cmd.travel=true; // turn toward the known target before chasing
+    }
+    if (exploratory_search_ && (route_.InjuryHold() ||
+        !route_.SafeMotion(w.pose.x,w.pose.y,w.pose.z,w.pose.yaw_deg,cmd.forward,cmd.strafe*w.strafe_scale))) {
+      cmd.forward=cmd.strafe=0;cmd.travel=true;
+    }
     return cmd;
+  }
+
+  // Native Fire press/release edge only after a deterministic death delay.
+  // With the feature OFF retain the qualified 4-tick pulse.
+  bool ShouldRespawnPulse(int tick) const {
+    if(dead_since_tick_<0) return false;
+    if(!cecil_p1_) return (tick&4)==0;
+    const int delay=static_cast<int>(profile_.skill.respawn_delay_s*kProfileTickHz+0.5);
+    const int elapsed=tick-dead_since_tick_-delay;
+    return elapsed>=0 && ((elapsed&4)==0);
   }
 
   // Called by the integration when the bot's own health drops (see Perception).
   void NotifyDamage(double before, double after) { perception_.NotifyDamage(before, after); }
+  void NotifyNavigation(bool active) { route_.NotifyRecovery(active); }
+
+  // Adapter contract: call after EVERY movement/recovery override, with the
+  // same own eye position as WorldView, resultant movement yaw and both final
+  // normalized axes (strafe already scaled). On false, zero both translation
+  // axes; keep perception, aim and fire. This does not assert unknown ground safe.
+  bool AllowFinalMovement(double x,double y,double z,double yaw_deg,
+                          double forward,double scaled_strafe) const {
+    if (!exploratory_search_) return true;
+    if (!route_.SafeMotion(x,y,z,yaw_deg,forward,scaled_strafe)) return false;
+    return !route_.InjuryHold() || retreat_motion_allowed_ ||
+           std::fabs(forward)+std::fabs(scaled_strafe)<1e-6;
+  }
 
   double PreferredRange(int weapon) const {
     const WeaponProfile& wp = WeaponAt(weapon);
@@ -285,6 +403,21 @@ class HumanBotPolicy {
     return li;
   }
 
+  double TargetUtility(const TrackState& t, bool sticky) const {
+    double score=1.0/(DistanceTo(t.x,t.y,t.z)+1.0);
+    if(cecil_p1_){
+      const double hp=std::isfinite(t.health)?
+        std::fmax(0.0,std::fmin(100.0,t.health)):100.0;
+      const bool threat=t.visible_now && t.facing_known &&
+        AimsAtMe(self_x_,self_z_,t.x,t.z,t.yaw_deg,25.0);
+      score*=1.0+profile_.skill.lowhp_weight*(1.0-hp/100.0)+
+        (threat?profile_.skill.threat_weight*
+        (1.0+0.5*(1.0-self_health_fraction_)*profile_.personality.caution):0.0);
+    }
+    if(sticky) score*=1.35;
+    return score;
+  }
+
   int ChooseTarget(int tick) {
     int best = -1;
     double best_score = -1.0;
@@ -292,9 +425,7 @@ class HumanBotPolicy {
       if (!perception_.Selectable(slot)) continue;
       const TrackState* t = perception_.Track(slot);
       if (t == nullptr) continue;
-      const double dist = DistanceTo(t->x, t->y, t->z);
-      double score = 1.0 / (dist + 1.0);
-      if (slot == target_) score *= 1.35;  // stickiness
+      const double score=TargetUtility(*t,slot==target_);
       if (score > best_score) {
         best_score = score;
         best = slot;
@@ -310,10 +441,11 @@ class HumanBotPolicy {
       if (best < 0 || best == target_) return target_;
       const TrackState* bt = perception_.Track(best);
       if (bt == nullptr) return target_;
-      // Only switch for a clearly closer opponent.
-      if (DistanceTo(bt->x, bt->y, bt->z) * 1.4 < DistanceTo(cur->x, cur->y, cur->z)) {
-        return best;
-      }
+      // Threat-aware hysteresis; old distance rule preserved when disabled.
+      if(cecil_p1_) {
+        if(best_score>TargetUtility(*cur,true)*1.10) return best;
+      } else if(DistanceTo(bt->x, bt->y, bt->z)*1.4 <
+                DistanceTo(cur->x, cur->y, cur->z)) return best;
       return target_;
     }
     if (best >= 0) return best;
@@ -328,6 +460,10 @@ class HumanBotPolicy {
   }
 
   void MoveIntent(const WorldView& w, bool visible, double distance, BotCommand& cmd) {
+    if (w.tick >= next_strafe_tick_) {
+      strafe_sign_ = -strafe_sign_;
+      next_strafe_tick_ = w.tick + 20 + static_cast<int>(movement_rng_.Next()%61u);
+    }
     const double health_frac = w.max_health > 0.0 ? w.health / w.max_health : 1.0;
     const double aggression = EffectiveAggression(profile_, w.tick);
     const double preferred = PreferredRange(cmd.weapon);
@@ -352,9 +488,6 @@ class HumanBotPolicy {
       cmd.strafe = ClampUnit(strafe_sign_ * profile_.personality.strafe_bias *
                              (0.5 + 0.5 * std::fabs(std::sin(0.9 * t))));
     }
-    // Deterministic direction changes: nobody slides sideways forever.
-    const int flip_ticks = 60 + static_cast<int>(profile_.seed % 61u);
-    if ((w.tick % flip_ticks) == 0) strafe_sign_ = -strafe_sign_;
   }
 
   double DistanceTo(double x, double y, double z) const {
@@ -365,12 +498,23 @@ class HumanBotPolicy {
   }
 
   BotProfile profile_{};
+  RouteMemory route_;
+  bool exploratory_search_ = false; // native B2 exposed excessive world deaths
+  bool cecil_p1_ = false;
+  int dead_since_tick_ = -1;
+  int next_shot_tick_[kWeaponCount+1] = {};
+  double self_health_fraction_ = 1.0;
   Perception perception_;
   AimController aim_;
   WeaponSelector weapons_;
   int target_ = -1;
   int target_since_tick_ = 0;
   double strafe_sign_ = 1.0;
+  Lcg movement_rng_{1u};
+  int next_strafe_tick_ = 0;
+  Lcg search_rng_{1u};
+  int search_turn_until_ = 0, next_search_tick_ = 0;
+  double search_sign_ = 1.0;
   int los_queries_last_tick_ = 0;
   int ray_budget_skips_ = 0;
   int target_switches_ = 0;
@@ -380,6 +524,11 @@ class HumanBotPolicy {
   double self_x_ = 0.0;
   double self_y_ = 0.0;
   double self_z_ = 0.0;
+  AimPose history_[21];
+  int history_count_=0,history_next_=0,escape_until_=0;
+  double escape_x_=0,escape_z_=0,last_health_=0;
+  bool escape_active_=false;
+  bool retreat_motion_allowed_=false;
 };
 
 }  // namespace botcore
