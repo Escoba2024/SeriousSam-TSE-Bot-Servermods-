@@ -4,7 +4,7 @@
   Session-Branch; Aufgaben-Präfix `arena/20261025-combat-improvements-` wurde
   wegen fixer Session-Branchbindung nicht verwendet – Abweichung dokumentiert).
 - **Basis:** `main` @ `ab0c740`. **Commits:** `4c770a0` (+ dieser Handoff-Commit).
-- **PR:** siehe GitHub (eigener PR aus obigem Branch, kein Eingriff in #57/#62, kein Merge).
+- **PR:** #66 https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/66 (eigener PR, kein Eingriff in #57/#62, kein Merge).
 - **Schreibbereich eingehalten:** ausschließlich
   `poc/research/behavior-improvements/**` + `docs/research/behavior-improvements/**`.
   botcore u. a. Geschützte nur gelesen/out-of-tree gebaut.
