@@ -23,3 +23,11 @@ The correct follow-up is an isolated player-join test using original 1.07 client
 - No current live game processes/listening port `25600/25601` at inspection.
 - `ser_strMOTD`, `cmd_cmdOnTick`, `cmd_tmTick` found in original Retail engine symbols; `Say(CTString)` found in game SDK. However `user INDEX` declaration and chat rendering/timing are **not yet verified in an actual 1.07 game process**.
 - Existing public 8-bot attempt on 25 October returned `RuntimeError: server runtime failure SYNCBAD` in its launcher log; its report is not a green public-acceptance certificate. Do not start an eight-bot public fleet without a safe acceptance gate.
+
+### Second native parser finding
+
+The corrected existing-variable guard launched a private retail server and GameSpy session under `ssam.ai | Red Station | Human Bots`, but its OnTick parser printed `<command>(1): Type mismatch` on every game tick. The test was interrupted and cleaned up; no public update occurred. Third candidate uses explicit `(FLOAT)` / `(INDEX)` casts for strict Retail-1.07 shell typechecking. Native retest remains required.
+
+### Third native 1.07 startup parser check — partial pass
+
+A third private overlay on 27054/27055 loaded the corrected type casts. The original unmodified DedicatedServer.exe reported `Starting session: 'ssam.ai | Red Station | Human Bots'` and loaded original RedStation.wld. Its `Dedicated_BotTest.log` had **no** `Type mismatch`, `<command>(1)` parser failure or `Only external declarations` during observed startup. After sampling the console the private run was intentionally SIGINT-interrupted; the runner's cleanup returned and no TSE test processes / ports 27054–27055 persisted. **Not equivalent to proving a successful 300-second announcement**: the native test was short and did not complete its observer population gate, and MOTD visibility in an actual player HUD was not captured. The launch contains pre-existing unrelated errors for `sam_strTechTestLevel` and `net_strMasterServerOverride`; these also occur in the prior unmodified configuration.
