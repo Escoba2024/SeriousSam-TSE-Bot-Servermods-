@@ -1,0 +1,60 @@
+test_action_time_query_revalidates_human_and_unknown (c1_audit_tests.ExistingSafetyTests.test_action_time_query_revalidates_human_and_unknown) ... ok
+test_controller_lock_rejects_second_owner (c1_audit_tests.ExistingSafetyTests.test_controller_lock_rejects_second_owner) ... ok
+test_owned_sync_incomplete_scan_oom_throttle_and_low_reserve_hold (c1_audit_tests.ExistingSafetyTests.test_owned_sync_incomplete_scan_oom_throttle_and_low_reserve_hold) ... ok
+test_resource_budget_boundaries_and_invalid_samples (c1_audit_tests.ExistingSafetyTests.test_resource_budget_boundaries_and_invalid_samples) ... ok
+test_reused_pidfd_is_closed_before_any_signal (c1_audit_tests.ExistingSafetyTests.test_reused_pidfd_is_closed_before_any_signal) ... ok
+test_unknown_stale_malformed_human_and_duplicate_query_hold (c1_audit_tests.ExistingSafetyTests.test_unknown_stale_malformed_human_and_duplicate_query_hold) ... ok
+test_archive_budget_includes_manifest_before_source_unlink (c1_audit_tests.RegressionTests.test_archive_budget_includes_manifest_before_source_unlink) ... FAIL
+test_hardlink_writer_prevents_source_unlink (c1_audit_tests.RegressionTests.test_hardlink_writer_prevents_source_unlink) ... FAIL
+test_partial_owned_sync_record_holds_until_newline (c1_audit_tests.RegressionTests.test_partial_owned_sync_record_holds_until_newline) ... FAIL
+test_state_is_loaded_after_controller_lock_acquisition (c1_audit_tests.RegressionTests.test_state_is_loaded_after_controller_lock_acquisition) ... FAIL
+test_unregistered_native_role_in_owned_cgroup_blocks_actions (c1_audit_tests.RegressionTests.test_unregistered_native_role_in_owned_cgroup_blocks_actions) ... FAIL
+
+======================================================================
+FAIL: test_archive_budget_includes_manifest_before_source_unlink (c1_audit_tests.RegressionTests.test_archive_budget_includes_manifest_before_source_unlink)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/tse-c1-reliability-20261025/poc/research/reliability-audit-20261025/test_reliability_audit.py", line 111, in test_archive_budget_includes_manifest_before_source_unlink
+    with self.assertRaises(RuntimeError, msg='manifest pushed archive over its declared budget'):
+AssertionError: RuntimeError not raised : manifest pushed archive over its declared budget
+
+======================================================================
+FAIL: test_hardlink_writer_prevents_source_unlink (c1_audit_tests.RegressionTests.test_hardlink_writer_prevents_source_unlink)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/tse-c1-reliability-20261025/poc/research/reliability-audit-20261025/test_reliability_audit.py", line 99, in test_hardlink_writer_prevents_source_unlink
+    with self.assertRaises(RuntimeError, msg='archive removed a file with an active alias writer'):
+AssertionError: RuntimeError not raised : archive removed a file with an active alias writer
+
+======================================================================
+FAIL: test_partial_owned_sync_record_holds_until_newline (c1_audit_tests.RegressionTests.test_partial_owned_sync_record_holds_until_newline)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/tse-c1-reliability-20261025/poc/research/reliability-audit-20261025/test_reliability_audit.py", line 120, in test_partial_owned_sync_record_holds_until_newline
+    self.assertFalse(status['complete'], 'unterminated sync record authorized a complete scan')
+AssertionError: True is not false : unterminated sync record authorized a complete scan
+
+======================================================================
+FAIL: test_state_is_loaded_after_controller_lock_acquisition (c1_audit_tests.RegressionTests.test_state_is_loaded_after_controller_lock_acquisition)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/tse-c1-reliability-20261025/poc/research/reliability-audit-20261025/test_reliability_audit.py", line 64, in test_state_is_loaded_after_controller_lock_acquisition
+    self.assertEqual(obj.r['generation'], 'new', 'controller consumed stale pre-lock state')
+AssertionError: 'old' != 'new'
+- old
++ new
+ : controller consumed stale pre-lock state
+
+======================================================================
+FAIL: test_unregistered_native_role_in_owned_cgroup_blocks_actions (c1_audit_tests.RegressionTests.test_unregistered_native_role_in_owned_cgroup_blocks_actions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/tse-c1-reliability-20261025/poc/research/reliability-audit-20261025/test_reliability_audit.py", line 86, in test_unregistered_native_role_in_owned_cgroup_blocks_actions
+    with self.assertRaises(RuntimeError, msg='unregistered native role was silently adopted'):
+AssertionError: RuntimeError not raised : unregistered native role was silently adopted
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.155s
+
+FAILED (failures=5)
+C1_RESULT_JSON={"errors": [], "failures": ["test_archive_budget_includes_manifest_before_source_unlink", "test_hardlink_writer_prevents_source_unlink", "test_partial_owned_sync_record_holds_until_newline", "test_state_is_loaded_after_controller_lock_acquisition", "test_unregistered_native_role_in_owned_cgroup_blocks_actions"], "passed": 6, "skipped": [], "tests": 11}
