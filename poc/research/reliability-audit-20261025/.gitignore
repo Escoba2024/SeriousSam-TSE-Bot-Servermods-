@@ -1,0 +1,4 @@
+.candidate/
+.scratch-*/
+.fixture-*/
+__pycache__/

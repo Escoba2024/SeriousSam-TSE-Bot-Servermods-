@@ -1,0 +1,142 @@
+test_action_starved (test_bot_telemetry.AnalyzeTests.test_action_starved) ... ok
+test_active_ok (test_bot_telemetry.AnalyzeTests.test_active_ok) ... ok
+test_disabled_by_config (test_bot_telemetry.AnalyzeTests.test_disabled_by_config) ... ok
+test_duration_caps_the_window (test_bot_telemetry.AnalyzeTests.test_duration_caps_the_window) ... ok
+test_entity_missing_ratio (test_bot_telemetry.AnalyzeTests.test_entity_missing_ratio) ... ok
+test_expectations_and_nullrender (test_bot_telemetry.AnalyzeTests.test_expectations_and_nullrender) ... ok
+test_game_off (test_bot_telemetry.AnalyzeTests.test_game_off) ... ok
+test_lock_stall_warning (test_bot_telemetry.AnalyzeTests.test_lock_stall_warning) ... ok
+test_missing_entity_is_reported_as_inactive (test_bot_telemetry.AnalyzeTests.test_missing_entity_is_reported_as_inactive) ... ok
+test_no_data (test_bot_telemetry.AnalyzeTests.test_no_data) ... ok
+test_no_local_players (test_bot_telemetry.AnalyzeTests.test_no_local_players) ... ok
+test_stalled_timer_is_not_confused_with_disabled (test_bot_telemetry.AnalyzeTests.test_stalled_timer_is_not_confused_with_disabled) ... ok
+test_warmup_skips_early_rows (test_bot_telemetry.AnalyzeTests.test_warmup_skips_early_rows) ... ok
+test_cli_active (test_bot_telemetry.CliTests.test_cli_active) ... ok
+test_cli_malformed_returns_usage (test_bot_telemetry.CliTests.test_cli_malformed_returns_usage) ... error: missing #columns header
+ok
+test_parses_manifest_and_rows (test_bot_telemetry.ParseTests.test_parses_manifest_and_rows) ... ok
+test_rejects_missing_header (test_bot_telemetry.ParseTests.test_rejects_missing_header) ... ok
+test_rejects_short_row (test_bot_telemetry.ParseTests.test_rejects_short_row) ... ok
+test_rejects_wrong_column_layout (test_bot_telemetry.ParseTests.test_rejects_wrong_column_layout) ... ok
+test_state_and_note_lines_are_kept (test_bot_telemetry.ParseTests.test_state_and_note_lines_are_kept) ... ok
+test_external_sync_alert_never_requests_restart (test_fleet_operations.HealthTests.test_external_sync_alert_never_requests_restart) ... ok
+test_foreign_port_and_mount_block (test_fleet_operations.HealthTests.test_foreign_port_and_mount_block) ... ok
+test_healthy (test_fleet_operations.HealthTests.test_healthy) ... ok
+test_human_hold (test_fleet_operations.HealthTests.test_human_hold) ... ok
+test_identity_pid_reuse_cwd_cgroup_each_blocks (test_fleet_operations.HealthTests.test_identity_pid_reuse_cwd_cgroup_each_blocks) ... ok
+test_lookalike_duplicate_names_cannot_mask_human (test_fleet_operations.HealthTests.test_lookalike_duplicate_names_cannot_mask_human) ... ok
+test_low_disk_and_stale_telemetry_block (test_fleet_operations.HealthTests.test_low_disk_and_stale_telemetry_block) ... ok
+test_missing_bot_is_recoverable_only_with_confirmed_ownership (test_fleet_operations.HealthTests.test_missing_bot_is_recoverable_only_with_confirmed_ownership) ... ok
+test_owned_sync_is_blocker (test_fleet_operations.HealthTests.test_owned_sync_is_blocker) ... ok
+test_stale_query_blocks (test_fleet_operations.HealthTests.test_stale_query_blocks) ... ok
+test_unknown_is_never_empty (test_fleet_operations.HealthTests.test_unknown_is_never_empty) ... ok
+test_process_identity_real_process (test_fleet_operations.ProcessTests.test_process_identity_real_process) ... ok
+test_telemetry_freshness_and_draw (test_fleet_operations.ProcessTests.test_telemetry_freshness_and_draw) ... ok
+test_udp_owner_real_socket (test_fleet_operations.ProcessTests.test_udp_owner_real_socket) ... ok
+test_archive_refuses_live_writer (test_fleet_operations.SupervisorTests.test_archive_refuses_live_writer) ... ok
+test_archive_restores_exact_bytes_and_budget_fail_closed (test_fleet_operations.SupervisorTests.test_archive_restores_exact_bytes_and_budget_fail_closed) ... ok
+test_attempt_budget_persisted_and_backoff (test_fleet_operations.SupervisorTests.test_attempt_budget_persisted_and_backoff) ... ok
+test_bounded_event_log (test_fleet_operations.SupervisorTests.test_bounded_event_log) ... ok
+test_config_refuses_public_paths_and_ports (test_fleet_operations.SupervisorTests.test_config_refuses_public_paths_and_ports) ... ok
+test_config_requires_pinned_build_and_absolute_template (test_fleet_operations.SupervisorTests.test_config_requires_pinned_build_and_absolute_template) ... ok
+test_exclusive_lock_no_double_controller (test_fleet_operations.SupervisorTests.test_exclusive_lock_no_double_controller) ... ok
+test_ghost_roster_wait_then_safe_full_recovery (test_fleet_operations.SupervisorTests.test_ghost_roster_wait_then_safe_full_recovery) ... ok
+test_log_threshold_has_guarded_maintenance_action (test_fleet_operations.SupervisorTests.test_log_threshold_has_guarded_maintenance_action) ... ok
+test_pidfd_wait_survives_exit_command_transition (test_fleet_operations.SupervisorTests.test_pidfd_wait_survives_exit_command_transition) ... ok
+test_private_master_guard_uses_only_own_query_port (test_fleet_operations.SupervisorTests.test_private_master_guard_uses_only_own_query_port) ... ok
+test_state_cannot_point_recovery_at_production_process (test_fleet_operations.SupervisorTests.test_state_cannot_point_recovery_at_production_process) ... ok
+test_cli_watch_and_expectations (test_gamespy_query.LiveLoopbackTests.test_cli_watch_and_expectations) ... {
+  "t": 1792955566.3860104,
+  "address": "127.0.0.1:33314",
+  "request": "\\status\\",
+  "summary": {
+    "hostname": "Alpha-Gaming",
+    "gametype": "Deathmatch",
+    "mapname": "Yodeller",
+    "numplayers": 3,
+    "maxplayers": 16,
+    "password": "0",
+    "players": [
+      "HetznerFleetA_1",
+      "HetznerFleetA_2",
+      "HetznerFleetB_1"
+    ],
+    "keys": [
+      "frags_0",
+      "frags_1",
+      "frags_2",
+      "gamename",
+      "gametype",
+      "gamever",
+      "hostname",
+      "hostport",
+      "mapname",
+      "maxplayers",
+      "numplayers",
+      "password",
+      "player_0",
+      "player_1",
+      "player_2"
+    ]
+  },
+  "problems": [
+    "numplayers=3, expected 9",
+    "player list has 3 entries, expected 9"
+  ],
+  "raw_keys": 15
+}
+gamespy_query: numplayers=3, expected 9
+gamespy_query: player list has 3 entries, expected 9
+ok
+test_query_roundtrip (test_gamespy_query.LiveLoopbackTests.test_query_roundtrip) ... ok
+test_timeout_is_failure (test_gamespy_query.LiveLoopbackTests.test_timeout_is_failure) ... gamespy_query: no answer from 127.0.0.1:56701 (timed out)
+ok
+test_bad_address (test_gamespy_query.ParseTests.test_bad_address) ... ok
+test_parse_and_names (test_gamespy_query.ParseTests.test_parse_and_names) ... ok
+test_summary_and_expectations (test_gamespy_query.ParseTests.test_summary_and_expectations) ... ok
+test_exact_local_slot_counts_preserve_tail (test_integrated_wine_preflight.PreflightTests.test_exact_local_slot_counts_preserve_tail) ... ok
+test_new_profile_guid_and_name_match_sidecar (test_integrated_wine_preflight.PreflightTests.test_new_profile_guid_and_name_match_sidecar) ... ok
+test_refuses_bad_shell_version (test_integrated_wine_preflight.PreflightTests.test_refuses_bad_shell_version) ... ok
+test_refuses_invalid_count_before_writing (test_integrated_wine_preflight.PreflightTests.test_refuses_invalid_count_before_writing) ... ok
+test_retail_server_provider_is_changed_only_in_private_client_copy (test_integrated_wine_preflight.PreflightTests.test_retail_server_provider_is_changed_only_in_private_client_copy) ... ok
+test_action_guard_rejects_duplicate_roster_mod_and_wrong_capacity (test_operations_completion.CompletionTests.test_action_guard_rejects_duplicate_roster_mod_and_wrong_capacity) ... ok
+test_changed_query_is_revalidated_before_recovery (test_operations_completion.CompletionTests.test_changed_query_is_revalidated_before_recovery) ... ok
+test_launch_resource_reserve_rejects_pressure_and_unknown_samples (test_operations_completion.CompletionTests.test_launch_resource_reserve_rejects_pressure_and_unknown_samples) ... ok
+test_live_runtime_holds_if_private_isolation_rule_is_lost (test_operations_completion.CompletionTests.test_live_runtime_holds_if_private_isolation_rule_is_lost) ... ok
+test_private_rules_block_nonloopback_ingress_without_public_ports (test_operations_completion.CompletionTests.test_private_rules_block_nonloopback_ingress_without_public_ports) ... ok
+test_second_stop_does_not_enter_unmounted_wine_prefixes (test_operations_completion.CompletionTests.test_second_stop_does_not_enter_unmounted_wine_prefixes) ... ok
+test_server_loss_does_not_bypass_oom_or_throttle_hold (test_operations_completion.CompletionTests.test_server_loss_does_not_bypass_oom_or_throttle_hold) ... ok
+test_server_loss_does_not_bypass_owned_sync_or_incomplete_scan (test_operations_completion.CompletionTests.test_server_loss_does_not_bypass_owned_sync_or_incomplete_scan) ... ok
+test_executable_identity_rejects_exited_child (test_operations_live_recovery.LiveRecoveryTests.test_executable_identity_rejects_exited_child) ... ok
+test_executable_identity_waits_through_preexec (test_operations_live_recovery.LiveRecoveryTests.test_executable_identity_waits_through_preexec) ... ok
+test_live_prefix_server_kill_error_is_preserved (test_operations_live_recovery.LiveRecoveryTests.test_live_prefix_server_kill_error_is_preserved) ... ok
+test_live_server_is_killed_then_waited_and_zombie_is_only_waited (test_operations_live_recovery.LiveRecoveryTests.test_live_server_is_killed_then_waited_and_zombie_is_only_waited) ... ok
+test_native_absent_server_wait_with_remaining_process (test_operations_live_recovery.LiveRecoveryTests.test_native_absent_server_wait_with_remaining_process) ... skipped 'C1 offline scope: no real Wine CLI'
+test_native_exec_transition_identity_is_live (test_operations_live_recovery.LiveRecoveryTests.test_native_exec_transition_identity_is_live) ... ok
+test_remaining_prefix_client_without_server_only_waits (test_operations_live_recovery.LiveRecoveryTests.test_remaining_prefix_client_without_server_only_waits) ... ok
+test_cgroup_throttle_and_oom_alerts_block_recovery (test_operations_review.ReviewTests.test_cgroup_throttle_and_oom_alerts_block_recovery) ... ok
+test_clock_rollback_fails_closed_for_retry_budget (test_operations_review.ReviewTests.test_clock_rollback_fails_closed_for_retry_budget) ... ok
+test_expected_local_count_must_match_not_just_be_nonzero (test_operations_review.ReviewTests.test_expected_local_count_must_match_not_just_be_nonzero) ... ok
+test_log_limit_range_is_validated (test_operations_review.ReviewTests.test_log_limit_range_is_validated) ... ok
+test_reader_handles_do_not_block_verified_archiving (test_operations_review.ReviewTests.test_reader_handles_do_not_block_verified_archiving) ... ok
+test_real_log_threshold_includes_wine_and_xvfb_outputs (test_operations_review.ReviewTests.test_real_log_threshold_includes_wine_and_xvfb_outputs) ... ok
+test_sync_scan_is_bounded_incremental_and_rotation_aware (test_operations_review.ReviewTests.test_sync_scan_is_bounded_incremental_and_rotation_aware) ... ok
+test_unknown_retail_window_blocks_display_teardown (test_operations_review.ReviewTests.test_unknown_retail_window_blocks_display_teardown) ... ok
+test_complete_same_artifact_evidence_is_required (test_public_wine_gate.PublicGate.test_complete_same_artifact_evidence_is_required) ... ok
+test_inactive_slot_or_failed_cleanup_is_rejected (test_public_wine_gate.PublicGate.test_inactive_slot_or_failed_cleanup_is_rejected) ... ok
+test_public_humans_are_allowed_but_all_bot_names_are_required (test_public_wine_gate.PublicGate.test_public_humans_are_allowed_but_all_bot_names_are_required) ... ok
+test_public_master_resolution_must_reach_the_selected_master (test_public_wine_gate.PublicGate.test_public_master_resolution_must_reach_the_selected_master) ... ok
+test_retail_script_avoids_unavailable_master_override (test_public_wine_gate.PublicGate.test_retail_script_avoids_unavailable_master_override) ... ok
+test_undeclared_runtime_settings_are_errors (test_public_wine_gate.PublicGate.test_undeclared_runtime_settings_are_errors) ... ok
+test_one_stationary_slot_is_rejected (test_reference_wine_activity.ReferenceActivity.test_one_stationary_slot_is_rejected) ... ok
+test_original_status_proves_rate_and_movement_without_invented_shots (test_reference_wine_activity.ReferenceActivity.test_original_status_proves_rate_and_movement_without_invented_shots) ... ok
+test_slow_timer_is_rejected (test_reference_wine_activity.ReferenceActivity.test_slow_timer_is_rejected) ... ok
+test_missing_process_is_not_signalled (test_runtime_process_identity.ProcessIdentity.test_missing_process_is_not_signalled) ... ok
+test_start_time_and_working_directory_must_both_match (test_runtime_process_identity.ProcessIdentity.test_start_time_and_working_directory_must_both_match) ... ok
+test_two_starts_in_same_second_are_distinct (test_wine_run_directory.RunDirectories.test_two_starts_in_same_second_are_distinct) ... ok
+
+----------------------------------------------------------------------
+Ran 92 tests in 3.911s
+
+OK (skipped=1)
+C1_RESULT_JSON={"errors": [], "failures": [], "passed": 91, "skipped": [{"reason": "C1 offline scope: no real Wine CLI", "test": "test_operations_live_recovery.LiveRecoveryTests.test_native_absent_server_wait_with_remaining_process"}], "tests": 92}

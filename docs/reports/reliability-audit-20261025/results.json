@@ -1,0 +1,53 @@
+{
+  "baseline": {
+    "tools/operations/fleet_health.py": "152d2b71865d0649f977016701267ed17a086eb15a506c4113173a28f45e1800",
+    "tools/operations/fleet_supervisor.py": "83d2bec6507d9de87fa7c42a97af69501f8f77b4608122a6f954dbfae20c1242"
+  },
+  "baseline_commit": "b5dafb8",
+  "candidate": {
+    "tools/operations/fleet_health.py": "ef99e37d4754c60ad3acf0eb484a529e56b80115c6734ba21252c68c1f4fd030",
+    "tools/operations/fleet_supervisor.py": "c0c1a99853f373ff052f33252ccab12f436537a3f96be85c1fccfbea62a3f87b"
+  },
+  "original_sources_unchanged": true,
+  "patch": "0001-close-controller-archive-and-sync-gaps.patch",
+  "patch_sha256": "9268f2a11bc4cd52589061af4094376a673d688cd9952278345b49e51ef31ba4",
+  "runs": {
+    "audit": {
+      "errors": [],
+      "exit_code": 0,
+      "failures": [],
+      "passed": 11,
+      "skipped": [],
+      "tests": 11
+    },
+    "inherited": {
+      "errors": [],
+      "exit_code": 0,
+      "failures": [],
+      "passed": 91,
+      "skipped": [
+        {
+          "reason": "C1 offline scope: no real Wine CLI",
+          "test": "test_operations_live_recovery.LiveRecoveryTests.test_native_absent_server_wait_with_remaining_process"
+        }
+      ],
+      "tests": 92
+    },
+    "red": {
+      "errors": [],
+      "exit_code": 1,
+      "failures": [
+        "test_archive_budget_includes_manifest_before_source_unlink",
+        "test_hardlink_writer_prevents_source_unlink",
+        "test_partial_owned_sync_record_holds_until_newline",
+        "test_state_is_loaded_after_controller_lock_acquisition",
+        "test_unregistered_native_role_in_owned_cgroup_blocks_actions"
+      ],
+      "passed": 6,
+      "skipped": [],
+      "tests": 11
+    }
+  },
+  "runtime": "NOT_RUN",
+  "scope": "offline imported-code regressions; no Retail qualification"
+}

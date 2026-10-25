@@ -1,0 +1,672 @@
+diff --git a/backend.ts b/backend.ts
+index f958d86..7546222 100644
+--- a/backend.ts
++++ b/backend.ts
+@@ -1,14 +1,14 @@
+ import fs from "node:fs/promises";
+ import dgram from "node:dgram";
+-import { execFileSync } from "node:child_process";
++import {verifyRuntime, classifyRoster, boundedTail, type RuntimeEvidence} from "./runtime.js";
+ import path from "node:path";
+ 
+ export type ServerDefinition = {
+  id:string; name:string; host:string; gamePort:number; queryPort:number;
+  publicAddress:string; logPath:string; healthPath:string;
+- runtimeResultPath:string; ownerAddress:string;
++ runtimeResultPath:string; runtimeIdentityPath?:string; ownerAddress:string;
+ };
+-export type Player = { slot:number; name:string; frags:number|null; ping:number|null; type:"bot"|"human" };
++export type Player = { slot:number; name:string; frags:number|null; ping:number|null; type:"bot"|"human"|"unknown"; rosterAssociation?:"owned_bot_roster"|"none" };
+ export type LogKind = "all"|"players"|"kills"|"sync"|"errors"|"admin";
+ 
+ const REGISTRY_PATH = process.env.ALPHA_SERVERS_CONFIG || path.join(process.cwd(),"servers.json");
+@@ -22,6 +22,7 @@ export async function getServers():Promise<ServerDefinition[]> {
+   if (!s || !safeServerId(s.id) || ids.has(s.id)) throw new Error("Invalid or duplicate server ID");
+   if (!["127.0.0.1","::1","localhost"].includes(s.host)) throw new Error("Query host must be loopback");
+   if (![s.queryPort,s.gamePort].every(p=>Number.isInteger(p) && p>=1 && p<=65535)) throw new Error("Invalid server port");
++  if (s.runtimeIdentityPath && !s.runtimeIdentityPath.startsWith("/srv/tse-")) throw new Error("Invalid identity source path");
+   if (!s.logPath.startsWith("/srv/tse-") || !s.healthPath.startsWith("/srv/tse-") ||
+       !s.runtimeResultPath.startsWith("/srv/tse-")) throw new Error("Invalid local source path");
+   ids.add(s.id);
+@@ -45,27 +46,44 @@ export function parseGameSpy(text:string):Record<string,string> {
+  }
+  return out;
+ }
+-export function extractPlayers(payload:Record<string,string>):Player[] {
++export function extractPlayers(payload:Record<string,string>, verifiedNames:string[]=[]):Player[] {
++ const associated=classifyRoster(payload,verifiedNames);
+  const slots=Object.keys(payload).filter(k=>/^player_\d+$/.test(k)).map(k=>Number(k.slice(7))).sort((a,b)=>a-b);
+  return slots.map(slot=>{
+   const name=payload["player_"+slot]??"";
+   const frag=payload["frags_"+slot], ping=payload["ping_"+slot];
+   return {slot,name,frags:frag!==undefined && /^-?\d+$/.test(frag)?Number(frag):null,
+    ping:ping!==undefined && /^\d+$/.test(ping)?Number(ping):null,
+-   type:name.startsWith("BOT-")?"bot" as const:"human" as const};
++   type:"unknown" as const,rosterAssociation:associated.includes(name)?"owned_bot_roster" as const:"none" as const};
+  });
+ }
+ export async function gameSpyQuery(server:ServerDefinition, command:"status"|"players"|"info"="status"):Promise<Record<string,string>> {
+  return await new Promise((resolve,reject)=>{
+   const sock=dgram.createSocket("udp4");
+-  let done=false;
++  let done=false;const packets=new Map<number,string>();let queryId:string|undefined;let last:number|undefined;
+   const finish=(error?:Error,response?:Record<string,string>)=>{
+    if(done)return;done=true; clearTimeout(timer);sock.close();
+    if(error)reject(error); else resolve(response??{});
+   };
+   const timer=setTimeout(()=>finish(new Error("GameSpy query timed out")),1800);
+   sock.on("error",e=>finish(e));
+-  sock.on("message",(payload)=>finish(undefined,parseGameSpy(payload.toString("latin1"))));
++  sock.on("message",(payload,peer)=>{
++   if(peer.port!==server.queryPort || peer.address!=="127.0.0.1")return;
++   const text=payload.toString("latin1");const id=/\\queryid\\(\d+)\.(\d+)(?:\\|$)/.exec(text);
++   if(!id)return;
++   const seq=Number(id[2]);if(seq<1 || seq>64 || (queryId!==undefined && queryId!==id[1]))return;
++   queryId=id[1];if(packets.has(seq) && packets.get(seq)!==text){finish(new Error("Conflicting GameSpy fragment"));return;}
++   packets.set(seq,text);if(text.includes("\\final\\"))last=seq;
++   if(last===undefined || packets.size!==last || Array.from({length:last},(_,i)=>i+1).some(i=>!packets.has(i)))return;
++   const fields:Record<string,string>={};
++   for(let i=1;i<=last;i++)for(const [key,value] of Object.entries(parseGameSpy(packets.get(i)!))){
++    if(key==="queryid" || key==="final")continue;
++    if(key in fields && fields[key]!==value){finish(new Error("Conflicting GameSpy field"));return;}fields[key]=value;
++   }
++   const count=Number(fields.numplayers);const slots=Object.keys(fields).filter(k=>/^player_\d+$/.test(k));
++   if(fields.numplayers!==undefined && (!Number.isInteger(count) || count<0 || count>64 || (command!=="info" && slots.length!==count)))return;
++   finish(undefined,fields);
++  });
+   sock.send(Buffer.from("\\"+command+"\\"),server.queryPort,server.host,(err)=>{if(err)finish(err);});
+  });
+ }
+@@ -82,7 +100,7 @@ export function parseVisits(log:string,ownerAddress:string) {
+   if(match){lastCrc=match[1]!;continue;}
+   if(!/ joined\s*$/.test(line)) continue;
+   const name=stripTseColors(line).replace(/\s+joined\s*$/,"").trim();
+-  if(!name || name.startsWith("BOT-") || lastCrc===ownerAddress || lastCrc==="127.0.0.1" ||
++  if(!name || lastCrc===ownerAddress || lastCrc==="127.0.0.1" ||
+      lastCrc==="Local machine" || lastCrc==="0.0.0.0" || !lastCrc) continue;
+   if(!/^\d{1,3}(?:\.\d{1,3}){3}$/.test(lastCrc))continue;
+   externalJoinEvents++;external.add(lastCrc);names.add(name);
+@@ -102,70 +120,63 @@ export function selectLogEvents(log:string,kind:LogKind,limit=50):string[] {
+  const matcher=matchers[kind]||matchers.all;
+  return log.split(/\r?\n/).filter(line=>matcher.test(line)).slice(-Math.max(1,Math.min(100,limit))).map(cleanLogLine);
+ }
+-async function readTail(file:string,limitBytes:number):Promise<{text:string;truncated:boolean}> {
+- const stat=await fs.stat(file);
+- const size=Math.min(stat.size,limitBytes),start=stat.size-size;
+- const handle=await fs.open(file,"r");
+- try {
+-  const buffer=Buffer.alloc(size); const {bytesRead}=await handle.read(buffer,0,size,start);
+-  const value=buffer.subarray(0,bytesRead).toString("utf8");
+-  const truncated=start>0;
+-  return {text:truncated?value.slice(Math.max(0,value.indexOf("\n")+1)):value,truncated};
+- } finally {await handle.close();}
+-}
+-async function uptimeFromRuntime(file:string):Promise<number|null> {
+- try {
+-  const result=JSON.parse(await fs.readFile(file,"utf8")) as {processes?:{server?:{pid?:number}}};
+-  const pid=result.processes?.server?.pid;
+-  if(!pid || !Number.isInteger(pid) || pid<2) return null;
+-  const cmd=await fs.readFile("/proc/"+pid+"/cmdline","utf8");
+-  if(!cmd.includes("DedicatedServer")) return null;
+-  const secs=Number(execFileSync("ps",["-p",String(pid),"-o","etimes="],{encoding:"utf8",timeout:1200}).trim());
+-  return Number.isFinite(secs)?secs:null;
+- } catch{return null;}
+-}
+-export async function getHealth(server:ServerDefinition):Promise<Record<string,unknown>> {
+- try {
+-  const h=JSON.parse(await fs.readFile(server.healthPath,"utf8")) as Record<string,unknown>;
+-  return {status:h.status??"unknown",alerts:Array.isArray(h.alerts)?h.alerts:[],
+-   players:h.players??null,expectedBots:h.expected_bots??null,ownedSyncBad:h.owned_sync_bad??null,
+-   externalSyncBad:h.external_sync_bad??null, diskFreeBytes:h.disk_free_bytes??null,
+-   processesVerified:h.processes_verified??false,queryFresh:h.query_fresh??false,
+-   telemetryFresh:h.telemetry_fresh??false, updatedUtc:h.utc??null};
+- } catch{return {status:"unavailable",alerts:["HEALTH_FILE_UNAVAILABLE"]};}
++async function readTail(file:string,limitBytes:number){
++ const data=await boundedTail(file,limitBytes);
++ return {...data,text:data.truncated?data.text.slice(data.text.indexOf("\n")+1):data.text};
++}
++export async function getHealth(server:ServerDefinition, evidence?:RuntimeEvidence, queryFresh=false):Promise<Record<string,unknown>> {
++ const runtime=evidence??await verifyRuntime(server);
++ let h:Record<string,unknown>={};
++ try{h=JSON.parse(await fs.readFile(server.healthPath,"utf8"));}catch{/* explicitly unavailable */}
++ const age=Date.now()-Date.parse(String(h.utc??""));
++ const sourceFresh=Number.isFinite(age) && age>=0 && age<=30000;
++ // Legacy files lack a generation binding; never elevate them to current health.
++ const bound=runtime.verified && h.runtime_result_sha256===runtime.generation;
++ if(!evidence && runtime.verified){try{await gameSpyQuery(server);queryFresh=true;}catch{/* query stays unverified */}}
++ let diskFreeBytes:number|null=null;try{const disk=await fs.statfs(path.dirname(server.runtimeResultPath));diskFreeBytes=disk.bavail*disk.bsize;}catch{/* unavailable */}
++ return {diskFreeBytes,status:runtime.verified && queryFresh && runtime.telemetryFresh?"LIMITED":"UNAVAILABLE",
++  alerts:[...runtime.alerts,...(!sourceFresh?["HEALTH_SOURCE_STALE"]:[]),...(!bound?["HEALTH_GENERATION_UNVERIFIED"]:[]),"SYNC_HISTORY_UNVERIFIED"],
++  expectedBots:runtime.verified?runtime.botNames.length:null,
++  processesVerified:runtime.verified,queryFresh,telemetryFresh:runtime.telemetryFresh,
++  updatedUtc:new Date().toISOString(),sourceUpdatedUtc:h.utc??null,sourceFresh,
++  sourceStatus:sourceFresh?h.status??"unknown":"STALE",syncCoverage:"NOT_VERIFIED",generationVerified:runtime.verified};
+ }
+ export async function getServerStatus(id:string) {
+  const s=await selectServer(id);
+  let fields:Record<string,string>={}, queryError:string|null=null;
+  try{fields=await gameSpyQuery(s,"status");}catch(e){queryError=e instanceof Error?e.message:String(e);}
+- const players=extractPlayers(fields);
++ const runtime=await verifyRuntime(s);const players=extractPlayers(fields,runtime.botNames);
+  return {server:publicServerInfo(s),online:queryError===null,
+-  queryError, uptimeSeconds:await uptimeFromRuntime(s.runtimeResultPath),
++  queryError, uptimeSeconds:runtime.uptimeSeconds,
+   map:fields.mapname??null,mode:fields.gametype??null, gameVersion:fields.gamever??null,
+   playerCount:Number.isFinite(Number(fields.numplayers))?Number(fields.numplayers):null,
+   maxPlayers:Number.isFinite(Number(fields.maxplayers))?Number(fields.maxplayers):null,
++  associatedBotCount:players.filter(p=>p.rosterAssociation==="owned_bot_roster").length,
+   botCount:players.filter(p=>p.type==="bot").length,
+   humanCount:players.filter(p=>p.type==="human").length,
+-  players, health:await getHealth(s), collectedUtc:new Date().toISOString()};
++  unknownCount:players.filter(p=>p.type==="unknown").length, classificationComplete:players.every(p=>p.type!=="unknown"),
++  players, health:await getHealth(s,runtime,queryError===null), collectedUtc:new Date().toISOString()};
+ }
+ export async function getPlayers(id:string) {
+- const s=await selectServer(id);const fields=await gameSpyQuery(s,"players");
+- return {serverId:id, players:extractPlayers(fields).sort((a,b)=>(b.frags??-99999)-(a.frags??-99999)),
++ const s=await selectServer(id);const fields=await gameSpyQuery(s,"players");const runtime=await verifyRuntime(s);
++ return {serverId:id, players:extractPlayers(fields,runtime.botNames).sort((a,b)=>(b.frags??-99999)-(a.frags??-99999)),
+   collectedUtc:new Date().toISOString()};
+ }
+ export async function getLogs(id:string,kind:LogKind="all",limit=50) {
+- const s=await selectServer(id),data=await readTail(s.logPath,1024*1024);
++ const s=await selectServer(id);
++ let data;try{data=await readTail(s.logPath,1024*1024);}catch{return {serverId:id,filter:kind,events:[],partialHistory:true,available:false,alerts:["LOG_SOURCE_UNAVAILABLE"],collectedUtc:new Date().toISOString()};}
+  return {serverId:id,filter:kind,events:selectLogEvents(data.text,kind,limit),
+   partialHistory:data.truncated,collectedUtc:new Date().toISOString()};
+ }
+ export async function getStatistics(id:string) {
+- const s=await selectServer(id), data=await readTail(s.logPath,24*1024*1024);
++ const s=await selectServer(id);
++ let data;let available=true;try{data=await readTail(s.logPath,24*1024*1024);}catch{data={text:"",truncated:true};available=false;}
+  const visits=parseVisits(data.text,s.ownerAddress);
+  const fields=await gameSpyQuery(s,"players");
+- const players=extractPlayers(fields); const bots=players.filter(p=>p.type==="bot");
+- return {serverId:id,visitors:visits,
++ const runtime=await verifyRuntime(s);const players=extractPlayers(fields,runtime.botNames); const bots=players.filter(p=>p.rosterAssociation==="owned_bot_roster");
++ return {serverId:id,visitors:available?visits:null,available,alerts:available?[]:["LOG_SOURCE_UNAVAILABLE"],
+   scoreboard:bots.sort((a,b)=>(b.frags??0)-(a.frags??0)),
+-  totalBotFrags:bots.reduce((sum,p)=>sum+(p.frags??0),0),
++  scoreboardIdentity:"ROSTER_ASSOCIATION_ONLY",totalBotFrags:null,associatedRosterFrags:bots.reduce((sum,p)=>sum+(p.frags??0),0),
+   partialHistory:data.truncated,collectedUtc:new Date().toISOString(),
+   note:"Unique external IPs are a proxy for visitors, not proof of distinct humans."};
+ }
+diff --git a/deploy/monitoring-readonly.conf.example b/deploy/monitoring-readonly.conf.example
+new file mode 100644
+index 0000000..cbdebf3
+--- /dev/null
++++ b/deploy/monitoring-readonly.conf.example
+@@ -0,0 +1,10 @@
++# Additional read-only process observation gate, after the app source/registry
++# have been staged and verified. Preserve the existing loopback/readonly unit.
++# CAP_SYS_PTRACE is needed for /proc/<different-uid-pid>/{cwd,fd} observation.
++# The actual ptrace/process_vm debug syscalls and writes through /proc are denied.
++[Service]
++CapabilityBoundingSet=CAP_DAC_READ_SEARCH CAP_SYS_PTRACE
++AmbientCapabilities=CAP_DAC_READ_SEARCH CAP_SYS_PTRACE
++ReadOnlyPaths=/proc
++SystemCallFilter=~@debug process_vm_readv process_vm_writev process_madvise
++SystemCallErrorNumber=EPERM
+diff --git a/docs/evidence/2026-10-25-monitoring-fix.md b/docs/evidence/2026-10-25-monitoring-fix.md
+new file mode 100644
+index 0000000..2945655
+--- /dev/null
++++ b/docs/evidence/2026-10-25-monitoring-fix.md
+@@ -0,0 +1,43 @@
++# Read-only generation-aware monitoring repair
++
++The registry referred to an unmounted generation; logs/statistics failed ENOENT.
++The old health file was returned HEALTHY without timestamp checks, and BOT-
++prefix classification mislabeled eight renamed local bots as humans.
++
++This branch accepts a private, reviewed receipt pinning result hash, PID/start/
++CWD/UID/cgroup, binaries and profile/GUID hashes. Live telemetry must confirm the
++expected local count and recent actions; the query socket belongs to the pinned
++Dedicated PID. Name matching only associates already verified roster members;
++duplicate names are unassociated. Every slot remains identity-unknown until authoritative server-side GUID/session bindings are available. Roster associations have separate counts; no confirmed bot/human claims.
++
++Health reports current observation timestamps and explicit LIMITED coverage;
++stale source health and unverified generation/sync history are alerts. It does
++not inherit historical zero sync counters or claim native qualification. Missing
++logs produce explicit unavailable responses. Multi-packet GameSpy replies must
++be complete and from the expected loopback port.
++
++Local regressions cover spoofed names, stale/future health, missing logs,
++fragment order, PID reuse, binary changes, GUID changes, stale telemetry and
++query-socket ownership. Runtime only reads files/sockets. No game operation or
++new admin capability was added. Private receipt/registry stay outside Git.
++
++Independent review: missing-history UI and UDP address ownership findings reproduced RED then GREEN. Unique former roster nickname now stays unknown with an explicit association label, also RED then GREEN. Missing authoritative server-side GUID/session observation remains a blocker for confirmed classifications.
++
++Service preflight found EACCES on /proc/<nobody-pid>/cwd under the original
++CAP_DAC_READ_SEARCH-only sandbox. A transient service reproduced it. The
++read-only observation profile adds CAP_SYS_PTRACE, denies @debug syscalls,
++and remounts /proc read-only. Its own helper proved process-CWD read works,
++ptrace(TRACEME) returns EPERM and opening /proc/self/mem for write is denied.
++No game process memory was accessed or instrumented. Loopback-only HTTP/UDP,
++ProtectSystem, task/memory limits and no admin tools remain in force.
++
++Deployment: immutable release /srv/ssam-monitor-release-20261025-b7bda00;
++private registry/receipt/evidence /srv/tse-monitor-evidence-20261025. Existing
++source repo/dirty registry preserved. Only the app service was restarted;
++game identities and 12 binary pins rechecked unchanged. Remove only drop-in
++/etc/systemd/system/alpha-gaming-control.service.d/20261025-monitoring.conf,
++daemon-reload and restart the app to roll back. Initial connection calls during
++restart timed out; subsequent get_health returned fresh LIMITED and verified
++process/query/telemetry evidence. This is not a full historical sync monitor.
++
++Service syscall-list inspection showed @debug does not include process_vm_writev/readv on this systemd version. Those calls and process_madvise are now explicitly denied. An owned transient helper proved both zero-vector process_vm calls return EPERM. No target game memory was accessed.
+diff --git a/package.json b/package.json
+index 83f0927..f0e5fa7 100644
+--- a/package.json
++++ b/package.json
+@@ -7,7 +7,7 @@
+     "build": "tsc --noEmit && tsc -p tsconfig.runtime.json && cross-env INPUT=mcp-app.html vite build",
+     "dev": "tsx main.ts",
+     "start": "node dist-server/main.js",
+-    "test": "tsx --test test/backend.test.ts",
++    "test": "tsx --test test/backend.test.ts test/runtime.test.ts test/provenance.test.ts test/runtime-io.test.ts test/branding.test.ts test/history.test.tsx",
+     "check": "npm run test && npm run build",
+     "test:integration": "tsx --test test/mcp.test.ts"
+   },
+diff --git a/runtime.ts b/runtime.ts
+new file mode 100644
+index 0000000..16e13aa
+--- /dev/null
++++ b/runtime.ts
+@@ -0,0 +1,74 @@
++import fs from 'node:fs/promises';
++import {createHash} from 'node:crypto';
++import path from 'node:path';
++import type {ServerDefinition} from './backend.js';
++
++const digest=(b:Buffer|string)=>createHash('sha256').update(b).digest('hex');
++export function processIdentity(stat:string){
++ const fields=stat.slice(stat.lastIndexOf(')')+2).trim().split(/\s+/);
++ return {state:fields[0],startTicks:Number(fields[19])};
++}
++export function telemetryActive(text:string,count:number,now=Date.now()):boolean {
++ const rows=text.split('\n');rows.pop();
++ const row=rows.filter(x=>/^\d+,/.test(x)).at(-1)?.split(',').map(Number);
++ return !!row && row.length===21 && row.every(Number.isFinite) && now-row[0]!>=0 && now-row[0]!<=15000 &&
++  row[1]!>=15 && row[1]!<=30 && row[2]!>0 && row[6]===count && row[7]===1 && row[8]===1 && row[20]===0;
++}
++export function classifyRoster(fields:Record<string,string>,names:string[]):string[]{
++ const queried=Object.entries(fields).filter(([k])=>/^player_\d+$/.test(k)).map(([,v])=>v);
++ return names.filter(n=>names.filter(x=>x===n).length===1 && queried.filter(x=>x===n).length===1);
++}
++export async function boundedTail(file:string,limit=65536){
++ const handle=await fs.open(file,'r');
++ try{const s=await handle.stat();if(!s.isFile())throw new Error('Not regular file');const start=Math.max(0,s.size-limit);
++ const b=Buffer.alloc(Math.min(s.size,limit));const {bytesRead}=await handle.read(b,0,b.length,start);
++ return {text:b.subarray(0,bytesRead).toString('utf8'),truncated:start>0,mtimeMs:s.mtimeMs};
++ }finally{await handle.close();}
++}
++type Role={pid:number;start_ticks:number;cwd:string;uid:number;cgroup:string;binaryHashes:Record<string,string>;profiles?:Array<{slot:number;name:string;profileHash:string;guidHash:string}>};
++type Receipt={version:number;resultHash:string;roles:Record<string,Role>};
++export type RuntimeEvidence={verified:boolean;telemetryFresh:boolean;botNames:string[];uptimeSeconds:number|null;alerts:string[];generation?:string};
++export async function verifyRuntime(s:ServerDefinition,procRoot='/proc'):Promise<RuntimeEvidence>{
++ const failed:RuntimeEvidence={verified:false,telemetryFresh:false,botNames:[],uptimeSeconds:null,alerts:['RUNTIME_IDENTITY_UNVERIFIED']};
++ try {
++  if(!s.runtimeIdentityPath)return failed;
++  const receipt=JSON.parse(await fs.readFile(s.runtimeIdentityPath,'utf8')) as Receipt;
++  const resultBytes=await fs.readFile(s.runtimeResultPath);if(receipt.version!==1 || digest(resultBytes)!==receipt.resultHash)return failed;
++  const result=JSON.parse(resultBytes.toString());const root=path.dirname(s.runtimeResultPath);
++  const names:string[]=[];let telemetryFresh=true;
++  const checks:Array<()=>Promise<void>>=[];
++  for(const role of ['server','botA','botB']){
++   const pin=receipt.roles[role];const recorded=result.processes?.[role];
++   if(!pin || !recorded || pin.pid!==recorded.pid || pin.start_ticks!==recorded.start_ticks || pin.cwd!==recorded.cwd || pin.cwd!==path.join(root,role))return failed;
++   const check=async()=>{
++    const p=path.join(procRoot,String(pin.pid));const identity=processIdentity(await fs.readFile(p+'/stat','utf8'));
++    if(identity.startTicks!==pin.start_ticks || ['Z','X'].includes(identity.state??'') || await fs.realpath(p+'/cwd')!==pin.cwd ||
++      (await fs.stat(p)).uid!==pin.uid || (await fs.readFile(p+'/cgroup','utf8')).trim()!==pin.cgroup)throw new Error('Process changed');
++    const cmd=await fs.readFile(p+'/cmdline','utf8');if(!cmd.includes(role==='server'?'Bin/DedicatedServer.exe':'Bin/SeriousSam.exe'))throw new Error('Wrong executable');
++   };await check();checks.push(check);
++   const files=role==='server'?['DedicatedServer.exe','Engine.dll','EntitiesMP.dll','GameMP.dll']:['SeriousSam.exe','Engine.dll','EntitiesMP.dll','GameMP.dll'];
++   for(const name of files)if(digest(await fs.readFile(path.join(pin.cwd,'Bin',name)))!==pin.binaryHashes[name])throw new Error('Binary changed');
++   if(role!=='server'){
++    if(!pin.profiles?.length || pin.profiles.length>4)throw new Error('Missing roster');
++    for(const [slot,profile] of pin.profiles.entries()){
++     if(profile.slot!==slot)throw new Error('Roster slot mismatch');
++     const file=path.join(pin.cwd,'Players',`Player${slot}.plr`);const b=await fs.readFile(file),guid=await fs.readFile(file+'.guid');
++     if(digest(b)!==profile.profileHash || guid.length!==16 || digest(guid)!==profile.guidHash || b.indexOf(guid)<0 || b.indexOf(guid)!==b.lastIndexOf(guid))throw new Error('Profile/GUID changed');
++     names.push(profile.name);
++    }
++    const t=await boundedTail(path.join(pin.cwd,'Bin/BotTelemetry.csv'));
++    telemetryFresh &&= Date.now()-t.mtimeMs>=0 && Date.now()-t.mtimeMs<=15000 && telemetryActive(t.text,pin.profiles.length);
++   }
++  }
++  // The queried UDP port must belong to the pinned Dedicated process, not another generation.
++  const server=receipt.roles.server!;const fds=await fs.readdir(path.join(procRoot,String(server.pid),'fd'));
++  const links=await Promise.all(fds.map(f=>fs.readlink(path.join(procRoot,String(server.pid),'fd',f)).catch(()=>'')));
++  const rows=(await fs.readFile(path.join(procRoot,'net/udp'),'utf8')).trim().split('\n').slice(1).map(x=>x.trim().split(/\s+/));
++  const eligible=rows.filter(x=>parseInt(x[1]!.split(':')[1]!,16)===s.queryPort && ['00000000','0100007F'].includes(x[1]!.split(':')[0]!));
++  if(eligible.length!==1 || !links.includes(`socket:[${eligible[0]![9]}]`))throw new Error('Query owner mismatch');
++  await Promise.all(checks.map(check=>check()));
++  const uptime=Number((await fs.readFile(path.join(procRoot,'uptime'),'utf8')).split(' ')[0]);
++  // Linux on this supported deployment uses USER_HZ=100 (verified by getconf CLK_TCK).
++  return {verified:true,telemetryFresh,botNames:telemetryFresh?names:[],uptimeSeconds:Math.max(0,uptime-server.start_ticks/100),alerts:telemetryFresh?[]:['TELEMETRY_STALE'],generation:receipt.resultHash};
++ }catch{return failed;}
++}
+diff --git a/servers.json b/servers.json
+index f3bd6cb..4e7fd8e 100644
+--- a/servers.json
++++ b/servers.json
+@@ -1,14 +1,16 @@
+ {
+- "servers": [{
+-  "id": "tse-public-1",
+-  "name": "Alpha-Gaming | TSE 1.07 | 8 Bots",
+-  "host": "127.0.0.1",
+-  "gamePort": 25600,
+-  "queryPort": 25601,
+-  "publicAddress": "91.99.75.33:25600",
+-  "logPath": "/srv/tse-integration-public-20261021/eight-115115-z44oq5ua/server/Dedicated_BotTest.log",
+-  "healthPath": "/srv/tse-public-health-20261021/health.json",
+-  "runtimeResultPath": "/srv/tse-integration-public-20261021/eight-115115-z44oq5ua/result.json",
+-  "ownerAddress": "91.99.75.33"
+- }]
+-}
+\ No newline at end of file
++  "servers": [
++    {
++      "id": "tse-public-1",
++      "name": "ssam.ai | TSE Classic 1.07",
++      "host": "127.0.0.1",
++      "gamePort": 25600,
++      "queryPort": 25601,
++      "publicAddress": "91.99.75.33:25600",
++      "logPath": "/srv/tse-integration-public-20261021/eight-115115-z44oq5ua/server/Dedicated_BotTest.log",
++      "healthPath": "/srv/tse-public-health-20261021/health.json",
++      "runtimeResultPath": "/srv/tse-integration-public-20261021/eight-115115-z44oq5ua/result.json",
++      "ownerAddress": "91.99.75.33"
++    }
++  ]
++}
+diff --git a/src/App.tsx b/src/App.tsx
+index 2906d6d..ca2ad26 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
+ import { createRoot } from "react-dom/client";
+ import { App } from "@modelcontextprotocol/ext-apps";
+ import "./style.css";
++import {LogHistory,StatisticsHistory,type LogResponse} from "./History.js";
+ 
+ type Server = {id:string;name:string;publicAddress:string;readOnly:boolean};
+-type Player = {slot:number;name:string;frags:number|null;ping:number|null;type:"bot"|"human"};
+-type ServerStatus = {online:boolean;uptimeSeconds:number|null;map:string|null;mode:string|null;playerCount:number|null;maxPlayers:number|null;botCount:number;humanCount:number;players:Player[];health?:Record<string,unknown>;collectedUtc:string};
+-type Stats = {visitors:{externalJoinEvents:number;distinctExternalAddresses:number;distinctNicknames:number;names:string[]};scoreboard:Player[];totalBotFrags:number;partialHistory:boolean;note:string};
+-type LogResponse = {events:string[];partialHistory:boolean;filter:string};
++type Player = {slot:number;name:string;frags:number|null;ping:number|null;type:"bot"|"human"|"unknown";rosterAssociation?:string};
++type ServerStatus = {online:boolean;uptimeSeconds:number|null;map:string|null;mode:string|null;playerCount:number|null;maxPlayers:number|null;botCount:number;humanCount:number;unknownCount:number;associatedBotCount:number;players:Player[];health?:Record<string,unknown>;collectedUtc:string};
++type Stats = {available?:boolean;visitors:{externalJoinEvents:number;distinctExternalAddresses:number;distinctNicknames:number;names:string[]}|null;scoreboard:Player[];totalBotFrags:number|null;associatedRosterFrags:number;partialHistory:boolean;note:string};
+ 
+ const mcpApp=new App({name:"ssam.ai Control",version:"0.1.0"});
+ const sections:Record<string,string[]>={
+@@ -38,7 +38,7 @@ function showTime(){return new Date().toLocaleTimeString("de-DE",{hour:"2-digit"
+ function Players({players}:{players:Player[]}){
+  const sorted=[...players].sort((a,b)=>(b.frags??-999999)-(a.frags??-999999));
+  return <div className="tablewrap"><table><thead><tr><th>Spieler / Bot</th><th>Frags</th><th>Ping</th></tr></thead>
+- <tbody>{sorted.map(p=><tr key={p.slot}><td><span className={p.type==="bot"?"boticon":"humanicon"}>{p.type==="bot"?"◆":"●"}</span>{p.name}</td><td className="score">{num(p.frags)}</td><td>{num(p.ping)}</td></tr>)}</tbody></table>
++ <tbody>{sorted.map(p=><tr key={p.slot}><td><span className={p.type==="bot"?"boticon":"humanicon"}>{p.type==="bot"?"◆":"●"}</span>{p.name} {p.type==="unknown"&&<small>({p.rosterAssociation==="owned_bot_roster"?"Bot-Roster-Zuordnung; Identität ungeprüft":"Identität unbekannt"})</small>}</td><td className="score">{num(p.frags)}</td><td>{num(p.ping)}</td></tr>)}</tbody></table>
+  {players.length===0&&<p className="muted">Keine aktiven Spieler gemeldet.</p>}</div>;
+ }
+ function Dashboard(){
+@@ -123,19 +123,18 @@ function Dashboard(){
+   {error&&<div className="message error">{error}</div>}
+   {status&&<><div className="cards">
+    <article><small>SERVERSTATUS</small><b className={status.online?"green":"red"}>{status.online?"● Online":"● Offline"}</b><span>{formatUptime(status.uptimeSeconds)}</span></article>
+-   <article><small>SPIELER</small><b>{num(status.playerCount)} / {num(status.maxPlayers)}</b><span>{status.humanCount} Menschen · {status.botCount} Bots</span></article>
++   <article><small>SPIELER</small><b>{num(status.playerCount)} / {num(status.maxPlayers)}</b><span>{status.associatedBotCount} Bot-Roster-Zuordnungen · {status.unknownCount} Identitäten ungeklärt</span></article>
+    <article><small>KARTE</small><b>{status.map??"–"}</b><span>{status.mode??"Unbekannt"}</span></article>
+    <article><small>SYNC / MONITORING</small><b className={status.health?.status==="OK"?"green":"amber"}>{String(status.health?.status??"Unbekannt")}</b><span>{status.health?.externalSyncBad===undefined?"Keine Daten":String(status.health.externalSyncBad)+" externe Sync-Fehler"}</span></article>
+   </div><h2>Aktive Spieler und Bots</h2><Players players={status.players}/></>}
+   {players&&!status&&<><h2>Live-Scoreboard</h2><Players players={players}/></>}
+-  {stats&&<><div className="cards three">
++  {stats&&<StatisticsHistory available={stats.available}>{stats.visitors&&<><div className="cards three">
+    <article><small>EXTERNE IP-ADRESSEN</small><b>{num(stats.visitors.distinctExternalAddresses)}</b><span>Nicht gleich eindeutige Menschen</span></article>
+    <article><small>SPIELBEITRITTE</small><b>{num(stats.visitors.externalJoinEvents)}</b><span>Seit Beginn der verfügbaren Logs</span></article>
+-   <article><small>BOT-FRAGS</small><b>{num(stats.totalBotFrags)}</b><span>Aktueller Spielstand</span></article>
++   <article><small>ROSTER-FRAGS</small><b>{num(stats.associatedRosterFrags)}</b><span>Zuordnung, keine bestätigte Slotidentität</span></article>
+   </div>{stats.partialHistory&&<div className="message">Historische Logauswertung ist unvollständig (Dateigrößenlimit).</div>}
+-  <h2>Bot-Ranking</h2><Players players={stats.scoreboard}/></>}
+-  {logs&&<><h2>Live-Logs · {logs.filter}</h2>{logs.partialHistory&&<p className="muted">Ausschnitt der jüngsten Ereignisse.</p>}
+-   <div className="logpanel">{logs.events.length?logs.events.map((line,i)=><div key={i} className={/SYNCBAD|error|warning/i.test(line)?"logwarn":""}>{line}</div>):<p>Keine entsprechenden Ereignisse gefunden.</p>}</div></>}
++  </>}<h2>Bot-Roster-Ranking (Zuordnung)</h2><Players players={stats.scoreboard}/></StatisticsHistory>}
++  {logs&&<LogHistory data={logs}/>}
+   {health&&<><h2>Systemüberwachung</h2><div className="monitor">
+    {Object.entries(health).map(([k,v])=><div key={k}><span>{k}</span><b>{typeof v==="object"?JSON.stringify(v):String(v)}</b></div>)}
+   </div></>}
+diff --git a/src/History.tsx b/src/History.tsx
+new file mode 100644
+index 0000000..dc76971
+--- /dev/null
++++ b/src/History.tsx
+@@ -0,0 +1,12 @@
++import React from 'react';
++export type LogResponse={events:string[];partialHistory:boolean;filter:string;available?:boolean};
++export function LogHistory({data}:{data:LogResponse}){
++ return <><h2>Live-Logs · {data.filter}</h2>{data.available===false?
++  <div className="message error">Logquelle nicht verfügbar. Keine Aussage über Ereignisse oder Syncfehler möglich.</div>:
++  <>{data.partialHistory&&<p className="muted">Ausschnitt der jüngsten Ereignisse.</p>}
++  <div className="logpanel">{data.events.length?data.events.map((line,i)=><div key={i} className={/SYNCBAD|error|warning/i.test(line)?'logwarn':''}>{line}</div>):<p>Keine entsprechenden Ereignisse gefunden.</p>}</div></>}
++ </>;
++}
++export function StatisticsHistory({available,children}:{available?:boolean;children:React.ReactNode}){
++ return <>{available===false&&<div className="message error">Besucherhistorie nicht verfügbar. Das Live-Ranking wird unabhängig abgefragt.</div>}{children}</>;
++}
+diff --git a/test/backend.test.ts b/test/backend.test.ts
+index 6e7eb25..8ed2879 100644
+--- a/test/backend.test.ts
++++ b/test/backend.test.ts
+@@ -12,8 +12,8 @@ test("scores derive from GameSpy without guessed data", () => {
+  const p = extractPlayers({player_0:"BOT-Expert-Rifle",frags_0:"2792",ping_0:"97",player_1:"Human",frags_1:"8",ping_1:"42"});
+  assert.equal(p.length,2);
+  assert.equal(p[0]?.frags,2792);
+- assert.equal(p[0]?.type,"bot");
+- assert.equal(p[1]?.type,"human");
++ assert.equal(p[0]?.type,"unknown");
++ assert.equal(p[1]?.type,"unknown");
+ });
+ test("visits are not bots, owner or repeated IP count", () => {
+  const log = [
+diff --git a/test/branding.test.ts b/test/branding.test.ts
+index 91f0718..b90d871 100644
+--- a/test/branding.test.ts
++++ b/test/branding.test.ts
+@@ -5,7 +5,7 @@ import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
+ 
+ test("ssam.ai Control branding and read-only MCP contract without online game requirement", { timeout: 25000 }, async () => {
+   const client = new Client({ name: "ssam-brand-test", version: "0.1.0" }, { capabilities: {} });
+-  const transport = new StdioClientTransport({ command: process.execPath, args: ["--import", "tsx", "main.ts", "--stdio"], cwd: process.cwd() });
++  const transport = new StdioClientTransport({ command: process.execPath, args: ["--import", "tsx", "main.ts", "--stdio"], cwd: process.cwd(), env: Object.fromEntries(Object.entries(process.env).filter((x):x is [string,string]=>x[1]!==undefined)) });
+   await client.connect(transport);
+   try {
+     const tools = await client.listTools();
+diff --git a/test/history.test.tsx b/test/history.test.tsx
+new file mode 100644
+index 0000000..47b39c4
+--- /dev/null
++++ b/test/history.test.tsx
+@@ -0,0 +1,13 @@
++import React from 'react';
++import {test} from 'node:test';
++import assert from 'node:assert/strict';
++import {renderToStaticMarkup} from 'react-dom/server';
++import {LogHistory,StatisticsHistory} from '../src/History.js';
++test('missing sync log is unavailable instead of empty clean history',()=>{
++ const html=renderToStaticMarkup(<LogHistory data={{available:false,events:[],partialHistory:true,filter:'sync'}}/>);
++ assert.match(html,/nicht verfügbar/);assert.doesNotMatch(html,/Keine entsprechenden Ereignisse/);
++});
++test('missing visitor history preserves independently queried scoreboard',()=>{
++ const html=renderToStaticMarkup(<StatisticsHistory available={false}><div>Live scoreboard</div></StatisticsHistory>);
++ assert.match(html,/nicht verfügbar/);assert.match(html,/Live scoreboard/);
++});
+diff --git a/test/mcp.test.ts b/test/mcp.test.ts
+index 9f47bbb..767c7d4 100644
+--- a/test/mcp.test.ts
++++ b/test/mcp.test.ts
+@@ -5,7 +5,7 @@ import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
+ 
+ test("end-to-end MCP handshake, real status and HTML resource", {timeout:25000}, async () => {
+  const client=new Client({name:"alpha-control-smoke",version:"0.1.0"},{capabilities:{}});
+- const transport=new StdioClientTransport({command:process.execPath,args:["--import","tsx","main.ts","--stdio"],cwd:process.cwd()});
++ const transport=new StdioClientTransport({command:process.execPath,args:["--import","tsx","main.ts","--stdio"],cwd:process.cwd(),env:Object.fromEntries(Object.entries(process.env).filter((x):x is [string,string]=>x[1]!==undefined))});
+  await client.connect(transport);
+  try{
+   const listed=await client.listTools();
+diff --git a/test/provenance.test.ts b/test/provenance.test.ts
+new file mode 100644
+index 0000000..b74e61c
+--- /dev/null
++++ b/test/provenance.test.ts
+@@ -0,0 +1,26 @@
++import {test} from 'node:test';
++import assert from 'node:assert/strict';
++import {classifyRoster,telemetryActive,processIdentity,verifyRuntime} from '../runtime.js';
++
++test('only unique verified roster names can be associated with bots',()=>{
++ const fields={player_0:'Pip',player_1:'Guest',player_2:'BOT-Spoof'};
++ assert.deepEqual(classifyRoster(fields,['Pip']),['Pip']);
++ assert.deepEqual(classifyRoster({...fields,player_3:'Pip'},['Pip']),[]);
++ assert.deepEqual(classifyRoster(fields,['Pip','Pip']),[]);
++});
++test('telemetry needs complete recent active row and expected local count',()=>{
++ const now=Date.now();const row=(t:number,lp=4)=>`${t},20,80,20,20,0,${lp},1,1,0,0,0,0,0.003,0.001,51,50,200,10,0,0\n`;
++ assert.equal(telemetryActive(row(now),4,now),true);
++ assert.equal(telemetryActive(row(now-60000),4,now),false);
++ assert.equal(telemetryActive(row(now+60000),4,now),false);
++ assert.equal(telemetryActive(row(now,1),4,now),false);
++ assert.equal(telemetryActive(row(now).trimEnd(),4,now),false);
++});
++test('proc stat parser handles spaces and parentheses in comm',()=>{
++ const tail=['S',...Array(18).fill('0'),'1234','0'];
++ assert.equal(processIdentity('12 (x y) z) '+tail.join(' ')).startTicks,1234);
++});
++test('missing receipt never verifies guessed runtime',async()=>{
++ const r=await verifyRuntime({runtimeResultPath:'/missing/result.json'} as any);
++ assert.equal(r.verified,false);assert.deepEqual(r.botNames,[]);
++});
+diff --git a/test/runtime-io.test.ts b/test/runtime-io.test.ts
+new file mode 100644
+index 0000000..11f3a9f
+--- /dev/null
++++ b/test/runtime-io.test.ts
+@@ -0,0 +1,53 @@
++import {test} from 'node:test';
++import assert from 'node:assert/strict';
++import fs from 'node:fs/promises';
++import path from 'node:path';
++import os from 'node:os';
++import {createHash} from 'node:crypto';
++import {verifyRuntime} from '../runtime.js';
++const hash=(b:Buffer|string)=>createHash('sha256').update(b).digest('hex');
++
++test('runtime requires matching process, profile, binary, telemetry and query socket ownership',async()=>{
++ const root=await fs.mkdtemp(path.join(os.tmpdir(),'ssam-proc-'));
++ const proc=path.join(root,'proc');const uid=(await fs.stat(root)).uid;
++ try{
++  await fs.mkdir(proc+'/net',{recursive:true});await fs.writeFile(proc+'/uptime','2000 0');
++  const result:any={processes:{}};const receipt:any={version:1,roles:{}};
++  for(const [i,role] of ['server','botA','botB'].entries()){
++   const cwd=path.join(root,role),pid=100+i;
++   await fs.mkdir(cwd+'/Bin',{recursive:true});await fs.mkdir(`${proc}/${pid}/fd`,{recursive:true});
++   await fs.symlink(cwd,`${proc}/${pid}/cwd`);
++   await fs.writeFile(`${proc}/${pid}/stat`,`${pid} (wine) S ${Array(18).fill('0').join(' ')} 1000 0`);
++   await fs.writeFile(`${proc}/${pid}/cgroup`,'0::/fixture');
++   await fs.writeFile(`${proc}/${pid}/cmdline`,role==='server'?'Bin/DedicatedServer.exe':'Bin/SeriousSam.exe');
++   const pin:any={pid,cwd,start_ticks:1000,uid,cgroup:'0::/fixture',binaryHashes:{}};
++   for(const f of [role==='server'?'DedicatedServer.exe':'SeriousSam.exe','GameMP.dll','Engine.dll','EntitiesMP.dll']){await fs.writeFile(cwd+'/Bin/'+f,f);pin.binaryHashes[f]=hash(f);}
++   if(role!=='server'){
++    await fs.mkdir(cwd+'/Players');const guid=Buffer.from('0123456789abcdef');const profile=Buffer.concat([Buffer.from('profile'),guid]);
++    await fs.writeFile(cwd+'/Players/Player0.plr',profile);await fs.writeFile(cwd+'/Players/Player0.plr.guid',guid);
++    pin.profiles=[{slot:0,name:role,profileHash:hash(profile),guidHash:hash(guid)}];
++    await fs.writeFile(cwd+'/Bin/BotTelemetry.csv',`${Date.now()},20,20,20,20,0,1,1,1,0,0,0,0,0,0,51,50,200,10,0,0\n`);
++   }
++   result.processes[role]={pid,cwd,start_ticks:1000};receipt.roles[role]=pin;
++  }
++  await fs.symlink('socket:[999]',proc+'/100/fd/3');
++  await fs.writeFile(proc+'/net/udp','header\n0: 00000000:6401 0 0 0 0 0 0 0 999\n');
++  const bytes=JSON.stringify(result);receipt.resultHash=hash(bytes);
++  const resultFile=root+'/result.json',receiptFile=root+'/receipt.json';await fs.writeFile(resultFile,bytes);await fs.writeFile(receiptFile,JSON.stringify(receipt));
++  const server={runtimeResultPath:resultFile,runtimeIdentityPath:receiptFile,queryPort:25601} as any;
++  assert.equal((await verifyRuntime(server,proc)).verified,true);
++  await fs.writeFile(proc+'/101/stat',`101 (wine) S ${Array(18).fill('0').join(' ')} 1001 0`);
++  const reused=await verifyRuntime(server,proc);assert.equal(reused.verified,false);assert.deepEqual(reused.botNames,[]);
++  await fs.writeFile(proc+'/101/stat',`101 (wine) S ${Array(18).fill('0').join(' ')} 1000 0`);
++  await fs.writeFile(root+'/botA/Bin/GameMP.dll','changed');assert.equal((await verifyRuntime(server,proc)).verified,false);
++  await fs.writeFile(root+'/botA/Bin/GameMP.dll','GameMP.dll');
++  await fs.writeFile(proc+'/net/udp','header\n0: 0200007F:6401 0 0 0 0 0 0 0 999\n');
++  assert.equal((await verifyRuntime(server,proc)).verified,false,'same port on another address must fail');
++  await fs.writeFile(proc+'/net/udp','header\n0: 00000000:6401 0 0 0 0 0 0 0 999\n');
++  await fs.unlink(proc+'/100/fd/3');assert.equal((await verifyRuntime(server,proc)).verified,false);
++  await fs.symlink('socket:[999]',proc+'/100/fd/3');
++  await fs.writeFile(root+'/botA/Bin/BotTelemetry.csv','1,20,20,20,20,0,1,1,1,0,0,0,0,0,0,51,50,200,10,0,0\n');
++  const stale=await verifyRuntime(server,proc);assert.equal(stale.verified,true);assert.equal(stale.telemetryFresh,false);assert.deepEqual(stale.botNames,[]);
++  await fs.writeFile(root+'/botA/Players/Player0.plr.guid','altered');assert.equal((await verifyRuntime(server,proc)).verified,false);
++ }finally{await fs.rm(root,{recursive:true,force:true});}
++});
+diff --git a/test/runtime.test.ts b/test/runtime.test.ts
+new file mode 100644
+index 0000000..fce3a88
+--- /dev/null
++++ b/test/runtime.test.ts
+@@ -0,0 +1,56 @@
++import {test} from 'node:test';
++import assert from 'node:assert/strict';
++import {extractPlayers,getHealth} from '../backend.js';
++import fs from 'node:fs/promises';
++import os from 'node:os';
++import path from 'node:path';
++
++test('unproven BOT nickname and ordinary nickname both stay unknown',()=>{
++ const p=extractPlayers({player_0:'BOT-Spoof',player_1:'RealPlayer'});
++ assert.deepEqual(p.map(x=>x.type),['unknown','unknown']);
++});
++test('stale HEALTHY file cannot report fresh query or verified processes',async()=>{
++ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'ssam-health-'));
++ try {
++  const f=path.join(dir,'health.json');
++  await fs.writeFile(f,JSON.stringify({utc:'2026-01-01T00:00:00Z',status:'HEALTHY',query_fresh:true,telemetry_fresh:true,processes_verified:true}));
++  const h=await getHealth({healthPath:f} as any);
++  assert.notEqual(h.status,'HEALTHY');assert.equal(h.queryFresh,false);assert.equal(h.processesVerified,false);
++ }finally{await fs.rm(dir,{recursive:true});}
++});
++
++test('future health timestamps fail closed',async()=>{
++ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'ssam-future-'));
++ try { const f=path.join(dir,'h.json');await fs.writeFile(f,JSON.stringify({utc:'2999-01-01T00:00:00Z',status:'HEALTHY',query_fresh:true}));
++ const h=await getHealth({healthPath:f} as any);assert.notEqual(h.status,'HEALTHY');assert.equal(h.queryFresh,false);
++ }finally{await fs.rm(dir,{recursive:true});}
++});
++
++test('missing log paths return explicit unavailable responses without raw ENOENT',async()=>{
++ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'ssam-missing-log-'));
++ try {
++  const cfg=path.join(dir,'servers.json');
++  // Registry is resolved once at module load; test via the real MCP child with isolated env instead.
++  const {execFile}=await import('node:child_process');const {promisify}=await import('node:util');
++  await fs.writeFile(cfg,JSON.stringify({servers:[{id:'fixture',name:'fixture',host:'127.0.0.1',gamePort:25600,queryPort:25601,logPath:'/srv/tse-missing/log',healthPath:'/srv/tse-missing/health',runtimeResultPath:'/srv/tse-missing/result'}]}));
++  const result=await promisify(execFile)(process.execPath,['--import','tsx','--input-type=module','-e',`import {getLogs} from './backend.ts';console.log(JSON.stringify(await getLogs('fixture')))`],{env:{...process.env,ALPHA_SERVERS_CONFIG:cfg}});
++  const value=JSON.parse(result.stdout);assert.equal(value.available,false);assert.deepEqual(value.alerts,['LOG_SOURCE_UNAVAILABLE']);assert.deepEqual(value.events,[]);
++ }finally{await fs.rm(dir,{recursive:true});}
++});
++
++test('GameSpy collects out-of-order fragments before returning all players',async()=>{
++ const dgram=await import('node:dgram');const {gameSpyQuery}=await import('../backend.js');
++ const sock=dgram.createSocket('udp4');await new Promise<void>(resolve=>sock.bind(0,'127.0.0.1',resolve));
++ sock.on('message',(_,peer)=>{
++  sock.send(Buffer.from('\\player_1\\B\\final\\\\queryid\\7.2'),peer.port,peer.address);
++  setTimeout(()=>sock.send(Buffer.from('\\numplayers\\2\\player_0\\A\\queryid\\7.1'),peer.port,peer.address),20);
++ });
++ try{const answer=await gameSpyQuery({host:'127.0.0.1',queryPort:sock.address().port} as any);assert.equal(answer.player_0,'A');assert.equal(answer.player_1,'B');}
++ finally{sock.close();}
++});
++
++test('unique roster nickname alone never turns a possible human into a confirmed bot',()=>{
++ const p=extractPlayers({player_0:'FormerBotName',player_1:'RenamedBot'},['FormerBotName']);
++ assert.equal(p[0]?.type,'unknown');
++ assert.equal((p[0] as any).rosterAssociation,'owned_bot_roster');
++});
