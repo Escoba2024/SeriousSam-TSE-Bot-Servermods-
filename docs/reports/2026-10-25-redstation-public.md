@@ -23,3 +23,9 @@ Remaining: session drain/Leave-Rejoin correction and native qualification; final
 Names: BOT-[Q] Pip, BOT-Nils, BOT-Mara, BOT-Rudi, BOT-Juna, BOT-Rin, BOT-[AG] Lea, BOT-Lars. Native profiles contain actual color codes; query exposes their visible names. Session lifecycle is explicitly disabled, so these bots do not independently leave/rejoin. A clean public smoke does not qualify PR47’s failing eight-single-client drain path or PR50’s new supervisor.
 
 See machine-readable sanitized results beside this report. Commit trees/publication IDs are recorded in the execution plan and private publication receipt.
+
+## Final generation-binding correction
+
+The final live check caught FOREIGN_PORT with three missing roles: the staged monitor unit still referenced the aborted first launch, while queries were reaching the retained second launch. No foreign game process was found; direct port/cgroup census matched the current Dedicated and wineserver. Corrected only the read-only unit result argument, reverified the unit and restarted only monitoring. The final gate now requires HEALTHY, no alerts, no missing roles, fresh telemetry/query, verified identities, and an ExecStart matching the exact retained result. That full gate passed; MemoryPeak18100224bytes and NRestarts0. No game restart/signals occurred during this correction. Machine-readable results contain the final correct-generation health.
+
+Alpha-Gaming app check:6 backend tests and TypeScript/Vite build PASS; harmless existing third-party annotation warnings were emitted. Actual MCP protocol handshake/status confirms the current server. The initial attempted npm path was absent; rerun used the verified installed npm with the pinned Node runtime.

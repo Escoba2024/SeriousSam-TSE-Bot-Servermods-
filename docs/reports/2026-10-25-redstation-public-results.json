@@ -195,30 +195,24 @@
     "botB": 22.382
   },
   "health": {
-    "status": "BLOCKED",
-    "alerts": [
-      "FOREIGN_PORT"
-    ],
-    "safe_recovery": false,
-    "utc": "2026-10-25T06:17:25Z",
+    "status": "HEALTHY",
+    "alerts": [],
+    "safe_recovery": true,
+    "utc": "2026-10-25T06:26:48Z",
     "players": 8,
     "expected_bots": 8,
-    "missing_roles": [
-      "server",
-      "botA",
-      "botB"
-    ],
-    "disk_free_bytes": 14659276800,
+    "missing_roles": [],
+    "disk_free_bytes": 14657937408,
     "owned_sync_bad": 0,
     "external_sync_bad": 0,
     "processes_verified": true,
     "query_fresh": true,
-    "query_age_s": 0.1928410530090332,
+    "query_age_s": 3.9887962341308594,
     "telemetry_fresh": true,
     "cgroup_cpu": {
-      "usage_usec": 82917670,
-      "user_usec": 67505983,
-      "system_usec": 15411687,
+      "usage_usec": 968462004,
+      "user_usec": 842747053,
+      "system_usec": 125714950,
       "core_sched.force_idle_usec": 0,
       "nr_periods": 0,
       "nr_throttled": 0,
@@ -234,9 +228,9 @@
       "oom_kill": 0,
       "oom_group_kill": 0
     },
-    "cgroup_memory_current": 67334144,
-    "cgroup_memory_peak": 605515776,
-    "host_memory_available": 2207510528,
+    "cgroup_memory_current": 547557376,
+    "cgroup_memory_peak": 547930112,
+    "host_memory_available": 2211176448,
     "sync_scan_complete": true
   },
   "root_python_tests": 133,
@@ -244,5 +238,9 @@
   "protected_source_archive_files": 415,
   "originals_unchanged": true,
   "independent_wan_windows_join": false,
-  "utc": "2026-10-25T06:17:28.080Z"
+  "utc": "2026-10-25T06:17:28.080Z",
+  "monitor_result_path": "/srv/tse-redstation-public-20261025/eight-060150-r_ca2yce/result.json",
+  "monitor_current_generation_verified": true,
+  "monitor_binding_correction": "Staged unit initially pointed to aborted first launch; final check caught FOREIGN_PORT/missing roles. Unit corrected to retained generation and full HEALTHY/no-missing-roles/no-alerts gate passed.",
+  "alpha_app_check": "6 backend tests and TypeScript/Vite build PASS"
 }
