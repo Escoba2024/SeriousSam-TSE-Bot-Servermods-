@@ -1,0 +1,246 @@
+{
+  "status": "PASS_PUBLIC_SMOKE_WITH_SESSION_LIFECYCLE_BLOCKED",
+  "runtime_result": "/srv/tse-redstation-public-20261025/eight-060150-r_ca2yce/result.json",
+  "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+  "elapsed_s": 600.000144883059,
+  "bots": 8,
+  "map": "Red Station",
+  "settings": {
+    "gam_iStartDifficulty": 2,
+    "gam_bInfiniteAmmo": 1,
+    "gam_iBlood": 3,
+    "gam_bGibs": 0
+  },
+  "names": [
+    "BOT-[Q] Pip",
+    "BOT-Nils",
+    "BOT-Mara",
+    "BOT-Rudi",
+    "BOT-Juna",
+    "BOT-Rin",
+    "BOT-[AG] Lea",
+    "BOT-Lars"
+  ],
+  "colors_in_profiles": true,
+  "session_lifecycle_enabled": false,
+  "lifecycle_blocker": "private admin drain timeout",
+  "checks": {
+    "botA": {
+      "telemetry": {
+        "samples": 608,
+        "warmup_s": 190,
+        "build": {
+          "tag": "p0-telemetry-20261022",
+          "built": "Oct 21 2026 09:31:27"
+        },
+        "config": {
+          "nullrender": "1",
+          "nullrender_fps": "20",
+          "dedicated": "0",
+          "bot_enabled": "1",
+          "bot_iLogEvery": "200",
+          "bot_iTelemetry": "1",
+          "tick_ms": "50.000"
+        },
+        "states": [],
+        "notes": [
+          "CONFIG,bot_bEnabled=1,bot_fYawSpeed=45.00,bot_fMoveFactor=1.00,bot_fFirePeriod=1.00,bot_iFireTicks=3,bot_iLogEvery=200,bot_bDiagnostics=0,bot_bAutoCombat=1,bot_bObstacleAvoidance=1,bot_iTelemetry=1,bot_bTelemetryConsole=0"
+        ],
+        "reasons": {
+          "ACTIVE": 608
+        },
+        "warnings": [],
+        "tick_hz_median": 20.0,
+        "tick_hz_min": 20,
+        "action_total": 48697,
+        "actions_per_s_median": 80.0,
+        "actions_per_bot_s": 20.0,
+        "action_ratio": 0.9999383983572895,
+        "lp_median": 4.0,
+        "frames_per_s_median": 20.0,
+        "render_skip_total": 12175,
+        "render_draw_total": 0,
+        "lock_ms_max": 23.501,
+        "lock_ms_last_last": 5.163,
+        "tick_ms_max": 56.152,
+        "stall_max": 0,
+        "stall_rows": 0,
+        "cpu_user_ms_total": 136600,
+        "cpu_kernel_ms_total": 7430,
+        "verdict": "ACTIVE_OK",
+        "exit_code": 0
+      },
+      "slots": {
+        "0": {
+          "max_tick": 15800,
+          "tick_span": 12000,
+          "samples": 61,
+          "moved": true,
+          "fired": true,
+          "fire_actions_delta": 266
+        },
+        "1": {
+          "max_tick": 15800,
+          "tick_span": 12000,
+          "samples": 61,
+          "moved": true,
+          "fired": true,
+          "fire_actions_delta": 355
+        },
+        "2": {
+          "max_tick": 15800,
+          "tick_span": 12000,
+          "samples": 61,
+          "moved": true,
+          "fired": true,
+          "fire_actions_delta": 448
+        },
+        "3": {
+          "max_tick": 15800,
+          "tick_span": 12000,
+          "samples": 61,
+          "moved": true,
+          "fired": true,
+          "fire_actions_delta": 664
+        }
+      }
+    },
+    "botB": {
+      "telemetry": {
+        "samples": 603,
+        "warmup_s": 190,
+        "build": {
+          "tag": "p0-telemetry-20261022",
+          "built": "Oct 21 2026 09:31:27"
+        },
+        "config": {
+          "nullrender": "1",
+          "nullrender_fps": "20",
+          "dedicated": "0",
+          "bot_enabled": "1",
+          "bot_iLogEvery": "200",
+          "bot_iTelemetry": "1",
+          "tick_ms": "50.000"
+        },
+        "states": [],
+        "notes": [
+          "CONFIG,bot_bEnabled=1,bot_fYawSpeed=45.00,bot_fMoveFactor=1.00,bot_fFirePeriod=1.00,bot_iFireTicks=3,bot_iLogEvery=200,bot_bDiagnostics=0,bot_bAutoCombat=1,bot_bObstacleAvoidance=1,bot_iTelemetry=1,bot_bTelemetryConsole=0"
+        ],
+        "reasons": {
+          "ACTIVE": 603
+        },
+        "warnings": [],
+        "tick_hz_median": 20,
+        "tick_hz_min": 19,
+        "action_total": 48296,
+        "actions_per_s_median": 80,
+        "actions_per_bot_s": 20.0,
+        "action_ratio": 1.0,
+        "lp_median": 4,
+        "frames_per_s_median": 20,
+        "render_skip_total": 12074,
+        "render_draw_total": 0,
+        "lock_ms_max": 5.263,
+        "lock_ms_last_last": 0.001,
+        "tick_ms_max": 63.596,
+        "stall_max": 0,
+        "stall_rows": 0,
+        "cpu_user_ms_total": 129030,
+        "cpu_kernel_ms_total": 6290,
+        "verdict": "ACTIVE_OK",
+        "exit_code": 0
+      },
+      "slots": {
+        "0": {
+          "max_tick": 15600,
+          "tick_span": 12000,
+          "samples": 61,
+          "moved": true,
+          "fired": true,
+          "fire_actions_delta": 196
+        },
+        "1": {
+          "max_tick": 15600,
+          "tick_span": 12000,
+          "samples": 61,
+          "moved": true,
+          "fired": true,
+          "fire_actions_delta": 709
+        },
+        "2": {
+          "max_tick": 15600,
+          "tick_span": 12000,
+          "samples": 61,
+          "moved": true,
+          "fired": true,
+          "fire_actions_delta": 624
+        },
+        "3": {
+          "max_tick": 15600,
+          "tick_span": 12000,
+          "samples": 61,
+          "moved": true,
+          "fired": true,
+          "fire_actions_delta": 1711
+        }
+      }
+    }
+  },
+  "host_busy_percent": 35.50766560601677,
+  "whole_test_cgroup_cpu_core_percent": 64.54575424735613,
+  "new_throttled_periods": 0,
+  "cpu_core_percent": {
+    "server": 10.515,
+    "botA": 23.678,
+    "botB": 22.382
+  },
+  "health": {
+    "status": "HEALTHY",
+    "alerts": [],
+    "safe_recovery": true,
+    "utc": "2026-10-25T06:26:48Z",
+    "players": 8,
+    "expected_bots": 8,
+    "missing_roles": [],
+    "disk_free_bytes": 14657937408,
+    "owned_sync_bad": 0,
+    "external_sync_bad": 0,
+    "processes_verified": true,
+    "query_fresh": true,
+    "query_age_s": 3.9887962341308594,
+    "telemetry_fresh": true,
+    "cgroup_cpu": {
+      "usage_usec": 968462004,
+      "user_usec": 842747053,
+      "system_usec": 125714950,
+      "core_sched.force_idle_usec": 0,
+      "nr_periods": 0,
+      "nr_throttled": 0,
+      "throttled_usec": 0,
+      "nr_bursts": 0,
+      "burst_usec": 0
+    },
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "cgroup_memory_current": 547557376,
+    "cgroup_memory_peak": 547930112,
+    "host_memory_available": 2211176448,
+    "sync_scan_complete": true
+  },
+  "root_python_tests": 133,
+  "protected_active_pins": 12,
+  "protected_source_archive_files": 415,
+  "originals_unchanged": true,
+  "independent_wan_windows_join": false,
+  "utc": "2026-10-25T06:17:28.080Z",
+  "monitor_result_path": "/srv/tse-redstation-public-20261025/eight-060150-r_ca2yce/result.json",
+  "monitor_current_generation_verified": true,
+  "monitor_binding_correction": "Staged unit initially pointed to aborted first launch; final check caught FOREIGN_PORT/missing roles. Unit corrected to retained generation and full HEALTHY/no-missing-roles/no-alerts gate passed.",
+  "alpha_app_check": "6 backend tests and TypeScript/Vite build PASS"
+}

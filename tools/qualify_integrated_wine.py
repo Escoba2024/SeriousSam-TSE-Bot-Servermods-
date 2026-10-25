@@ -96,7 +96,9 @@ def dedicated_script(base,host,port,public):
 def population_ready(status,names,expected,public):
     count=int(status.get("numplayers",-1))
     if public:
-        return expected<=count<=16 and len(names)==count and set(ROSTER).issubset(names)
+        visible=lambda value:re.sub(r"\^c[0-9a-fA-F]{6}|\^r","",value)
+        observed=[visible(name) for name in names]
+        return expected<=count<=16 and len(observed)==count and len(set(observed))==count and {visible(name) for name in ROSTER}.issubset(observed)
     return count==expected and len(names)==expected
 
 def make_run_directory(runtime,stage):
@@ -151,6 +153,7 @@ def close_window(pid,display):
     return sent
 
 def main():
+    global ROSTER
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ("runtime","template","vanilla"):parser.add_argument("--"+name,required=True,type=Path)
     artifact=parser.add_mutually_exclusive_group(required=True)
@@ -165,7 +168,12 @@ def main():
     parser.add_argument("--identity-record",type=Path,help="isolated one-bot smoke only; private serialized Planner identity")
     parser.add_argument("--color-probe",action="store_true",help="private one-bot native markup test, NEVER production activation")
     parser.add_argument("--identity-rejoin-smoke",action="store_true",help="private in-place orderly bot disconnect and rejoin on the SAME live test server")
+    parser.add_argument("--redstation-roster",type=Path,help="Explicit Red Station preset and vetted colored identity pool")
     args=parser.parse_args()
+    if args.redstation_roster:
+        import redstation_preset
+        pool=json.loads(args.redstation_roster.read_text())
+        ROSTER=redstation_preset.roster(pool["identities"],pool["seed"])
     expected={"one":1,"four":4,"eight":8,"legacy-four":4,"reference-four":4}[args.stage];human=args.stage in ("one","four","eight")
     reference=args.stage=="reference-four"
     assert not reference or args.duration>=600,"reference CPU minimum is 600s"
@@ -236,6 +244,8 @@ def main():
             for name,want in PINS.items():
                 if name=="GameMP.dll" and role.startswith("bot"):continue
                 assert sha(game/"Bin"/name)==want,role+" original mismatch "+name
+            if args.redstation_roster:
+                redstation_preset.configure_overlay(game,role)
             if role.startswith("bot"):
                 shutil.copy2(dll,game/"Bin/GameMP.dll")
                 offset=4 if role=="botB" else 0
