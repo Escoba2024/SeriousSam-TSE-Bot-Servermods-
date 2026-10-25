@@ -1,3 +1,13 @@
+# ssam.ai — Serious Sam TSE 1.07
+
+**Projektname ab 25.10.2026: ssam.ai** (bisher Alpha-Gaming). Dieses Repository entwickelt die Vanilla-kompatiblen BotClients und die Serious-Sam-TSE-1.07-Infrastruktur. Die Kampagnen **#SamIsBack** und **#newSam** bleiben bestehen.
+
+> **Kompatibilität:** Historische Alpha-Gaming-Bezeichnungen in Prüfberichten, Commit-Historie, Dateipfaden, Dienstkennungen und alten Nachweisen bleiben absichtlich erhalten. Ein Branding-Wechsel ist keine neue Runtime-Abnahme, kein Serverneustart und kein Nachweis der Domaininhaberschaft.
+>
+> [Umstellungsplan mit Abnahmekriterien](docs/superpowers/plans/2026-10-25-ssam-ai-rebrand.md).
+
+---
+
 # Serious Sam TSE 1.07 – Vanilla Bot Clients
 
 Bots joinen als reguläre Netzwerkspieler über separate modifizierte BotClient-Prozesse. Dedicated Server, Engine, Entities und menschliche TSE-1.07-Clients bleiben unverändert. Eingaben entstehen ausschließlich über normale `CPlayerAction`-/`CPlayerSource::SetAction`-Pfade. Pro Prozess sind maximal vier lokale Spieler vorgesehen; acht Bots verwenden zwei getrennte Installationen.
