@@ -24,7 +24,7 @@ def main():
     shutil.copytree(RELEASE,target)
     for name in ("Game.cpp","BotDriver.cpp","BotTelemetry.h"):
         shutil.copy2(HERE/name,target/name)
-    for name in ("bot_profile.h","bot_perception.h","bot_aim.h","bot_loadout.h","bot_human.h"):
+    for name in ("bot_profile.h","bot_perception.h","bot_aim.h","bot_loadout.h","bot_human.h","bot_route.h"):
         shutil.copy2(ROOT/"poc/botcore"/name,target/name)
     print("UNQUALIFIED candidate source:",target)
 if __name__=="__main__": main()

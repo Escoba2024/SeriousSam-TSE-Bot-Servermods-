@@ -14,7 +14,7 @@ import stat
 import struct
 import uuid
 
-from bot_sessions import VISIBLE_CAP
+from gaming_names import VISIBLE_CAP, validate_native
 
 MAX_TEMPLATE_BYTES = 4096
 GUID_BYTES = 16
@@ -59,7 +59,12 @@ def profile_bytes(template, identity, *, color_probe=False, colors_enabled=False
         raise ValueError("explicit boolean color_probe required")
     if type(colors_enabled) is not bool:
         raise ValueError('explicit boolean colors_enabled required')
-    if color_probe or (colors_enabled and identity.get('color') is not None):
+    if 'native_name' in identity:
+        if validate_native(identity['native_name']) != identity['nickname']:
+            raise ValueError('native name does not match stable visible identity')
+        if colors_enabled or color_probe:
+            name = identity['native_name'].encode('ascii')
+    elif color_probe or (colors_enabled and identity.get('color') is not None):
         rgb = identity.get("color")
         if not isinstance(rgb, str) or not re.fullmatch(r"[0-9a-fA-F]{6}", rgb):
             raise ValueError("validated RGB required for native color markup")
@@ -213,6 +218,13 @@ def reconcile(state, observation):
     if status == "LEAVING":
         if not alive and not connected and observation.get("query_absence_confirmed") is True:
             return "ack_left"
+        if alive and not connected:
+            # Wine may expose a splash/loading window before Retail is ready to
+            # handle WM_DELETE_WINDOW. Do not spend the at-most-once close claim
+            # on it: wait for independently proved native join + query presence.
+            # A client that never becomes ready remains held for bounded manual
+            # cleanup; this is never permission to kill a shared process.
+            return "wait_leave_ready"
         if alive:
             return "graceful_leave"
         return "quarantine"

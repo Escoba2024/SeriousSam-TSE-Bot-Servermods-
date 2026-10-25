@@ -42,6 +42,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <EntitiesV/PlayerWeapons.h>
+#include <EntitiesV/Projectile.h>
 
 // Engine CTString::VPrintF shares a static buffer with the renderer. Timer
 // diagnostics must format locally, then use the synchronized console writer.
@@ -73,6 +74,8 @@ static INDEX bot_bObstacleAvoidance = FALSE; // optional reactive movement recov
 static INDEX bot_iTelemetry = 1;         // 0 = keep the build silent
 static INDEX bot_bTelemetryConsole = 0;  // 1 = console summary every 5 s
 static INDEX bot_bHumanAI      = FALSE; // profile-driven perception/aim/loadout (new path)
+static INDEX bot_bCecilP1 = FALSE; // experimental; default OFF
+static INDEX bot_bExploratorySearch = FALSE; // unqualified: B2 had excess world deaths
 static INDEX bot_iRosterOffset = 0;     // 0 or 4: which half of the 8-bot roster this client uses
 static INDEX bot_iProfile0     = -1;    // explicit roster index per local slot (-1 = offset+iLP)
 static INDEX bot_iProfile1     = -1;
@@ -532,6 +535,8 @@ void BotDriver_Init(void)
   // touches engine state and can be silenced with bot_iTelemetry=0.
   BotTelemetry_Start();
   _pShell->DeclareSymbol("user INDEX bot_bHumanAI;",      &bot_bHumanAI);
+  _pShell->DeclareSymbol("user INDEX bot_bCecilP1;", &bot_bCecilP1);
+  _pShell->DeclareSymbol("user INDEX bot_bExploratorySearch;", &bot_bExploratorySearch);
   _pShell->DeclareSymbol("user INDEX bot_iRosterOffset;", &bot_iRosterOffset);
   _pShell->DeclareSymbol("user INDEX bot_iProfile0;",     &bot_iProfile0);
   _pShell->DeclareSymbol("user INDEX bot_iProfile1;",     &bot_iProfile1);
@@ -601,7 +606,8 @@ static void BotHumanAttach(INDEX iLP)
     botcore::BuildProfile(3,0,(uint32_t)bot_iProfileSeed,"BOT-Fallback",&profile);
     BotLog("[BotHuman] local=%d roster index %d rejected, average fallback\n",iLP,profile_index);
   }
-  BotHumanPolicy(iLP).Configure(&profile);
+  BotHumanPolicy(iLP).Configure(&profile,bot_bExploratorySearch!=FALSE,
+                               bot_bCecilP1!=FALSE);
   _absBots[iLP].bs_lastHealth=0.0f;
   BotLog("[BotHuman] local=%d profile=%s tier=%d persona=%s seed=%lu\n",
     iLP,profile.name,profile.tier,botcore::PersonalityName(profile.persona),
@@ -855,6 +861,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     FLOAT humanStrafe=0.0f;    // -1..1, applied only when bot_fStrafeScale > 0
     FLOAT humanScanYaw=0.0f;   // scan delta while no opponent is perceived
     FLOAT humanTargetDistance=0.0f; // frozen last-seen distance from the policy
+    FLOAT humanEscapeForward=-1.0f; // nonnegative only during a bounded escape
     if (automatic) {
       testAimReady=FALSE;
       const CSessionProperties *session=(const CSessionProperties *)_pNetwork->GetSessionProperties();
@@ -887,6 +894,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           world.deathmatch=deathmatch!=FALSE;
           world.usable_weapons=BotCombatUsableWeapons(hw);
           world.current_weapon=hw->m_iCurrentWeapon;
+          world.strafe_scale=Clamp(bot_fStrafeScale,0.0f,1.0f);
 
           if (bs.bs_lastHealth>0.0f && world.health<bs.bs_lastHealth) {
             human.NotifyDamage(bs.bs_lastHealth,world.health);
@@ -913,6 +921,8 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
             si.vy=other->en_vCurrentTranslationAbsolute(2);
             si.vz=other->en_vCurrentTranslationAbsolute(3);
             si.health=other->GetHealth();
+            si.yaw_deg=otherEye.pl_OrientationAngle(1);
+            si.facing_known=TRUE;
             si.alive=TRUE;
             si.local=local!=FALSE;
             candidate[count]=other;
@@ -939,6 +949,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           humanStrafe=(FLOAT)command.strafe;
           humanScanYaw=(FLOAT)command.yaw_delta_deg;
           humanTargetDistance=(FLOAT)command.distance_m;
+          if (command.escape || command.travel) humanEscapeForward=(FLOAT)command.forward;
 
           if (bot_iLogEvery>0 && bs.bs_iTick%bot_iLogEvery==0) {
             BotLog("[BotHuman] local=%d tick=%d profile=%s target=%d vis=%d fire=%d weapon=%d dist=%.1f pref=%.1f move=%.2f strafe=%.2f err=%.2f rays=%d skipped=%d switches=%d overshoots=%d\n",
@@ -955,6 +966,14 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           botcore::WorldView fallen;
           fallen.tick=bs.bs_iTick;
           fallen.alive=FALSE;
+          fallen.pose.x=std::nan(""); // absent entity is not a position at map origin
+          if (player!=NULL) {
+            const CPlacement3D lastEye=BotCombatEye(player);
+            fallen.pose.x=lastEye.pl_PositionVector(1);
+            fallen.pose.y=lastEye.pl_PositionVector(2);
+            fallen.pose.z=lastEye.pl_PositionVector(3);
+            fallen.health=player->GetHealth();
+          }
           human.BeginTick(fallen);
           moveFactor=0.0f;
           bs.bs_lastHealth=0.0f;
@@ -1050,6 +1069,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         // No opponent position is used; perception/aim/fire remain profile-driven.
         if (player!=NULL && player->GetHealth()>0 && deathmatch) {
           bs.bs_aHeading+=humanScanYaw;
+          if (humanEscapeForward>=0.0f) moveFactor=humanEscapeForward;
         } else { moveFactor=0.0f; }
       } else if (player!=NULL && player->GetHealth()>0 && deathmatch) {
         bs.bs_aHeading+=bot_fYawSpeed*fTick; // bounded search until a visible opponent exists
@@ -1081,6 +1101,9 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
       bs.bs_aHeading += bot_fYawSpeed*fTick;
     }
 
+    // An old recovery advance must not push a hurt bot forward while it is
+    // turning back along its own history.
+    if (humanEscapeForward==0.0f) bs.bs_navigation.Reset();
     if (bot_bObstacleAvoidance && automatic && combatDeathmatch && player!=NULL) {
       if (bs.bs_navPlayer!=player) { bs.bs_navigation.Reset(); bs.bs_navPlayer=player; }
       const BOOL alive=player->GetHealth()>0;
@@ -1100,6 +1123,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         alive!=FALSE,combatHold!=FALSE,(iLP&1)?-1:1,
         Clamp(bot_fMoveFactor,0.0f,1.0f)};
       const botcore::NavigationDecision navigation=bs.bs_navigation.Update(input);
+      if (bot_bHumanAI) BotHumanPolicy(iLP).NotifyNavigation(navigation.overrideInput);
       if (navigation.overrideInput) {
         bs.bs_aHeading=player->m_aLastRotation(1)+(FLOAT)navigation.yawDelta;
         bs.bs_aPitch=player->m_aLastRotation(2);
@@ -1115,6 +1139,29 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
       }
     } else { bs.bs_navigation.Reset(); bs.bs_navPlayer=NULL; }
 
+    // Obstacle recovery can replace the policy's forward input. Validate the
+    // final axes after that override, using both current and requested yaw;
+    // this does not assume whether Retail applies rotation before translation.
+    if (bot_bHumanAI && automatic && combatDeathmatch && player!=NULL &&
+        player->GetHealth()>0.0f) {
+      const CPlacement3D eye=BotCombatEye(player);
+      const FLOAT yaw=eye.pl_OrientationAngle(1);
+      const FLOAT requestedYaw=yaw+bs.bs_aHeading-player->m_aLastRotation(1);
+      const FLOAT lateral=Clamp(humanStrafe*bot_fStrafeScale,-1.0f,1.0f);
+      botcore::HumanBotPolicy &human=BotHumanPolicy(iLP);
+      if (!human.AllowFinalMovement(eye.pl_PositionVector(1),eye.pl_PositionVector(2),
+            eye.pl_PositionVector(3),yaw,moveFactor,lateral) ||
+          !human.AllowFinalMovement(eye.pl_PositionVector(1),eye.pl_PositionVector(2),
+            eye.pl_PositionVector(3),requestedYaw,moveFactor,lateral)) {
+        if (bot_iLogEvery>0 && bs.bs_iTick%bot_iLogEvery==0) {
+          BotLog("[BotMotionSafety] local=%d tick=%d veto=1 forward=%.2f strafe=%.2f\n",
+            iLP,bs.bs_iTick,moveFactor,lateral);
+        }
+        moveFactor=0.0f;
+        humanStrafe=0.0f;
+      }
+    }
+
     // 2) fire decision
     // The legacy path uses a periodic pulse; the profile-driven path fires
     // exactly when its aim policy allows it (fresh line of sight, settled
@@ -1129,7 +1176,8 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     const BOOL respawnInput=automatic && player!=NULL && player->GetHealth()<=0;
     if (bot_bHumanAI && automatic) {
       // A press/release cadence, so the native respawn edge really occurs.
-      const BOOL respawnPulse=respawnInput && ((bs.bs_iTick&4)==0);
+      const BOOL respawnPulse=respawnInput &&
+        BotHumanPolicy(iLP).ShouldRespawnPulse(bs.bs_iTick);
       bFire = (humanFire && testAimReady) || respawnPulse;
     } else {
       bFire = bFire && (testAimReady || respawnInput);
@@ -1189,6 +1237,27 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           iLP, bs.bs_iTick, bs.bs_aHeading, bFire);
       }
       if (bot_bDiagnostics && iLP==0) {
+        // Passive replicated projectile witnesses; sampled sightings are NOT a
+        // shot/hit counter (short-lived projectiles and hitscan may be missed).
+        // Bounded logging, no hooks or simulation writes. Private probes only.
+        if (player!=NULL) {
+          INDEX witnesses=0;
+          {FOREACHINDYNAMICCONTAINER(player->GetWorld()->wo_cenEntities,CEntity,itpen) {
+            CEntity *entity=itpen;
+            if (witnesses>=8) break;
+            if (!IsOfClass(entity,"Projectile")) continue;
+            CProjectile *projectile=(CProjectile*)entity;
+            INDEX launcher=-1;
+            CEntity *owner=(CEntity*)projectile->m_penLauncher;
+            for (INDEX index=0;index<16;++index)
+              if (owner!=NULL && CEntity::GetPlayerEntity(index)==owner)
+                launcher=index;
+            BotLog("[BotProjectileWitness] tick=%d entity=%lu type=%d launcher=%d speed=%.2f\n",
+              bs.bs_iTick,(unsigned long)entity->en_ulID,(int)projectile->m_prtType,
+              launcher,projectile->en_vCurrentTranslationAbsolute.Length());
+            ++witnesses;
+          }}
+        }
         if (player!=NULL && player->m_penWeapons!=NULL) {
           CPlayerWeapons *weapons = player->GetPlayerWeapons();
           CPlacement3D eye = player->en_plViewpoint;
@@ -1206,8 +1275,8 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           const INDEX frags = session->sp_bUseFrags
             ? player->m_psLevelStats.ps_iKills : player->m_psLevelStats.ps_iScore;
           const CPlacement3D &placement = player->en_plPlacement;
-          BotLog("[BotSnapshot] tick=%d player=%d pos=(%.2f,%.2f,%.2f) yaw=%.2f health=%.1f buttons=%lu \\frags_%d\\%d\n",
-            bs.bs_iTick, iPlayer, placement.pl_PositionVector(1),
+          BotLog("[BotSnapshot] tick=%d player=%d entity=%lu pos=(%.2f,%.2f,%.2f) yaw=%.2f health=%.1f buttons=%lu \\frags_%d\\%d\n",
+            bs.bs_iTick, iPlayer,(unsigned long)player->en_ulID,placement.pl_PositionVector(1),
             placement.pl_PositionVector(2), placement.pl_PositionVector(3),
             placement.pl_OrientationAngle(1), player->GetHealth(),
             (unsigned long)player->m_ulLastButtons, iPlayer, frags);

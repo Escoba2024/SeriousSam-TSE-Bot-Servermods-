@@ -1,0 +1,13 @@
+# Hetzner-only AI2 native diagnosis — 25 October 2026
+
+Authority: user's autonomous Bot AI2 task, isolated tests only. No Shadow or subagents. Original public binaries/processes are excluded from instrumentation.
+
+Original Retail Engine `b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f` was actually loaded by a new x86 MSVC probe on this host. Exported `CTString::Undecorated` and `LengthNaked` accept color, bold and italic combinations. `^f3NIGHT^F^r` decodes to `IGHT`; `^f3^c00FF00NIGHT^F^r` to `c00FF00NIGHT`. Therefore automatic Flash generation and regular profile validation reject Flash. No invisible-padding workaround or relaxed character policy. Rendering remains a separate test.
+
+The original exported functions are `?Undecorated@CTString@@QBE?AV1@XZ` and `?LengthNaked@CTString@@QBEJXZ`; PE image base `0x600c0000`, export RVAs `0x7120` and `0x70e0` respectively (objdump name-index mapping). `tools/probe_retail_namecodes.cpp` is the reproducible call-level probe; private output is retained on Hetzner. The public Croteam source is only corroboration, not proof of ABI equivalence: [DrawPort.cpp](https://github.com/Croteam-official/Serious-Engine/blob/master/Sources/Engine/Graphics/DrawPort.cpp), [CTString.cpp](https://github.com/Croteam-official/Serious-Engine/blob/master/Sources/Engine/Base/CTString.cpp).
+
+Current candidate's increased exploration exposes native non-player deaths. Existing logs cannot identify exact damage types/amounts or distinguish inputs from actual weapon shots. No Frida/Ghidra MCP tools, Java, Frida Python or pip were present in this Hetzner session. A private Python environment was created under `/srv/tse-ai2-frida-venv-20261025` to install Frida via official PyPI. Ubuntu ensurepip is absent; the official PyPA pip zipapp bootstraps only this private diagnostic environment. No OS packages, Wine installation, system Python, kernel ptrace settings or public service are changed.
+
+Before any Retail attach: self-test on a newly spawned throwaway process, then prove PID/start/CWD/UID/cgroup and private network namespace for the exact owned test process. Only observe function calls/arguments; no replacement, return-value edits, state writes, production attach or security-setting changes. Keep an uninstrumented control and measure overhead; detach before cleanup. A tool self-test is not a TSE runtime PASS. If platform/kernel permissions reject attach, report the actual error and retain the safe uninstrumented tests.
+
+Official diagnostic references: [Frida installation](https://frida.re/docs/installation/), [PyPA standalone zipapp](https://pip.pypa.io/en/stable/installation/#standalone-zip-application). Verified tool/runtime results will be appended after execution.

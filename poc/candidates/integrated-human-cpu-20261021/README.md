@@ -1,5 +1,19 @@
 # Integrierter Human-KI-/CPU-Kandidat
 
+Fortsetzung 25.10.: öffentliche Flotte auf Benutzerauftrag deaktiviert; neue
+Route-Memory hinter `bot_bExploratorySearch=1` bleibt separat nativ zu prüfen.
+Sie speichert ausschließlich eigene Wege und konservative Warnstellen nach
+starkem Schaden ohne zuvor sichtbaren Gegner, keine unbekannten Kartendaten.
+Ein neuer Build besitzt keine automatische Retail- oder Produktionsfreigabe.
+
+## Fortsetzung Bot AI2 am 25.10.2026
+
+Die aktuellen Quellen enthalten zusätzliche Abfang-/Explosivschutz- und verletzungsabhängige Rückzugslogik. `bot_bExploratorySearch` bleibt nach einer nativen Qualitätsregression standardmäßig 0. `bot_fStrafeScale` bleibt standardmäßig 0; ein begrenzter Privatlauf mit 0,5 ersetzt keine Acht-Bot-Abnahme. Die bekannten qualifizierten DLLs werden nicht verändert.
+
+[AI2-Bericht und Grenzen](../../../docs/reports/2026-10-25-bot-ai2.md): echte Kämpfe und Vierclient-Rejoins gemessen, aber Acht-Einzelclient-Abnahme am RAM-Gate blockiert und keine allgemein stärkere KI freigegeben. `debug_logging` des privaten Session-Harness aktiviert auch begrenzte Snapshot-/Projektil-Diagnostik. Passive Frida-Hooks sind auf eigene isolierte Server mit Originalpins und getrenntem Werkzeugnachweis beschränkt.
+
+Gaming-Pool: `python3 tools/gaming_names.py --count 150 --seed 20261025 --output NEW-CONFIG.json` vom Repository-Root. Ausgabe ist deaktiviert, überschreibt keine Datei und enthält keine BOT-Präfixe. `--advanced-styles` ergänzt Bold/Italic-Vorschläge; Flash bleibt wegen des tatsächlich nachgewiesenen Retail-Decoderfehlers ausgeschlossen.
+
 **Nicht qualifiziert.** Nur dieser Overlay kombiniert die Änderungen; die ursprünglichen Patchdateien #42 und #44 sind alternative Vorschläge und dürfen nicht zusätzlich darüber angewendet werden. Die doppelte Nummer 0008 bleibt als historische Herkunft erhalten, nicht als Ausführungsreihenfolge.
 
 Basis: main 67f1977 mit #43. Imports: #42 f3c9384, #44 7d9e695. Telemetrie-CSV: 21 exakt typisierte Formatfelder statt 22. Die qualifizierten Release-Quellen und 61DC-DLL bleiben geschützt.

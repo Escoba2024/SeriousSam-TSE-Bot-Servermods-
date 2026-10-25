@@ -7,6 +7,8 @@ test_bot_navigation
 test_output.txt
 test_ai_output.txt
 test_bot_human_ai
+test_bot_intercept
+test_bot_route
 test_botdriver_block
 block.inc
 bench_bot_human

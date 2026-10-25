@@ -1,6 +1,7 @@
 """Explicit Red Station configuration for fresh owned overlays; no binary patch."""
 import random
 import re
+from gaming_names import validate_native
 VALUES={'gam_iStartDifficulty':2,'gam_bInfiniteAmmo':1,'gam_iBlood':3,'gam_bGibs':0}
 def symbols(source):
  for key,value in VALUES.items():
@@ -17,10 +18,15 @@ def roster(identities,seed):
  names=[];seen=set()
  for who in identities:
   n=who.get('nickname');rgb=who.get('color')
-  if not isinstance(n,str) or not re.fullmatch(r'[A-Za-z0-9 ._\[\]-]{1,18}',n) or n!=n.strip() or not any(c.isalnum() for c in n):raise ValueError('unsafe native nickname')
+  if not isinstance(n,str) or not re.fullmatch(r'[A-Za-z0-9 ._\[\]-]{1,22}',n) or n!=n.strip() or not any(c.isalnum() for c in n):raise ValueError('unsafe native nickname')
   if n.casefold() in seen:raise ValueError('duplicate native nickname')
-  if not isinstance(rgb,str) or not re.fullmatch(r'[0-9a-fA-F]{6}',rgb):raise ValueError('invalid native color')
-  seen.add(n.casefold());names.append('BOT-^c'+rgb.upper()+n+'^r')
+  if 'native_name' in who:
+   native=who['native_name']
+   if validate_native(native)!=n:raise ValueError('native and visible identity differ')
+  else:
+   if not isinstance(rgb,str) or not re.fullmatch(r'[0-9a-fA-F]{6}',rgb):raise ValueError('invalid native color')
+   native='^c'+rgb.upper()+n+'^r';validate_native(native)
+  seen.add(n.casefold());names.append(native)
  return random.Random(seed).sample(names,8)
 def configure_overlay(game,role):
  if not game.is_mount():raise RuntimeError('fresh overlay required')

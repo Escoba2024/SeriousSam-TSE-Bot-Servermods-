@@ -79,6 +79,9 @@ struct SkillParams {
   double preferred_range_m;  // nominal engagement distance
   double retreat_health;     // 0..1, fall back below this health fraction
   double search_rate_deg_s;  // scan speed while no target is known
+  double threat_weight; // visible target pointing at self
+  double lowhp_weight; // opportunistic visible target priority
+  double respawn_delay_s; // dead time before native fire-edge
 };
 
 /* ------------------------------------------------------------------------ */
@@ -133,27 +136,27 @@ inline const SkillParams& SkillFor(int tier) {
       {0.55, 1.2, 55.0,  60.0, 0.35, 4,
        110.0,  320.0, 4.50, 0.55, 0.55, 5.0, 0.35, 0.05,
        2.5, 1.45,
-       7.0, 0.55, 40.0},
+       7.0, 0.55, 40.0, 0.5, 0.20, 2.0},
       // 2 - casual: reacts, but tracking and trigger discipline are loose
       {0.42, 1.6, 62.0,  70.0, 0.40, 5,
        150.0,  450.0, 3.20, 0.45, 0.45, 4.0, 0.28, 0.20,
        2.0, 1.35,
-       9.0, 0.50, 45.0},
+       9.0, 0.50, 45.0, 0.65, 0.28, 1.5},
       // 3 - average: competent, occasionally sloppy
       {0.30, 2.0, 68.0,  80.0, 0.45, 6,
        200.0,  650.0, 2.20, 0.38, 0.34, 3.0, 0.22, 0.45,
        1.6, 1.28,
-       12.0, 0.42, 52.0},
+       12.0, 0.42, 52.0, 0.85, 0.35, 1.0},
       // 4 - advanced: deliberate aim, real weapon knowledge
       {0.22, 2.5, 74.0,  90.0, 0.50, 7,
        270.0,  900.0, 1.50, 0.30, 0.24, 2.2, 0.16, 0.70,
        1.2, 1.22,
-       16.0, 0.35, 60.0},
+       16.0, 0.35, 60.0, 1.0, 0.42, 0.6},
       // 5 - very good arena player: fast, precise, patient trigger
       {0.15, 3.0, 80.0, 100.0, 0.55, 8,
        340.0, 1300.0, 1.00, 0.24, 0.16, 1.5, 0.10, 0.90,
        0.9, 1.18,
-       22.0, 0.28, 70.0},
+       22.0, 0.28, 70.0, 1.15, 0.50, 0.25},
   };
   const int idx = (tier < 1 ? 1 : (tier > kSkillTierCount ? kSkillTierCount : tier)) - 1;
   return kSkills[idx];
@@ -223,6 +226,9 @@ enum class ProfileError {
   kPreferredRangeOutOfRange,
   kRetreatHealthOutOfRange,
   kSearchRateOutOfRange,
+  kThreatWeightOutOfRange,
+  kLowHealthWeightOutOfRange,
+  kRespawnDelayOutOfRange,
   kNonFinite,
   kSeedZero
 };
@@ -242,7 +248,9 @@ inline ProfileError ValidateSkill(const SkillParams& s) {
       !std::isfinite(s.fire_tol_deg) || !std::isfinite(s.settle_s) ||
       !std::isfinite(s.prediction_gain) || !std::isfinite(s.weapon_dwell_s) ||
       !std::isfinite(s.switch_margin) || !std::isfinite(s.preferred_range_m) ||
-      !std::isfinite(s.retreat_health) || !std::isfinite(s.search_rate_deg_s)) {
+      !std::isfinite(s.retreat_health) || !std::isfinite(s.search_rate_deg_s) ||
+      !std::isfinite(s.threat_weight) || !std::isfinite(s.lowhp_weight) ||
+      !std::isfinite(s.respawn_delay_s)) {
     return ProfileError::kNonFinite;
   }
   if (!InRange(s.reaction_s, 0.05, 2.0)) return ProfileError::kReactionOutOfRange;
@@ -262,6 +270,9 @@ inline ProfileError ValidateSkill(const SkillParams& s) {
   if (!InRange(s.preferred_range_m, 1.0, 60.0)) return ProfileError::kPreferredRangeOutOfRange;
   if (!InRange(s.retreat_health, 0.0, 0.95)) return ProfileError::kRetreatHealthOutOfRange;
   if (!InRange(s.search_rate_deg_s, 5.0, 180.0)) return ProfileError::kSearchRateOutOfRange;
+  if (!InRange(s.threat_weight, 0.0, 2.0)) return ProfileError::kThreatWeightOutOfRange;
+  if (!InRange(s.lowhp_weight, 0.0, 1.0)) return ProfileError::kLowHealthWeightOutOfRange;
+  if (!InRange(s.respawn_delay_s, 0.0, 5.0)) return ProfileError::kRespawnDelayOutOfRange;
   if (s.max_los_per_tick < 1 || s.max_los_per_tick > 16) {
     return ProfileError::kSightRangeOutOfRange;
   }
@@ -309,7 +320,9 @@ inline bool SkillUnaffectedByPersonality(int tier, int persona_a, int persona_b)
   const SkillParams& sb = b.skill;
   return sa.reaction_s == sb.reaction_s && sa.turn_rate_deg_s == sb.turn_rate_deg_s &&
          sa.aim_sigma_deg == sb.aim_sigma_deg && sa.fire_tol_deg == sb.fire_tol_deg &&
-         sa.memory_s == sb.memory_s && sa.prediction_gain == sb.prediction_gain;
+         sa.memory_s == sb.memory_s && sa.prediction_gain == sb.prediction_gain &&
+         sa.threat_weight == sb.threat_weight && sa.lowhp_weight == sb.lowhp_weight &&
+         sa.respawn_delay_s == sb.respawn_delay_s;
 }
 
 /* ------------------------------------------------------------------------ */

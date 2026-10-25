@@ -13,17 +13,22 @@ import re
 import sqlite3
 import unicodedata
 import uuid
+from gaming_names import VISIBLE_CAP as NATIVE_VISIBLE_CAP, validate_native
 
-VISIBLE_CAP = 24  # Own conservative policy cap, NOT a measured Retail maximum.
-DEFAULT_BANDS = [[0.1, 300, 1199], [0.8, 1200, 5400], [0.1, 5401, 10800]]
+# Keep query normalization at its previous bound: shortening a human name to
+# the owned 22-character cap could invent a collision. Bot admission below uses
+# the shared native cap and rejects excess input instead of truncating it.
+VISIBLE_CAP = 24
+DEFAULT_BANDS = [[0.15, 300, 900], [0.55, 900, 2700], [0.25, 2700, 5400], [0.05, 5400, 9000]]
 ACTIVE = ("JOINING", "PLAYING", "LEAVING")
+DECORATION = re.compile(r'\^c[0-9a-fA-F]{6}|\^f[0-9]|\^[biIBFr]')
 
 
 def clean_name(value):
     if not isinstance(value, str):
         raise ValueError("nickname must be text")
     # Candidate decoration grammar; colors remain gated until native verification.
-    value = re.sub(r"\^c[0-9a-fA-F]{6}|\^r", "", value)
+    value = DECORATION.sub('', value)
     value = unicodedata.normalize("NFKC", value)
     value = re.sub(r"[^A-Za-z0-9 ._\[\]-]", "", value)
     value = " ".join(value.split())[:VISIBLE_CAP].strip()
@@ -40,7 +45,7 @@ def validate_config(config):
     allowed = {"enabled", "colors_enabled", "accelerated", "max_bots", "pool_id", "seed",
                "reserved_human_slots", "join_interval_s", "leave_interval_s",
                "startup_delay_s", "pause_s", "session_bands", "servers", "identities", "min_bots",
-               "debug_logging", "log_every_ticks", "max_log_mib", "low_memory_rendering"}
+               "debug_logging", "log_every_ticks", "max_log_mib", "low_memory_rendering", "exploratory_search", "strafe_scale"}
     if not isinstance(config, dict) or set(config) - allowed:
         raise ValueError("configuration must be an object with known keys")
     c = dict(config)
@@ -53,13 +58,17 @@ def validate_config(config):
     c.setdefault('log_every_ticks', 20)
     c.setdefault('max_log_mib', 32)
     c.setdefault('low_memory_rendering', False)
+    c.setdefault('exploratory_search', False)
+    c.setdefault('strafe_scale', 0.0)
+    if not number(c['strafe_scale']) or c['strafe_scale']>1:
+        raise ValueError('strafe_scale must be a finite number in 0..1')
     c.setdefault("reserved_human_slots", 2)
     c.setdefault("join_interval_s", 60)
     c.setdefault("leave_interval_s", 15)
     c.setdefault("startup_delay_s", [10, 180])
     c.setdefault("pause_s", [900, 7200])
     c.setdefault("session_bands", DEFAULT_BANDS)
-    for key in ("enabled", "colors_enabled", "accelerated", "debug_logging", "low_memory_rendering"):
+    for key in ("enabled", "colors_enabled", "accelerated", "debug_logging", "low_memory_rendering", "exploratory_search"):
         if type(c[key]) is not bool:
             raise ValueError(key + " must be boolean")
     for key,high in [('log_every_ticks',1200),('max_log_mib',128)]:
@@ -101,6 +110,22 @@ def validate_config(config):
         if not isinstance(ident, str) or not re.fullmatch(r"[a-z0-9_-]{1,40}", ident) or ident in ids:
             raise ValueError("invalid or duplicate identity ID")
         i["nickname"] = clean_name(i.get("nickname"))
+        if len(i['nickname']) > NATIVE_VISIBLE_CAP:
+            raise ValueError('native nickname exceeds 22-visible-character policy cap')
+        if 'native_name' in i and validate_native(i['native_name']) != i['nickname']:
+            raise ValueError('native name must match the stable visible identity')
+        if 'session_bands' in i or 'pause_s' in i:
+            # Reuse the global validation contract, including the accelerated gate.
+            timing = dict(c, identities=[dict(id='timing', nickname='Timing', profile=0)])
+            for field in ('session_bands', 'pause_s'):
+                if field in i: timing[field] = i[field]
+            validate_config(timing)
+        if 'active_hours_utc' in i:
+            hours = i['active_hours_utc']
+            if (not isinstance(hours, list) or not hours or
+                    any(type(h) is not int or not 0 <= h <= 23 for h in hours) or
+                    len(hours) != len(set(hours))):
+                raise ValueError('active_hours_utc must contain unique UTC hours 0..23')
         key = i["nickname"].casefold()
         if key in names:
             raise ValueError("duplicate visible nickname")
@@ -213,6 +238,8 @@ class Planner:
         if not number(at) or not 0 <= now - at <= 15 or type(maximum) is not int or not 1 <= maximum <= 16 or not isinstance(names, list) or len(names) > maximum:
             return None
         try:
+            # Raw human markup outside the earlier color qualification still
+            # holds admission. clean_name separately prevents visible aliases.
             if any(not isinstance(n, str) or "^" in re.sub(r"\^c[0-9a-fA-F]{6}|\^r", "", n) for n in names):
                 return None
             keys = [clean_name(n).casefold() for n in names]
@@ -266,7 +293,9 @@ class Planner:
                 self.put_meta("leave_at", now + self.config["leave_interval_s"])
             if not enabled or observed is None or len(active) >= capacity or any(r["status"] == "JOINING" for r in all_rows.values()) or now < self.meta("join_at"):
                 return actions
-            ready = [r for r in rows if r["status"] == "WAITING" and now >= r["until"] and identities[r["id"]]["nickname"].casefold() not in humans]
+            ready = [r for r in rows if r["status"] == "WAITING" and now >= r["until"] and
+                     identities[r["id"]]["nickname"].casefold() not in humans and
+                     int(now//3600)%24 in identities[r['id']].get('active_hours_utc', range(24))]
             if ready:
                 seq = self.meta("join_sequence")
                 row = self.rng("selection", server, seq).choices(ready, weights=[identities[r["id"]]["regular_weight"] for r in ready])[0]
@@ -292,11 +321,13 @@ class Planner:
                 return False
             if event == "joined":
                 rng = self.rng("duration", ident, epoch)
-                band = rng.choices(self.config["session_bands"], weights=[b[0] for b in self.config["session_bands"]])[0]
+                bands = next(i for i in self.identities() if i['id']==ident).get('session_bands', self.config['session_bands'])
+                band = rng.choices(bands, weights=[b[0] for b in bands])[0]
                 status, until, reason = "PLAYING", now + rng.randint(band[1], band[2]), ""
             else:
                 status = "COOLDOWN"
-                until = now + self.rng("pause", ident, epoch).randint(*self.config["pause_s"])
+                pause = next(i for i in self.identities() if i['id']==ident).get('pause_s', self.config['pause_s'])
+                until = now + self.rng("pause", ident, epoch).randint(*pause)
                 reason = row["reason"] if event == 'left' and row["status"] == "LEAVING" else event
             self.db.execute("UPDATE session SET status=?,until=?,reason=?,last_event=? WHERE id=?", (status, until, reason, event, ident))
             self.db.execute("INSERT INTO event (id,epoch,event,reason,at) VALUES (?,?,?,?,?)", (ident, epoch, event, reason, now))
