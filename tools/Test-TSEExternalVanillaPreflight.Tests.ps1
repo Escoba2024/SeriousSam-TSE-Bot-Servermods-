@@ -50,6 +50,34 @@ try {
  Remove-Item -LiteralPath (Join-Path $bin 'EntitiesMP.dll') -Force
  $missing=Invoke-Fixture $valid
  Check ($missing.status -eq 'BLOCKED' -and $missing.filesVerified -eq 2) 'missing binary blocked'
+ # Restore all four benign fixture files before parser-negative cases.
+ foreach($name in $names){Set-Content -LiteralPath (Join-Path $bin $name) -Value ('mock-'+$name) -Encoding Ascii}
+ $noFinal=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1',''))
+ Check ($noFinal.status -eq 'BLOCKED' -and -not $noFinal.oneBotOnly) 'missing final blocked'
+ $duplicate=Invoke-Fixture ($valid.Replace('\numplayers\1\','\numplayers\1\numplayers\9\'))
+ Check ($duplicate.status -eq 'BLOCKED') 'duplicate numplayers blocked'
+ $unexpected=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1','\player_2\Intruder\final\\queryid\1.1'))
+ Check ($unexpected.status -eq 'BLOCKED') 'unexpected extra player index blocked'
+ $prefixed=Invoke-Fixture ('garbage'+$valid)
+ Check ($prefixed.status -eq 'BLOCKED') 'garbage prefix blocked'
+ $dangling=Invoke-Fixture ($valid+'\extra')
+ Check ($dangling.status -eq 'BLOCKED') 'dangling unpaired field blocked'
+ $badFinal=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1','\final\garbage\queryid\1.1'))
+ Check ($badFinal.status -eq 'BLOCKED') 'nonempty final marker blocked'
+ $badGame=Invoke-Fixture ($valid.Replace('\gamename\serioussamse\','\gamename\othergame\'))
+ Check ($badGame.status -eq 'BLOCKED') 'wrong gamename blocked'
+ $noQueryid=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1','\final\'))
+ Check ($noQueryid.oneBotOnly -and $noQueryid.status -eq 'FIXTURE_MATCH_ONLY') 'final without optional queryid allowed'
+ $afterFinal=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1','\final\\unexpected\junk'))
+ Check ($afterFinal.status -eq 'BLOCKED') 'unknown field after final blocked'
+ $twice=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1','\final\\final\'))
+ Check ($twice.status -eq 'BLOCKED') 'duplicate final blocked'
+ $rich=Invoke-Fixture ($valid.Replace('\player_0\Expected_Bot\final\\queryid\1.1','\activemod\\player_0\Expected_Bot\frags_0\2\ping_0\88\final\\queryid\1.1'))
+ Check ($rich.oneBotOnly -and $rich.status -eq 'FIXTURE_MATCH_ONLY') 'realistic extended one-bot fields allowed'
+ $extraFrags=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1','\frags_1\12\final\\queryid\1.1'))
+ Check ($extraFrags.status -eq 'BLOCKED') 'unexpected second-player frags rejected'
+ $extraPing=Invoke-Fixture ($valid.Replace('\final\\queryid\1.1','\ping_1\33\final\\queryid\1.1'))
+ Check ($extraPing.status -eq 'BLOCKED') 'unexpected second-player ping rejected'
  Write-Output ([ordered]@{result='PASS';checks=$passes;scope='offline simulated only; never authorizes runtime'}|ConvertTo-Json -Compress)
 }finally {
  if(Test-Path -LiteralPath $root){Remove-Item -LiteralPath $root -Recurse -Force}
