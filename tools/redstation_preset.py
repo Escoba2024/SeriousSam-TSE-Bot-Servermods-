@@ -21,8 +21,8 @@ def server_startup(base):
   raise ValueError('duplicate ssam.ai announcement installation')
  # The clock is in seconds, and the slot-based guard avoids per-tick chat spam.
  # Reset on a new match (tick < 1) to permit announcements on next rotation.
- shell = ('if(cmd_tmTick<1){tmp_ai[9]=-1;}'
-          'if((INDEX)cmd_tmTick>=300 && '
+ shell = ('if((FLOAT)cmd_tmTick<(FLOAT)1){tmp_ai[9]=(INDEX)-1;}'
+          'if((INDEX)cmd_tmTick>=(INDEX)300 && '
           '((INDEX)cmd_tmTick/(INDEX)300)!=tmp_ai[9]){'
           'tmp_ai[9]=(INDEX)cmd_tmTick/(INDEX)300;'
           'Say(\\\"'+ANNOUNCEMENT+'\\\");}\\n')
