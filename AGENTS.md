@@ -58,6 +58,17 @@ Nicht alle MCP-Server ohne Diagnosebedarf gleichzeitig betreiben. Vor jeder Schl
 - [Cloud-Aufgaben #4](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/4)
 - [Shadow-/Hetzner-Aufgaben #5](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/5)
 
+## Optionale Codex-Subagenten – Regelung ab 25.10.2026
+
+**Subagenten sind für zukünftige TSE-Arbeiten ausdrücklich erlaubt, aber nicht verpflichtend.** Diese Regel ersetzt frühere pauschale Ausschlüsse von Subagenten in TSE-Fortsetzungs-Prompts. Sie schaltet keine Plattformfunktion automatisch ein; der ausführende Hauptagent muss die tatsächlich verfügbaren Codex-/Agentenwerkzeuge prüfen.
+
+- **Maximal ein Hauptagent und zwei zusätzliche Subagenten gleichzeitig** im selben Arbeitsauftrag. Delegation nur, wenn unabhängige Aufgaben parallel sinnvoll bearbeitet werden können und Mehrverbrauch an Ressourcen/Modellkontingent gerechtfertigt ist. Kleine oder stark gekoppelte Arbeiten seriell ausführen.
+- **Sinnvolle Delegation:** Cecil-Bot-Mod als Referenz analysieren, Bot-AI/Navigations-/Combat-Ideen und Regressionen separat untersuchen, reproduzierbare Offline-Tests entwickeln und Code/PRs unabhängig prüfen. Jeder Auftrag benötigt einen klar begrenzten Scope, Artefakt/Abnahmekriterium und eine Rückmeldung an den Hauptagenten.
+- **Isolierung:** Vor Delegation laufende Codex-Prozesse, Worktrees, Branches, Dateibesitz und Ressourcenkonflikte prüfen. Schreibende Subagenten erhalten getrennte Branches und Git-Worktrees sowie überschneidungsfreie Dateien; niemals zwei Writer im selben Worktree oder derselben Datei. Bestehende uncommittete Änderungen und fremde Arbeit schützen.
+- **Zentrale Verantwortung:** Nur der Hauptagent führt Integration, Merge, abschließende Tests, Releases und produktive Hetzner-/Wine-/Gameserver-Operationen aus. Subagenten dürfen keine produktiven Prozesse starten/stoppen, Ports übernehmen, DLLs austauschen, Deployments ausführen oder die Live-Flotte verändern. Tests mit Runtime-Bedarf ausschließlich isoliert und nach nachgewiesenem Preflight/technischer Exklusivität.
+- **Keine Dispatcher-Rückkehr:** Keinen selbstgebauten Dispatcher, keine automatischen Mehrfach-Chats, keine obligatorischen A00-CLAIM/GRANTED-Freigaben und keine vierstündigen Code-Leases wieder einführen. A00–A09 sind Projektrollen und Arbeitsbereiche, nicht automatisch gestartete oder zehn erlaubte gleichzeitige Subagenten.
+- **Nachweis und Abschluss:** Der Hauptagent prüft Subagentenergebnisse anhand von Diffs, Build-/Testausgaben und Reproduzierbarkeit selbst, dokumentiert Zuordnung, Ergebnisse, Integration und offene Risiken in PR/Handoff. Fehlende native Retail-Tests als `NOT_TESTED` ausweisen. Ohne tatsächlich verfügbares Subagent-Werkzeug arbeitet der Hauptagent eigenständig weiter, statt Delegation zu behaupten.
+
 ## Agentenkoordination A00–A09 – Arbeitsmodus ab 19.10.2026
 
 **Keine manuellen A00-Freigabestufen für reguläre Entwicklung.** Die früheren Pflichten `CLAIM_REQUESTED → A00-GRANTED`, vierstündige Code-Leases und das Warten auf Freigabekommentare sind aufgehoben. Das gilt für eigenständige Arbeit an Code, Tests, Analyse, Dokumentation, isolierten Branches/Worktrees und PRs. A00 koordiniert Konflikte und unterstützt die Integration, ist aber kein obligatorischer Dispatcher oder Genehmiger. Das aktuelle Verfahren steht in [docs/coordination/README.md](docs/coordination/README.md), [HANDOFF.md](docs/coordination/HANDOFF.md) und [Issue #18](https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/18).
