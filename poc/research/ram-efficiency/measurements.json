@@ -1,0 +1,59 @@
+{
+  "comment": "Anchor values for resource_model.py. Every entry cites its source. evidence levels: MEASURED_HETZNER = real Retail-1.07/Wine run on ubuntu-4gb-nbg1-2 reported in this repository or a referenced PR branch; DERIVED = arithmetic on measured values; nothing in this file was measured inside the LMArena sandbox.",
+  "host": {
+    "total_mib": 3819,
+    "vcpus": 2,
+    "swap_mib": 0,
+    "evidence": "MEASURED_HETZNER",
+    "source": "docs/reports/2026-10-21-hetzner-capacity.md; docs/reports/2026-10-21-hetzner-eight-bot-cpu-headless-baseline.md"
+  },
+  "arch_a_shared_clients": {
+    "description": "Public architecture A: 1x DedicatedServer + 2x SeriousSam.exe with 4 local bot players each, Build04 NullRender, 20 Hz.",
+    "server_rss_kib": 51368,
+    "client_rss_kib": [188436, 188820],
+    "cgroup_cpu_core_percent_600s": 69.031,
+    "cgroup_cpu_core_percent_redstation_600s": 64.546,
+    "server_cpu_core_percent": 13.75,
+    "client_cpu_core_percent": [23.82, 22.835],
+    "public_cgroup_ram_snapshot_mib": 530.926,
+    "public_cgroup_ram_peak_mib": 532.16,
+    "bots": 8,
+    "evidence": "MEASURED_HETZNER",
+    "source": "docs/reports/2026-10-21-human-cpu-final.md (section 11); docs/reports/2026-10-21-hetzner-capacity.md; PR #51 branch docs/reports/2026-10-25-redstation-public-results.json"
+  },
+  "arch_b_individual_clients": {
+    "description": "PR #47 architecture B: N independent Retail clients, one bot each, private server, loopback namespace, overlay mounts, private cgroup.",
+    "one_client_cgroup_peak_mib": 555.797,
+    "one_client_cgroup_cpu_core_percent": 51.545,
+    "four_clients_cgroup_peak_mib": 1157.992,
+    "four_clients_cgroup_cpu_core_percent": 72.495,
+    "four_clients_lowmem_cgroup_peak_mib": 1047.352,
+    "eight_attempt1_peak_bots": 5,
+    "eight_attempt1_cgroup_peak_mib": 1322.781,
+    "eight_attempt1_blocked_available_mib": 970.465,
+    "eight_attempt1_reserve_required_mib": 1068,
+    "eight_attempt2_lowmem_peak_bots": 6,
+    "eight_attempt2_cgroup_peak_mib": 1389.926,
+    "eight_attempt2_blocked_available_mib": 921.137,
+    "redstation_attempt_peak_joined": 7,
+    "redstation_attempt_clients_spawned": 8,
+    "redstation_attempt_cgroup_peak_mib": 1725.875,
+    "redstation_attempt_available_at_failure_mib": 913.113,
+    "redstation_attempt_failure": "private admin drain timeout (explicitly NOT proven RAM-caused)",
+    "redstation_attempt_public_fleet_running": false,
+    "evidence": "MEASURED_HETZNER",
+    "source": "PR #47 branch docs/reports/2026-10-21-session-execution-results.json (commit b75f14d6); PR #51 branch docs/reports/2026-10-25-redstation-public.md"
+  },
+  "derived": {
+    "arch_b_marginal_client_mib": 200.73,
+    "arch_b_marginal_client_mib_formula": "(1157.992 - 555.797) / 3",
+    "arch_b_base_overhead_mib": 355.06,
+    "arch_b_base_overhead_mib_formula": "555.797 - 200.73 (private server + Xvfb + wineserver + first-client sharing)",
+    "arch_b_fit_check_8_clients_mib": 1960.9,
+    "arch_b_fit_check_8_clients_note": "linear fit predicts 1960.9 MiB for 8; independent Redstation run peaked at 1725.9 MiB with 7 joined + 1 joining, i.e. fit is conservative within ~12% at 7-8 clients",
+    "arch_a_rss_per_bot_kib": 47157,
+    "arch_a_rss_per_bot_note": "(188436+188820)/8, shared RSS accounting - NOT a marginal per-bot cost; PSS never measured",
+    "evidence": "DERIVED",
+    "source": "arithmetic over the MEASURED_HETZNER anchors above"
+  }
+}
