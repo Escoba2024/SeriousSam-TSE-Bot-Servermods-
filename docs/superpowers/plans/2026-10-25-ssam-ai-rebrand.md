@@ -65,3 +65,15 @@ All uncompleted checkbox items must be reconciled against actual output and evid
 - The validation mirror intentionally lacks original binary images; Github `main` tree was checked for `public/images/{battlefield.jpg,bot-tech.jpg,kleer-vignette.png,sam-vignette.png}` and `public/brand/ssam-icon.svg`. Its tracked `dist/` legacy build was removed.
 - Registry via read-only MCP confirmed `ssam.ai | Red Station | 8 Human Bots`, game query **offline**, so public GameSpy announcement is **not verified**. Health telemetry timestamp predates check, do not mistake cached health for live players.
 - The website is *not* deployed; no domain registration/ownership by owner. Repo slug and App-backed title admin changes cannot be performed with the presently connected write actions. Do not bypass credential controls or rename active systemd service identifiers for a cosmetic goal.
+
+## Live-Website Deployment über Hetzner-IP (25.10.2026, 16:03 UTC)
+
+- [x] Öffentliche IP `http://91.99.75.33/` vor Änderung geprüft: HTTP 200 und Alpha-Gaming-Titel, Auslieferung aus `/var/www/alpha-gaming/releases/agent6-20261018-fef0259`.
+- [x] GitHub Website PR #1 bereits gemergt; dazu passende isolierte Vite-Quelldateien geprüft. Alle vier Bilder anhand Git-Blob-SHA exakt gegen die vorhandene bisherige Live-Version geprüft und im neuen Build aufgenommen.
+- [x] `npm run typecheck` und `npm run build` erfolgreich (1.943 Module); finaler Build ohne alten Alpha-Gaming-Markentext, SVG-Logo und vier Bilder enthalten.
+- [x] Staging `npm run preview -- --port 8765` auf localhost: mobile/desktop Playwright-Smoketest erfolgreich, inklusive Navigation, Serverdetails, Bots, deaktivierten Zahlungen und gesperrtem Adminbereich, null JS-Fehler. Alle geprüften statischen Ressourcen HTTP 200.
+- [x] Neue Release-Stufe angelegt: `/var/www/alpha-gaming/releases/ssam-ai-20261025-72e39f4` (lesbare Dateiberechtigungen), alte Nginx-Konfiguration unverändert, `nginx -t` PASS.
+- [x] Atomare Umschaltung von `/var/www/alpha-gaming/current` auf neues Release, ursprüngliches Release weiterhin unter `/var/www/alpha-gaming/releases/agent6-20261018-fef0259` erhalten. Rückfallzeiger `/root/ssam-ai-backups/site-before-ssam-20261025.txt` und Build-SHA256 in `/root/ssam-ai-backups/ssam-site-release-20261025.sha256`.
+- [x] **Live-Abnahme nach Umschaltung:** HTTP 200, Dokumenttitel `SSAM.AI`, Favicon und 4/4 Bilder HTTP 200; Live-Playwright Desktop/Mobile-Smoke PASS, 390px viewport ohne horizontales Überlaufen, null JS-Laufzeitfehler, `X-Robots-Tag: noindex, nofollow` gesetzt.
+- [ ] Domain `ssam.ai` bleibt unregistriert/nicht im Besitz des Eigentümers. Öffentliches Branding über die vorhandene **HTTP-IP** ist ein Preview ohne TLS/Custom-Domain; kein Zahlungssystem aktiviert. Vor kommerzieller Veröffentlichung Rechte-/Lizenzlage, Datenschutz und Rechtstexte prüfen.
+- [ ] GitHub-Repository-Slugs und älteren App-backed ChatGPT-Eintrag separat über Settings umbenennen; tatsächlichen GameSpy-Servernamen erst bei sicherem GameServer-Start prüfen.
