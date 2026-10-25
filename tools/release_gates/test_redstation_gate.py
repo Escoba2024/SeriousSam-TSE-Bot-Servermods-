@@ -10,8 +10,8 @@ HERE = pathlib.Path(__file__).parent
 SCRIPT = HERE / 'redstation_gate.py'
 STATUS = dict(gamename='serioussamse', gamever='1.07', hostname='ssam.ai | Red Station | Human Bots',
               mapname='Red Station', gametype='Fragmatch', maxplayers='16', difficulty='Hard',
-              infiniteammo='1', final='')
-RULES = dict(difficulty='Hard', infiniteammo='1', final='')
+              infiniteammo='0', final='')
+RULES = dict(difficulty='Hard', infiniteammo='0', final='')
 
 class RedStationGateTests(unittest.TestCase):
     def check(self, status=None, rules=None):
@@ -33,7 +33,7 @@ class RedStationGateTests(unittest.TestCase):
         self.assertFalse(report['release_qualified'])
 
     def test_infinite_ammo_discrepancy_blocks(self):
-        res=self.check(status={**STATUS,'infiniteammo':'0'},rules={**RULES,'infiniteammo':'0'})
+        res=self.check(status={**STATUS,'infiniteammo':'1'},rules={**RULES,'infiniteammo':'1'})
         self.assertEqual(res.returncode,8,res.stderr)
         self.assertIn('infiniteammo',res.stdout)
 
@@ -45,7 +45,7 @@ class RedStationGateTests(unittest.TestCase):
                 self.assertEqual(self.check(status,rules).returncode,8)
 
     def test_disagreeing_rules_blocks(self):
-        res=self.check(rules={**RULES,'infiniteammo':'0'})
+        res=self.check(rules={**RULES,'infiniteammo':'1'})
         self.assertEqual(res.returncode,8)
         self.assertIn('inconsistent',res.stdout)
 

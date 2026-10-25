@@ -18,10 +18,10 @@ STATUS_EXPECTED = {
     'mapname': 'Red Station',
     'gametype': 'Fragmatch',
     'difficulty': 'Hard',
-    'infiniteammo': '1',
+    'infiniteammo': '0',  # GameSpy inverted boolean: SDK prints sp_bInfiniteAmmo ? 0 : 1
     'maxplayers': '16',
 }
-RULES_EXPECTED = {'difficulty': 'Hard', 'infiniteammo': '1'}
+RULES_EXPECTED = {'difficulty': 'Hard', 'infiniteammo': '0'}
 
 
 def validate(status, rules):
@@ -70,6 +70,7 @@ def main(argv=None):
         errors=[str(exc)]
     verdict=('SIMULATED_CONFIG_PASS' if fixture else 'LIVE_CONFIG_OBSERVED_PASS') if not errors else 'CONFIG_BLOCKED'
     print(json.dumps({'verdict':verdict,'evidence_class':evidence,'release_qualified':False,
+                      'infiniteammo_wire_encoding':'0=enabled per SessionProperties.cpp; Retail gameplay unverified',
                       'problems':errors},sort_keys=True))
     return 0 if not errors else 8
 

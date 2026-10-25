@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox syntax for tracking.
 
-**Goal:** Prevent a false release claim when the original Retail server exposes `infiniteammo=0` despite startup configuration specifying 1.
+**Goal:** Prevent false configuration verdicts caused by reversed Serious Engine GameSpy boolean encoding, while requiring native gameplay qualification.
 
 **Architecture:** Read-only status + rules GameSpy queries using the existing probe; compare both against explicit requirements with final-marker completeness and consistency checks. Offline fixture runs never issue a native PASS. No production startup, restart, player action or binary changes.
 
@@ -20,7 +20,7 @@
 
 - Absent `final` marker must fail.
 - Divergent status/rules must fail.
-- `infiniteammo=0` must fail even when static script requests 1.
+- `infiniteammo=0` is GameSpy wire encoding for enabled in the inspected Serious Engine sources; reject `1` for this desired setting.
 - Synthetic fixture must never be reported as a qualified runtime.
 - A game/mode/version/map/name mismatch must fail.
 
@@ -34,8 +34,9 @@
 - [x] Run RED: all five scenarios fail on missing implementation.
 - [x] Implement CLI and validator.
 - [x] Run GREEN and inherited unit tests (5 + 18 PASS).
-- [x] Perform read-only live query; `CONFIG_BLOCKED`, `infiniteammo=0` in both GameSpy responses.
-- [ ] Commit, publish isolated PR and handoff to Codex main integration.
+- [x] Inspect `Sources/Game/SessionProperties.cpp` wire encoding; test-first revise verdict (2 expected RED, then GREEN).
+- [x] Perform read-only live query; report configuration-level result separately from unverified Retail gameplay.
+- [x] Commit, publish isolated PR #70 and handoff to Codex main integration (see GitHub).
 
 ## Acceptance
 

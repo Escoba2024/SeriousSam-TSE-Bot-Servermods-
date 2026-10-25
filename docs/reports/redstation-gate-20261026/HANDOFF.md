@@ -1,36 +1,36 @@
-# 2026-10-26 ssam.ai Red Station runtime release gate
+# 2026-10-26 ssam.ai Red Station runtime release gate – corrected encoding
 
-**Scope:** isolated read-only QA worktree, based on PR #63 (not `main`), no production writes.
+**Scope:** isolated, read-only QA worktree based on PR #63. Public processes/players, binaries, scripts and other agent worktrees unchanged.
 
-## Grounded discrepancy
+## Critical source-level discovery and corrected conclusion
 
-Active eight-player Red Station server at `127.0.0.1:25601` (Hetzner loopback, 2026-10-25 23:40 UTC):
+The first version of this gate **incorrectly** treated GameSpy `infiniteammo=0` as "disabled". A later source audit disproved that inference:
 
-- Existing mounted server `Scripts/PersistentSymbols.ini` explicitly declares `gam_bInfiniteAmmo=(INDEX)1`.
-- Existing mounted `Scripts/Dedicated/BotTest/1_begin.ini` specifies `gam_bInfiniteAmmo=1`.
-- Native GameSpy `\\status\\` reported `mapname=Red Station`, `gamever=1.07`, `difficulty=Hard`, `infiniteammo=0`.
-- Independent native GameSpy `\\rules\\` also reported `infiniteammo=0`.
-- Root cause **NOT ESTABLISHED**: perhaps mode/session initialization overwrites it; requires separate isolated native tests. Neither a script assignment nor offline unit tests are proof of gameplay behavior.
+- `Sources/Game/SessionProperties.cpp:213` in the separately checked-out Serious Engine SDK copies `gam_bInfiniteAmmo` to `sp.sp_bInfiniteAmmo` when creating a multiplayer session.
+- `Sources/Game/SessionProperties.cpp:348` emits **`\\infiniteammo\\%d` with `sp.sp_bInfiniteAmmo ? 0 : 1`**, reversing the conventional numeric reading. Similar inversions exist for `ammostays`, `friendlyfire` and other GameSpy booleans.
+- At 2026-10-25 23:40 UTC active server configuration contained `gam_bInfiniteAmmo=(INDEX)1` in `PersistentSymbols.ini` and `gam_bInfiniteAmmo=1` in `Scripts/Dedicated/BotTest/1_begin.ini`. Both native GameSpy `\\status\\` and `\\rules\\` responded `infiniteammo=0`, consistent with **enabled** under the inspected SDK wire encoding.
 
-## New evidence gate
+**Evidence limitation:** the inspected open-source SDK is NOT proof of byte-identical Retail 1.07 GameMP binary behavior. An original Retail 1.07 client must confirm ammunition is not consumed and Sync remains healthy. This gate passes only the **configuration snapshot**, never full gameplay, 300-second chat, MOTD HUD or vanilla-release acceptance.
 
-`tools/release_gates/redstation_gate.py` validates both read-only query replies and rejects missing final markers, wrong hostname/game version/mode/map, wrong difficulty, inconsistent rule status and missing/wrong ammo setting. It exits `8` for unexpected or incomplete runtime state and `0` only for a matching configuration snapshot. It never reports a full release PASS.
+## New read-only validator
 
-Usage with the existing read-only query port (not a game process operation):
+`tools/release_gates/redstation_gate.py` queries native GameSpy `status` and `rules`; it rejects incomplete replies, wrong name/mode/version/map, wrong difficulty, cross-response discrepancies and invalid infinite-ammo wire encoding. It returns exit `8` on config mismatch and `0` on matching snapshot. The output always has `release_qualified=false`, and offline fixture output is always `SYNTHETIC_FIXTURE`.
+
+Live read-only command:
 
 `python3 tools/release_gates/redstation_gate.py --address 127.0.0.1:25601`
 
-For offline fixtures use both `--status-json /path/to/status.json --rules-json /path/to/rules.json`. Such output explicitly reads `SYNTHETIC_FIXTURE` and `release_qualified=false`.
+No production process signals, changes or game-client captures are performed.
 
-## Reproduction
+## Test evidence
 
-- Five newly written tests failed before the new CLI existed (8 checks across subtests, exit `2` vs expected `8` or `0`).
-- After implementation `python3 -m unittest discover -s tools/release_gates -p 'test_*.py' -v`: **5/5 PASS**.
-- Existing `python3 -m unittest test_redstation_preset test_gamespy_query -q` from `tools/`: **18/18 PASS**.
-- Read-only live query: **exit 8, CONFIG_BLOCKED**, `status.infiniteammo='0' expected '1'` and `rules.infiniteammo='0' expected '1'`.
+- Initial red/green implementation: 5 new tests PASS; inherited `test_redstation_preset` + `test_gamespy_query` 18 PASS.
+- After discovering inverted encoding, **2 tests failed (RED)** before correcting the validator; following code correction all 5 new tests PASS.
+- Current GameSpy configuration snapshot: `infiniteammo=0` is treated as **0=enabled** per inspected SDK, while gameplay still `NOT_TESTED_RETAIL`.
 
-## Next work for Codex lead
+## Remaining native acceptance
 
-1. Identify runtime initialization and the actual owned `gam_bInfiniteAmmo` setting path on an **isolated native Retail 1.07** instance; reproduce GameSpy `0` with controlled flags and find the smallest change.
-2. Add negative regression covering the corrected runtime state and test ammunition behavior in an original Retail 1.07 client, then re-run Sync/WAN/multiplayer gates.
-3. Keep PR #63 separate and draft until native MOTD/300-second chat/UI verification. Do not adjust protected `.wld`, original DLLs, current public sessions or fail-open this configuration gate.
+1. Validate the actual Retail 1.07 GameSpy encoder or capture original-client ammo consumption during a controlled isolated match.
+2. Confirm the dedicated session options are applied on entry and at respawn and confirm correct damage/hits and sync.
+3. Verify MOTD is shown to human players and 300-second chat sends exactly once, including on match restart; powerup removal still unsupported pending vanilla-compatible proof.
+4. Integrate only through PR #63/PR #70 dependency after native gates, preserving protected builds and backups.
