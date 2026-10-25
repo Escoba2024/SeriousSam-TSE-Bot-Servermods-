@@ -15,13 +15,18 @@
 - [x] Inspect live Hetzner project and concurrent worktrees before changes.
 - [x] Create isolated GitHub branding branch in TSE repository.
 - [x] Set ssam.ai as the primary TSE repository display identity and retain existing technical documentation.
-- [x] Update website source (header, title, metadata, page copy, demo server names) in private Website PR #1 (draft); **website build and visual test pending**.
+- [x] Website ssam.ai rebranding, new SVG logo/favicon, correct public image assets, package name, README and portable visual smoke tests; website PR #1 merged (squash commit `72e39f4`).
 - [x] Update deployed read-only MCP UI display labels, preserve stable MCP protocol identifiers, run unit/build/branding handshake, verify tunnel health (HTTP 200). Legacy online-only integration test fails at live.online when game server offline.
 - [x] Update separate owned skill plugin to 0.1.1 as ssam.ai Control (read-back verified); App-backed plugin's original ChatGPT listing title requires separate App configuration.
 - [x] Update MCP human-readable registry name only to `ssam.ai | Red Station | 8 Human Bots`, preserve all other registry fields. The actual GameSpy broadcast session name still needs to be verified at the next safe game start.
 - [ ] Verify ssam.ai domain ownership/registrar and brand rights before configuring DNS, email, SSL or publishing a site.
 - [ ] Rename GitHub repository slugs only after audits of remote URLs, workflows and active agent branches; GitHub redirects alone are not sufficient.
-- [ ] Verify final production website build and GameSpy broadcast, update App-backed listing, rename repos after dependency audit, and document final blockers.
+- [x] Validate website on isolated Hetzner workspace: `npm ci`, TypeScript, Vite build, browser smoke at 390 px + desktop, 0 browser JS errors. Source image blobs verified in GitHub tree; binary preview images missing in isolated local mirror.
+- [x] Document remaining external blockers and retain all live compatibility identifiers.
+- [ ] Verify next live GameSpy broadcast name after an authorized game start; game server is currently offline.
+- [ ] Rename repository slugs (`SeriousSam-TSE-Bot-Servermods-`, `Alpha-Gaming-Website`) after external dependency audit and GitHub repository-Settings rename access; connected GitHub tools have no repository-rename action.
+- [ ] Rename original App-backed ChatGPT listing title in App configuration UI; Plugin Creator explicitly does not allow App-backed presentation edits. Separate ssam.ai Control skill plugin already displays new name.
+- [ ] Register and prove control of domain ssam.ai, then assess IP/legal rights before any DNS, HTTPS or public website deployment.
 
 ## Decision record
 
@@ -51,3 +56,12 @@ All uncompleted checkbox items must be reconciled against actual output and evid
 - Owned ChatGPT skill plugin updated and read back as version 0.1.1 with `ssam.ai Control` displayName and read-only guard intact. The separate App-backed plugin still reports original App-side name, which is not editable via Plugin Creator source update.
 - Domain `ssam.ai` has public Cloudflare NS records; this does **not** prove domain ownership. No DNS or public website deployment performed.
 - Technical unit names, paths and GitHub repo slugs remain unchanged for compatibility until verified migration.
+
+## Continuation / verification (2026-10-25)
+
+- Website React rebranding PR [#1](https://github.com/Escoba2024/Alpha-Gaming-Website/pull/1) **MERGED**, squash commit `72e39f4d4456d816f88bcff04941947b96444b8c`.
+- Verified isolated Hetzner checkouts: 297 npm packages installed; `npm run typecheck` exit 0, `npm run build` exit 0, 1943 Vite modules built. Final build contains SVG favicon. `grep` found no remaining Alpha-Gaming public-facing strings in source, index and npm manifests.
+- Portable Playwright smoke PASS: Chrome Headless Shell, 390×844 mobile viewport (scrollWidth 390), desktop home, mobile navigation, server modal, bot page, preview-only payments disabled and /admin locked; zero browser errors.
+- The validation mirror intentionally lacks original binary images; Github `main` tree was checked for `public/images/{battlefield.jpg,bot-tech.jpg,kleer-vignette.png,sam-vignette.png}` and `public/brand/ssam-icon.svg`. Its tracked `dist/` legacy build was removed.
+- Registry via read-only MCP confirmed `ssam.ai | Red Station | 8 Human Bots`, game query **offline**, so public GameSpy announcement is **not verified**. Health telemetry timestamp predates check, do not mistake cached health for live players.
+- The website is *not* deployed; no domain registration/ownership by owner. Repo slug and App-backed title admin changes cannot be performed with the presently connected write actions. Do not bypass credential controls or rename active systemd service identifiers for a cosmetic goal.
