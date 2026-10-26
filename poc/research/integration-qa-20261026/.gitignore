@@ -1,0 +1,5 @@
+test_combat_nav_regressions
+test_item_multifloor_regressions
+*.o
+__pycache__/
+*.pyc
