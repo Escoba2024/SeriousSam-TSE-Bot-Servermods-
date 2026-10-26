@@ -47,3 +47,12 @@ Native Cecil OFF/ON controlled run, reliable native sync producer, 1/4/8 accepta
 - Read `docs/reports/2026-10-26-m1-repeatability-review.md`; historical native P1 FAIL and new short PASS have a different `qualify_bot_sessions.py` source hash. Do not infer cause.
 - Immediate engineering step: seek authoritatively paired Retail 1.07 client/server applied actions+CRC/state around first divergent tick, with original engine hash, connection epoch, uninstrumented control and private logs. Do not manufacture CRC data from aggregate BotTelemetry or PR58/PR65 synthetic models.
 - User ordered shutdown; public game server remains offline. Before any private test recheck resource/headroom, all processes and 8 GiB disk floor; do not change foreign worktrees.
+
+
+## M1 handler debug continuation (2026-10-26)
+- Pinned original Engine SHA: `b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f`, actual Wine mapping base determined from private `/proc/PID/maps`; Frida Linux Process.enumerateModules/getModuleByName does NOT list the mapped PE Engine.dll.
+- Handler-only Frida count at RVA `0x000e2d10` is proven reachable in a single-bot private Retail 1.07 run: 1,272 calls / 20.39 seconds, zero probe errors, native run 116.78s PASS_LIMITED, observed server SYNCBAD=0. This is NOT CRC causation or longer session stability.
+- High-risk instruction-level hooks at `0x601a34b2` and `0x601a34ca` led to Wine page fault at `0x601a2d57` and failed private Retail run (query uncertainty >15s). Published probe now rejects `--comparisons` *before attaching*; do not repeat unsafe approach without an alternative reviewed design and fully owned test.
+- Local private artifacts: `/srv/tse-session-qualification-master-sync-20261026`, `...master-sync-v2-20261026`, `...master-crc-20261026`; private controller logs under `/root/ssam-ai-backups/shutdown-20261026-0033/`. Never publish raw evidence.
+- Next task is a differently qualified native applied-action, CRC and state capture across BOTH sides with authoritative tick+connection epoch; no M1-M4 final acceptance yet.
+- Run `cd /srv/tse-m1-m4-integration-20261026 && python3 -m unittest discover -s tools -p 'test_*.py'` and verify current repo/GitHub branch before work.

@@ -41,3 +41,13 @@ Establish exact private P1 OFF/ON preflight using the existing PR73 guarded harn
 - Historic P1 four-bot failure and new ON result share exactly the same DLL, visible settings and four-bot peak, but differ in `qualify_bot_sessions.py`; see `docs/reports/2026-10-26-m1-repeatability-review.md`.
 - Earlier AI2 eight-bot Build06 PASS_LIMITED is from a different DLL; cannot qualify Cecil P1.
 - GitHub PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/74 (DRAFT). Confirm remote HEAD/tree before modifying it.
+
+
+## M1 native handler-reachability continuation (2026-10-26)
+- Read `docs/reports/2026-10-26-m1-native-sync-handler-probe.md` before further native instrumentation.
+- Original 1.07 `Engine.dll` source hash and Wine /proc/maps executable RVA were verified.
+- Private native 1-bot count-only: 116.78s PASS_LIMITED, 1,272 actual server handler entries in 20.39s, no Frida error or reported SYNCBAD.
+- **Failed interior CMP hook**: experimental native run FAIL with Wine page fault at `0x601a2d57`; no valid CRC pairs; hooks now blocked before attach.
+- TDD probe module: 25 checks; total tools suite: 81 PASS. Only handler counting qualified as limited native reachability, NOT server/client action/CRC pair.
+- Ruling: prohibit unsafe interior instruction patching until relocation/semantics are independently qualified; preserve public shutdown and 8 GiB disk reserve.
+- Next technical goal: safe, attributable action/CRC/state producer or verified alternative data source; do not promote synthetic evidence to M1 complete.
