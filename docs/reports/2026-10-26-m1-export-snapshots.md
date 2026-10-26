@@ -35,3 +35,10 @@ Read-only independent review found three Important duration acceptance weaknesse
 - Cleanup role/mount sets must be unique and exact; runtime evaluator independently verifies empty cgroup, absence of live processes using the private root and absence of expected mounts.
 - Host samples must cover native elapsed/UTC through final cleanup with monotonic bounded gaps and final reserve data. These are host-wide resource observations; native producer/source and private artifact paths are separately pinned. No nonexistent child identity fields are manufactured.
 - Duration evaluator: 22 test methods. Short real control remains REJECTED for insufficient full-population/telemetry duration; no release status inferred.
+
+## Further M1 acceptance/recovery safeguards
+- Native JSON truncate/write race reproduced and handled by bounded retry with no fallback success state (5 regression tests).
+- Fourbot/3600 and eightbot/7200 boundary cases and native source-inventory drift covered.
+- Recovery command construction, exact three-stage admission, default/import side effects and identity-bound direct-child cleanup tested. An independent reviewer found three concrete recovery-driver issues; all were corrected before native fault work.
+- 39/39 build-source files plus candidate DLL hash reverified; running onebot original Engine kick threshold independently read as 10 through read-only procfs.
+- Public server remains off. Long native duration and fault outcomes still require actual receipts.

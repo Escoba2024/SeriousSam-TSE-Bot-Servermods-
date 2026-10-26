@@ -10,6 +10,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 import re
+from native_receipt_io import read_receipt
 
 
 def _number(value):
@@ -93,10 +94,10 @@ def evaluate_runtime(root, *, bots, required_s, dll_sha256, harness_sha256):
     root=Path(root)
     if root.parent!=Path('/srv') or not root.name.startswith('tse-session-qualification-master-m1-'):
         raise ValueError('M1_PRIVATE_NATIVE_ROOT_REQUIRED')
-    inventory=json.loads((root/'source-sha256.json').read_text())
+    inventory=read_receipt(root/'source-sha256.json')
     if not harness_sha256 or inventory!=harness_sha256:raise ValueError('NATIVE_PRODUCER_SOURCE_DRIFT')
-    result=json.loads((root/'result.json').read_text())
-    guard=json.loads((root/'host-guard.json').read_text())
+    result=read_receipt(root/'result.json')
+    guard=read_receipt(root/'host-guard.json')
     result['runtime_root']=str(root)
     cgroup=Path(result.get('cgroup','/'))
     if cgroup.parent!=Path('/sys/fs/cgroup') or not re.fullmatch(r'tse-sessions-[0-9]+',cgroup.name):

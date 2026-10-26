@@ -48,3 +48,26 @@ class RecoveryGateTests(unittest.TestCase):
             with self.subTest(field=field):self.assertEqual(m.decide_recovery(s)['action'],'HOLD')
 
 if __name__=='__main__':unittest.main()
+
+class RecoveryMatrixTests(unittest.TestCase):
+    def matrix(self):
+        return dict(status='DURATION_MATRIX_ACCEPTED',stages=[dict(root='/srv/tse-session-qualification-master-m1-'+name+'-20261026',verdict=dict(status='DURATION_RECEIPTS_ACCEPTED',bots=bots,required_s=seconds,dll_sha256='a'*64)) for name,bots,seconds in [('one-hour',1,3600),('four-hour',4,3600),('eight-two-hours',8,7200)]])
+    def test_exact_complete_matrix_accepted_for_further_verification(self):
+        self.assertEqual(len(m.validated_matrix_stages(self.matrix(),'a'*64)),3)
+    def test_empty_duplicate_or_weakened_matrix_rejected(self):
+        for mode in ['empty','duplicate','duration','root','candidate']:
+            sample=self.matrix()
+            if mode=='empty':sample['stages']=[]
+            if mode=='duplicate':sample['stages'][2]=sample['stages'][1]
+            if mode=='duration':sample['stages'][2]['verdict']['required_s']=3600
+            if mode=='root':sample['stages'][2]['root']='/srv/public'
+            if mode=='candidate':sample['stages'][2]['verdict']['dll_sha256']='b'*64
+            with self.subTest(mode=mode),self.assertRaises(ValueError):m.validated_matrix_stages(sample,'a'*64)
+    def test_command_uses_only_pinned_qualifier_and_explicit_private_arguments(self):
+        args=m.native_command('/srv/tse-session-qualification-master-m1-client-fault-20261026','/root/ssam-ai-backups/m1-completion-20261026-0155/one-hour-config.json',1500,27144,':156',crash=True)
+        self.assertEqual(args[:2],['/usr/bin/python3','/srv/tse-cecil-guard-20261026/tools/qualify_bot_sessions.py'])
+        self.assertEqual(args[args.index('--duration')+1],'1500')
+        self.assertIn('--crash-one-probe',args)
+        self.assertIn('--execute',args)
+    def test_command_rejects_public_runtime_parameters(self):
+        with self.assertRaises(ValueError):m.native_command('/srv/public','/tmp/cfg',1500,25600,':0')

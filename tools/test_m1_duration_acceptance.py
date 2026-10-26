@@ -1,4 +1,8 @@
 import copy
+import json
+import tempfile
+from pathlib import Path
+from datetime import datetime, timezone
 import unittest
 import m1_duration_acceptance as m
 
@@ -69,6 +73,24 @@ class DurationGateTests(unittest.TestCase):
     def test_missing_final_guard_observation_rejects(self):
         p=self.fixture();p[1]['samples']=p[1]['samples'][:-10]
         self.assertEqual(self.verdict(p)['status'],'REJECTED')
+    def matrix_fixture(self,bots,seconds):
+        result,guard,_=self.fixture();root=result['runtime_root'];ids=['gamer-%03d'%i for i in range(bots)];roles=['server','vanilla']+ids
+        result.update(max_bots=bots,peak_playing=bots,measured_s=seconds+100,elapsed_s=seconds+100,utc=datetime.fromtimestamp(seconds+100,timezone.utc).isoformat(),cleanup=[dict(role=x,errors=[]) for x in roles],unmounts=[dict(path=root+'/'+prefix+role,exitcode=0) for role in roles for prefix in ['','prefix-']],telemetry={i:[dict(playing_s=seconds+90,reports=[dict(verdict='ACTIVE_OK',exit_code=0,tick_hz_median=20)])] for i in ids})
+        guard['samples']=[dict(at=i,available_mib=1500,disk_free_gib=8.5,host_busy_percent=20) for i in range(0,seconds+111,5)]
+        samples=[dict(elapsed_s=i,active=bots,population=bots+1,decisions=[dict(id=x,action='healthy') for x in ids],processes={x:dict(start_ticks=j+1,pss_mib=100) for j,x in enumerate(roles)}) for i in range(0,seconds+1,2)]
+        return result,guard,samples
+    def test_four_and_eight_native_duration_boundaries(self):
+        for bots,seconds in [(4,3600),(8,7200)]:
+            with self.subTest(bots=bots):
+                parts=self.matrix_fixture(bots,seconds)
+                self.assertEqual(m.evaluate_stage(*parts,bots=bots,required_s=seconds,dll_sha256='a'*64)['status'],'DURATION_RECEIPTS_ACCEPTED')
+                parts[2].pop()
+                self.assertEqual(m.evaluate_stage(*parts,bots=bots,required_s=seconds,dll_sha256='a'*64)['status'],'REJECTED')
+    def test_runtime_wrapper_rejects_actual_source_inventory_drift(self):
+        with tempfile.TemporaryDirectory(prefix='tse-session-qualification-master-m1-test-',dir='/srv') as d:
+            root=Path(d);(root/'source-sha256.json').write_text(json.dumps({'qualify_bot_sessions.py':'a'*64}))
+            with self.assertRaisesRegex(ValueError,'NATIVE_PRODUCER_SOURCE_DRIFT'):
+                m.evaluate_runtime(root,bots=1,required_s=3600,dll_sha256='a'*64,harness_sha256={'qualify_bot_sessions.py':'b'*64})
     def test_samples_outside_native_run_reject(self):
         p=self.fixture()
         for row in p[2]:row['elapsed_s']+=100000
