@@ -122,21 +122,87 @@ def offline_public_guard(marker, expected_sha):
         raise RuntimeError('public process/listener active during offline development')
 
 
+def validate_public_guard_metadata(before, health, *, now=None):
+    """Fail closed: do not mistake a prior runtime's HEALTHY snapshot for current."""
+    from datetime import datetime, timezone
+    from pathlib import Path
+    if not isinstance(before, dict) or not isinstance(health, dict):
+        raise RuntimeError('public health/metadata malformed')
+    names=before.get('expected_names')
+    if (not isinstance(names,list) or len(names)!=8 or
+            any(not isinstance(n,str) or not n.strip() for n in names)):
+        raise RuntimeError('public expected_names missing or incomplete')
+    try:
+        normalized=[clean_name(n).casefold() for n in names]
+    except ValueError as exc:
+        raise RuntimeError('public expected_names invalid') from exc
+    if len(set(normalized))!=8 or before.get('bots')!=8:
+        raise RuntimeError('public expected_names duplicate or count mismatch')
+    processes=before.get('processes')
+    if not isinstance(processes,dict) or set(processes)!= {'server','botA','botB'}:
+        raise RuntimeError('public process generation inventory incomplete')
+    generations=set()
+    for role in ('server','botA','botB'):
+        entry=processes[role]
+        cwd=entry.get('cwd') if isinstance(entry,dict) else None
+        if not isinstance(cwd,str):
+            raise RuntimeError('public process generation missing cwd')
+        d=Path(cwd)
+        if d.name != role or d.parent.parent != Path('/srv/tse-experimental-public-20261025/runtime'):
+            raise RuntimeError('public process generation path mismatch')
+        generations.add(d.parent.name)
+    if len(generations)!=1:
+        raise RuntimeError('public process generation disagreement')
+    generation=next(iter(generations))
+    if not generation.startswith('eight-') or health.get('generation')!=generation:
+        raise RuntimeError('public health generation unverified')
+    stamp=health.get('utc')
+    try:
+        if not isinstance(stamp,str):
+            raise ValueError('timestamp missing')
+        observed=datetime.fromisoformat(stamp.replace('Z','+00:00'))
+        if observed.tzinfo is None:raise ValueError('timezone missing')
+    except ValueError as exc:
+        raise RuntimeError('public health timestamp unverified') from exc
+    now=now if now is not None else datetime.now(timezone.utc)
+    if not (0 <= (now-observed).total_seconds() <= 120):
+        raise RuntimeError('public health stale or future-dated')
+    if health.get('status')!='HEALTHY':
+        raise RuntimeError('public health not healthy')
+    if health.get('sync_history_verified') is not True:
+        raise RuntimeError('public sync_history generation coverage unverified')
+    if type(health.get('owned_sync_bad')) is not int or health['owned_sync_bad']!=0:
+        raise RuntimeError('public sync warning')
+    if any(health.get(k) is not True for k in ('telemetry_fresh','query_fresh','processes_verified')):
+        raise RuntimeError('public telemetry/query/process verification incomplete')
+    return names
+
+
+def assert_exact_public_roster(expected_names, observed_names):
+    """Additional unknown players are protected; never enroll them in CPU tests."""
+    a=[clean_name(n).casefold() for n in expected_names]
+    b=[clean_name(n).casefold() for n in observed_names]
+    if len(a)!=len(b) or len(b)!=len(set(b)) or set(a)!=set(b):
+        raise RuntimeError('public roster differs or contains unknown/external players')
+
+
 def live_public_guard(public):
     before=json.loads(public.read_text())
+    health_path=Path('/srv/tse-public-health-20261021/health.json')
+    pinned=validate_public_guard_metadata(before,json.loads(health_path.read_text()))
     records={role:process_record(info['pid']) for role,info in before['processes'].items()}
     for role,record in records.items():
         if record['cwd']!=before['processes'][role]['cwd'] or record['start_ticks']!=before['processes'][role]['start_ticks']:
             raise RuntimeError('public process baseline changed')
-    expected={n.casefold() for n in q.ROSTER}
     def check():
-        if any(probe_process(r)!='LIVE' for r in records.values()):raise RuntimeError('public process changed')
+        current=json.loads(public.read_text())
+        if current!=before:
+            raise RuntimeError('public result generation changed')
+        validate_public_guard_metadata(current,json.loads(health_path.read_text()))
+        if any(probe_process(r)!='LIVE' for r in records.values()):
+            raise RuntimeError('public process changed')
         names=player_names(q.query(25601))
-        if not expected.issubset({clean_name(n).casefold() for n in names}):raise RuntimeError('public bot disappeared')
-        live=json.loads(Path('/srv/tse-public-health-20261021/health.json').read_text())
-        if (live.get('owned_sync_bad')!=0 or not live.get('telemetry_fresh') or
-            not live.get('query_fresh') or not live.get('processes_verified')):
-            raise RuntimeError('public telemetry/sync guard')
+        assert_exact_public_roster(pinned,names)
     return check
 
 
@@ -728,7 +794,9 @@ def main():
         _,DLL=select_artifact(MANIFEST)
     if args.public_result:
         PUBLIC=args.public_result.resolve()
-        q.ROSTER=[clean_name(n) for n in json.loads(PUBLIC.read_text())['expected_names']]
+        before=json.loads(PUBLIC.read_text())
+        health=json.loads(Path('/srv/tse-public-health-20261021/health.json').read_text())
+        q.ROSTER=[clean_name(n) for n in validate_public_guard_metadata(before,health)]
     validate_native_config(config)
     root=args.runtime.resolve()
     if (os.uname().nodename!='ubuntu-4gb-nbg1-2' or os.geteuid()!=0 or
