@@ -82,3 +82,11 @@ The canonical fault qualifier is now tools/qualify_m1_recovery.py. Default invoc
 Independent review found (and corrected) an argv JSON object/array conflict, a vacuous/incomplete duration-matrix admission and missing active-child cleanup wiring. The qualifier builds only pinned native argv, requires the exact 1/3600 + 4/3600 + 8/7200 matrix, binds each direct child through pidfd and uses bounded finally cleanup plus an independent resource census. The initial string edits failed to wire two guards; actual source was normalized and patched with asserted replacements/AST transformation before execution. No fault test was started during these fixes.
 Bounded native JSON receipt reads now retry truncate/write races without stale-state fallback; source and reader SHA are pinned in the private duration policy. Active native duration process/source unchanged.
 39/39 candidate build-source hashes and candidate DLL SHA were freshly reverified. The onebot running engine's effective ser_iKickOnSyncBad was passively read as original value 10; no hooks/state writes.
+
+
+## Chat continuation: diagnostic validator repaired, 26 October 2026
+Own isolated branch/worktree: agent/chat/20261026-m1-diagnostic-fix, /srv/tse-m1-diagnostic-fix-20261026, from committed Manus base 4c20198. Original integration has uncommitted CRC work: do not overwrite. Manus worktree remains untouched.
+
+Read docs/reports/2026-10-26-m1-diagnostic-reassessment.md. The original 25-minute eight-bot probe stopped with final-validator error, while native result and guard passed. Corrected optional max_log_mib contract (32 default, exact int1..128) accepts preserved evidence in a separately pinned retrospective receipt: 1,331.624 s full nine-slot population, all eight healthy20Hz bot roles, zero sync markers across10 complete logs, clean fresh census. Original BLOCKED/history/policies remain unchanged. Diagnostic-only, NOT M1 duration acceptance.
+
+Verification: performance69 PASS normal and optimized; tools220 run/219 PASS/one native skip; independent read-only review clean. No binary/service/public-runtime change. Next: same-provenance prefilter duration1/4/8 matrix, candidate-bound recovery, sync root-cause/release review. Inspect active jobs and disk8GiB floor before any new test.
