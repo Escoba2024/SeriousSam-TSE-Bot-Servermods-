@@ -1,0 +1,37 @@
+# SSAM.AI – M1–M4 GOAL LEDGER
+Updated: 2026-10-26, Hetzner UTC. Public gameserver explicitly disabled by user; do not auto-start.
+Worktree: /srv/tse-m1-m4-integration-20261026
+Branch: agent/chat/20261026-m1-m4-integration
+Baseline origin/main: ab0c7400353a108f8461bb82280c539fdfe81499
+
+| Goal | Status | Verified evidence / remaining gate |
+|---|---|---|
+| 0 Baseline and consolidation | COMPLETE | Exclusive integration worktree, host/worktree census, user-authorized server shutdown; 415/415 protected files SHA256 MATCH; rollback archive SHA256 MATCH; original DLL hashes checked. Other worktrees remain protected. |
+| 1 Synchronization | IN_PROGRESS | Historic P1 four-bot FAIL (5 SYNCBAD). New controlled same-DLL P1 OFF/ON runs documented in docs/reports/2026-10-26-m1-controlled-cecil-native-ab.md; root cause and 60/60/120-minute gates OPEN. |
+| 2 Reliability | IN_PROGRESS | PR46 and PR67 open, unmerged; restart/hour/reliability not requalified. |
+| 3 Combat AI 2.0 | BLOCKED | PR45 original qualified version exists; PR57/P1 unqualified due four-bot SYNCBAD; PR66 offline only. |
+| 4 Navigation 2.0 | BLOCKED | PR69 research-only; no native movement/item integration acceptance. |
+| 5 Dynamic Sessions | BLOCKED | AI2 session tests exist; PR68 offline only; no final mixed native acceptance. |
+| 6 Integrated candidate | NOT_STARTED | No shared M1-M4 native build. |
+| 7 Native final acceptance | NOT_STARTED | 60/60/120-minute duration gates outstanding. |
+| 8 Final documentation | IN_PROGRESS | Plan + ledger + continuation; no final report claim. |
+
+## Durable evidence (as of writing)
+- User ordered explicit public server shutdown, PID 399158, 399232, 399305; verified ports 25600/25601 free after signals.
+- Pre-shutdown receipts: /root/ssam-ai-backups/shutdown-20261026-0033/ (PRIVATE; do not commit).
+- Host initial 3.7 GiB RAM, 8.8 GiB free disk; after shutdown 2.7 GiB RAM available; swap 0.
+- PR71 SHA 3b06a2a; cherry-pick integrated as 90adf81; test: `python3 -m unittest discover -s tools -p 'test_*.py'` -> 56 OK.
+- PR73 SHA c798853 is ONLY in its AI2/P1 ancestry, not merged to main/integration; existing fail-closed metadata guard.
+- Private historic native Cecil-P1 four-bot receipt: FAIL, 97.93 seconds, five SYNCBAD; no paired CRC/state/action producer.
+- Server hash of unmodified Engine.dll observed: b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f.
+- Immutable qualified GameMP reference: 61dc27e0e7b80badcf9ae705c30fca88edd3935737715dffff59e90c26f1fef9.
+- Reference hashes were checked; full 415-file rollback claim remains to re-verify.
+
+## Next task
+Establish exact private P1 OFF/ON preflight using the existing PR73 guarded harness while public server is intentionally offline, then get same-DLL receipts or record explicit resource/producer blocker. Do not confuse pass of comparator with native sync pass.
+
+## Native execution checkpoint – 2026-10-26
+- PR73 guarded native private 1-bot P1 OFF: PASS_LIMITED_SESSION_LIFECYCLE, 77.40 s, zero server SYNCBAD.
+- master-four-off-20261026: PASS_LIMITED_SESSION_LIFECYCLE, 152.38 s, peak 4, observed server SYNCBAD=0, controller guard=FINISHED.
+- master-four-on-20261026: PASS_LIMITED_SESSION_LIFECYCLE, 152.43 s, peak 4, observed server SYNCBAD=0, controller guard=FINISHED.
+- Distinguish short healthy native runs from long term stability. M1–M4 remain not finally accepted.
