@@ -61,3 +61,12 @@ Establish exact private P1 OFF/ON preflight using the existing PR73 guarded harn
 - Next safe work: native sync producer validation plus full M1 runtime acceptance, then candidate-specific supervisor binding and bounded isolated crash-recovery tests.
 
 - Additional M1 source-level TDD: absent Dedicated_BotTest.log previously produced sync_scan_complete=true (RED); current integration forces incomplete and blocks safe recovery (GREEN). See tools/test_m1_missing_sync_log.py. Total integrated tests now 131, 130 passed + 1 native skipped.
+
+## M1 completion continuation (26 October 2026)
+- New conventional-export paired sync producer implemented with 16 RED/GREEN tests; integrated suite 147 run, 146 passed + 1 native skip. Commit ce8ae95.
+- Fresh onebot control 157.02 s; instrumented onebot 186.87 s; instrumented fourbot 359.64 s all PASS_LIMITED_SESSION_LIFECYCLE, orderly cleanup.
+- Fourbot paired native comparisons: original Retail 147; four botclients 137/118/99/79; all captured action inputs, layer CRC transitions and full CRC matched. Historic failure NOT reproduced; no speculative root-cause fix.
+- Native uninstrumented onebot >=60-minute qualification is ACTIVE at /srv/tse-session-qualification-master-m1-one-hour-20261026. Exact guarded PR73 source, P1 ON, immutable original binaries. Do not start competing native jobs.
+- Private orchestration/evidence: /root/ssam-ai-backups/m1-completion-20261026-0155/. Planned next stages fourbot 3840 s and eightbot 7680 s (continuous full-population gates 3600/7200, not just elapsed time).
+- New source-pinned duration receipt evaluator has 14 RED/GREEN tests; rejects gaps, generation changes, missing logs/telemetry, wrong candidate and host/cleanup failures. It deliberately never declares M1 complete.
+- Candidate-bound native supervisor/restart qualification remains OPEN; M1 remains IN_PROGRESS. Public server remains user-disabled.
