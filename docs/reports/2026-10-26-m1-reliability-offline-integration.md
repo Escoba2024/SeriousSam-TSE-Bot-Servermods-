@@ -68,3 +68,31 @@ reliability evidence. A valid source import is not acceptance.
 
 Current releases remain unchanged. M1 Reliability is **IN_PROGRESS**
 and M1 overall **IN_PROGRESS**. M2/M3/M4 are not released.
+
+## Follow-up: missing server SYNC log must fail closed
+
+During integration a **sixth** reliability defect was reproduced against the
+already audited C1-patched source. If the server's
+`server/Dedicated_BotTest.log` was absent, `fleet_health.collect`
+seeded `complete=True, owned=0`, allowing `assess` to treat missing
+SYNC evidence as a completed zero-error scan. This violates fail-closed
+supervision and can incorrectly authorize recovery.
+
+TDD reproduction: `tools/test_m1_missing_sync_log.py`, using a fully
+synthetic result.json, valid stub GameSpy response and no actual processes.
+RED: `AssertionError: True is not false: missing file was silently
+admitted as zero bad syncs`. Minimal patch: initialize missing-log
+`complete=False`, leaving the existing scanner behavior unchanged for
+real files. GREEN: focused one-test PASS and full offline suite **131 run,
+0 failures/errors, 1 deliberately skipped native Wine test**. The 11
+original imported C1 regressions continue to PASS.
+
+This is an integration-specific additive fix, not part of the original
+C1 patch SHA above. Post-fix `tools/operations/fleet_health.py` SHA256:
+`c666370adfcd4bae3df75f073474ca730302a3b93beaaf492b05e00a2e3c42bd`. The original C1-patch SHA stays in the table
+as provenance, not as the integrated post-fix file hash.
+
+Consequence: missing server log holds automatic recovery until complete,
+owned-generation sync evidence exists; this trades availability for
+safety. Neither native incident recovery nor production deployment is
+qualified by this offline reproduction.

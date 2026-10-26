@@ -64,3 +64,5 @@ Native Cecil OFF/ON controlled run, reliable native sync producer, 1/4/8 accepta
 - Not installed/activated. Simulator/test-only code; historical Build04 DLL SHA is hard pinned and must NOT be reassigned to unqualified P1.
 - To rerun safe suite: import test_operations_live_recovery, set method `test_native_absent_server_wait_with_remaining_process.__unittest_skip__=True`, discover `tools/test_*.py`; do not invoke the native method without owned isolated preflight.
 - Reverify source identity and public shutdown on every resume. Continue M1 action/CRC producer work without native Frida interior cmp hooking.
+
+- Additional supervisor issue fixed: NO server SYNC log is NOT a clean scan. Current branch's health module differs from C1 patch result by a single safe complete=False default, with reproducer tools/test_m1_missing_sync_log.py (RED→GREEN). Current integrated tests 131 run, 0 failures/errors, 1 native skip. No service installation or activation.

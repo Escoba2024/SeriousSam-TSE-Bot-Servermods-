@@ -147,7 +147,7 @@ def collect(result_path):
   except OSError:dll_ok=False
  try:master_ok=bool(q.validate_master_resolution())
  except (OSError,AssertionError):master_ok=False
- logs=root/'server/Dedicated_BotTest.log';counts=dict(owned=0,external=0,complete=True)
+ logs=root/'server/Dedicated_BotTest.log';counts=dict(owned=0,external=0,complete=False)
  if logs.exists():counts=sync_counts(logs,generation=infos.get('server',{}).get('start_ticks'))
  owned=counts['owned'];external=counts['external']
  telemetry=all(telemetry_valid(root/role/'Bin/BotTelemetry.csv',expected_local=1 if r.get('bots')==1 else 4) for role in infos if role.startswith('bot') and role not in missing)
