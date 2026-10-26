@@ -35,3 +35,9 @@ Establish exact private P1 OFF/ON preflight using the existing PR73 guarded harn
 - master-four-off-20261026: PASS_LIMITED_SESSION_LIFECYCLE, 152.38 s, peak 4, observed server SYNCBAD=0, controller guard=FINISHED.
 - master-four-on-20261026: PASS_LIMITED_SESSION_LIFECYCLE, 152.43 s, peak 4, observed server SYNCBAD=0, controller guard=FINISHED.
 - Distinguish short healthy native runs from long term stability. M1–M4 remain not finally accepted.
+
+## M1 follow-up audit
+- PR73 fail-closed guarded-harness Python suite fresh: `python3 -m unittest discover -s tools -p 'test_*.py'` in `/srv/tse-cecil-guard-20261026` -> 186 PASS.
+- Historic P1 four-bot failure and new ON result share exactly the same DLL, visible settings and four-bot peak, but differ in `qualify_bot_sessions.py`; see `docs/reports/2026-10-26-m1-repeatability-review.md`.
+- Earlier AI2 eight-bot Build06 PASS_LIMITED is from a different DLL; cannot qualify Cecil P1.
+- GitHub PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/74 (DRAFT). Confirm remote HEAD/tree before modifying it.

@@ -39,3 +39,11 @@ Native Cecil OFF/ON controlled run, reliable native sync producer, 1/4/8 accepta
 - Native onebot P1 OFF limited PASS (77.40s); fourbot same DLL OFF/ON results now pinned in docs/reports/2026-10-26-m1-controlled-cecil-native-ab.md.
 - Verified 415/415 files in protected manifest SHA match original source + backup tar SHA matches manifest; no files deleted.
 - Recheck public ports/generation, other ongoing processes and >8GiB free before next Retail run. Next source task: actual server/client native applied-action/CRC/state producer and first divergent tick; do not assume old SYNCBAD is fixed by one short control.
+
+## GitHub / additional QA update – 2026-10-26
+- GitHub draft PR #74 holds this isolated master integration source; branch `agent/chat/20261026-m1-m4-integration`; first published commit `82a7973751ad0b3d54b2582e04fc6fa4dc21b8a8`. Direct git HTTPS push from Hetzner lacks credential; use connected GitHub connector, verify exact Git tree equality before publication.
+- Local isolated worktree was safely aligned with published branch AFTER identical Git tree verification. Old local history is preserved in `agent/chat/20261026-m1-m4-pre-github-reconcile`.
+- PR73 Python suite: 186 PASS; PR71 integrated comparator 56 PASS. New short native four-bot OFF/ON both PASS_LIMITED. These are not long-term acceptance.
+- Read `docs/reports/2026-10-26-m1-repeatability-review.md`; historical native P1 FAIL and new short PASS have a different `qualify_bot_sessions.py` source hash. Do not infer cause.
+- Immediate engineering step: seek authoritatively paired Retail 1.07 client/server applied actions+CRC/state around first divergent tick, with original engine hash, connection epoch, uninstrumented control and private logs. Do not manufacture CRC data from aggregate BotTelemetry or PR58/PR65 synthetic models.
+- User ordered shutdown; public game server remains offline. Before any private test recheck resource/headroom, all processes and 8 GiB disk floor; do not change foreign worktrees.
