@@ -70,3 +70,12 @@ Establish exact private P1 OFF/ON preflight using the existing PR73 guarded harn
 - Private orchestration/evidence: /root/ssam-ai-backups/m1-completion-20261026-0155/. Planned next stages fourbot 3840 s and eightbot 7680 s (continuous full-population gates 3600/7200, not just elapsed time).
 - New source-pinned duration receipt evaluator has 14 RED/GREEN tests; rejects gaps, generation changes, missing logs/telemetry, wrong candidate and host/cleanup failures. It deliberately never declares M1 complete.
 - Candidate-bound native supervisor/restart qualification remains OPEN; M1 remains IN_PROGRESS. Public server remains user-disabled.
+
+
+## Completion execution checkpoint:26October2026
+- M1 IN_PROGRESS: original1/4hour receipts historicPASS; optimized25minute eightbot diagnosticPASS retrospective. Freshidle-r2 full1/4/8matrix active; original unsuccessfulCPU-contaminated attempt preserved andcleaned.
+- Reliability IN_PROGRESS: exactcandidate-bound private recoveryprofile prepared andregressiontested, notexecuted. No production24/7supervisor activation.
+- Combat OFFLINE_CANDIDATE_INTEGRATED: QA01/QA02 corrected, opt-inPR66composed, nativebuild/gunplay/sync NOT_TESTED.
+- Navigation OFFLINE_CANDIDATE_INTEGRATED: 3Danchors/itemammo/pathcost fixes tested; nativecapabilityguardclosed, realgraph/item/anchorcontracts stillrequired.
+- Sessions OPEN: existing private lifecycle/ghost machinery remains; final mixedpopulation nativeacceptance pending.
+- FullM1-M4 NOT_COMPLETE. Persisted plan2026-10-26-m1-prefilter-completion.md controlsnextsteps. Never stoporclaimcomplete from a startedtest or offlinepass.

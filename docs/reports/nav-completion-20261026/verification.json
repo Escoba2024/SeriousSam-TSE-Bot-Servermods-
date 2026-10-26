@@ -1,0 +1,99 @@
+{
+  "scope": "portable offline only; native NOT_TESTED_RETAIL",
+  "commands": [
+    "nice -n 19 make -j1 test sanitize bench-candidate",
+    "nice -n 19 python3 reproduce_original.py",
+    "nice -n 19 python3 cross_verify.py --combat-applier /srv/tse-c1-combat-20261026/poc/candidates/combat-master-20261026/apply.py"
+  ],
+  "logs_sha256": {
+    "completion-red.log": "49df5c2cc922c95bdff88e06bdaeafb0cfccd05bd6d24f9849cbfebae28538a9",
+    "pickup-red.log": "45e5da2de56ac41d76568bbdc72eb63eebe8f7486a8aafec4dec3956cb707d3e",
+    "floor-red.log": "e6b26cf8eae5a33d8154339f18091fb32eb08e340fad1d09bcb0a9a3b4f4bb0f",
+    "final-verification.log": "83b9ca41c4427e9bdfbcec788907562fd0c9feb7316772941ad8163bc2d821f3",
+    "original-reproduction-final.log": "420d9ecf27ca50f9061eecaffc718c3db572ba29b959067d5052c13ae133d253",
+    "cross-final.log": "9d5ca57630c3e0ed148f009d93fedab6c35b02f86b9197d7dea35c4a79b0a261"
+  },
+  "manifest_sha256": "3af54f464030c88463338464c82f476c94aa08415521f5337be23a6e6bf85fbf",
+  "cross_manifest": {
+    "applier_sha256": "594d89893adda8e952573c5a58880e07b57d180daea6550479d2cd846d4793b0",
+    "combat": {
+      "qualified": false,
+      "native_build": "NOT_TESTED",
+      "retail": "NOT_TESTED",
+      "source_pins": {
+        "pr57": "6b84c5d283664bc9e968bb4961abf2dd48731c5b",
+        "pr66": "48e110a7aa7b818cf7bab5979f6aae629932a2dc",
+        "qa_pr62": "d5fcd066c28764a6ba7fb6808364304f3ccd74e7"
+      },
+      "mode": "botcore",
+      "inputs_sha256": {
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/Makefile": "58dce210e2eb745183c79fd190ef0b3ec6112df60ddd59873d16944160ed8ab9",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bench_bot_human.cpp": "1be7255c2c3c929e9ae60532463a4b5be9b7aad51e5b614151a0ee96ff069ac7",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bot_aim.h": "349693e345bf8a3e27399311e6d345f4dae5cba58373b2a6c722cf1a0d77f8c3",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bot_combat.h": "99c5b7905e4bf804031dc30097c25982da36283a8c7fb05ffdf1ddc129850cbf",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bot_human.h": "add61bff9034b15d58060bf7bebbafdb4dfe9237c2cc88cf023ded15afc52649",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bot_loadout.h": "f45b962b87da2456966ecda0278a8880a1c0f2998c57ab16cc9ebdc98edf63d2",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bot_navigation.h": "e1947272f39cdfa698f8410f9a05fad5b5161cd057308404e0d815ae2792501b",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bot_perception.h": "d1bf17adc166d815249cd53152bba2fdbb58ce2d1c429ef1844c517627a2d480",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bot_profile.h": "4eba7660f6812f46bd232fef4d780ec30f6220b395f40288d11f9ac200a51239",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bot_reconnect.h": "015d0484d40d7947dbdf604464f62cc694f69b79c02ce2a99db857814c44d110",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bot_route.h": "1db480c301da04b7c764d0ac877a326c44b796b5516f83414b91742cfb013b01",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/bot_weapon_input.h": "38d7e5e6c9a8dfe0cd7ac7b831a5f277298e0bbe2b9e4b25ae831fd78f7ad4a2",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/botcore.h": "3f6ec8b750946c6eee6118dcf40bce649fd1edd831deb8071357e562253e6400",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/botcore_ai.h": "05fd35fe0eb346f331053089ff1641242dc61e932ef4dc2b32a77487fefda093",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/extract_block.py": "85daa50a0595f03a004d827b862065798e4c89e5b4bffc0cf68d8f3c52145bc1",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_bot_cecil_p1.cpp": "4a45bf096426c7259efc716d415844d2da1986856dcb60359c5055710cdf9bee",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_bot_combat.cpp": "32c212c5e4cad34d43d2711997853664274790b79f2e821ed885898705f2524a",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_bot_human_ai.cpp": "43e167c780ce269bed5a78c561152fbd601ce89896c1582f20aafe0df34e4fc5",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_bot_intercept.cpp": "fc9a38712aaf40ee59e2cbf190aa9fac2d4c308f722206e09a47625e5295756e",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_bot_navigation.cpp": "6a0c76706f4e2b21ac4c4401260b37ba28c0fb78703f1d15ef107ae0e54824ab",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_bot_reconnect.cpp": "7cceb51fb4169824e2f10c17e5c2e557ddf3501468cfe39128da6793261217f8",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_bot_route.cpp": "cff9f4678dc0a669c3d9cb0ba9e50f3ce8c1e58e0b65d9bbfea45291326253e2",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_bot_weapon_input.cpp": "eccb64445bcd9a68c603d77f7f40d4cc358fd16265e0def1399f360b6f8cc4e1",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_botcore.cpp": "06f8c4caa99ec81aeb3e0cd960867a2597cee343e217ddfbaa8c76b6bb10a319",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_botcore_ai.cpp": "79979fa0dc038b9a15022a7f8cdc273244b7db77f123b95abc14d5146ee35f74",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/test_botdriver_block.cpp": "489990ab9103dc635b21fcc2dbaa383c0975d42c744396b9053424fb3d161043",
+        "6b84c5d283664bc9e968bb4961abf2dd48731c5b:poc/botcore/verify_patch.py": "42050fdb07272f058a448b21c89f4ca9b238a997fc5f035d56ce268d5cda72a9",
+        "48e110a7aa7b818cf7bab5979f6aae629932a2dc:poc/research/behavior-improvements/combat2_weapon.h": "eb02f61e48c7378c46f45478d40add1522cf862c874208889bd11a58d9dd3531",
+        "48e110a7aa7b818cf7bab5979f6aae629932a2dc:poc/research/behavior-improvements/combat2_tactics.h": "fbf61ba07a31d2247749fb413b9822d3fa8ae9d0509c3564b8881d7a8ba12b47"
+      },
+      "local_inputs_sha256": {
+        "combat.patch": "629aec0db03e407687df31ab66e9a1d0515d556f9caf69b5ab5aba329d8465c2",
+        "driver.patch": "dca03cf5bec86be947c551cc277074e30a4620fd0114a4d13427730b6d93ca25",
+        "combat_master_support.h": "f8521d1d998ae18652416b8e4bc62673fb7a7ab891eab2b09b57fa1ebf98753d"
+      },
+      "output_sha256": {
+        "Makefile": "58dce210e2eb745183c79fd190ef0b3ec6112df60ddd59873d16944160ed8ab9",
+        "bench_bot_human.cpp": "1be7255c2c3c929e9ae60532463a4b5be9b7aad51e5b614151a0ee96ff069ac7",
+        "bot_aim.h": "349693e345bf8a3e27399311e6d345f4dae5cba58373b2a6c722cf1a0d77f8c3",
+        "bot_combat.h": "99c5b7905e4bf804031dc30097c25982da36283a8c7fb05ffdf1ddc129850cbf",
+        "bot_human.h": "5229bc124e1494bb22086d5398fc44be75586b6923b2a26d899748a7623090b9",
+        "bot_loadout.h": "f45b962b87da2456966ecda0278a8880a1c0f2998c57ab16cc9ebdc98edf63d2",
+        "bot_navigation.h": "e1947272f39cdfa698f8410f9a05fad5b5161cd057308404e0d815ae2792501b",
+        "bot_perception.h": "d1bf17adc166d815249cd53152bba2fdbb58ce2d1c429ef1844c517627a2d480",
+        "bot_profile.h": "4eba7660f6812f46bd232fef4d780ec30f6220b395f40288d11f9ac200a51239",
+        "bot_reconnect.h": "015d0484d40d7947dbdf604464f62cc694f69b79c02ce2a99db857814c44d110",
+        "bot_route.h": "1db480c301da04b7c764d0ac877a326c44b796b5516f83414b91742cfb013b01",
+        "bot_weapon_input.h": "38d7e5e6c9a8dfe0cd7ac7b831a5f277298e0bbe2b9e4b25ae831fd78f7ad4a2",
+        "botcore.h": "3f6ec8b750946c6eee6118dcf40bce649fd1edd831deb8071357e562253e6400",
+        "botcore_ai.h": "05fd35fe0eb346f331053089ff1641242dc61e932ef4dc2b32a77487fefda093",
+        "combat2_selected.h": "ecd418333977b9bc2d62c2a28d65801844c186cfbcf2dab2d7caea8e50f0ffa1",
+        "combat2_weapon.h": "eb02f61e48c7378c46f45478d40add1522cf862c874208889bd11a58d9dd3531",
+        "combat_master_support.h": "f8521d1d998ae18652416b8e4bc62673fb7a7ab891eab2b09b57fa1ebf98753d",
+        "extract_block.py": "85daa50a0595f03a004d827b862065798e4c89e5b4bffc0cf68d8f3c52145bc1",
+        "test_bot_cecil_p1.cpp": "4a45bf096426c7259efc716d415844d2da1986856dcb60359c5055710cdf9bee",
+        "test_bot_combat.cpp": "32c212c5e4cad34d43d2711997853664274790b79f2e821ed885898705f2524a",
+        "test_bot_human_ai.cpp": "43e167c780ce269bed5a78c561152fbd601ce89896c1582f20aafe0df34e4fc5",
+        "test_bot_intercept.cpp": "fc9a38712aaf40ee59e2cbf190aa9fac2d4c308f722206e09a47625e5295756e",
+        "test_bot_navigation.cpp": "6a0c76706f4e2b21ac4c4401260b37ba28c0fb78703f1d15ef107ae0e54824ab",
+        "test_bot_reconnect.cpp": "7cceb51fb4169824e2f10c17e5c2e557ddf3501468cfe39128da6793261217f8",
+        "test_bot_route.cpp": "cff9f4678dc0a669c3d9cb0ba9e50f3ce8c1e58e0b65d9bbfea45291326253e2",
+        "test_bot_weapon_input.cpp": "eccb64445bcd9a68c603d77f7f40d4cc358fd16265e0def1399f360b6f8cc4e1",
+        "test_botcore.cpp": "06f8c4caa99ec81aeb3e0cd960867a2597cee343e217ddfbaa8c76b6bb10a319",
+        "test_botcore_ai.cpp": "79979fa0dc038b9a15022a7f8cdc273244b7db77f123b95abc14d5146ee35f74",
+        "test_botdriver_block.cpp": "489990ab9103dc635b21fcc2dbaa383c0975d42c744396b9053424fb3d161043",
+        "verify_patch.py": "42050fdb07272f058a448b21c89f4ca9b238a997fc5f035d56ce268d5cda72a9"
+      }
+    }
+  }
+}

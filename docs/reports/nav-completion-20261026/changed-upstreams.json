@@ -1,0 +1,18 @@
+[
+  "poc/navigation-lab/nav_astar.h",
+  "poc/navigation-lab/nav_graph.h",
+  "poc/navigation-lab/test_nav_astar.cpp",
+  "poc/research/item-utility/include/botcore_adapter.h",
+  "poc/research/item-utility/include/item_scoring.h",
+  "poc/research/item-utility/include/item_snapshot.h",
+  "poc/research/item-utility/include/item_weapons.h",
+  "poc/research/item-utility/tests/test_botcore_adapter.cpp",
+  "poc/research/item-utility/tests/test_item_utility.cpp",
+  "poc/research/item-utility/tests/test_scoring_terms.cpp",
+  "poc/research/nav-item-bridge/Makefile",
+  "poc/research/nav-item-bridge/include/bridge_arbitrator.h",
+  "poc/research/nav-item-bridge/include/nav_cost_cache.h",
+  "poc/research/nav-item-bridge/include/nav_goal_sink.h",
+  "poc/research/nav-item-bridge/include/nav_item_bridge.h",
+  "poc/research/nav-item-bridge/tests/test_scenarios_matrix.cpp"
+]

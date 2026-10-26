@@ -19,6 +19,22 @@ SDK_SHA="aa7869c2c2c4db0562281814d0ac3784e6b9d6f0"
 INCLUDE_SHA="94ff8cd0e63941f8601294350b616472f772ed51"
 ROOT=Path(__file__).resolve().parents[1]
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+def stage_source_overlay(source,game):
+    """Validate a flat source-only overlay before copying; return actual input pins."""
+    source=Path(source).resolve();game=Path(game).resolve()
+    if not source.is_dir() or not game.is_dir() or source==game:
+        raise ValueError('separate existing source overlay and SDK game directory required')
+    required={'Game.cpp','Game.vcxproj','BotDriver.cpp','BotDriver.h','bot_human.h'}
+    entries=[p for p in source.iterdir() if p.suffix in ('.cpp','.h','.vcxproj')]
+    if not required.issubset({p.name for p in entries}) or any(p.is_symlink() or not p.is_file() for p in entries):
+        raise ValueError('complete regular flat GameMP source overlay required')
+    pins={p.name:sha(p) for p in entries}
+    for p in entries:
+        shutil.copy2(p,game/p.name)
+        if sha(game/p.name)!=pins[p.name]:raise RuntimeError('source overlay changed while staging')
+    return pins
+
+
 def build(args):
     out=args.output.resolve()
     out.mkdir(exist_ok=False)
@@ -46,11 +62,13 @@ def build(args):
         subprocess.run(["git","-C",str(sdk),"archive","--format=tar","-o",str(archive),"HEAD","Sources/Game","Sources/Properties"],check=True)
         with tarfile.open(archive) as t: t.extractall(out,filter="data")
         for name in ("Includes","EntitiesTSE"): (out/"Sources"/name).symlink_to(sdk/"Sources"/name,target_is_directory=True)
-        overlay=out/"overlay"
-        subprocess.run(["python3",str(ROOT/"poc/candidates/integrated-human-cpu-20261021/apply.py"),str(overlay)],check=True)
+        overlay=getattr(args,'source_overlay',None)
+        if overlay is None:
+            overlay=out/"overlay"
+            subprocess.run(["python3",str(ROOT/"poc/candidates/integrated-human-cpu-20261021/apply.py"),str(overlay)],check=True)
         game=out/"Sources/Game"
-        for p in overlay.iterdir():
-            if p.is_file(): shutil.copy2(p,game/p.name)
+        report['overlay_sha256']=stage_source_overlay(overlay,game)
+        report['source_overlay']=str(Path(overlay).resolve())
         shutil.copy2(sdk/"Sources/Includes/Engine107/EntitiesV.lib",game/"EntitiesMP.lib")
         ns={"m":"http://schemas.microsoft.com/developer/msbuild/2003"}
         files=[e.attrib["Include"] for e in ET.parse(game/"Game.vcxproj").findall(".//m:ClCompile",ns) if "Include" in e.attrib]
@@ -82,5 +100,6 @@ def build(args):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ("sdk","toolchain","prefix","output"): p.add_argument("--"+name,required=True,type=Path)
+    p.add_argument("--source-overlay",type=Path,help="explicit complete source-only candidate overlay; never a runtime directory")
     build(p.parse_args())
 if __name__=="__main__": main()

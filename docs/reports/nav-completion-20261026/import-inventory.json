@@ -1,0 +1,18 @@
+{
+  "source": "/srv/tse-c2-nav-20261026/poc/candidates/nav-master-20261026",
+  "status": "Uncommitted C2 candidate, imported for review, not accepted integration",
+  "files": {
+    ".gitignore": "03824949a66ab6db1429bd078d10d1bc2d75706aa1b756c547f9a7ff541c77cb",
+    "Makefile": "fdea5661013dcfdec36c0f2eddad3a4985c35dc229aa7eed9157f38de0195925",
+    "bench_controller.cpp": "f2be3ce6fc957308ec26dc9471dfd27b53ea81573afba1e1951ce4d8916ad141",
+    "cross_verify.py": "88c58b613e5f5b427450c32988456f3b9e0442e5d1e85eaffbb8f23fb283de8d",
+    "integration.patch": "726c6ba6b944517797be24e49ea9348f4277b21d60f36e6abafa2bd5447fa3ee",
+    "nav_item_controller.h": "1cfb721e469c0117e13efbc16f74b84cbd4bf80bd40491415ae3aa714e2d6048",
+    "pins.json": "74c6ee5843319e28675983f9da28d00b77e48780e317d614f8d03743669004c4",
+    "prepare.py": "0f3a828f131de19f9cfbe1c65001198d37ff4cd351350b3311e0c90e5549f6c0",
+    "reproduce_original.py": "b9b8cbce067a4050fcdf3f745b4e9cb2d9a157120580af4b78158436583069ac",
+    "tests/test_c1_ownership.cpp": "9b5ee6059d58890c5d90b65d02d969a08d1ddb404a212bd499d3400368eccf6a",
+    "tests/test_controller.cpp": "66c6cf6c56bf6b62b9faa529717d90a11c721900df0cdddbe343f8d41ba23dc1",
+    "tests/test_regressions.cpp": "3cbee2022888005ad19d4c56813c87cf4333829b249e2a8fe9b186d005da2a50"
+  }
+}

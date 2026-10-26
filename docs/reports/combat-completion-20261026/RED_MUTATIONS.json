@@ -1,0 +1,41 @@
+{
+  "original": {
+    "exit": 1,
+    "summary": "COMBAT REGRESSIONS: 29222 checks, 319 failures",
+    "outcomes": [
+      "AMBUSH exploratory=0 visible_from=21 occluded=0 outside_fov=0 escaped=100 shots=0 first_target=-1",
+      "AMBUSH exploratory=1 visible_from=21 occluded=0 outside_fov=0 escaped=100 shots=0 first_target=-1",
+      "AMBUSH exploratory=0 visible_from=26 occluded=0 outside_fov=0 escaped=100 shots=0 first_target=-1",
+      "AMBUSH exploratory=0 visible_from=21 occluded=1 outside_fov=0 escaped=100 shots=0 first_target=-1",
+      "AMBUSH exploratory=0 visible_from=21 occluded=0 outside_fov=1 escaped=100 shots=0 first_target=-1",
+      "WALL exploratory=0 bypass=0 resets=9 max_x=14.33",
+      "WALL exploratory=1 bypass=0 resets=8 max_x=52.01"
+    ]
+  },
+  "without-cancel": {
+    "exit": 1,
+    "summary": "COMBAT REGRESSIONS: 29222 checks, 307 failures",
+    "outcomes": [
+      "AMBUSH exploratory=0 visible_from=21 occluded=0 outside_fov=0 escaped=100 shots=0 first_target=-1",
+      "AMBUSH exploratory=1 visible_from=21 occluded=0 outside_fov=0 escaped=100 shots=0 first_target=-1",
+      "AMBUSH exploratory=0 visible_from=26 occluded=0 outside_fov=0 escaped=100 shots=0 first_target=-1",
+      "AMBUSH exploratory=0 visible_from=21 occluded=1 outside_fov=0 escaped=100 shots=0 first_target=-1",
+      "AMBUSH exploratory=0 visible_from=21 occluded=0 outside_fov=1 escaped=100 shots=0 first_target=-1",
+      "WALL exploratory=0 bypass=1 resets=0 max_x=22.70",
+      "WALL exploratory=1 bypass=0 resets=0 max_x=78.79"
+    ]
+  },
+  "without-recovery-gate": {
+    "exit": 1,
+    "summary": "COMBAT REGRESSIONS: 29414 checks, 12 failures",
+    "outcomes": [
+      "AMBUSH exploratory=0 visible_from=21 occluded=0 outside_fov=0 escaped=0 shots=32 first_target=25",
+      "AMBUSH exploratory=1 visible_from=21 occluded=0 outside_fov=0 escaped=0 shots=32 first_target=25",
+      "AMBUSH exploratory=0 visible_from=26 occluded=0 outside_fov=0 escaped=5 shots=32 first_target=30",
+      "AMBUSH exploratory=0 visible_from=21 occluded=1 outside_fov=0 escaped=100 shots=0 first_target=-1",
+      "AMBUSH exploratory=0 visible_from=21 occluded=0 outside_fov=1 escaped=100 shots=0 first_target=-1",
+      "WALL exploratory=0 bypass=0 resets=9 max_x=14.33",
+      "WALL exploratory=1 bypass=0 resets=8 max_x=52.01"
+    ]
+  }
+}
