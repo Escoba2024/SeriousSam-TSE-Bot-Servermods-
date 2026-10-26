@@ -1,0 +1,71 @@
+--- a/tools/operations/fleet_supervisor.py
++++ b/tools/operations/fleet_supervisor.py
+@@ -89,12 +89,14 @@
+  return len(recent)<3 and (not recent or now-max(recent)>=30*(2**(len(recent)-1)))
+
+ def open_writers(paths):
+- targets={str(Path(p).resolve()) for p in paths};found=[]
++ targets={(st.st_dev,st.st_ino) for p in paths for st in [Path(p).stat()]};found=[]
++ if not targets:return found
+  for proc in Path('/proc').glob('[0-9]*'):
+   try:
+    for fd in (proc/'fd').iterdir():
+     try:
+-     if os.readlink(fd) in targets:
++     st=fd.stat()
++     if (st.st_dev,st.st_ino) in targets:
+       info=(proc/'fdinfo'/fd.name).read_text();flags=int(re.search(r'^flags:\s+(\d+)',info,re.M).group(1),8)
+       if flags&os.O_ACCMODE != os.O_RDONLY:found.append(int(proc.name))
+     except FileNotFoundError:pass
+@@ -117,8 +119,13 @@
+   with gzip.open(tmp,'rb') as f:
+    for chunk in iter(lambda:f.read(1048576),b''):check.update(chunk)
+   if check.hexdigest()!=digest or open_writers([p]) or q.sha(p)!=digest:tmp.unlink();raise RuntimeError('archive verification changed')
+-  os.replace(tmp,dst);p.unlink();row=dict(source=str(p),sha256=digest,archive=str(dst));rows.append(row)
+-  event(directory/'manifest.json',row,limit=10000)
++  row=dict(source=str(p),sha256=digest,archive=str(dst));manifest=directory/'manifest.json'
++  history=json.loads(manifest.read_text()) if manifest.exists() else []
++  history=(history+[dict(row,utc=time.time())])[-10000:]
++  manifest_bytes=len((json.dumps(history,indent=2)+'\n').encode())
++  committed=sum(f.stat().st_size for f in directory.iterdir() if f.is_file() and f not in [tmp,manifest])+tmp.stat().st_size+manifest_bytes
++  if committed>budget:tmp.unlink();raise RuntimeError('archive budget exceeded including manifest')
++  os.replace(tmp,dst);atomic(manifest,history);p.unlink();rows.append(row)
+  return rows
+
+ def master_rule(port,owner):
+@@ -171,7 +178,7 @@
+
+ class Runtime:
+  def __init__(self,config):
+-  self.config=Path(config);self.c=json.loads(self.config.read_text());self.root=validate_config(self.c);self.result=self.root/'result.json';self.r=json.loads(self.result.read_text());self.lock=acquire_lock(self.root/'supervisor.lock');self.roles=['server','botA']+(['botB'] if self.c['bots']==8 else []);self.cg=Path('/sys/fs/cgroup')/('tse-ops-'+hashlib.sha256(str(self.root).encode()).hexdigest()[:12]);self.boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip();self.r['log_limit_bytes']=validate_log_limit(self.c)
++  self.config=Path(config);self.c=json.loads(self.config.read_text());self.root=validate_config(self.c);self.result=self.root/'result.json';self.lock=acquire_lock(self.root/'supervisor.lock');self.r=json.loads(self.result.read_text());self.roles=['server','botA']+(['botB'] if self.c['bots']==8 else []);self.cg=Path('/sys/fs/cgroup')/('tse-ops-'+hashlib.sha256(str(self.root).encode()).hexdigest()[:12]);self.boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip();self.r['log_limit_bytes']=validate_log_limit(self.c)
+  def save(self):atomic(self.result,self.r)
+  def log(self,kind,**kw):event(self.root/'events.json',dict(kind=kind,**kw))
+  def resources(self,additional_bytes):
+@@ -202,6 +209,15 @@
+    mounted=any(l.split()[4]==m['target'] for l in Path('/proc/self/mountinfo').read_text().splitlines())
+    if mounted and not h.mount_matches(m):raise RuntimeError('foreign/replaced mount')
+   allowed=set(map(int,(self.cg/'cgroup.procs').read_text().split())) if self.cg.exists() else set()
++  # A controller can die after exec but before saving the new identity. Do not
++  # treat unrecorded native roles in our cgroup as permission to start another.
++  registered={info['pid'] for info in self.r.get('processes',{}).values()}
++  if x:registered.add(x['pid'])
++  for pid in allowed-registered:
++   try:info=h.process_identity(pid)
++   except FileNotFoundError:continue
++   command=info['command'].replace('\\','/').rsplit('/',1)[-1]
++   if command in ('DedicatedServer.exe','SeriousSam.exe','Xvfb'):raise RuntimeError('unregistered native process in owned cgroup')
+   for port in [self.c['port'],self.c['port']+1]:
+    if not h.udp_owners(port)<=allowed:raise RuntimeError('foreign port owner')
+   for proc in Path('/proc').glob('[0-9]*'):
+--- a/tools/operations/fleet_health.py
++++ b/tools/operations/fleet_health.py
+@@ -111,7 +111,7 @@
+   m=re.search(rb"SYNCBAD: Client '([^']+)'",line)
+   if m:c['owned' if m[1] in [b'127.0.0.1',b'91.99.75.33',b'Local machine'] else 'external']+=1
+  c['mtime']=st.st_mtime_ns;_SYNC_CACHE[key]=c
+- return dict(owned=c['owned'],external=c['external'],complete=c['offset']>=st.st_size and c['valid'],bytes_scanned=len(data))
++ return dict(owned=c['owned'],external=c['external'],complete=c['offset']>=st.st_size and c['valid'] and not c['partial'],bytes_scanned=len(data))
+
+ def log_paths(root,r):
+  paths=[root/'xvfb.log',root/'server/Dedicated_BotTest.log']

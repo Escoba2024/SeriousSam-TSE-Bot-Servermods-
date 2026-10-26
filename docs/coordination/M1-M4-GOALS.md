@@ -8,7 +8,7 @@ Baseline origin/main: ab0c7400353a108f8461bb82280c539fdfe81499
 |---|---|---|
 | 0 Baseline and consolidation | COMPLETE | Exclusive integration worktree, host/worktree census, user-authorized server shutdown; 415/415 protected files SHA256 MATCH; rollback archive SHA256 MATCH; original DLL hashes checked. Other worktrees remain protected. |
 | 1 Synchronization | IN_PROGRESS | Historic P1 four-bot FAIL (5 SYNCBAD). New controlled same-DLL P1 OFF/ON runs documented in docs/reports/2026-10-26-m1-controlled-cecil-native-ab.md; root cause and 60/60/120-minute gates OPEN. |
-| 2 Reliability | IN_PROGRESS | PR46 and PR67 open, unmerged; restart/hour/reliability not requalified. |
+| 2 Reliability | IN_PROGRESS | Imported C1 PR50-derived ownership/sync/archive fixes into isolated integration source; RED 5/11 then GREEN 11/11 audit; integrated 130 tests, 0 fails/errors, 1 native skip. NOT_DEPLOYED, earlier DLL pin, native restart/hour gates OPEN. |
 | 3 Combat AI 2.0 | BLOCKED | PR45 original qualified version exists; PR57/P1 unqualified due four-bot SYNCBAD; PR66 offline only. |
 | 4 Navigation 2.0 | BLOCKED | PR69 research-only; no native movement/item integration acceptance. |
 | 5 Dynamic Sessions | BLOCKED | AI2 session tests exist; PR68 offline only; no final mixed native acceptance. |
@@ -51,3 +51,11 @@ Establish exact private P1 OFF/ON preflight using the existing PR73 guarded harn
 - TDD probe module: 25 checks; total tools suite: 81 PASS. Only handler counting qualified as limited native reachability, NOT server/client action/CRC pair.
 - Ruling: prohibit unsafe interior instruction patching until relocation/semantics are independently qualified; preserve public shutdown and 8 GiB disk reserve.
 - Next technical goal: safe, attributable action/CRC/state producer or verified alternative data source; do not promote synthetic evidence to M1 complete.
+
+
+## M1 reliability offline integration checkpoint – 26 October 2026
+- Five independent reliability defects reproduced (RED), exact audited fix patch applied to own worktree (GREEN). Evidence: `docs/reports/2026-10-26-m1-reliability-offline-integration.md`.
+- 130 tests in combined integration suite (129 passed, 1 native/Wine test deliberately skipped) and 11/11 focused regression tests.
+- Imported supervisor still pins historical `7fc94a...` DLL and its original manifest; Cecil P1 `7dc961c8...` has NO native reliability admission. No service installed or started.
+- Ruling: keep operations code unactivated and source-pinned to historic candidate until M1 full native validation. A provenance-preserving offline import minimizes accidental change to live game.
+- Next safe work: native sync producer validation plus full M1 runtime acceptance, then candidate-specific supervisor binding and bounded isolated crash-recovery tests.

@@ -56,3 +56,11 @@ Native Cecil OFF/ON controlled run, reliable native sync producer, 1/4/8 accepta
 - Local private artifacts: `/srv/tse-session-qualification-master-sync-20261026`, `...master-sync-v2-20261026`, `...master-crc-20261026`; private controller logs under `/root/ssam-ai-backups/shutdown-20261026-0033/`. Never publish raw evidence.
 - Next task is a differently qualified native applied-action, CRC and state capture across BOTH sides with authoritative tick+connection epoch; no M1-M4 final acceptance yet.
 - Run `cd /srv/tse-m1-m4-integration-20261026 && python3 -m unittest discover -s tools -p 'test_*.py'` and verify current repo/GitHub branch before work.
+
+
+## Reliability handoff – 26 October 2026
+- Imported C1 source modules and exact patch into `tools/operations/`; source SHA checks and portable tests are in `docs/reports/2026-10-26-m1-reliability-offline-integration.md`.
+- Imported four `tools/test_*operations*.py` suites and C1 audit; direct 5 RED before patch and 11 PASS after patch. Combined 130 tests, 0 fails/errors, 1 native test skipped to preserve public/private runtime.
+- Not installed/activated. Simulator/test-only code; historical Build04 DLL SHA is hard pinned and must NOT be reassigned to unqualified P1.
+- To rerun safe suite: import test_operations_live_recovery, set method `test_native_absent_server_wait_with_remaining_process.__unittest_skip__=True`, discover `tools/test_*.py`; do not invoke the native method without owned isolated preflight.
+- Reverify source identity and public shutdown on every resume. Continue M1 action/CRC producer work without native Frida interior cmp hooking.
