@@ -1,0 +1,195 @@
+--- bot_human.h
++++ bot_human.h
+@@ -29,6 +29,8 @@
+ #include "bot_perception.h"
+ #include "bot_profile.h"
+ #include "bot_route.h"
++#include "combat_master_support.h"
++#define COMBAT_MASTER_AVAILABLE 1
+ 
+ namespace botcore {
+ 
+@@ -41,6 +43,7 @@
+   uint32_t usable_weapons = 0;  // after ammo filtering
+   int current_weapon = 1;
+   bool deathmatch = true;
++  double observation_age_s = 0.0; // explicit position age; unknown = 0, NOT RTT
+   double strafe_scale = 1.0; // actual adapter scaling, used only for movement safety
+ };
+ 
+@@ -56,6 +59,7 @@
+   double aim_error_deg = 90.0;
+   double preferred_range_m = 12.0;
+   double distance_m = 0.0;
++  double latency_lead_s = 0.0; // applied measured-age component, for diagnostics
+   bool escape = false;         // bounded retreat along own recent travel history
+   bool travel = false;         // explicit movement/turn hold for own route memory
+ };
+@@ -68,7 +72,8 @@
+   HumanBotPolicy() { Configure(nullptr); }
+ 
+   void Configure(const BotProfile* profile, bool exploratory_search=false,
+-                 bool cecil_p1=false) {
++                 bool cecil_p1=false, bool weapon2=false, bool lead2=false,
++                 bool strafe2=false) {
+     BotProfile fallback{};
+     if (profile == nullptr) {
+       BuildProfile(3, 0, 0x1234567u, "BOT-Default", &fallback);
+@@ -77,6 +82,7 @@
+     profile_ = *profile;
+     exploratory_search_ = exploratory_search;
+     cecil_p1_ = cecil_p1;
++    weapon2_ = weapon2; lead2_ = lead2; strafe2_ = strafe2;
+     perception_.Configure(profile_.skill, profile_.seed ^ 0x5DEECE66u);
+     aim_.Configure(profile_.skill, profile_.seed ^ 0x1B54u);
+     weapons_.Configure(profile_.skill);
+@@ -87,6 +93,10 @@
+     perception_.Reset();
+     aim_.Reset();
+     weapons_.Reset();
++    weapons2_.Configure(profile_.skill, profile_.tier, profile_.persona,
++                        profile_.personality.range_preference, profile_.seed);
++    strafe2_controller_.Configure(profile_.persona, profile_.personality.strafe_bias,
++                                 profile_.seed);
+     target_ = -1;
+     target_since_tick_ = 0;
+     strafe_sign_ = (profile_.seed & 1u) ? 1.0 : -1.0;
+@@ -107,6 +117,7 @@
+     history_count_=history_next_=0; escape_until_=0; last_health_=0;
+     escape_active_=retreat_motion_allowed_=false;
+     route_.Configure(profile_.seed ^ 0x3A97u);
++    navigation_override_active_=false;
+   }
+ 
+   const BotProfile& profile() const { return profile_; }
+@@ -223,6 +234,13 @@
+       return cmd;
+     }
+ 
++    // Fresh accepted LOS can interrupt history retreat, even before reaction
++    // matures. Target acquisition and firing below still use their normal gates.
++    if (escape_active_) {
++      for (int slot=0;slot<kMaxPlayers;++slot) {
++        if (perception_.Visible(slot)) { escape_active_=false; break; }
++      }
++    }
+     if (escape_active_) {
+       const double dx=escape_x_-w.pose.x,dz=escape_z_-w.pose.z;
+       if (w.tick>=escape_until_ || dx*dx+dz*dz<2.25) escape_active_=false;
+@@ -264,7 +282,7 @@
+       cmd.fire = false;
+       cmd.forward = 0.0;
+       cmd.strafe = 0.0;
+-      cmd.weapon = weapons_.Update(BuildLoadout(w, false), w.tick);
++      cmd.weapon = SelectWeapon(w, false, 0.0);
+       if (exploratory_search_) {
+         cmd.travel=true;
+         // The bounded retreat has ended. An injured bot scans/defends in place
+@@ -294,7 +312,7 @@
+     const double distance = std::sqrt(dx * dx + dy * dy + dz * dz);
+     cmd.distance_m = distance;
+ 
+-    cmd.weapon = weapons_.Update(BuildLoadout(w, true, distance), w.tick);
++    cmd.weapon = SelectWeapon(w, true, distance);
+     if (cmd.weapon <= 0) cmd.weapon = w.current_weapon > 0 ? w.current_weapon : 1;
+ 
+     AimPoint aim_point;
+@@ -316,6 +334,13 @@
+       }
+     }
+ 
++    if (lead2_ && visible) {
++      cmd.latency_lead_s = combat_master::LeadAge(w.observation_age_s, profile_.skill.prediction_gain);
++      aim_point.x += tr->vx * cmd.latency_lead_s;
++      aim_point.y += tr->vy * cmd.latency_lead_s;
++      aim_point.z += tr->vz * cmd.latency_lead_s;
++    }
++
+     const AimOutput aim = aim_.Step(w.pose, aim_point, dt);
+     cmd.yaw_delta_deg = aim.yaw_delta_deg;
+     cmd.pitch_delta_deg = aim.pitch_delta_deg;
+@@ -335,7 +360,10 @@
+ 
+     MoveIntent(w, visible, distance, cmd);
+     const double bearing=std::atan2(-dx,-dz)*kRadToDeg;
+-    if (cmd.forward>0 && std::fabs(AimController::WrapDeg(bearing-w.pose.yaw_deg))>45) {
++    // Recovery may intentionally face away from a target. Preserve that intent;
++    // the exploratory turn hold applies only when recovery is not overriding.
++    if (exploratory_search_ && !navigation_override_active_ && cmd.forward>0 &&
++        std::fabs(AimController::WrapDeg(bearing-w.pose.yaw_deg))>45) {
+       cmd.forward=0;cmd.travel=true; // turn toward the known target before chasing
+     }
+     if (exploratory_search_ && (route_.InjuryHold() ||
+@@ -356,8 +384,15 @@
+   }
+ 
+   // Called by the integration when the bot's own health drops (see Perception).
+-  void NotifyDamage(double before, double after) { perception_.NotifyDamage(before, after); }
+-  void NotifyNavigation(bool active) { route_.NotifyRecovery(active); }
++  void NotifyDamage(double before, double after) {
++    perception_.NotifyDamage(before, after);
++    if (strafe2_ && std::isfinite(before) && std::isfinite(after) && after < before)
++      strafe2_controller_.NotifyDamage(perception_.tick()+1);
++  }
++  void NotifyNavigation(bool active) {
++    route_.NotifyRecovery(active);
++    navigation_override_active_=active;
++  }
+ 
+   // Adapter contract: call after EVERY movement/recovery override, with the
+   // same own eye position as WorldView, resultant movement yaw and both final
+@@ -372,6 +407,7 @@
+   }
+ 
+   double PreferredRange(int weapon) const {
++    if (weapon2_) return combat2::DesiredRange2(weapon, profile_);
+     const WeaponProfile& wp = WeaponAt(weapon);
+     double band = 0.5 * (wp.min_m + wp.max_m);
+     if (band < 6.0) band = 6.0;
+@@ -384,6 +420,11 @@
+   }
+ 
+  private:
++  int SelectWeapon(const WorldView& w, bool target, double distance) {
++    if (weapon2_) return weapons2_.Update(w.usable_weapons, distance, target, w.tick);
++    return weapons_.Update(BuildLoadout(w, target, distance), w.tick);
++  }
++
+   double SortKey(const SenseInput& s) const {
+     const double tracked_bonus = (perception_.Track(s.index) != nullptr) ? -1000.0 : 0.0;
+     const double dx = s.x - self_x_;
+@@ -473,7 +514,8 @@
+         profile_.skill.retreat_health * (0.6 + 0.9 * profile_.personality.caution);
+     if (visible && health_frac < retreat_below) {
+       cmd.forward = -0.85;
+-      cmd.strafe = ClampUnit(strafe_sign_ * 0.5 * profile_.personality.strafe_bias);
++      cmd.strafe = strafe2_ ? strafe2_controller_.Step(w.tick,2) :
++          ClampUnit(strafe_sign_ * 0.5 * profile_.personality.strafe_bias);
+       return;
+     }
+     if (distance > preferred + 3.0) {
+@@ -488,6 +530,11 @@
+       cmd.strafe = ClampUnit(strafe_sign_ * profile_.personality.strafe_bias *
+                              (0.5 + 0.5 * std::fabs(std::sin(0.9 * t))));
+     }
++    if (strafe2_) {
++      const int mode = distance > preferred + 3.0 ? 0 :
++                       (distance < preferred - 3.0 ? 2 : 1);
++      cmd.strafe = strafe2_controller_.Step(w.tick, mode);
++    }
+   }
+ 
+   double DistanceTo(double x, double y, double z) const {
+@@ -499,8 +546,12 @@
+ 
+   BotProfile profile_{};
+   RouteMemory route_;
++  bool navigation_override_active_ = false;
+   bool exploratory_search_ = false; // native B2 exposed excessive world deaths
+   bool cecil_p1_ = false;
++  bool weapon2_ = false, lead2_ = false, strafe2_ = false;
++  combat2::WeaponSelector2 weapons2_;
++  combat2::StrafeController strafe2_controller_;
+   int dead_since_tick_ = -1;
+   int next_shot_tick_[kWeaponCount+1] = {};
+   double self_health_fraction_ = 1.0;

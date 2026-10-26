@@ -37,7 +37,9 @@ def decide_recovery(sample):
                 m1_complete=False,public_deployment_authorized=False)
 
 def validated_matrix_stages(matrix,dll_sha256):
-    expected={1:('one-hour',3600),4:('four-hour',3600),8:('eight-two-hours',7200)}
+    # Exact reviewed roots only. Every receipt still needs direct native
+    # revalidation by the caller; a retry name never confers native acceptance.
+    expected={1:(('one-hour',),3600),4:(('four-hour','four-hour-r2'),3600),8:(('eight-two-hours',),7200)}
     if matrix.get('status')!='DURATION_MATRIX_ACCEPTED' or not isinstance(matrix.get('stages'),list) or len(matrix['stages'])!=3:
         raise ValueError('EXACT_COMPLETE_DURATION_MATRIX_REQUIRED')
     found={}
@@ -45,8 +47,10 @@ def validated_matrix_stages(matrix,dll_sha256):
         verdict=stage.get('verdict',{});bots=verdict.get('bots')
         if type(bots) is not int or bots not in expected or bots in found:
             raise ValueError('EXACT_COMPLETE_DURATION_MATRIX_REQUIRED')
-        name,seconds=expected[bots];root='/srv/tse-session-qualification-master-m1-'+name+'-20261026'
-        if (stage.get('root')!=root or verdict.get('status')!='DURATION_RECEIPTS_ACCEPTED' or
+        names,seconds=expected[bots]
+        allowed={'/srv/tse-session-qualification-master-m1-'+name+'-20261026' for name in names}
+        root=stage.get('root')
+        if (not isinstance(root,str) or root not in allowed or verdict.get('status')!='DURATION_RECEIPTS_ACCEPTED' or
                 type(verdict.get('required_s')) is not int or verdict['required_s']!=seconds or verdict.get('dll_sha256')!=dll_sha256):
             raise ValueError('PINNED_DURATION_STAGE_REQUIRED')
         found[bots]=(root,bots,seconds)

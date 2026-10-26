@@ -82,3 +82,28 @@ The canonical fault qualifier is now tools/qualify_m1_recovery.py. Default invoc
 Independent review found (and corrected) an argv JSON object/array conflict, a vacuous/incomplete duration-matrix admission and missing active-child cleanup wiring. The qualifier builds only pinned native argv, requires the exact 1/3600 + 4/3600 + 8/7200 matrix, binds each direct child through pidfd and uses bounded finally cleanup plus an independent resource census. The initial string edits failed to wire two guards; actual source was normalized and patched with asserted replacements/AST transformation before execution. No fault test was started during these fixes.
 Bounded native JSON receipt reads now retry truncate/write races without stale-state fallback; source and reader SHA are pinned in the private duration policy. Active native duration process/source unchanged.
 39/39 candidate build-source hashes and candidate DLL SHA were freshly reverified. The onebot running engine's effective ser_iKickOnSyncBad was passively read as original value 10; no hooks/state writes.
+
+
+## Chat continuation: diagnostic validator repaired, 26 October 2026
+Own isolated branch/worktree: agent/chat/20261026-m1-diagnostic-fix, /srv/tse-m1-diagnostic-fix-20261026, from committed Manus base 4c20198. Original integration has uncommitted CRC work: do not overwrite. Manus worktree remains untouched.
+
+Read docs/reports/2026-10-26-m1-diagnostic-reassessment.md. The original 25-minute eight-bot probe stopped with final-validator error, while native result and guard passed. Corrected optional max_log_mib contract (32 default, exact int1..128) accepts preserved evidence in a separately pinned retrospective receipt: 1,331.624 s full nine-slot population, all eight healthy20Hz bot roles, zero sync markers across10 complete logs, clean fresh census. Original BLOCKED/history/policies remain unchanged. Diagnostic-only, NOT M1 duration acceptance.
+
+Verification: performance69 PASS normal and optimized; tools220 run/219 PASS/one native skip; independent read-only review clean. No binary/service/public-runtime change. Next: same-provenance prefilter duration1/4/8 matrix, candidate-bound recovery, sync root-cause/release review. Inspect active jobs and disk8GiB floor before any new test.
+
+
+## Active autonomous completion: idle-r2 matrix and integrated offline candidates
+User ordered work through completion. Own branch agent/chat/20261026-m1-diagnostic-fix; matrix runtime and policy remain private.
+
+- First new onebot attempt aborted258.903s on three hostCPU samples99.700/99.801/99.900%, during overlapping portablecompile/test work. RAM2085.8MiB/disk8.261GiB; independent final census clean. This is not a syncfault diagnosis. Failed receipts and original matrix source preserved in /root/ssam-ai-backups/m1-prefilter-matrix-20261026-1803/.
+- Deliberate idle-r2 source/policy/roots are new; no prior receipt overwritten. Source-root profile is exact1/3720/3600 +4/3840/3600 +8/7680/7200. No portablecompilation, benchmark or nativebuild during this matrix.
+- Active matrix: /root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r2/matrix.json. Controller-start.json binds PID/startticks; policy.sha256 and policy.json pin15 producer/support inputs plus config/manifest/candidate/disabledmarker. Inspect actual state before any runtimeaction. Shared original matrix.lock and native qualificationlock prevent overlap. Public server remains disabled.
+- Source matrixcontroller9498f75501d6190fe2e42db77d50eb281e35ec8559ffe343fd41b977e57a176a; policy759d6a09948b62ca970de39e39cf414fd0caac349fc2c78369bca9c39fae520c.
+- Next after accepted matrix: tools/qualify_prefilter_m1_recovery.py --evidence-root /root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r2 --execute --matrix-policy-sha256759d6a09948b62ca970de39e39cf414fd0caac349fc2c78369bca9c39fae520c (supply hash as a separate argv value). Do not run before verifying exactmatrix and source/legacy policy pins. Duration uses optimized producer; fault qualification deliberately preserves separately pinned legacy producer and sameP1DLL. Never relabel inventories. No fault test started yet. Recovery binding failure retains unbound child for bounded wait/census, repeated signals are suppressed in cleanup, persistent recovery-HOLD/freshness prevent unsafe retries.
+- Combat fixes integrated commits7cfa578/d639dcb from6363889/d012fbac; nav source integratedd50b8c3 from6c18b51. These are OFFLINE source only. Preserve flags and kNativeNotQualified. Reports under docs/reports/combat-completion-20261026/ and nav-completion-20261026/.
+- Combat portable evidence29414 regression/1243module assertions,21600 unchanged off-corpus rows,10 inherited binaries, native-tail/resetbranch smoke; nav29completion/404controller checks, inherited suites/sanitizers/compatibility/cross-C1 ownership. Parent did not repeat heavy tests during native matrix. Source-only cherry-picks preserve tested bytes.
+- Python suite241 run/240PASS/one documented competing native test skipped at26cbe16; recovery freshness subsequently6focusedPASS normal/-O. Sourcebuilder now accepts a validated complete --source-overlay; no new DLL built.
+- Unqualified composed flat source /srv/tse-composed-source-20261026 was materialized with exactPR57/PR66pins. Do not deploy it. Build source overlay only outside measurement windows.
+- M3 nextnativeprobe must verify existing107eye/entity placement,8ammo counts/capacities,infiniteammo and world/entity metadata. No waypoint graph/native item eligibility or foot-height contract is established; do not manufacture those facts or call native snapshots fixtures.
+
+Idle-r2 launched 2026-10-26T19:23:36.067080+01:00; actual status at checkpoint NATIVE_DURATION_RUNNING.

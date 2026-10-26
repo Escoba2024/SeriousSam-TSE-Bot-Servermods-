@@ -1,0 +1,22 @@
+[
+  {
+    "commit": "ab0c7400353a108f8461bb82280c539fdfe81499",
+    "path": "poc/botcore",
+    "tree": "5577310fe225f6ca5460b7460c2e29e49b436070"
+  },
+  {
+    "commit": "3f2ba8dbf0df341b35cb157efd152fa93d1d7fd7",
+    "path": "poc/navigation-lab",
+    "tree": "438c5f70d2defd57a10ef44714bc616d42dbf7e1"
+  },
+  {
+    "commit": "72d464ff501d90ec4b69c2a131a50a06323e1909",
+    "path": "poc/research/item-utility",
+    "tree": "83223381611256cbfade0d0412f60ae55416ff4c"
+  },
+  {
+    "commit": "d0c181c638c6e82fd0187c3a29ad5fc8bf6d1869",
+    "path": "poc/research/nav-item-bridge",
+    "tree": "7dabce12d579821703040dc9f0078eabdc3167f8"
+  }
+]

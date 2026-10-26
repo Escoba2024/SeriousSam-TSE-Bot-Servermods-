@@ -1,0 +1,54 @@
+--- BotDriver.cpp
++++ BotDriver.cpp
+@@ -74,6 +74,10 @@
+ static INDEX bot_iTelemetry = 1;         // 0 = keep the build silent
+ static INDEX bot_bTelemetryConsole = 0;  // 1 = console summary every 5 s
+ static INDEX bot_bHumanAI      = FALSE; // profile-driven perception/aim/loadout (new path)
++static INDEX bot_bCombatWeapon2 = FALSE; // unqualified opt-in, latched at attach
++static INDEX bot_bCombatLead2 = FALSE; // measured-age lead only
++static INDEX bot_bCombatStrafe2 = FALSE; // requires explicit bot_fStrafeScale > 0
++static FLOAT bot_fCombatObservationAge = 0.0f; // seconds; explicit estimate, NOT RTT
+ static INDEX bot_bCecilP1 = FALSE; // experimental; default OFF
+ static INDEX bot_bExploratorySearch = FALSE; // unqualified: B2 had excess world deaths
+ static INDEX bot_iRosterOffset = 0;     // 0 or 4: which half of the 8-bot roster this client uses
+@@ -536,6 +540,10 @@
+   BotTelemetry_Start();
+   _pShell->DeclareSymbol("user INDEX bot_bHumanAI;",      &bot_bHumanAI);
+   _pShell->DeclareSymbol("user INDEX bot_bCecilP1;", &bot_bCecilP1);
++  _pShell->DeclareSymbol("user INDEX bot_bCombatWeapon2;", &bot_bCombatWeapon2);
++  _pShell->DeclareSymbol("user INDEX bot_bCombatLead2;", &bot_bCombatLead2);
++  _pShell->DeclareSymbol("user INDEX bot_bCombatStrafe2;", &bot_bCombatStrafe2);
++  _pShell->DeclareSymbol("user FLOAT bot_fCombatObservationAge;", &bot_fCombatObservationAge);
+   _pShell->DeclareSymbol("user INDEX bot_bExploratorySearch;", &bot_bExploratorySearch);
+   _pShell->DeclareSymbol("user INDEX bot_iRosterOffset;", &bot_iRosterOffset);
+   _pShell->DeclareSymbol("user INDEX bot_iProfile0;",     &bot_iProfile0);
+@@ -607,7 +615,8 @@
+     BotLog("[BotHuman] local=%d roster index %d rejected, average fallback\n",iLP,profile_index);
+   }
+   BotHumanPolicy(iLP).Configure(&profile,bot_bExploratorySearch!=FALSE,
+-                               bot_bCecilP1!=FALSE);
++                               bot_bCecilP1!=FALSE, bot_bCombatWeapon2!=FALSE,
++                               bot_bCombatLead2!=FALSE, bot_bCombatStrafe2!=FALSE);
+   _absBots[iLP].bs_lastHealth=0.0f;
+   BotLog("[BotHuman] local=%d profile=%s tier=%d persona=%s seed=%lu\n",
+     iLP,profile.name,profile.tier,botcore::PersonalityName(profile.persona),
+@@ -895,6 +904,7 @@
+           world.usable_weapons=BotCombatUsableWeapons(hw);
+           world.current_weapon=hw->m_iCurrentWeapon;
+           world.strafe_scale=Clamp(bot_fStrafeScale,0.0f,1.0f);
++          world.observation_age_s=bot_fCombatObservationAge;
+ 
+           if (bs.bs_lastHealth>0.0f && world.health<bs.bs_lastHealth) {
+             human.NotifyDamage(bs.bs_lastHealth,world.health);
+@@ -1137,7 +1147,10 @@
+           (int)navigation.phase,(int)navigation.reason,navigation.began,navigation.finished,
+           yaw,navigation.yawDelta,moveFactor,position(1),position(2),position(3));
+       }
+-    } else { bs.bs_navigation.Reset(); bs.bs_navPlayer=NULL; }
++    } else {
++      bs.bs_navigation.Reset(); bs.bs_navPlayer=NULL;
++      if (bot_bHumanAI) BotHumanPolicy(iLP).NotifyNavigation(false);
++    }
+ 
+     // Obstacle recovery can replace the policy's forward input. Validate the
+     // final axes after that override, using both current and requested yaw;

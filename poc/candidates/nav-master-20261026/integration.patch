@@ -1,0 +1,645 @@
+--- a/poc/navigation-lab/nav_astar.h
++++ b/poc/navigation-lab/nav_astar.h
+@@ -207,17 +207,22 @@
+ 
+   void Reconstruct(NavPath& out, int from, int end, const NavGraph& graph) const {
+     // Walk parent pointers into a temporary reversed list, then flip.
+-    int16_t rev[kNavMaxPathNodes];
++    int16_t rev[kNavMaxNodes];
+     int n = 0;
+     int cur = end;
+-    while (cur >= 0 && n < kNavMaxPathNodes) {
++    while (cur >= 0 && n < kNavMaxNodes) {
+       rev[n++] = static_cast<int16_t>(cur);
+       if (cur == from) break;
+       cur = parent_[cur];
+     }
+     out.count = 0;
+     out.cost = 0.0f;
+-    for (int i = n - 1; i >= 0; --i) {
++    // Return a prefix anchored at `from`, never a suffix near the goal.
++    // A bounded output is continued by the caller on a later tick.
++    if (n > kNavMaxPathNodes && out.status == NavSearchStatus::kFound) {
++      out.status = NavSearchStatus::kBudgetExhausted;
++    }
++    for (int i = n - 1; i >= 0 && out.count < kNavMaxPathNodes; --i) {
+       out.nodes[out.count++] = rev[i];
+     }
+     // Report the true (unvaried) cost of the chosen route.
+--- a/poc/navigation-lab/nav_graph.h
++++ b/poc/navigation-lab/nav_graph.h
+@@ -174,6 +174,24 @@
+     return best;
+   }
+ 
++  // Explicit 3D anchor for bridge callers. Height tolerance prevents snapping
++  // through ceilings even when a lower floor is closer in XZ.
++  int NearestNode3D(double x, double y, double z, double max_dist,
++                    double max_vertical = 2.0) const {
++    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(z) ||
++        !std::isfinite(max_dist) || max_dist <= 0 ||
++        !std::isfinite(max_vertical) || max_vertical < 0) return -1;
++    int best = -1;
++    double best_d2 = max_dist * max_dist;
++    for (int i=0; i<node_count_; ++i) {
++      const double dx=nodes_[i].x-x, dy=nodes_[i].y-y, dz=nodes_[i].z-z;
++      if (std::fabs(dy)>max_vertical) continue;
++      const double d2=dx*dx+dy*dy+dz*dz;
++      if (d2<best_d2) { best=i; best_d2=d2; }
++    }
++    return best;
++  }
++
+   const NavNode& node(int i) const { return nodes_[i]; }
+   int edge_count(int i) const { return edge_count_[i]; }
+   const NavEdge& edge(int i, int e) const { return edges_[i][e]; }
+--- a/poc/navigation-lab/test_nav_astar.cpp
++++ b/poc/navigation-lab/test_nav_astar.cpp
+@@ -178,12 +178,23 @@
+   CHECK(p.nodes[0] == entrance);
+   CHECK(p.count <= kNavMaxPathNodes);
+ 
+-  // A large budget solves the same problem completely.
++  // A large expansion budget can find a route longer than the output buffer.
++  // Return an anchored prefix, then continue from its frontier on later ticks.
+   NavSearchConfig big;
+   big.max_expand = kNavMaxNodes;
+-  const NavPath full = search.Find(g, entrance, centre, big);
+-  CHECK(full.status == NavSearchStatus::kFound);
+-  CHECK(full.expanded <= kNavMaxNodes);
++  int start = entrance;
++  for (int attempt = 0; attempt < 4 && start != centre; ++attempt) {
++    const NavPath part = search.Find(g, start, centre, big);
++    CHECK(part.nodes[0] == start);
++    CHECK(part.expanded <= kNavMaxNodes);
++    CHECK(part.count > 1);
++    CHECK(part.count <= kNavMaxPathNodes);
++    CHECK(part.status == (part.nodes[part.count - 1] == centre
++                             ? NavSearchStatus::kFound
++                             : NavSearchStatus::kBudgetExhausted));
++    start = part.nodes[part.count - 1];
++  }
++  CHECK(start == centre);
+ }
+ 
+ static void TestGoalChanges() {
+--- a/poc/research/item-utility/include/botcore_adapter.h
++++ b/poc/research/item-utility/include/botcore_adapter.h
+@@ -104,7 +104,7 @@
+   uint32_t mask = 0;
+   for (int i = 1; i <= kWeaponCount; ++i) {
+     if (!WeaponOwned(s.owned_weapons, i)) continue;
+-    if (!WeaponHasAmmo(s.ammo, i)) continue;
++    if (!WeaponHasAmmo(s.ammo, i, s.infinite_ammo)) continue;
+     mask |= (1u << (i - 1));
+   }
+   return mask;
+--- a/poc/research/item-utility/include/item_scoring.h
++++ b/poc/research/item-utility/include/item_scoring.h
+@@ -112,12 +112,14 @@
+ 
+   // Ammo pressure: how much of the bot's ranged capability is actually
+   // available. Starvation (owned ranged weapons, none loaded) is maximal.
+-  if (c.self.ammunition_starved) {
++  if (w.self.infinite_ammo) {
++    c.ammo_pressure = 0.0;
++  } else if (c.self.ammunition_starved) {
+     c.ammo_pressure = 1.0;
+   } else if (c.self.best_weapon > 1) {
+     const int cap = WeaponAmmoCap(c.self.best_weapon);
+     const double fill = cap > 0
+-        ? Clamp01(static_cast<double>(w.self.ammo[c.self.best_weapon]) / cap)
++        ? Clamp01(static_cast<double>(WeaponAmmoCount(w.self.ammo,c.self.best_weapon)) / cap)
+         : 1.0;
+     c.ammo_pressure = fill < 0.35 ? 0.60 : (fill < 0.65 ? 0.35 : 0.20);
+   } else {
+@@ -155,10 +157,17 @@
+ // is worthless; ammo for a weapon it does not load is discounted.
+ inline double AmmoNeed(const ScoreContext& c, const ItemWorld& w, int weapon_index) {
+   if (weapon_index < 1 || weapon_index > kWeaponCount) return 0.0;
+-  if (!WeaponOwned(w.self.owned_weapons, weapon_index)) return 0.0;
++  if (w.self.infinite_ammo) return 0.0;
++  // An ammo pool remains useful when either consumer is owned.
++  if (!WeaponOwned(w.self.owned_weapons, weapon_index) &&
++      !(WeaponAmmoIndex(weapon_index)==4 &&
++        (WeaponOwned(w.self.owned_weapons,4)||WeaponOwned(w.self.owned_weapons,5))) &&
++      !(WeaponAmmoIndex(weapon_index)==6 &&
++        (WeaponOwned(w.self.owned_weapons,6)||WeaponOwned(w.self.owned_weapons,7))))
++    return 0.0;
+   const int cap = WeaponAmmoCap(weapon_index);
+   if (cap <= 0) return 0.0;  // melee: no ammo exists
+-  const double current = static_cast<double>(w.self.ammo[weapon_index]);
++  const double current = static_cast<double>(WeaponAmmoCount(w.self.ammo,weapon_index));
+   const double fill = Clamp01(current / cap);
+   if (fill >= kFullHealthFrac) return 0.0;
+ 
+@@ -220,7 +229,7 @@
+     case ItemKind::kAmmo: {
+       const int cap = WeaponAmmoCap(it.weapon_index);
+       if (cap <= 0) return 0.0;
+-      const double have = static_cast<double>(w.self.ammo[it.weapon_index]);
++      const double have = static_cast<double>(WeaponAmmoCount(w.self.ammo,it.weapon_index));
+       const double missing = cap - have > 1.0 ? cap - have : 1.0;
+       const double amount = it.amount > 0 ? static_cast<double>(it.amount) : it.value;
+       const double useful = amount < missing ? amount : missing;
+@@ -358,11 +367,22 @@
+ 
+ // Full evaluation of one item. `intent` is the item the bot is currently
+ // travelling to (or -1); it only affects the documented "close finish" rule.
+-inline ItemEvaluation EvaluateItem(const ScoreContext& c, const ItemWorld& w,
++inline ItemEvaluation EvaluateItem(const ScoreContext& base, const ItemWorld& w,
+                                    int item_index) {
+   ItemEvaluation e;
+   e.item_index = item_index;
+   const ItemSnapshot& it = w.items[item_index];
++  ScoreContext c = base;
++  // Normal-top and overtop pickups have different limits. Never infer a
++  // native super-item property from its amount or appearance.
++  if (it.pickup_limit > 0 && it.kind == ItemKind::kHealth) {
++    c.health_frac = Clamp01(w.self.health/it.pickup_limit);
++    c.health_deficit_pts = it.pickup_limit-w.self.health;
++  }
++  if (it.pickup_limit > 0 && it.kind == ItemKind::kArmor) {
++    c.armor_frac = Clamp01(w.self.armor/it.pickup_limit);
++    c.armor_deficit_pts = it.pickup_limit-w.self.armor;
++  }
+   e.item_id = it.id;
+   e.kind = it.kind;
+   e.weapon_index = it.weapon_index;
+--- a/poc/research/item-utility/include/item_snapshot.h
++++ b/poc/research/item-utility/include/item_snapshot.h
+@@ -35,6 +35,7 @@
+   ItemKind kind = ItemKind::kNone;
+   int weapon_index = 0;           // 1..14 for kAmmo/kWeapon, else 0
+   Vec3 pos{};
++  double pickup_limit = 0.0;      // health/armor cap from verified caller, 0=normal top
+   double value = 0.0;             // health/armor points, or 0..1 usefulness
+   int amount = 0;                 // ammo units for kAmmo (0 = use `value`)
+   double respawn_s = 0.0;         // >0 = not there yet
+@@ -53,6 +54,7 @@
+   double max_health = 100.0;
+   double armor = 0.0;
+   double max_armor = 100.0;
++  bool infinite_ammo = false;     // explicit session fact supplied by caller
+   uint32_t owned_weapons = 0;     // bit (index-1), mirrored from
+                                   // CPlayerWeapons::m_iAvailableWeapons
+   int ammo[kWeaponCount + 1] = {0};  // 1..14, 0 = none
+@@ -62,7 +64,10 @@
+ // Small helper so callers do not have to remember the offset.
+ inline void SetAmmo(SelfState& s, int weapon_index, int amount) {
+   if (weapon_index >= 1 && weapon_index <= kWeaponCount) {
+-    s.ammo[weapon_index] = amount < 0 ? 0 : amount;
++    const int slot = WeaponAmmoIndex(weapon_index);
++    s.ammo[slot] = amount < 0 ? 0 : amount;
++    if (slot == 4) s.ammo[5] = s.ammo[slot];
++    if (slot == 6) s.ammo[7] = s.ammo[slot];
+   }
+ }
+ 
+@@ -150,9 +155,10 @@
+     return ValidationError::kBadKind;
+   }
+   if (!Finite(it.pos.x) || !Finite(it.pos.y) || !Finite(it.pos.z) ||
+-      !Finite(it.value) || !Finite(it.respawn_s) || !Finite(it.staleness_s)) {
++      !Finite(it.pickup_limit) || !Finite(it.value) || !Finite(it.respawn_s) || !Finite(it.staleness_s)) {
+     return ValidationError::kNonFinite;
+   }
++  if (it.pickup_limit < 0.0) return ValidationError::kNegativeValue;
+   if (it.value < 0.0) return ValidationError::kNegativeValue;
+   if (it.respawn_s < 0.0) return ValidationError::kNegativeRespawn;
+   if (it.staleness_s < 0.0) return ValidationError::kNonFinite;
+@@ -185,7 +191,7 @@
+     return ValidationError::kBadSelf;
+   }
+   if (s.max_health <= 0.0 || s.max_armor < 0.0 || s.health < 0.0 ||
+-      s.health > s.max_health || s.armor < 0.0 || s.armor > s.max_armor ||
++      s.armor < 0.0 ||
+       s.move_speed_mps <= 0.0) {
+     return ValidationError::kBadSelf;
+   }
+@@ -242,7 +248,7 @@
+ 
+   for (int i = 1; i <= kWeaponCount; ++i) {
+     if (!WeaponOwned(s.owned_weapons, i)) continue;
+-    if (!WeaponHasAmmo(s.ammo, i)) {
++    if (!WeaponHasAmmo(s.ammo, i, s.infinite_ammo)) {
+       if (WeaponNeedsAmmo(i)) {
+         a.starved_mask |= (1 << i);
+         a.ammunition_starved = true;
+@@ -266,6 +272,11 @@
+     // Only melee left: treat as starved for ranged purposes.
+     a.ammunition_starved = true;
+   }
++  bool ranged_usable = false;
++  for (int i=2; i<=kWeaponCount; ++i)
++    if (i!=10 && WeaponOwned(s.owned_weapons,i) &&
++        WeaponHasAmmo(s.ammo,i,s.infinite_ammo)) ranged_usable=true;
++  a.ammunition_starved = !ranged_usable && a.ammunition_starved;
+   return a;
+ }
+ 
+--- a/poc/research/item-utility/include/item_weapons.h
++++ b/poc/research/item-utility/include/item_weapons.h
+@@ -57,19 +57,28 @@
+   return kTable[index - 1];
+ }
+ 
++// Canonical pool slots: shell=4, bullets=6. No separate reserve for twins.
++inline int WeaponAmmoIndex(int index) {
++  return index == 5 ? 4 : (index == 7 ? 6 : index);
++}
++inline int WeaponAmmoCount(const int* ammo, int index) {
++  return ammo && index >= 1 && index <= kWeaponCount
++      ? ammo[WeaponAmmoIndex(index)] : 0;
++}
+ inline int WeaponAmmoCap(int index) {
+   if (index < 1 || index > kWeaponCount) return 0;
+-  return WeaponTraitAt(index).ammo_cap;
++  if (index == 2 || index == 3) return 0; // Colt reloads without reserve.
++  return WeaponTraitAt(WeaponAmmoIndex(index)).ammo_cap;
+ }
+ 
+ inline bool WeaponNeedsAmmo(int index) { return WeaponAmmoCap(index) > 0; }
+ 
+ // `ammo_by_index` is a SelfState::ammo array with 15 entries (1..14 used).
+-inline bool WeaponHasAmmo(const int* ammo_by_index, int index) {
++inline bool WeaponHasAmmo(const int* ammo_by_index, int index, bool infinite_ammo = false) {
+   if (ammo_by_index == nullptr) return false;
+   if (index < 1 || index > kWeaponCount) return false;
+-  if (!WeaponNeedsAmmo(index)) return true;
+-  return ammo_by_index[index] > 0;
++  if (infinite_ammo || !WeaponNeedsAmmo(index)) return true;
++  return WeaponAmmoCount(ammo_by_index,index) >= (index == 5 ? 2 : 1);
+ }
+ 
+ inline bool WeaponOwned(uint32_t owned_mask, int index) {
+--- a/poc/research/item-utility/tests/test_botcore_adapter.cpp
++++ b/poc/research/item-utility/tests/test_botcore_adapter.cpp
+@@ -101,7 +101,7 @@
+ 
+   const uint32_t usable = UsableWeaponMask(s);
+   CHECK(WeaponOwned(usable, 1), "melee stays usable without ammo");
+-  CHECK(!WeaponOwned(usable, 2), "an empty weapon is not usable");
++  CHECK(WeaponOwned(usable, 2), "Colt remains usable without reserve");
+   CHECK(WeaponOwned(usable, 4), "a loaded weapon is usable");
+ 
+   for (int i = 1; i <= kWeaponCount; ++i) {
+--- a/poc/research/item-utility/tests/test_item_utility.cpp
++++ b/poc/research/item-utility/tests/test_item_utility.cpp
+@@ -238,9 +238,10 @@
+ 
+ static void TestMissingAmmoSelectsAmmo() {
+   Scenario s;
++  GrantWeapon(s.self, 6);
+   s.self.health = 100.0;
+-  SetAmmo(s.self, 2, 0);  // colt empty
+-  s.Add(ItemKind::kAmmo, 0.0, -8.0, 0.0, 2, 25);
++  SetAmmo(s.self, 6, 0);  // Tommygun empty
++  s.Add(ItemKind::kAmmo, 0.0, -8.0, 0.0, 6, 25);
+   s.Add(ItemKind::kAmmo, 0.0, -8.0, 0.0, 4, 30);  // shotgun already full
+   s.Add(ItemKind::kHealth, 0.0, -8.0, 50.0);      // not needed
+ 
+@@ -248,9 +249,9 @@
+   planner.Configure(Profile(3, 2));
+   const GoalDecision d = planner.Step(s.World());
+ 
+-  CHECK(d.has_goal, "empty colt triggers an ammo search");
++  CHECK(d.has_goal, "empty Tommygun triggers an ammo search");
+   CHECK(d.goal_kind == ItemKind::kAmmo, "ammo item selected");
+-  CHECK(d.goal_weapon_index == 2, "ammo for the empty colt selected");
++  CHECK(d.goal_weapon_index == 6, "ammo for the empty Tommygun selected");
+   CHECK(!d.suppress_combat, "an ammo trip is not a survival trip");
+ 
+   int n = 0;
+@@ -566,10 +567,13 @@
+   // Empty primary weapon beats a medkit at 70 hp, so the abort hits the ammo
+   // trip and the medkit is the fallback.
+   Scenario s;
++  s.self.owned_weapons = 0;
++  GrantWeapon(s.self, 1);
++  GrantWeapon(s.self, 6);
+   s.self.health = 70.0;
+   const int medkit = s.Add(ItemKind::kHealth, 0.0, -14.0, 50.0);
+-  const int ammo = s.Add(ItemKind::kAmmo, 0.0, -6.0, 0.0, 2, 25);
+-  SetAmmo(s.self, 2, 0);
++  const int ammo = s.Add(ItemKind::kAmmo, 0.0, -6.0, 0.0, 6, 25);
++  SetAmmo(s.self, 6, 0);
+ 
+   ItemProfile p = Profile(3, 1);
+   // Deliberately short global cooldown, long per-item cooldown: this isolates
+@@ -634,10 +638,11 @@
+ 
+ static void TestGoalSwitchRespectsDwellAndMargin() {
+   Scenario s;
++  GrantWeapon(s.self, 6);
+   s.self.health = 20.0;
+   s.self.armor = 100.0;
+-  SetAmmo(s.self, 2, 0);
+-  const int ammo = s.Add(ItemKind::kAmmo, 0.0, -12.0, 0.0, 2, 25);
++  SetAmmo(s.self, 6, 0);
++  const int ammo = s.Add(ItemKind::kAmmo, 0.0, -12.0, 0.0, 6, 25);
+   const int health = s.Add(ItemKind::kHealth, 0.0, -2.5, 100.0);
+   s.items[health].respawn_s = 5.0;  // not there yet
+ 
+@@ -1048,7 +1053,7 @@
+ 
+   Scenario health_over_max = s;
+   health_over_max.self.health = 150.0;
+-  CHECK(!plain_ok(health_over_max.World()), "health above max is rejected");
++  CHECK(plain_ok(health_over_max.World()), "legal overtop health is accepted");
+ 
+   Scenario bad_priority = s;
+   bad_priority.combat.combat_priority = 1.5;
+@@ -1103,20 +1108,20 @@
+   Scenario s;
+   s.self.owned_weapons = 0;
+   GrantWeapon(s.self, 1);
+-  GrantWeapon(s.self, 2);
+-  SetAmmo(s.self, 2, 0);
+-  const int item = s.Add(ItemKind::kAmmo, 0.0, -5.0, 0.0, 2, 10);
++  GrantWeapon(s.self, 6);
++  SetAmmo(s.self, 6, 0);
++  const int item = s.Add(ItemKind::kAmmo, 0.0, -5.0, 0.0, 6, 10);
+   const ItemProfile p = Profile(3, 2);
+ 
+   double previous = 2.0;
+-  for (int ammo = 0; ammo <= 50; ammo += 10) {
+-    s.self.ammo[2] = ammo;
++  for (int ammo = 0; ammo <= 100; ammo += 20) {
++    s.self.ammo[6] = ammo;
+     const ScoreContext c = MakeContext(p, s.World(), 0);
+     const double need = EvaluateItem(c, s.World(), item).terms.need;
+     CHECK(need <= previous + 1e-9, "ammo need never grows with more ammo");
+     previous = need;
+   }
+-  s.self.ammo[2] = 50;
++  s.self.ammo[6] = 100;
+   const ScoreContext full = MakeContext(p, s.World(), 0);
+   CHECK(EvaluateItem(full, s.World(), item).terms.need == 0.0,
+         "full ammo has zero ammo need");
+--- a/poc/research/item-utility/tests/test_scoring_terms.cpp
++++ b/poc/research/item-utility/tests/test_scoring_terms.cpp
+@@ -230,14 +230,14 @@
+   Ctx c;
+   c.world.self.owned_weapons = 0;
+   GrantWeapon(c.world.self, 1);
+-  GrantWeapon(c.world.self, 2);
+-  SetAmmo(c.world.self, 2, 0);
+-  c.Add(ItemKind::kAmmo, 0.0, -5.0, 0.0, 2, 10);
++  GrantWeapon(c.world.self, 6);
++  SetAmmo(c.world.self, 6, 0);
++  c.Add(ItemKind::kAmmo, 0.0, -5.0, 0.0, 6, 10);
+   const ScoreContext ctx = MakeContext(Prof(), c.world, 0);
+ 
+   CHECK(AmmoNeed(ctx, c.world, 3) == 0.0, "ammo for an unowned weapon is worthless");
+   CHECK(AmmoNeed(ctx, c.world, 1) == 0.0, "melee has no ammo need");
+-  CHECK(AmmoNeed(ctx, c.world, 2) > 0.7, "an empty main weapon is an emergency");
++  CHECK(AmmoNeed(ctx, c.world, 6) > 0.7, "an empty main weapon is an emergency");
+   CHECK(AmmoNeed(ctx, c.world, 99) == 0.0, "an invalid index is harmless");
+ }
+ 
+--- a/poc/research/nav-item-bridge/Makefile
++++ b/poc/research/nav-item-bridge/Makefile
+@@ -18,8 +18,9 @@
+ 	include/bridge_arbitrator.h \
+ 	include/nav_item_bridge.h \
+ 	include/arena_sim.h \
+-	include/upstream/navlab_mirror.h \
+-	include/upstream/itemai_mirror.h
++	$(wildcard ../../navigation-lab/*.h) \
++	$(wildcard ../item-utility/include/*.h) \
++	$(wildcard ../../botcore/*.h)
+ 
+ .PHONY: all test smoke bench compat check-noalloc clean
+ 
+--- a/poc/research/nav-item-bridge/include/bridge_arbitrator.h
++++ b/poc/research/nav-item-bridge/include/bridge_arbitrator.h
+@@ -371,6 +371,7 @@
+     out.forward = recovery_dec.forward;
+     out.strafe = 0.0;
+     out.fire = false;
++    out.jump_hint = false;  // Recovery replaced the route segment owning this hint.
+   }
+ 
+   if (trace != nullptr) {
+--- a/poc/research/nav-item-bridge/include/nav_cost_cache.h
++++ b/poc/research/nav-item-bridge/include/nav_cost_cache.h
+@@ -282,6 +282,12 @@
+       return out;
+     }
+ 
++    if (desired_expand <= 0) {
++      out.status = navlab::NavSearchStatus::kBudgetExhausted;
++      out.nodes[0] = static_cast<int16_t>(from);
++      out.count = 1;
++      return out;
++    }
+     int cap = desired_expand;
+     if (budget != nullptr) {
+       cap = budget->Grant(desired_expand);
+@@ -415,17 +421,22 @@
+ 
+   void Reconstruct(navlab::NavPath& out, int from, int end,
+                    const navlab::NavGraph& graph) const {
+-    int16_t rev[navlab::kNavMaxPathNodes];
++    int16_t rev[navlab::kNavMaxNodes];
+     int n = 0;
+     int cur = end;
+-    while (cur >= 0 && n < navlab::kNavMaxPathNodes) {
++    while (cur >= 0 && n < navlab::kNavMaxNodes) {
+       rev[n++] = static_cast<int16_t>(cur);
+       if (cur == from) break;
+       cur = parent_[cur];
+     }
+     out.count = 0;
+     out.cost = 0.0f;
+-    for (int i = n - 1; i >= 0; --i) {
++    // Return a prefix anchored at `from`, never a suffix near the goal.
++    // A bounded output is continued by the caller on a later tick.
++    if (n > navlab::kNavMaxPathNodes && out.status == navlab::NavSearchStatus::kFound) {
++      out.status = navlab::NavSearchStatus::kBudgetExhausted;
++    }
++    for (int i = n - 1; i >= 0 && out.count < navlab::kNavMaxPathNodes; --i) {
+       out.nodes[out.count++] = rev[i];
+     }
+     for (int i = 0; i + 1 < out.count; ++i) {
+@@ -769,8 +780,7 @@
+     }
+ 
+     const uint32_t epoch = MixEpoch(graph_epoch, local_blocked.epoch());
+-    const int bot_node = graph.NearestNode(raw_world.self.eye.x,
+-                                           raw_world.self.eye.z,
++    const int bot_node = graph.NearestNode3D(raw_world.self.eye.x, raw_world.self.eye.y, raw_world.self.eye.z,
+                                            cfg.max_anchor_dist_m);
+ 
+     int uncached_indices[itemai::kMaxItems];
+@@ -807,7 +817,7 @@
+         continue;
+       }
+ 
+-      const int item_node = graph.NearestNode(raw_it.pos.x, raw_it.pos.z,
++      const int item_node = graph.NearestNode3D(raw_it.pos.x, raw_it.pos.y, raw_it.pos.z,
+                                               cfg.max_anchor_dist_m);
+       te.anchor_node = item_node;
+ 
+@@ -854,6 +864,9 @@
+         continue;
+       }
+ 
++      // Unknown is pending, never an optimistic reachable air-distance.
++      adapted_storage[i].reachable = false;
++      te.reachable = false;
+       true_table->Set(i, te);
+ 
+       // Candidate pre-filter before spending A* expansions:
+@@ -908,6 +921,8 @@
+         te.path_verified = true;
+         ++stats.graph_unreachable;
+       } else if (path.status == navlab::NavSearchStatus::kFound) {
++        adapted_storage[idx].reachable = true;
++        te.reachable = true;
+         int second_node = -1;
+         float cost_from_second = path.cost;
+         if (path.count >= 2) {
+@@ -957,10 +972,10 @@
+   static bool QuickMaybeNeeded(const itemai::ItemWorld& w,
+                                const itemai::ItemSnapshot& it) {
+     const double hf = w.self.max_health > 0.0
+-                          ? w.self.health / w.self.max_health
++                          ? w.self.health / (it.pickup_limit>0 ? it.pickup_limit : w.self.max_health)
+                           : 1.0;
+     const double af = w.self.max_armor > 0.0
+-                          ? w.self.armor / w.self.max_armor
++                          ? w.self.armor / (it.pickup_limit>0 ? it.pickup_limit : w.self.max_armor)
+                           : 1.0;
+     switch (it.kind) {
+       case itemai::ItemKind::kHealth:
+@@ -971,7 +986,7 @@
+         if (it.weapon_index < 1 || it.weapon_index > itemai::kWeaponCount) {
+           return false;
+         }
+-        return itemai::WeaponOwned(w.self.owned_weapons, it.weapon_index);
++        return !w.self.infinite_ammo && itemai::WeaponNeedsAmmo(it.weapon_index);
+       default:
+         return true;
+     }
+--- a/poc/research/nav-item-bridge/include/nav_goal_sink.h
++++ b/poc/research/nav-item-bridge/include/nav_goal_sink.h
+@@ -136,7 +136,10 @@
+ 
+     if (active_ && true_items_ != nullptr) {
+       const TrueItemEntry* te = true_items_->Find(goal_.goal_id);
+-      if (te != nullptr) true_pos_ = te->true_pos;
++      if (te != nullptr) {
++        if (itemai::Distance(true_pos_,te->true_pos) >= 0.05) planned_epoch_ = 0;
++        true_pos_ = te->true_pos;
++      }
+     }
+   }
+ 
+@@ -152,7 +155,7 @@
+ 
+     // Idempotent update when same goal_id and unchanged pickup position.
+     if (active_ && goal_.goal_id == goal.goal_id &&
+-        PlanarDistXZ(true_pos_.x, true_pos_.z, target_pos.x, target_pos.z) <
++        itemai::Distance(true_pos_, target_pos) <
+             0.05 &&
+         (status_ == itemai::NavStatus::kAccepted ||
+          status_ == itemai::NavStatus::kInProgress)) {
+@@ -174,9 +177,9 @@
+       return itemai::NavStatus::kUnreachable;
+     }
+ 
+-    const int start_node = graph_->NearestNode(bot_pos_.x, bot_pos_.z,
++    const int start_node = graph_->NearestNode3D(bot_pos_.x, bot_pos_.y, bot_pos_.z,
+                                                cfg_.max_anchor_dist_m);
+-    const int goal_node = graph_->NearestNode(target_pos.x, target_pos.z,
++    const int goal_node = graph_->NearestNode3D(target_pos.x, target_pos.y, target_pos.z,
+                                               cfg_.max_anchor_dist_m);
+     if (start_node < 0 || goal_node < 0) {
+       ++unreachable_aborts_;
+@@ -440,7 +443,7 @@
+       const int wp_idx = route_[route_pos_];
+       const bool is_last_wp = (route_pos_ == route_len_ - 1) && !partial_route_;
+       const double dist_to_item =
+-          PlanarDistXZ(bot_pos_.x, bot_pos_.z, true_pos_.x, true_pos_.z);
++          itemai::Distance(bot_pos_, true_pos_);
+       if (!is_last_wp || dist_to_item > goal_.arrive_radius_m * 2.2) {
+         const navlab::NavNode& wp = graph_->node(wp_idx);
+         target_x = wp.x;
+@@ -541,10 +544,14 @@
+   }
+ 
+   bool ReplanCurrentGoal() {
+-    if (graph_ == nullptr || graph_->node_count() <= 0 || goal_node_ < 0) {
++    if (graph_ == nullptr || graph_->node_count() <= 0) {
+       return false;
+     }
+-    const int start_node = graph_->NearestNode(bot_pos_.x, bot_pos_.z,
++    // Epoch changes may replace/reindex all nodes. Resolve the live item again.
++    goal_node_ = graph_->NearestNode3D(true_pos_.x, true_pos_.y, true_pos_.z,
++                                     cfg_.max_anchor_dist_m);
++    if (goal_node_ < 0) return false;
++    const int start_node = graph_->NearestNode3D(bot_pos_.x, bot_pos_.y, bot_pos_.z,
+                                                cfg_.max_anchor_dist_m);
+     if (start_node < 0) return false;
+     const navlab::NavPath path = RunGoalSearch(start_node, goal_node_);
+@@ -571,7 +578,7 @@
+     }
+     const int until = tick_ + cfg_.blocked_edge_ttl_ticks;
+     const int near_node =
+-        graph_->NearestNode(bot_pos_.x, bot_pos_.z, cfg_.max_anchor_dist_m);
++        graph_->NearestNode3D(bot_pos_.x, bot_pos_.y, bot_pos_.z, cfg_.max_anchor_dist_m);
+     if (route_pos_ > 0 && route_pos_ < route_len_) {
+       const int u = route_[route_pos_ - 1];
+       const int v = route_[route_pos_];
+@@ -608,6 +615,7 @@
+       const double reach = node.radius > persona_.search_radius
+                                ? node.radius
+                                : persona_.search_radius;
++      const double dy = node.y - bot_pos_.y;
+       const double d2 = dx * dx + dz * dz;
+       bool passed = false;
+       if (route_pos_ > 0 && graph_->Valid(route_[route_pos_ - 1])) {
+@@ -619,7 +627,7 @@
+         const double seg2 = sx * sx + sz * sz;
+         if (seg2 > 1e-9) passed = ((bx * sx + bz * sz) / seg2) > 1.0;
+       }
+-      if (d2 <= reach * reach || passed) {
++      if (std::fabs(dy) <= 2.0 && (d2 <= reach * reach || passed)) {
+         ++route_pos_;
+       } else {
+         break;
+--- a/poc/research/nav-item-bridge/include/nav_item_bridge.h
++++ b/poc/research/nav-item-bridge/include/nav_item_bridge.h
+@@ -548,7 +548,7 @@
+     if (budgeted_patrol_pos_ >= budgeted_patrol_len_ &&
+         tick_budget_.Remaining() > 0) {
+       const int start =
+-          graph.NearestNode(wv.pose.x, wv.pose.z, budget_cfg_.max_anchor_dist_m);
++          graph.NearestNode3D(wv.pose.x, wv.pose.y, wv.pose.z, budget_cfg_.max_anchor_dist_m);
+       const int goal =
+           static_cast<int>((bundle_.bot_profile.seed + static_cast<uint32_t>(wv.tick / 20)) %
+                            static_cast<uint32_t>(n));
+--- a/poc/research/nav-item-bridge/tests/test_scenarios_matrix.cpp
++++ b/poc/research/nav-item-bridge/tests/test_scenarios_matrix.cpp
+@@ -286,8 +286,9 @@
+   navbridge::BuildBridgeProfile(3, 1, 0x505Au, 0, "S05ABot", &prof_a, 0.0f);
+   const int ba = sim_a.AddBot(prof_a, 0.0, 0.0, 0.0);
+   sim_a.bot(ba).health = 90.0;
+-  sim_a.bot(ba).ammo[2] = 10;
+-  sim_a.AddItem(501, itemai::ItemKind::kAmmo, 0.0, -24.0, 20.0, 2, 25, 400);
++  sim_a.bot(ba).owned_weapons |= (1u << 5);
++  sim_a.bot(ba).ammo[6] = 10;
++  sim_a.AddItem(501, itemai::ItemKind::kAmmo, 0.0, -24.0, 20.0, 6, 100, 400);
+ 
+   for (int t = 0; t < 6; ++t) sim_a.StepTick();
+   const bool a_had_goal = (sim_a.bot(ba).last_output.item_decision.goal_id == 501);
+@@ -364,6 +365,7 @@
+   const int floor_sg =
+       sim.AddItem(602, itemai::ItemKind::kWeapon, 20.0, 0.0, 25.0, 6, 50, 400);
+ 
++  sim.item(island_rl).pos.y = 6.0; // Actual item height must match its island.
+   sim.StepTick();
+   const int first_goal = sim.bot(bi).last_output.item_decision.goal_id;
+   const int unreachable_marked_t1 =

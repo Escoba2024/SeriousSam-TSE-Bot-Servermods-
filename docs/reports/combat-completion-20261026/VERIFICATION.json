@@ -1,0 +1,23 @@
+{
+  "retail": "NOT_TESTED",
+  "native_build": "NOT_TESTED",
+  "default_off_commands": 21600,
+  "default_off_trace_sha256": "51398dd81d9f3f6265eb1d0640f0f4a5bd002aeaabb5f62a04595e23a70420aa",
+  "integration": "COMBAT MASTER: 1243 checks, 0 failures",
+  "combat_regressions": "AMBUSH exploratory=0 visible_from=21 occluded=0 outside_fov=0 escaped=0 shots=32 first_target=25\nAMBUSH exploratory=1 visible_from=21 occluded=0 outside_fov=0 escaped=0 shots=32 first_target=25\nAMBUSH exploratory=0 visible_from=26 occluded=0 outside_fov=0 escaped=5 shots=32 first_target=30\nAMBUSH exploratory=0 visible_from=21 occluded=1 outside_fov=0 escaped=100 shots=0 first_target=-1\nAMBUSH exploratory=0 visible_from=21 occluded=0 outside_fov=1 escaped=100 shots=0 first_target=-1\nWALL exploratory=0 bypass=1 resets=0 max_x=22.70\nWALL exploratory=1 bypass=0 resets=0 max_x=78.79\nCOMBAT REGRESSIONS: 29414 checks, 0 failures",
+  "pr57_inherited_suite": "PASS",
+  "driver_block_smoke": "PASS",
+  "native_recovery_reset_branch": "NATIVE RECOVERY RESET BRANCH PASS",
+  "applier": "PASS",
+  "pins": {
+    "pr57": "6b84c5d283664bc9e968bb4961abf2dd48731c5b",
+    "pr66": "48e110a7aa7b818cf7bab5979f6aae629932a2dc",
+    "qa_pr62": "d5fcd066c28764a6ba7fb6808364304f3ccd74e7"
+  },
+  "source_base": "63638893b40ee6b8c095a634213eb5cf2656ffbe",
+  "qa_pr72": "7df2867e1ad7a6101b95a54031d7583265977f72",
+  "command": "nice -n 19 python3 poc/candidates/combat-master-20261026/verify.py",
+  "fixture_fields": "value initialized",
+  "red_and_mutations": "RED_MUTATIONS.json",
+  "native_reset_red_exit": 3
+}
