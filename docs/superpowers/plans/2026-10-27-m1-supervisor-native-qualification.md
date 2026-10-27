@@ -19,3 +19,12 @@ Constraints: separate worktree only owns new qualification helper/tests/docs; no
 - Realcurrentr3matrixadmissionnegativePASS: actualNATIVE_DURATION_RUNNING receipt rejected, noopsruntimepathcreated, noadditionalnativeactions. Privatebenchmark/evidence rootcontainsnegative-admission-result.json.
 - Protectedbackupcheck:415/415priorrestorecopyfilesMATCH, archiveSHA256MATCH,61DCreferencepreserved. Scopeisunchangedbackup/priorrestorecopy, notclaimmutablepublicruntimeconfigunchanged.
 - Nativeharnessworker owns /srv/tse-m1-supervisor-harness-20261027 frome304707; onlynewhelper/tests/docs. NoNativeactions. Mainaloneexecutesaftercurrentrealgates.
+
+
+## User priority update: 27 October, eight-bot run deferred
+
+- Eight-bot duration is DEFERRED_BY_USER; preserve failed receipts and no_retry. It is neither PASS nor removed from final M1 acceptance.
+- Independent next step completed: existing core qualifier imported unchanged and nine direct existing-Runtime offline regressions added; focused20/20 and optimized33/33 pass. Full suite288:284PASS/1FAIL/2ERROR/1SKIP, exit1.
+- Parallel safety helpers from the first implementation were rejected in parent review; production Runtime and all native admission/resource/policy guards remain unchanged.
+- Canonical recovery and native supervisor gates remain pending until their real prerequisites are satisfied. No public game startup or native tests in this phase.
+- See docs/reports/2026-10-27-opencode-m1-next-steps.md for exact scope and limitations.
