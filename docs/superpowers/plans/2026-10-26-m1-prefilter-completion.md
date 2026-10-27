@@ -38,3 +38,16 @@ Interfaces: consumes exact pinned producer/support/configs and private policy; p
 - Initial native optimized1bot trial aborted258.903s by unchanged CPUguard. Last3 hostbusy samples99.700/99.801/99.900%; RAM2085.8MiB, disk8.261GiB. Additional portablecompiler/test work overlapped; no native syncfault conclusion. Cleanup and independent census clean. Failedpolicy/receipts/source copy retained privately.
 - Ruling: strict serial compute phases. No portablecompilation/bench/Winebuild during duration matrix; source inspection and short Python unitchecks only. Both offlineworkers complete. Deliberate idle-r2 retry uses new exact roots, policy andmatrix; original failedreceipt not overwritten.
 - Recovery preflight review found raw-PID termination on binding failure and missing SIGTERM cleanup handler. RED2 regression errors reproduced, replaced with prebinding tracking/bounded wait/census and cleanup-state signal handler. Faulttests still require accepted exactmatrix and independently pinned original faultproducer.
+
+## 27 October M1 continuation: measured monitor CPU overhead
+- [x] Current Drive/GitHub/live census; same-tree remote/local reconciliation. main ab0c740; PR75 head4e959ad; localbf2bbfb has byte-identical tree to4e959ad. Preserve both histories; own branch agent/chat/20261027-m1-monitor-cost from published4e959ad.
+- [x] idle-r2:1bot3700.687s and4bot3762.257s accepted.8bot stopped after3748.102s, fullpopulation3582.551s, CPU87.538/86.996/86.465%, RAM>=1049.7MiB/disk>=8.155GiB; clean census, recovery correctly blocked.
+- [x] Short preserved-log profile: matching0.16CPU s/pass, double full log reads0.13s/pass. Native game CPU falls119.01 to110.32% of onecore; no proven hardware exhaustion.
+- [ ] RED performance acceptance <=65% original matching cost on same private preserved corpus; existing semantic unit tests as regression gate.
+- [ ] Collapse conservative prefilter anchors only; preserve exact original regex/identifier/flags, no caching/incremental omission, full log scans every tick. GREEN equivalence suite and native integration contract; independent review.
+- [ ] Fresh immutable idle-r3 source/policy/roots; unchanged DLL/config/CPU85 guard/RAM768/disk8. Repeat1/4/8 because helper dependency changed; preserve allold receipts.
+- [ ] Native recovery after accepted new matrix, final independent M1 release review, GitHub/Drive record.
+Ruling: keep original qualifier/observer/game configuration unchanged; reduce measured matcher cost conservatively. No new architecture or M2-M4 promotion.
+
+- Measured first7anchor attempt failed fullregex fallback on routineerrors/symbols; rejected. Actual8anchor candidate paired median0.58955 oldcost passes<=0.65 acceptance. Retained failed/absolute/paired receipts; no fabricated GREEN.
+- Independent diff review found no blockingissue; actual8anchor delegation and routinefalsepositive tests added. Full performance72 normal/-O, tools242, focusedprofile19-O. DLL/gameconfig/protection unchanged. aptdownloadcache cleared; disk8.58GiB.

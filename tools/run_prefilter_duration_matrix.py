@@ -17,7 +17,7 @@ REPO = Path(__file__).resolve().parent.parent
 TOOLS = REPO / 'tools'
 NATIVE = REPO / 'performance/native/tools'
 CONFIG_BASE = Path('/root/ssam-ai-backups/m1-completion-20261026-0155')
-BASE = Path('/root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r2')
+BASE = Path('/root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r3')
 POLICY = BASE / 'policy.json'
 STATE = BASE / 'matrix.json'
 HOLD = BASE / 'HOLD.json'
@@ -28,9 +28,9 @@ CANDIDATE = '7dc961c880e0ed68ead13ed4e8299a025be71e05619de36c437c756e964334bf'
 PRODUCER_NAMES = ('qualify_bot_sessions.py','bot_session_executor.py','bot_session_runtime.py',
                   'bot_sessions.py','qualify_integrated_wine.py')
 STAGE_CONTRACT = (
-    (1,3600,3720,'one-hour-idle-r2','one-hour-config.json',27170,':160'),
-    (4,3600,3840,'four-hour-idle-r2','4-duration-config.json',27174,':161'),
-    (8,7200,7680,'eight-two-hours-idle-r2','8-duration-config.json',27178,':162'),
+    (1,3600,3720,'one-hour-idle-r3','one-hour-config.json',27170,':160'),
+    (4,3600,3840,'four-hour-idle-r3','4-duration-config.json',27174,':161'),
+    (8,7200,7680,'eight-two-hours-idle-r3','8-duration-config.json',27178,':162'),
 )
 
 

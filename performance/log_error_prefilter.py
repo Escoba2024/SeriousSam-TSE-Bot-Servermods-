@@ -37,24 +37,21 @@ RUNTIME_ERROR_PATTERN = BAD_PATTERN + r"|FatalError:"
 # prefiltered because its accepted literals may differ.
 _DEFAULT_FLAGS = re.compile(RUNTIME_ERROR_PATTERN).flags
 
-# Each fixed branch has at least one exact, case-sensitive literal below.  The
-# [Uu] and [Ff]/[Ee] branches need every permitted spelling rather than a
-# case-folded test, so they preserve the source regex's case semantics.
+# Conservative shared substrings cover every fixed regex branch. Broader
+# candidates only delegate to the unchanged original regex. 'atal' covers
+# every Fatal/fatal variant; removing the leading case-varying letter from
+# the two symbol messages covers both alternatives without routine
+# 'bot symbols declared' or joystick 'error' forcing a slow full regex scan.
+# Complete logs and the Identifier branch are still scanned on every call.
 _FIXED_BRANCH_MARKERS = (
     "SYNCBAD",
     "Too many bad syncs",
     "CRC check failed",
     "Cannot load script",
-    "Unknown symbol",
-    "unknown symbol",
-    "Unrecognized symbol",
-    "unrecognized symbol",
+    "nknown symbol",
+    "nrecognized symbol",
     "Permission denied",
-    "Fatal Error",
-    "Fatal error",
-    "fatal Error",
-    "fatal error",
-    "FatalError:",
+    "atal",
 )
 _IDENTIFIER_PREFIX = "Identifier '"
 _ALLOWED_IDENTIFIER_PREFIX = "sam_strTechTestLevel'"

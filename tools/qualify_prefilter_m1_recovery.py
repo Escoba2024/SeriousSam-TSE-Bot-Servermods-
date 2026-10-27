@@ -9,7 +9,7 @@ from pathlib import Path
 import argparse, fcntl, hashlib, json, os, signal, subprocess, sys, time, traceback
 
 def main():
-    DEFAULT_BASE = Path('/root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r2')
+    DEFAULT_BASE = Path('/root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r3')
     CONFIG_BASE = Path('/root/ssam-ai-backups/m1-completion-20261026-0155')
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--evidence-root', type=Path, default=DEFAULT_BASE)
@@ -39,7 +39,7 @@ def main():
     # separately pinned historical producer, with no source-inventory spoofing.
     import importlib.util
     matrix_file = TOOLS / 'run_prefilter_duration_matrix.py'
-    if hashlib.sha256(matrix_file.read_bytes()).hexdigest() != '9498f75501d6190fe2e42db77d50eb281e35ec8559ffe343fd41b977e57a176a':
+    if hashlib.sha256(matrix_file.read_bytes()).hexdigest() != 'c6ffcf2dd9ec1cf926219045e57e4e61278379dd1484a37f12f4ac80b24751f1':
         raise RuntimeError('reviewed matrix controller drift')
     spec = importlib.util.spec_from_file_location('_recovery_duration_matrix', matrix_file)
     matrix_source = importlib.util.module_from_spec(spec); spec.loader.exec_module(matrix_source)

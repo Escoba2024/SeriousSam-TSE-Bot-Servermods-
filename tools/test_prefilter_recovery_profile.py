@@ -14,7 +14,7 @@ class ProfileTests(unittest.TestCase):
             {'root':'/srv/tse-session-qualification-master-m1-prefilter-'+name+'-20261026',
              'verdict':{'status':'DURATION_RECEIPTS_ACCEPTED','bots':b,'required_s':s,
                         'continuous_full_population_s':s+1,'dll_sha256':'a'*64,'reasons':[],'m1_complete':False}}
-            for b,s,name in [(1,3600,'one-hour-idle-r2'),(4,3600,'four-hour-idle-r2'),(8,7200,'eight-two-hours-idle-r2')]]}
+            for b,s,name in [(1,3600,'one-hour-idle-r3'),(4,3600,'four-hour-idle-r3'),(8,7200,'eight-two-hours-idle-r3')]]}
     def test_exact_new_roots_and_full_matrix_required(self):
         matrix=self.matrix()
         self.assertEqual([x[1:] for x in p.validated_stages(matrix,'a'*64)],[(1,3600),(4,3600),(8,7200)])
