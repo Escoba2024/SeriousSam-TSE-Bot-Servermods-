@@ -107,3 +107,8 @@ User ordered work through completion. Own branch agent/chat/20261026-m1-diagnost
 - M3 nextnativeprobe must verify existing107eye/entity placement,8ammo counts/capacities,infiniteammo and world/entity metadata. No waypoint graph/native item eligibility or foot-height contract is established; do not manufacture those facts or call native snapshots fixtures.
 
 Idle-r2 launched 2026-10-26T19:23:36.067080+01:00; actual status at checkpoint NATIVE_DURATION_RUNNING.
+
+## 27 October M1-only continuation
+M1 IN_PROGRESS. idle-r2 BLOCKED by threeCPU>=85 samples after8bot3748.102s/3582.551s fullpopulation;1/4 accepted3700.687/3762.257s against oldpolicy. Recovery notstarted. No public game runtime.
+Measured conservative matcher correction: paired medianCPUratio0.58955; unchanged originalregex/fulltext/Identifier/flags/DLL/gameconfig/85guard. New source requires fresh idle-r3 matrix, no oldreceipt relabeling. See docs/reports/2026-10-27-m1-monitor-cost-and-duration.md and existing prefiltercompletionplan.
+Private evidence/policy: /root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r3/; diagnostic benchmark/failures /root/ssam-ai-backups/m1-monitor-cost-20261027/. Before runtimeaction inspect actualmatrix/process identity/locks. Final M1 native/recovery/release review stillOPEN.

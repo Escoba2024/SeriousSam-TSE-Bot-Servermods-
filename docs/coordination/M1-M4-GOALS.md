@@ -79,3 +79,8 @@ Establish exact private P1 OFF/ON preflight using the existing PR73 guarded harn
 - Navigation OFFLINE_CANDIDATE_INTEGRATED: 3Danchors/itemammo/pathcost fixes tested; nativecapabilityguardclosed, realgraph/item/anchorcontracts stillrequired.
 - Sessions OPEN: existing private lifecycle/ghost machinery remains; final mixedpopulation nativeacceptance pending.
 - FullM1-M4 NOT_COMPLETE. Persisted plan2026-10-26-m1-prefilter-completion.md controlsnextsteps. Never stoporclaimcomplete from a startedtest or offlinepass.
+
+## 27 October M1-only continuation
+M1 IN_PROGRESS. idle-r2 BLOCKED by threeCPU>=85 samples after8bot3748.102s/3582.551s fullpopulation;1/4 accepted3700.687/3762.257s against oldpolicy. Recovery notstarted. No public game runtime.
+Measured conservative matcher correction: paired medianCPUratio0.58955; unchanged originalregex/fulltext/Identifier/flags/DLL/gameconfig/85guard. New source requires fresh idle-r3 matrix, no oldreceipt relabeling. See docs/reports/2026-10-27-m1-monitor-cost-and-duration.md and existing prefiltercompletionplan.
+Private evidence/policy: /root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r3/; diagnostic benchmark/failures /root/ssam-ai-backups/m1-monitor-cost-20261027/. Before runtimeaction inspect actualmatrix/process identity/locks. Final M1 native/recovery/release review stillOPEN.

@@ -31,6 +31,34 @@ class LogErrorPrefilterTests(unittest.TestCase):
         self.assertEqual(actual.groups(), expected.groups())
         self.assertEqual(actual.groupdict(), expected.groupdict())
 
+    def test_shared_anchor_candidates_delegate_without_fabricating_errors(self):
+        for text in ("catalog", "nknown symbol", "nrecognized symbol"):
+            with self.subTest(text=text):
+                matcher = make_runtime_error_matcher()
+                self.assertIsNone(matcher.search(text))
+                self.assertEqual(matcher.counters.full_searches, 1)
+                self.assertEqual(matcher.counters.prefilter_rejections, 0)
+
+    def test_routine_joystick_and_bot_symbols_keep_fast_path(self):
+        matcher = make_runtime_error_matcher()
+        self.assertIsNone(matcher.search("joy 1: error 0x000000a5; bot symbols declared"))
+        self.assertEqual(matcher.counters.prefilter_rejections, 1)
+        self.assertEqual(matcher.counters.full_searches, 0)
+
+    def test_shared_anchor_false_positives_preserve_original_result(self):
+        pattern = re.compile(RUNTIME_ERROR_PATTERN)
+        cases = (
+            "symbol rror bad syncs ordinary text",
+            "symbol first; Identifier 'actual_error' is not declared; FatalError:",
+            "rror first; unknown symbol later; SYNCBAD",
+            "Identifier 'sam_strTechTestLevel' is not declared; FatalError:",
+            "symbol" + "SYNCBAD",
+            "FatalError:" + "rror",
+        )
+        for text in cases:
+            with self.subTest(text=text):
+                self.assert_same_search(pattern, text)
+
     def test_every_current_error_alternative(self) -> None:
         pattern = re.compile(RUNTIME_ERROR_PATTERN)
         alternatives = (

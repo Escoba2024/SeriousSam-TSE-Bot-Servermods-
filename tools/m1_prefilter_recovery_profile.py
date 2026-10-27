@@ -1,9 +1,9 @@
 """Exact optimized-producer matrix admission; no runtime operations."""
 import math
 
-ROOTS={1:('/srv/tse-session-qualification-master-m1-prefilter-one-hour-idle-r2-20261026',3600),
-       4:('/srv/tse-session-qualification-master-m1-prefilter-four-hour-idle-r2-20261026',3600),
-       8:('/srv/tse-session-qualification-master-m1-prefilter-eight-two-hours-idle-r2-20261026',7200)}
+ROOTS={1:('/srv/tse-session-qualification-master-m1-prefilter-one-hour-idle-r3-20261026',3600),
+       4:('/srv/tse-session-qualification-master-m1-prefilter-four-hour-idle-r3-20261026',3600),
+       8:('/srv/tse-session-qualification-master-m1-prefilter-eight-two-hours-idle-r3-20261026',7200)}
 
 
 def validated_stages(matrix,candidate):
