@@ -45,7 +45,16 @@ def retail_window_owners(display):
   prop=subprocess.check_output(['xprop','-display',display,'-id',wid,'_NET_WM_PID'],text=True);m=re.search(r'=\s*(\d+)\s*$',prop);seen.append(int(m[1]) if m else None)
  return seen
 
-def validate_config(c):
+def roles_for(c,profile=None):
+ return list(profile.role_names) if profile else ['server','botA']+(['botB'] if c['bots']==8 else [])
+
+def validate_config(c,profile=None):
+ if profile:
+  from private_candidate_profile import validate_location
+  root=validate_location(c['root'],c['port'],c['display'])
+  if root!=profile.root or c['bots']!=8 or c['port']!=profile.port or c['display']!=profile.display:raise ValueError('private instance/profile mismatch')
+  validate_log_limit(c);profile.verify_pins();return root
+ if 'private_profile' in c:raise ValueError('verified instance-bound private profile required')
  try:
   root=Path(c['root']);port=c['port'];display=c['display'];bots=c['bots'];validate_log_limit(c)
   if not root.is_absolute() or not root.resolve().is_relative_to(BASE) or root.resolve()==BASE:raise ValueError('private root required')
@@ -58,8 +67,9 @@ def validate_config(c):
   return root
  except (KeyError,TypeError,OSError,AssertionError) as e:raise ValueError('invalid instance manifest: '+str(e)) from e
 
-def validate_state(c,r):
- root=Path(c['root']);roles=['server','botA']+(['botB'] if c['bots']==8 else [])
+def validate_state(c,r,profile=None):
+ root=Path(c['root']);roles=roles_for(c,profile)
+ if profile and r.get('private_profile_sha256')!=profile.profile_sha256:raise ValueError('state/private profile generation mismatch')
  cg='/sys/fs/cgroup/tse-ops-'+hashlib.sha256(str(root).encode()).hexdigest()[:12]
  if r.get('cgroup',cg)!=cg:raise ValueError('state cgroup outside owned instance')
  for role,info in r.get('processes',{}).items():
@@ -71,7 +81,8 @@ def validate_state(c,r):
  allowed={str(root/x) for role in roles for x in [role,'prefix-'+role]}
  if any(x not in allowed for x in r.get('mounts',[])):raise ValueError('state mount outside owned instance')
 
-def recovery_action(role,names,bots,missing_seconds):
+def recovery_action(role,names,bots,missing_seconds,profile=None):
+ if profile:return profile.recovery_action(role,names,missing_seconds)
  if any(n not in q.ROSTER[:bots] for n in names):return 'HOLD_HUMANS'
  offset=4 if role=='botB' else 0;owned=q.ROSTER[offset:offset+(1 if bots==1 else 4)]
  if not set(owned)&set(names):return 'RESTART_ROLE'
@@ -177,8 +188,32 @@ def _demote(cg):
  return child
 
 class Runtime:
+ profile=None
  def __init__(self,config):
-  self.config=Path(config);self.c=json.loads(self.config.read_text());self.root=validate_config(self.c);self.result=self.root/'result.json';self.lock=acquire_lock(self.root/'supervisor.lock');self.r=json.loads(self.result.read_text());self.roles=['server','botA']+(['botB'] if self.c['bots']==8 else []);self.cg=Path('/sys/fs/cgroup')/('tse-ops-'+hashlib.sha256(str(self.root).encode()).hexdigest()[:12]);self.boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip();self.r['log_limit_bytes']=validate_log_limit(self.c)
+  self.config=Path(config);self.c=json.loads(self.config.read_text());self.native_locks=[]
+  if 'private_profile' in self.c:
+   from private_candidate_profile import load
+   self.profile=load(self.c)
+  self.root=validate_config(self.c,self.profile) if self.profile else validate_config(self.c);self.result=self.root/'result.json'
+  self.lock=None
+  try:
+   if self.profile:
+    # Share the existing M1 matrix/recovery ownership locks, including gaps
+    # between their native stages. Nonblocking acquisition cannot deadlock.
+    for path in ['/root/ssam-ai-backups/m1-completion-20261026-0155/matrix.lock','/srv/tse-session-qualification.lock']:
+     self.native_locks.append(acquire_lock(path))
+   self.lock=acquire_lock(self.root/'supervisor.lock')
+   self.r=json.loads(self.result.read_text());self.roles=roles_for(self.c,self.profile)
+   self.cg=Path('/sys/fs/cgroup')/('tse-ops-'+hashlib.sha256(str(self.root).encode()).hexdigest()[:12])
+   self.boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+   self.r['log_limit_bytes']=validate_log_limit(self.c)
+  except BaseException:
+   self.close();raise
+ def close(self):
+  if self.lock:self.lock.close()
+  for lock in reversed(getattr(self,'native_locks',[])):lock.close()
+  self.native_locks=[]
+
  def save(self):atomic(self.result,self.r)
  def log(self,kind,**kw):event(self.root/'events.json',dict(kind=kind,**kw))
  def resources(self,additional_bytes):
@@ -193,9 +228,11 @@ class Runtime:
    try:yield
    finally:self._admitting=False
  def specs(self):
-  return [h.mount_spec(self.root,role,TEMPLATE/('prefix-botA' if role=='prefix-botB' else role)) for game in self.roles for role in [game,'prefix-'+game]]
+  return [h.mount_spec(self.root,role,self.profile.source(role) if self.profile else TEMPLATE/('prefix-botA' if role=='prefix-botB' else role)) for game in self.roles for role in [game,'prefix-'+game]]
  def ownership(self):
-  validate_state(self.c,self.r)
+  if self.profile:validate_state(self.c,self.r,self.profile)
+  else:validate_state(self.c,self.r)
+  if self.profile:self.profile.require_namespace();self.profile.verify_pins()
   for role,info in self.r.get('processes',{}).items():
    status=h.verify_process(info)
    if status not in ['LIVE','ABSENT']:raise RuntimeError(role+':'+status)
@@ -240,10 +277,10 @@ class Runtime:
  def _launch(self,role):
   self.ownership();info=self.r.get('processes',{}).get(role)
   if info and h.verify_process(info)=='LIVE':raise RuntimeError('refusing duplicate launch')
-  self.resources((192 if role=='server' else 384)*1024**2)
+  self.resources((192 if role=='server' else (300 if self.profile else 384))*1024**2)
   game=self.root/role
   for name,want in q.PINS.items():
-   if name=='GameMP.dll' and role.startswith('bot'):want=h.DLL
+   if name=='GameMP.dll' and h.bot_role(role,self.profile):want=self.profile.candidate_sha256 if self.profile else h.DLL
    if q.sha(game/'Bin'/name)!=want:raise RuntimeError('runtime binary mismatch '+role+'/'+name)
   if role=='server':
    for port in [self.c['port'],self.c['port']+1]:
@@ -251,10 +288,11 @@ class Runtime:
   prefix=self.root/('prefix-'+role)
   close_prefix(prefix)
   logs=[self.root/(role+'-wine.log'),game/('Dedicated_BotTest.log' if role=='server' else 'SeriousSam.log')]
-  if role.startswith('bot'):logs.append(game/'Bin/BotTelemetry.csv')
+  if h.bot_role(role,self.profile):logs.append(game/'Bin/BotTelemetry.csv')
   archive_closed(logs,self.root/'archives')
-  env=dict(os.environ,HOME=str(self.root.parent),WINEARCH='win32',WINEDEBUG='-all',DISPLAY=self.c['display'],LIBGL_ALWAYS_SOFTWARE='1',GALLIUM_DRIVER='llvmpipe',LP_NUM_THREADS='1',XDG_CACHE_HOME=str(self.root.parent/'cache'),WINEPREFIX=str(prefix))
-  cmd=['wine','Bin/DedicatedServer.exe','BotTest'] if role=='server' else ['wine','Bin/SeriousSam.exe','+connect','127.0.0.1:'+str(self.c['port']),'+quickjoin','+script','Scripts\\Integrated.ini']
+  if self.profile:self.profile.verify_settings()
+  env=dict(os.environ,HOME=str(self.root/'home' if self.profile else self.root.parent),WINEARCH='win32',WINEDEBUG='-all',DISPLAY=self.c['display'],LIBGL_ALWAYS_SOFTWARE='1',GALLIUM_DRIVER='llvmpipe',LP_NUM_THREADS='1',XDG_CACHE_HOME=str(self.root/'home/cache' if self.profile else self.root.parent/'cache'),WINEPREFIX=str(prefix))
+  cmd=['wine','Bin/DedicatedServer.exe','BotTest'] if role=='server' else ['wine','Bin/SeriousSam.exe','+connect','127.0.0.1:'+str(self.c['port']),'+quickjoin','+script','Scripts\\Session.ini' if self.profile else 'Scripts\\Integrated.ini']
   with (self.root/(role+'-wine.log')).open('wb') as out:p=subprocess.Popen(cmd,cwd=game,env=env,stdout=out,stderr=subprocess.STDOUT,stdin=subprocess.DEVNULL,start_new_session=True,preexec_fn=_demote(self.cg))
   expected='DedicatedServer.exe' if role=='server' else 'SeriousSam.exe'
   info=settled_process(p,expected)
@@ -262,22 +300,25 @@ class Runtime:
  def start(self):
   with self.admission():self._start()
  def _start(self):
-  validate_config(self.c)
+  if self.profile:validate_config(self.c,self.profile)
+  else:validate_config(self.c)
   if os.statvfs('/').f_bavail*os.statvfs('/').f_frsize<h.MIN_FREE:raise RuntimeError('disk reserve below 8 GiB')
-  q.validate_master_resolution();self.ownership()
+  if self.profile:self.profile.require_namespace()
+  else:q.validate_master_resolution()
+  self.ownership()
   live=[role for role,info in self.r.get('processes',{}).items() if h.verify_process(info)=='LIVE']
   if live:
    if set(live)!=set(self.roles):raise RuntimeError('partial fleet: reconcile with monitor; no duplicate startup')
    for m in self.specs():
     if not h.mount_matches(m):raise RuntimeError('live fleet lost own mount')
    self.log('ADOPT');return
-  self.resources((128+192+384*(len(self.roles)-1))*1024**2)
+  self.resources(self.profile.startup_budget_bytes if self.profile else (128+192+384*(len(self.roles)-1))*1024**2)
   for rule in private_rules(self.c['port'],self.cg.name):
    probe=subprocess.run(['iptables','-w','-C']+rule,capture_output=True)
    if probe.returncode==1:subprocess.run(['iptables','-w','-I']+rule,check=True,capture_output=True)
    elif probe.returncode:raise RuntimeError('cannot verify private isolation rule')
   self.r['private_network_guards']=private_rules(self.c['port'],self.cg.name);self.save()
-  self.mounts();self.cg.mkdir(exist_ok=True);(self.cg/'cpu.max').write_text('max 100000');self.r.update(cgroup=str(self.cg),boot_id=self.boot,game_port=self.c['port'],query_port=self.c['port']+1,display=self.c['display'],bots=self.c['bots'],dll_sha256=h.DLL)
+  self.mounts();self.cg.mkdir(exist_ok=True);(self.cg/'cpu.max').write_text('max 100000');self.r.update(cgroup=str(self.cg),boot_id=self.boot,game_port=self.c['port'],query_port=self.c['port']+1,display=self.c['display'],bots=self.c['bots'],dll_sha256=self.profile.candidate_sha256 if self.profile else h.DLL)
   xinfo=self.r.get('xvfb')
   if xinfo and h.verify_process(xinfo) not in ['ABSENT','LIVE']:raise RuntimeError('display PID mismatch')
   if not xinfo or h.verify_process(xinfo)=='ABSENT':
@@ -287,8 +328,12 @@ class Runtime:
    with (self.root/'xvfb.log').open('ab') as out:x=subprocess.Popen(['Xvfb',self.c['display'],'-screen','0','640x480x24','-nolisten','tcp','-noreset'],cwd=self.root,stdout=out,stderr=subprocess.STDOUT,preexec_fn=_demote(self.cg),start_new_session=True)
    self.r['xvfb']=settled_process(x,'Xvfb');self.save();time.sleep(2)
    if h.verify_process(self.r['xvfb'])!='LIVE':raise RuntimeError('Xvfb failed')
-  self.launch('server');time.sleep(8);self.launch('botA')
-  if 'botB' in self.roles:time.sleep(5);self.launch('botB')
+  if self.profile:
+   for role in self.roles:
+    self.launch(role);time.sleep(8 if role in ('server','vanilla') else 20)
+  else:
+   self.launch('server');time.sleep(8);self.launch('botA')
+   if 'botB' in self.roles:time.sleep(5);self.launch('botB')
   self.r.update(status='OWNED_ISOLATED_RUNNING',left_running=True);self.save()
  def signal_role(self,role,sig):
   self.ownership();info=self.r['processes'][role]
@@ -318,7 +363,7 @@ class Runtime:
  def no_humans(self):
   try:names=h.query_roster(q.query(self.c['port']+1))
   except ValueError as e:raise RuntimeError('human/unknown player hold') from e
-  if any(n not in q.ROSTER[:self.c['bots']] for n in names):raise RuntimeError('human/unknown player hold')
+  if any(n not in (self.profile.expected_names if self.profile else q.ROSTER[:self.c['bots']]) for n in names):raise RuntimeError('human/unknown player hold')
  def stop(self):
   self.ownership()
   xinfo=self.r.get('xvfb')
@@ -329,7 +374,8 @@ class Runtime:
    prefix=self.root/('prefix-'+role)
    # A repeated stop sees empty, unmounted prefix targets. Never ask Wine
    # to enter those directories; ownership/cgroup checks still hold below.
-   if h.mount_matches(h.mount_spec(self.root,'prefix-'+role,TEMPLATE/('prefix-botA' if role=='botB' else 'prefix-'+role))):close_prefix(prefix)
+   source=self.profile.source('prefix-'+role) if self.profile else TEMPLATE/('prefix-botA' if role=='botB' else 'prefix-'+role)
+   if h.mount_matches(h.mount_spec(self.root,'prefix-'+role,source)):close_prefix(prefix)
   x=self.r.get('xvfb')
   if x and h.verify_process(x)=='LIVE':
    fd=owned_pidfd(x)
@@ -347,7 +393,7 @@ class Runtime:
    elif probe.returncode!=1:raise RuntimeError('cannot verify private isolation cleanup')
   self.r.update(status='OWNED_ISOLATED_STOPPED',left_running=False);self.save();self.log('STOP')
  def reconcile(self):
-  self.ownership();snap,health=h.collect(self.result);atomic(self.root/'health.json',health)
+  self.ownership();snap,health=h.collect(self.result,self.profile) if self.profile else h.collect(self.result);atomic(self.root/'health.json',health)
   if health['status']=='HEALTHY':self.r['last_no_humans']=time.time();self.save()
   maintenance=maintenance_action(snap['logs_over_limit'],health['safe_recovery'],bool(health['humans']),retry_allowed(self.r))
   if maintenance in ['RESTART_FLEET','STOP_BUDGET_HOLD']:
@@ -359,7 +405,7 @@ class Runtime:
    if not retry_allowed(self.r):self.log('CIRCUIT_OPEN');return health
    self.no_humans();now=time.time();names=[n for k,n in snap['query'].items() if re.fullmatch(r'player_\d+',k)];plans={}
    for role in health['recover_roles']:
-    since=self.r.setdefault('missing_since',{}).setdefault(role,now);plans[role]=recovery_action(role,names,self.c['bots'],now-since)
+    since=self.r.setdefault('missing_since',{}).setdefault(role,now);plans[role]=recovery_action(role,names,self.c['bots'],now-since,profile=self.profile)
    self.save()
    if 'WAIT_GHOSTS' in plans.values() or 'HOLD_HUMANS' in plans.values():return health
    self.r.setdefault('attempts',[]).append(now);self.r['attempts']=self.r['attempts'][-3:];self.save()
@@ -402,18 +448,41 @@ def prepare(parent,port,display,bots):
  cache=parent/'cache';cache.mkdir(exist_ok=True);os.chown(cache,65534,65534)
  atomic(root/'instance.json',c);r=json.loads(result.read_text());r.update(template=str(TEMPLATE),mounts=[],boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip());atomic(result,r);print(str(root/'instance.json'))
 
-def monitor(result,output,interval):
+def read_only_profile(config,result):
+ if config is None:return None
+ from private_candidate_profile import load
+ c=json.loads(Path(config).read_text())
+ if 'private_profile' not in c:return None
+ profile=load(c)
+ if Path(result).resolve()!=profile.root/'result.json':raise ValueError('read-only result/profile mismatch')
+ return profile
+
+def monitor(result,output,interval,profile=None):
  output=Path(output);output.mkdir(parents=True,exist_ok=True);lock=acquire_lock(output/'monitor.lock')
- while True:
-  try:_,status=h.collect(result)
-  except Exception as e:status=dict(status='BLOCKED',alerts=['MONITOR_EXCEPTION:'+type(e).__name__],safe_recovery=False,utc=time.time())
-  atomic(output/'health.json',status);event(output/'events.json',status,limit=256);time.sleep(interval)
+ try:
+  while True:
+   try:_,status=h.collect(result,profile) if profile else h.collect(result)
+   except Exception as e:status=dict(status='BLOCKED',alerts=['MONITOR_EXCEPTION:'+type(e).__name__],safe_recovery=False,utc=time.time())
+   atomic(output/'health.json',status);event(output/'events.json',status,limit=256);time.sleep(interval)
+ finally:lock.close()
 
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['prepare','start','stop','run','health','monitor']);p.add_argument('--config',type=Path);p.add_argument('--parent',type=Path);p.add_argument('--port',type=int,default=26820);p.add_argument('--display',default=':125');p.add_argument('--bots',type=int,choices=[1,4,8],default=8);p.add_argument('--result',type=Path);p.add_argument('--output',type=Path);p.add_argument('--interval',type=float,default=10);a=p.parse_args()
- if a.action=='prepare':prepare(a.parent,a.port,a.display,a.bots);return
- if a.action=='health':print(json.dumps(h.collect(a.result)[1],indent=2));return
- if a.action=='monitor':monitor(a.result,a.output,a.interval);return
+ if a.action=='prepare':
+  if a.config:
+   from private_candidate_profile import prepare as prepare_private
+   config=json.loads(a.config.read_text())
+   if 'private_profile' not in config:raise ValueError('explicit private candidate configuration required')
+   print(prepare_private(config))
+  else:prepare(a.parent,a.port,a.display,a.bots)
+  return
+ if a.action in ('health','monitor'):
+  profile=read_only_profile(a.config,a.result)
+  if a.action=='health':
+   result=h.collect(a.result,profile) if profile else h.collect(a.result)
+   print(json.dumps(result[1],indent=2))
+  else:monitor(a.result,a.output,a.interval,profile=profile)
+  return
  runtime=Runtime(a.config)
  try:
   if a.action=='stop':runtime.stop()
@@ -424,5 +493,5 @@ def main():
      try:health=runtime.reconcile()
      except Exception as e:runtime.log('BLOCKED',error=str(e));health=dict(status='BLOCKED',alerts=[str(e)],safe_recovery=False);atomic(runtime.root/'health.json',health)
      time.sleep(a.interval)
- finally:runtime.lock.close()
+ finally:runtime.close()
 if __name__=='__main__':main()
