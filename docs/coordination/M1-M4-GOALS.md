@@ -91,3 +91,16 @@ Own worktree `/srv/tse-m1-completion-20261028`, branch`agent/lead/20261028-m1-co
 ### 28 October08:34UTC — BLOCKED at actual RAM admission
 Source6a32f10 native600sdiagnostic stoppedafter124.975s at6bots:1039.3MiBavailable<1068launchgate. Originalguards unchanged. CPUmean51.679/peak82.661% includesstartup/cleanup<=6bots; no8botCPUclaim.20/20unmounts, noownedprocess/mount,cgroupempty. Disk9461497856B>=8GiBfloor,<9target.0syncmarkers in8actualgamelogs isshortpartial-only. No freshmatrix orfault/supervisor test started; currentcampaignpolicy remainsunexecuted. Additionalcapacity decisionpending; no protectedservice stop, billingaction oridenticalretry.
 Supervisorqualification sourcefix: oldgenerationarchivedgamelogs fullyscanned; observednativeSYNCfaultlatch persistsacrossgenerations. RED8cases→23focusedGREENnormal/-O; integrated291run290PASS1nativeWineCLIskip. Remainingnativeprobesnotimplemented/accepted. See2026-10-28-m1-completion-audit.md andcapacitydecision. M1BLOCKED;M2-M4deferred/unqualified.
+
+
+## Published handoff — 28 October 2026, 08:41 UTC
+
+M1 remains **BLOCKED** by the measured RAM admission failure. The pending capacity question has no answer or authorization yet. No test, service change or provider operation is running on behalf of this task.
+
+Draft PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/80
+
+Published implementation commit `aae549948db666b0df71b605756c719c70ebe6e0` has tree `118a5b01b83e9f27b5eefbb42f80c85ee90e7332`, verified byte-identical by fresh Git fetch to local final implementation `d671933cced53d00d42b2244af149155a88d0ccf`. Native diagnostic used retained local `6a32f10`. The following handoff commit changes documentation only. PR80 targets PR78, remains draft/open/mergeable; main is unchanged at `ab0c7400353a108f8461bb82280c539fdfe81499`.
+
+Issue79 was updated with current reserve, 415-file checks, valid Git metadata and historical publication/arithmetic limits; it remains open: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/79#issuecomment-6464508887
+
+Resume in `/srv/tse-m1-completion-20261028` on `agent/lead/20261028-m1-completion`; preserve all local histories. Private diagnostic verdict and CPU evidence are in `/root/ssam-ai-backups/m1-completion-20261028/`. New duration campaign policy exists but no matrix was started. Recheck actual capacity, all locks, public shutdown, original/build/source/config hashes and clean ownership before any new native action. Never resume by weakening guards or relabeling historical receipts. Canonical recovery, remaining supervisor native scenarios and final M1 QA follow accepted duration gates. M2–M4 remain deferred/unqualified.
