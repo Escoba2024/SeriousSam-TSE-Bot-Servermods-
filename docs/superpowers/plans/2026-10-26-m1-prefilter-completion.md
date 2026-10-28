@@ -51,3 +51,69 @@ Ruling: keep original qualifier/observer/game configuration unchanged; reduce me
 
 - Measured first7anchor attempt failed fullregex fallback on routineerrors/symbols; rejected. Actual8anchor candidate paired median0.58955 oldcost passes<=0.65 acceptance. Retained failed/absolute/paired receipts; no fabricated GREEN.
 - Independent diff review found no blockingissue; actual8anchor delegation and routinefalsepositive tests added. Full performance72 normal/-O, tools242, focusedprofile19-O. DLL/gameconfig/protection unchanged. aptdownloadcache cleared; disk8.58GiB.
+
+
+## 28 October 2026 — autonomous M1 completion, controlling execution update
+
+**Owner:** main agent, branch `agent/lead/20261028-m1-completion`, isolated worktree `/srv/tse-m1-completion-20261028`, baseline PR78 `93a2849aa096031eaf47ef3b6a0570d3ebeb0b9a`.
+**Execution:** writing-plans + executing-plans; execute routine work without intermediate approvals as explicitly requested. Existing Task3 M2-M4 is deferred until M1 acceptance. No new planning file.
+**Spec:** user M1 completion task dated 28 October; `AGENTS.md`, toolchain policy, native acceptance contracts and this plan. User duration requirements are 1/3600s, 4/3600s, 8/7200s continuous full population. CPU>=85% for three consecutive existing guard samples aborts, RAM floor768MiB, disk floor8GiB; keep monitor intervals, population/activity checks and sync enforcement unchanged.
+**Starting state:** GitHub main `ab0c740`, local main `fdfc46e` clean/behind6. PR74→75→76→77→78 open drafts, serial ancestry. r3 matrix BLOCKED at eight bots; one3701.053s/four3762.538s accepted only under original r3 pins. Eight unfinished; recovery never started. Public game absent in process/UDP census; unrelated Xvfb :139 and persistent runtime overlays protected. Foreign dirty worktrees inventoried and left untouched. Root cleanup commit2ba50e2 exists in separate Git object store; publication and independent protection proof outstanding. Disk initial9509568512B=8.857 GiB, availableRAM2632777728B. Evidence private under `/root/ssam-ai-backups/m1-completion-20261028/`.
+
+### Task4: verified inventory and Issue79 reconciliation
+Files: existing continuation/goals; `docs/reports/2026-10-28-m1-completion-audit.md`; prior Issue79 cleanup report imported with attribution.
+- [x] Verify actual host, GitHub PR74-78/issue79, main and current process/service/lock/mount/resource state.
+- [ ] Inventory all Git stores/worktrees/local changes; classify metadata damage before any repair. Verify cleanup commit, exact deletion report, protected originals/backup hashes and rollback restore-copy.
+- [ ] Record current bytes/GiB, floor and target separately; no deletion unless safe cache individually classified. Close79 only when complete evidence is published and reviewed.
+Acceptance: reproducible census, >=8589934592B free, protected inventory verified, documentation arithmetic corrected with source preserved. Main owns operations; independent review is read-only.
+
+### Task5: integrated offline baseline and measured CPU correction
+Files: existing performance matcher/native producer/support and their regression tests; only edit after measured cause identifies responsible file.
+- [ ] Run inherited tools suite on integrated PR78, isolate historical environment failures without weakening production safety. Native CLI test explicitly excluded until owned preflight; report skip.
+- [ ] Aggregate preserved r2/r3 CPU/RAM/disk/log-growth and per-process/cgroup measurements. Read-only specialist may analyze independently, no runtime operations.
+- [ ] Reproduce measured bottleneck on preserved corpus; write behavior regression first, minimal correction, verify semantic equivalence and paired CPU evidence. No threshold/interval/population/simulation-rate change.
+- [ ] Commit exact integrated source and independent review before native execution; prepare immutable new policy with exact sources/config/build/original pins. If unchanged producer permits historical reuse, prove full provenance; otherwise fresh entire matrix.
+Acceptance: green relevant suites, documented measurements, existing safety guards unchanged, no competing heavy tasks during native windows.
+
+### Task6: source-pinned serial native duration matrix
+Files: existing `tools/run_prefilter_duration_matrix.py`, `tools/m1_duration_acceptance.py`; fresh PRIVATE policy/evidence roots only.
+- [ ] Fresh per-run census/lock/namespace/ports/storage/rollback preflight; validate dry-run and immutable sources.
+- [ ] 1 bot>=3600s, then4>=3600s, then8>=7200s continuous full population, same candidate/config/producer. Evaluate every receipt plus fresh independent process/mount/cgroup census before progression.
+- [ ] Record activity, GameSpy, exact generations, full logs, telemetry, CPU/RAM/disk, sync, original observer and cleanup. Any guard breach stops; diagnosis required before retry. No instrumented duration acceptance.
+Acceptance: all three actual receipt verdicts accepted and independently revalidated; no unexpected sync/disconnect/crash/population gap. No M1 completion from duration alone.
+
+### Task7: native recovery and complete supervisor qualification
+Files: existing `tools/qualify_prefilter_m1_recovery.py`, `tools/qualify_existing_supervisor.py`, `tools/operations/*`, focused tests. Reuse existing Runtime.
+- [ ] Accepted-only candidate-bound canonical client/server fault qualification with owned identity handles and clean cleanup.
+- [ ] Native existing-supervisor baseline, duplicate controller, generation/epoch/wrong PID safety, guest/unknown slot HOLD, stale health/query, restart persistence/backoff/circuit, closed-writer archive/log threshold maintenance, controlled restart and cleanup tests.
+- [ ] Qualify fully healthy following generation>=3600s, then preserve source/artifact receipts and originals check. Implement missing native probes with regression tests before execution; mock evidence remains offline only.
+Acceptance: every named native gate proven, no foreign signaling/adoption, no public operations, unchanged guard limits. Existing qualifier CORE verdict explicitly leaves deferred gates open until separately proven.
+
+### Task8: independent integrated QA, rollback and final disposition
+Files: existing reports, continuation and goals, minimal source fixes if independent reviewer identifies defects.
+- [ ] Independent whole integrated diff and evidence review, regression/integration/security checks on actual final target version. Main implements fixes RED→GREEN and repeats relevant verification.
+- [ ] Restore-copy/hash rollback proof, protected original inventory and fresh GitHub/branch state.
+- [ ] Commit sanitized reports/source, publish own reviewable branch/PR with exact tree check. No main merge or public activation implied.
+- [ ] Reconcile every user M1 checkbox; COMPLETE only if all pass. Else specific IN_PROGRESS/BLOCKED with evidence and precise continuation. Record M2/M3/M4 as deferred/unqualified.
+Acceptance: no open M1-P0, source/build/config/runtime provenance complete, native matrix/recovery/safety and independent QA accepted. All evidence persistent; raw logs/binaries/secrets stay private.
+
+## 28 October execution ledger
+- Census saved privately as `initial-census.json`. No active Wine/game/matrix/fault processes found; shared native lock not held. Public disabled; third-party services untouched.
+- Ruling: latest explicit user instruction authorizes fresh private eight-bot work, superseding PR78 historical defer note. It does not authorize public startup or guard weakening.
+- Task4→5: verified disk/originals/rollback are preconditions for native work; Task5→6 exact producer pins decide historical reuse; Task6→7 accepted-only admission; Task7→8 complete native receipts are mandatory. No conflicting interfaces identified yet.
+
+- Independent storage audit: all3Gitstores valid, no repair.415/415 original+restore+tar bytes MATCH, archiveSHA MATCH. Cleanup report arithmetic/proof gaps prevent unconditional Issue79 closure; current8.842GiB floor passes,9GiB target unachieved. No deletion.
+- Task5 baseline288run/287PASS/1nativeWineCLI skip. Root avoids historical permission-fixture failures; no production safety changed.
+- Selected measured correction: stateless chunked join-existence check, no cached state. Full error logs and guard/intervals untouched. Seven behavioral tests RED→GREEN; performance79 normal/-O GREEN. Paired preservedr3 median predicateCPUratio0.0114239. Fullreader prototype retained privately but not integrated.
+- Ruling: modified native producer requires fresh entire matrix; new campaignm1-joinsearch-matrix-20261028-r1, unique roots/27210,27214,27218/:170,:171,:172. Old receipts/policies unchanged. Supervisor/recovery profiles rebound explicitly; no automatic fault execution before accepted matrix.
+
+- Independent pre-native review found chunk-search late-I/O-error omission. ReproducerRED (OSError not raised); final selection complete binary UTF8 marker search with original decoder fallback. Allbytesstillread; no suppressed scans. Final7paired predicateCPUratio0.06811433. Priorchunkprototype superseded, not deployed.
+- Ruling: short8bot native diagnostic before fullmatrix to obtain missing wineserver/controller/cgroup/hoststeal attribution; it cannot satisfy duration acceptance. Supplemental read-only sampler has own hash/evidence, no signal/control authority, unchanged original hostguard.
+
+### 28 October08:34UTC — BLOCKED at actual RAM admission
+Source6a32f10 native600sdiagnostic stoppedafter124.975s at6bots:1039.3MiBavailable<1068launchgate. Originalguards unchanged. CPUmean51.679/peak82.661% includesstartup/cleanup<=6bots; no8botCPUclaim.20/20unmounts, noownedprocess/mount,cgroupempty. Disk9461497856B>=8GiBfloor,<9target.0syncmarkers in8actualgamelogs isshortpartial-only. No freshmatrix orfault/supervisor test started; currentcampaignpolicy remainsunexecuted. Additionalcapacity decisionpending; no protectedservice stop, billingaction oridenticalretry.
+Supervisorqualification sourcefix: oldgenerationarchivedgamelogs fullyscanned; observednativeSYNCfaultlatch persistsacrossgenerations. RED8cases→23focusedGREENnormal/-O; integrated291run290PASS1nativeWineCLIskip. Remainingnativeprobesnotimplemented/accepted. See2026-10-28-m1-completion-audit.md andcapacitydecision. M1BLOCKED;M2-M4deferred/unqualified.
+
+- Fresh independent final-changeQA:55focusedPASS/68optimizedPASS, noCritical/Importantfindings; docsallocationclaimcorrected. Reviewer explicitly leavesfullnative8/duration/recovery/supervisor/M1QA andhistoricalcleanuprawproofunjudged. This isdraftreadiness, notM1acceptance.
+- GitHubcleanup2ba50e2 exactfetch422NoCommit;localrootcommitexists. Issue79remainsopen.
+- Task6nativeprogressBLOCKED byRAMbefore7; Task7newnativeexecutionBLOCKED. Task8ownchangeQAcomplete,fullM1QAopen. Awaitcapacitydecision; do notretryorstartfreshmatrixuntilnewcensusprovesadmission.

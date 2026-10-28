@@ -24,7 +24,7 @@ import time
 
 REPO=Path(__file__).resolve().parents[1]
 TOOLS=REPO/'tools'
-FAULT_BASE=Path('/root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r3')
+FAULT_BASE=Path('/root/ssam-ai-backups/m1-joinsearch-matrix-20261028-r1')
 LEGACY_BASE=Path('/root/ssam-ai-backups/m1-completion-20261026-0155')
 LEGACY_NATIVE=Path('/srv/tse-cecil-guard-20261026/tools')
 GLOBAL_HOLD=Path('/root/ssam-ai-backups/m1-supervisor-native-HOLD.json')
@@ -298,7 +298,14 @@ def save_inner(evidence,state):
 def step(runtime,evidence,state):
  row=sampled(runtime)
  with (evidence/'native-samples.jsonl').open('a') as stream:stream.write(json.dumps(row)+'\n')
+ health=row['health']
+ reasons=[name for name in ('owned_sync_bad','external_sync_bad') if health.get(name,0)]
+ if any(name in health.get('alerts',[]) for name in ('OWNED_CLIENT_SYNC','EXTERNAL_CLIENT_SYNC')):
+  reasons.append('SYNC_ALERT')
+ if reasons and not state.get('native_fault_latch'):
+  state['native_fault_latch']=dict(reasons=reasons,mono=row['mono'])
  save_inner(evidence,state)
+ if state.get('native_fault_latch'):raise RuntimeError('unexpected native fault latched across generations')
  return row
 
 
@@ -335,12 +342,17 @@ def measure_healthy(runtime,evidence,state,seconds,frozen):
              process_cpu_percent={role:100*(last['process_resources'][role]['cpu_s']-first['process_resources'][role]['cpu_s'])/(last['mono']-first['mono']) for role in frozen})
 
 
-def scan_logs(runtime):
+def native_error_matcher():
  sys.path.insert(0,str(REPO))
  from performance.log_error_prefilter import make_runtime_error_matcher
  matcher=make_runtime_error_matcher()
  import fleet_health as health
  if matcher.pattern.pattern!=health.q.BAD.pattern+r'|FatalError:':raise RuntimeError('unreviewed native log expression')
+ return matcher
+
+
+def scan_logs(runtime):
+ matcher=native_error_matcher()
  scanned=[]
  for role in runtime.roles:
   path=runtime.root/role/('Dedicated_BotTest.log' if role=='server' else 'SeriousSam.log')
@@ -354,10 +366,12 @@ def scan_logs(runtime):
 def verify_archives(root,*,start_index=0):
  root=Path(root);rows=json.loads((root/'archives/manifest.json').read_text());proof=[];total=0
  if not isinstance(rows,list) or type(start_index) is not int or not 0<=start_index<len(rows):raise RuntimeError('actual new closed-writer archives absent')
+ matcher=native_error_matcher()
  for row in rows[start_index:]:
   archive=Path(row['archive']);source=Path(row['source'])
   if archive.parent!=root/'archives' or not source.is_relative_to(root) or archive.is_symlink():raise RuntimeError('unbound native archive')
   digest=hashlib.sha256();size=0
+  native_log=source.name in ('SeriousSam.log','Dedicated_BotTest.log');chunks=[]
   with gzip.open(archive,'rb') as stream:
    while True:
     chunk=stream.read(1024**2)
@@ -365,8 +379,11 @@ def verify_archives(root,*,start_index=0):
     size+=len(chunk);total+=len(chunk)
     if size>32*1024**2 or total>256*1024**2:raise RuntimeError('bounded native archive verification exceeded')
     digest.update(chunk)
+    if native_log:chunks.append(chunk)
   if digest.hexdigest()!=row['sha256']:raise RuntimeError('native archived bytes fail SHA256')
-  proof.append(dict(archive=str(archive),sha256=row['sha256'],bytes=size))
+  if native_log and matcher.search(b''.join(chunks).decode(errors='replace')):
+   raise RuntimeError('native error in previous-generation archive')
+  proof.append(dict(archive=str(archive),sha256=row['sha256'],bytes=size,native_error_scan_complete=native_log))
  return dict(status='ARCHIVE_BYTES_VERIFIED',archives=proof,scope='CONTENT_VERIFICATION_ONLY_NOT_NATIVE_ACCEPTANCE')
 
 

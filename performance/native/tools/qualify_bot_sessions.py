@@ -12,6 +12,7 @@ from dataclasses import replace
 import fcntl
 import hashlib
 import json
+import locale
 import os
 from pathlib import Path
 import re
@@ -247,6 +248,20 @@ def runtime_error(log):
     if _runtime_error_matcher is None or _runtime_error_matcher.pattern.pattern != pattern:
         _runtime_error_matcher = make_runtime_error_matcher(re.compile(pattern))
     return _runtime_error_matcher.search(log)
+
+
+def native_join_present(path):
+    """Recheck the complete current log, avoiding redundant UTF-8 decoding.
+
+    ASCII 'joined' is invariant under UTF-8 replacement decoding and universal
+    newline translation. Other default encodings use the original reader.
+    No state survives a call; full reads preserve late I/O failures. The
+    separate error gate still reads and scans every complete log every tick.
+    """
+    if not path.exists():return False
+    if sys.flags.utf8_mode or locale.getencoding().lower().replace('_','-') in ('utf-8','utf8'):
+        return b'joined' in path.read_bytes()
+    return 'joined' in q.text(path)
 
 
 def validate_native_config(config):
@@ -515,8 +530,7 @@ class WineTransport:
         absent=status=='ABSENT' and not connected
         self.absence[key]=self.absence.get(key,0)+1 if absent else 0
         if row and status=='LIVE' and row['epoch']!=state['epoch']:bound=False
-        logs=q.text(self.roles[state['id']]/'SeriousSam.log')
-        native_join='joined' in logs
+        native_join=native_join_present(self.roles[state['id']]/'SeriousSam.log')
         return dict(identity_id=state['id'],epoch=state['epoch'],ownership_verified=bound and status!='MISMATCH',
                     fresh_query=0<=now-self.query_at<=5,process_alive=status=='LIVE',
                     connected=connected and native_join,

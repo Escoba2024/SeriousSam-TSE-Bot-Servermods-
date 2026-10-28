@@ -53,6 +53,31 @@ class SupervisorQualificationTests(unittest.TestCase):
    (root/'archives/manifest.json').write_text(json.dumps([old,new]))
    result=qualifier.verify_archives(root,start_index=1)
    self.assertEqual(result['status'],'ARCHIVE_BYTES_VERIFIED');self.assertEqual(len(result['archives']),1)
+ def test_old_generation_native_errors_reject_even_with_valid_archive_hash(self):
+  for filename in ['SeriousSam.log','Dedicated_BotTest.log']:
+   for data in [b'SYNCBAD: native fixture\n', b'Too many bad syncs\n', b'FatalError: fixture\n']:
+    with self.subTest(filename=filename,data=data),tempfile.TemporaryDirectory() as td:
+     root=Path(td);(root/'archives').mkdir();archive=root/'archives/previous.gz'
+     with gzip.open(archive,'wb') as stream:stream.write(data)
+     row={'archive':str(archive),'source':str(root/'bot'/filename),'sha256':hashlib.sha256(data).hexdigest()}
+     (root/'archives/manifest.json').write_text(json.dumps([row]))
+     with self.assertRaisesRegex(RuntimeError,'native error'):
+      qualifier.verify_archives(root)
+ def test_sync_fault_aborts_wait_and_remains_latched_after_clean_generation(self):
+  with tempfile.TemporaryDirectory() as td:
+   evidence=Path(td);state={}
+   for health in [{'owned_sync_bad':1,'external_sync_bad':0},
+                  {'owned_sync_bad':0,'external_sync_bad':0}]:
+    with patch.object(qualifier,'sampled',return_value={'health':health,'mono':1}):
+     with self.assertRaisesRegex(RuntimeError,'native fault'):
+      qualifier.step(None,evidence,state)
+   self.assertTrue(state['native_fault_latch'])
+   self.assertTrue(json.loads((evidence/'inner.json').read_text())['native_fault_latch'])
+ def test_external_sync_fault_is_also_fatal_in_private_qualification(self):
+  with tempfile.TemporaryDirectory() as td,patch.object(qualifier,'sampled',return_value={
+       'health':{'owned_sync_bad':0,'external_sync_bad':1},'mono':1}):
+   with self.assertRaisesRegex(RuntimeError,'native fault'):
+    qualifier.step(None,Path(td),{})
  def test_full_hour_is_measured_from_first_actual_healthy_sample(self):
   fields={'status':'HEALTHY','safe_recovery':True,'query_fresh':True,'telemetry_fresh':True,'owned_sync_bad':0,'sync_scan_complete':True}
   frozen={'bot':{'pid':1}}
