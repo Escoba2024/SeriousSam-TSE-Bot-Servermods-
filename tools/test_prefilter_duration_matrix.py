@@ -13,7 +13,7 @@ import run_prefilter_duration_matrix as m
 class MatrixContractTests(unittest.TestCase):
     def policy(self):
         return {'candidate_sha256':'a'*64, 'stages':[{'bots':b,'required_s':s,'duration_s':d,
-            'root':str(m.RUNTIME_PARENT/('tse-session-qualification-master-m1-prefilter-'+label+'-20261026')),
+            'root':str(m.RUNTIME_PARENT/('tse-session-qualification-master-m1-prefilter-'+label+'-20261028')),
             'config':str(m.CONFIG_BASE/name),'port':port,'display':display}
             for b,s,d,label,name,port,display in m.STAGE_CONTRACT],
             'harness_sha256':{n:'b'*64 for n in m.PRODUCER_NAMES}}

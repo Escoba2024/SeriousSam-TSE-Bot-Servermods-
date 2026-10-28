@@ -84,3 +84,23 @@ Establish exact private P1 OFF/ON preflight using the existing PR73 guarded harn
 M1 IN_PROGRESS. idle-r2 BLOCKED by threeCPU>=85 samples after8bot3748.102s/3582.551s fullpopulation;1/4 accepted3700.687/3762.257s against oldpolicy. Recovery notstarted. No public game runtime.
 Measured conservative matcher correction: paired medianCPUratio0.58955; unchanged originalregex/fulltext/Identifier/flags/DLL/gameconfig/85guard. New source requires fresh idle-r3 matrix, no oldreceipt relabeling. See docs/reports/2026-10-27-m1-monitor-cost-and-duration.md and existing prefiltercompletionplan.
 Private evidence/policy: /root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r3/; diagnostic benchmark/failures /root/ssam-ai-backups/m1-monitor-cost-20261027/. Before runtimeaction inspect actualmatrix/process identity/locks. Final M1 native/recovery/release review stillOPEN.
+
+## 28 October autonomous M1 completion checkpoint
+Own worktree `/srv/tse-m1-completion-20261028`, branch`agent/lead/20261028-m1-completion`, basePR78`93a2849`. User now authorizes privateeightbot work; historical defer superseded. r3finishedBLOCKED,1/4historicalaccepted,8CPUfailed2665.992s; recoverynotstarted. Freshsource requires all1/4/8gates. Existing plan`2026-10-26-m1-prefilter-completion.md` Tasks4–8 controls continuation. New campaign`/root/ssam-ai-backups/m1-joinsearch-matrix-20261028-r1/`, inspect actualprocess/receipt/locks before runtime. CPU correction completebinaryUTF8joinmarker lookup, full error scans/intervals/guards unchanged. Native diagnostic and freshmatrix/recovery/supervisor stillpending. Backup415/415 originals/restore/archive verified; disk>=8but<9GiB. Issue79 arithmetic/proofgaps retained, no extra deletion. M1IN_PROGRESS;M2–M4deferred/unqualified. See`docs/reports/2026-10-28-m1-completion-audit.md`.
+
+### 28 October08:34UTC — BLOCKED at actual RAM admission
+Source6a32f10 native600sdiagnostic stoppedafter124.975s at6bots:1039.3MiBavailable<1068launchgate. Originalguards unchanged. CPUmean51.679/peak82.661% includesstartup/cleanup<=6bots; no8botCPUclaim.20/20unmounts, noownedprocess/mount,cgroupempty. Disk9461497856B>=8GiBfloor,<9target.0syncmarkers in8actualgamelogs isshortpartial-only. No freshmatrix orfault/supervisor test started; currentcampaignpolicy remainsunexecuted. Additionalcapacity decisionpending; no protectedservice stop, billingaction oridenticalretry.
+Supervisorqualification sourcefix: oldgenerationarchivedgamelogs fullyscanned; observednativeSYNCfaultlatch persistsacrossgenerations. RED8cases→23focusedGREENnormal/-O; integrated291run290PASS1nativeWineCLIskip. Remainingnativeprobesnotimplemented/accepted. See2026-10-28-m1-completion-audit.md andcapacitydecision. M1BLOCKED;M2-M4deferred/unqualified.
+
+
+## Published handoff — 28 October 2026, 08:41 UTC
+
+M1 remains **BLOCKED** by the measured RAM admission failure. The pending capacity question has no answer or authorization yet. No test, service change or provider operation is running on behalf of this task.
+
+Draft PR: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/80
+
+Published implementation commit `aae549948db666b0df71b605756c719c70ebe6e0` has tree `118a5b01b83e9f27b5eefbb42f80c85ee90e7332`, verified byte-identical by fresh Git fetch to local final implementation `d671933cced53d00d42b2244af149155a88d0ccf`. Native diagnostic used retained local `6a32f10`. The following handoff commit changes documentation only. PR80 targets PR78, remains draft/open/mergeable; main is unchanged at `ab0c7400353a108f8461bb82280c539fdfe81499`.
+
+Issue79 was updated with current reserve, 415-file checks, valid Git metadata and historical publication/arithmetic limits; it remains open: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/79#issuecomment-6464508887
+
+Resume in `/srv/tse-m1-completion-20261028` on `agent/lead/20261028-m1-completion`; preserve all local histories. Private diagnostic verdict and CPU evidence are in `/root/ssam-ai-backups/m1-completion-20261028/`. New duration campaign policy exists but no matrix was started. Recheck actual capacity, all locks, public shutdown, original/build/source/config hashes and clean ownership before any new native action. Never resume by weakening guards or relabeling historical receipts. Canonical recovery, remaining supervisor native scenarios and final M1 QA follow accepted duration gates. M2–M4 remain deferred/unqualified.

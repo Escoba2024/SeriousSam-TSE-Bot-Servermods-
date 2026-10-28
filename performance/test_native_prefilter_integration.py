@@ -34,8 +34,26 @@ class IntegrationTests(unittest.TestCase):
     def test_entire_other_ast_is_unchanged(self):
         def stripped(path):
             tree = ast.parse(path.read_text())
+            # The 28 October join predicate has its own behavioral/equivalence
+            # tests. Normalize only that exact documented transformation;
+            # resource/error gates and all other native code must still match.
+            if path == ORIGINAL:
+                transport = next(n for n in tree.body if isinstance(n, ast.ClassDef)
+                                 and n.name == 'WineTransport')
+                observe = next(n for n in transport.body if isinstance(n, ast.FunctionDef)
+                               and n.name == 'observe')
+                observe.body = [n for n in observe.body if not (
+                    isinstance(n, ast.Assign) and len(n.targets) == 1
+                    and isinstance(n.targets[0], ast.Name) and n.targets[0].id == 'logs')]
+                for n in observe.body:
+                    if (isinstance(n, ast.Assign) and len(n.targets) == 1
+                            and isinstance(n.targets[0], ast.Name)
+                            and n.targets[0].id == 'native_join'):
+                        n.value = ast.parse("native_join_present(self.roles[state['id']]/'SeriousSam.log')",
+                                            mode='eval').body
             tree.body = [n for n in tree.body if not (
-                isinstance(n, ast.FunctionDef) and n.name == 'runtime_error' or
+                isinstance(n, ast.FunctionDef) and n.name in ('runtime_error', 'native_join_present') or
+                isinstance(n, ast.Import) and [a.name for a in n.names] == ['locale'] or
                 isinstance(n, ast.ImportFrom) and n.module == 'log_error_prefilter' or
                 isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and
                     t.id == '_runtime_error_matcher' for t in n.targets))]

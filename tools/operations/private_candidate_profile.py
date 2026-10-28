@@ -16,8 +16,8 @@ import sys
 TOOLS = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(TOOLS))
 CANDIDATE = '7dc961c880e0ed68ead13ed4e8299a025be71e05619de36c437c756e964334bf'
-EVIDENCE = Path('/root/ssam-ai-backups/m1-prefilter-matrix-20261026-idle-r3')
-QUALIFIER = Path('/srv/tse-m1-diagnostic-fix-20261026')
+EVIDENCE = Path('/root/ssam-ai-backups/m1-joinsearch-matrix-20261028-r1')
+QUALIFIER = TOOLS.parent
 BUILD = Path('/srv/tse-cecil-p1-build-20261025-01/manifest.json')
 CONFIG = Path('/root/ssam-ai-backups/m1-completion-20261026-0155/8-duration-config.json')
 MARKER = Path('/root/ssam-ai-backups/shutdown-20261026-0033/public-disabled.json')
