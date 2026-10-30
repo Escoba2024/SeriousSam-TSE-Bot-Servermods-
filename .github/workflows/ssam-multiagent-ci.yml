@@ -1,0 +1,22 @@
+name: ssam multiagent offline validation
+
+on:
+  pull_request:
+    paths:
+      - 'tools/ssam_multiagent/**'
+      - '.github/workflows/ssam-multiagent-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Python and safety tests (fake OpenCode, local temporary Git only)
+        run: python3 -B -m unittest discover -s tools/ssam_multiagent -p 'test_*.py' -v
+      - name: Check Python syntax
+        run: python3 -m py_compile tools/ssam_multiagent/manager.py tools/ssam_multiagent/test_manager.py
