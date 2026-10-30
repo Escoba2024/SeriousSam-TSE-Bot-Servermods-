@@ -210,13 +210,19 @@ def start(slot: str, prompt_file: Path, workspace: Path, state: Path, opencode: 
         dest = state / "tasks" / (task_id + ".json")
         atomic_json(dest, record)
         child = subprocess.Popen(
-            [sys.executable, str(Path(__file__).resolve()), "worker", task_id,
-             "--state-dir", str(state), "--opencode-bin", str(opencode)],
+            [sys.executable, str(Path(__file__).resolve()),
+             "--state-dir", str(state), "--opencode-bin", str(opencode),
+             "worker", task_id],
             cwd=target, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL, start_new_session=True, close_fds=True,
         )
         record["worker_pid"] = child.pid
-        record["worker_ticks"] = pid_ticks(child.pid)
+        for _ in range(20):
+            record["worker_ticks"] = pid_ticks(child.pid)
+            if record["worker_ticks"] is not None:
+                break
+            time.sleep(0.05)
+        require(record["worker_ticks"] is not None, "WORKER_PID_IDENTITY_UNAVAILABLE")
         atomic_json(dest, record)
     print(json.dumps({"task_id": task_id, "pid": child.pid, "slot": slot,
                       "model": MODEL, "worktree": str(target)}, sort_keys=True))
@@ -227,6 +233,11 @@ def worker(task_id: str, state: Path, opencode: Path) -> None:
             "INVALID_TASK_ID")
     path = state / "tasks" / (task_id + ".json")
     record = read_json(path)
+    for _ in range(40):
+        if record.get("worker_pid") == os.getpid() and record.get("worker_ticks") is not None:
+            break
+        time.sleep(0.05)
+        record = read_json(path)
     require(record["worker_pid"] == os.getpid(), "WORKER_IDENTITY_MISMATCH")
     require(record["worker_ticks"] == pid_ticks(os.getpid()), "WORKER_TICKS_MISMATCH")
     private = state / "private" / task_id
