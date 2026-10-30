@@ -50,7 +50,7 @@ Stand: 2026-10-30. Der Benutzer möchte M1, M2 und M3 parallel entwickeln und au
 | Prüfung | Ist-Zustand |
 |---|---|
 | Entwurf und CLI-Quellcode | Commit/PR erstellt |
-| Offline-Test mit drei Fake-Prozessen | Prüfung via CI noch offen |
+| Offline-Test mit drei Fake-Prozessen | CI 5/5 PASS (https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/actions/runs/41083921944) |
 | PID-Reuse, Worktree-Schutz | Tests vorhanden, Ausführung offen |
 | Deployment auf Ubuntu | NICHT ERFOLGT |
 | Drei native OpenCode-Prozesse | NICHT NACHGEWIESEN |
