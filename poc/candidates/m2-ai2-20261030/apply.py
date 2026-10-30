@@ -18,7 +18,7 @@ def materialize(output,gamemp=False):
     if not output.parent.is_dir():raise ValueError('output parent must exist')
     with tempfile.TemporaryDirectory(prefix='.m2-compose-',dir=output.parent) as temp:
         target=c1.materialize(Path(temp)/'source',gamemp)
-        patches=['aim.patch','policy.patch']+(['driver.patch'] if gamemp else [])
+        patches=['aim.patch','policy.patch']+(['driver.patch','ammo.patch'] if gamemp else [])
         for name in patches:
             subprocess.run(['patch','--batch','--fuzz=0','-p0','-i',str(HERE/name)],cwd=target,check=True,stdout=subprocess.DEVNULL)
         manifest=json.loads((target/'SOURCE_MANIFEST.json').read_text())

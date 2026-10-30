@@ -39,6 +39,8 @@ def extract(native):
     (native/'emission.inc').write_text(text[start:text.index('    // Count emitted combat fire input',start)])
     marker='      if (bot_bObstacleAvoidance && (moveFactor<0.0f'
     (native/'clearance.inc').write_text(block(text,marker) if marker in text else '')
+    start=text.index('          BotLog("[BotAmmo]') if '          BotLog("[BotAmmo]' in text else -1
+    (native/'ammo.inc').write_text(text[start:text.index(');',start)+2]+'\n' if start>=0 else '')
     result=run(['python3',native/'extract_block.py',native/'BotDriver.cpp']) if (native/'extract_block.py').exists() else run(['python3',apply.c1.ROOT/'poc/botcore/extract_block.py',native/'BotDriver.cpp'])
     (native/'block.inc').write_text(result)
 
@@ -49,7 +51,7 @@ def main():
         root=Path(tmp);materialize=apply.c1.materialize if a.baseline else apply.materialize
         core=materialize(root/'core');native=materialize(root/'native',True);extract(native)
         results=[];failures=[]
-        for name,include in [('policy',core),('driver',native),('tail',native),('attach',native),('emission',native)]:
+        for name,include in [('policy',core),('driver',native),('tail',native),('attach',native),('emission',native),('ammo',native)]:
             exe=root/name
             flags=['-std=c++17','-O1' if a.sanitize else '-O2','-g','-Wall','-Wextra','-Werror']
             if a.sanitize:flags+=['-fsanitize=address,undefined','-fno-omit-frame-pointer']

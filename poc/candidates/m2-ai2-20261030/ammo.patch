@@ -1,0 +1,17 @@
+--- BotDriver.cpp
++++ BotDriver.cpp
+@@ -1316,6 +1316,14 @@
+             eye.pl_PositionVector(3), eye.pl_OrientationAngle(1), eye.pl_OrientationAngle(2),
+             weapons->m_iCurrentWeapon, weapons->m_iWantedWeapon, weapons->m_iAvailableWeapons,
+             weapons->m_iColtBullets, weapons->m_bFireWeapon, weapons->m_fRayHitDistance);
++          BotLog("[BotAmmo] tick=%d local=%d current=%d wanted=%d available=%d colt=%d bullets=%d shells=%d rockets=%d grenades=%d napalm=%d cells=%d sniper=%d cannon=%d\n",
++            (int)bs.bs_iTick, (int)iLP, (int)weapons->m_iCurrentWeapon,
++            (int)weapons->m_iWantedWeapon, (int)weapons->m_iAvailableWeapons,
++            (int)weapons->m_iColtBullets, (int)weapons->m_iBullets,
++            (int)weapons->m_iShells, (int)weapons->m_iRockets,
++            (int)weapons->m_iGrenades, (int)weapons->m_iNapalm,
++            (int)weapons->m_iElectricity, (int)weapons->m_iSniperBullets,
++            (int)weapons->m_iIronBalls);
+         }
+         for (INDEX iPlayer=0; iPlayer<16; iPlayer++) {
+           CPlayer *player = (CPlayer *)CEntity::GetPlayerEntity(iPlayer);

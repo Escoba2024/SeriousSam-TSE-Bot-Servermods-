@@ -5,6 +5,48 @@
 public activation, main merge, weaker guards or qualified-DLL replacement.
 Historical M2 deferral in older coordination entries is superseded.
 
+## Active final-acceptance continuation, 30 October afternoon UTC
+
+New isolated worktree `/srv/tse-m2-final-20261030`, branch
+`agent/lead/20261030-m2-final`; existing worktree and all unpublished prior
+commits74174ca..72580c2 preserved. Draft PR82 is stacked on PR81, which remains
+stacked on PR80: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/pull/82
+Initial remote660bd5a/tree3955b8ab freshly fetched byte-identical to local239e617.
+Plan: `../superpowers/plans/2026-10-30-m2-final-acceptance.md`.
+Report: `../reports/2026-10-30-m2-final-acceptance.md`.
+
+Current diagnostic candidate build03 sourcec67a06a900db049cac1cc0304860323b069cdb5f,
+DLL a62a19e75251f69207966bb8965c019d8c7e76458099e6eb86bfddc4cb1ee5dd.
+All15 MSVC x86 units and42 source hashes pass; PE32/x86 checked. Only one bounded
+read-only ammo log line differs from build02; no gameplay qualification transfers.
+Six real M2/inherited executables pass ASan/UBSan, core741/29/35/43 and ammo3,
+C1 1243/29414 and10 suites pass. Tools291 (one deliberate native-Wine skip) and
+benchmarks59 pass. Candidate45 Python tests pass plus focused Compound RED/GREEN.
+
+Build02 completed all native skill/persona axes, with shotgun shell consumption,
+owned rocket entities, damage/kills and actual post-bot-respawn combat. It retains
+its860 hash scope. Hole15 is clean lifecycle only, with no target/fire and one
+world/fall death. Failed map04 and interrupted/quarantined predecessor cases remain.
+
+New-hash ammo16 one-bot300s and ammo17 two-bot300s are clean, with real Colt
+combat, original deaths/respawns and no sync errors. Ammo18 two-bot150s Aggressor
+proves bot respawn followed by sampled clip decrease5, peer damage100→-20 and
+credited peer kill; independent reviewer confirmed both client identities without
+cross-comparing local ticks. The preceding local death carried a suicide penalty.
+
+**Serial native build03 matrix is RUNNING**, private state/controller
+`/root/ssam-ai-backups/m2-final-20261030/ammo-profiles.json` / `run-ammo-campaign.py`,
+parent session47810. All native starts use global locks/current guards. Own
+Compound27 two-bot300s fixture is queued behind its complete clean outcome.
+No concurrent native tests or heavy suites. Ordinary-input directors stop on
+stale evidence; they do not establish exact aiming/cadence or shots by dispatch.
+Remaining physical exhaustion/fallback and melee coverage are open.
+
+Recheck live private state before any action; source-pinned original map staging
+and original/restore/archive415-file checks protect rollback. Latest report and
+live receipts supersede historical entries below. M2 is not accepted; no external
+blocker is asserted solely for missing combat events.
+
 ## Work and publication
 
 Own worktree `/srv/tse-m2-20261030`, branch `agent/lead/20261030-m2-ai2`.
