@@ -1,3 +1,9 @@
+> **Current mandate, 30 October 2026:** M2 is prioritized independently of M1.
+> M1 remains IN_PROGRESS / NOT_ACCEPTED. Do not run historical eight-bot,
+> 120-minute duration or recovery controllers for this campaign. Public games
+> stay disabled. Current work: [M2-CONTINUATION.md](M2-CONTINUATION.md).
+> Older scheduling instructions below are historical and superseded.
+
 # SSAM.AI – M1–M4 CONTINUATION
 Updated: 2026-10-26. User explicitly requested shutdown and autonomous M1–M4 development.
 
