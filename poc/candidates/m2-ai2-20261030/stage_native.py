@@ -17,15 +17,15 @@ def exact(text,before,after):
     return text.replace(before,after)
 
 def patch_runner(text):
-    text=exact(text,"preset='existing', cecil_p1=False):","preset='existing', cecil_p1=False, m2_combat=False):")
-    text=exact(text,'        self.cecil_p1=cecil_p1','        self.cecil_p1=cecil_p1\n        self.m2_combat=m2_combat')
+    text=exact(text,"preset='existing', cecil_p1=False):","preset='existing', cecil_p1=False, m2_combat=False, m2_skill=5, m2_persona=2):")
+    text=exact(text,'        self.cecil_p1=cecil_p1','        self.cecil_p1=cecil_p1\n        self.m2_combat=m2_combat\n        if m2_skill not in range(1,6) or m2_persona not in range(6):raise ValueError("invalid M2 profile")\n        self.m2_skill=m2_skill\n        self.m2_persona=m2_persona')
     text=exact(text,"                if self.cecil_p1:script+='bot_bCecilP1=1;\\n'", """                if self.cecil_p1:script+='bot_bCecilP1=1;\\n'
                 if self.m2_combat:
                     script=re.sub(r'(?m)^bot_bEnabled\\s*=\\s*1\\s*;', 'bot_bEnabled=0;', script)
-                    script+='bot_bCombatWeapon2=1;\\nbot_bCombatLead2=1;\\nbot_bCombatStrafe2=1;\\nbot_fCombatObservationAge=0;\\nbot_iSkillTier=5;\\nbot_iPersonality=2;\\nbot_bEnabled=1;\\n'""")
-    text=exact(text,'cecil_p1=args.cecil_p1)','cecil_p1=args.cecil_p1,m2_combat=args.m2_combat)')
-    text=exact(text,'                cecil_p1=args.cecil_p1,','                cecil_p1=args.cecil_p1,m2_combat=args.m2_combat,')
-    text=exact(text,"    parser.add_argument('--cecil-p1',", "    parser.add_argument('--m2-combat',action='store_true',help='explicit private M2 weapon/lead/strafe and expert-duelist configuration')\n    parser.add_argument('--cecil-p1',")
+                    script+=f'bot_bCombatWeapon2=1;\\nbot_bCombatLead2=1;\\nbot_bCombatStrafe2=1;\\nbot_fCombatObservationAge=0;\\nbot_iSkillTier={self.m2_skill};\\nbot_iPersonality={self.m2_persona};\\nbot_bEnabled=1;\\n'""")
+    text=exact(text,'cecil_p1=args.cecil_p1)','cecil_p1=args.cecil_p1,m2_combat=args.m2_combat,m2_skill=args.m2_skill,m2_persona=args.m2_persona)')
+    text=exact(text,'                cecil_p1=args.cecil_p1,','                cecil_p1=args.cecil_p1,m2_combat=args.m2_combat,m2_skill=args.m2_skill,m2_persona=args.m2_persona,')
+    text=exact(text,"    parser.add_argument('--cecil-p1',", "    parser.add_argument('--m2-combat',action='store_true',help='explicit private M2 weapon/lead/strafe configuration')\n    parser.add_argument('--m2-skill',type=int,choices=range(1,6),default=5)\n    parser.add_argument('--m2-persona',type=int,choices=range(6),default=2)\n    parser.add_argument('--cecil-p1',")
     text=exact(text,"    if args.join_cancel_probe and", "    if config['max_bots']>2 or args.duration>300:\n        raise ValueError('M2 limited to one/two bots and <=300 seconds')\n    if args.m2_combat and (not args.cecil_p1 or config['strafe_scale']<=0):\n        raise ValueError('M2 smoke requires explicit P1 and positive strafe scale')\n    if args.execute and not args.m2_combat:\n        raise ValueError('M2 execution requires explicit --m2-combat')\n    if args.join_cancel_probe and")
     compile(text,'staged-M2-qualify_bot_sessions.py','exec')
     return text

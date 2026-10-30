@@ -38,13 +38,35 @@ class Staging(unittest.TestCase):
   self.assertFalse(Path('/srv/tse-session-qualification-m2-fixture').exists())
  def test_m2_requires_explicit_p1(self):
   self.assertNotEqual(self.cli(2,180,['--m2-combat']).returncode,0)
+ def test_explicit_profiles_are_accepted_without_starting_runtime(self):
+  for tier,persona in ((1,0),(5,5)):
+   p=self.cli(1,60,['--m2-combat','--cecil-p1','--m2-skill',str(tier),'--m2-persona',str(persona)])
+   self.assertEqual(p.returncode,0,p.stderr)
+   self.assertEqual(json.loads(p.stdout)['status'],'DRY_RUN_NO_RUNTIME')
+ def test_out_of_range_profiles_are_rejected(self):
+  for flag,value in (('--m2-skill','0'),('--m2-skill','6'),('--m2-persona','-1'),('--m2-persona','6')):
+   self.assertNotEqual(self.cli(1,60,['--m2-combat','--cecil-p1',flag,value]).returncode,0)
+ def test_all_thirty_profiles_reach_generated_script_before_enable(self):
+  path=self.root/'tools/qualify_bot_sessions.py';source=path.read_text()
+  begin=source.index('                script=(Path(__file__)')
+  end=source.index("                (game/'Scripts/Session.ini').write_text(script)",begin)
+  for tier in range(1,6):
+   for persona in range(6):
+    scope=dict(re=re,Path=Path,__file__=str(path),startup_script=lambda _:'bot_iProfile0=0;\n',
+      self=SimpleNamespace(p=SimpleNamespace(config=dict(log_every_ticks=20,debug_logging=True,exploratory_search=False,strafe_scale=.5)),
+      identities={'bot':{}},cecil_p1=True,m2_combat=True,m2_skill=tier,m2_persona=persona),role='bot')
+    exec(textwrap.dedent(source[begin:end]),scope)
+    script=scope['script']
+    self.assertIn('bot_iSkillTier='+str(tier)+';',script)
+    self.assertIn('bot_iPersonality='+str(persona)+';',script)
+    self.assertTrue(script.rstrip().endswith('bot_bEnabled=1;'))
  def test_generated_configuration_enables_only_after_all_latched_settings(self):
   path=self.root/'tools/qualify_bot_sessions.py';source=path.read_text()
   begin=source.index('                script=(Path(__file__)')
   end=source.index("                (game/'Scripts/Session.ini').write_text(script)",begin)
   config=dict(log_every_ticks=20,debug_logging=True,exploratory_search=False,strafe_scale=.5)
   scope=dict(re=re,Path=Path,__file__=str(path),startup_script=lambda _:'bot_iProfile0=0;\n',role='bot',
-             self=SimpleNamespace(p=SimpleNamespace(config=config),identities={'bot':{}},cecil_p1=True,m2_combat=True))
+             self=SimpleNamespace(p=SimpleNamespace(config=config),identities={'bot':{}},cecil_p1=True,m2_combat=True,m2_skill=5,m2_persona=2))
   exec(textwrap.dedent(source[begin:end]),scope)
   script=scope['script'];assignments=re.findall(r'(?m)^\s*(bot_\w+)\s*=\s*([^;]+);',script)
   enables=[i for i,pair in enumerate(assignments) if pair[0]=='bot_bEnabled' and pair[1].strip()=='1']
