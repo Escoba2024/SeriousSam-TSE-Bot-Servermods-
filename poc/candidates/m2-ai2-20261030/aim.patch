@@ -1,0 +1,15 @@
+--- bot_aim.h
++++ bot_aim.h
+@@ -107,6 +107,12 @@
+     shots_gated_ = 0;
+   }
+ 
++  // Invalidate an entity generation even after target selection lost its track.
++  // Unrelated absent slots must not disturb the current aiming controller.
++  void ForgetTarget(int key) {
++    if (key>=0 && last_target_key_==key) Reset();
++  }
++
+   // dt in seconds (one tick = 0.05 s). Safe to call with the same pose twice.
+   AimOutput Step(const AimPose& pose, const AimPoint& pt, double dt) {
+     AimOutput out;

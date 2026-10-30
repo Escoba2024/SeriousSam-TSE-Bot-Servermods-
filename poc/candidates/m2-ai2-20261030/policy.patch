@@ -1,0 +1,115 @@
+--- bot_human.h
++++ bot_human.h
+@@ -31,6 +31,7 @@
+ #include "bot_route.h"
+ #include "combat_master_support.h"
+ #define COMBAT_MASTER_AVAILABLE 1
++#define M2_AI2_AVAILABLE 1
+ 
+ namespace botcore {
+ 
+@@ -73,7 +74,7 @@
+ 
+   void Configure(const BotProfile* profile, bool exploratory_search=false,
+                  bool cecil_p1=false, bool weapon2=false, bool lead2=false,
+-                 bool strafe2=false) {
++                 bool strafe2=false, bool defer_fire_commit=false) {
+     BotProfile fallback{};
+     if (profile == nullptr) {
+       BuildProfile(3, 0, 0x1234567u, "BOT-Default", &fallback);
+@@ -83,6 +84,7 @@
+     exploratory_search_ = exploratory_search;
+     cecil_p1_ = cecil_p1;
+     weapon2_ = weapon2; lead2_ = lead2; strafe2_ = strafe2;
++    defer_fire_commit_=defer_fire_commit;
+     perception_.Configure(profile_.skill, profile_.seed ^ 0x5DEECE66u);
+     aim_.Configure(profile_.skill, profile_.seed ^ 0x1B54u);
+     weapons_.Configure(profile_.skill);
+@@ -97,6 +99,7 @@
+                         profile_.personality.range_preference, profile_.seed);
+     strafe2_controller_.Configure(profile_.persona, profile_.personality.strafe_bias,
+                                  profile_.seed);
++    last_fire_offer_tick_=-1; last_fire_offer_weapon_=0;
+     target_ = -1;
+     target_since_tick_ = 0;
+     strafe_sign_ = (profile_.seed & 1u) ? 1.0 : -1.0;
+@@ -211,6 +214,7 @@
+ 
+   BotCommand Step(const WorldView& w, const SenseInput* sensed, const bool* los, int count,
+                   double dt) {
++    last_fire_offer_tick_=-1; last_fire_offer_weapon_=0;
+     BotCommand cmd;
+     cmd.weapon = w.current_weapon > 0 ? w.current_weapon : 1;
+     if (!(dt > 0.0)) dt = 1.0 / kProfileTickHz;
+@@ -348,14 +352,13 @@
+     const WeaponProfile& firing_weapon = WeaponAt(cmd.weapon);
+     const bool blast_safe = firing_weapon.self_blast_m <= 0.0 ||
+                             distance > firing_weapon.self_blast_m + 1.0;
+-    cmd.fire = aim.fire_allowed && visible && blast_safe;
+-    if(cecil_p1_ && cmd.fire && cmd.weapon>=1 && cmd.weapon<=kWeaponCount) {
+-      const double period=firing_weapon.shot_period_s;
+-      if(period>0.0){
+-        const int delay=static_cast<int>(period*kProfileTickHz+0.5);
+-        if(w.tick<next_shot_tick_[cmd.weapon]) cmd.fire=false;
+-        else next_shot_tick_[cmd.weapon]=w.tick+(delay>0?delay:1);
+-      }
++    const bool melee=cmd.weapon==1 || cmd.weapon==10;
++    cmd.fire = aim.fire_allowed && visible && blast_safe &&
++               WeaponUsable(w.usable_weapons,cmd.weapon) && (!melee || distance<=2.0);
++    if (cecil_p1_ && cmd.fire && w.tick<next_shot_tick_[cmd.weapon]) cmd.fire=false;
++    if (cmd.fire) {
++      last_fire_offer_tick_=w.tick;last_fire_offer_weapon_=cmd.weapon;
++      if (!defer_fire_commit_) NotifyFireEmitted(w.tick,cmd.weapon);
+     }
+ 
+     MoveIntent(w, visible, distance, cmd);
+@@ -371,6 +374,27 @@
+       cmd.forward=cmd.strafe=0;cmd.travel=true;
+     }
+     return cmd;
++  }
++
++  // Replicated lifecycle invalidation. A returning slot must react anew.
++  void ForgetOpponent(int index) {
++    perception_.Forget(index);
++    aim_.ForgetTarget(index);
++    if (target_==index) target_=-1;
++  }
++
++  // Commit only the current proposal, after all native fire vetoes and SetAction.
++  // A blocked weapon draw/recovery never starts its shot interval.
++  void NotifyFireEmitted(int tick,int weapon) {
++    if (tick!=last_fire_offer_tick_ || weapon!=last_fire_offer_weapon_ ||
++        weapon<1 || weapon>kWeaponCount) return;
++    last_fire_offer_tick_=-1;last_fire_offer_weapon_=0;
++    if (!cecil_p1_) return;
++    const double period=WeaponAt(weapon).shot_period_s;
++    if (period>0.0) {
++      const int delay=static_cast<int>(period*kProfileTickHz+0.5);
++      next_shot_tick_[weapon]=tick+(delay>0?delay:1);
++    }
+   }
+ 
+   // Native Fire press/release edge only after a deterministic death delay.
+@@ -518,6 +542,12 @@
+           ClampUnit(strafe_sign_ * 0.5 * profile_.personality.strafe_bias);
+       return;
+     }
++    if (cmd.weapon==1 || cmd.weapon==10) {
++      cmd.preferred_range_m=1.5;
++      cmd.forward=distance>1.5 ? ClampUnit(0.55+0.45*aggression) : 0.0;
++      cmd.strafe=0.0;
++      return;
++    }
+     if (distance > preferred + 3.0) {
+       cmd.forward = ClampUnit(0.55 + 0.45 * aggression);
+       cmd.strafe = 0.0;
+@@ -549,6 +579,8 @@
+   bool navigation_override_active_ = false;
+   bool exploratory_search_ = false; // native B2 exposed excessive world deaths
+   bool cecil_p1_ = false;
++  bool defer_fire_commit_=false;
++  int last_fire_offer_tick_=-1,last_fire_offer_weapon_=0;
+   bool weapon2_ = false, lead2_ = false, strafe2_ = false;
+   combat2::WeaponSelector2 weapons2_;
+   combat2::StrafeController strafe2_controller_;
