@@ -37,9 +37,9 @@
 **Files:** Existing M2 stagers/input helper, targeted tests if defects occur; private native controllers/receipts.
 **Interface:** Consume exact DLL860ae6d7 and guarded finite-ammo scene; produce attributable engine-side combat/death/respawn evidence, then native profile matrix.
 - [ ] Validate actual input effects and previous steering outcome before dependent steering.
-- [ ] Run serial one/two-bot cases on appropriate original maps; inspect weapons/clip/health/kill/respawn and sync.
+- [x] Run serial one/two-bot cases on appropriate original maps; inspect weapons/clip/health/kill/respawn and sync (build02; new build03 verification follows).
 - [ ] Reproduce each defect, add failing regression, minimally fix, rebuild and retest affected native cases.
-- [ ] Exercise five independent skills and six personas, preserving explicit unproven cells.
+- [x] Exercise five independent skills and six personas, preserving explicit unproven cells (build02 axes; no 30-cell native claim).
 
 ### Task 3: final qualification and publication
 
@@ -61,3 +61,12 @@
 - New finite RedStation04 failed original join because I extrapolated the wrong DM_ filename. Compared pinned original preset; corrected to RedStation.wld with failing/passing regression in7f6b3d7. Failure/8 clean unmounts preserved. No AI DLL/source change.
 - Added conservative native evidence reducer/tests,40/40 candidate Python checks PASS. Independent follow-up review through56cf70b: no Critical/Important findings; profile gap resolved.
 - RedStation05 two-bot300s active: interim original death, bot death/return alive and other bot frag2. Nine150s serial profile-axis cases queued behind its final clean receipt; no concurrent native tests or heavyweight offline suite.
+- RedStation05 finished wrapper/controller0, guardFINISHED,8/8 unmounts. Local bot0/index2 death1400→alive1440;198 alive policy rows after return, continued motion/rays but no visible target/fire. Living sensing is not frozen respawn state. Other bot frags2. Resource mean57.532%/peak80.378%, RAMmin1736.586MiB, cgroup719.164MiB, diskmin8.571GiB.
+- Initial publication DraftPR82 onPR81, remote660bd5ace1dc1d211d369af548d4237e3075f066 tree3955b8ab352c7c04716e8d4c279f1e0f41a192fe freshly equals local239e617. Native campaign continues; no final acceptance claim.
+- Profile06/aggressor,07/survivor,08/controller clean. Remaining nine-case axis campaign ongoing under own controller/private profiles.json. Target/loadout review: extra weapons appear only at unfavourable long ranges so far; no proven weapon selector defect. Original Hole filename/title verified from licensed level archive; explicit whitelist and guard tests RED/GREEN,41 Python checksPASS; prepared only.
+- Nine native axes FINISHED, controller0 for all; source/config/actual attach/map/unmount/sync checks all pass. Review found broader evidence in final tier cases: tier1 selects shotgun4, tier3 consumes shell30→29, tiers2/4 spawn distinct owned type0 rockets (Engine107 headerPRT_ROCKET), tier2 original health100→44.7. Marksman/Flaky after own respawn show Colt decreases6/7 and further kills; actual return to combat established. No exact shot or cadence/exhaustion inference.
+- Hole15 one-bot300s finished cleanly, but no visible target/fire and one world/fall death; unsuitable floor/spawn separation for gunplay. Original input helper correctly refused a late W request after measurement ended. No safety bypass or world-death concealment.
+- Ruling: existing telemetry cannot directly measure all eight finite reserve pools. Add one bounded, read-only BotAmmo line under the existing diagnostics/cadence; no action/policy/server/packet/state change. This requires a new explicitly unqualified MSVC candidate and fresh native checks; old860 evidence retains its old hash scope. Native log statement regression RED2/3 checks, thenGREEN3/3; parser reserve/projectile tests RED3, then44 Python testsGREEN. Core741/29/35/43 and inherited C1/10 suitesGREEN. Sanitizer run active before build.
+- Sanitizer completed0 across all six M2/inherited executables. Build03 source c67a06a900db049cac1cc0304860323b069cdb5f:15 MSVC x86 units PASS,42/42 inputs and PE32/x86 verified, DLL a62a19e75251f69207966bb8965c019d8c7e76458099e6eb86bfddc4cb1ee5dd. Only BotDriver.cpp differs from build02; removing the exact bounded diagnostic statement restores byte-identical source. New candidate has no inherited native acceptance.
+- Broad offline recheck:291 tools tests (one deliberate native-Wine skip),59 benchmark tests,45 candidate Python tests PASS. Malformed Windows-CRT projectile speeds previously aborted the evidence parser; failing regression then minimal reject-and-continue fix. Parser-only change does not alter the built DLL.
+- Fresh build03 native ammo-16: one bot/300s, finite Red Station, tier5/persona2, own display160/port27564, serial lock and all original resource guards. Running; do not infer gameplay acceptance from startup or dispatch.

@@ -13,12 +13,17 @@ import re
 
 SNAPSHOT=re.compile(r'\[BotSnapshot\] tick=(\d+) player=(\d+) entity=(\d+) pos=\(([^)]+)\) yaw=(\S+) health=(\S+) buttons=(\d+) \\frags_(\d+)\\(-?\d+)$')
 WEAPON=re.compile(r'\[BotWeapon\] tick=(\d+) .*? weapon=(\d+) wanted=(\d+) available=(\d+) ammo=(-?\d+) firing=(\d+)')
+POOLS=('colt','bullets','shells','rockets','grenades','napalm','cells','sniper','cannon')
+AMMO=re.compile(r'\[BotAmmo\] tick=(\d+) local=(\d+) current=(\d+) wanted=(\d+) available=(\d+) '+
+                ' '.join(name+r'=(-?\d+)' for name in POOLS)+r'$')
+PROJECTILE=re.compile(r'\[BotProjectileWitness\] tick=(\d+) entity=(\d+) type=(\d+) launcher=(-?\d+) speed=(\S+)$')
 
 def analyze(text):
     result=dict(full_m2_acceptance=False,incomplete_final_line=bool(text and not text.endswith('\n')),
                 actors={},emitted_fire_input_max=0,sampled_colt_clip_decrease=0,
-                observed_current_weapons=[],nonmonotonic_samples=0,invalid_samples=0)
-    actors={};previous_weapon=None;weapons=set()
+                observed_current_weapons=[],nonmonotonic_samples=0,invalid_samples=0,
+                ammo_pools={},projectile_witnesses=[])
+    actors={};previous_weapon=None;weapons=set();previous_ammo={};projectiles={}
     lines=text.splitlines()
     if result['incomplete_final_line']:lines=lines[:-1]
     for line in lines:
@@ -55,7 +60,32 @@ def analyze(text):
             if previous_weapon and weapon==previous_weapon[1]==2 and 0<=ammo<=6 and 0<=previous_weapon[2]<=6:
                 result['sampled_colt_clip_decrease']+=max(0,previous_weapon[2]-ammo)
             previous_weapon=(tick,weapon,ammo)
+        match=AMMO.search(line)
+        if match:
+            tick,slot=int(match[1]),int(match[2]);values=dict(zip(POOLS,map(int,match.groups()[5:])))
+            weapons.add(int(match[3]));old=previous_ammo.get(slot)
+            if old and tick<=old[0]:result['nonmonotonic_samples']+=1;old=None
+            for name,value in values.items():
+                pool=result['ammo_pools'].setdefault(name,dict(samples=0,minimum=value,maximum=value,sampled_decrease=0,zero_samples=0))
+                pool['samples']+=1;pool['minimum']=min(pool['minimum'],value);pool['maximum']=max(pool['maximum'],value)
+                pool['zero_samples']+=int(value==0)
+                if old and value>=0 and old[1][name]>=0:pool['sampled_decrease']+=max(0,old[1][name]-value)
+            previous_ammo[slot]=(tick,values)
+        elif '[BotAmmo]' in line:
+            result['invalid_samples']+=1;previous_ammo.clear()
+        match=PROJECTILE.search(line)
+        if match:
+            try:speed=float(match[5])
+            except ValueError:result['invalid_samples']+=1;continue
+            if not math.isfinite(speed) or speed<0:result['invalid_samples']+=1;continue
+            key=(int(match[3]),int(match[4]))
+            witness=projectiles.setdefault(key,dict(entities=set(),sampled_sightings=0,max_sampled_speed=0.0))
+            witness['entities'].add(int(match[2]));witness['sampled_sightings']+=1
+            witness['max_sampled_speed']=max(witness['max_sampled_speed'],speed)
     result['observed_current_weapons']=sorted(weapons)
+    result['projectile_witnesses']=[dict(type=kind,launcher=launcher,distinct_entities=len(value['entities']),
+        sampled_sightings=value['sampled_sightings'],max_sampled_speed=value['max_sampled_speed'])
+        for (kind,launcher),value in sorted(projectiles.items())]
     return result
 
 if __name__=='__main__':

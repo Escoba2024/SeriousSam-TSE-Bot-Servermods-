@@ -62,4 +62,21 @@ class DuelStage(unittest.TestCase):
    root=Path(temp)/'harness'
    with self.assertRaises(ValueError):self.m.stage(root,map_name='unverified')
    self.assertFalse(root.exists())
+ def test_original_hole_map_has_explicit_level_and_query_name(self):
+  # Filename and WLIF title checked in the licensed original level archive.
+  with tempfile.TemporaryDirectory() as temp:
+   root=self.m.stage(Path(temp)/'harness',map_name='hole')
+   self.assertIn("state.get('mapname')!='Hole'",(root/'tools/qualify_bot_sessions.py').read_text())
+   preset=(root/'tools/m2_duel_preset.py').read_text()
+   self.assertIn('Deathmatch\\\\Hole.wld',preset)
+   self.assertIn('gam_bInfiniteAmmo=0;',preset)
+   self.assertEqual(json.loads((root/'SOURCE_MANIFEST.json').read_text())['map'],'hole')
+ def test_original_compound_query_uses_kuntakinte_level_filename(self):
+  # Original Retail level discovery reports KuntaKinte.wld as 'Compound'.
+  with tempfile.TemporaryDirectory() as temp:
+   root=self.m.stage(Path(temp)/'harness',map_name='compound')
+   self.assertIn("state.get('mapname')!='Compound'",(root/'tools/qualify_bot_sessions.py').read_text())
+   preset=(root/'tools/m2_duel_preset.py').read_text()
+   self.assertIn('KuntaKinte.wld',preset)
+   self.assertIn('gam_bInfiniteAmmo=0;',preset)
 if __name__=='__main__':unittest.main()

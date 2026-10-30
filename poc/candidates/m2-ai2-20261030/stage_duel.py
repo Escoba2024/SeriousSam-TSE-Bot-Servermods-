@@ -13,7 +13,9 @@ base=importlib.util.module_from_spec(s);s.loader.exec_module(base)
 
 def stage(output,map_name='littletrouble'):
     maps={'littletrouble':('Little Trouble','DM_LittleTrouble.wld'),
-          'redstation':('Red Station','RedStation.wld')}
+          'redstation':('Red Station','RedStation.wld'),
+          'hole':('Hole','Hole.wld'),
+          'compound':('Compound','KuntaKinte.wld')}
     if map_name not in maps:raise ValueError('explicit known original Retail map required')
     query_name,level_name=maps[map_name]
     output=Path(output).absolute()
@@ -35,7 +37,7 @@ def stage(output,map_name='littletrouble'):
         manifest=json.loads((root/'SOURCE_MANIFEST.json').read_text())
         manifest['scenario']='ORIGINAL_RETAIL_LITTLE_TROUBLE_FINITE_AMMO_OWN_INPUT'
         manifest['map']=map_name
-        if map_name!='littletrouble':manifest['scenario']='ORIGINAL_RETAIL_RED_STATION_FINITE_AMMO_OWN_INPUT'
+        if map_name!='littletrouble':manifest['scenario']='ORIGINAL_RETAIL_'+map_name.upper()+'_FINITE_AMMO_OWN_INPUT'
         manifest['duel_inputs_sha256']={name:hashlib.sha256((HERE/name).read_bytes()).hexdigest() for name in ('stage_duel.py','m2_duel_preset.py')}
         manifest['files_sha256']={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.rglob('*')) if p.is_file() and p.name!='SOURCE_MANIFEST.json'}
         (root/'SOURCE_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
@@ -44,5 +46,5 @@ def stage(output,map_name='littletrouble'):
     return output
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('output',type=Path)
-    p.add_argument('--map',choices=('littletrouble','redstation'),default='littletrouble')
+    p.add_argument('--map',choices=('littletrouble','redstation','hole','compound'),default='littletrouble')
     a=p.parse_args();print(stage(a.output,a.map))

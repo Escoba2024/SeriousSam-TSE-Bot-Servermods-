@@ -60,7 +60,11 @@ def configure_overlay(game,role):
         # Ordinary graphics/input settings on our own original opponent, not a
         # workload limit change. Its renderer remains subject to the host guard.
         path=game/'Scripts/Session.ini';path.write_text(
-            'sam_iMaxFPSActive=20;\nsam_iMaxFPSInactive=20;\nsam_bPauseOnMinimize=0;\n')
+            'sam_iMaxFPSActive=20;\nsam_iMaxFPSInactive=20;\nsam_bPauseOnMinimize=0;\n'
+            # Original supported user FLOATs, verified in PersistentSymbols.
+            # At20Hz the default300deg/s quantizes keyboard yaw to15deg.
+            # This controls only our original opponent; M2 skill is unchanged.
+            'ctl_fButtonRotationSpeedH=60;\nctl_fButtonRotationSpeedP=30;\n')
         path=game/'Scripts/PersistentSymbols.ini';text=path.read_text()
         for key,value in [('sam_iScreenSizeI',320),('sam_iScreenSizeJ',240),
                           ('sam_iMaxFPSActive',20),('sam_iMaxFPSInactive',20)]:
