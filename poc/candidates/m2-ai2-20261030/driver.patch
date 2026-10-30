@@ -1,0 +1,119 @@
+--- BotDriver.cpp
++++ BotDriver.cpp
+@@ -85,6 +85,8 @@
+ static INDEX bot_iProfile1     = -1;
+ static INDEX bot_iProfile2     = -1;
+ static INDEX bot_iProfile3     = -1;
++static INDEX bot_iSkillTier = -1; // -1 roster default, explicit 1..5
++static INDEX bot_iPersonality = -1; // -1 roster default, explicit 0..5
+ static INDEX bot_iProfileSeed  = 20261020; // per-client seed; slots/tiers are mixed in
+ static FLOAT bot_fStrafeScale  = 0.0f;  // 0 = strafe disabled; see the migration notes
+ static INDEX bot_bDiag = FALSE;        // P0: timer/config heartbeat (opt-in)
+@@ -550,6 +552,8 @@
+   _pShell->DeclareSymbol("user INDEX bot_iProfile1;",     &bot_iProfile1);
+   _pShell->DeclareSymbol("user INDEX bot_iProfile2;",     &bot_iProfile2);
+   _pShell->DeclareSymbol("user INDEX bot_iProfile3;",     &bot_iProfile3);
++  _pShell->DeclareSymbol("user INDEX bot_iSkillTier;", &bot_iSkillTier);
++  _pShell->DeclareSymbol("user INDEX bot_iPersonality;", &bot_iPersonality);
+   _pShell->DeclareSymbol("user INDEX bot_iProfileSeed;",  &bot_iProfileSeed);
+   _pShell->DeclareSymbol("user FLOAT bot_fStrafeScale;",  &bot_fStrafeScale);
+   _pShell->DeclareSymbol("user INDEX bot_bDiag;",      &bot_bDiag);
+@@ -576,6 +580,7 @@
+   botcore::CombatWeaponInput bs_weaponInput;
+   botcore::ObstacleRecovery bs_navigation;
+   CPlayer *bs_navPlayer;
++  CPlayer *bs_apObservedPlayers[16]; // equality only; retained pointers never dereferenced
+   FLOAT  bs_lastHealth;       // previous tick health, for the damage alert
+   ULONG  bs_ulCombatFireActions; // cumulative emitted combat input, not respawn
+ };
+@@ -614,9 +619,17 @@
+     botcore::BuildProfile(3,0,(uint32_t)bot_iProfileSeed,"BOT-Fallback",&profile);
+     BotLog("[BotHuman] local=%d roster index %d rejected, average fallback\n",iLP,profile_index);
+   }
++  // Independent mechanical skill and temperament, retaining roster identity.
++  const INDEX tier=(bot_iSkillTier>=1 && bot_iSkillTier<=5)?bot_iSkillTier:profile.tier;
++  const INDEX persona=(bot_iPersonality>=0 && bot_iPersonality<6)?bot_iPersonality:profile.persona;
++  if (tier!=profile.tier || persona!=profile.persona) {
++    botcore::BotProfile configured;
++    if (botcore::BuildProfile(tier,persona,profile.seed,profile.name,&configured)) profile=configured;
++  }
+   BotHumanPolicy(iLP).Configure(&profile,bot_bExploratorySearch!=FALSE,
+                                bot_bCecilP1!=FALSE, bot_bCombatWeapon2!=FALSE,
+-                               bot_bCombatLead2!=FALSE, bot_bCombatStrafe2!=FALSE);
++                               bot_bCombatLead2!=FALSE, bot_bCombatStrafe2!=FALSE, true);
++  memset(_absBots[iLP].bs_apObservedPlayers,0,sizeof(_absBots[iLP].bs_apObservedPlayers));
+   _absBots[iLP].bs_lastHealth=0.0f;
+   BotLog("[BotHuman] local=%d profile=%s tier=%d persona=%s seed=%lu\n",
+     iLP,profile.name,profile.tier,botcore::PersonalityName(profile.persona),
+@@ -628,6 +641,7 @@
+   for (INDEX slot=0; slot<4; ++slot) {
+     _absBots[slot].bs_navigation.Reset();
+     _absBots[slot].bs_navPlayer=NULL;
++    _absBots[slot].bs_ppls=NULL; // force fresh attach after stop/map/rejoin, even if allocator reuses source
+   }
+ }
+ 
+@@ -918,9 +932,13 @@
+           INDEX count=0;
+           for (INDEX index=0; index<16; ++index) {
+             CPlayer *other=(CPlayer *)CEntity::GetPlayerEntity(index);
+-            if (other==NULL || other==player || other->GetHealth()<=0) continue;
++            if (other!=bs.bs_apObservedPlayers[index]) human.ForgetOpponent(index);
++            bs.bs_apObservedPlayers[index]=other;
++            if (other==NULL || other==player || other->GetHealth()<=0) {
++              human.ForgetOpponent(index);continue;
++            }
+             const BOOL local=BotCombatIsLocal(pgame,index);
+-            if (local && bot_bCombatSkipLocals) continue;
++            if (local && bot_bCombatSkipLocals) { human.ForgetOpponent(index);continue; }
+             const CPlacement3D otherEye=BotCombatEye(other);
+             botcore::SenseInput &si=sensed[count];
+             si.index=index;
+@@ -1061,7 +1079,10 @@
+         const FLOAT distance=bot_bHumanAI ? humanTargetDistance
+           : (target!=NULL ? (BotCombatEye(target).pl_PositionVector-
+               BotCombatEye(player).pl_PositionVector).Length() : 0.0f);
+-        combatHold=combatHold || distance<=((combatWeapon==1 || combatWeapon==10)?1.5f:8.0f);
++        if (bot_bHumanAI) {
++          combatHold=combatHold || (std::fabs(moveFactor)<0.01f &&
++            std::fabs(humanStrafe*bot_fStrafeScale)<0.01f);
++        } else combatHold=combatHold || distance<=((combatWeapon==1 || combatWeapon==10)?1.5f:8.0f);
+         CPlayerWeapons *weapons=player->GetPlayerWeapons();
+         combatSelect=bs.bs_weaponInput.Poll(bs.bs_iTick,combatWeapon,
+           weapons->m_iWantedWeapon,player->m_ulLastButtons);
+@@ -1138,6 +1159,7 @@
+         bs.bs_aHeading=player->m_aLastRotation(1)+(FLOAT)navigation.yawDelta;
+         bs.bs_aPitch=player->m_aLastRotation(2);
+         moveFactor=(FLOAT)navigation.forward;
++        humanStrafe=0.0f; // recovery exclusively owns translation and heading
+         testAimReady=FALSE; // recovery heading is movement, not combat aim
+       }
+       if (navigation.began || navigation.finished ||
+@@ -1161,6 +1183,18 @@
+       const FLOAT yaw=eye.pl_OrientationAngle(1);
+       const FLOAT requestedYaw=yaw+bs.bs_aHeading-player->m_aLastRotation(1);
+       const FLOAT lateral=Clamp(humanStrafe*bot_fStrafeScale,-1.0f,1.0f);
++      // Existing forward recovery cannot inspect reverse/sideways motion. Probe
++      // the actual travel bearing at both possible action-order headings. These
++      // are wall checks only; unknown ground remains unknown.
++      if (bot_bObstacleAvoidance && (moveFactor<0.0f || std::fabs(lateral)>0.01f)) {
++        const FLOAT offset=(FLOAT)(std::atan2(-lateral,moveFactor)*botcore::kRadToDeg);
++        const FLOAT currentClear=BotObstacleDistance(player,yaw+offset);
++        const FLOAT requestedClear=std::fabs(requestedYaw-yaw)<0.01f ? currentClear :
++          BotObstacleDistance(player,requestedYaw+offset);
++        if (!(currentClear>=1.2f && requestedClear>=1.2f)) {
++          moveFactor=0.0f;humanStrafe=0.0f;
++        }
++      }
+       botcore::HumanBotPolicy &human=BotHumanPolicy(iLP);
+       if (!human.AllowFinalMovement(eye.pl_PositionVector(1),eye.pl_PositionVector(2),
+             eye.pl_PositionVector(3),yaw,moveFactor,lateral) ||
+@@ -1229,6 +1263,8 @@
+ 
+     // 4) hand it to the network player source (stamps pa_llCreated internally)
+     ppls->SetAction(pa);
++    if (bot_bHumanAI && automatic && bFire && !respawnInput)
++      BotHumanPolicy(iLP).NotifyFireEmitted(bs.bs_iTick,combatWeapon);
+     // Count emitted combat fire input independently of sampled status logs.
+     if (bFire && automatic && !respawnInput) ++bs.bs_ulCombatFireActions;
+     BotTelemetry_Action(iLP);

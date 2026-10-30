@@ -1,0 +1,266 @@
+{
+  "m2_status": "CODE_COMPLETE / NATIVE_QA_PENDING",
+  "retail_107_full_acceptance": false,
+  "native_cases": [
+    {
+      "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+      "dll_sha256": "860ae6d7fbc91de301f80a963599d970692b872a51d0e0330dbd30ccd11e134b",
+      "max_bots": 1,
+      "peak_playing": 1,
+      "measured_s": 90,
+      "elapsed_s": 97.23058534087613,
+      "cecil_p1": true,
+      "m2_combat": true,
+      "preset": "existing",
+      "all_bots_drained": true,
+      "new_throttled_periods": 0,
+      "cgroup_cpu_core_percent": 56.392464080444554,
+      "cgroup_peak_mib": 655.80859375,
+      "cleanup_errors": null,
+      "case": "one",
+      "host_guard": "FINISHED",
+      "host_cpu_mean_percent": 30.90301895311142,
+      "host_cpu_peak_percent": 64.94949494949495,
+      "available_mib_min": 1982.3046875,
+      "disk_gib_min": 8.682239532470703,
+      "unmounts": 6,
+      "bots": [
+        {
+          "profile_attach_tiers": [
+            5
+          ],
+          "profile_attach_personas": [
+            "duelist"
+          ],
+          "sampled_human_decisions": 73,
+          "sampled_target_decisions": 0,
+          "sampled_fire_decisions": 0,
+          "sampled_weapons": [
+            1
+          ],
+          "max_emitted_combat_fire_actions": 0,
+          "sampled_own_dead_rows": 0,
+          "syncbad_markers": 0,
+          "bad_sync_disconnects": 0
+        }
+      ],
+      "controller_returncode": 0,
+      "acceptance": "PASS_LIMITED_SESSION_LIFECYCLE"
+    },
+    {
+      "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+      "dll_sha256": "860ae6d7fbc91de301f80a963599d970692b872a51d0e0330dbd30ccd11e134b",
+      "max_bots": 2,
+      "peak_playing": 2,
+      "measured_s": 180,
+      "elapsed_s": 193.6470163310878,
+      "cecil_p1": true,
+      "m2_combat": true,
+      "preset": "existing",
+      "all_bots_drained": true,
+      "new_throttled_periods": 0,
+      "cgroup_cpu_core_percent": 65.56185528362238,
+      "cgroup_peak_mib": 704.6015625,
+      "cleanup_errors": null,
+      "case": "two",
+      "host_guard": "FINISHED",
+      "host_cpu_mean_percent": 36.13416218573573,
+      "host_cpu_peak_percent": 71.5863453815261,
+      "available_mib_min": 1796.33203125,
+      "disk_gib_min": 8.671268463134766,
+      "unmounts": 8,
+      "bots": [
+        {
+          "profile_attach_tiers": [
+            5
+          ],
+          "profile_attach_personas": [
+            "duelist"
+          ],
+          "sampled_human_decisions": 150,
+          "sampled_target_decisions": 0,
+          "sampled_fire_decisions": 0,
+          "sampled_weapons": [
+            1
+          ],
+          "max_emitted_combat_fire_actions": 0,
+          "sampled_own_dead_rows": 0,
+          "syncbad_markers": 0,
+          "bad_sync_disconnects": 0
+        },
+        {
+          "profile_attach_tiers": [
+            5
+          ],
+          "profile_attach_personas": [
+            "duelist"
+          ],
+          "sampled_human_decisions": 163,
+          "sampled_target_decisions": 0,
+          "sampled_fire_decisions": 0,
+          "sampled_weapons": [
+            1
+          ],
+          "max_emitted_combat_fire_actions": 0,
+          "sampled_own_dead_rows": 0,
+          "syncbad_markers": 0,
+          "bad_sync_disconnects": 0
+        }
+      ],
+      "controller_returncode": 0,
+      "acceptance": "PASS_LIMITED_SESSION_LIFECYCLE"
+    },
+    {
+      "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+      "dll_sha256": "860ae6d7fbc91de301f80a963599d970692b872a51d0e0330dbd30ccd11e134b",
+      "max_bots": 2,
+      "peak_playing": 2,
+      "measured_s": 240,
+      "elapsed_s": 254.03839955315925,
+      "cecil_p1": true,
+      "m2_combat": true,
+      "preset": "redstation",
+      "all_bots_drained": true,
+      "new_throttled_periods": 0,
+      "cgroup_cpu_core_percent": 63.98855930084309,
+      "cgroup_peak_mib": 712.4765625,
+      "cleanup_errors": null,
+      "case": "redstation",
+      "host_guard": "FINISHED",
+      "host_cpu_mean_percent": 34.686010170515594,
+      "host_cpu_peak_percent": 62.96670030272452,
+      "available_mib_min": 1813.55859375,
+      "disk_gib_min": 8.659420013427734,
+      "unmounts": 8,
+      "bots": [
+        {
+          "profile_attach_tiers": [
+            5
+          ],
+          "profile_attach_personas": [
+            "duelist"
+          ],
+          "sampled_human_decisions": 208,
+          "sampled_target_decisions": 8,
+          "sampled_fire_decisions": 3,
+          "sampled_weapons": [
+            1,
+            2
+          ],
+          "max_emitted_combat_fire_actions": 30,
+          "sampled_own_dead_rows": 0,
+          "syncbad_markers": 0,
+          "bad_sync_disconnects": 0
+        },
+        {
+          "profile_attach_tiers": [
+            5
+          ],
+          "profile_attach_personas": [
+            "duelist"
+          ],
+          "sampled_human_decisions": 222,
+          "sampled_target_decisions": 13,
+          "sampled_fire_decisions": 1,
+          "sampled_weapons": [
+            1,
+            2
+          ],
+          "max_emitted_combat_fire_actions": 12,
+          "sampled_own_dead_rows": 0,
+          "syncbad_markers": 0,
+          "bad_sync_disconnects": 0
+        }
+      ],
+      "controller_returncode": null,
+      "external_exec_returncode": 143,
+      "acceptance": "QUARANTINED_OUTER_STATUS_UNRESOLVED",
+      "observed_internal_child_returncode": 0
+    },
+    {
+      "status": "PASS_LIMITED_SESSION_LIFECYCLE",
+      "dll_sha256": "860ae6d7fbc91de301f80a963599d970692b872a51d0e0330dbd30ccd11e134b",
+      "max_bots": 2,
+      "peak_playing": 2,
+      "measured_s": 120,
+      "elapsed_s": 133.72072480618954,
+      "cecil_p1": true,
+      "m2_combat": true,
+      "preset": "redstation",
+      "all_bots_drained": true,
+      "new_throttled_periods": 0,
+      "cgroup_cpu_core_percent": 67.07311481740855,
+      "cgroup_peak_mib": 694.953125,
+      "cleanup_errors": null,
+      "case": "redstation-control",
+      "host_guard": "FINISHED",
+      "host_cpu_mean_percent": 36.30521761412777,
+      "host_cpu_peak_percent": 61.15035317860747,
+      "available_mib_min": 1821.26171875,
+      "disk_gib_min": 8.648727416992188,
+      "unmounts": 8,
+      "controller_returncode": 0,
+      "wrapper_external_signal": null,
+      "acceptance": "PASS_LIMITED_SESSION_LIFECYCLE",
+      "bots": [
+        {
+          "profile_attach_tiers": [
+            5
+          ],
+          "profile_attach_personas": [
+            "duelist"
+          ],
+          "sampled_human_decisions": 90,
+          "sampled_target_decisions": 5,
+          "sampled_fire_decisions": 2,
+          "sampled_weapons": [
+            1,
+            2
+          ],
+          "max_emitted_combat_fire_actions": 11,
+          "sampled_own_dead_rows": 0,
+          "syncbad_markers": 0,
+          "bad_sync_disconnects": 0
+        },
+        {
+          "profile_attach_tiers": [
+            5
+          ],
+          "profile_attach_personas": [
+            "duelist"
+          ],
+          "sampled_human_decisions": 103,
+          "sampled_target_decisions": 0,
+          "sampled_fire_decisions": 0,
+          "sampled_weapons": [
+            1
+          ],
+          "max_emitted_combat_fire_actions": 0,
+          "sampled_own_dead_rows": 0,
+          "syncbad_markers": 0,
+          "bad_sync_disconnects": 0
+        }
+      ]
+    }
+  ],
+  "observer_input": {
+    "case": "redstation",
+    "scope": "PID/start-time/CWD/UID verified own original Retail process and PID-bound X11 window",
+    "key": "w",
+    "duration_s": 2,
+    "claim": "input dispatch only; actual steering/hit attribution not established"
+  },
+  "redstation_status_control": "Fresh 120s no-input control: external child0, independent wrapper FINISHED/no external signal, internal PASS_LIMITED, guards FINISHED and clean teardown. Earlier tool143 cause remains unknown; no release acceptance transfer.",
+  "postflight": {
+    "original_files_verified": 415,
+    "restore_files_verified": 415,
+    "archive_members_verified": 415,
+    "archive_sha_match": true,
+    "successful_owned_unmounts": 30,
+    "owned_empty_cgroups_removed_after_snapshot": 4,
+    "no_remaining_own_game_wine_processes": true,
+    "no_remaining_own_mounts": true,
+    "public_game_listeners_absent": true,
+    "protected_services_and_preexisting_xvfb_retained": true
+  }
+}

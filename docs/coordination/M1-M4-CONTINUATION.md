@@ -1,3 +1,9 @@
+> **Current mandate, 30 October 2026:** M2 is prioritized independently of M1.
+> M1 remains IN_PROGRESS / NOT_ACCEPTED. Do not run historical eight-bot,
+> 120-minute duration or recovery controllers for this campaign. Public games
+> stay disabled. Current work: [M2-CONTINUATION.md](M2-CONTINUATION.md).
+> Older scheduling instructions below are historical and superseded.
+
 # SSAM.AI – M1–M4 CONTINUATION
 Updated: 2026-10-26. User explicitly requested shutdown and autonomous M1–M4 development.
 
@@ -132,3 +138,13 @@ Published implementation commit `aae549948db666b0df71b605756c719c70ebe6e0` has t
 Issue79 was updated with current reserve, 415-file checks, valid Git metadata and historical publication/arithmetic limits; it remains open: https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/issues/79#issuecomment-6464508887
 
 Resume in `/srv/tse-m1-completion-20261028` on `agent/lead/20261028-m1-completion`; preserve all local histories. Private diagnostic verdict and CPU evidence are in `/root/ssam-ai-backups/m1-completion-20261028/`. New duration campaign policy exists but no matrix was started. Recheck actual capacity, all locks, public shutdown, original/build/source/config hashes and clean ownership before any new native action. Never resume by weakening guards or relabeling historical receipts. Canonical recovery, remaining supervisor native scenarios and final M1 QA follow accepted duration gates. M2–M4 remain deferred/unqualified.
+
+## 30 October 2026 — user supersedes M2 deferral
+
+M2 Human Bot AI2.0 is now the development priority independently of M1 duration
+qualification. M1 remains **IN_PROGRESS / NOT_ACCEPTED**; its RAM blocker is
+retained. Do not start eight-bot/120-minute tests or the old duration/recovery
+controllers for this M2 campaign. No weaker guards or public activation.
+Continue via `docs/coordination/M2-CONTINUATION.md` and the persistent
+`docs/superpowers/plans/2026-10-30-m2-ai2.md`. Earlier “M2 deferred until M1”
+lines are historical and superseded by this explicit user decision.

@@ -29,3 +29,6 @@ __pycache__/
 /SHADOW-MIGRATION-README.txt
 /MIGRATION-RUNTIME-NOTES.txt
 /poc/REPO-README.md
+
+# Generated source/test outputs, never runtime evidence or publication
+.generated/
