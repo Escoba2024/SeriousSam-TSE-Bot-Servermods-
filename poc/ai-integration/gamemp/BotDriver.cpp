@@ -348,7 +348,28 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     }
     CPlayer *localInput = (CPlayer *)CEntity::GetPlayerEntity(ppls->pls_Index);
     if (localInput==NULL) {
-      bs.bs_navigation.Reset(); bs.bs_navPlayer=NULL; continue;
+      bs.bs_navigation.Reset(); bs.bs_navPlayer=NULL;
+      // A previously attached local slot can temporarily lose its player
+      // entity during death/spectator transition. Returning here forever
+      // suppresses the Fire edge that Retail deathmatch needs to respawn.
+      // Never pulse an uninitialized source or non-deathmatch session.
+      const CSessionProperties *session =
+        (const CSessionProperties *)_pNetwork->GetSessionProperties();
+      const BOOL deathmatch = session!=NULL &&
+        (session->sp_gmGameMode==CSessionProperties::GM_SCOREMATCH ||
+         session->sp_gmGameMode==CSessionProperties::GM_FRAGMATCH);
+      if (botcore::BotDriverMissingEntityRespawnEligible(
+            bs.bs_ppls==ppls, bot_bAutoCombat && bot_iTestTarget<0,
+            deathmatch!=FALSE)) {
+        ++bs.bs_iTick;
+        CPlayerAction respawnAction;
+        respawnAction.Clear();
+        if (botcore::BotDriverRespawnPulse(bs.bs_iTick)) {
+          respawnAction.pa_ulButtons |= BOT_PLACT_FIRE;
+        }
+        ppls->SetAction(respawnAction);
+      }
+      continue;
     }
 
     // reset state when a new player source appears (join / rejoin / map change)
@@ -612,13 +633,15 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     }
     // Retail deathmatch respawns on the native Fire press/release action.
     // The combat decision never attacks while dead; this pulse is respawn input.
-    const BOOL respawnInput=automatic && player!=NULL && player->GetHealth()<=0;
+    const BOOL respawnInput=automatic && (player==NULL ||
+      player->GetHealth()<=0 || player->m_penWeapons==NULL);
     if (bot_bHumanAI && automatic) {
       // A press/release cadence, so the native respawn edge really occurs.
-      const BOOL respawnPulse=respawnInput && ((bs.bs_iTick&4)==0);
+      const BOOL respawnPulse=respawnInput && botcore::BotDriverRespawnPulse(bs.bs_iTick);
       bFire = (humanFire && testAimReady) || respawnPulse;
     } else {
-      bFire = bFire && (testAimReady || respawnInput);
+      bFire = (bFire && testAimReady) ||
+        (respawnInput && botcore::BotDriverRespawnPulse(bs.bs_iTick));
     }
 
     // 3) compose the action

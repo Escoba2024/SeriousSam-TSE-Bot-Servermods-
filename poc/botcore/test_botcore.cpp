@@ -27,6 +27,26 @@ int main() {
   CHECK(BotBrain::kSpeedForward == 10.0, "native TSE default forward speed is 10");
   CHECK(TestJump(400) && TestJump(403) && !TestJump(404) && !TestJump(479),
         "fixed-target test jump lasts four ticks every four seconds");
+  CHECK(!BotDriverMissingEntityRespawnEligible(false,true,true),
+        "initial join cannot emit missing-entity respawn input");
+  CHECK(!BotDriverMissingEntityRespawnEligible(true,false,true),
+        "manual mode cannot emit missing-entity respawn input");
+  CHECK(!BotDriverMissingEntityRespawnEligible(true,true,false),
+        "non-deathmatch cannot emit missing-entity respawn input");
+  CHECK(BotDriverMissingEntityRespawnEligible(true,true,true),
+        "established automatic deathmatch source permits respawn input");
+  int respawn_press_ticks=0, respawn_press_edges=0, respawn_release_edges=0;
+  bool prior_respawn_press=false;
+  for (int tick=1; tick<=40; ++tick) {
+    const bool press=BotDriverRespawnPulse(tick);
+    if (press) ++respawn_press_ticks;
+    if (press && !prior_respawn_press) ++respawn_press_edges;
+    if (!press && prior_respawn_press) ++respawn_release_edges;
+    prior_respawn_press=press;
+  }
+  CHECK(respawn_press_ticks==20 && respawn_press_edges==6 &&
+        respawn_release_edges==5,
+        "40 ticks yield five complete press/release edges plus the next press");
   const AimAngles forward = AimAt(0, 0, -10);
   CHECK(std::fabs(forward.yaw_deg) < 1e-9 && std::fabs(forward.pitch_deg) < 1e-9,
         "test aim forward is negative z");
