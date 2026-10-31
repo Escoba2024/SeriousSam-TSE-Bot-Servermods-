@@ -44,9 +44,9 @@ int main() {
     if (!press && prior_respawn_press) ++respawn_release_edges;
     prior_respawn_press=press;
   }
-  CHECK(respawn_press_ticks==20 && respawn_press_edges==5 &&
+  CHECK(respawn_press_ticks==20 && respawn_press_edges==6 &&
         respawn_release_edges==5,
-        "40 ticks generate five distinct Fire press/release respawn edges");
+        "40 ticks yield five complete press/release edges plus the next press");
   const AimAngles forward = AimAt(0, 0, -10);
   CHECK(std::fabs(forward.yaw_deg) < 1e-9 && std::fabs(forward.pitch_deg) < 1e-9,
         "test aim forward is negative z");
