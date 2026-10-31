@@ -23,7 +23,7 @@ Die veröffentlichte `BotDriver.cpp` überspringt bei `localInput == NULL` die g
 ## Bisherige Prüfungen
 
 - GitHub Compare gegen PR #91-Basis: ausschließlich drei C++-Dateien geändert, anfangs +61/-4 Zeilen, keine anderen Projektpfade.
-- Isolierter C++11-Fixture-Test (gleiche Helferlogik) mit `g++ -std=c++11 -Wall -Wextra -Werror -pedantic -O2`: **PASS** (4 Berechtigungszustände; 40 Ticks → 20 Fire-Ticks, 6 neue Press-Flanken, 5 Release-Flanken). Der erste Testversuch erkannte eine inkorrekte Erwartung bei der Tick-40-Grenze; Unit-Test korrigiert.
+- Neuer 40-Tick-Helfertest ist als C++-Quellcode angelegt (erwartet 20 Fire-Ticks, 6 Press-Flanken und 5 Release-Flanken), aber **ein tatsächlich ausgeführter Compiler-/Testlauf dieses neuen Branches ist nicht nachgewiesen**. Die Erwartung am Tick-40-Rand wurde durch Codeprüfung korrigiert.
 - Bestands-Botcore-Qualitätsgate auf Ubuntu via ssam.ai System Control: **PASS** für bestehende Botcore/Human-AI-Suiten (u.a. 555 Checks), jedoch **nicht** auf diesem neuen GitHub-Branch.
 - GitHub Commit-CI: keine Status-Checks zurückgegeben.
 - Native MSVC-x86-`GameMP.dll`-Build, Game-/Wine-Integration, echte Red-Station-Death/Respawn/Return-to-Combat-Sequenz, Bot-SYNC/CRC, Originalclient-Join: **NICHT AUSGEFÜHRT**.
