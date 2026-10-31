@@ -23,6 +23,20 @@ struct AimAngles { double yaw_deg, pitch_deg; };
 
 inline bool TestJump(int tick) { return tick % 80 < 4; }
 
+// Native deathmatch needs alternating Fire press and release actions.
+// This cadence is independent of combat-fire configuration and cannot
+// permanently hold Fire down during a dead/spectator transition.
+inline bool BotDriverRespawnPulse(int tick) {
+  return (tick & 4) == 0;
+}
+
+// The source must have been attached while playable before missing-entity
+// respawn input is attempted; do not send gameplay actions during initial join.
+inline bool BotDriverMissingEntityRespawnEligible(
+    bool previously_attached, bool automatic, bool deathmatch) {
+  return previously_attached && automatic && deathmatch;
+}
+
 // Phase-1 fixed-target test geometry; no navigation or target selection.
 inline AimAngles AimAt(double x, double y, double z) {
   const double degrees = 180.0 / std::acos(-1.0);
