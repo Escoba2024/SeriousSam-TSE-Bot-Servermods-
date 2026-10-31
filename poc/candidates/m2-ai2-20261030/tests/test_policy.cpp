@@ -1,6 +1,7 @@
 #include "bot_human.h"
 #include <cstdio>
 #include <set>
+#include <utility>
 using namespace botcore;
 static int checks=0, failures=0;
 #define CHECK(c) do{++checks;if(!(c)){++failures;std::printf("FAIL line %d: %s\n",__LINE__,#c);}}while(0)
@@ -80,6 +81,55 @@ int main(){
 #else
   (void)oldbias;
 #endif
+  // Empty ammo fallback: when no ranged weapon is usable the bot switches to
+  // knife and continues fighting in melee instead of staring or dry-firing.
+  for(int tier=1;tier<=5;++tier)for(int persona=0;persona<6;++persona){
+    setup(p,tier,persona);w=world(1); // knife from spawn
+    int knifefire=0,holdingknife=0;
+    for(w.tick=0;w.tick<240;++w.tick){auto c=step(p,w,1.2);knifefire+=c.fire;holdingknife+=(c.weapon==1);}
+    CHECK(holdingknife>0);CHECK(knifefire>0);
+  }
+  // Mid-fight ammo depletion must be detected and the bot must not emit fire
+  // with the now-empty weapon; it re-selects and falls back to melee.
+  setup(p);w=world(2);
+  for(w.tick=0;w.tick<40;++w.tick){auto c=step(p,w,10);CHECK(c.weapon==2);}
+  w.usable_weapons=(1u<<0); // colt ammo exhausted, only knife remains
+  int fallback_weapon=-1,fallback_fire=0;
+  for(w.tick=40;w.tick<100;++w.tick){
+    auto c=step(p,w,1.2);
+    if(c.weapon==1)fallback_weapon=1;
+    fallback_fire+=c.fire;
+  }
+  CHECK(fallback_weapon==1);CHECK(fallback_fire>0);
+
+  // Weapon selection sanity for the Red-Station-relevant families.
+  for(auto cas:{std::pair<int,double>{2,25.0},std::pair<int,double>{4,10.0},std::pair<int,double>{8,30.0}}){
+    setup(p);w=world(cas.first);w.usable_weapons=(1u<<(cas.first-1));
+    auto c=step(p,w,cas.second);CHECK(c.weapon==cas.first);
+  }
+
+  // Melee commitment: knife/chainsaw fire only inside the 2m reach boundary
+  // and the policy does not emit dry ranged fire when only melee is usable.
+  for(int weapon:{1,10}){
+    setup(p);w=world(weapon);w.usable_weapons=(1u<<(weapon-1));
+    int infire=0,outfire=0;
+    for(w.tick=0;w.tick<120;++w.tick){infire+=step(p,w,1.2).fire;}
+    setup(p);w=world(weapon);w.usable_weapons=(1u<<(weapon-1));
+    for(w.tick=0;w.tick<120;++w.tick){outfire+=step(p,w,4.0).fire;}
+    CHECK(infire>0);CHECK(outfire==0);
+  }
+
+  // Opponent replacement must reset acquisition and impose a fresh reaction
+  // delay, even if the same slot index is reused by a new entity.
+  setup(p);w=world();
+  int acquired=1000;
+  for(w.tick=0;w.tick<40;++w.tick)if(step(p,w).target>=0&&acquired>40)acquired=w.tick;
+  CHECK(acquired<40);
+  p.ForgetOpponent(1);
+  int reacquired=1000;
+  for(w.tick=40;w.tick<90;++w.tick)if(step(p,w).target>=0&&reacquired>90)reacquired=w.tick;
+  CHECK(reacquired>acquired+2); // fresh reaction delay after identity reset
+
   // Occluded live position cannot drive new shots or hidden tracking.
   setup(p);w=world();for(w.tick=0;w.tick<70;++w.tick)step(p,w);
   for(;w.tick<170;++w.tick)CHECK(!step(p,w,400,false).fire);

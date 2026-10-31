@@ -1,9 +1,11 @@
 import importlib.util
+import json
 from pathlib import Path
 import tempfile
 import unittest
 HERE=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('m2_duel',HERE/'m2_duel_preset.py')
+s2=importlib.util.spec_from_file_location('m2_stage_duel',HERE/'stage_duel.py')
 class Preset(unittest.TestCase):
  @classmethod
  def setUpClass(cls):
@@ -47,4 +49,16 @@ class Preset(unittest.TestCase):
   self.assertEqual(result,source.replace('"mouse Y"','"None"').replace('"mouse X"','"None"'))
   with self.assertRaises(ValueError):self.m.keyboard_look(source+source)
   with self.assertRaises(ValueError):self.m.keyboard_look('unknown controls')
+  def test_redstation_finite_ammo_staging(self):
+   stage=importlib.util.module_from_spec(s2);s2.loader.exec_module(stage)
+   with tempfile.TemporaryDirectory(dir='/tmp/opencode',prefix='m2-redstation-') as temp:
+    out=Path(temp)/'staged'
+    stage.stage(out,'redstation')
+    manifest=json.loads((out/'SOURCE_MANIFEST.json').read_text())
+    self.assertEqual(manifest['map'],'redstation')
+    self.assertIn('REDSTATION',manifest['scenario'])
+    self.assertIn('FINITE_AMMO',manifest['scenario'])
+    preset=(out/'tools/m2_duel_preset.py').read_text()
+    self.assertIn('RedStation.wld',preset)
+    self.assertIn('gam_bInfiniteAmmo=0;',self.m.server_begin())
 if __name__=='__main__':unittest.main()

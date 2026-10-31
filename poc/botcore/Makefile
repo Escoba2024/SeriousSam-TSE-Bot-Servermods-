@@ -1,7 +1,7 @@
 CXX ?= g++
 CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra
 
-TESTS = test_botcore test_botcore_ai test_bot_reconnect test_bot_combat test_bot_weapon_input test_bot_navigation test_bot_human_ai
+TESTS = test_botcore test_botcore_ai test_bot_reconnect test_bot_combat test_bot_weapon_input test_bot_navigation test_bot_human_ai test_bot_navigation_v2 test_bot_driver_policy test_bot_driver_policy_bridge
 HEADERS = $(wildcard *.h)
 
 # Patched driver used by the integration-block smoke test. Point BOTDRIVER at

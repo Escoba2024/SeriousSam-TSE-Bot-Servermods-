@@ -17,12 +17,14 @@ POOLS=('colt','bullets','shells','rockets','grenades','napalm','cells','sniper',
 AMMO=re.compile(r'\[BotAmmo\] tick=(\d+) local=(\d+) current=(\d+) wanted=(\d+) available=(\d+) '+
                 ' '.join(name+r'=(-?\d+)' for name in POOLS)+r'$')
 PROJECTILE=re.compile(r'\[BotProjectileWitness\] tick=(\d+) entity=(\d+) type=(\d+) launcher=(-?\d+) speed=(\S+)$')
+LIFECYCLE=re.compile(r'\[BotLifecycle\] tick=(\d+) local=(\d+) health=(\S+) alive=(\d+) current=(\d+) wanted=(\d+) fire=(\d+) actions=(\d+)$')
+COMBAT=re.compile(r'\[BotCombat\] tick=(\d+) local=(\d+) health=(\S+) respawn=(\d+) fire=(\d+) weapon=(\d+) actions=(\d+)$')
 
 def analyze(text):
     result=dict(full_m2_acceptance=False,incomplete_final_line=bool(text and not text.endswith('\n')),
                 actors={},emitted_fire_input_max=0,sampled_colt_clip_decrease=0,
                 observed_current_weapons=[],nonmonotonic_samples=0,invalid_samples=0,
-                ammo_pools={},projectile_witnesses=[])
+                ammo_pools={},projectile_witnesses=[],lifecycle_samples=0,combat_samples=[])
     actors={};previous_weapon=None;weapons=set();previous_ammo={};projectiles={}
     lines=text.splitlines()
     if result['incomplete_final_line']:lines=lines[:-1]
@@ -82,6 +84,24 @@ def analyze(text):
             witness=projectiles.setdefault(key,dict(entities=set(),sampled_sightings=0,max_sampled_speed=0.0))
             witness['entities'].add(int(match[2]));witness['sampled_sightings']+=1
             witness['max_sampled_speed']=max(witness['max_sampled_speed'],speed)
+        match=LIFECYCLE.search(line)
+        if match:
+            try:
+                health=float(match[3])
+                if math.isfinite(health):result['lifecycle_samples']+=1
+                else:result['invalid_samples']+=1
+            except ValueError:result['invalid_samples']+=1
+        elif '[BotLifecycle]' in line:result['invalid_samples']+=1
+        match=COMBAT.search(line)
+        if match:
+            try:
+                health=float(match[3])
+                if math.isfinite(health):
+                    result['combat_samples'].append(dict(tick=int(match[1]),local=int(match[2]),health=health,
+                        respawn=bool(int(match[4])),fire=bool(int(match[5])),weapon=int(match[6]),actions=int(match[7])))
+                else:result['invalid_samples']+=1
+            except ValueError:result['invalid_samples']+=1
+        elif '[BotCombat]' in line:result['invalid_samples']+=1
     result['observed_current_weapons']=sorted(weapons)
     result['projectile_witnesses']=[dict(type=kind,launcher=launcher,distinct_entities=len(value['entities']),
         sampled_sightings=value['sampled_sightings'],max_sampled_speed=value['max_sampled_speed'])
