@@ -41,7 +41,7 @@
      BotCommand cmd;
      cmd.weapon = w.current_weapon > 0 ? w.current_weapon : 1;
      if (!(dt > 0.0)) dt = 1.0 / kProfileTickHz;
-@@ -348,14 +352,13 @@
+@@ -348,14 +352,20 @@
      const WeaponProfile& firing_weapon = WeaponAt(cmd.weapon);
      const bool blast_safe = firing_weapon.self_blast_m <= 0.0 ||
                              distance > firing_weapon.self_blast_m + 1.0;
@@ -54,6 +54,13 @@
 -        else next_shot_tick_[cmd.weapon]=w.tick+(delay>0?delay:1);
 -      }
 +    const bool melee=cmd.weapon==1 || cmd.weapon==10;
++    // Defensive fallback: if the chosen weapon became unusable (ammo depleted,
++    // weapon lost), re-select immediately. The next tick will switch and fight
++    // on with any remaining usable weapon, falling back to knife if necessary.
++    if (!WeaponUsable(w.usable_weapons,cmd.weapon)) {
++      cmd.weapon = SelectWeapon(w, true, distance);
++      if (cmd.weapon <= 0) cmd.weapon = w.current_weapon > 0 ? w.current_weapon : 1;
++    }
 +    cmd.fire = aim.fire_allowed && visible && blast_safe &&
 +               WeaponUsable(w.usable_weapons,cmd.weapon) && (!melee || distance<=2.0);
 +    if (cecil_p1_ && cmd.fire && w.tick<next_shot_tick_[cmd.weapon]) cmd.fire=false;

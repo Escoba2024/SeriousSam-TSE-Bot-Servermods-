@@ -1,6 +1,19 @@
 --- BotDriver.cpp
 +++ BotDriver.cpp
-@@ -1316,6 +1316,14 @@
+@@ -1267,6 +1267,12 @@
+       BotHumanPolicy(iLP).NotifyFireEmitted(bs.bs_iTick,combatWeapon);
+     // Count emitted combat fire input independently of sampled status logs.
+     if (bFire && automatic && !respawnInput) ++bs.bs_ulCombatFireActions;
++    if (bot_bDiag) {
++      BotLog("[BotCombat] tick=%d local=%d health=%.1f respawn=%d fire=%d weapon=%d actions=%lu
++",
++        (int)bs.bs_iTick, (int)iLP, (FLOAT)player->GetHealth(),
++        (int)respawnInput, (int)bFire, (int)combatWeapon, (unsigned long)bs.bs_ulCombatFireActions);
++    }
+     BotTelemetry_Action(iLP);
+     BotDriver_NoteConfigOnce();
+     bActed = TRUE;
+@@ -1316,6 +1322,20 @@
              eye.pl_PositionVector(3), eye.pl_OrientationAngle(1), eye.pl_OrientationAngle(2),
              weapons->m_iCurrentWeapon, weapons->m_iWantedWeapon, weapons->m_iAvailableWeapons,
              weapons->m_iColtBullets, weapons->m_bFireWeapon, weapons->m_fRayHitDistance);
@@ -12,6 +25,12 @@
 +            (int)weapons->m_iGrenades, (int)weapons->m_iNapalm,
 +            (int)weapons->m_iElectricity, (int)weapons->m_iSniperBullets,
 +            (int)weapons->m_iIronBalls);
++          BotLog("[BotLifecycle] tick=%d local=%d health=%.1f alive=%d current=%d wanted=%d fire=%d actions=%lu
++",
++            (int)bs.bs_iTick, (int)iLP, (FLOAT)player->GetHealth(),
++            (int)(player->GetHealth()>0),
++            (int)weapons->m_iCurrentWeapon, (int)weapons->m_iWantedWeapon,
++            (int)weapons->m_bFireWeapon, (unsigned long)bs.bs_ulCombatFireActions);
          }
          for (INDEX iPlayer=0; iPlayer<16; iPlayer++) {
            CPlayer *player = (CPlayer *)CEntity::GetPlayerEntity(iPlayer);

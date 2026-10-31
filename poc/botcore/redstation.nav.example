@@ -1,0 +1,74 @@
+# Red Station waypoint graph — EXAMPLE / FORMAT TEMPLATE
+#
+# WARNING: All coordinates below are placeholders. They MUST be replaced with
+# real measurements from a native Retail 1.07 Red Station session before any
+# production use. Lines marked `# MEASURE_REQUIRED` must be overwritten.
+# Do not treat this file as an accurate map graph.
+#
+# Syntax:
+#   node <x> <y> <z>    # waypoint position in Serious Engine world units (metres)
+#   edge <a> <b>        # bidirectional traversable connection
+#   # comment
+#
+# Coordinate convention:
+#   x, y, z are metres in absolute world space, same units as replicated
+#   player positions and botcore::SenseInput.  The bot looks along -z when
+#   yaw = 0 deg (atan2(-dx, -dz) convention used by bot_navigation_v2.h).
+#
+# Area tags (for operators, not parsed):
+#   [SPAWN]    likely player spawn points
+#   [CENTRAL]  high-traffic central courtyard / hub
+#   [CORRIDOR] connecting passages
+#   [ELEVATED] catwalks or ramps that need a pit probe before traversal
+#   [PICKUP]   health / armor / weapon / ammo positions (comment only)
+
+# ---------------------------------------------------------------------------
+# [SPAWN] Central ground floor spawn area
+# ---------------------------------------------------------------------------
+node 0.0 0.0 0.0        # MEASURE_REQUIRED: central spawn / hub
+
+# ---------------------------------------------------------------------------
+# [CENTRAL] Open courtyard around the central pillar
+# ---------------------------------------------------------------------------
+node 8.0 0.0 0.0        # MEASURE_REQUIRED: east side of courtyard
+node -8.0 0.0 0.0       # MEASURE_REQUIRED: west side of courtyard
+node 0.0 0.0 8.0        # MEASURE_REQUIRED: south side of courtyard
+node 0.0 0.0 -8.0       # MEASURE_REQUIRED: north side of courtyard
+
+# ---------------------------------------------------------------------------
+# [CORRIDOR] Lower side corridors
+# ---------------------------------------------------------------------------
+node -8.0 0.0 6.0       # MEASURE_REQUIRED: west corridor south end
+node -8.0 0.0 -6.0      # MEASURE_REQUIRED: west corridor north end
+node 8.0 0.0 6.0        # MEASURE_REQUIRED: east corridor south end
+node 8.0 0.0 -6.0       # MEASURE_REQUIRED: east corridor north end
+
+# ---------------------------------------------------------------------------
+# [ELEVATED] Upper catwalk (requires pit probe before dropping)
+# ---------------------------------------------------------------------------
+node 0.0 2.5 8.0        # MEASURE_REQUIRED: catwalk south end
+node 0.0 2.5 -8.0       # MEASURE_REQUIRED: catwalk north end
+node 0.0 2.5 0.0        # MEASURE_REQUIRED: catwalk above central hub
+
+# ---------------------------------------------------------------------------
+# [PICKUP] Example pickup positions (comment only — items are fed at runtime)
+# # health 0.0 0.0 4.0    # MEASURE_REQUIRED: central health pack
+# # armor  -8.0 0.0 0.0   # MEASURE_REQUIRED: west corridor armor shard
+# # rocket 8.0 0.0 0.0    # MEASURE_REQUIRED: east corridor rocket launcher
+
+# ---------------------------------------------------------------------------
+# Connections (also placeholders — verify against real map geometry)
+# ---------------------------------------------------------------------------
+edge 0 1                  # hub -> east courtyard
+edge 0 2                  # hub -> west courtyard
+edge 0 3                  # hub -> south courtyard
+edge 0 4                  # hub -> north courtyard
+edge 1 7                  # east courtyard -> east corridor south
+edge 1 8                  # east courtyard -> east corridor north
+edge 2 5                  # west courtyard -> west corridor south
+edge 2 6                  # west corridor south -> west corridor north
+edge 3 9                  # south courtyard -> catwalk south end
+edge 4 10                 # north courtyard -> catwalk north end
+edge 9 11                 # catwalk south end -> catwalk hub
+edge 10 11                # catwalk north end -> catwalk hub
+edge 11 0                 # catwalk hub -> ground hub (drop via ramp, pit probe first)

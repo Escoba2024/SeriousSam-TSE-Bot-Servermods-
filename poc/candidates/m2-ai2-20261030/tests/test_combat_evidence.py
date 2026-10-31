@@ -69,5 +69,23 @@ class Evidence(unittest.TestCase):
    d=self.m.analyze(f'[BotProjectileWitness] tick=20 entity=570 type=0 launcher=1 speed={speed}\n')
    self.assertEqual(d['invalid_samples'],1)
    self.assertEqual(d['projectile_witnesses'],[])
+ def test_lifecycle_log_counts_own_health_and_fire_state(self):
+  d=self.m.analyze('[BotLifecycle] tick=20 local=0 health=100.0 alive=1 current=2 wanted=2 fire=0 actions=0\n'
+                   '[BotLifecycle] tick=40 local=0 health=40.0 alive=1 current=2 wanted=2 fire=1 actions=1\n'
+                   '[BotLifecycle] tick=60 local=0 health=-20.0 alive=0 current=1 wanted=1 fire=0 actions=1\n')
+  self.assertEqual(d['lifecycle_samples'],3)
+  self.assertEqual(d['invalid_samples'],0)
+ def test_combat_log_records_respawn_and_fire_separately(self):
+  d=self.m.analyze('[BotCombat] tick=60 local=0 health=-20.0 respawn=1 fire=1 weapon=1 actions=1\n'
+                   '[BotCombat] tick=80 local=0 health=100.0 respawn=0 fire=0 weapon=1 actions=1\n')
+  self.assertEqual(len(d['combat_samples']),2)
+  self.assertTrue(d['combat_samples'][0]['respawn'])
+  self.assertFalse(d['combat_samples'][1]['respawn'])
+ def test_malformed_lifecycle_or_combat_lines_increment_invalid(self):
+  d=self.m.analyze('[BotLifecycle] tick=20 local=0 health=nan alive=1 current=2 wanted=2 fire=0 actions=0\n'
+                   '[BotCombat] tick=20 local=0 health=nan respawn=0 fire=0 weapon=1 actions=0\n')
+  self.assertEqual(d['invalid_samples'],2)
+  self.assertEqual(d['lifecycle_samples'],0)
+  self.assertEqual(len(d['combat_samples']),0)
 
 if __name__=='__main__':unittest.main()
