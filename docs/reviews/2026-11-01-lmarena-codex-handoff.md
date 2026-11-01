@@ -2,7 +2,7 @@
 
 **Datum:** 2026-11-01 · **Quelle:** [2026-11-01-lmarena-independent-review.md](2026-11-01-lmarena-independent-review.md) (Befund-IDs verweisen dort auf Kapitel)
 **Status:** Nur Dokumentation/Planung. Keine Quelle wurde geändert; keine Runtime angestoßen.
-**Regel:** Aufgaben, die von offenen PRs bereits abgedeckt sind, werden hier **nicht** dupliziert, sondern referenziert: PR #74 (Pair-Sync-Producer, Supervisor-Werkzeuge), PR #91 (NavV2 + Bridge, offline), PR #95 (Respawn-Fix, Draft), PR #55 (Item-Utility, offline), PR #58/#65 (Sync-Tools, offline), PR #82 (M2-Evidenz).
+**Regel:** Aufgaben, die von offenen PRs bereits abgedeckt sind, werden hier **nicht** dupliziert, sondern referenziert: PR #39 (BNMV-v6-Converter + 9 konvertierte Cecil-Navmeshes + Taktik-AI), PR #74 (Pair-Sync-Producer, Supervisor-Werkzeuge), PR #91 (NavV2 + Bridge, offline), PR #95 (Respawn-Fix, Draft), PR #55 (Item-Utility, offline), PR #57 (Cecil P1), PR #58/#65 (Sync-Tools, offline), PR #82 (M2-Evidenz).
 
 **Definition of Done (gilt für alle Tasks):**
 - Offline: `cd poc/botcore && make test && make smoke && make bench` grün; neue Regeln erhalten eigene unit Tests.
@@ -10,7 +10,9 @@
 - Report-Kennzeichnung: `TESTED` / `NOT_TESTED` / `BLOCKED`; keine Addierung mehrerer Läufe als ein Gate.
 
 **Abhängigkeitsgraph (Kurzform):**
-`T-02` → (alle nativen Gates) ; `T-01` + `T-04` (parallel) → `T-05` ; `T-03` → `T-05` ; `T-06` → `T-05` ; `T-05` → `T-11` ; `T-07/T-08/T-09` → (optional in `T-05`-Kandidaten, sonst eigener A/B) ; `T-10/T-12/T-13` unabhängig.
+`T-02` → (alle nativen Gates) ; `T-01` + `T-04` (parallel) → `T-05` ; `T-03` → `T-05` ; `T-06` → `T-05` ; `T-05` → `T-11` ; `T-07/T-08/T-09` → (optional in `T-05`-Kandidaten, sonst eigener A/B) ; `T-10/T-12/T-13` unabhängig ; `T-14` offline und unabhängig (aber vor `T-05`/`T-07`/`T-08` als Basis-Entscheidung erledigen).
+
+**Zweite Durchsicht (01.11.2026):** T-03 wurde auf **PR #39-Basis** umgeschrieben (Converter + konvertierte RedStation-Daten existieren bereits; Rest = Validierung + Integration). Neue Aufgabe **T-14** (Policy-Konvergenz) ergänzt das Backlog.
 
 ---
 
@@ -39,21 +41,21 @@
 - **Empfohlene Tests:** `tools/operations/fleet_health.py`-RAM-Gate gegen die neue Konfiguration; 8-Prozess-Start ohne Guard-Abbruch.
 - **Komplexität:** MEDIUM (Operations, kein Code — falls Host-Migration nötig: MEDIUM–HIGH).
 
-## T-03 · P1 · Red-Station-NavGraph aus der CecilBotMod-Navmesh (M3-Kern)
+## T-03 · P1 · Red-Station-NavGraph: Validierung und Integration der bereits konvertierten PR #39-Daten (M3-Kern)
 
-- **Ziel:** Die 193 realen Waypoints von `CecilBotMod/Cecil/Navmeshes/RedStation_5AF1A276.nav` (Format im Audit verifiziert: `BNMV` v6, `bGenerated`, `nextId`, `ct=193`, pro Punkt `BPPH`+idx+FLOAT3D+range+flags+2×INDEX) in den Projekt-NavGraph überführen und nativ verifizieren. **Ersetzt die `MEASURE_REQUIRED`-Platzhalter aus PR #91** (`poc/botcore/redstation.nav.example`, 12 Knoten).
-- **Relevante Dateien:** neu `tools/parse_cecil_navmesh.py`, neu `poc/botcore/redstation.nav` (Daten, aus Platzhalter abgeleitet), `poc/botcore/botcore_ai.h` (`WaypointGraph`, kMaxNodes=256, kMaxEdgesPerNode=8), `poc/botcore/bot_navigation_v2.h` (PR #91, A* + Modi — unverändert nutzen), `THIRD-PARTY-NOTICES.md` (Attribution), Cecil-Referenz `Navmesh.cpp:88-113`, `PathPoint.cpp` (Serialisierung).
+- **Ziel:** Die 193 echten Red-Station-Waypoints in den **aktiven** NavGraph überführen und nativ verifizieren. **Basis = PR #39** (`agent/bot-ai-cecil-20261020` @ `1433bc9`): dort existieren bereits (a) ein strikter, getesteter BNMV-v6-Converter (`poc/experiments/tactical-ai/convert_cecil_navmesh.py`, 5/5 Tests über alle 9 Cecil-Navmeshes; im Audit zusätzlich bytegenau gegen Cecils `PathPoint.cpp`-Serialisierung verifiziert: `BPPH`+idx+FLOAT3D+range+flags+important+next+[lockEntity+CPlacement3D]+**Kanzahl+Nachbarn**+Polygon-UBYTE) und (b) die konvertierte RedStation-Graphdatei `poc/experiments/tactical-ai/maps/RedStation_5AF1A276.waypoints` (**193 node / 879 gerichtete arc / 1 locked**). **Neuparser ist ausdrücklich NICHT zu schreiben.** Rest des M3-Kerns: Kantenbesatz prüfen, nativer Walk-Test, Anbindung an aktives Pathfinding, Platzhalter ersetzen. Issue #93 ordnet die Wiederverwendung an („keine doppelten Policy-Owner oder redundanten Kontrollpfade").
+- **Relevante Dateien:** PR #39: `poc/experiments/tactical-ai/{convert_cecil_navmesh.py,maps/RedStation_5AF1A276.waypoints,test_bot_nav_graph.cpp}`, `docs/plans/2026-10-20-cecilbot-tactical-ai.md`; neu: `poc/botcore/redstation.nav` (aus PR #39-Daten, ersetzt `redstation.nav.example`); Konsumenten: `poc/botcore/botcore_ai.h` (`WaypointGraph`, kMaxNodes=256, kMaxEdgesPerNode=8), `poc/botcore/bot_navigation_v2.h` (PR #91, A* + `kFetchItem`/`kRetreat`/`kAvoidPit` — als Konsument nutzen), `THIRD-PARTY-NOTICES.md` (Attribution).
 - **Vorgeschlagene Umsetzung:**
-  1. **Parser** (Python, read-only gegen eine lokal gespeicherte Kopie der `.nav`): Ausgabe JSON `{version, points:[{idx,x,y,z,range,flags}]}`; Sanity-Checks (193 Punkte, endliche Koordinaten, Map-Bounds ~±60 m plausibel).
-  2. **Konverter** nach `redstation.nav`-Syntax (`node <x> <y> <z>`); Kanten zunächst leer.
-  3. **Kanten-Build (nativ, einmalig):** auf einem isolierten Testserver (Preflight nach `tools/Test-TSEExternalVanillaPreflight.ps1`-Regeln, **kein** Produktivserver): ein Bot prozeßt im Load-Event ~193×193/2 Punkt-Paar-`CCastRay` (Flag `BPOF_PASSABLE`-äquivalent wie Cecils `CastPathPointRay`) und schreibt die passierenden Paare in die Kantenliste; alternativ/ergänzend: Walk-Test (Bot läuft Knoten-für-Knoten, pro Kante Stuck-Events zählen).
-  4. **Validierung:** ≥ 95 % der Kanten passierbar, jeder Knoten begehbar (Bot hält ≥ 2 s ohne Stuck/Reset), keine Kante führt > 2 m über eine Kante/Abgrund (Y-Verlauf prüfen). Fehlkanten: prunen; Knoten mit > 8 Kanten: längste prunen oder `kMaxEdgesPerNode` erhöhen (entscheiden + testen).
-  5. **Daten-Kommit** mit Quellenangabe (CecilBotMod, GPL-2.0, Datei-Hash der `.nav`) in `THIRD-PARTY-NOTICES.md` (→ T-12).
-- **Wichtige Einschränkung (im Audit belegt):** Der Dateinamen-Hash (`5AF1A276`) ist ein **Name-String-Hash**, kein Dateiinhalt-Hash → die Punkte gelten nur für bytegleiche `.wld`. Der Walk-Test ist deshalb zwingend und kein Formalismus.
-- **Abhängigkeiten:** Isolierte Retail-Testumgebung + kurzes Runtime-Leasing (keine T-02-Größe nötig; 1 Bot genügt); PR #91-Zweig (NavV2/Bridge als Konsument, unverändert).
-- **Akzeptanzkriterien:** `redstation.nav` im Repo mit ≥ 90 Knoten und ≥ 150 Kanten (oder begründete Abweichung), Walk-Test-Report `TESTED` (1 Bot, RedStation, ≥ 600 s, Stuck-Events ≤ 2, 0 SYNCBAD), Konverter-Unit-Tests (Synthese-`.nav` → erwarteter JSON).
-- **Empfohlene Tests:** `parse_cecil_navmesh.py` gegen alle 9 Cecil-`.nav`-Dateien (Stabilitäts-Regression); `test_bot_navigation_v2.cpp` mit dem echten Graphen (Erreichbarkeit: jeder Knoten von jedem Knoten); nativer Walk-Test wie oben.
-- **Komplexität:** MEDIUM (Parser/Konverter LOW; nativer Kanten-Build + Walk MEDIUM; kein neuer AI-Code).
+  1. **Übernahme PR #39** (Entscheidung + Dokumentation): die vier Dateien/Dateibäume (Converter, RedStation-`.waypoints`, Nav-Graph-Test, ggf. `bot_navigation.h`) in den Arbeitszweig einbringen (cherry-pick oder saubere Re-Commit der Dateisubmenge; PR #39 bleibt als Draft bestehen, Taktik-AI-Anteil wird unter T-14 entschieden — hier rein die **Datenebene** übernehmen).
+  2. **Offline-Kantenanalyse:** Maximalgrad der 879 gerichteten Kanten über 193 Knoten ermitteln; bei > 8 ausgehenden Kanten: längste Kanten prunen (Abstandsschwelle, deterministisch, getestet) oder `kMaxEdgesPerNode` erhöhen — eine Entscheidung, dokumentiert. `redstation.nav` aus den PR #39-Daten erzeugen (Syntax `node <x> <y> <z>` + `arc <a> <b>`), Lock-Punkt als `# locked`/Türkandidat markieren.
+  3. **Nativer Walk-Test (zwingend, kein Formalismus):** isolierter Retail-Testserver (Preflight-Regeln wie T-01, **kein** Produktivserver), 1 Bot: jeder der 193 Knoten aufgesucht (≥ 2 s Stand, kein Stuck/Reset), pro Kante passierbar/Stuck-Events gezählt, Y-Verlauf gegen Abgründe prüfen (> 2 m Sprung = Fehlkante → prunen), Lock-Punkt als Tür verifizieren. Raycast-Kanten-Build (`CCastRay` + `BPOF_PASSABLE`, Cecils `CastPathPointRay`-Äquivalent) nur als **Fallback für fehlende Kanten** — v6 trägt bereits 879 Kanten.
+  4. **Integration in aktives Pathfinding** (derzeit in PR #39 explizit noch offen): `bot_navigation_v2.h` (PR #91) lädt den echten Graphen statt Platzhalter; `kAvoidPit`/`kRetreat`/`kFetchItem`-Modi laufen auf echten Daten; BotDriver-Policy-Bridge (PR #91) als Anbindungspunkt, ohne Human-AI-Logik zu ändern (Policy-Owner-Regel T-14 beachten).
+  5. **Daten-Kommit** mit Quellenangabe (CecilBotMod, GPL-2.0, Datei-Hash der `.nav`) in `THIRD-PARTY-NOTICES.md` (→ T-12); `redstation.nav.example`-Platzhalter aus PR #91 ersetzen (oder als Fallback mit Hinweis markieren).
+- **Wichtige Einschränkung (im Audit belegt):** Der Dateinamen-Hash (`5AF1A276`) ist ein **Name-String-Hash**, kein Dateiinhalt-Hash → die Punkte gelten nur für bytegleiche `.wld`. Der Walk-Test ist deshalb zwingend.
+- **Abhängigkeiten:** PR #39 (Datenbasis), PR #91 (NavV2/Bridge als Konsument); isolierte Retail-Testumgebung + kurzes Runtime-Leasing (1 Bot genügt, keine T-02-Größe nötig).
+- **Akzeptanzkriterien:** `redstation.nav` im Repo mit 193 Knoten/879 Kanten (oder begründet prunten), Walk-Test-Report `TESTED` (1 Bot, RedStation, ≥ 600 s, Stuck-Events ≤ 2, 0 SYNCBAD, Abdeckungs-Protokoll je Knoten), Erreichbarkeitstest grün (jeder Knoten von jedem Knoten), 8-Bot-Red-Station-Nutznachweis anschließend über T-05.
+- **Empfohlene Tests:** PR #39-Tests beibehalten (Converter 5/5, `test_bot_nav_graph.cpp`); neu: Loader-Unit-Test (echte Datei → erwarteter Graph inkl. Lock-Markierung), Erreichbarkeitstest, nativer Walk-Test wie oben.
+- **Komplexität:** MEDIUM (Übernahme + Kantenanalyse LOW; nativer Walk MEDIUM; Integration MEDIUM; **kein** neuer Parser, **kein** neuer AI-Code).
 
 ## T-04 · P1 · Globales Ray-/World-Lock-Budget pro Tick (M1-Schutz + H1-Diskriminator)
 
@@ -167,14 +169,28 @@
 - **Empfohlene Tests:** Unit-Test der Rotationslogik, 24-h-Lauf (optional als `NOT_TESTED` bis erledigt).
 - **Komplexität:** LOW.
 
+## T-14 · P1 · Policy-Konvergenz: ein Policy-Owner für alle Kampflogik (neuer Befund A-10, zweite Durchsicht)
+
+- **Ziel:** Die drei parallelen Kampf-Policy-Linien — (1) **Human-AI** `bot_human.h` (im produktiven Kandidaten Build04 integriert, 555 Checks), (2) **Cecil P1** (PR #57: `bot_route.h`-Interception, Fire-Cadence, Respawn; ein negativer Datenpunkt: 5 SYNCBAD in einem 4-Bot-Lauf, nicht reproduziert), (3) **Cecil-Taktik-AI** (PR #39: `bot_bTacticalAI`, opt-in, experimenteller Build `C65CB29B…`) — plus PR #66-Research in **einen** Policy-Owner konvergieren, damit keine doppelten Policy-Owner/redundanten Kontrollpfade entstehen (Issue #93, explizite Nutzeranforderung).
+- **Relevante Dateien:** `poc/botcore/bot_human.h`, PR #74-Branch `poc/candidates/integrated-human-cpu-20261021/BotDriver.cpp` (Human-AI-Policy-Block, `7fc94a…`-Basis), PR #57 `poc/botcore/bot_route.h` + `poc/release/gamemp/BotDriver.cpp`-Diff, PR #39 `poc/experiments/tactical-ai/BotDriver-tactics.patch` + `bot_navigation.h`, PR #66 `poc/research/combat2/`; neu: `docs/decisions/2026-11-xx-policy-owner.md`.
+- **Vorgeschlagene Umsetzung:**
+  1. **Inventur:** Funktion-Matrix je Linie (Zielen, Feuern, Items, Navigation, Respawn, Kommunikation) — vorhanden/fehlt/inkompatibel (Anschluss an Issue #93-Matrix).
+  2. **Owner-Entscheidung:** Empfehlung: **Human-AI als einziger Policy-Owner** (Begründung: produktiv integriert, am besten getestet, korreliertes Zielmodell). Cecil P1 und PR #39-Taktik werden **Selektionsquellen**: pro Modul ein Review (übernehmen/abstimmen/verwerfen) — z. B. Fire-Cadence aus Cecil P1 (A-8), ggf. Taktikmodule aus PR #39; PR #39-**Navdaten** fließen unabhängig davon über T-03 ein (Daten ≠ Policy).
+  3. **Verzichtsliste:** Parallel produktive Policy-Branches werden eingestellt; `bot_bTacticalAI`-Pfad und `bot_route.h`-Pfad bleiben entweder deaktiviert oder werden in den Owner merged — keine beiden im selben Build aktiv.
+  4. **Dokumentation:** Entscheidung + Matrix + Mapping (welches Modul aus welcher Quelle) in `docs/decisions/`; A/B-Baseline-Definition für T-05 (Kontrollgruppe = Owner ohne neue Module).
+- **Abhängigkeiten:** keine (offline, rein Entscheidung); Ergebnis ist Vorbedingung für T-05/T-07/T-08, damit deren Baselines eindeutig sind.
+- **Akzeptanzkriterien:** Entscheidungsdoku im Repo (TESTED = im Peer-Review verabschiedet), keine zwei aktiven Policy-Pfade im M3-Kandidaten-Build, A/B-Baseline in T-05-Plan eindeutig benannt.
+- **Empfohlene Tests:** keine Code-Tests (Entscheidungsdoku); ggf. Smoke-Test, dass `bot_bTacticalAI=FALSE`-Default und Human-AI-Block den einzigen aktiven Pfad bilden.
+- **Komplexität:** LOW (Dokumentation/Entscheidung; die eigentliche Merging-Arbeit erfolgt bei den jeweiligen Modulen in T-07/T-08 oder T-03).
+
 ---
 
 ## Reihenfolge-Vorschlag (1–2 Wochen, 1 Hauptagent + optional 1 Subagent für T-03 offline)
 
 | Woche | Hauptagent | Subagent (optional) |
 |---|---|---|
-| 1 | T-02 (RAM) → T-01-Laufmatrix starten | T-03 Parser/Konverter/Unit-Tests (offline) |
-| 2 | T-04 → T-06 (Build+Smoke) → T-03 nativer Walk (kurzer Slot) | T-07/T-09-Offline-Vorbereitung (A/B-Profile, Tests) |
+| 1 | T-02 (RAM) → T-01-Laufmatrix starten | T-14 (Policy-Entscheidungsdoku) + T-03 Übernahme PR #39 + Kantenanalyse (offline) |
+| 2 | T-04 → T-06 (Build+Smoke) → T-03 nativer Walk (kurzer Slot) | T-07/T-09-Offline-Vorbereitung (A/B-Profile nach T-14-Baseline, Tests) |
 | 3 | **T-05 8-Bot-Red-Station-Gate** | Gate-Monitoring (nur Leserecht) |
 | 4 | T-11 (Supervisor), T-08, T-10, T-12/T-13 | – |
 
