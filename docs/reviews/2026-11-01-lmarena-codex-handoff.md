@@ -14,6 +14,13 @@
 
 **Zweite Durchsicht (01.11.2026):** T-03 wurde auf **PR #39-Basis** umgeschrieben (Converter + konvertierte RedStation-Daten existieren bereits; Rest = Validierung + Integration). Neue Aufgabe **T-14** (Policy-Konvergenz) ergänzt das Backlog.
 
+**Dritter Stand (01.11.2026, 19:14 UTC — PR #96-Kommentar des Umsetzungsteams, self-reported, NICHT audit-verifiziert):** T-01–T-13 werden als umgesetzt/nachgewiesen gemeldet (405 Python-Tests PASS, BotCore test/smoke/san/bench PASS, Retail-Win32-Build PASS, private DLL `dd9ae785…` `qualified=false`, nicht installiert). Konsequenzen für dieses Backlog:
+- **T-02 → definitiv BLOCKED_PHYSICAL_RAM** (Host: 7,57 GiB gesamt / ~5,8 GiB frei; „≥ 8 GiB Reserve" unerreichbar). Neue Priorität 1: **Kapazitäts-Entscheidung** (Host-Upgrade, Flotten-Split auf zweite Maschine oder Xvfb/Overhead-Reduktion) — erst danach T-05.
+- **T-05:** Live-8-Bot-Red-Station-Point-in-Time-Run existiert (0 SYNCBAD in inspizierten Logs, 45-s-Bewegung/Feuer/Tod/Respawn dokumentiert) — **kein** 3600-s-Originalclient-/CRC-Gate; bleibt als Abnahme offen.
+- **T-03:** Umsetzung meldet eigenen BNMV-v6-Parser + 193 Cecil-/236 gemessene Live-Knoten. **Nach Push prüfen:** (a) wurde PR #39-Converter wiederverwendet oder ein Duplikat geschrieben (Issue #93: keine redundanten Kontrollpfade)? (b) Merge-Kriterium Cecil↔Live-Messung dokumentieren? (c) Walk-/Kantenvalidierung (offen) wie hier spezifiziert.
+- **T-14 (neue Aufgabe, nach Umsetzungslauf ergänzt):** noch offen; zudem klären, welche **Policy-Linie** der Live-8-Bot-Run nutzte (A/B-Baseline für T-05).
+- **Verifizierungs-Basis:** Zweig `agent/chat/20261101-lmarena-integrated` + 5 lokale Commits (`3238592`, `7cf62b9`, `78d44ec`, `dffce98`, `f4a6beb`) liegen **nicht** im Remote (Push-Blocker auf Ubuntu) → alles darüber steht hier unter Vorbehalt „self-reported".
+
 ---
 
 ## T-01 · P0 · Isolation des ersten divergenten SYNCBAD-Ticks (M1-Root-Cause)
