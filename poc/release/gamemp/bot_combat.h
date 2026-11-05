@@ -61,8 +61,11 @@ inline CombatDecision DecideCombat(const TargetInfo* players, int count,
   const bool aligned=std::fabs(TestTurnDelta(in.yaw,aim.yaw_deg,180.0))<3.0 &&
                      std::fabs(TestTurnDelta(in.pitch,aim.pitch_deg,180.0))<3.0;
   const bool melee=d.weapon==1 || d.weapon==10;
-  d.fireAllowed=aligned && (!melee || distance<=2.0);
-  const double stop=melee?1.5:in.stopDistance;
+  const bool colt=d.weapon==2;
+  // Do not waste Colt fire on distant targets; close the distance instead.
+  // Keep advancing below the standard 8m combat hold while Colt is equipped.
+  d.fireAllowed=aligned && (!colt || distance<=18.0) && (!melee || distance<=2.0);
+  const double stop=melee?1.5:(colt?3.0:in.stopDistance);
   if (aligned && distance>stop) d.moveFactor=in.moveFactor<0?0:(in.moveFactor>1?1:in.moveFactor);
   return d;
 }

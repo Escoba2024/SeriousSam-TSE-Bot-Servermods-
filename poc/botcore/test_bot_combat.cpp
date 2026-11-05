@@ -15,15 +15,15 @@ int main() {
                          {2,0,0,-5,100,true},{3,0,0,-2,0,false}};
     CombatDecision d=DecideCombat(players,4,in);
     CHECK(d.target==1 && d.weapon==2,"nearest living remote target; local and dead excluded");
-    CHECK(d.fireAllowed && d.moveFactor==1.0,"aligned valid distant target allows fire and pursuit");
+    CHECK(!d.fireAllowed && d.moveFactor==1.0,"Colt outside 18m holds fire and advances");
     in.skipLocals=false;
     d=DecideCombat(players,4,in);
-    CHECK(d.target==2 && d.moveFactor==0.0,"explicit local opponents allowed; close target stops pursuit");
+    CHECK(d.target==2 && d.fireAllowed && d.moveFactor==1.0,"Colt advances inside classic 8m hold radius");
     in.skipLocals=true; in.yaw=90;
     d=DecideCombat(players,4,in);
     CHECK(d.yawDelta==-4.5 && !d.fireAllowed && d.moveFactor==0.0,"bounded turn and no firing/movement while unaligned");
     in.yaw=179;
-    TargetInfo behind[]={{1,0.0,0.0,20.0,100,false}};
+    TargetInfo behind[]={{1,0.0,0.0,10.0,100,false}};
     d=DecideCombat(behind,1,in);
     CHECK(std::fabs(d.yawDelta-1.0)<0.001 && d.fireAllowed,"shortest turn across yaw wrap");
     in.yaw=0; in.self.health=0;
@@ -51,8 +51,14 @@ int main() {
     CHECK(SelectWeapon(CombatUsableWeapons(owned,loaded),20)==7,"available minigun with bullets at mid range");
     CHECK(SelectWeapon(CombatUsableWeapons(owned,loaded),50)==13,"loaded sniper at long range");
     in.self.health=100; in.usableWeapons=3u; in.yaw=0;
+    TargetInfo closeColt[]={{1,0,0,-2,100,false}};
+    d=DecideCombat(closeColt,1,in);
+    CHECK(d.weapon==2 && d.fireAllowed && d.moveFactor==0.0,"Colt may fire at close range without overshooting");
+    TargetInfo edgeColt[]={{1,0,0,-18,100,false}};
+    d=DecideCombat(edgeColt,1,in);
+    CHECK(d.fireAllowed && d.moveFactor==1.0,"Colt effective range includes 18m boundary");
     d=DecideCombat(players,4,in);
-    CHECK(d.target==1 && d.fireAllowed,"fresh decision after respawn reacquires valid target");
+    CHECK(d.target==1 && !d.fireAllowed && d.moveFactor==1.0,"respawn reacquires target without long Colt fire");
     std::printf("COMBAT POLICY %s (%d failures)\n",failures?"FAIL":"PASS",failures);
     return failures?1:0;
 }
