@@ -91,7 +91,7 @@ Files: existing build tool, native candidate manifest, isolated evidence/qualifi
 - [ ] Final server table, first join address, tested improvements, GitHub evidence and rollback locations.
 
 ## Current status and next action
-IN_PROGRESS / BUILD010 FUNCTIONAL QUALIFICATION. Clean release source df1ca40d3feb3788b7be1cb098d26a035a4a3b0e built15 units and linked PE32x86 DLL224ee607072982a521bdab36250554039f9e606a4db755fdd42716fb0f031475. Both development clients mapped this hash and joined the temporary Skulls test. A600-second observation is running; no final3600/3600/7200 gate has begun. All production clients remain unchanged.
+IN_PROGRESS / BUILD010 FUNCTIONAL QUALIFICATION. Clean release source df1ca40d3feb3788b7be1cb098d26a035a4a3b0e built15 units and linked PE32x86 DLL224ee607072982a521bdab36250554039f9e606a4db755fdd42716fb0f031475. Both development clients mapped this hash and joined the temporary Skulls test. The600.0086-second observation completed with no new log errors and improved movement, but failed combat behavior: all four botB scores unchanged and only1/5/1/1 fire actions despite visible targets; no final3600/3600/7200 gate has begun. All production clients remain unchanged.
 
 The original bAvoidPits opt-in/current-path-point condition replaces the adapter's unconditional floor veto.154 bridge checks pass normally and under ASan/UBSan. Native behavior, five-map features and originalRetailgameplay still need acceptance.009's earlier SYNCBAD remains unexplained; a later120.85s mixed008/009 control had no observed log errors and180 matching sampledCRC pairs, not a stability qualification.
 

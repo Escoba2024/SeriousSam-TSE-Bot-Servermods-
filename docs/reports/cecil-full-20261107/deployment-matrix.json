@@ -562,7 +562,7 @@
           "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e"
         }
       ],
-      "candidate_status": "BUILD010_FUNCTIONAL_TEST_RUNNING"
+      "candidate_status": "BUILD010_COMBAT_QUALIFICATION_FAILED"
     }
   ]
 }

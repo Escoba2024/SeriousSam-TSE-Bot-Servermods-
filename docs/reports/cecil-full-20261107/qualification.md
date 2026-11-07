@@ -22,7 +22,7 @@ C: integrierter Cecil/Human-Port, aktuell Build010. Native Skulls-Beobachtung is
 Ein fehlgeschlagenes Gate wird als fehlgeschlagen dokumentiert. Schwellen werden nicht nach Messbeginn gelockert. Begründete Szenariokorrektur erfordert neue Version und neuen Lauf.
 
 ## Aktueller Status — Build010
-Build010, Quellstand df1ca40d3feb3788b7be1cb098d26a035a4a3b0e, DLL224ee607072982a521bdab36250554039f9e606a4db755fdd42716fb0f031475: echter PE32-x86-Build aus15 Übersetzungseinheiten; beide Entwicklungsclients mit geladenem Hash und Join bestätigt. Ein600-s-Funktionstest auf Skulls läuft. Keine native Gesamtfreigabe; keines der formalen3600/3600/7200-s-Gates abgeschlossen oder begonnen.
+Build010, Quellstand df1ca40d3feb3788b7be1cb098d26a035a4a3b0e, DLL224ee607072982a521bdab36250554039f9e606a4db755fdd42716fb0f031475: echter PE32-x86-Build aus15 Übersetzungseinheiten; beide Entwicklungsclients mit geladenem Hash und Join bestätigt. Der600,0086-s-Funktionstest auf Skulls ist beendet: keine neuen Logfehler, alle acht Bots bewegt, maximal3,04s unbegründeter Stillstand. Die Kampfabnahme ist fehlgeschlagen: BotA-Feueraktionen219/289/220/75, BotB1/5/1/1; alle vier BotB-Scores blieben unverändert trotz zahlreicher sichtbarer Ziele.17 Todesfälle insgesamt. Diagnose und erneute Verhaltensprüfung sind erforderlich. Keine native Gesamtfreigabe; keines der formalen3600/3600/7200-s-Gates abgeschlossen oder begonnen.
 
 Der Adapter berücksichtigt jetzt das originale opt-in bAvoidPits und den aktuellen Navpunkt. Körper-/Gravitationsbasis, begrenzte Ausweichbewegung und endliche Actionachsen sind portabel geprüft. Native invertierte Schwerkraft, alle fünf Kartenfunktionen und originaler Retail-Gameplaybeitritt bleiben offen.
 

@@ -1,0 +1,127 @@
+{
+  "dll_sha256": "224ee607072982a521bdab36250554039f9e606a4db755fdd42716fb0f031475",
+  "monitor_status": "DURATION_ACTIVITY_SYNC_PASS_BEHAVIOR_REVIEW_REQUIRED",
+  "monitor_error_count": 0,
+  "duration_gate": {
+    "required_s": 7200,
+    "observed_s": 600.0086165530374,
+    "status": "NOT_MET"
+  },
+  "score_deltas": {
+    "Dev-1": 5,
+    "Dev-2": 10,
+    "Dev-3": 2,
+    "Dev-4": 0,
+    "Dev-5": 0,
+    "Dev-6": 0,
+    "Dev-7": 0,
+    "Dev-8": 0
+  },
+  "deaths_observed": 17,
+  "resources": {
+    "processes": {
+      "botA": {
+        "cpu_limit": "WITHIN_OBSERVED_LIMIT",
+        "rss_gate": "NOT_PROVEN",
+        "cpu_percent": {
+          "median": 6.948361769520306,
+          "p95": 8.892200151616667
+        },
+        "cpu_baseline_ratios": {
+          "median": 1.055264770273419,
+          "p95": 1.172236867200088
+        },
+        "rss_last_mib": 195.23046875
+      },
+      "botB": {
+        "cpu_limit": "WITHIN_OBSERVED_LIMIT",
+        "rss_gate": "NOT_PROVEN",
+        "cpu_percent": {
+          "median": 6.940302519818979,
+          "p95": 8.922507124981507
+        },
+        "cpu_baseline_ratios": {
+          "median": 1.0222737827437411,
+          "p95": 1.1762471462748951
+        },
+        "rss_last_mib": 194.6875
+      },
+      "server": {
+        "cpu_limit": "NOT_PROVEN",
+        "rss_gate": "NOT_PROVEN",
+        "cpu_percent": {
+          "median": 5.96049279253409,
+          "p95": 6.9835142622575725
+        },
+        "rss_last_mib": 55.6484375
+      }
+    },
+    "process_identity_changes": [],
+    "host_limit": "WITHIN_OBSERVED_LIMIT",
+    "percentile_method": "nearest-rank P95",
+    "swap_gate": "NOT_APPLICABLE_NO_SWAP",
+    "disk_gate": "WITHIN_OBSERVED_LIMIT",
+    "comparison_limit": "Observed window only; equal scenarios and three 120s windows require separate review.",
+    "disk_min_free_gib": 79.41646957397461,
+    "memory_min_available_mib": 3353.15234375,
+    "swap_peak_used_mib": 0.0,
+    "swap_net_used_mib": 0.0,
+    "host_percent": {
+      "median": 38.91752577319587,
+      "p95": 42.67015706806283
+    }
+  },
+  "qualified": false,
+  "behavior": "FAILED_COMBAT_ASYMMETRY",
+  "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+  "slots": {
+    "botA:0": {
+      "fire_actions_delta": 219,
+      "pickups_delta": 3,
+      "movement_observations": 593,
+      "max_unexplained_stationary_s": 0
+    },
+    "botA:1": {
+      "fire_actions_delta": 289,
+      "pickups_delta": 2,
+      "movement_observations": 596,
+      "max_unexplained_stationary_s": 1.0096574769122526
+    },
+    "botA:2": {
+      "fire_actions_delta": 220,
+      "pickups_delta": 3,
+      "movement_observations": 592,
+      "max_unexplained_stationary_s": 0
+    },
+    "botA:3": {
+      "fire_actions_delta": 75,
+      "pickups_delta": 0,
+      "movement_observations": 593,
+      "max_unexplained_stationary_s": 1.010926206014119
+    },
+    "botB:0": {
+      "fire_actions_delta": 1,
+      "pickups_delta": 1,
+      "movement_observations": 551,
+      "max_unexplained_stationary_s": 3.0310979660134763
+    },
+    "botB:1": {
+      "fire_actions_delta": 5,
+      "pickups_delta": 3,
+      "movement_observations": 550,
+      "max_unexplained_stationary_s": 3.039869731059298
+    },
+    "botB:2": {
+      "fire_actions_delta": 1,
+      "pickups_delta": 2,
+      "movement_observations": 549,
+      "max_unexplained_stationary_s": 3.035380079993047
+    },
+    "botB:3": {
+      "fire_actions_delta": 1,
+      "pickups_delta": 3,
+      "movement_observations": 566,
+      "max_unexplained_stationary_s": 3.039869731059298
+    }
+  }
+}
