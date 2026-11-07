@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "data_distribution": "private only; provenance remains open",
+  "assets": [
+    {
+      "nav_file": "DM_LittleTrouble_6C64BF87.nav",
+      "nav_sha256": "252d7e4c003804fe9ae2afef359843feb39b5dda29c1d6eadb0835fbe64a30ac",
+      "nav_crc32": "980013d4",
+      "cecil_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+      "private_only": true,
+      "map_path": "Levels/LevelsMP/Deathmatch/DM_LittleTrouble.wld",
+      "map_sha256": "e74e48e99bcc6e945500e1f28921c443515898791bfbca4d7ebf1ae61a26593c",
+      "map_crc32": "4060d0dd"
+    },
+    {
+      "nav_file": "DM_TheLostTomb_AACB1C67.nav",
+      "nav_sha256": "f9ed26706819bca6920cd5415915aa51ee209f164d1ab61d1e51f93da744aff1",
+      "nav_crc32": "4f94f077",
+      "cecil_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+      "private_only": true,
+      "map_path": "Levels/LevelsMP/Deathmatch/DM_TheLostTomb.wld",
+      "map_sha256": "c8d24b974621e7e71a4bcd2af4d0bf710b33650989a59b304aefeee018445627",
+      "map_crc32": "618198ad"
+    },
+    {
+      "nav_file": "DesertTemple_E6B24B0F.nav",
+      "nav_sha256": "1775a7ae51561c14d772ee54592c2ee2b4a19c7b715aaa6d11101fb99252c2e9",
+      "nav_crc32": "0e3f2564",
+      "cecil_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+      "private_only": true,
+      "map_status": "NOT_INSTALLED_NOT_OPERATED"
+    },
+    {
+      "nav_file": "Fortress_5652374B.nav",
+      "nav_sha256": "bde550e7ffcdcf99fc5274f164752b444f8646fb7b9e15a4149ae04d031b2730",
+      "nav_crc32": "941478b1",
+      "cecil_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+      "private_only": true,
+      "map_path": "Levels/LevelsMP/Deathmatch/Fortress.wld",
+      "map_sha256": "52648c53edffa982314ade6a9fd0f43ae0158c33f23ee52c572d4fda8d7fbccd",
+      "map_crc32": "6a8768d6"
+    },
+    {
+      "nav_file": "Hole_1AD627D0.nav",
+      "nav_sha256": "6ae46f0a18e2f5071b981f111d1dcc338a02144b963da0bdbed777a3a1ff2646",
+      "nav_crc32": "d7cac057",
+      "cecil_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+      "private_only": true,
+      "map_path": "Levels/LevelsMP/Deathmatch/Hole.wld",
+      "map_sha256": "cd2e73d8fe103e9d85e6498318e0c75d1f4b10f3b473a2a4d735d9a7eae8166d",
+      "map_crc32": "582bd040"
+    },
+    {
+      "nav_file": "KuntaKinte_AFD9424F.nav",
+      "nav_sha256": "d5cd11f6853d641a7ccdf82d780d9505e8feae6a95f11ac687940994b3d4a3e5",
+      "nav_crc32": "9e90da19",
+      "cecil_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+      "private_only": true,
+      "map_path": "Levels/LevelsMP/Deathmatch/KuntaKinte.wld",
+      "map_sha256": "178c1c0434d991b01d0b60091f8775a8090ead56cd43b57c317ef6f255df0fbc",
+      "map_crc32": "14288f5b"
+    },
+    {
+      "nav_file": "RedStation_5AF1A276.nav",
+      "nav_sha256": "70e2839587b0f14c024ef978579133e84eed594a3cbbd0fa1f1db98d99aa37c6",
+      "nav_crc32": "e4571656",
+      "cecil_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+      "private_only": true,
+      "map_path": "Levels/LevelsMP/Deathmatch/RedStation.wld",
+      "map_sha256": "66e1309ee6eeeda8c564574df65df87a8406f4079b78ad508e77c82d19971111",
+      "map_crc32": "ff3776e0"
+    },
+    {
+      "nav_file": "WeGotSkullsNBonesToo_9B573405.nav",
+      "nav_sha256": "6aafa5eb0f80826033ff23a75b1dc21138127719756d207614561bffd23ce874",
+      "nav_crc32": "70b554dd",
+      "cecil_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+      "private_only": true,
+      "map_path": "Levels/LevelsMP/Deathmatch/WeGotSkullsNBonesToo.wld",
+      "map_sha256": "1af9e22b8d0dba2b1cd4b0c9952ad97ee39c0aeb64317ea7c2156f7f8dd34ed5",
+      "map_crc32": "42d03dd2"
+    },
+    {
+      "nav_file": "Yodeller_FC72665B.nav",
+      "nav_sha256": "adc56723662da0107dd777bfaacb78f5561bf43bc43da476b82af300436d5c41",
+      "nav_crc32": "a4a7950c",
+      "cecil_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+      "private_only": true,
+      "map_path": "Levels/LevelsMP/Deathmatch/Yodeller.wld",
+      "map_sha256": "80c318868ceace921cd35feaf8002e3ebc25aef3e93cf8bad220816a510b28ef",
+      "map_crc32": "b3c8ceeb"
+    }
+  ]
+}

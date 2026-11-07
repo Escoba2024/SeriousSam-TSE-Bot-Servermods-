@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "status": "FAILED_NATIVE_SYNC",
+  "qualified": false,
+  "dll_sha256": "9065ab2a6717f130bf57e9bdbfd12acf0e82286cc4f1c484ffa3536549daa74e",
+  "source": "fc08f0abdc2119777a1beb313f1797d48b8c78ad",
+  "map": "We Got Skulls'n'Bones Too",
+  "server_syncbad_count": 10,
+  "server_first_bad": {
+    "sequence": 60937,
+    "tick": 3045.8
+  },
+  "server_last_bad": {
+    "sequence": 61117,
+    "tick": 3054.8
+  },
+  "observed_client_disconnect": "development botB: Too many bad syncs",
+  "monitor_failure": "expected bot population missing",
+  "monitor_duration_s": 1.0100459390087053,
+  "monitor_limitation": "Population assertion preceded log scan; errors array was empty despite preserved client/server evidence. Corrected ordering under regression test.",
+  "rollback": {
+    "both_clients": "8752c2d8c753e0520b046fe4efcd3bd83760e7a47003caa973edc58aa3044d30",
+    "verified_population": 8,
+    "scope": "join/mapping only; no stability qualification"
+  },
+  "production_changed": false,
+  "root_cause": "UNKNOWN",
+  "review": "Only Driver and native bridge differ from008; no concrete UB or authoritative state write found. Additional logging/codegen/timing not established as cause.",
+  "private_evidence": "sync009-preserved manifest contains hashes; raw logs retained privately",
+  "next": "Uninstrumented008 control, native sync-dump feasibility, first divergent tick investigation; no production rollout or sync bypass."
+}

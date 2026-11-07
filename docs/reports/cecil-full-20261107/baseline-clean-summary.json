@@ -1,0 +1,28 @@
+{
+  "duration_s": 360.5594033980742,
+  "samples": 72,
+  "errors": 0,
+  "dll_hashes": {
+    "server": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+    "botA": "ce559971ce4a1677c1b299a7d0c27f148fa4ecace2a55d45e006bdb1598ac6a4",
+    "botB": "ce559971ce4a1677c1b299a7d0c27f148fa4ecace2a55d45e006bdb1598ac6a4"
+  },
+  "cpu_percent": {
+    "botA": {
+      "median": 6.584472414179037,
+      "p95": 7.58566839213637
+    },
+    "botB": {
+      "median": 6.78908393912978,
+      "p95": 7.585571751003654
+    },
+    "server": {
+      "median": 5.190825003003433,
+      "p95": 5.988685572738404
+    }
+  },
+  "host_percent": {
+    "median": 38.766980146290486,
+    "p95": 40.72327044025157
+  }
+}
