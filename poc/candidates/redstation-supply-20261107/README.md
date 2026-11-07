@@ -25,3 +25,5 @@ The pit check now respects Cecil's opt-in `bAvoidPits` and fresh current-path-po
 A build or portable test does not qualify deployment. Final native gates require the same DLL hash for 1 bot/3600s, 4 bots/3600s, 8 bots/7200s and recovery, plus actual behavior on all five operated maps and an original Retail gameplay client. The live observer reports measurements and keeps behavior review explicitly pending; sampled packet CRC equality is only diagnostic evidence.
 
 License: adapted Cecil code and source-derived fixtures retain Dreamy Cecil attribution under GPL-2.0; see the repository [GPL text](../../release/LICENSE).
+
+For the private nine-file NAV roundtrip and Red Station all-pairs checks, run the compiled `test_cecil_nav /path/to/authorized-nav-assets/*.nav`. Running it without arguments checks synthetic fixtures only. SDK and Includes worktrees must be clean; the build reads their pinned native headers. Imported SDK files retain their original line endings and whitespace.

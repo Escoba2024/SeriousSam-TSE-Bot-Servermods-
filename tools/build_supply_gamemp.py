@@ -66,8 +66,7 @@ def build(args):
             actual=subprocess.check_output(["git","-C",str(directory),"rev-parse","HEAD"],text=True).strip()
             if actual!=expected: raise RuntimeError("SDK revision mismatch: "+str(directory))
             if subprocess.check_output(["git","-C",str(directory),"status","--porcelain"]).strip():
-                # SDK root may list a prepared external EntitiesTSE directory.
-                if directory!=sdk: raise RuntimeError("modified include SDK")
+                raise RuntimeError("modified SDK: "+str(directory))
         report["repo_commit"]=subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD"],text=True).strip()
         report["repo_tree"]=subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD^{tree}"],text=True).strip()
         archive=out/"sdk-game.tar"
