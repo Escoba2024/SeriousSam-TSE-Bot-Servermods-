@@ -124,3 +124,9 @@ Publication uses codex/20261107-cecil-release based on origin/main, containing o
 - Pickup-mask evidence helper and honest offline analyzer integrated;37Python tests pass. No picked-mask or fireaction alone is treated as item acquisition or a hit.
 - Deploymentmatrix now retains original inventory plus latest six-instance mapped-DLL/config observation. Development temporarily runs Skulls on25650 with006; all five production builds unchanged. Backups and map/population transaction recorded privately.
 - Next: finish gravity/safe-motion bridge, native build007, verify behavior on all five maps, then final-hash1/4/8gates3600/3600/7200, recovery, fleet rollout and15min simultaneous qualification. All long gates remain open.
+
+### Meilenstein 07.11.2026, 19:45 UTC
+- Native Combat-Asymmetrie auf serverseitigen Versandrückstand bei effektivem4000-B/s-Clientbudget eingegrenzt; Original-1.07-Adressen und passive Traces belegen Pfad. Keine Aim-Codeänderung.
+- Gleiche010-DLL mit explizitemLAN-Startup100000/6000 bei B:60-s-Aktionsfeedback0,05s statt2,15s;300-s-Combatkontrolle alle8 bewegt/feuernd/Scorezuwachs,41 Todesfälle/Respawns,0 Logfehler. A-Konfigurationsübernahme und beidseitige effektive Sessionwerte bestätigt;5Produktionsserver unverändert.
+- Isolierte native Stopfixture besteht Wrapper/WM_DELETE sowie ausstehendes Auto-Restart ohne Game, einschließlich Cleanup/Flottenschutz. Vorherige Permission-,BadWindow- und Drain-Versuche bleiben als Fehler mit eigenem Cleanupnachweis erhalten.
+- Nächste Schritte: beide Clientwerte nativ prüfen, alle5Mapfunktionen/Supply/Original-Retailgameplay, dann formale3600/3600/7200-s-Gates und Recovery. Noch kein formales Langzeitgate begonnen.

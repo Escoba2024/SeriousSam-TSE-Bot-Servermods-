@@ -14,6 +14,17 @@ python3 tools/build_supply_gamemp.py --sdk /path/to/sdk --toolchain /path/to/msv
 
 Original Retail binaries, raw captures/logs, private deployment profiles and NAV coordinate payloads are not distributed here. Supply the nine authorized Cecil v6 NAV assets privately, with the runtime map-CRC bindings and preset configuration. Missing/invalid assets fail closed. The graph parser and fixtures are portable; actual collision, item acquisition, special map actions and network stability require native tests.
 
+## Runtime network settings
+
+Set the existing LAN values explicitly in the BotClient startup script, after persistent settings have loaded:
+
+```text
+cli_iMinBPS=6000;
+cli_iMaxBPS=100000;
+```
+
+Keep the existing `cli_iBufferActions=1`, `cli_bPrediction=0` and original server bandwidth limit unchanged. The presence of `Scripts/NetSettings/LAN.ini` does not mean it was executed: native build010 diagnosis found effective client/session values of 100/4000 B/s instead. Retail 1.07 divides the effective maximum by 20 and caps it with the server limit; the old 200-byte budget per tick left insufficient catch-up capacity for a late-joining four-player client. Verify effective client and server-session values, stream backlog and combat after restart. A configured number alone is not acceptance evidence.
+
 ## Portable checks
 
 From the repository root, compile and execute each `test_*.cpp` here with `g++ -std=c++14 -O2`. Run `test_cecil_native_bridge.py` both normally and with `--sanitize`, plus `test_cecil_action_native.py --sdk-player /path/to/sdk/Sources/EntitiesMP/Player.es`, `test_cecil_items_native.py` and `test_cecil_rules_exports.py poc/candidates/redstation-supply-20261107/fixtures/cecil-953b477`. The supplied weapon/settings fixtures are source-derived GPL-2.0 Cecil tables, pinned to the revision above; they contain no NAV coordinates. Python tooling tests use `python3 -m unittest discover -s tools -p 'test_NAME.py'` for build_supply_gamemp, parse_cecil_navmesh, qualify_cecil_live, analyze_cecil_qualification and analyze_retail_sync_pcap.
