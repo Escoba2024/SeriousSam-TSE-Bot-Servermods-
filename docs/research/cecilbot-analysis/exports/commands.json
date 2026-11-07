@@ -1,0 +1,436 @@
+{
+  "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+  "note": "Static declarations and hotkey bindings, never executed by this analysis",
+  "rows": [
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 688,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"QuickBot(void);\"), &CECIL_QuickBot);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 689,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"QuickBots(INDEX);\"), &CECIL_QuickBots);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 690,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"AddBot(CTString, CTString, CTString);\"), &CECIL_AddBot);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 691,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"RemoveBot(CTString);\"), &CECIL_RemoveBot);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 692,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"RemoveAllBots(void);\"), &CECIL_RemoveAllBots);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 693,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"BotUpdate(void);\"), &CECIL_BotUpdate);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 694,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"BotTeleport(void);\"), &CECIL_BotTeleport);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 696,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"GenerateNavMesh(INDEX);\"), &CECIL_GenerateNavMesh);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 697,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshSave(void);\"), &CECIL_NavMeshSave);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 698,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshLoad(void);\"), &CECIL_NavMeshLoad);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 699,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshClear(void);\"), &CECIL_NavMeshClear);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 702,
+      "declaration": "_pShell->DeclareSymbol(\"user INDEX \" MODCOM_NAME(\"bEntityIDs;\"), &MOD_bEntityIDs);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 703,
+      "declaration": "_pShell->DeclareSymbol(\"user INDEX \" MODCOM_NAME(\"bClientSandbox;\"), &MOD_bClientSandbox);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 704,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" MODCOM_NAME(\"bBotThoughts;\"), &MOD_bBotThoughts);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 708,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" MODCOM_NAME(\"bCheckClassNames;\"), &MOD_bCheckClassNames);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 711,
+      "declaration": "_pShell->DeclareSymbol(\"user CTString \" BOTCOM_NAME(\"strBotEdit;\"), &BOT_strBotEdit);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 715,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" BOTCOM_NAME(\"ResetBotConfig(INDEX);\"), &CECIL_ResetBotConfig);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 716,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"b3rdPerson;\"      ), &_sbsBotSettings.b3rdPerson);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 717,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"iCrosshair;\"      ), &_sbsBotSettings.iCrosshair);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 718,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fRespawnDelay;\"   ), &_sbsBotSettings.fRespawnDelay);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 720,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"bSniperZoom;\"     ), &_sbsBotSettings.bSniperZoom);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 721,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"bShooting;\"       ), &_sbsBotSettings.bShooting);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 722,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fShootAngle;\"     ), &_sbsBotSettings.fShootAngle);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 723,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fAccuracyAngle;\"  ), &_sbsBotSettings.fAccuracyAngle);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 725,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fRotSpeedDist;\"   ), &_sbsBotSettings.fRotSpeedDist);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 726,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fRotSpeedMin;\"    ), &_sbsBotSettings.fRotSpeedMin);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 727,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fRotSpeedMax;\"    ), &_sbsBotSettings.fRotSpeedMax);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 728,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fRotSpeedLimit;\"  ), &_sbsBotSettings.fRotSpeedLimit);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 730,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fWeaponCD;\"       ), &_sbsBotSettings.fWeaponCD);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 731,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fTargetCD;\"       ), &_sbsBotSettings.fTargetCD);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 733,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"iFollowPlayers;\"  ), &_sbsBotSettings.iFollowPlayers);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 734,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fSpeedMul;\"       ), &_sbsBotSettings.fSpeedMul);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 735,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"bStrafe;\"         ), &_sbsBotSettings.bStrafe);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 736,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"bJump;\"           ), &_sbsBotSettings.bJump);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 737,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"bAvoidPits;\"      ), &_sbsBotSettings.bAvoidPits);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 739,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fPrediction;\"     ), &_sbsBotSettings.fPrediction);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 740,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fPredictRnd;\"     ), &_sbsBotSettings.fPredictRnd);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 742,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"iAllowedWeapons;\" ), &_sbsBotSettings.iAllowedWeapons);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 743,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"iTargetType;\"     ), &_sbsBotSettings.iTargetType);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 744,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"bTargetSearch;\"   ), &_sbsBotSettings.bTargetSearch);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 745,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fImportantChance;\"), &_sbsBotSettings.fImportantChance);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 746,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"bItemSearch;\"     ), &_sbsBotSettings.bItemSearch);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 747,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fItemSearchCD;\"   ), &_sbsBotSettings.fItemSearchCD);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 749,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" BOTCOM_NAME(\"bItemVisibility;\" ), &_sbsBotSettings.bItemVisibility);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 750,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fWeaponDist;\"     ), &_sbsBotSettings.fWeaponDist);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 751,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fHealthSearch;\"   ), &_sbsBotSettings.fHealthSearch);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 752,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fHealthDist;\"     ), &_sbsBotSettings.fHealthDist);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 753,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fArmorDist;\"      ), &_sbsBotSettings.fArmorDist);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 754,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" BOTCOM_NAME(\"fAmmoDist;\"       ), &_sbsBotSettings.fAmmoDist);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 757,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" MODCOM_NAME(\"iRenderNavMesh;\"), &MOD_iRenderNavMesh);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 758,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" MODCOM_NAME(\"bOnlyCurrentConnections;\"), &MOD_bOnlyCurrentConnections);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 759,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user FLOAT \" MODCOM_NAME(\"fNavMeshRenderRange;\"), &MOD_fNavMeshRenderRange);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 760,
+      "declaration": "_pShell->DeclareSymbol(\"persistent user INDEX \" MODCOM_NAME(\"iNavMeshRangeModel;\"), &MOD_iNavMeshRangeModel);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 761,
+      "declaration": "_pShell->DeclareSymbol(\"user INDEX \" MODCOM_NAME(\"iNavMeshPoint;\"), &MOD_iNavMeshPoint);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 762,
+      "declaration": "_pShell->DeclareSymbol(\"user INDEX \" MODCOM_NAME(\"iNavMeshConnecting;\"), &MOD_iNavMeshConnecting);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 764,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"AddNavMeshPoint(FLOAT, FLOAT);\"), &CECIL_AddNavMeshPoint);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 765,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"DeleteNavMeshPoint(void);\"), &CECIL_DeleteNavMeshPoint);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 766,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshPointInfo(void);\"), &CECIL_NavMeshPointInfo);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 767,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"ConnectNavMeshPoint(INDEX);\"), &CECIL_ConnectNavMeshPoint);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 768,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"UntargetNavMeshPoint(INDEX);\"), &CECIL_UntargetNavMeshPoint);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 769,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"TeleportNavMeshPoint(FLOAT);\"), &CECIL_TeleportNavMeshPoint);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 771,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshPointPos(FLOAT, FLOAT, FLOAT);\"), &CECIL_NavMeshPointPos);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 772,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"SnapNavMeshPoint(FLOAT);\"), &CECIL_SnapNavMeshPoint);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 773,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshPointFlags(INDEX);\"), &CECIL_NavMeshPointFlags);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 774,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshPointEntity(INDEX);\"), &CECIL_NavMeshPointEntity);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 775,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshPointRange(FLOAT);\"), &CECIL_NavMeshPointRange);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 776,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshPointNext(INDEX);\"), &CECIL_NavMeshPointNext);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 777,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshPointLock(INDEX);\"), &CECIL_NavMeshPointLock);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 778,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"AddNavMeshPointRange(FLOAT);\"), &CECIL_AddNavMeshPointRange);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 780,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshSelectPoint(void);\"), &CECIL_NavMeshSelectPoint);"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "line": 781,
+      "declaration": "_pShell->DeclareSymbol(\"user void \" MODCOM_NAME(\"NavMeshConnectionType(void);\"), &CECIL_NavMeshConnectionType);"
+    },
+    {
+      "path": "Scripts/Hotkeys/BracketClose_Pressed.ini",
+      "line": 1,
+      "declaration": "// Connect points\nMOD_GenerateNavMesh(1);"
+    },
+    {
+      "path": "Scripts/Hotkeys/BracketOpen_Pressed.ini",
+      "line": 1,
+      "declaration": "// Generate new navmesh\nMOD_NavMeshClear();\nMOD_GenerateNavMesh(0);"
+    },
+    {
+      "path": "Scripts/Hotkeys/Equals_Pressed.ini",
+      "line": 1,
+      "declaration": "// Quick bot addition\nMOD_QuickBot();"
+    },
+    {
+      "path": "Scripts/Hotkeys/Num1_Pressed.ini",
+      "line": 1,
+      "declaration": "// Select some NavMesh point\nMOD_NavMeshSelectPoint();"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumAdd_Pressed.ini",
+      "line": 1,
+      "declaration": "// Add NavMesh point with 0.5 vertical offset and snap it to 0.5 grid\nMOD_AddNavMeshPoint(0.5, 0.5);"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumDiv_Pressed.ini",
+      "line": 1,
+      "declaration": "// Snap NavMesh point position to 0.5 grid\nMOD_SnapNavMeshPoint(0.5);"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumEnter_Pressed.ini",
+      "line": 1,
+      "declaration": "// Display information about a NavMesh point\nMOD_NavMeshPointInfo();"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumMul_Pressed.ini",
+      "line": 1,
+      "declaration": "// Teleport NavMesh point to the player position with 0.5 vertical offset\nMOD_TeleportNavMeshPoint(0.5);"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumPeriod_Pressed.ini",
+      "line": 1,
+      "declaration": "// Change NavMesh connection type\nMOD_NavMeshConnectionType();"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumSub_Pressed.ini",
+      "line": 1,
+      "declaration": "// Delete selected NavMesh point\nMOD_DeleteNavMeshPoint();"
+    },
+    {
+      "path": "Scripts/Hotkeys/O_Pressed.ini",
+      "line": 1,
+      "declaration": "// Add bot to \"Red\" team\nMOD_AddBot(\"\", \"RighteousRobert\", \"Red\");"
+    },
+    {
+      "path": "Scripts/Hotkeys/P_Pressed.ini",
+      "line": 1,
+      "declaration": "// Add bot to \"Blue\" team\nMOD_AddBot(\"\", \"BlueBill\", \"Blue\");"
+    },
+    {
+      "path": "Scripts/Hotkeys/Period_Pressed.ini",
+      "line": 1,
+      "declaration": "// Make bots start or stop following players in co-op mode\nBOT_iFollowPlayers = (BOT_iFollowPlayers + 1) % 3;\nMOD_BotUpdate();"
+    },
+    {
+      "path": "Scripts/Hotkeys/PgDn_Pressed.ini",
+      "line": 1,
+      "declaration": "// Decrease range of a NavMesh point\nMOD_AddNavMeshPointRange(-1.0);"
+    },
+    {
+      "path": "Scripts/Hotkeys/PgUp_Pressed.ini",
+      "line": 1,
+      "declaration": "// Increase range of a NavMesh point\nMOD_AddNavMeshPointRange(1.0);"
+    }
+  ]
+}

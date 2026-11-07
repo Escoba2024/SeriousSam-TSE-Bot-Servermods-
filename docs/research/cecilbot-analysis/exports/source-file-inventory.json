@@ -1,0 +1,389 @@
+{
+  "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+  "files": [
+    {
+      "path": "Sources/Bots/BotModMain.cpp",
+      "bytes": 18262,
+      "sha256": "78f0340dbeaab8e43233725aa7db8fd809dcd0374ab986ecb26dae66a63d151b",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/BotModMain.h",
+      "bytes": 1918,
+      "sha256": "94c057d2c35267f186e651a17ca913d57d2a344d17160e31d4d98556b8979221",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/BotStructure.cpp",
+      "bytes": 13582,
+      "sha256": "93b00e81051e691c2e537dbe4a9c17655c9ee9f0a52aa78a838e9c261324b20a",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/BotStructure.h",
+      "bytes": 8458,
+      "sha256": "0fbc1914934db2c4970bae3486f8c263c349131a69f80c3ce92c87117ed703de",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Classes/BotModGlobal.es",
+      "bytes": 2398,
+      "sha256": "1586ba3ce649e877fe547e9771f875c23b0e97b3df26fbf5f2d9b5bf9affc36d",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Classes/NavMeshGenerator.es",
+      "bytes": 2443,
+      "sha256": "4438668f60a8c7fefd561961a6de1400d7db8ba4d1d9ece726283af8ecdd45f6",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Classes/PlayerBot.es",
+      "bytes": 4590,
+      "sha256": "7ef823885cf896081f6bccd54ab36b0b22117d0d7d8d0c305515d58c447a6f6c",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/CustomPackets.cpp",
+      "bytes": 2578,
+      "sha256": "10de688964a474d6014bb2940366792decfcb3841587993bb36b48e63a1f4f19",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/CustomPackets.h",
+      "bytes": 2463,
+      "sha256": "cfc58a8fe7a4b9bf9224fb2653d165adbcd31fa9986bef51ece8d5cfea44d523",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Hotkeys.cpp",
+      "bytes": 1674,
+      "sha256": "3e70dfea11e1d9f40b4c3fd0e5311a9aaaab1fa9c9713ce2a5f9968443d7d37c",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Hotkeys.h",
+      "bytes": 9564,
+      "sha256": "588f28423677f8b0f7f0947cc8d78dd82191225a6023df057378dc9083f10c2c",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotFunctions.cpp",
+      "bytes": 10367,
+      "sha256": "3f0c6e504705c790ba34daa06a6b3a528f9b52fdc022e3ce1cad35765f76eeb2",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotFunctions.h",
+      "bytes": 1155,
+      "sha256": "ac0007043f4f859b5092944f0e616159dd026f3e75942b3b30cf323789d5e080",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotItems.cpp",
+      "bytes": 7285,
+      "sha256": "ccda95bde0d1d2be51a5d649ec52383abc6acb0d4dfeb36c1f2ed7551b56af40",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotItems.h",
+      "bytes": 902,
+      "sha256": "03bc7d9b75a1775ef6546c9ec05227efbdb3b840fadc324298bb86c87605be2a",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotLogic.h",
+      "bytes": 2595,
+      "sha256": "eaa527c7934df9d1d96f7a9f31c98a3d9a210452c693ba13c0145a67b61e9f10",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotMovement.cpp",
+      "bytes": 20166,
+      "sha256": "507cda6a5a977eb889ca95ef1d9a3a930e5b403857790fbbdc22a2d887b1af7e",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotSettings.cpp",
+      "bytes": 4358,
+      "sha256": "4c2ee47491d891ee4a843534cac528ce23e2db039ca64e1f567540e0b4f7329b",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotSettings.h",
+      "bytes": 3645,
+      "sha256": "d826d516b5fb382113cc7fb3f0c5be174d387f532ff4f4b4d3b6c390ea36e2f5",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotThoughts.h",
+      "bytes": 1442,
+      "sha256": "d505d6c0b791dfe7eb6c028aab063deda93c9f15f0859c71e1b04d42c0fd3a60",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotWeapons.cpp",
+      "bytes": 5849,
+      "sha256": "cd3d56b6168ea610f976eea662c5a9b7f4bf31ed4712721f9296269d17521006",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Logic/BotWeapons.h",
+      "bytes": 2642,
+      "sha256": "1b00ddfde564199b67939c4b05d580b4334f6ae17f5164b1b5fe41778e75bd51",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/NetworkPatch/Serialization.cpp",
+      "bytes": 1241,
+      "sha256": "df5b37eca980b4dc676b85c65f39c92518fc085686c2d55fa23137e67ddb4d6b",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/NetworkPatch/ServerIntegration.cpp",
+      "bytes": 4693,
+      "sha256": "6dacdcb85128be5523e6abd19c4ccf5592f1fd48807d667d6951b4acaeda4c79",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/NetworkPatch/ServerIntegration.h",
+      "bytes": 1211,
+      "sha256": "d389b8cc9fa9ab10c10c494e81fe1699347574285d1cffc5f756d8c2f1011b14",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/NetworkPatch/StreamBlock.cpp",
+      "bytes": 3971,
+      "sha256": "0987da1c325ee29f02cffe039758a4572f74650959686033d0aee7ed691878d9",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/NetworkPatch/StreamBlock.h",
+      "bytes": 2272,
+      "sha256": "c04c4d87b4d435f9a0b127c4f915ac916d569586175dffa7f03ad2d2b6e9a867",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/Patcher/CPOL.htm",
+      "bytes": 13812,
+      "sha256": "05e5da964231dabd958a0bd0bdc9303294f58027aa4b402080c8c7f66bf339c4",
+      "role": "excluded CPOL patcher"
+    },
+    {
+      "path": "Sources/Bots/Patcher/README",
+      "bytes": 548,
+      "sha256": "f5ee3992838c3de57e48468e7ddb59984b15b7c64a8cd6d350fe9e632bf8bad4",
+      "role": "excluded CPOL patcher"
+    },
+    {
+      "path": "Sources/Bots/Patcher/patcher.cpp",
+      "bytes": 8468,
+      "sha256": "e1be03451aa97a74171a72b80ee1c152c3e06e7429383bd3586b565b680e8d29",
+      "role": "excluded CPOL patcher"
+    },
+    {
+      "path": "Sources/Bots/Patcher/patcher.h",
+      "bytes": 3258,
+      "sha256": "ca2f101dbe7288089e0249f51ef9e2ae7d0e736ff1a02cfbf0f1e57285927934",
+      "role": "excluded CPOL patcher"
+    },
+    {
+      "path": "Sources/Bots/Patcher/patcher_defines.h",
+      "bytes": 8176,
+      "sha256": "5ace24e215d9083f6e87f1e8e3caa27331bf9491e7cf8e1bc2a2fc1c14659b49",
+      "role": "excluded CPOL patcher"
+    },
+    {
+      "path": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "bytes": 19805,
+      "sha256": "cb25a0b2ac99e23caf600ecb105e83977ecea408cdfd269fa3ddec1d0e0605ba",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/PathFinding/Navmesh.h",
+      "bytes": 2775,
+      "sha256": "7417df288784b8a2a384e1b34e5b211b9c19a85fa978b95b39b67846635f2878",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/PathFinding/PathPoint.cpp",
+      "bytes": 5530,
+      "sha256": "827bbf15fb4099df23cec6d5291f067a6eb5dce31b5047ea248fac1658de95a5",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/PathFinding/PathPoint.h",
+      "bytes": 3307,
+      "sha256": "5a0411cfa9a15e45a3e20e4579aabd710f3017e305282f6f4988dca6457643ea",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/PathFinding/PathPolygon.cpp",
+      "bytes": 2581,
+      "sha256": "854c9c29f8338fe582593973729da0b2956e11a23f098a1051fb314ba2ee210c",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/PathFinding/PathPolygon.h",
+      "bytes": 1366,
+      "sha256": "0bd30b3ba987ef4f1fdd3487204ebfe55f75c5d96f48e06979073d74db3b85ac",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/PlayerCommon.h",
+      "bytes": 2998,
+      "sha256": "cdaea99a2a432bfac9e3859782b801a468b3d964d41a9609aca8b2e5da3fc800",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.cpp",
+      "bytes": 43641,
+      "sha256": "d2f9d0195243544efa72264449682966125cc4f3d7e143e07a08211ff54d4b8b",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/SandboxActions.h",
+      "bytes": 1127,
+      "sha256": "6c22da9a9a7e0ae55216abf6171f8b437dd46aeef56ee930c09e2b5a0fdf2d2e",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/SandboxCommon.cpp",
+      "bytes": 8572,
+      "sha256": "a83b0e6ebef1d2b38e97f9690e4f4fe1c94ef29a520423518ce2f90410fb99ad",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/SandboxCommon.h",
+      "bytes": 3542,
+      "sha256": "a23b7938546920668b3e9d3e08ecc1a90ebd9694c264422f818ca8888d618365",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Sources/Bots/_BotMod.h",
+      "bytes": 1082,
+      "sha256": "41a969b9368bceb53d015548bfcc185378ff2950a9268d6bc8464cb275e2ea51",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/CustomOptions/BotOptions.cfg",
+      "bytes": 14066,
+      "sha256": "588dba5f157f8244382d8ae2b00376ed651f2c5440850083d9cfeddf792964c2",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/CustomOptions/BotOptions.des",
+      "bytes": 21,
+      "sha256": "23f1e6744dbb59084d042c03c87d319f52c349814eb8414eae1e88bb09a5ff08",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Game_Startup.ini",
+      "bytes": 216,
+      "sha256": "6e26c3a21b18bc6425818bdb09bdaf986362e0390d542b14a98bca45da5e6e02",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/BracketClose_Pressed.ini",
+      "bytes": 43,
+      "sha256": "77199506a8d4cf64177d6d6f72a4d9e9b3d4725d74898b0e0bd9abc186c2c248",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/BracketOpen_Pressed.ini",
+      "bytes": 68,
+      "sha256": "5518d6f8ea3b6655af5e81631656916b4efd32bf39989c9ed6aacaf676543aa9",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/Equals_Pressed.ini",
+      "bytes": 38,
+      "sha256": "bea4de825e84962f6589b254c27321ea0a2ef3330535dda4e0288aa177d9d691",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/Num1_Pressed.ini",
+      "bytes": 55,
+      "sha256": "ad01dcf0853a94eccb3a401ddebb16175a5572ca2da40941cc3254fe4e2d9425",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumAdd_Pressed.ini",
+      "bytes": 101,
+      "sha256": "239a04eb622955729abf99e066201589a086989415f2390ac8504ed659b8ad58",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumDiv_Pressed.ini",
+      "bytes": 70,
+      "sha256": "1a60d97ad68ebf42c910bf834b6cbf9d1f54ae1e23b0a8fab331fa6d2912996c",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumEnter_Pressed.ini",
+      "bytes": 69,
+      "sha256": "dba5f6c4bb854273202304ee8a4528766f9fcc72d671677b05655be004639130",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumMul_Pressed.ini",
+      "bytes": 105,
+      "sha256": "e94219662f980d1c76e2ffc7af0c1431bd398e3a7c3b324b6ef81f1941baac1f",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumPeriod_Pressed.ini",
+      "bytes": 63,
+      "sha256": "4da1483bd0cf6603c538cddde88f72d73e700ac85bf7255685cdf531a0b5f28c",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/NumSub_Pressed.ini",
+      "bytes": 59,
+      "sha256": "aff36190b2f63f8b35f37f049518846cdaa8d4e3f9d382cf202c7062b70bbbaa",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/O_Pressed.ini",
+      "bytes": 67,
+      "sha256": "d15f6dc81cedcf624dbcac9a0946179f4ff9d965938396eccc3817ecc7415ad1",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/P_Pressed.ini",
+      "bytes": 62,
+      "sha256": "6187a472e47de6349b66cb27d6a94b24770f067673117e05ca291c49f1c7be6a",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/Period_Pressed.ini",
+      "bytes": 127,
+      "sha256": "0fdf85bb264f7f52772c378a70e739149991ed4cbd12ffad09dd063022b6002e",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/PgDn_Pressed.ini",
+      "bytes": 69,
+      "sha256": "58e04f89044ed9473bd60b0a70c138a050b91859b881a536c848c9be5b9572d6",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Scripts/Hotkeys/PgUp_Pressed.ini",
+      "bytes": 68,
+      "sha256": "f6f680d158594a658d005441d5eb8ce5bdd52d234efa38008ea9125f0530b9a5",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Cecil/Bots/BotNames.txt",
+      "bytes": 2387,
+      "sha256": "76029f0e1eec3ff77472627b3e726c12491d20ff254e4572adebf479421baf83",
+      "role": "source/config reference"
+    },
+    {
+      "path": "Cecil/Bots/BotSkins.txt",
+      "bytes": 309,
+      "sha256": "385e0e3fac84b491a164979e7d8f7594a7d7ca67935f54d864fe33f331f4508e",
+      "role": "source/config reference"
+    }
+  ]
+}

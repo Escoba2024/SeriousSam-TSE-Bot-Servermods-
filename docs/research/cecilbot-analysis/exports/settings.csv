@@ -1,0 +1,120 @@
+preset,parameter,source_value,type,description
+Dummy,fRespawnDelay,0.0f,FLOAT,How long to wait until respawning
+Dummy,bSniperZoom,FALSE,INDEX,Use sniper zoom or not
+Dummy,bShooting,FALSE,INDEX,Attack or not
+Dummy,fShootAngle,15.0f,FLOAT,Maximum attack angle
+Dummy,fAccuracyAngle,5.0f,FLOAT,Target angle accuracy
+Dummy,fRotSpeedDist,400.0f,FLOAT,Maximum distance for the difference
+Dummy,fRotSpeedMin,0.05f,FLOAT,Minimal rotation speed multiplier
+Dummy,fRotSpeedMax,0.2f,FLOAT,Maximum rotation speed multiplier
+Dummy,fRotSpeedLimit,30.0f,FLOAT,Maximum rotation speed limit
+Dummy,fWeaponCD,3.0f,FLOAT,Weapon selection cooldown
+Dummy,fTargetCD,1.0f,FLOAT,Target selection cooldown
+Dummy,iFollowPlayers,0,INDEX,"Follow players in coop or not (0 - no, 1 - yes, 2 - until there's a visible enemy)"
+Dummy,fSpeedMul,1.0f,FLOAT,Speed multiplier
+Dummy,bStrafe,TRUE,INDEX,Strafe near the target or not
+Dummy,bJump,TRUE,INDEX,Jump or not
+Dummy,fPrediction,0.1f,FLOAT,Position prediction multiplier
+Dummy,fPredictRnd,0.1f,FLOAT,Prediction randomness
+Dummy,iAllowedWeapons,-1,INDEX,Allowed weapons for the bot (-1 = everything is allowed)
+Dummy,iTargetType,-1,INDEX,"Target type (0 - players, 1 - enemies, 2 - both)"
+Dummy,bTargetSearch,TRUE,INDEX,Search for a target or not
+Dummy,fImportantChance,0.2f,FLOAT,How often to pick important points
+Dummy,bItemSearch,TRUE,INDEX,Search for items or not
+Dummy,fItemSearchCD,5.0f,FLOAT,Item search cooldown
+Dummy,bItemVisibility,TRUE,INDEX,Check for item's visibility or not
+Dummy,fWeaponDist,16.0f,FLOAT,Weapon search distance
+Dummy,fHealthSearch,100.0f,FLOAT,Start health searching below this HP
+Dummy,fHealthDist,0.0f,FLOAT,Health search distance
+Dummy,fArmorDist,0.0f,FLOAT,Armor search distance
+Dummy,fAmmoDist,0.0f,FLOAT,Ammo search distance
+Easy,fRespawnDelay,3.0f,FLOAT,How long to wait until respawning
+Easy,bSniperZoom,TRUE,INDEX,Use sniper zoom or not
+Easy,bShooting,TRUE,INDEX,Attack or not
+Easy,fShootAngle,15.0f,FLOAT,Maximum attack angle
+Easy,fAccuracyAngle,10.0f,FLOAT,Target angle accuracy
+Easy,fRotSpeedDist,400.0f,FLOAT,Maximum distance for the difference
+Easy,fRotSpeedMin,0.1f,FLOAT,Minimal rotation speed multiplier
+Easy,fRotSpeedMax,0.5f,FLOAT,Maximum rotation speed multiplier
+Easy,fRotSpeedLimit,20.0f,FLOAT,Maximum rotation speed limit
+Easy,fWeaponCD,5.0f,FLOAT,Weapon selection cooldown
+Easy,fTargetCD,3.0f,FLOAT,Target selection cooldown
+Easy,iFollowPlayers,1,INDEX,"Follow players in coop or not (0 - no, 1 - yes, 2 - until there's a visible enemy)"
+Easy,fSpeedMul,1.0f,FLOAT,Speed multiplier
+Easy,bStrafe,FALSE,INDEX,Strafe near the target or not
+Easy,bJump,TRUE,INDEX,Jump or not
+Easy,fPrediction,0.2f,FLOAT,Position prediction multiplier
+Easy,fPredictRnd,0.5f,FLOAT,Prediction randomness
+Easy,iAllowedWeapons,-1,INDEX,Allowed weapons for the bot (-1 = everything is allowed)
+Easy,iTargetType,-1,INDEX,"Target type (0 - players, 1 - enemies, 2 - both)"
+Easy,bTargetSearch,TRUE,INDEX,Search for a target or not
+Easy,fImportantChance,0.1f,FLOAT,How often to pick important points
+Easy,bItemSearch,TRUE,INDEX,Search for items or not
+Easy,fItemSearchCD,5.0f,FLOAT,Item search cooldown
+Easy,bItemVisibility,TRUE,INDEX,Check for item's visibility or not
+Easy,fWeaponDist,16.0f,FLOAT,Weapon search distance
+Easy,fHealthSearch,50.0f,FLOAT,Start health searching below this HP
+Easy,fHealthDist,32.0f,FLOAT,Health search distance
+Easy,fArmorDist,16.0f,FLOAT,Armor search distance
+Easy,fAmmoDist,16.0f,FLOAT,Ammo search distance
+Normal,fRespawnDelay,1.0f,FLOAT,How long to wait until respawning
+Normal,bSniperZoom,TRUE,INDEX,Use sniper zoom or not
+Normal,bShooting,TRUE,INDEX,Attack or not
+Normal,fShootAngle,15.0f,FLOAT,Maximum attack angle
+Normal,fAccuracyAngle,5.0f,FLOAT,Target angle accuracy
+Normal,fRotSpeedDist,400.0f,FLOAT,Maximum distance for the difference
+Normal,fRotSpeedMin,0.05f,FLOAT,Minimal rotation speed multiplier
+Normal,fRotSpeedMax,0.2f,FLOAT,Maximum rotation speed multiplier
+Normal,fRotSpeedLimit,30.0f,FLOAT,Maximum rotation speed limit
+Normal,fWeaponCD,3.0f,FLOAT,Weapon selection cooldown
+Normal,fTargetCD,1.0f,FLOAT,Target selection cooldown
+Normal,iFollowPlayers,1,INDEX,"Follow players in coop or not (0 - no, 1 - yes, 2 - until there's a visible enemy)"
+Normal,fSpeedMul,1.0f,FLOAT,Speed multiplier
+Normal,bStrafe,TRUE,INDEX,Strafe near the target or not
+Normal,bJump,TRUE,INDEX,Jump or not
+Normal,fPrediction,0.1f,FLOAT,Position prediction multiplier
+Normal,fPredictRnd,0.1f,FLOAT,Prediction randomness
+Normal,iAllowedWeapons,-1,INDEX,Allowed weapons for the bot (-1 = everything is allowed)
+Normal,iTargetType,-1,INDEX,"Target type (0 - players, 1 - enemies, 2 - both)"
+Normal,bTargetSearch,TRUE,INDEX,Search for a target or not
+Normal,fImportantChance,0.2f,FLOAT,How often to pick important points
+Normal,bItemSearch,TRUE,INDEX,Search for items or not
+Normal,fItemSearchCD,5.0f,FLOAT,Item search cooldown
+Normal,bItemVisibility,TRUE,INDEX,Check for item's visibility or not
+Normal,fWeaponDist,16.0f,FLOAT,Weapon search distance
+Normal,fHealthSearch,80.0f,FLOAT,Start health searching below this HP
+Normal,fHealthDist,32.0f,FLOAT,Health search distance
+Normal,fArmorDist,16.0f,FLOAT,Armor search distance
+Normal,fAmmoDist,16.0f,FLOAT,Ammo search distance
+Hard,fRespawnDelay,0.0f,FLOAT,How long to wait until respawning
+Hard,bSniperZoom,TRUE,INDEX,Use sniper zoom or not
+Hard,bShooting,TRUE,INDEX,Attack or not
+Hard,fShootAngle,15.0f,FLOAT,Maximum attack angle
+Hard,fAccuracyAngle,2.0f,FLOAT,Target angle accuracy
+Hard,fRotSpeedDist,50.0f,FLOAT,Maximum distance for the difference
+Hard,fRotSpeedMin,0.05f,FLOAT,Minimal rotation speed multiplier
+Hard,fRotSpeedMax,0.1f,FLOAT,Maximum rotation speed multiplier
+Hard,fRotSpeedLimit,30.0f,FLOAT,Maximum rotation speed limit
+Hard,fWeaponCD,3.0f,FLOAT,Weapon selection cooldown
+Hard,fTargetCD,1.0f,FLOAT,Target selection cooldown
+Hard,iFollowPlayers,2,INDEX,"Follow players in coop or not (0 - no, 1 - yes, 2 - until there's a visible enemy)"
+Hard,fSpeedMul,1.0f,FLOAT,Speed multiplier
+Hard,bStrafe,TRUE,INDEX,Strafe near the target or not
+Hard,bJump,TRUE,INDEX,Jump or not
+Hard,fPrediction,0.5f,FLOAT,Position prediction multiplier
+Hard,fPredictRnd,0.0f,FLOAT,Prediction randomness
+Hard,iAllowedWeapons,-1,INDEX,Allowed weapons for the bot (-1 = everything is allowed)
+Hard,iTargetType,-1,INDEX,"Target type (0 - players, 1 - enemies, 2 - both)"
+Hard,bTargetSearch,TRUE,INDEX,Search for a target or not
+Hard,fImportantChance,0.4f,FLOAT,How often to pick important points
+Hard,bItemSearch,TRUE,INDEX,Search for items or not
+Hard,fItemSearchCD,5.0f,FLOAT,Item search cooldown
+Hard,bItemVisibility,TRUE,INDEX,Check for item's visibility or not
+Hard,fWeaponDist,16.0f,FLOAT,Weapon search distance
+Hard,fHealthSearch,100.0f,FLOAT,Start health searching below this HP
+Hard,fHealthDist,32.0f,FLOAT,Health search distance
+Hard,fArmorDist,16.0f,FLOAT,Armor search distance
+Hard,fAmmoDist,16.0f,FLOAT,Ammo search distance
+ConstructorOnly,b3rdPerson,TRUE,INDEX,Set third person view
+ConstructorOnly,iCrosshair,-1,INDEX,Preferred crosshair (-1 for random)
+ConstructorOnly,bAvoidPits,FALSE,INDEX,Avoid bottomless pits or not

@@ -1,0 +1,12 @@
+reference/
+__pycache__/
+exports/*.points.csv
+exports/*.edges.csv
+exports/DM_*.json
+exports/DesertTemple_*.json
+exports/Fortress_*.json
+exports/Hole_*.json
+exports/KuntaKinte_*.json
+exports/RedStation_*.json
+exports/WeGotSkullsNBonesToo_*.json
+exports/Yodeller_*.json

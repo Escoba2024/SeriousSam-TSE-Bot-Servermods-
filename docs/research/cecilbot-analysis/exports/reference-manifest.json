@@ -1,0 +1,218 @@
+[
+  {
+    "path": ".gitmodules",
+    "bytes": 128,
+    "sha256": "45bb39a72f35c32f05df4be6a7619d69d4ed1e0f76245ef939008bd7cfe59367",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Cecil/Navmeshes/DM_LittleTrouble_6C64BF87.nav",
+    "bytes": 6618,
+    "sha256": "252d7e4c003804fe9ae2afef359843feb39b5dda29c1d6eadb0835fbe64a30ac",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Cecil/Navmeshes/DM_TheLostTomb_AACB1C67.nav",
+    "bytes": 6483,
+    "sha256": "f9ed26706819bca6920cd5415915aa51ee209f164d1ab61d1e51f93da744aff1",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Cecil/Navmeshes/DesertTemple_E6B24B0F.nav",
+    "bytes": 17570,
+    "sha256": "1775a7ae51561c14d772ee54592c2ee2b4a19c7b715aaa6d11101fb99252c2e9",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Cecil/Navmeshes/Fortress_5652374B.nav",
+    "bytes": 9330,
+    "sha256": "bde550e7ffcdcf99fc5274f164752b444f8646fb7b9e15a4149ae04d031b2730",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Cecil/Navmeshes/Hole_1AD627D0.nav",
+    "bytes": 8095,
+    "sha256": "6ae46f0a18e2f5071b981f111d1dcc338a02144b963da0bdbed777a3a1ff2646",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Cecil/Navmeshes/KuntaKinte_AFD9424F.nav",
+    "bytes": 21503,
+    "sha256": "d5cd11f6853d641a7ccdf82d780d9505e8feae6a95f11ac687940994b3d4a3e5",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Cecil/Navmeshes/RedStation_5AF1A276.nav",
+    "bytes": 12245,
+    "sha256": "70e2839587b0f14c024ef978579133e84eed594a3cbbd0fa1f1db98d99aa37c6",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Cecil/Navmeshes/WeGotSkullsNBonesToo_9B573405.nav",
+    "bytes": 17836,
+    "sha256": "6aafa5eb0f80826033ff23a75b1dc21138127719756d207614561bffd23ce874",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Cecil/Navmeshes/Yodeller_FC72665B.nav",
+    "bytes": 6955,
+    "sha256": "adc56723662da0107dd777bfaacb78f5561bf43bc43da476b82af300436d5c41",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "LICENSE",
+    "bytes": 18092,
+    "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "README.md",
+    "bytes": 1572,
+    "sha256": "99f121a2d6ea40adb090b078aad24fd5665e8e0e90ee84ae4d547157e671d3f8",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/BotStructure.cpp",
+    "bytes": 13582,
+    "sha256": "93b00e81051e691c2e537dbe4a9c17655c9ee9f0a52aa78a838e9c261324b20a",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/BotStructure.h",
+    "bytes": 8458,
+    "sha256": "0fbc1914934db2c4970bae3486f8c263c349131a69f80c3ce92c87117ed703de",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Classes/BotModGlobal.es",
+    "bytes": 2398,
+    "sha256": "1586ba3ce649e877fe547e9771f875c23b0e97b3df26fbf5f2d9b5bf9affc36d",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Classes/NavMeshGenerator.es",
+    "bytes": 2443,
+    "sha256": "4438668f60a8c7fefd561961a6de1400d7db8ba4d1d9ece726283af8ecdd45f6",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Classes/PlayerBot.es",
+    "bytes": 4590,
+    "sha256": "7ef823885cf896081f6bccd54ab36b0b22117d0d7d8d0c305515d58c447a6f6c",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotFunctions.cpp",
+    "bytes": 10367,
+    "sha256": "3f0c6e504705c790ba34daa06a6b3a528f9b52fdc022e3ce1cad35765f76eeb2",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotFunctions.h",
+    "bytes": 1155,
+    "sha256": "ac0007043f4f859b5092944f0e616159dd026f3e75942b3b30cf323789d5e080",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotItems.cpp",
+    "bytes": 7285,
+    "sha256": "ccda95bde0d1d2be51a5d649ec52383abc6acb0d4dfeb36c1f2ed7551b56af40",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotItems.h",
+    "bytes": 902,
+    "sha256": "03bc7d9b75a1775ef6546c9ec05227efbdb3b840fadc324298bb86c87605be2a",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotLogic.h",
+    "bytes": 2595,
+    "sha256": "eaa527c7934df9d1d96f7a9f31c98a3d9a210452c693ba13c0145a67b61e9f10",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotMovement.cpp",
+    "bytes": 20166,
+    "sha256": "507cda6a5a977eb889ca95ef1d9a3a930e5b403857790fbbdc22a2d887b1af7e",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotSettings.cpp",
+    "bytes": 4358,
+    "sha256": "4c2ee47491d891ee4a843534cac528ce23e2db039ca64e1f567540e0b4f7329b",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotSettings.h",
+    "bytes": 3645,
+    "sha256": "d826d516b5fb382113cc7fb3f0c5be174d387f532ff4f4b4d3b6c390ea36e2f5",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotThoughts.h",
+    "bytes": 1442,
+    "sha256": "d505d6c0b791dfe7eb6c028aab063deda93c9f15f0859c71e1b04d42c0fd3a60",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotWeapons.cpp",
+    "bytes": 5849,
+    "sha256": "cd3d56b6168ea610f976eea662c5a9b7f4bf31ed4712721f9296269d17521006",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/Logic/BotWeapons.h",
+    "bytes": 2642,
+    "sha256": "1b00ddfde564199b67939c4b05d580b4334f6ae17f5164b1b5fe41778e75bd51",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/PathFinding/Navmesh.cpp",
+    "bytes": 19805,
+    "sha256": "cb25a0b2ac99e23caf600ecb105e83977ecea408cdfd269fa3ddec1d0e0605ba",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/PathFinding/Navmesh.h",
+    "bytes": 2775,
+    "sha256": "7417df288784b8a2a384e1b34e5b211b9c19a85fa978b95b39b67846635f2878",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/PathFinding/PathPoint.cpp",
+    "bytes": 5530,
+    "sha256": "827bbf15fb4099df23cec6d5291f067a6eb5dce31b5047ea248fac1658de95a5",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/PathFinding/PathPoint.h",
+    "bytes": 3307,
+    "sha256": "5a0411cfa9a15e45a3e20e4579aabd710f3017e305282f6f4988dca6457643ea",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/PathFinding/PathPolygon.cpp",
+    "bytes": 2581,
+    "sha256": "854c9c29f8338fe582593973729da0b2956e11a23f098a1051fb314ba2ee210c",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/PathFinding/PathPolygon.h",
+    "bytes": 1366,
+    "sha256": "0bd30b3ba987ef4f1fdd3487204ebfe55f75c5d96f48e06979073d74db3b85ac",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Bots/PlayerCommon.h",
+    "bytes": 2998,
+    "sha256": "cdaea99a2a432bfac9e3859782b801a468b3d964d41a9609aca8b2e5da3fc800",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  },
+  {
+    "path": "Sources/Properties/Common.props",
+    "bytes": 567,
+    "sha256": "74b6d699f9908891e2000d76ce62657971398a5af35a8d1f0f8a35ee6960aca4",
+    "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+  }
+]

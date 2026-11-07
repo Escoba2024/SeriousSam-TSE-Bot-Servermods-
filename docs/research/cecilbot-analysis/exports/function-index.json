@@ -1,0 +1,803 @@
+{
+  "method": "lexical definition index; class/procedure macros also documented in reports; not a C++ AST",
+  "rows": [
+    {
+      "file": "Sources/Bots/BotModMain.cpp",
+      "line": 38,
+      "declaration": "INDEX FindBotByPointer(CPlayerEntity *pen) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotModMain.cpp",
+      "line": 54,
+      "declaration": "void CECIL_InitBotMod(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotModMain.cpp",
+      "line": 86,
+      "declaration": "void CECIL_EndBotMod(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotModMain.cpp",
+      "line": 95,
+      "declaration": "void CECIL_BotGameStart(CSessionProperties &sp) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotModMain.cpp",
+      "line": 119,
+      "declaration": "void CECIL_BotGameCleanup(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotModMain.cpp",
+      "line": 128,
+      "declaration": "void CECIL_WorldOverlayRender(CPlayer *penOwner, CEntity *penViewer, CAnyProjection3D &apr, CDrawPort *pdp) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotModMain.cpp",
+      "line": 455,
+      "declaration": "void CECIL_HUDOverlayRender(CPlayer *penOwner, CEntity *penViewer, CAnyProjection3D &apr, CDrawPort *pdp) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotStructure.cpp",
+      "line": 27,
+      "declaration": "void SBotProperties::Thought(const char *strFormat, ...) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotStructure.cpp",
+      "line": 49,
+      "declaration": "CPlayerWeapons *CPlayerBotController::GetWeapons(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotStructure.cpp",
+      "line": 54,
+      "declaration": "void CPlayerBotController::WriteBot(CTStream *strm) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotStructure.cpp",
+      "line": 119,
+      "declaration": "void CPlayerBotController::ReadBot(CTStream *strm) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotStructure.cpp",
+      "line": 178,
+      "declaration": "void CPlayerBotController::UpdateBot(const SBotSettings &sbs) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotStructure.cpp",
+      "line": 210,
+      "declaration": "BOOL CPlayerBotController::ButtonAction(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotStructure.cpp",
+      "line": 219,
+      "declaration": "BOOL CPlayerBotController::CurrentPoint(CBotPathPoint *pbppExclude) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotStructure.cpp",
+      "line": 224,
+      "declaration": "void CPlayerBotController::BotSelectNewWeapon(const INDEX &iSelect) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotStructure.cpp",
+      "line": 245,
+      "declaration": "void CPlayerBotController::BotWeapons(CPlayerAction &pa, SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/BotStructure.cpp",
+      "line": 324,
+      "declaration": "void CPlayerBotController::BotThinking(CPlayerAction &pa, SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/CustomPackets.cpp",
+      "line": 21,
+      "declaration": "BOOL ServerHandlePacket(CMessageDispatcher &md, INDEX iClient, CNetworkMessage &nmReceived) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/CustomPackets.cpp",
+      "line": 62,
+      "declaration": "BOOL HandleCustomPacket(CSessionState *pses, CNetworkMessage &nmMessage) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Hotkeys.cpp",
+      "line": 23,
+      "declaration": "BOOL LoadCommands(SHotkey &hk, const SKeyConversion &kc) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotFunctions.cpp",
+      "line": 111,
+      "declaration": "BOOL CPlayerBotController::ImportantForNavMesh(CEntity *penEntity) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotFunctions.cpp",
+      "line": 134,
+      "declaration": "void CPlayerBotController::UseImportantEntity(CEntity *penEntity) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotFunctions.cpp",
+      "line": 164,
+      "declaration": "BOOL CPlayerBotController::CastBotRay(CEntity *penTarget, const SBotLogic &sbl, BOOL bPhysical) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotFunctions.cpp",
+      "line": 185,
+      "declaration": "BOOL CastPathPointRay(const FLOAT3D &vSource, const FLOAT3D &vPoint, FLOAT &fDist, BOOL bPhysical) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotFunctions.cpp",
+      "line": 198,
+      "declaration": "BOOL CPlayerBotController::IsEnemyPlayer(CEntity *penEnemy) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotFunctions.cpp",
+      "line": 216,
+      "declaration": "BOOL CPlayerBotController::IsEnemyMonster(CEntity *penEnemy) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotFunctions.cpp",
+      "line": 224,
+      "declaration": "CEntity *CPlayerBotController::ClosestEnemy(FLOAT &fLast, const SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotFunctions.cpp",
+      "line": 315,
+      "declaration": "CEntity *CPlayerBotController::ClosestRealPlayer(FLOAT3D vCheckPos, FLOAT &fDist) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotItems.cpp",
+      "line": 24,
+      "declaration": "BOOL CPlayerBotController::IsItemPickable(class CItem *penItem, const BOOL &bCheckDist) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotItems.cpp",
+      "line": 37,
+      "declaration": "void CPlayerBotController::BotItemSearch(SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotItems.cpp",
+      "line": 93,
+      "declaration": "FLOAT CPlayerBotController::GetItemDist(CEntity *penItem) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotItems.cpp",
+      "line": 121,
+      "declaration": "CEntity *CPlayerBotController::GetClosestItem(FLOAT &fItemDist, const SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotItems.cpp",
+      "line": 204,
+      "declaration": "CEntity *CPlayerBotController::ClosestItemType(const CDLLEntityClass &decClass, FLOAT &fDist, const SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotMovement.cpp",
+      "line": 25,
+      "declaration": "BOOL CPlayerBotController::NoPosChange(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotMovement.cpp",
+      "line": 34,
+      "declaration": "void CPlayerBotController::BotPathFinding(SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotMovement.cpp",
+      "line": 229,
+      "declaration": "void CPlayerBotController::BotAim(CPlayerAction &pa, SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotMovement.cpp",
+      "line": 341,
+      "declaration": "BOOL CPlayerBotController::CheckPit(FLOAT3D vMovement, FLOAT fHeadingDir, FLOAT fDistance) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotMovement.cpp",
+      "line": 375,
+      "declaration": "FLOAT CPlayerBotController::AvoidPits(const FLOAT3D &vMovement, FLOAT fDistance) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotMovement.cpp",
+      "line": 395,
+      "declaration": "void CPlayerBotController::BotMovement(CPlayerAction &pa, SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotSettings.cpp",
+      "line": 19,
+      "declaration": "static void PresetDummy(SBotSettings &sbs) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotSettings.cpp",
+      "line": 58,
+      "declaration": "static void PresetEasy(SBotSettings &sbs) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotSettings.cpp",
+      "line": 97,
+      "declaration": "static void PresetNormal(SBotSettings &sbs) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotSettings.cpp",
+      "line": 136,
+      "declaration": "static void PresetHard(SBotSettings &sbs) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotSettings.cpp",
+      "line": 178,
+      "declaration": "void SBotSettings::Reset(const EDifficulty eDiff) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotWeapons.cpp",
+      "line": 65,
+      "declaration": "BOOL CPlayerBotController::UsingScope(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotWeapons.cpp",
+      "line": 70,
+      "declaration": "BOOL CPlayerBotController::CanUseScope(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotWeapons.cpp",
+      "line": 75,
+      "declaration": "void CPlayerBotController::UseWeaponScope(CPlayerAction &pa, const SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/Logic/BotWeapons.cpp",
+      "line": 92,
+      "declaration": "void CPlayerBotController::FireWeapon(CPlayerAction &pa, const SBotLogic &sbl) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/ServerIntegration.cpp",
+      "line": 36,
+      "declaration": "void CECIL_AddBlockToAllSessions(CCecilStreamBlock &nsb) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/ServerIntegration.cpp",
+      "line": 57,
+      "declaration": "extern void CECIL_ApplyNetworkPatches(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/ServerIntegration.cpp",
+      "line": 71,
+      "declaration": "BOOL CCecilMessageDispatcher::P_ReceiveFromClient(INDEX iClient, CNetworkMessage &nmMessage) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/ServerIntegration.cpp",
+      "line": 94,
+      "declaration": "BOOL CCecilMessageDispatcher::P_ReceiveFromClientReliable(INDEX iClient, CNetworkMessage &nmMessage) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/ServerIntegration.cpp",
+      "line": 117,
+      "declaration": "void CCecilSessionState::P_ProcessGameStreamBlock(CNetworkMessage &nmMessage) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/StreamBlock.cpp",
+      "line": 37,
+      "declaration": "void CCecilStreamBlock::ReadFromMessage(CNetworkMessage &nmToRead) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/StreamBlock.cpp",
+      "line": 46,
+      "declaration": "void CCecilStreamBlock::WriteToMessage(CNetworkMessage &nmToWrite) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/StreamBlock.cpp",
+      "line": 55,
+      "declaration": "void CCecilStreamBlock::RemoveFromStream(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/StreamBlock.cpp",
+      "line": 60,
+      "declaration": "void CCecilStreamBlock::Write_t(CTStream &strm) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/StreamBlock.cpp",
+      "line": 72,
+      "declaration": "void CCecilStreamBlock::Read_t(CTStream &strm) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/StreamBlock.cpp",
+      "line": 94,
+      "declaration": "void CCecilNetworkStream::AddAllocatedBlock(CCecilStreamBlock *pnsbBlock) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/NetworkPatch/StreamBlock.cpp",
+      "line": 116,
+      "declaration": "void CCecilNetworkStream::AddBlock(CCecilStreamBlock &nsbBlock) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "line": 38,
+      "declaration": "void CBotNavmesh::WriteNavmesh(CTStream *strm) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "line": 55,
+      "declaration": "void CBotNavmesh::ReadNavmesh(CTStream *strm) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "line": 83,
+      "declaration": "void CBotNavmesh::SaveNavmesh(CWorld &wo) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "line": 100,
+      "declaration": "void CBotNavmesh::LoadNavmesh(CWorld &wo) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "line": 119,
+      "declaration": "void CBotNavmesh::ClearNavmesh(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "line": 224,
+      "declaration": "static void GetPolygonTriangle(CBrushPolygon *pbpo, INDEX iTriangle, CDynamicContainer<CBrushVertex> &cOutput) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "line": 238,
+      "declaration": "void CBotNavmesh::GenerateNavmesh(CWorld *pwo) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "line": 384,
+      "declaration": "void CBotNavmesh::ConnectPoints(INDEX iPoint) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "line": 520,
+      "declaration": "void CBotNavmesh::CleanupPoints(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/Navmesh.cpp",
+      "line": 569,
+      "declaration": "static FLOAT PointsDist(CBotPathPoint *pbppSrc, CBotPathPoint *pbppDst) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/PathPoint.cpp",
+      "line": 30,
+      "declaration": "void CBotPathPoint::Reset(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/PathPoint.cpp",
+      "line": 44,
+      "declaration": "void CBotPathPoint::Clear(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/PathPoint.cpp",
+      "line": 58,
+      "declaration": "void CBotPathPoint::WritePoint(CTStream *strm) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/PathPoint.cpp",
+      "line": 105,
+      "declaration": "void CBotPathPoint::ReadPoint(CTStream *strm, INDEX iVersion) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/PathPoint.cpp",
+      "line": 190,
+      "declaration": "BOOL CBotPathPoint::IsImportant(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/PathPoint.cpp",
+      "line": 195,
+      "declaration": "BOOL CBotPathPoint::IsLocked(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/PathPoint.cpp",
+      "line": 207,
+      "declaration": "void CBotPathPoint::Connect(CBotPathPoint *pbppPoint, INDEX iType) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/PathPolygon.cpp",
+      "line": 41,
+      "declaration": "void CPathPolygon::WritePolygon(CTStream *strm) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/PathPolygon.cpp",
+      "line": 54,
+      "declaration": "void CPathPolygon::ReadPolygon(CTStream *strm) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/PathFinding/PathPolygon.cpp",
+      "line": 84,
+      "declaration": "FLOAT3D CPathPolygon::Center(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 77,
+      "declaration": "extern void CopyBotNames(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 87,
+      "declaration": "extern void CopyBotSkins(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 97,
+      "declaration": "static void GetRandomName(CTString &strName) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 120,
+      "declaration": "static void GetRandomSkin(CTString &strSkin) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 143,
+      "declaration": "static void CECIL_ResetBotConfig(INDEX iDifficulty) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 160,
+      "declaration": "static void CECIL_AddBot(const CTString &strName, const CTString &strSkin, const CTString &strTeam) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 198,
+      "declaration": "static void CECIL_QuickBot(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 203,
+      "declaration": "static void CECIL_QuickBots(INDEX ctBots) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 250,
+      "declaration": "static void CECIL_RemoveAllBots(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 285,
+      "declaration": "static void CECIL_RemoveBot(const CTString &strBotName) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 323,
+      "declaration": "static void CECIL_BotUpdate(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 340,
+      "declaration": "static void CECIL_BotTeleport(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 356,
+      "declaration": "static void CECIL_SetWeapons(INDEX iWeapon, INDEX bPlayer) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 376,
+      "declaration": "static void CECIL_GenerateNavMesh(void *pArgs) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 379,
+      "declaration": "static void CECIL_GenerateNavMesh(INDEX iPoints) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 397,
+      "declaration": "static void CECIL_NavMeshSave(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 411,
+      "declaration": "BOOL LoadNavMeshPacket(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 422,
+      "declaration": "static void CECIL_NavMeshLoad(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 431,
+      "declaration": "static void CECIL_NavMeshClear(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 447,
+      "declaration": "static void CECIL_AddNavMeshPoint(FLOAT fOffset, FLOAT fGridSnap) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 461,
+      "declaration": "static void CECIL_DeleteNavMeshPoint(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 472,
+      "declaration": "static void CECIL_NavMeshPointInfo(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 504,
+      "declaration": "static void CECIL_ConnectNavMeshPoint(INDEX iTargetPoint) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 517,
+      "declaration": "static void CECIL_UntargetNavMeshPoint(INDEX iTargetPoint) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 529,
+      "declaration": "static void CECIL_TeleportNavMeshPoint(FLOAT fOffset) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 541,
+      "declaration": "static void CECIL_NavMeshPointPos(FLOAT fX, FLOAT fY, FLOAT fZ) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 553,
+      "declaration": "static void CECIL_SnapNavMeshPoint(FLOAT fGridSize) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 565,
+      "declaration": "static void CECIL_NavMeshPointFlags(INDEX iFlags) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 577,
+      "declaration": "static void CECIL_NavMeshPointEntity(INDEX iEntityID) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 589,
+      "declaration": "static void CECIL_NavMeshPointRange(FLOAT fRange) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 601,
+      "declaration": "static void CECIL_NavMeshPointNext(INDEX iNextPoint) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 613,
+      "declaration": "static void CECIL_NavMeshPointLock(INDEX iEntityID) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 625,
+      "declaration": "static void CECIL_AddNavMeshPointRange(FLOAT fRange) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 641,
+      "declaration": "static void CECIL_NavMeshSelectPoint(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 671,
+      "declaration": "static void CECIL_NavMeshConnectionType(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 686,
+      "declaration": "extern void CECIL_InitSandboxActions(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 831,
+      "declaration": "static void AddBotWithCharacter(CWorld &wo, CPlayerCharacter &pcBot, const SBotSettings &sbs) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxActions.cpp",
+      "line": 860,
+      "declaration": "void CECIL_SandboxAction(CPlayer *pen, const INDEX &iAction, CNetworkMessage &nmMessage) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 23,
+      "declaration": "CTString ULongToBinary(ULONG ul) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 39,
+      "declaration": "BOOL ProjectLine(CProjection3D *ppr, FLOAT3D vPoint1, FLOAT3D vPoint2, FLOAT3D &vOnScreen1, FLOAT3D &vOnScreen2) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 63,
+      "declaration": "CEntity *FindEntityByID(CWorld *pwo, const INDEX &iEntityID) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 81,
+      "declaration": "FLOAT3D VerticalDiff(FLOAT3D vPosDiff, const FLOAT3D &vGravityDir) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 91,
+      "declaration": "FLOAT3D HorizontalDiff(FLOAT3D vPosDiff, const FLOAT3D &vGravityDir) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 97,
+      "declaration": "FLOAT GetRelH(FLOAT3D vDesiredDir, const ANGLE3D &aCurrent) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 117,
+      "declaration": "FLOAT GetRelP(FLOAT3D vDesiredDir, const ANGLE3D &aCurrent) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 137,
+      "declaration": "FLOAT2D GetRelAngles(FLOAT3D vDesiredDir, const ANGLE3D &aCurrent) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 173,
+      "declaration": "void CastRayFlags(CCastRay &cr, CWorld *pwoWorld, ULONG ulPass) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 209,
+      "declaration": "BOOL FlatPolygon(CWorld *wo, CBrushPolygon *pbpo) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 235,
+      "declaration": "BOOL IsOfDllClass(CEntity *pen, const CDLLEntityClass &dec) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 252,
+      "declaration": "BOOL IsDerivedFromDllClass(CEntity *pen, const CDLLEntityClass &dec) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 277,
+      "declaration": "INDEX CECIL_GetMaxPlayers(void) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 281,
+      "declaration": "CPlayer *CECIL_GetPlayerEntity(const INDEX &iPlayer) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    },
+    {
+      "file": "Sources/Bots/SandboxCommon.cpp",
+      "line": 293,
+      "declaration": "INDEX CECIL_PlayerIndex(CPlayerEntity *pen) {",
+      "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c"
+    }
+  ]
+}

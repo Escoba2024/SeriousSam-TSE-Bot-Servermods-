@@ -1,0 +1,477 @@
+[
+  {
+    "file": "DM_LittleTrouble_6C64BF87.nav",
+    "sha256": "252d7e4c003804fe9ae2afef359843feb39b5dda29c1d6eadb0835fbe64a30ac",
+    "bytes": 6618,
+    "version": 6,
+    "generated": false,
+    "points": 110,
+    "directed_links": 412,
+    "reciprocal_pairs": 161,
+    "one_way_arcs": 90,
+    "weak_component_sizes": [
+      110
+    ],
+    "strong_component_sizes": [
+      103,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "flags": {
+      "WALK": 0,
+      "JUMP": 1,
+      "CROUCH": 0,
+      "OVERRIDE": 0,
+      "UNREACHABLE": 0,
+      "TELEPORT": 0,
+      "IMPORTANT": 0
+    },
+    "locked": 0,
+    "important_entities": 5,
+    "polygons": 0,
+    "bounds": {
+      "x": [
+        -68.75,
+        34.5
+      ],
+      "y": [
+        0.5,
+        8.505160331726074
+      ],
+      "z": [
+        -48.75,
+        40.75
+      ]
+    },
+    "roundtrip": "BYTE_IDENTICAL"
+  },
+  {
+    "file": "DM_TheLostTomb_AACB1C67.nav",
+    "sha256": "f9ed26706819bca6920cd5415915aa51ee209f164d1ab61d1e51f93da744aff1",
+    "bytes": 6483,
+    "version": 6,
+    "generated": false,
+    "points": 111,
+    "directed_links": 367,
+    "reciprocal_pairs": 157,
+    "one_way_arcs": 53,
+    "weak_component_sizes": [
+      111
+    ],
+    "strong_component_sizes": [
+      104,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "flags": {
+      "WALK": 0,
+      "JUMP": 4,
+      "CROUCH": 0,
+      "OVERRIDE": 4,
+      "UNREACHABLE": 0,
+      "TELEPORT": 0,
+      "IMPORTANT": 0
+    },
+    "locked": 0,
+    "important_entities": 2,
+    "polygons": 0,
+    "bounds": {
+      "x": [
+        -42.0,
+        40.5
+      ],
+      "y": [
+        -12.5,
+        2.5
+      ],
+      "z": [
+        -54.5,
+        39.5
+      ]
+    },
+    "roundtrip": "BYTE_IDENTICAL"
+  },
+  {
+    "file": "DesertTemple_E6B24B0F.nav",
+    "sha256": "1775a7ae51561c14d772ee54592c2ee2b4a19c7b715aaa6d11101fb99252c2e9",
+    "bytes": 17570,
+    "version": 6,
+    "generated": false,
+    "points": 282,
+    "directed_links": 1215,
+    "reciprocal_pairs": 347,
+    "one_way_arcs": 521,
+    "weak_component_sizes": [
+      282
+    ],
+    "strong_component_sizes": [
+      268,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "flags": {
+      "WALK": 0,
+      "JUMP": 26,
+      "CROUCH": 0,
+      "OVERRIDE": 4,
+      "UNREACHABLE": 0,
+      "TELEPORT": 4,
+      "IMPORTANT": 0
+    },
+    "locked": 0,
+    "important_entities": 9,
+    "polygons": 0,
+    "bounds": {
+      "x": [
+        -58.0,
+        58.0
+      ],
+      "y": [
+        -16.5,
+        31.0
+      ],
+      "z": [
+        -48.0,
+        186.0
+      ]
+    },
+    "roundtrip": "BYTE_IDENTICAL"
+  },
+  {
+    "file": "Fortress_5652374B.nav",
+    "sha256": "bde550e7ffcdcf99fc5274f164752b444f8646fb7b9e15a4149ae04d031b2730",
+    "bytes": 9330,
+    "version": 6,
+    "generated": false,
+    "points": 158,
+    "directed_links": 514,
+    "reciprocal_pairs": 200,
+    "one_way_arcs": 114,
+    "weak_component_sizes": [
+      158
+    ],
+    "strong_component_sizes": [
+      158
+    ],
+    "flags": {
+      "WALK": 0,
+      "JUMP": 30,
+      "CROUCH": 0,
+      "OVERRIDE": 5,
+      "UNREACHABLE": 0,
+      "TELEPORT": 0,
+      "IMPORTANT": 0
+    },
+    "locked": 6,
+    "important_entities": 10,
+    "polygons": 0,
+    "bounds": {
+      "x": [
+        -75.75,
+        51.75
+      ],
+      "y": [
+        -63.0,
+        6.5
+      ],
+      "z": [
+        -69.75,
+        55.5
+      ]
+    },
+    "roundtrip": "BYTE_IDENTICAL"
+  },
+  {
+    "file": "Hole_1AD627D0.nav",
+    "sha256": "6ae46f0a18e2f5071b981f111d1dcc338a02144b963da0bdbed777a3a1ff2646",
+    "bytes": 8095,
+    "version": 6,
+    "generated": false,
+    "points": 139,
+    "directed_links": 443,
+    "reciprocal_pairs": 171,
+    "one_way_arcs": 101,
+    "weak_component_sizes": [
+      139
+    ],
+    "strong_component_sizes": [
+      134,
+      2,
+      1,
+      1,
+      1
+    ],
+    "flags": {
+      "WALK": 0,
+      "JUMP": 14,
+      "CROUCH": 2,
+      "OVERRIDE": 11,
+      "UNREACHABLE": 0,
+      "TELEPORT": 0,
+      "IMPORTANT": 0
+    },
+    "locked": 2,
+    "important_entities": 14,
+    "polygons": 0,
+    "bounds": {
+      "x": [
+        -39.0,
+        111.75
+      ],
+      "y": [
+        -15.5,
+        65.0
+      ],
+      "z": [
+        -115.25,
+        84.0
+      ]
+    },
+    "roundtrip": "BYTE_IDENTICAL"
+  },
+  {
+    "file": "KuntaKinte_AFD9424F.nav",
+    "sha256": "d5cd11f6853d641a7ccdf82d780d9505e8feae6a95f11ac687940994b3d4a3e5",
+    "bytes": 21503,
+    "version": 6,
+    "generated": false,
+    "points": 335,
+    "directed_links": 1602,
+    "reciprocal_pairs": 622,
+    "one_way_arcs": 358,
+    "weak_component_sizes": [
+      335
+    ],
+    "strong_component_sizes": [
+      327,
+      8
+    ],
+    "flags": {
+      "WALK": 0,
+      "JUMP": 13,
+      "CROUCH": 0,
+      "OVERRIDE": 5,
+      "UNREACHABLE": 0,
+      "TELEPORT": 0,
+      "IMPORTANT": 0
+    },
+    "locked": 0,
+    "important_entities": 8,
+    "polygons": 0,
+    "bounds": {
+      "x": [
+        -67.5,
+        67.75
+      ],
+      "y": [
+        -29.5,
+        52.0
+      ],
+      "z": [
+        -128.5,
+        128.5
+      ]
+    },
+    "roundtrip": "BYTE_IDENTICAL"
+  },
+  {
+    "file": "RedStation_5AF1A276.nav",
+    "sha256": "70e2839587b0f14c024ef978579133e84eed594a3cbbd0fa1f1db98d99aa37c6",
+    "bytes": 12245,
+    "version": 6,
+    "generated": false,
+    "points": 193,
+    "directed_links": 879,
+    "reciprocal_pairs": 338,
+    "one_way_arcs": 203,
+    "weak_component_sizes": [
+      193
+    ],
+    "strong_component_sizes": [
+      188,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "flags": {
+      "WALK": 0,
+      "JUMP": 10,
+      "CROUCH": 0,
+      "OVERRIDE": 8,
+      "UNREACHABLE": 0,
+      "TELEPORT": 1,
+      "IMPORTANT": 0
+    },
+    "locked": 1,
+    "important_entities": 8,
+    "polygons": 0,
+    "bounds": {
+      "x": [
+        -99.05020904541016,
+        98.31412506103516
+      ],
+      "y": [
+        -17.0,
+        49.25468063354492
+      ],
+      "z": [
+        -99.36631774902344,
+        101.54743957519531
+      ]
+    },
+    "roundtrip": "BYTE_IDENTICAL"
+  },
+  {
+    "file": "WeGotSkullsNBonesToo_9B573405.nav",
+    "sha256": "6aafa5eb0f80826033ff23a75b1dc21138127719756d207614561bffd23ce874",
+    "bytes": 17836,
+    "version": 6,
+    "generated": false,
+    "points": 296,
+    "directed_links": 1124,
+    "reciprocal_pairs": 352,
+    "one_way_arcs": 420,
+    "weak_component_sizes": [
+      296
+    ],
+    "strong_component_sizes": [
+      268,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "flags": {
+      "WALK": 0,
+      "JUMP": 19,
+      "CROUCH": 2,
+      "OVERRIDE": 1,
+      "UNREACHABLE": 6,
+      "TELEPORT": 4,
+      "IMPORTANT": 0
+    },
+    "locked": 0,
+    "important_entities": 10,
+    "polygons": 0,
+    "bounds": {
+      "x": [
+        -142.0,
+        128.0
+      ],
+      "y": [
+        -71.5,
+        25.5
+      ],
+      "z": [
+        -74.0,
+        97.0
+      ]
+    },
+    "roundtrip": "BYTE_IDENTICAL"
+  },
+  {
+    "file": "Yodeller_FC72665B.nav",
+    "sha256": "adc56723662da0107dd777bfaacb78f5561bf43bc43da476b82af300436d5c41",
+    "bytes": 6955,
+    "version": 6,
+    "generated": false,
+    "points": 111,
+    "directed_links": 485,
+    "reciprocal_pairs": 193,
+    "one_way_arcs": 99,
+    "weak_component_sizes": [
+      111
+    ],
+    "strong_component_sizes": [
+      98,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "flags": {
+      "WALK": 0,
+      "JUMP": 4,
+      "CROUCH": 1,
+      "OVERRIDE": 3,
+      "UNREACHABLE": 4,
+      "TELEPORT": 0,
+      "IMPORTANT": 0
+    },
+    "locked": 0,
+    "important_entities": 6,
+    "polygons": 0,
+    "bounds": {
+      "x": [
+        321.0,
+        510.0
+      ],
+      "y": [
+        74.57268524169922,
+        104.2854232788086
+      ],
+      "z": [
+        -270.1460876464844,
+        -132.0
+      ]
+    },
+    "roundtrip": "BYTE_IDENTICAL"
+  }
+]

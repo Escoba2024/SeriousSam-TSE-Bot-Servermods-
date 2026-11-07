@@ -1,0 +1,134 @@
+file,line,declaration,source_commit
+Sources/Bots/BotModMain.cpp,38,INDEX FindBotByPointer(CPlayerEntity *pen) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotModMain.cpp,54,void CECIL_InitBotMod(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotModMain.cpp,86,void CECIL_EndBotMod(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotModMain.cpp,95,void CECIL_BotGameStart(CSessionProperties &sp) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotModMain.cpp,119,void CECIL_BotGameCleanup(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotModMain.cpp,128,"void CECIL_WorldOverlayRender(CPlayer *penOwner, CEntity *penViewer, CAnyProjection3D &apr, CDrawPort *pdp) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotModMain.cpp,455,"void CECIL_HUDOverlayRender(CPlayer *penOwner, CEntity *penViewer, CAnyProjection3D &apr, CDrawPort *pdp) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotStructure.cpp,27,"void SBotProperties::Thought(const char *strFormat, ...) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotStructure.cpp,49,CPlayerWeapons *CPlayerBotController::GetWeapons(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotStructure.cpp,54,void CPlayerBotController::WriteBot(CTStream *strm) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotStructure.cpp,119,void CPlayerBotController::ReadBot(CTStream *strm) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotStructure.cpp,178,void CPlayerBotController::UpdateBot(const SBotSettings &sbs) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotStructure.cpp,210,BOOL CPlayerBotController::ButtonAction(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotStructure.cpp,219,BOOL CPlayerBotController::CurrentPoint(CBotPathPoint *pbppExclude) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotStructure.cpp,224,void CPlayerBotController::BotSelectNewWeapon(const INDEX &iSelect) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotStructure.cpp,245,"void CPlayerBotController::BotWeapons(CPlayerAction &pa, SBotLogic &sbl) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/BotStructure.cpp,324,"void CPlayerBotController::BotThinking(CPlayerAction &pa, SBotLogic &sbl) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/CustomPackets.cpp,21,"BOOL ServerHandlePacket(CMessageDispatcher &md, INDEX iClient, CNetworkMessage &nmReceived) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/CustomPackets.cpp,62,"BOOL HandleCustomPacket(CSessionState *pses, CNetworkMessage &nmMessage) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Hotkeys.cpp,23,"BOOL LoadCommands(SHotkey &hk, const SKeyConversion &kc) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotFunctions.cpp,111,BOOL CPlayerBotController::ImportantForNavMesh(CEntity *penEntity) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotFunctions.cpp,134,void CPlayerBotController::UseImportantEntity(CEntity *penEntity) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotFunctions.cpp,164,"BOOL CPlayerBotController::CastBotRay(CEntity *penTarget, const SBotLogic &sbl, BOOL bPhysical) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotFunctions.cpp,185,"BOOL CastPathPointRay(const FLOAT3D &vSource, const FLOAT3D &vPoint, FLOAT &fDist, BOOL bPhysical) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotFunctions.cpp,198,BOOL CPlayerBotController::IsEnemyPlayer(CEntity *penEnemy) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotFunctions.cpp,216,BOOL CPlayerBotController::IsEnemyMonster(CEntity *penEnemy) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotFunctions.cpp,224,"CEntity *CPlayerBotController::ClosestEnemy(FLOAT &fLast, const SBotLogic &sbl) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotFunctions.cpp,315,"CEntity *CPlayerBotController::ClosestRealPlayer(FLOAT3D vCheckPos, FLOAT &fDist) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotItems.cpp,24,"BOOL CPlayerBotController::IsItemPickable(class CItem *penItem, const BOOL &bCheckDist) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotItems.cpp,37,void CPlayerBotController::BotItemSearch(SBotLogic &sbl) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotItems.cpp,93,FLOAT CPlayerBotController::GetItemDist(CEntity *penItem) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotItems.cpp,121,"CEntity *CPlayerBotController::GetClosestItem(FLOAT &fItemDist, const SBotLogic &sbl) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotItems.cpp,204,"CEntity *CPlayerBotController::ClosestItemType(const CDLLEntityClass &decClass, FLOAT &fDist, const SBotLogic &sbl) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotMovement.cpp,25,BOOL CPlayerBotController::NoPosChange(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotMovement.cpp,34,void CPlayerBotController::BotPathFinding(SBotLogic &sbl) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotMovement.cpp,229,"void CPlayerBotController::BotAim(CPlayerAction &pa, SBotLogic &sbl) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotMovement.cpp,341,"BOOL CPlayerBotController::CheckPit(FLOAT3D vMovement, FLOAT fHeadingDir, FLOAT fDistance) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotMovement.cpp,375,"FLOAT CPlayerBotController::AvoidPits(const FLOAT3D &vMovement, FLOAT fDistance) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotMovement.cpp,395,"void CPlayerBotController::BotMovement(CPlayerAction &pa, SBotLogic &sbl) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotSettings.cpp,19,static void PresetDummy(SBotSettings &sbs) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotSettings.cpp,58,static void PresetEasy(SBotSettings &sbs) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotSettings.cpp,97,static void PresetNormal(SBotSettings &sbs) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotSettings.cpp,136,static void PresetHard(SBotSettings &sbs) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotSettings.cpp,178,void SBotSettings::Reset(const EDifficulty eDiff) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotWeapons.cpp,65,BOOL CPlayerBotController::UsingScope(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotWeapons.cpp,70,BOOL CPlayerBotController::CanUseScope(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotWeapons.cpp,75,"void CPlayerBotController::UseWeaponScope(CPlayerAction &pa, const SBotLogic &sbl) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/Logic/BotWeapons.cpp,92,"void CPlayerBotController::FireWeapon(CPlayerAction &pa, const SBotLogic &sbl) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/ServerIntegration.cpp,36,void CECIL_AddBlockToAllSessions(CCecilStreamBlock &nsb) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/ServerIntegration.cpp,57,extern void CECIL_ApplyNetworkPatches(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/ServerIntegration.cpp,71,"BOOL CCecilMessageDispatcher::P_ReceiveFromClient(INDEX iClient, CNetworkMessage &nmMessage) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/ServerIntegration.cpp,94,"BOOL CCecilMessageDispatcher::P_ReceiveFromClientReliable(INDEX iClient, CNetworkMessage &nmMessage) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/ServerIntegration.cpp,117,void CCecilSessionState::P_ProcessGameStreamBlock(CNetworkMessage &nmMessage) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/StreamBlock.cpp,37,void CCecilStreamBlock::ReadFromMessage(CNetworkMessage &nmToRead) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/StreamBlock.cpp,46,void CCecilStreamBlock::WriteToMessage(CNetworkMessage &nmToWrite) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/StreamBlock.cpp,55,void CCecilStreamBlock::RemoveFromStream(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/StreamBlock.cpp,60,void CCecilStreamBlock::Write_t(CTStream &strm) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/StreamBlock.cpp,72,void CCecilStreamBlock::Read_t(CTStream &strm) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/StreamBlock.cpp,94,void CCecilNetworkStream::AddAllocatedBlock(CCecilStreamBlock *pnsbBlock) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/NetworkPatch/StreamBlock.cpp,116,void CCecilNetworkStream::AddBlock(CCecilStreamBlock &nsbBlock) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/Navmesh.cpp,38,void CBotNavmesh::WriteNavmesh(CTStream *strm) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/Navmesh.cpp,55,void CBotNavmesh::ReadNavmesh(CTStream *strm) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/Navmesh.cpp,83,void CBotNavmesh::SaveNavmesh(CWorld &wo) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/Navmesh.cpp,100,void CBotNavmesh::LoadNavmesh(CWorld &wo) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/Navmesh.cpp,119,void CBotNavmesh::ClearNavmesh(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/Navmesh.cpp,224,"static void GetPolygonTriangle(CBrushPolygon *pbpo, INDEX iTriangle, CDynamicContainer<CBrushVertex> &cOutput) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/Navmesh.cpp,238,void CBotNavmesh::GenerateNavmesh(CWorld *pwo) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/Navmesh.cpp,384,void CBotNavmesh::ConnectPoints(INDEX iPoint) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/Navmesh.cpp,520,void CBotNavmesh::CleanupPoints(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/Navmesh.cpp,569,"static FLOAT PointsDist(CBotPathPoint *pbppSrc, CBotPathPoint *pbppDst) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/PathPoint.cpp,30,void CBotPathPoint::Reset(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/PathPoint.cpp,44,void CBotPathPoint::Clear(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/PathPoint.cpp,58,void CBotPathPoint::WritePoint(CTStream *strm) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/PathPoint.cpp,105,"void CBotPathPoint::ReadPoint(CTStream *strm, INDEX iVersion) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/PathPoint.cpp,190,BOOL CBotPathPoint::IsImportant(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/PathPoint.cpp,195,BOOL CBotPathPoint::IsLocked(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/PathPoint.cpp,207,"void CBotPathPoint::Connect(CBotPathPoint *pbppPoint, INDEX iType) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/PathPolygon.cpp,41,void CPathPolygon::WritePolygon(CTStream *strm) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/PathPolygon.cpp,54,void CPathPolygon::ReadPolygon(CTStream *strm) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/PathFinding/PathPolygon.cpp,84,FLOAT3D CPathPolygon::Center(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,77,extern void CopyBotNames(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,87,extern void CopyBotSkins(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,97,static void GetRandomName(CTString &strName) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,120,static void GetRandomSkin(CTString &strSkin) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,143,static void CECIL_ResetBotConfig(INDEX iDifficulty) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,160,"static void CECIL_AddBot(const CTString &strName, const CTString &strSkin, const CTString &strTeam) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,198,static void CECIL_QuickBot(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,203,static void CECIL_QuickBots(INDEX ctBots) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,250,static void CECIL_RemoveAllBots(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,285,static void CECIL_RemoveBot(const CTString &strBotName) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,323,static void CECIL_BotUpdate(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,340,static void CECIL_BotTeleport(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,356,"static void CECIL_SetWeapons(INDEX iWeapon, INDEX bPlayer) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,376,static void CECIL_GenerateNavMesh(void *pArgs) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,379,static void CECIL_GenerateNavMesh(INDEX iPoints) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,397,static void CECIL_NavMeshSave(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,411,BOOL LoadNavMeshPacket(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,422,static void CECIL_NavMeshLoad(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,431,static void CECIL_NavMeshClear(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,447,"static void CECIL_AddNavMeshPoint(FLOAT fOffset, FLOAT fGridSnap) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,461,static void CECIL_DeleteNavMeshPoint(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,472,static void CECIL_NavMeshPointInfo(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,504,static void CECIL_ConnectNavMeshPoint(INDEX iTargetPoint) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,517,static void CECIL_UntargetNavMeshPoint(INDEX iTargetPoint) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,529,static void CECIL_TeleportNavMeshPoint(FLOAT fOffset) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,541,"static void CECIL_NavMeshPointPos(FLOAT fX, FLOAT fY, FLOAT fZ) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,553,static void CECIL_SnapNavMeshPoint(FLOAT fGridSize) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,565,static void CECIL_NavMeshPointFlags(INDEX iFlags) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,577,static void CECIL_NavMeshPointEntity(INDEX iEntityID) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,589,static void CECIL_NavMeshPointRange(FLOAT fRange) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,601,static void CECIL_NavMeshPointNext(INDEX iNextPoint) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,613,static void CECIL_NavMeshPointLock(INDEX iEntityID) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,625,static void CECIL_AddNavMeshPointRange(FLOAT fRange) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,641,static void CECIL_NavMeshSelectPoint(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,671,static void CECIL_NavMeshConnectionType(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,686,extern void CECIL_InitSandboxActions(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,831,"static void AddBotWithCharacter(CWorld &wo, CPlayerCharacter &pcBot, const SBotSettings &sbs) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxActions.cpp,860,"void CECIL_SandboxAction(CPlayer *pen, const INDEX &iAction, CNetworkMessage &nmMessage) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,23,CTString ULongToBinary(ULONG ul) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,39,"BOOL ProjectLine(CProjection3D *ppr, FLOAT3D vPoint1, FLOAT3D vPoint2, FLOAT3D &vOnScreen1, FLOAT3D &vOnScreen2) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,63,"CEntity *FindEntityByID(CWorld *pwo, const INDEX &iEntityID) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,81,"FLOAT3D VerticalDiff(FLOAT3D vPosDiff, const FLOAT3D &vGravityDir) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,91,"FLOAT3D HorizontalDiff(FLOAT3D vPosDiff, const FLOAT3D &vGravityDir) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,97,"FLOAT GetRelH(FLOAT3D vDesiredDir, const ANGLE3D &aCurrent) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,117,"FLOAT GetRelP(FLOAT3D vDesiredDir, const ANGLE3D &aCurrent) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,137,"FLOAT2D GetRelAngles(FLOAT3D vDesiredDir, const ANGLE3D &aCurrent) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,173,"void CastRayFlags(CCastRay &cr, CWorld *pwoWorld, ULONG ulPass) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,209,"BOOL FlatPolygon(CWorld *wo, CBrushPolygon *pbpo) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,235,"BOOL IsOfDllClass(CEntity *pen, const CDLLEntityClass &dec) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,252,"BOOL IsDerivedFromDllClass(CEntity *pen, const CDLLEntityClass &dec) {",953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,277,INDEX CECIL_GetMaxPlayers(void) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,281,CPlayer *CECIL_GetPlayerEntity(const INDEX &iPlayer) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c
+Sources/Bots/SandboxCommon.cpp,293,INDEX CECIL_PlayerIndex(CPlayerEntity *pen) {,953b477e53fdc5a5d84c8ae8d759c84fdf6c973c

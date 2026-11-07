@@ -1,0 +1,21 @@
+{
+  "timestamp_utc": "2026-11-07T16:08:11.877457+00:00",
+  "tests": 5,
+  "unittest_exit": 0,
+  "output": "test_invalid_link_and_float (test_export.ExportTests.test_invalid_link_and_float) ... ok\ntest_lock_and_polygon_survive (test_export.ExportTests.test_lock_and_polygon_survive) ... ok\ntest_nine_originals_roundtrip (test_export.ExportTests.test_nine_originals_roundtrip) ... ok\ntest_truncation_and_trailing (test_export.ExportTests.test_truncation_and_trailing) ... ok\ntest_weapon_schema_and_known_values (test_rules.RuleTests.test_weapon_schema_and_known_values) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.027s\n\nOK\n",
+  "nav_files": 9,
+  "nav_json_roundtrip": "BYTE_IDENTICAL",
+  "nav_export_reproduction": "BYTE_IDENTICAL",
+  "weapon_export_reproduction": "BYTE_IDENTICAL",
+  "settings_assignments": 119,
+  "weapon_rows": 30,
+  "reference_hashes": 36,
+  "json_and_local_links": "PASS",
+  "reviews": [
+    "combat audit: corrected sequence, catch-up teleport, initial targetbox",
+    "architecture audit: corrected CBotPathPoint and cwd; parity vs optimality clarified"
+  ],
+  "native_build": "NOT_TESTED",
+  "gameplay": "NOT_TESTED",
+  "services_changed": false
+}
