@@ -1,0 +1,843 @@
+{
+  "source_commit": "953b477e53fdc5a5d84c8ae8d759c84fdf6c973c",
+  "source_files": [
+    "Sources/Bots/Logic/BotSettings.cpp",
+    "Sources/Bots/Logic/BotSettings.h"
+  ],
+  "reset_does_not_change_constructor_only_values": true,
+  "rows": [
+    {
+      "preset": "Dummy",
+      "parameter": "fRespawnDelay",
+      "source_value": "0.0f",
+      "type": "FLOAT",
+      "description": "How long to wait until respawning"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "bSniperZoom",
+      "source_value": "FALSE",
+      "type": "INDEX",
+      "description": "Use sniper zoom or not"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "bShooting",
+      "source_value": "FALSE",
+      "type": "INDEX",
+      "description": "Attack or not"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fShootAngle",
+      "source_value": "15.0f",
+      "type": "FLOAT",
+      "description": "Maximum attack angle"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fAccuracyAngle",
+      "source_value": "5.0f",
+      "type": "FLOAT",
+      "description": "Target angle accuracy"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fRotSpeedDist",
+      "source_value": "400.0f",
+      "type": "FLOAT",
+      "description": "Maximum distance for the difference"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fRotSpeedMin",
+      "source_value": "0.05f",
+      "type": "FLOAT",
+      "description": "Minimal rotation speed multiplier"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fRotSpeedMax",
+      "source_value": "0.2f",
+      "type": "FLOAT",
+      "description": "Maximum rotation speed multiplier"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fRotSpeedLimit",
+      "source_value": "30.0f",
+      "type": "FLOAT",
+      "description": "Maximum rotation speed limit"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fWeaponCD",
+      "source_value": "3.0f",
+      "type": "FLOAT",
+      "description": "Weapon selection cooldown"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fTargetCD",
+      "source_value": "1.0f",
+      "type": "FLOAT",
+      "description": "Target selection cooldown"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "iFollowPlayers",
+      "source_value": "0",
+      "type": "INDEX",
+      "description": "Follow players in coop or not (0 - no, 1 - yes, 2 - until there's a visible enemy)"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fSpeedMul",
+      "source_value": "1.0f",
+      "type": "FLOAT",
+      "description": "Speed multiplier"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "bStrafe",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Strafe near the target or not"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "bJump",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Jump or not"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fPrediction",
+      "source_value": "0.1f",
+      "type": "FLOAT",
+      "description": "Position prediction multiplier"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fPredictRnd",
+      "source_value": "0.1f",
+      "type": "FLOAT",
+      "description": "Prediction randomness"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "iAllowedWeapons",
+      "source_value": "-1",
+      "type": "INDEX",
+      "description": "Allowed weapons for the bot (-1 = everything is allowed)"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "iTargetType",
+      "source_value": "-1",
+      "type": "INDEX",
+      "description": "Target type (0 - players, 1 - enemies, 2 - both)"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "bTargetSearch",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Search for a target or not"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fImportantChance",
+      "source_value": "0.2f",
+      "type": "FLOAT",
+      "description": "How often to pick important points"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "bItemSearch",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Search for items or not"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fItemSearchCD",
+      "source_value": "5.0f",
+      "type": "FLOAT",
+      "description": "Item search cooldown"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "bItemVisibility",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Check for item's visibility or not"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fWeaponDist",
+      "source_value": "16.0f",
+      "type": "FLOAT",
+      "description": "Weapon search distance"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fHealthSearch",
+      "source_value": "100.0f",
+      "type": "FLOAT",
+      "description": "Start health searching below this HP"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fHealthDist",
+      "source_value": "0.0f",
+      "type": "FLOAT",
+      "description": "Health search distance"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fArmorDist",
+      "source_value": "0.0f",
+      "type": "FLOAT",
+      "description": "Armor search distance"
+    },
+    {
+      "preset": "Dummy",
+      "parameter": "fAmmoDist",
+      "source_value": "0.0f",
+      "type": "FLOAT",
+      "description": "Ammo search distance"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fRespawnDelay",
+      "source_value": "3.0f",
+      "type": "FLOAT",
+      "description": "How long to wait until respawning"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "bSniperZoom",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Use sniper zoom or not"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "bShooting",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Attack or not"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fShootAngle",
+      "source_value": "15.0f",
+      "type": "FLOAT",
+      "description": "Maximum attack angle"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fAccuracyAngle",
+      "source_value": "10.0f",
+      "type": "FLOAT",
+      "description": "Target angle accuracy"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fRotSpeedDist",
+      "source_value": "400.0f",
+      "type": "FLOAT",
+      "description": "Maximum distance for the difference"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fRotSpeedMin",
+      "source_value": "0.1f",
+      "type": "FLOAT",
+      "description": "Minimal rotation speed multiplier"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fRotSpeedMax",
+      "source_value": "0.5f",
+      "type": "FLOAT",
+      "description": "Maximum rotation speed multiplier"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fRotSpeedLimit",
+      "source_value": "20.0f",
+      "type": "FLOAT",
+      "description": "Maximum rotation speed limit"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fWeaponCD",
+      "source_value": "5.0f",
+      "type": "FLOAT",
+      "description": "Weapon selection cooldown"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fTargetCD",
+      "source_value": "3.0f",
+      "type": "FLOAT",
+      "description": "Target selection cooldown"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "iFollowPlayers",
+      "source_value": "1",
+      "type": "INDEX",
+      "description": "Follow players in coop or not (0 - no, 1 - yes, 2 - until there's a visible enemy)"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fSpeedMul",
+      "source_value": "1.0f",
+      "type": "FLOAT",
+      "description": "Speed multiplier"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "bStrafe",
+      "source_value": "FALSE",
+      "type": "INDEX",
+      "description": "Strafe near the target or not"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "bJump",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Jump or not"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fPrediction",
+      "source_value": "0.2f",
+      "type": "FLOAT",
+      "description": "Position prediction multiplier"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fPredictRnd",
+      "source_value": "0.5f",
+      "type": "FLOAT",
+      "description": "Prediction randomness"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "iAllowedWeapons",
+      "source_value": "-1",
+      "type": "INDEX",
+      "description": "Allowed weapons for the bot (-1 = everything is allowed)"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "iTargetType",
+      "source_value": "-1",
+      "type": "INDEX",
+      "description": "Target type (0 - players, 1 - enemies, 2 - both)"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "bTargetSearch",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Search for a target or not"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fImportantChance",
+      "source_value": "0.1f",
+      "type": "FLOAT",
+      "description": "How often to pick important points"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "bItemSearch",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Search for items or not"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fItemSearchCD",
+      "source_value": "5.0f",
+      "type": "FLOAT",
+      "description": "Item search cooldown"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "bItemVisibility",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Check for item's visibility or not"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fWeaponDist",
+      "source_value": "16.0f",
+      "type": "FLOAT",
+      "description": "Weapon search distance"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fHealthSearch",
+      "source_value": "50.0f",
+      "type": "FLOAT",
+      "description": "Start health searching below this HP"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fHealthDist",
+      "source_value": "32.0f",
+      "type": "FLOAT",
+      "description": "Health search distance"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fArmorDist",
+      "source_value": "16.0f",
+      "type": "FLOAT",
+      "description": "Armor search distance"
+    },
+    {
+      "preset": "Easy",
+      "parameter": "fAmmoDist",
+      "source_value": "16.0f",
+      "type": "FLOAT",
+      "description": "Ammo search distance"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fRespawnDelay",
+      "source_value": "1.0f",
+      "type": "FLOAT",
+      "description": "How long to wait until respawning"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "bSniperZoom",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Use sniper zoom or not"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "bShooting",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Attack or not"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fShootAngle",
+      "source_value": "15.0f",
+      "type": "FLOAT",
+      "description": "Maximum attack angle"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fAccuracyAngle",
+      "source_value": "5.0f",
+      "type": "FLOAT",
+      "description": "Target angle accuracy"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fRotSpeedDist",
+      "source_value": "400.0f",
+      "type": "FLOAT",
+      "description": "Maximum distance for the difference"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fRotSpeedMin",
+      "source_value": "0.05f",
+      "type": "FLOAT",
+      "description": "Minimal rotation speed multiplier"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fRotSpeedMax",
+      "source_value": "0.2f",
+      "type": "FLOAT",
+      "description": "Maximum rotation speed multiplier"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fRotSpeedLimit",
+      "source_value": "30.0f",
+      "type": "FLOAT",
+      "description": "Maximum rotation speed limit"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fWeaponCD",
+      "source_value": "3.0f",
+      "type": "FLOAT",
+      "description": "Weapon selection cooldown"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fTargetCD",
+      "source_value": "1.0f",
+      "type": "FLOAT",
+      "description": "Target selection cooldown"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "iFollowPlayers",
+      "source_value": "1",
+      "type": "INDEX",
+      "description": "Follow players in coop or not (0 - no, 1 - yes, 2 - until there's a visible enemy)"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fSpeedMul",
+      "source_value": "1.0f",
+      "type": "FLOAT",
+      "description": "Speed multiplier"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "bStrafe",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Strafe near the target or not"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "bJump",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Jump or not"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fPrediction",
+      "source_value": "0.1f",
+      "type": "FLOAT",
+      "description": "Position prediction multiplier"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fPredictRnd",
+      "source_value": "0.1f",
+      "type": "FLOAT",
+      "description": "Prediction randomness"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "iAllowedWeapons",
+      "source_value": "-1",
+      "type": "INDEX",
+      "description": "Allowed weapons for the bot (-1 = everything is allowed)"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "iTargetType",
+      "source_value": "-1",
+      "type": "INDEX",
+      "description": "Target type (0 - players, 1 - enemies, 2 - both)"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "bTargetSearch",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Search for a target or not"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fImportantChance",
+      "source_value": "0.2f",
+      "type": "FLOAT",
+      "description": "How often to pick important points"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "bItemSearch",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Search for items or not"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fItemSearchCD",
+      "source_value": "5.0f",
+      "type": "FLOAT",
+      "description": "Item search cooldown"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "bItemVisibility",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Check for item's visibility or not"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fWeaponDist",
+      "source_value": "16.0f",
+      "type": "FLOAT",
+      "description": "Weapon search distance"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fHealthSearch",
+      "source_value": "80.0f",
+      "type": "FLOAT",
+      "description": "Start health searching below this HP"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fHealthDist",
+      "source_value": "32.0f",
+      "type": "FLOAT",
+      "description": "Health search distance"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fArmorDist",
+      "source_value": "16.0f",
+      "type": "FLOAT",
+      "description": "Armor search distance"
+    },
+    {
+      "preset": "Normal",
+      "parameter": "fAmmoDist",
+      "source_value": "16.0f",
+      "type": "FLOAT",
+      "description": "Ammo search distance"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fRespawnDelay",
+      "source_value": "0.0f",
+      "type": "FLOAT",
+      "description": "How long to wait until respawning"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "bSniperZoom",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Use sniper zoom or not"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "bShooting",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Attack or not"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fShootAngle",
+      "source_value": "15.0f",
+      "type": "FLOAT",
+      "description": "Maximum attack angle"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fAccuracyAngle",
+      "source_value": "2.0f",
+      "type": "FLOAT",
+      "description": "Target angle accuracy"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fRotSpeedDist",
+      "source_value": "50.0f",
+      "type": "FLOAT",
+      "description": "Maximum distance for the difference"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fRotSpeedMin",
+      "source_value": "0.05f",
+      "type": "FLOAT",
+      "description": "Minimal rotation speed multiplier"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fRotSpeedMax",
+      "source_value": "0.1f",
+      "type": "FLOAT",
+      "description": "Maximum rotation speed multiplier"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fRotSpeedLimit",
+      "source_value": "30.0f",
+      "type": "FLOAT",
+      "description": "Maximum rotation speed limit"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fWeaponCD",
+      "source_value": "3.0f",
+      "type": "FLOAT",
+      "description": "Weapon selection cooldown"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fTargetCD",
+      "source_value": "1.0f",
+      "type": "FLOAT",
+      "description": "Target selection cooldown"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "iFollowPlayers",
+      "source_value": "2",
+      "type": "INDEX",
+      "description": "Follow players in coop or not (0 - no, 1 - yes, 2 - until there's a visible enemy)"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fSpeedMul",
+      "source_value": "1.0f",
+      "type": "FLOAT",
+      "description": "Speed multiplier"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "bStrafe",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Strafe near the target or not"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "bJump",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Jump or not"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fPrediction",
+      "source_value": "0.5f",
+      "type": "FLOAT",
+      "description": "Position prediction multiplier"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fPredictRnd",
+      "source_value": "0.0f",
+      "type": "FLOAT",
+      "description": "Prediction randomness"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "iAllowedWeapons",
+      "source_value": "-1",
+      "type": "INDEX",
+      "description": "Allowed weapons for the bot (-1 = everything is allowed)"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "iTargetType",
+      "source_value": "-1",
+      "type": "INDEX",
+      "description": "Target type (0 - players, 1 - enemies, 2 - both)"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "bTargetSearch",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Search for a target or not"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fImportantChance",
+      "source_value": "0.4f",
+      "type": "FLOAT",
+      "description": "How often to pick important points"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "bItemSearch",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Search for items or not"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fItemSearchCD",
+      "source_value": "5.0f",
+      "type": "FLOAT",
+      "description": "Item search cooldown"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "bItemVisibility",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Check for item's visibility or not"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fWeaponDist",
+      "source_value": "16.0f",
+      "type": "FLOAT",
+      "description": "Weapon search distance"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fHealthSearch",
+      "source_value": "100.0f",
+      "type": "FLOAT",
+      "description": "Start health searching below this HP"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fHealthDist",
+      "source_value": "32.0f",
+      "type": "FLOAT",
+      "description": "Health search distance"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fArmorDist",
+      "source_value": "16.0f",
+      "type": "FLOAT",
+      "description": "Armor search distance"
+    },
+    {
+      "preset": "Hard",
+      "parameter": "fAmmoDist",
+      "source_value": "16.0f",
+      "type": "FLOAT",
+      "description": "Ammo search distance"
+    },
+    {
+      "preset": "ConstructorOnly",
+      "parameter": "b3rdPerson",
+      "source_value": "TRUE",
+      "type": "INDEX",
+      "description": "Set third person view"
+    },
+    {
+      "preset": "ConstructorOnly",
+      "parameter": "iCrosshair",
+      "source_value": "-1",
+      "type": "INDEX",
+      "description": "Preferred crosshair (-1 for random)"
+    },
+    {
+      "preset": "ConstructorOnly",
+      "parameter": "bAvoidPits",
+      "source_value": "FALSE",
+      "type": "INDEX",
+      "description": "Avoid bottomless pits or not"
+    }
+  ]
+}

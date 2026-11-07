@@ -1,0 +1,614 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-2.0-only
+"""Compile real native bridge decisions against deterministic world/ray stubs.
+The main-thread loader and native item decoding are excluded (separate tests/build).
+This is portable behavioral evidence, not Retail collision/runtime qualification.
+"""
+import argparse
+import re
+import hashlib
+from pathlib import Path
+import subprocess
+import tempfile
+
+STUBS = r'''
+#include <cstdio>
+#include <cstdarg>
+#include <cstdlib>
+#include <new>
+#include <vector>
+#include <cmath>
+#include "cecil_motion.h"
+#include "cecil_rules.h"
+static bool measuring=false;static size_t allocations=0;
+void* operator new(size_t n){if(measuring)++allocations;void* p=std::malloc(n?n:1);if(!p)throw std::bad_alloc();return p;}
+void operator delete(void* p)noexcept{std::free(p);}
+void operator delete(void* p,size_t)noexcept{std::free(p);}
+using INDEX=int;using BOOL=int;using FLOAT=float;using ULONG=unsigned long;
+const int TRUE=1,FALSE=0,ENF_DELETED=1,BPOF_PASSABLE=1<<11;
+struct FLOAT3D {
+ float a[3];FLOAT3D(float x=0,float y=0,float z=0):a{x,y,z}{}
+ float operator()(int i)const{return a[i-1];} float& operator()(int i){return a[i-1];}
+ FLOAT3D operator+(const FLOAT3D& b)const{return {a[0]+b.a[0],a[1]+b.a[1],a[2]+b.a[2]};}
+ FLOAT3D operator-(const FLOAT3D& b)const{return {a[0]-b.a[0],a[1]-b.a[1],a[2]-b.a[2]};}
+ FLOAT3D operator*(float s)const{return {a[0]*s,a[1]*s,a[2]*s};}
+ double Length()const{return std::sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]);}
+};
+struct FLOATmatrix3D {double m[3][3]={{1,0,0},{0,1,0},{0,0,1}};};
+FLOAT3D operator*(const FLOAT3D& v,const FLOATmatrix3D& m){
+ return {float(v(1)*m.m[0][0]+v(2)*m.m[0][1]+v(3)*m.m[0][2]),
+         float(v(1)*m.m[1][0]+v(2)*m.m[1][1]+v(3)*m.m[1][2]),
+         float(v(1)*m.m[2][0]+v(2)*m.m[2][1]+v(3)*m.m[2][2])};
+}
+struct CPlacement3D {FLOAT3D pl_PositionVector,pl_OrientationAngle;};
+struct StubClass {const char* name="Entity";const char* GetName()const{return name;}};
+struct CEntity {
+ enum {RT_BRUSH=4,RT_MODEL=2,RT_TERRAIN=11};
+ StubClass cls;CEntity* target=nullptr;bool marker=false;
+ StubClass* GetClass(){return &cls;}CEntity* GetTarget()const{return target;}bool IsMarker()const{return marker;}
+ unsigned en_ulID=0,flags=0;int type=RT_MODEL;CPlacement3D pl;
+ bool pickable=false;botcore::CecilItem item;
+ const CPlacement3D& GetPlacement()const{return pl;}
+ unsigned GetFlags()const{return flags;}int GetRenderType()const{return type;}
+};
+bool IsDerivedFromClass(CEntity*,const char*){return false;}
+struct CSwitch:CEntity {bool m_bUseable=true;CSwitch(){cls.name="Classes/Switch.ecl";}};
+struct CMovingBrush:CEntity {CEntity* m_penSwitch=nullptr;CMovingBrush(){cls.name="Classes/MovingBrush.ecl";}};
+struct CMarker:CEntity {CMarker(){cls.name="Classes/Marker.ecl";marker=true;}};
+struct CWorld {
+ std::vector<CEntity*> wo_cenEntities;
+ CEntity* EntityFromID(ULONG id){for(auto e:wo_cenEntities)if(e->en_ulID==id)return e;return nullptr;}
+};
+#define FOREACHINDYNAMICCONTAINER(c,t,it) for(auto it : c)
+struct CPlayerWeapons {CEntity* m_penRayHit=nullptr;float m_fRayHitDistance=1000;unsigned m_iAvailableWeapons=3;int m_iCurrentWeapon=2;unsigned usable=3,ammo=0;};
+enum PlayerState {PST_STAND=0,PST_SWIM=2,PST_DIVE=3};
+struct CPlayer:CEntity {
+ PlayerState m_pstState=PST_STAND;FLOATmatrix3D body;CPlacement3D en_plViewpoint;
+ const FLOATmatrix3D& GetRotationMatrix()const{return body;}
+ CPlayerWeapons w;CPlayerWeapons* m_penWeapons=&w;CWorld world;
+ float health=100,m_fArmor=0;FLOAT3D en_vGravityDir{0,-1,0};
+ float GetHealth()const{return health;}CPlayerWeapons* GetPlayerWeapons(){return &w;}
+ CWorld* GetWorld(){return &world;}
+};
+struct CSessionProperties {BOOL sp_bInfiniteAmmo=FALSE;};
+struct Network {CSessionProperties session;const void* GetSessionProperties(){return &session;}} network,*_pNetwork=&network;
+struct Timer {double TickQuantum=.05;} timer,*_pTimer=&timer;
+int _botRayBudget=20,bot_iRosterOffset=0;
+long _botSupplyMapSerial=7;
+long InterlockedCompareExchange(long* p,long,long){return *p;}
+int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0;char lastEnd[32]={0};
+void BotLog(const char* format,...){
+ if(std::strstr(format,"[CecilLock]")){
+  ++lockEvents;va_list args;va_start(args,format);(void)va_arg(args,int);(void)va_arg(args,int);
+  lastLocked=va_arg(args,int);lastPresent=va_arg(args,int);va_end(args);
+ }
+ if(std::strstr(format,"[CecilGoal]"))++goalEvents;
+ if(std::strstr(format,"[CecilGoalEnd]")){
+  ++endEvents;va_list args;va_start(args,format);
+  (void)va_arg(args,int);(void)va_arg(args,int);(void)va_arg(args,unsigned long);
+  std::snprintf(lastEnd,sizeof(lastEnd),"%s",va_arg(args,const char*));va_end(args);
+ }
+}
+CPlacement3D BotCombatEye(CPlayer* p){return p->GetPlacement();}
+unsigned BotCecilUsableWeapons(CPlayerWeapons* p,bool){return p->usable;}
+unsigned BotCecilAmmoNeed(CPlayerWeapons* p){return p->ammo;}
+bool BotCecilWeaponGoalPicked(CPlayer*,CEntity*){return false;}
+bool BotCecilReadItem(CPlayer*,CEntity* e,unsigned generation,unsigned,botcore::CecilItem* out){
+ if(!e||!e->pickable||(e->flags&ENF_DELETED))return false;
+ *out=e->item;out->id=e->en_ulID;out->generation=generation;out->pickable=true;
+ out->x=e->pl.pl_PositionVector(1);out->y=e->pl.pl_PositionVector(2);out->z=e->pl.pl_PositionVector(3);return true;
+}
+struct CBrushPlane {FLOAT3D bpl_plAbsolute{0,1,0};};
+struct CBrushPolygon {CBrushPlane* bpo_pbplPlane=nullptr;unsigned bpo_ulFlags=0;};
+CEntity obstruction,floorEntity;CBrushPlane floorPlane;CBrushPolygon floorPolygon;
+int floorMode=0,rayCount=0,blockedItems=0,floorPattern=0,wallMode=0,wallCount=0;FLOAT3D lastFrom,lastTo,wallFrom,wallTo;
+struct CCastRay {
+ enum {TT_NONE,TT_COLLISIONBOX};
+ bool cr_bAllowOverHit=false,cr_bPhysical=false;int cr_ttHitModels=TT_NONE;
+ CEntity* cr_penHit=nullptr;CBrushPolygon* cr_pbpoBrushPolygon=nullptr;FLOAT3D from,to;
+ CCastRay(CPlayer*,const FLOAT3D& a,const FLOAT3D& b):from(a),to(b){}
+ void Cast(CWorld*){
+  ++rayCount;lastFrom=from;lastTo=to;
+  if(cr_ttHitModels==TT_NONE&&(to-from).Length()>4){
+   if(floorPattern==1&&from(3)<=0)return;
+   if(floorPattern==2&&from(3)<0&&from(1)<2)return;
+   if(floorMode){cr_penHit=&floorEntity;if(floorMode==2)cr_pbpoBrushPolygon=&floorPolygon;}
+  }else{
+   ++wallCount;wallFrom=from;wallTo=to;
+   if(wallMode==2||(wallMode==1&&to(3)<from(3))||(to(1)>0 && to(1)<=blockedItems))cr_penHit=&obstruction;
+  }
+ }
+};
+'''
+TESTS = r'''
+static int checks=0,failures=0;
+void check(bool yes,const char* name){++checks;if(!yes){++failures;std::printf("FAIL %s\n",name);}}
+bool near(double a,double b){return std::fabs(a-b)<1e-5;}
+CPlayer player;std::vector<CEntity> items;
+void setup(int nodes=3){
+ player=CPlayer();player.m_penWeapons=&player.w;items.clear();items.reserve(140);
+ auto& g=BotSupplyGraph();g=botcore::CecilNavGraph();g.points.resize(nodes);
+ for(int i=0;i<nodes;++i){g.points[i].id=i;g.points[i].z=-10*i;g.points[i].radius=1;if(i+1<nodes)g.points[i].links.push_back(i+1);}
+ auto& s=BotSupplyState(0);s=SSupplyState();s.navigator.Prepare(nodes);s.goals.Prepare(nodes);s.blocked.resize(nodes);s.worldLock.assign(nodes,3);
+ s.playable=true;s.generation=1;s.anchor=0;s.owned=3;
+ BotCecilSettings()=botcore::CecilPreset(2);BotCecilSettings().fItemSearchCD=0;
+ // Existing support/recovery fixtures explicitly exercise opt-in, off-graph pit avoidance.
+ BotCecilSettings().bAvoidPits=1;
+ lockEvents=0;lastLocked=lastPresent=-1;goalEvents=endEvents=0;lastEnd[0]=0;_botSupplyMapSerial=7;_botRayBudget=40;rayCount=0;blockedItems=0;floorMode=0;floorPattern=0;wallMode=wallCount=0;floorEntity.type=CEntity::RT_MODEL;
+ floorPlane.bpl_plAbsolute=FLOAT3D(0,1,0);floorPolygon.bpo_pbplPlane=&floorPlane;floorPolygon.bpo_ulFlags=0;
+}
+CEntity& addItem(unsigned id,float x,float z,botcore::CecilItemKind kind=botcore::CecilItemKind::Health){
+ items.emplace_back();auto& e=items.back();e.en_ulID=id;e.pickable=true;
+ e.pl.pl_PositionVector=FLOAT3D(x,0,z);e.item.kind=kind;e.item.value=25;e.item.weapon=4;
+ player.world.wo_cenEntities.push_back(&e);return e;
+}
+template<class T>auto typed(const T& m,int)->decltype(m.itemGoal&&m.urgent){return m.itemGoal&&m.urgent;}
+template<class T>bool typed(const T&,long){return false;}
+int main(){
+ { // Preset control: absence of support is not an unconditional movement veto.
+ setup();BotCecilSettings()=botcore::CecilPreset(2);double pitF=1,pitS=0,pitU=0;
+ check(BotCecilSettings().bAvoidPits==0,"original normal preset does not enable pit avoidance");
+ _botRayBudget=1;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,pitF,pitS,pitU,0,1)==1&&pitF==1&&rayCount==1&&BotSupplyState(0).probe.floorRays==0,"default preset allows missing-floor motion after one verified wall ray");
+ setup();BotCecilSettings().bAvoidPits=0;wallMode=2;pitF=1;pitS=pitU=0;_botRayBudget=16;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,pitF,pitS,pitU,0,1)==0&&pitF==0&&BotSupplyState(0).probe.primaryReason==SCecilProbe::reasonWallHit&&BotSupplyState(0).probe.floorRays==0,"disabled pit avoidance still rejects actual walls");
+ setup();BotCecilSettings().bAvoidPits=0;pitF=1;pitS=pitU=0;_botRayBudget=0;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,pitF,pitS,pitU,0,1)==0&&pitF==0&&rayCount==0,"disabled pit avoidance cannot bypass wall-ray budget");
+ setup();BotCecilSettings().bAvoidPits=0;player.en_plViewpoint.pl_OrientationAngle(1)=NAN;pitF=1;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,pitF,pitS,pitU,0,1)==0&&pitF==0&&rayCount==0,"disabled pit avoidance cannot bypass invalid view state");
+ setup();auto& pathState=BotSupplyState(0);pathState.goal=2;pathState.scanTick=100;
+ const auto pathMove=BotSupplyTick(&player,0,1,1000);_botRayBudget=16;rayCount=0;pitF=1;pitS=pitU=0;
+ check(pathMove.active&&pathState.hop>=0,"fixture establishes a live directed navigation point");
+ check(BotCecilSafeMotion(&player,pathState,.05,pitF,pitS,pitU,0,1)==1&&pitF==1&&pathState.probe.floorRays==0,"opt-in pit avoidance exempts an actual current NAV point");
+ pathState.blocked[pathState.hop]=1;_botRayBudget=16;pitF=1;pitS=pitU=0;
+ check(BotCecilSafeMotion(&player,pathState,.05,pitF,pitS,pitU,0,1)==0&&pathState.probe.floorRays>0,"blocked current NAV point restores off-graph support checks");
+ pathState.blocked[pathState.hop]=0;_botRayBudget=16;pitF=1;pitS=pitU=0;
+ check(BotCecilSafeMotion(&player,pathState,.1,pitF,pitS,pitU,0,1)==0&&pathState.probe.floorRays>0,"last-tick NAV context cannot exempt a caller that skipped navigation update");
+ pathState.goal=1;_botRayBudget=16;pitF=1;pitS=pitU=0;
+ check(BotCecilSafeMotion(&player,pathState,.05,pitF,pitS,pitU,0,1)==0&&pathState.probe.floorRays>0,"post-update goal change invalidates current point context");
+ pathState.ClearGoal();_botRayBudget=16;pitF=1;pitS=pitU=0;
+ check(BotCecilSafeMotion(&player,pathState,.15,pitF,pitS,pitU,0,1)==0&&pathState.probe.floorRays>0,"cleared goal cannot retain a stale floor exemption");
+ setup();auto& stale=BotSupplyState(0);stale.goal=2;stale.hop=1;_botRayBudget=16;pitF=1;pitS=pitU=0;
+ check(BotCecilSafeMotion(&player,stale,0,pitF,pitS,pitU,0,1)==0&&stale.probe.floorRays>0,"anchor goal and stale hop alone do not establish a current NAV point");
+ setup();player.health=25;auto& connector=BotSupplyState(0);addItem(501,0,-2);connector.goal=connector.anchor=0;connector.goalEntity=501;connector.scanTick=100;
+ const auto connectorMove=BotSupplyTick(&player,0,1,1000);_botRayBudget=16;pitF=1;pitS=pitU=0;
+ check(connectorMove.active&&connector.hop==0&&BotCecilSafeMotion(&player,connector,.05,pitF,pitS,pitU,0,1)==1&&connector.probe.floorRays==0,"arrived target retains NAV context for verified item connector");
+ setup();auto& guarded=BotSupplyState(0);guarded.goal=2;guarded.scanTick=100;BotSupplyTick(&player,0,1,1000);
+ BotSupplyTick(&player,0,2,1);_botRayBudget=16;pitF=1;pitS=pitU=0;
+ check(BotCecilSafeMotion(&player,guarded,.1,pitF,pitS,pitU,0,1)==0&&guarded.probe.floorRays>0,"close-combat early return cannot retain preceding NAV context");
+ setup();auto& failed=BotSupplyState(0);failed.goal=2;failed.scanTick=100;BotSupplyGraph().points[0].links.clear();
+ BotSupplyTick(&player,0,1,1000);_botRayBudget=16;pitF=1;pitS=pitU=0;
+ check(BotCecilSafeMotion(&player,failed,.05,pitF,pitS,pitU,0,1)==0&&failed.probe.floorRays>0,"unreachable directed goal remains off graph for pit avoidance");
+ }
+ setup();double probeF=1,probeS=0,probeU=0;wallMode=2;obstruction.en_ulID=77;_botRayBudget=16;
+ auto& diagnostic=BotSupplyState(0);
+ check(BotCecilSafeMotion(&player,diagnostic,0,probeF,probeS,probeU,0,1)==0&&diagnostic.probe.primaryReason==SCecilProbe::reasonWallHit&&diagnostic.probe.lastReason==SCecilProbe::reasonWallHit&&diagnostic.probe.hitEntity==77&&diagnostic.probe.wallRays==4&&diagnostic.probe.floorRays==0,"wall rejection records existing hit and exact ray counts");
+ check(diagnostic.probe.inputForward==1&&diagnostic.probe.inputStrafe==0&&diagnostic.probe.finalYaw==0&&diagnostic.probe.to[2]>diagnostic.probe.from[2],"probe preserves original input and last rejected reverse geometry");
+ setup();probeF=1;probeS=probeU=0;_botRayBudget=16;
+ BotCecilSafeMotion(&player,BotSupplyState(0),0,probeF,probeS,probeU,0,1);
+ const auto noSupport=BotSupplyState(0).probe;
+ check(noSupport.primaryReason==SCecilProbe::reasonNoFloor&&noSupport.lastReason==SCecilProbe::reasonNoFloor&&noSupport.floorRays==4&&noSupport.wallRays==4&&noSupport.hitEntity==0&&noSupport.to[1]<noSupport.from[1],"missing support records floor rays and real downward geometry");
+ setup();floorMode=2;floorEntity.type=CEntity::RT_BRUSH;floorEntity.en_ulID=55;floorPlane.bpl_plAbsolute=FLOAT3D(0,-1,0);probeF=1;probeS=probeU=0;
+ BotCecilSafeMotion(&player,BotSupplyState(0),0,probeF,probeS,probeU,0,1);
+ check(BotSupplyState(0).probe.primaryReason==SCecilProbe::reasonUnsupportedNormal&&near(BotSupplyState(0).probe.support,-1)&&BotSupplyState(0).probe.normal[1]==-1&&BotSupplyState(0).probe.hitEntity==55,"unsupported normal records actual brush support dot and entity");
+ setup();floorMode=2;floorPolygon.bpo_ulFlags=BPOF_PASSABLE;probeF=1;probeS=probeU=0;
+ BotCecilSafeMotion(&player,BotSupplyState(0),0,probeF,probeS,probeU,0,1);
+ check(BotSupplyState(0).probe.lastReason==SCecilProbe::reasonPassable,"passable brush has distinct rejection reason");
+ setup();_botRayBudget=1;probeF=1;probeS=probeU=0;
+ BotCecilSafeMotion(&player,BotSupplyState(0),0,probeF,probeS,probeU,0,1);
+ check(BotSupplyState(0).probe.primaryReason==SCecilProbe::reasonBudget&&BotSupplyState(0).probe.reasonMask==(1u<<SCecilProbe::reasonBudget)&&rayCount==0,"budget rejection adds no diagnostic raycast");
+ probeF=probeS=probeU=0;BotCecilSafeMotion(&player,BotSupplyState(0),.05,probeF,probeS,probeU,0,1);
+ check(BotSupplyState(0).probe.primaryReason==0&&BotSupplyState(0).probe.lastReason==0&&BotSupplyState(0).probe.reasonMask==0&&BotSupplyState(0).probe.hitEntity==0,"each call resets stale probe diagnostics");
+ setup();player.body.m[0][0]=2;probeF=1;
+ BotCecilSafeMotion(&player,BotSupplyState(0),0,probeF,probeS,probeU,0,1);
+ check(BotSupplyState(0).probe.primaryReason==SCecilProbe::reasonInvalid&&rayCount==0,"invalid input is distinct and adds no ray");
+ setup();double tinyF=.04,tinyS=0,tinyU=0;_botRayBudget=0;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,tinyF,tinyS,tinyU,0,1)==1&&tinyF==0&&tinyS==0&&tinyU==0&&rayCount==0,"subthreshold motion becomes true neutral even without floor or budget");
+ check(!BotCecilFloor(&player,.04,0,0,0)&&!BotCecilClearMotion(&player,.04,0,0,0),"direct probes never exempt small nonzero horizontal movement");
+ tinyF=.04;tinyU=1;check(BotCecilSafeMotion(&player,BotSupplyState(0),0,tinyF,tinyS,tinyU,0,1)==0&&tinyF==0&&tinyU==0,"vertical input cannot hide small horizontal motion from floor checking");
+ setup();auto& locks=BotSupplyState(0);auto& lockGraph=BotSupplyGraph();auto& lockEntity=addItem(99,0,0);lockGraph.points[1].lock_entity=99;
+ BotCecilLocks(&player,locks,0);
+ check(lockEvents==1&&lastLocked==0&&lastPresent==1&&!locks.blocked[1],"physical lock logs initial unlocked snapshot once");
+ BotCecilLocks(&player,locks,.1);check(lockEvents==1,"unchanged physical lock produces no repeated event");
+ locks.avoidNode=1;locks.avoidUntil=10;BotCecilLocks(&player,locks,.2);
+ check(lockEvents==1&&locks.blocked[1],"temporary avoid node cannot create a physical lock event");
+ lockEntity.pl.pl_PositionVector(1)=.2f;BotCecilLocks(&player,locks,.3);
+ check(lockEvents==2&&lastLocked==1&&lastPresent==1,"physical lock displacement creates locked transition");
+ lockEntity.flags=ENF_DELETED;BotCecilLocks(&player,locks,.4);
+ check(lockEvents==3&&lastLocked==1&&lastPresent==0,"missing lock entity has distinct physical status");
+ lockEntity.flags=0;lockEntity.pl.pl_PositionVector(1)=0;BotCecilLocks(&player,locks,.5);
+ check(lockEvents==4&&lastLocked==0&&locks.blocked[1],"physical unlock logs independently of still active temporary avoid");
+ locks.Reset();BotCecilLocks(&player,locks,.6);check(lockEvents==5&&lastLocked==0,"reset deterministically logs fresh physical lock snapshot");
+ setup();_botRayBudget=2;check(!BotSupplyClear(&player,{0,0,0},{1,0,0})&&rayCount==0,"reserve final wall and floor rays");
+ setup();check(!BotCecilFloor(&player,1,0,0,32),"teleport flags never excuse missing support");
+ setup();floorMode=1;check(!BotCecilFloor(&player,1,0,0,0),"model is not floor support");
+ floorMode=2;floorEntity.type=CEntity::RT_BRUSH;
+ check(BotCecilFloor(&player,1,0,0,0),"brush upward polygon supports movement");
+ floorPolygon.bpo_ulFlags=BPOF_PASSABLE;check(!BotCecilFloor(&player,1,0,0,0),"passable brush is not support");
+ floorPolygon.bpo_ulFlags=0;floorPlane.bpl_plAbsolute=FLOAT3D(1,0,0);
+ check(!BotCecilFloor(&player,1,0,0,0),"wall normal is not support");
+ floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;
+ check(BotCecilFloor(&player,1,0,0,90)&&near(lastFrom(1),-1.5)&&near(lastFrom(3),0),"terrain support and supplied final heading");
+ setup(1);check(BotSupplyNearest(&player,{9,0,0},FALSE)==-1,"item connector beyond eight is rejected");
+ setup(1);check(BotSupplyNearest(&player,{9,0,0},TRUE)==0,"player anchoring keeps twelve unit range");
+ setup(1);player.health=25;addItem(10,0,-3);
+ BotCecilChooseGoal(&player,0,0,1000);auto& s=BotSupplyState(0);double since=s.goalSince;
+ _botRayBudget=40;BotCecilChooseGoal(&player,0,200,1000);
+ check(goalEvents==1,"one goal event for one selection despite repeated scans");
+ check(s.goalEntity==10&&s.goalSince==since,"same item does not renew twelve second lifetime");
+ _botRayBudget=40;auto expired=BotSupplyTick(&player,0,260,1000);
+ check(endEvents==1&&std::strcmp(lastEnd,"timeout")==0,"timeout goal end event");
+ check(s.goalEntity!=10&&!expired.active,"expired item rejected before movement and selection");
+ setup(1);player.health=25;for(int i=1;i<=7;++i)addItem(100+i,float(i),0);
+ blockedItems=6;
+ for(int tick=0;tick<140;tick+=20){_botRayBudget=7;BotCecilChooseGoal(&player,0,tick,1000);}
+ check(BotSupplyState(0).goalEntity==107,"bounded rejection memory advances beyond occluded leaders");
+ setup(1);player.health=25;addItem(10,0,-7);
+ auto& connector=BotSupplyState(0);connector.goal=connector.anchor=0;connector.goalEntity=10;connector.goalSince=0;connector.scanTick=999;
+ player.pl.pl_PositionVector=FLOAT3D(0,0,2);BotSupplyGraph().points[0].radius=3;
+ auto disconnected=BotSupplyTick(&player,0,1,1000);
+ check(endEvents==1&&std::strcmp(lastEnd,"connector")==0,"connector goal end event");
+ check(connector.goalEntity==0&&!disconnected.active,"failed final connector immediately clears item");
+ setup(3);auto& chain=BotSupplyState(0);chain.goal=0;chain.anchor=0;chain.scanTick=999;
+ BotSupplyGraph().points[0].flags=botcore::CECIL_IMPORTANT;BotSupplyGraph().points[0].next_slot=2;
+ BotSupplyGraph().points[0].links={1};BotSupplyGraph().points[1].flags=botcore::CECIL_UNREACHABLE;
+ BotSupplyTick(&player,0,1,1000);_botRayBudget=40;
+ auto chained=BotSupplyTick(&player,0,2,1000);
+ check(chain.goal==2&&chained.active&&chained.forward>0,"important chain keeps context into untagged destination");
+ setup(2);BotSupplyGraph().points[1].x=10;BotSupplyGraph().points[1].z=0;
+ BotCecilSettings().bStrafe=0;auto& noStrafe=BotSupplyState(0);noStrafe.goal=1;noStrafe.anchor=0;noStrafe.scanTick=999;
+ auto lateral=BotSupplyTick(&player,0,1,1000);check(lateral.strafe==0,"bStrafe disables native lateral motion");
+ setup(2);auto& danger=BotSupplyState(0);danger.goal=1;danger.anchor=0;danger.scanTick=999;
+ check(!BotSupplyTick(&player,0,1,5).active,"close threat prevents blind patrol navigation");
+ setup(2);player.health=25;addItem(10,0,-10);auto& health=BotSupplyState(0);
+ health.goal=1;health.anchor=0;health.goalEntity=10;health.scanTick=999;
+ auto flee=BotSupplyTick(&player,0,1,5);
+ check(flee.active&&typed(flee,0),"urgent health can navigate with a close threat and typed result");
+ setup(2);player.health=70;addItem(10,0,-10);auto& mild=BotSupplyState(0);
+ mild.goal=1;mild.anchor=0;mild.goalEntity=10;mild.scanTick=999;
+ check(!BotSupplyTick(&player,0,1,5).active,"nonurgent health yields to close threat");
+ setup(1);check(BotSupplyNearest(&player,{8,0,0},FALSE)==0,"eight unit item connector accepted");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;_botRayBudget=1;
+ check(BotCecilFloor(&player,1,0,0,0)&&_botRayBudget==0,"floor uses the reserved last ray");
+ setup();auto& reject=BotSupplyState(0);reject.RejectItem(42,10);
+ check(reject.ItemRejected(42,39.9)&&!reject.ItemRejected(42,40),"rejection TTL expires exactly after thirty seconds");
+ for(unsigned i=1;i<=300;++i)reject.RejectItem(1000+i,i);
+ check(!reject.ItemRejected(1001,301)&&reject.ItemRejected(1300,301),"bounded rejection records replace oldest expiry");
+ reject.Reset();check(!reject.ItemRejected(1300,301),"source reset clears rejection memory");
+ setup(1);player.health=25;auto& hidden=addItem(10,0,-3);auto& gone=BotSupplyState(0);
+ gone.goal=gone.anchor=0;gone.goalEntity=10;gone.scanTick=999;hidden.pickable=false;
+ check(!BotSupplyTick(&player,0,1,1000).active&&gone.goalEntity==0,"unavailable item invalidated before movement");
+ check(endEvents==1&&std::strcmp(lastEnd,"unavailable")==0,"unavailable goal end event");
+ setup(1);player.health=25;addItem(10,1,0);auto& occluded=BotSupplyState(0);
+ occluded.goal=occluded.anchor=0;occluded.goalEntity=10;occluded.scanTick=999;blockedItems=1;
+ check(!BotSupplyTick(&player,0,1,1000).active&&occluded.goalEntity==0,"occluded final connector immediately rejected");
+ botcore::CecilItem candidate;botcore::CecilItemInput need;
+ candidate.kind=botcore::CecilItemKind::Ammo;candidate.ammo_mask=8;need.ammo_need_mask=8;need.owned=8;
+ check(BotCecilUrgentItem(candidate,need),"needed ammo marked urgent");
+ need.ammo_need_mask=0;check(!BotCecilUrgentItem(candidate,need),"unneeded ammo not urgent");
+ candidate.kind=botcore::CecilItemKind::Weapon;need.usable=botcore::CecilWeaponMask(13);need.enemy_distance=20;
+ check(BotCecilUrgentItem(candidate,need),"out of range collected weapon does not suppress supply urgency");
+ need.enemy_distance=50;check(!BotCecilUrgentItem(candidate,need),"usable ranged weapon removes weapon supply urgency");
+ setup(3);auto& stable=BotSupplyState(0);stable.goal=2;stable.anchor=0;stable.scanTick=99999;
+ measuring=true;
+ for(int tick=1;tick<=1000;++tick){_botRayBudget=20;BotSupplyTick(&player,0,tick,1000);}
+ measuring=false;check(allocations==0,"prepared native timer path does not allocate");
+ setup(3);BotCecilSettings().bItemSearch=0;
+ SCecilFollowGoal follow;follow.valid=true;follow.x=0;follow.y=0;follow.z=-20;follow.entity=901;follow.generation=7;follow.expiresAt=5;
+ auto chased=BotSupplyTick(&player,0,1,1000,&follow);
+ check(chased.active&&chased.followGoal&&BotSupplyState(0).goal==2,"frozen target becomes directed NAV goal without target entity");
+ _botRayBudget=40;follow.expiresAt=.1;
+ auto timedOut=BotSupplyTick(&player,0,2,1000,&follow);
+ check(!timedOut.followGoal&&BotSupplyState(0).followEntity==0,"expired follow snapshot clears owned goal");
+ _botRayBudget=40;follow.expiresAt=5;BotSupplyTick(&player,0,3,1000,&follow);
+ follow.entity=902;follow.generation=8;_botSupplyMapSerial=8;follow.z=-10;_botRayBudget=40;
+ BotSupplyTick(&player,0,4,1000,&follow);
+ check(BotSupplyState(0).goal==1&&BotSupplyState(0).followEntity==902&&BotSupplyState(0).followGeneration==8,"entity generation change replans immediately");
+ follow.generation=9;_botSupplyMapSerial=9;follow.z=-20;_botRayBudget=40;BotSupplyTick(&player,0,5,1000,&follow);
+ check(BotSupplyState(0).goal==2&&BotSupplyState(0).followGeneration==9,"same entity reused with new generation invalidates old route");
+ _botRayBudget=40;auto missing=BotSupplyTick(&player,0,6,1000);
+ check(!missing.followGoal&&BotSupplyState(0).followEntity==0,"missing snapshot clears follow context");
+ follow.x=std::numeric_limits<double>::quiet_NaN();_botRayBudget=40;
+ check(!BotSupplyTick(&player,0,7,1000,&follow).followGoal,"nonfinite frozen target is rejected");
+ setup(3);follow.x=0;follow.entity=901;follow.generation=7;follow.z=-20;follow.expiresAt=5;
+ BotSupplyTick(&player,0,1,1000,&follow);BotSupplyReset(0);
+ check(BotSupplyState(0).followEntity==0&&BotSupplyState(0).goal==-1,"map or source reset clears frozen target route");
+ setup(3);player.health=25;addItem(10,0,-10);auto& urgentState=BotSupplyState(0);
+ urgentState.goal=1;urgentState.anchor=0;urgentState.goalEntity=10;urgentState.scanTick=999;
+ auto supplyFirst=BotSupplyTick(&player,0,1,1000,&follow);
+ check(supplyFirst.itemGoal&&supplyFirst.urgent&&!supplyFirst.followGoal&&urgentState.goalEntity==10,"urgent item retains priority over follow snapshot");
+ setup(3);BotCecilSettings().bItemSearch=0;follow.z=-10;BotSupplyTick(&player,0,1,1000,&follow);
+ player.pl.pl_PositionVector=FLOAT3D(0,0,-10);_botRayBudget=40;
+ auto followArrived=BotSupplyTick(&player,0,2,1000,&follow);
+ check(followArrived.followGoal&&!followArrived.active&&BotSupplyState(0).goal==1,"follow arrival waits at frozen node instead of taking important chain");
+ measuring=true;
+ for(int tick=3;tick<80;++tick){_botRayBudget=20;BotSupplyTick(&player,0,tick,1000,&follow);}
+ measuring=false;check(allocations==0,"prepared follow updates do not allocate");
+ setup(3);BotCecilSettings().bItemSearch=0;follow.entity=901;follow.generation=6;follow.z=-20;follow.expiresAt=5;
+ check(!BotSupplyTick(&player,0,1,1000,&follow).followGoal,"snapshot from a different map generation is rejected");
+ setup(3);BotCecilSettings().bItemSearch=0;follow.generation=7;follow.z=-10;follow.expiresAt=5;
+ BotSupplyTick(&player,0,1,1000,&follow);follow.z=-20;_botRayBudget=40;
+ BotSupplyTick(&player,0,2,1000,&follow);
+ check(BotSupplyState(0).goal==1,"same identity snapshot refresh is throttled between replans");
+ _botRayBudget=40;BotSupplyTick(&player,0,23,1000,&follow);
+ check(BotSupplyState(0).goal==2,"updated frozen coordinates refresh the target after one second");
+ setup(3);player.health=70;addItem(10,0,-10);auto& nonurgent=BotSupplyState(0);
+ nonurgent.goal=1;nonurgent.anchor=0;nonurgent.goalEntity=10;nonurgent.scanTick=999;
+ auto retained=BotSupplyTick(&player,0,1,1000,&follow);
+ check(retained.itemGoal&&!retained.urgent&&!retained.followGoal&&nonurgent.goal==1,"existing nonurgent item may finish before chasing");
+ setup(1);player.health=25;addItem(10,0,-3);auto& deferred=BotSupplyState(0);
+ deferred.goal=deferred.anchor=0;deferred.goalEntity=10;deferred.scanTick=999;_botRayBudget=1;
+ auto noBudget=BotSupplyTick(&player,0,1,1000);
+ check(!noBudget.active&&deferred.goalEntity==10&&endEvents==0,"missing connector query budget waits without rejecting valid item");
+ setup(4);BotCecilSettings().bItemSearch=0;BotSupplyGraph().points[0].links={1,3};
+ BotSupplyGraph().points[1].flags=botcore::CECIL_UNREACHABLE;BotSupplyGraph().points[3].x=10;BotSupplyGraph().points[3].z=0;
+ auto& hold=BotSupplyState(0);hold.goal=2;hold.anchor=0;hold.scanTick=999;
+ auto stay=BotSupplyTick(&player,0,1,1000);check(stay.active&&stay.forward==0&&stay.strafe==0,"UNREACHABLE preserves original initial stay");
+ for(int tick=2;tick<=41;++tick){_botRayBudget=40;BotSupplyTick(&player,0,tick,1000);}
+ check(hold.goal==-1&&hold.avoidNode==1,"two second hold discards goal and avoids actual blocking hop");
+ _botRayBudget=40;auto detour=BotSupplyTick(&player,0,43,1000);
+ check(detour.active&&std::fabs(detour.forward)+std::fabs(detour.strafe)>0&&hold.goal==3,"roam resumes on alternate safe branch after bounded hold");
+ BotSupplyGraph().points[2].lock_entity=777;BotCecilLocks(&player,hold,3);
+ check(hold.blocked[1]&&hold.blocked[2],"temporary avoid is combined with actual dynamic lock");
+ BotCecilLocks(&player,hold,13);check(!hold.blocked[1]&&hold.blocked[2],"avoid expires without removing actual dynamic lock");
+ setup(3);BotSupplyGraph().points[1].flags=botcore::CECIL_UNREACHABLE;auto& important=BotSupplyState(0);
+ important.goal=2;important.anchor=0;important.scanTick=999;important.importantGoal=true;important.avoidNode=1;important.avoidUntil=10;
+ auto crossing=BotSupplyTick(&player,0,1,1000);
+ check(crossing.active&&crossing.forward>0&&!important.blocked[1],"important context bypasses temporary avoidance and original stay");
+ setup(2);BotSupplyGraph().points[1].y=6;BotSupplyGraph().points[1].z=0;
+ auto& high=BotSupplyState(0);high.goal=1;high.anchor=0;high.scanTick=999;
+ for(int tick=1;tick<=42;++tick){_botRayBudget=40;BotSupplyTick(&player,0,tick,1000);}
+ check(high.goal==-1&&high.avoidNode==1,"too high stay is also bounded at two seconds");
+ setup(4);BotCecilSettings().bItemSearch=0;BotSupplyGraph().points[0].links={1,3};
+ BotSupplyGraph().points[1].flags=botcore::CECIL_UNREACHABLE;BotSupplyGraph().points[3].x=10;BotSupplyGraph().points[3].z=0;
+ follow.valid=true;follow.entity=901;follow.generation=7;follow.x=follow.y=0;follow.z=-20;follow.expiresAt=100;
+ SCecilMove followDetour;
+ for(int tick=1;tick<=43;++tick){_botRayBudget=40;followDetour=BotSupplyTick(&player,0,tick,1000,&follow);}
+ check(followDetour.active&&!followDetour.followGoal&&BotSupplyState(0).goal==3,"follow periodic refresh cannot reset hold deadline; alternate roam resumes");
+ setup(3);player.pl.pl_PositionVector=FLOAT3D(100,0,100);
+ auto unanchored=BotSupplyTick(&player,0,1,1000);
+ check(!unanchored.active&&unanchored.forward==0&&unanchored.strafe==0&&unanchored.up==0,"missing safe anchor returns neutral movement");
+ setup(2);BotSupplyGraph().points[1].y=6;BotSupplyGraph().points[1].z=0;player.m_pstState=PST_SWIM;
+ auto& swimmer=BotSupplyState(0);swimmer.goal=1;swimmer.anchor=0;swimmer.scanTick=999;
+ auto swimming=BotSupplyTick(&player,0,1,1000);
+ check(swimming.active&&near(swimming.up,1)&&near(swimming.forward,0),"confirmed swim overrides too high stay with normalized vertical movement");
+ check(player.m_pstState==PST_SWIM&&player.pl.pl_PositionVector.Length()==0&&player.flags==0,"swimming adapter does not mutate player snapshot");
+ setup(2);BotSupplyGraph().points[1].y=-6;BotSupplyGraph().points[1].z=0;player.m_pstState=PST_DIVE;
+ auto& diver=BotSupplyState(0);diver.goal=1;diver.anchor=0;diver.scanTick=999;
+ check(near(BotSupplyTick(&player,0,1,1000).up,-1),"confirmed dive follows downward waypoint");
+ setup(2);BotSupplyGraph().points[1].flags=botcore::CECIL_UNREACHABLE;player.m_pstState=PST_SWIM;
+ auto& wet=BotSupplyState(0);wet.goal=1;wet.anchor=0;wet.scanTick=999;
+ check(BotSupplyTick(&player,0,1,1000).forward>0,"liquid movement has original priority over UNREACHABLE stay");
+ setup(1);player.m_pstState=PST_SWIM;player.health=25;auto& wetItem=addItem(10,0,-1);wetItem.pl.pl_PositionVector(2)=2;
+ auto& wetGoal=BotSupplyState(0);wetGoal.goal=wetGoal.anchor=0;wetGoal.goalEntity=10;wetGoal.scanTick=999;
+ auto wetConnector=BotSupplyTick(&player,0,1,1000);
+ check(near(wetConnector.up,2/std::sqrt(5.0))&&near(wetConnector.forward,1/std::sqrt(5.0)),"liquid final item connector uses normalized three dimensional direction");
+ setup();player.m_pstState=PST_SWIM;check(BotCecilFloor(&player,1,0,0,0)&&rayCount==0,"confirmed swim does not require a floor");
+ player.m_pstState=PST_DIVE;check(BotCecilFloor(&player,1,0,0,0),"confirmed dive does not require a floor");
+ player.m_pstState=PST_STAND;check(!BotCecilFloor(&player,1,0,0,0),"walking still requires floor support");
+ setup(2);player.m_pstState=PST_SWIM;player.en_vGravityDir=FLOAT3D(1,0,0);auto& sideways=BotSupplyState(0);
+ sideways.goal=1;sideways.anchor=0;sideways.scanTick=999;
+ check(BotSupplyTick(&player,0,1,1000).active,"swim adapter accepts a valid transitional gravity basis");
+ setup(3);BotCecilSettings().bItemSearch=0;CSwitch switchEntity;switchEntity.en_ulID=600;
+ switchEntity.pl.pl_PositionVector=FLOAT3D(0,1,-1.5);player.world.wo_cenEntities.push_back(&switchEntity);
+ BotSupplyGraph().points[0].important_entity=600;BotSupplyGraph().points[0].next_slot=1;
+ auto& interaction=BotSupplyState(0);interaction.goal=interaction.anchor=0;interaction.importantGoal=true;interaction.scanTick=999;
+ player.w.m_penRayHit=&switchEntity;player.w.m_fRayHitDistance=1.5;
+ auto used=BotSupplyTick(&player,0,1,1000);
+ check(used.buttons==EXPECTED_NATIVE_USE&&used.useControl&&interaction.goal==1,"native matching close usable switch yields one normal USE action and preserves chain");
+ check(switchEntity.m_bUseable&&switchEntity.target==nullptr&&switchEntity.pl.pl_PositionVector(2)==1,"USE adapter leaves switch snapshot unchanged");
+ _botRayBudget=40;auto release=BotSupplyTick(&player,0,2,1000);
+ check(release.useControl&&release.buttons==0,"USE reserves following release tick against scope bits");
+ _botRayBudget=40;check(!BotSupplyTick(&player,0,3,1000).useControl,"USE scope ownership ends after release tick");
+ setup(1);switchEntity.en_ulID=600;player.world.wo_cenEntities.push_back(&switchEntity);BotSupplyGraph().points[0].important_entity=600;
+ auto& wrongRay=BotSupplyState(0);wrongRay.goal=wrongRay.anchor=0;wrongRay.importantGoal=true;wrongRay.scanTick=999;
+ player.w.m_penRayHit=&obstruction;player.w.m_fRayHitDistance=1;
+ auto align=BotSupplyTick(&player,0,1,1000);
+ check(align.buttons==0&&align.useControl&&align.pitch_delta>0&&align.forward>0,"wrong native hit cannot USE; bounded physical approach aims pitch");
+ player.w.m_penRayHit=&switchEntity;player.w.m_fRayHitDistance=2;_botRayBudget=40;
+ check(BotSupplyTick(&player,0,2,1000).buttons==0,"USE rejects exact two metre native hit distance");
+ player.w.m_fRayHitDistance=-1;_botRayBudget=40;
+ check(BotSupplyTick(&player,0,3,1000).buttons==0,"USE rejects invalid native hit distance");
+ switchEntity.m_bUseable=false;player.w.m_fRayHitDistance=1;_botRayBudget=40;
+ check(BotSupplyTick(&player,0,4,1000).buttons==0&&wrongRay.interactionPoint==-1,"unusable switch ends attempt without event or USE");
+ switchEntity.m_bUseable=true;
+ setup(3);CMovingBrush brush;brush.en_ulID=601;brush.m_penSwitch=&switchEntity;brush.pl.pl_PositionVector=FLOAT3D(0,1,-1.5);
+ player.world.wo_cenEntities.push_back(&brush);player.world.wo_cenEntities.push_back(&switchEntity);
+ BotSupplyGraph().points[0].important_entity=601;BotSupplyGraph().points[0].next_slot=1;
+ auto& relay=BotSupplyState(0);relay.goal=relay.anchor=0;relay.importantGoal=true;relay.scanTick=999;
+ player.w.m_penRayHit=&brush;player.w.m_fRayHitDistance=1;
+ check(BotSupplyTick(&player,0,1,1000).buttons==EXPECTED_NATIVE_USE,"matching MovingBrush native ray relays USE to its usable switch");
+ setup(3);CMarker marker;CEntity markerTarget;marker.en_ulID=700;markerTarget.en_ulID=701;
+ marker.target=&markerTarget;markerTarget.pl.pl_PositionVector=FLOAT3D(0,0,-20);
+ player.world.wo_cenEntities={&marker,&markerTarget};BotSupplyGraph().points[0].important_entity=700;BotSupplyGraph().points[0].next_slot=1;
+ auto& markerRoute=BotSupplyState(0);markerRoute.goal=markerRoute.anchor=0;markerRoute.importantGoal=true;markerRoute.scanTick=999;
+ auto redirected=BotSupplyTick(&player,0,1,1000);
+ check(markerRoute.goal==2&&markerRoute.importantGoal&&redirected.buttons==0,"Marker GetTarget overrides next chain with reachable directed target anchor");
+ setup(3);BotCecilSettings().bItemSearch=0;player.world.wo_cenEntities={&switchEntity};
+ BotSupplyGraph().points[0].important_entity=600;BotSupplyGraph().points[0].next_slot=1;
+ auto& timedInteraction=BotSupplyState(0);timedInteraction.goal=timedInteraction.anchor=0;timedInteraction.importantGoal=true;
+ for(int tick=1;tick<=102;++tick){_botRayBudget=40;BotSupplyTick(&player,0,tick,1000);}
+ check(timedInteraction.goal==1&&timedInteraction.interactionPoint==-1,"unmatched switch attempt ends after five seconds despite periodic scans");
+ setup(1);player.world.wo_cenEntities={&switchEntity};BotSupplyGraph().points[0].important_entity=600;
+ auto& finalUse=BotSupplyState(0);finalUse.goal=finalUse.anchor=0;finalUse.importantGoal=true;finalUse.scanTick=999;
+ player.w.m_penRayHit=&switchEntity;player.w.m_fRayHitDistance=1;
+ BotSupplyTick(&player,0,1,1000);_botRayBudget=40;auto idleRelease=BotSupplyTick(&player,0,2,1000);
+ check(!idleRelease.active&&idleRelease.useControl&&idleRelease.buttons==0,"idle release tick still reserves USE against scope");
+ setup(1);player.world.wo_cenEntities={&switchEntity};BotSupplyGraph().points[0].important_entity=600;
+ auto& threatened=BotSupplyState(0);threatened.goal=threatened.anchor=0;threatened.importantGoal=true;threatened.scanTick=999;
+ player.w.m_penRayHit=&switchEntity;player.w.m_fRayHitDistance=1;
+ auto closeCombat=BotSupplyTick(&player,0,1,5);
+ check(!closeCombat.active&&closeCombat.buttons==0&&!closeCombat.useControl,"close threat prevents important approach and USE");
+ setup(1);CSwitch otherSwitch;otherSwitch.en_ulID=602;CMovingBrush otherBrush;otherBrush.en_ulID=603;otherBrush.m_penSwitch=&otherSwitch;
+ player.world.wo_cenEntities={&brush,&switchEntity,&otherBrush,&otherSwitch};BotSupplyGraph().points[0].important_entity=601;
+ auto& wrongRelay=BotSupplyState(0);wrongRelay.goal=wrongRelay.anchor=0;wrongRelay.importantGoal=true;wrongRelay.scanTick=999;
+ player.w.m_penRayHit=&otherBrush;player.w.m_fRayHitDistance=1;
+ check(BotSupplyTick(&player,0,1,1000).buttons==0,"different MovingBrush switch identity cannot receive USE");
+ brush.m_penSwitch=&brush;_botRayBudget=40;
+ check(BotSupplyTick(&player,0,2,1000).buttons==0&&wrongRelay.interactionPoint==-1,"relay cycles are rejected without recursion");
+ brush.m_penSwitch=&switchEntity;
+ setup(3);BotCecilSettings().bItemSearch=0;marker.cls.name="Classes/MovingBrushMarker.ecl";
+ player.world.wo_cenEntities={&marker,&markerTarget};BotSupplyGraph().points[0].important_entity=700;BotSupplyGraph().points[0].next_slot=1;
+ BotSupplyGraph().points[1].links.clear();auto& unreachableMarker=BotSupplyState(0);
+ unreachableMarker.goal=unreachableMarker.anchor=0;unreachableMarker.importantGoal=true;unreachableMarker.scanTick=999;
+ BotSupplyTick(&player,0,1,1000);
+ check(unreachableMarker.goal==0,"unreachable marker target cannot bypass directed topology");
+ measuring=true;
+ for(int tick=2;tick<=101;++tick){_botRayBudget=40;BotSupplyTick(&player,0,tick,1000);}
+ measuring=false;
+ check(unreachableMarker.goal==1&&unreachableMarker.interactionPoint==-1,"unreachable derived marker attempt expires and preserves next chain");
+ check(allocations==0,"important interaction timer does not allocate");
+ setup(1);player.world.wo_cenEntities={&switchEntity};BotSupplyGraph().points[0].important_entity=600;
+ auto& cooled=BotSupplyState(0);cooled.goal=cooled.anchor=0;cooled.importantGoal=true;cooled.scanTick=999;
+ player.w.m_penRayHit=&switchEntity;player.w.m_fRayHitDistance=1;BotSupplyTick(&player,0,1,1000);
+ cooled.goal=0;cooled.importantGoal=true;cooled.scanTick=999;_botRayBudget=40;
+ check(BotSupplyTick(&player,0,2,1000).buttons==0,"same switch cannot be rapidly retoggled within five second cooldown");
+ setup(1);player.world.wo_cenEntities={&switchEntity};BotSupplyGraph().points[0].important_entity=600;
+ auto& changingGravity=BotSupplyState(0);changingGravity.goal=changingGravity.anchor=0;changingGravity.importantGoal=true;changingGravity.scanTick=999;
+ BotSupplyTick(&player,0,1,1000);player.en_vGravityDir=FLOAT3D(1,0,0);_botRayBudget=40;
+ check(BotSupplyTick(&player,0,2,1000).active,"in-progress interaction supports valid gravity transitions");
+ setup(1);switchEntity.pl.pl_PositionVector=FLOAT3D(30,0,0);player.world.wo_cenEntities={&switchEntity};BotSupplyGraph().points[0].important_entity=600;
+ auto& remote=BotSupplyState(0);remote.goal=remote.anchor=0;remote.importantGoal=true;remote.scanTick=999;
+ auto tooFar=BotSupplyTick(&player,0,1,1000);
+ check(tooFar.buttons==0&&tooFar.forward==0&&remote.interactionPoint==-1,"remote switch cannot trigger blind interaction or distant connector");
+ switchEntity.pl.pl_PositionVector=FLOAT3D(0,1,-1.5);
+ setup(2);BotCecilSettings().bItemSearch=0;CSwitch firstSwitch,secondSwitch;
+ firstSwitch.en_ulID=800;secondSwitch.en_ulID=801;
+ firstSwitch.pl.pl_PositionVector=secondSwitch.pl.pl_PositionVector=FLOAT3D(0,1,-1);
+ player.world.wo_cenEntities={&firstSwitch,&secondSwitch};
+ BotSupplyGraph().points[0].important_entity=800;BotSupplyGraph().points[0].next_slot=1;
+ BotSupplyGraph().points[1].important_entity=801;BotSupplyGraph().points[1].z=0;
+ auto& sequence=BotSupplyState(0);sequence.goal=sequence.anchor=0;sequence.importantGoal=true;sequence.scanTick=999;
+ player.w.m_penRayHit=&firstSwitch;player.w.m_fRayHitDistance=1;
+ const auto firstPress=BotSupplyTick(&player,0,1,1000);
+ player.w.m_penRayHit=&secondSwitch;_botRayBudget=40;
+ const auto between=BotSupplyTick(&player,0,2,1000);
+ _botRayBudget=40;const auto secondPress=BotSupplyTick(&player,0,3,1000);
+ check(firstPress.buttons==EXPECTED_NATIVE_USE&&between.buttons==0&&between.useControl&&secondPress.buttons==EXPECTED_NATIVE_USE,
+       "different chained switches require actual press release press edges");
+ setup(2);player.body.m[0][0]=-1;player.body.m[1][1]=-1;player.en_vGravityDir=FLOAT3D(0,1,0);
+ BotSupplyGraph().points[1].x=10;BotSupplyGraph().points[1].z=0;auto& inverted=BotSupplyState(0);
+ inverted.goal=1;inverted.anchor=0;inverted.scanTick=999;
+ auto upside=BotSupplyTick(&player,0,1,1000);
+ check(upside.active&&near(upside.strafe,-1)&&near(upside.yaw_delta,9),"native inverted body projection emits correct lateral and yaw axes");
+ inverted.navigator.Reset();player.en_plViewpoint.pl_OrientationAngle(1)=90;_botRayBudget=40;
+ auto headTurn=BotSupplyTick(&player,0,2,1000);
+ check(headTurn.active&&near(headTurn.forward,1)&&near(headTurn.strafe,0),"native inverted frame accounts for local head yaw");
+ floorMode=2;floorEntity.type=CEntity::RT_BRUSH;floorPlane.bpl_plAbsolute=FLOAT3D(0,-1,0);_botRayBudget=40;
+ check(BotCecilFloor(&player,1,0,0,0)&&lastTo(2)>lastFrom(2),"inverted floor ray follows real gravity and accepts upward-facing local support");
+ floorPlane.bpl_plAbsolute=FLOAT3D(0,1,0);_botRayBudget=40;
+ check(!BotCecilFloor(&player,1,0,0,0),"inverted support rejects wrong-facing world normal");
+ setup(1);const double tilt=std::sqrt(.5);player.body.m[0][0]=tilt;player.body.m[0][1]=-tilt;player.body.m[1][0]=tilt;player.body.m[1][1]=tilt;
+ player.en_vGravityDir=FLOAT3D(float(tilt),float(-tilt),0);BotSupplyGraph().points[0].x=float(7*tilt);BotSupplyGraph().points[0].y=float(7*tilt);
+ check(BotSupplyNearest(&player,{0,0,0},FALSE)==0,"item anchoring tests height against actual tilted gravity instead of world Y");
+ floorMode=2;floorEntity.type=CEntity::RT_BRUSH;floorPlane.bpl_plAbsolute=FLOAT3D(float(-tilt),float(tilt),0);_botRayBudget=40;
+ check(BotCecilFloor(&player,1,0,0,0)&&lastTo(1)>lastFrom(1)&&lastTo(2)<lastFrom(2),"tilted floor ray and support-normal test use gravity vector");
+ setup();player.body.m[0][0]=2;rayCount=0;double f=0,st=0,u=0;
+ check(!BotCecilFloor(&player,0,0,0,0)&&BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,1)==0&&rayCount==0,"invalid basis fails closed even for neutral input before any ray");
+ setup();f=st=u=0;check(BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,1)==1&&rayCount==0,"valid neutral motion consumes no floor query");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;floorPattern=1;f=1;st=u=0;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,1)==2&&near(f,-.4)&&st==0&&u==0&&rayCount==8,"blocked primary motion recovers only after safe reverse ray");
+ setup();f=1;st=u=0;check(BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,1)==0&&f==0&&st==0&&u==0&&rayCount==8,"all unsafe alternatives result in neutral movement");
+ setup();_botRayBudget=1;f=1;st=u=0;check(BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,1)==0&&f==0&&rayCount==0,"recovery cannot exceed remaining ray budget");
+ setup();_botRayBudget=0;f=1;st=u=0;check(BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,1)==0&&f==0&&rayCount==0,"exhausted floor budget fails closed");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;floorPattern=2;player.pl.pl_PositionVector=FLOAT3D(0,0,1);
+ for(int tick=0;tick<2000;++tick){f=1;st=u=0;_botRayBudget=16;BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,0,1);player.pl.pl_PositionVector(1)+=float(st*.5);player.pl.pl_PositionVector(3)-=float(f*.5);}
+ check(player.pl.pl_PositionVector(1)>=2&&player.pl.pl_PositionVector(3)<-10,"2000 tick cliff detour makes net progress instead of reverse forward pendulum");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;floorPattern=1;player.pl.pl_PositionVector=FLOAT3D(0,0,2);
+ bool budgetSafe=true;int reverseTicks=0;
+ for(int tick=0;tick<2000;++tick){f=1;st=u=0;_botRayBudget=16;BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,0,1);player.pl.pl_PositionVector(1)+=float(st*10*1.35*.05);player.pl.pl_PositionVector(3)-=float(f*10*1.35*.05);budgetSafe=budgetSafe&&_botRayBudget>=0;reverseTicks+=f<0;}
+ check(player.pl.pl_PositionVector(1)>10&&reverseTicks==0&&budgetSafe,"reviewer half-plane 2000 tick fixture gains lateral distance without reverse pendulum or ray overrun");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;floorPattern=1;player.pl.pl_PositionVector=FLOAT3D(0,0,2);reverseTicks=0;
+ for(int tick=0;tick<2000;++tick){f=1;st=u=0;_botRayBudget=16;BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,0,0);player.pl.pl_PositionVector(3)-=float(f*10*1.35*.05);reverseTicks+=f<0;}
+ check(reverseTicks>0&&reverseTicks<=12&&player.pl.pl_PositionVector(1)==0,"strafe disabled permits one bounded retreat then stops instead of repeating reverse forward cycles");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;wallMode=1;f=1;st=u=0;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,1)==2&&f==0&&st>0,"wall collision selects safe lateral escape before reverse");
+ auto& held=BotSupplyState(0);player.en_plViewpoint.pl_OrientationAngle(1)=90;f=1;st=u=0;_botRayBudget=16;
+ check(BotCecilSafeMotion(&player,held,.1,f,st,u,90,1)==2&&near(f,-.4)&&near(st,0),"held world escape survives changing head yaw");
+ wallMode=2;f=1;st=u=0;_botRayBudget=16;
+ check(BotCecilSafeMotion(&player,held,.2,f,st,u,0,1)==0&&f==0&&st==0,"held escape is immediately stopped by new wall");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;wallMode=1;f=1;st=u=0;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,0)==2&&near(f,-.4)&&st==0,"strafe disabled permits only independently safe reverse");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;wallMode=1;f=1;st=u=0;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,.1)==2&&f==0&&near(st,.1)&&near(lastFrom(1),.15),"strafe cap is applied before floor support probe");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;player.body.m[0][0]=-1;player.body.m[1][1]=-1;player.en_vGravityDir=FLOAT3D(0,1,0);f=0;st=1;u=0;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,1)==1&&wallFrom(2)<0&&wallTo(1)<wallFrom(1),"inverted wall probe uses body direction and gravity lift");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;wallMode=1;f=1;st=u=0;
+ BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,1);f=1;st=u=0;_botRayBudget=16;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),.6,f,st,u,0,1)==0&&BotSupplyState(0).escapeAfter>1,"zero net progress imposes cooldown rather than endless direction toggling");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;wallMode=2;f=1;st=u=0;_botRayBudget=3;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,f,st,u,0,1)==0&&rayCount==2&&_botRayBudget==1,"wall alternatives reserve floor query and never exceed shared budget");
+ setup();auto& invalid=BotSupplyState(0);invalid.goal=1;invalid.anchor=0;invalid.scanTick=999;invalid.importantGoal=true;invalid.interactionPoint=1;
+ player.en_plViewpoint.pl_OrientationAngle(1)=std::numeric_limits<float>::quiet_NaN();
+ auto badYaw=BotSupplyTick(&player,0,1,1000);
+ check(!badYaw.active&&badYaw.yaw_delta==0&&badYaw.buttons==0,"active Important rejects NaN local view yaw before interaction");
+ player.en_plViewpoint.pl_OrientationAngle(1)=0;player.pl.pl_PositionVector(1)=std::numeric_limits<float>::quiet_NaN();
+ auto badPosition=BotSupplyTick(&player,0,2,1000);
+ check(!badPosition.active&&badPosition.yaw_delta==0&&badPosition.buttons==0,"active Important rejects NaN own position before interaction");
+ setup(2);player.m_pstState=PST_DIVE;player.en_plViewpoint.pl_OrientationAngle(2)=60;auto& pitched=BotSupplyState(0);
+ pitched.goal=1;pitched.anchor=0;pitched.scanTick=999;auto pitchedSwim=BotSupplyTick(&player,0,1,1000);
+ const double back=-pitchedSwim.forward;const double appliedY=pitchedSwim.up-std::sin(60*3.141592653589793/180)*back;
+ check(pitchedSwim.active&&std::fabs(appliedY)<1e-6&&pitchedSwim.forward==0&&pitchedSwim.pitch_delta<0,"dive levels pitched view before forward input without assuming native speed gains");
+ pitched.navigator.Reset();player.en_plViewpoint.pl_OrientationAngle(2)=90;_botRayBudget=40;
+ auto verticalLook=BotSupplyTick(&player,0,2,1000);
+ check(verticalLook.active&&std::isfinite(verticalLook.forward)&&std::isfinite(verticalLook.up)&&std::fabs(verticalLook.forward)<=1&&std::fabs(verticalLook.up)<=1&&verticalLook.pitch_delta<0,"near vertical dive pitch uses bounded input and levels view for progress");
+ setup();floorMode=1;floorEntity.type=CEntity::RT_TERRAIN;float nativeForward=1,nativeStrafe=0,nativeUp=0;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),0,nativeForward,nativeStrafe,nativeUp,0,1)==1&&nativeForward==1,"safe motion accepts native FLOAT action references");
+ setup(2);auto& malformed=BotSupplyState(0);malformed.goal=1;malformed.anchor=0;malformed.scanTick=999;player.body.m[2][2]=0;
+ auto noFrame=BotSupplyTick(&player,0,1,1000);
+ check(!noFrame.active&&noFrame.forward==0&&noFrame.strafe==0&&noFrame.buttons==0,"invalid native body frame suppresses navigation and interaction actions");
+ setup(2);player.m_pstState=PST_DIVE;player.en_plViewpoint.pl_OrientationAngle(2)=90;auto& level=BotSupplyState(0);
+ level.goal=1;level.anchor=0;level.scanTick=999;SCecilMove afterLevel;
+ for(int tick=1;tick<=11;++tick){_botRayBudget=40;afterLevel=BotSupplyTick(&player,0,tick,1000);player.en_plViewpoint.pl_OrientationAngle(2)+=float(afterLevel.pitch_delta);}
+ check(afterLevel.forward>0&&near(player.en_plViewpoint.pl_OrientationAngle(2),0),"vertical dive view levels and forward progress resumes within eleven ticks");
+ setup(2);player.m_pstState=PST_SWIM;player.en_plViewpoint.pl_OrientationAngle(2)=-45;auto& swimLevel=BotSupplyState(0);
+ swimLevel.goal=1;swimLevel.anchor=0;swimLevel.scanTick=999;
+ for(int tick=1;tick<=7;++tick){_botRayBudget=40;afterLevel=BotSupplyTick(&player,0,tick,1000);player.en_plViewpoint.pl_OrientationAngle(2)+=float(afterLevel.pitch_delta);}
+ check(afterLevel.forward>0&&near(player.en_plViewpoint.pl_OrientationAngle(2),0),"swim leveling continues through native minus thirty degree threshold until level");
+ setup(2);player.m_pstState=PST_DIVE;player.en_plViewpoint.pl_OrientationAngle(2)=60;auto& deferredLevel=BotSupplyState(0);
+ deferredLevel.goal=1;deferredLevel.anchor=0;deferredLevel.scanTick=999;
+ for(int tick=1;tick<=60;++tick){_botRayBudget=40;afterLevel=BotSupplyTick(&player,0,tick,1000);}
+ check(afterLevel.forward==0&&afterLevel.pitch_delta<0&&deferredLevel.goal==1,"unapplied leveling actions never allow blind forward or mark route unreachable");
+ std::printf("native bridge: %d checks, %d failures\n",checks,failures);return failures?1:0;
+}
+'''
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--support-dir", type=Path)
+    parser.add_argument("--sanitize", action="store_true")
+    parser.add_argument("--sdk-player",type=Path,help="pinned Engine107 SDK Sources/EntitiesMP/Player.es button contract")
+    args = parser.parse_args()
+    use_mask=1<<5 # Pinned SDK fallback for portable fixtures.
+    if args.sdk_player:
+        native=args.sdk_player.read_text()
+        def mask(name):
+            match=re.search(r"^#define\s+"+name+r"\s+\(1L\s*<<\s*(\d+)\)",native,re.M)
+            if not match:raise ValueError("SDK button declaration missing: "+name)
+            return 1<<int(match[1])
+        use_mask=mask("PLACT_USE")
+        assert use_mask!=mask("PLACT_SNIPER_USE")
+        print("SDK action contract",use_mask,mask("PLACT_SNIPER_USE"),hashlib.sha256(args.sdk_player.read_bytes()).hexdigest(),flush=True)
+    here = Path(__file__).resolve().parent
+    support = args.support_dir or here
+    source = (here / "BotSupplyNative.h").read_text()
+    # Keep actual function bodies; remove only the platform loader and includes.
+    start = source.index("static void BotSupplyUpdateNavigation(")
+    end = source.index("static botcore::CecilFrame BotCecilBodyFrame(", start)
+    source = source[:start] + source[end:]
+    source = "\n".join(line for line in source.splitlines() if not line.startswith("#"))
+    with tempfile.TemporaryDirectory(prefix="cecil-bridge-") as temp:
+        cpp, exe = Path(temp) / "bridge.cpp", Path(temp) / "bridge"
+        items_source = (support / "BotCecilItems.h").read_text()
+        helper_start = items_source.index("inline bool BotCecilIsClass(")
+        helper_end = items_source.index("inline uint32_t BotCecilAmmoNeed", helper_start)
+        cpp.write_text("#define EXPECTED_NATIVE_USE "+str(use_mask)+"u\n"+STUBS + items_source[helper_start:helper_end] + source + TESTS)
+        cmd = ["g++", "-std=c++14", "-O1", "-g", "-Wall", "-Wextra", "-Wno-unused-function",
+               "-I", str(here), "-I", str(support), str(cpp), "-o", str(exe)]
+        if args.sanitize:
+            cmd += ["-fsanitize=address,undefined", "-fno-omit-frame-pointer"]
+        subprocess.run(cmd, check=True)
+        subprocess.run([str(exe)], check=True)
+
+if __name__ == "__main__":
+    main()
