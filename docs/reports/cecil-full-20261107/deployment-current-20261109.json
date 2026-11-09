@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "inventory_utc": "2026-11-09T14:35:56.383940+00:00",
-  "disk_free_gib": 64.11287307739258,
+  "inventory_utc": "2026-11-09T16:31:03.616455+00:00",
+  "disk_free_gib": 61.79025650024414,
   "qualified": false,
   "private_data_omitted": [
     "player names and identities",
@@ -591,8 +591,8 @@
   ],
   "scope": "READ_ONLY_CHECK_TIME_SNAPSHOT_NO_NEW_PRODUCTION_DEPLOYMENT",
   "latest_built_candidate": {
-    "source_commit": "bd422158466dbfc24344591aaac2870ec5c3a581",
-    "dll_sha256": "802bb63f6e4efc0a822be855506988bc43df066d43546d9912303d3327195650",
+    "source_commit": "2f216fe5b93297456fea2c2736b946752029ea90",
+    "dll_sha256": "d3889413432b4eccbe8e375c2f1e5cf6d06c7af0edbb5908da1cf8225ca26a39",
     "status": "SUPPLY_FAILED_NOT_QUALIFIED"
   }
 }

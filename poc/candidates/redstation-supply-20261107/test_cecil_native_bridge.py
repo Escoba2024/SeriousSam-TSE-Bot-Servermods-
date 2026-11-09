@@ -81,8 +81,13 @@ struct Timer {double TickQuantum=.05;} timer,*_pTimer=&timer;
 int _botRayBudget=20,bot_iRosterOffset=0;
 long _botSupplyMapSerial=7;
 long InterlockedCompareExchange(long* p,long,long){return *p;}
-int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0;char lastEnd[32]={0};
+int lockApproachEvents=0,lastApproachNode=-1,lastApproachHop=-1;unsigned long lastApproachRef=0;int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0;char lastEnd[32]={0};
 void BotLog(const char* format,...){
+ if(std::strstr(format,"[CecilLockApproach]")){
+  ++lockApproachEvents;va_list args;va_start(args,format);(void)va_arg(args,int);(void)va_arg(args,int);
+  (void)va_arg(args,unsigned long);lastApproachRef=va_arg(args,unsigned long);lastApproachNode=va_arg(args,int);
+  (void)va_arg(args,double);(void)va_arg(args,double);(void)va_arg(args,int);lastApproachHop=va_arg(args,int);va_end(args);
+ }
  if(std::strstr(format,"[CecilLock]")){
   ++lockEvents;va_list args;va_start(args,format);(void)va_arg(args,int);(void)va_arg(args,int);
   lastLocked=va_arg(args,int);lastPresent=va_arg(args,int);va_end(args);
@@ -165,7 +170,7 @@ void setup(int nodes=3){
  BotCecilSettings()=botcore::CecilPreset(2);BotCecilSettings().fItemSearchCD=0;
  // Existing support/recovery fixtures explicitly exercise opt-in, off-graph pit avoidance.
  BotCecilSettings().bAvoidPits=1;
- lockEvents=0;lastLocked=lastPresent=-1;goalEvents=endEvents=0;lastEnd[0]=0;_botSupplyMapSerial=7;_botRayBudget=40;rayCount=0;blockedItems=0;floorMode=0;floorPattern=0;wallMode=wallCount=0;floorEntity.type=CEntity::RT_MODEL;
+ lockApproachEvents=0;lockEvents=0;lastLocked=lastPresent=-1;goalEvents=endEvents=0;lastEnd[0]=0;_botSupplyMapSerial=7;_botRayBudget=40;rayCount=0;blockedItems=0;floorMode=0;floorPattern=0;wallMode=wallCount=0;floorEntity.type=CEntity::RT_MODEL;
  floorPlane.bpl_plAbsolute=FLOAT3D(0,1,0);floorPolygon.bpo_pbplPlane=&floorPlane;floorPolygon.bpo_ulFlags=0;
  nearFootMode=nearFootRays=0;nearFootDistance=.26f;floorEntity.flags=0;invalidateAfterFloor=false;
  legacyCastCalls=sectorAdds=sectorTests=worldTests=normalizeCalls=0;wallPolygonFlags=0;forcePassableHit=false;
@@ -224,7 +229,76 @@ template<class R>auto physicalCast(R& ray,CWorld* world,int)->decltype(BotCecilP
  return BotCecilPhysicalCast(ray,world);
 }
 template<class R>bool physicalCast(R& ray,CWorld* world,long){ray.Cast(world);return true;}
+CMovingBrush lift;
+void liftFixture(){
+ setup(6);auto& g=BotSupplyGraph();
+ const float positions[6][3]={{-8,.5,0},{0,1.639451f,0},{0,12.5,0},{10,12.5,0},{-5.5,1,0},{0,0,100}};
+ for(int i=0;i<6;++i){g.points[i].x=positions[i][0];g.points[i].y=positions[i][1];g.points[i].z=positions[i][2];g.points[i].links.clear();}
+ g.points[0].links={1};g.points[1].links={2};g.points[2].links={3};g.points[4].links={0,5};g.points[5].links={3};
+ lift=CMovingBrush();lift.type=CEntity::RT_BRUSH;lift.en_ulID=9;player.world.wo_cenEntities.push_back(&lift);g.points[1].lock_entity=9;
+ auto& item=addItem(991,10,0,botcore::CecilItemKind::Weapon);item.pl.pl_PositionVector(2)=12.5;
+ auto& state=BotSupplyState(0);state.goal=3;state.goalEntity=991;state.goalDeadline=11;state.scanTick=999;
+ player.pl.pl_PositionVector=FLOAT3D(-8,.5,0);BotSupplyTick(&player,0,1,1000);
+ state.anchor=4;player.pl.pl_PositionVector=FLOAT3D(-1.584377f,1.080671f,.991288f);
+ player.en_penReference=&lift;player.en_vCurrentTranslationAbsolute=FLOAT3D(13.135438f,6.670916f,-9.632113f);
+ lift.pl.pl_PositionVector(2)=.1906f;_botRayBudget=16;
+}
+void liftOccupancyBridge(){
+ liftFixture();auto& state=BotSupplyState(0);const auto move=BotSupplyTick(&player,0,2,1000);
+ check(move.active&&state.hop==1,"native matching grounded lift at1.95m retains fresh locked hop instead of reverse anchor");
+ check(state.anchor==4&&state.blocked[1]&&state.goalEntity==991&&state.goalSince==0&&state.goalDeadline==11&&!state.goalRelocationBudgeted,
+  "lift contact never rewrites anchor global lock goal or ordinary weapon budget");
+ check(lockApproachEvents==1&&lastApproachRef==9&&lastApproachNode==1&&lastApproachHop==1&&rayCount==0&&_botRayBudget==16,"fresh supported approach logs once without adding physical casts");
+ _botRayBudget=16;BotSupplyTick(&player,0,3,1000);
+ check(state.hop==1&&lockApproachEvents==1,"current continuous native support holds same edge without repeated log");
+ player.pl.pl_PositionVector=FLOAT3D(0,1.1f,0);state.anchor=1;_botRayBudget=16;BotSupplyTick(&player,0,4,1000);
+ check(state.hop==2&&state.blocked[1]&&state.goalDeadline==11&&!state.goalRelocationBudgeted,
+  "actual original radius arrival advances upward without fabricating relocation budget");
+ auto denied=[&](const char* label){const auto m=BotSupplyTick(&player,0,2,1000);check((!m.active||BotSupplyState(0).hop!=1)&&lockApproachEvents==0,label);};
+ liftFixture();player.en_penReference=nullptr;denied("NULL native reference cannot start supported lock approach");
+ liftFixture();player.en_penReference=&floorEntity;denied("foreign native reference cannot start supported lock approach");
+ liftFixture();CMovingBrush sameID;sameID.en_ulID=9;sameID.type=CEntity::RT_BRUSH;player.en_penReference=&sameID;
+ denied("equal entity ID with wrong world pointer cannot prove current lift support");
+ liftFixture();lift.flags=ENF_DELETED;denied("deleted lock entity never grants supported approach");
+ liftFixture();lift.type=CEntity::RT_MODEL;denied("model lock entity is not supporting brush contact");
+ liftFixture();lift.cls.name="Classes/Brush.ecl";denied("static nonmoving brush support cannot waive locked approach");
+ for(PlayerState mode:{PST_FALL,PST_SWIM,PST_DIVE}){liftFixture();player.m_pstState=mode;denied("air and liquid native states cannot claim grounded moving lift");}
+ liftFixture();player.m_pstState=PST_CROUCH;BotSupplyTick(&player,0,2,1000);
+ check(BotSupplyState(0).hop==1&&lockApproachEvents==1,"native crouch and finite moving-platform velocity preserve current approach");
+ liftFixture();player.en_vCurrentTranslationAbsolute(2)=NAN;denied("nonfinite velocity rejects supported approach without a speed cap");
+ liftFixture();lift.pl.pl_OrientationAngle(2)=NAN;denied("nonfinite lock placement rejects supported approach");
+ liftFixture();player.pl.pl_PositionVector=FLOAT3D(0,BotSupplyGraph().points[1].y-2.01f,0);
+ denied("same mover reference on another floor beyond bounded 3D range grants no approach");
+ liftFixture();player.pl.pl_PositionVector(1)=100;denied("distant support on same broad moving brush grants no approach");
+ liftFixture();BotSupplyGraph().points[1].radius=.5f;denied("small original point radius tightens occupied approach bound");
+ liftFixture();BotSupplyGraph().points[1].radius=1.5f;player.pl.pl_PositionVector(1)=-2.1f;
+ denied("large original point radius cannot exceed absolute two metre occupied bound");
+ liftFixture();BotSupplyGraph().points[1].radius=NAN;denied("nonfinite original radius fails closed");
+ liftFixture();lift.pl.pl_PositionVector(2)=0;BotSupplyState(0).avoidNode=1;BotSupplyState(0).avoidUntil=10;
+ denied("temporary avoidance with physically open reference is not a moving lock event");
+ liftFixture();player.hasWorld=false;check(BotCecilSupportedLockNode(&player,BotSupplyState(0))==-1,"missing world rejects native support helper without a query");
+ for(int loss=0;loss<3;++loss){
+   liftFixture();BotSupplyTick(&player,0,2,1000);
+   if(loss==0)player.en_penReference=nullptr;
+   if(loss==1)player.en_penReference=&floorEntity;
+   if(loss==2)player.pl.pl_PositionVector(1)=-2.1f;
+   _botRayBudget=16;const auto dropped=BotSupplyTick(&player,0,3,1000);
+   check(dropped.active&&BotSupplyState(0).hop==4&&lockApproachEvents==1,
+     "NULL foreign or out-of-range support loss immediately drops locked edge before next replan timer");
+   player.en_penReference=&lift;player.pl.pl_PositionVector=FLOAT3D(-1.584377f,1.080671f,.991288f);_botRayBudget=16;
+   BotSupplyTick(&player,0,4,1000);
+   check(BotSupplyState(0).hop==4&&lockApproachEvents==1,"later contact cannot revive an already closed dropped edge");
+ }
+ liftFixture();BotSupplyState(0).mappedWeaponGoal=true;BotSupplyState(0).goalDeadline=40;BotSupplyTick(&player,0,2,1000);
+ check(BotSupplyState(0).hop==1&&BotSupplyState(0).goalDeadline==40&&!BotSupplyState(0).goalRelocationBudgeted,
+  "supported mapped weapon approach preserves its original fixed deadline");
+ liftFixture();BotSupplyTick(&player,0,2,1000);_botRayBudget=16;BotSupplyTick(&player,0,241,1000);
+ check(endEvents==1&&std::strcmp(lastEnd,"timeout")==0&&BotSupplyState(0).goalEntity==0,
+  "ordinary weapon deadline still expires while contact stays on a locked approach");
+
+}
 int main(){
+ liftOccupancyBridge();
  { // Reproduce Retail033's mask overwrite, including initialized-mask controls.
  for(bool physical:{false,true})for(ULONG initial:{0u,2048u}){
    setup();floorMode=2;floorEntity.type=CEntity::RT_BRUSH;floorPolygon.bpo_ulFlags=274752625u;

@@ -170,6 +170,31 @@ static bool BotCecilFrameReady(const CPlayer* player){
 static double BotCecilHeight(const CPlayer* player,const FLOAT3D& delta){
   return delta(1)*player->en_vGravityDir(1)+delta(2)*player->en_vGravityDir(2)+delta(3)*player->en_vGravityDir(3);
 }
+// A matching current physics reference proves only occupancy of this approach,
+// not arrival at the NAV point. The navigator validates its retained edge and
+// newly observed lock transition; this helper never changes an anchor, lock or deadline.
+static int BotCecilSupportedLockNode(CPlayer* player,const SSupplyState& state){
+  if(!BotCecilFrameReady(player)||!player->GetWorld()||
+     (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH)||
+     !state.navigator.HasCommittedEdge(state.goal)||state.hop<0)return -1;
+  const auto& graph=BotSupplyGraph();const size_t hop=(size_t)state.hop;
+  if(hop>=graph.points.size()||hop>=state.worldLock.size()||state.worldLock[hop]!=1)return -1;
+  const auto& point=graph.points[hop];
+  if(point.lock_entity<0||!std::isfinite(point.radius)||point.radius<=0)return -1;
+  CEntity* entity=player->GetWorld()->EntityFromID((ULONG)point.lock_entity);
+  if(!entity||entity!=player->en_penReference||(entity->GetFlags()&ENF_DELETED)||
+     entity->GetRenderType()!=CEntity::RT_BRUSH||!BotCecilIsClass(entity,"MovingBrush","Moving Brush"))return -1;
+  const auto& position=player->GetPlacement().pl_PositionVector;
+  const auto& placement=entity->GetPlacement();double distance2=0;
+  for(int i=0;i<3;++i){
+    if(!std::isfinite(player->en_vCurrentTranslationAbsolute(i+1))||
+       !std::isfinite(placement.pl_PositionVector(i+1))||!std::isfinite(placement.pl_OrientationAngle(i+1)))return -1;
+    const double coordinate=i==0?point.x:(i==1?point.y:point.z);
+    const double delta=coordinate-position(i+1);distance2+=delta*delta;
+  }
+  const double limit=std::fmin(2.0,2.0*point.radius);
+  return std::isfinite(distance2)&&distance2<=limit*limit?state.hop:-1;
+}
 static bool BotCecilRayLength(const FLOAT3D& from,const FLOAT3D& to,double& length){
   length=0;bool same=true;
   for(int i=1;i<=3;++i){
@@ -767,11 +792,18 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   botcore::CecilMotionInput in;in.x=p(1);in.y=p(2);in.z=p(3);in.yaw=player->en_plViewpoint.pl_OrientationAngle(1);in.frame=BotCecilBodyFrame(player);
   for(int j=0;j<3;++j)in.gravity[j]=player->en_vGravityDir(j+1);
   in.now=now;in.dt=_pTimer->TickQuantum;in.anchor=s.anchor;in.goal=s.goal;in.slot=slot+bot_iRosterOffset;
+  in.supported_lock_node=BotCecilSupportedLockNode(player,s);
   in.alive=true;in.allow_jump=BotCecilSettings().bJump!=0;
   const auto& point=BotSupplyGraph().points[s.goal];
   if(!s.goalEntity&&!s.followEntity&&(point.important_entity>=0||(point.flags&botcore::CECIL_IMPORTANT)))s.importantGoal=true;
   in.important_goal=s.importantGoal;
   auto move=s.navigator.Update(BotSupplyGraph(),s.blocked.data(),s.blocked.size(),in);s.hop=move.hop;
+  if(move.supported_lock_started){
+    const auto& held=BotSupplyGraph().points[move.hop];
+    const FLOAT3D delta=FLOAT3D(held.x,held.y,held.z)-p;
+    BotLog("[CecilLockApproach] local=%d tick=%d player=%lu ref=%lu node=%d radius=%.6f distance=%.6f goal=%d hop=%d\n",
+      slot,tick,(unsigned long)player->en_ulID,(unsigned long)(player->en_penReference?player->en_penReference->en_ulID:0),move.hop,(double)held.radius,(double)delta.Length(),s.goal,s.hop);
+  }
   BotCecilRebudgetWeapon(player,s,move,input,slot,tick,now);
   if(move.active||move.arrived){s.currentNavGoal=s.goal;s.currentNavTime=now;}
   if(!s.goalEntity&&!s.followEntity&&s.importantGoal&&(move.arrived||s.interactionPoint>=0)&&

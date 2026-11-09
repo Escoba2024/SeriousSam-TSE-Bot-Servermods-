@@ -13,10 +13,11 @@ struct CecilMotionInput {
   double x=0,y=0,z=0,yaw=0,gravity[3]={0,-1,0};
   double now=0,dt=.05,turn_speed_deg=180;
   int anchor=-1,goal=-1,slot=0;
+  int supported_lock_node=-1; // Native validates current grounded contact; never an anchor/arrival hint.
   bool alive=false,allow_jump=true,important_goal=false;
 };
 struct CecilMotion {
-  bool active=false,arrived=false,stuck=false,relocated=false;
+  bool active=false,arrived=false,stuck=false,relocated=false,supported_lock_started=false;
   int hop=-1;double forward=0,strafe=0,up=0,yaw_delta=0,pitch_delta=0;uint32_t flags=0;
 };
 class CecilNavigator {
@@ -26,7 +27,7 @@ class CecilNavigator {
     search_.Prepare(nodes);locks_.assign(nodes,0);Reset();
   }
   void Reset() {
-    source_=hop_=goal_=-1;last_time_=-1;next_replan_=next_jump_=0;
+    source_=hop_=goal_=supported_lock_hop_=-1;last_time_=-1;next_replan_=next_jump_=0;
     recovery_until_=-1;have_progress_=false;progress_time_=px_=py_=pz_=0;
     std::fill(locks_.begin(),locks_.end(),0);
   }
@@ -40,6 +41,7 @@ class CecilNavigator {
        in.goal<0||(size_t)in.goal>=n||(blocked?count!=n:count!=0)||!Valid(in)) {Reset();return out;}
     if(last_time_>=0&&in.now<last_time_)Reset();
     last_time_=in.now;
+    const bool was_hop_locked=hop_>=0&&(size_t)hop_<n&&locks_[hop_];
     bool lock_change=false;
     for(size_t i=0;i<n;++i){const unsigned char value=blocked&&blocked[i]?1:0;
       lock_change|=locks_[i]!=value;locks_[i]=value;}
@@ -47,7 +49,7 @@ class CecilNavigator {
     if(new_goal){goal_=in.goal;hop_=-1;recovery_until_=-1;have_progress_=false;}
     if(!have_progress_||Distance2(in.x-px_,in.y-py_,in.z-pz_)>=.75*.75)Progress(in);
     if(Reached(g.points[in.goal],in)) {
-      out.arrived=true;out.hop=in.goal;hop_=in.goal;Progress(in);recovery_until_=-1;return out;
+      supported_lock_hop_=-1;out.arrived=true;out.hop=in.goal;hop_=in.goal;Progress(in);recovery_until_=-1;return out;
     }
     bool recovered=false;
     if(recovery_until_>=0&&in.now>=recovery_until_) {
@@ -61,28 +63,40 @@ class CecilNavigator {
     const bool relocated=source_>=0&&!at_hop&&in.anchor!=source_&&in.anchor!=hop_&&
       Reached(g.points[in.anchor],in);
     out.relocated=relocated;
-    if(new_goal||lock_change||recovered||relocated||hop_<0||in.now>=next_replan_||at_hop) {
+    // A supported approach at an observed open-to-closed lift transition is the
+    // same edge. Keep its exact hop until the original radius is reached; do
+    // not synthesize arrival, relocation, a source or an unlocked destination.
+    const bool supported=!new_goal&&!recovered&&!relocated&&!at_hop&&recovery_until_<0&&
+      source_>=0&&(size_t)source_<n&&hop_>=0&&(size_t)hop_<n&&source_!=hop_&&
+      in.supported_lock_node==hop_&&locks_[hop_]&&
+      (!was_hop_locked||supported_lock_hop_==hop_)&&
+      std::find(g.points[source_].links.begin(),g.points[source_].links.end(),hop_)!=g.points[source_].links.end();
+    const bool support_ended=supported_lock_hop_>=0&&!supported;
+    const bool supported_started=supported&&supported_lock_hop_!=hop_;
+    supported_lock_hop_=supported?hop_:-1;
+    if(new_goal||lock_change||recovered||relocated||support_ended||hop_<0||in.now>=next_replan_||at_hop) {
       const bool committed=!new_goal&&!recovered&&!relocated&&!at_hop&&
-        source_>=0&&hop_>=0&&hop_!=source_&&!locks_[hop_];
+        source_>=0&&hop_>=0&&hop_!=source_&&(!locks_[hop_]||supported);
       if(!committed)source_=at_hop&&!new_goal&&!recovered&&!relocated?hop_:in.anchor;
       // Search allows an occupied blocked origin to exit. An acquisition anchor
       // outside its arrival radius is still a destination and must respect locks.
       if(!committed&&locks_[source_]&&!Reached(g.points[source_],in)){hop_=-1;return out;}
       // Validate the remaining suffix from the committed destination. Even an
       // unrelated lock change must not replace the active edge or its flags.
-      if(!search_.Run(g,committed?hop_:source_,locks_.data(),n)){hop_=-1;return out;}
+      if(!search_.Run(g,committed?hop_:source_,locks_.data(),n)){hop_=supported_lock_hop_=-1;return out;}
       const int next=search_.NextHop(in.goal);
-      if(next<0){hop_=-1;return out;}
+      if(next<0){hop_=supported_lock_hop_=-1;return out;}
       if(!committed)hop_=Reached(g.points[source_],in)?next:source_;
       next_replan_=in.now+1.0;
     }
     if(hop_<0||(size_t)hop_>=n)return out;
+    out.supported_lock_started=supported_started;
     const CecilNavPoint& target=g.points[hop_];
     out.active=true;out.hop=hop_;
     out.flags=(target.flags&CECIL_OVERRIDE)?target.flags:g.points[source_].flags;
     // UNREACHABLE is a stay instruction, not a topology filter.
     if(hop_!=source_&&(target.flags&CECIL_UNREACHABLE)&&!in.important_goal) {
-      out.hop=source_;Progress(in);recovery_until_=-1;return out;
+      out.supported_lock_started=false;out.hop=source_;Progress(in);recovery_until_=-1;return out;
     }
     const double dx=double(target.x)-in.x,dy=double(target.y)-in.y,dz=double(target.z)-in.z;
     if(!std::isfinite(dx)||!std::isfinite(dy)||!std::isfinite(dz)){Reset();return CecilMotion();}
@@ -92,7 +106,7 @@ class CecilNavigator {
     // Original stay-on-point rule uses the actual gravity plane, including transitions.
     if(hx*hx+hy*hy+hz*hz<1&&std::fabs(vertical)>4){Progress(in);return out;}
     if(recovery_until_<0&&in.now-progress_time_>=2.0) {
-      recovery_until_=in.now+.5;next_replan_=in.now;Progress(in);
+      out.supported_lock_started=false;supported_lock_hop_=-1;recovery_until_=in.now+.5;next_replan_=in.now;Progress(in);
     }
     if(in.now<recovery_until_) {
       out.stuck=true;out.forward=-.4;out.strafe=(in.slot&1)?-.8:.8;
@@ -133,7 +147,7 @@ class CecilNavigator {
   }
   CecilNavSearch search_;
   std::vector<unsigned char> locks_;
-  int source_=-1,hop_=-1,goal_=-1;
+  int source_=-1,hop_=-1,goal_=-1,supported_lock_hop_=-1;
   double last_time_=-1,next_replan_=0,next_jump_=0,recovery_until_=-1;
   bool have_progress_=false;
   double progress_time_=0,px_=0,py_=0,pz_=0;
