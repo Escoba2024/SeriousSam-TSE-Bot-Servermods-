@@ -17,6 +17,8 @@ template<class T>auto supportedLock(T& in,int node,int)->decltype(in.supported_l
 template<class T>void supportedLock(T&,int,long){}
 template<class T>auto lockStarted(const T& out,int)->decltype(out.supported_lock_started){return out.supported_lock_started;}
 template<class T>bool lockStarted(const T&,long){return false;}
+template<class T>auto sourceSlot(const T& nav,int goal,int)->decltype(nav.SourceSlot(goal)){return nav.SourceSlot(goal);}
+template<class T>int sourceSlot(const T&,int,long){return -1;}
 static CecilNavGraph liftGraph(){
   CecilNavGraph g;g.points.resize(6);
   const double p[6][3]={{-8,.5,0},{0,1.639451,0},{0,12.5,0},{10,12.5,0},{-5.5,1,0},{0,0,100}};
@@ -124,6 +126,7 @@ int main(){
   auto out=nav.Update(g,locked,3,in);
   check(out.active&&out.hop==1&&near(out.forward,1)&&near(out.yaw_delta,0),"route begins on directed next hop");
   check(nav.HasCommittedEdge(2)&&!nav.HasCommittedEdge(1),"route commitment is bound to its exact goal");
+  check(sourceSlot(nav,2,0)==0&&sourceSlot(nav,1,0)==-1,"committed source query is bound to the existing goal and edge");
   in.anchor=2;in.now=.5;out=nav.Update(g,locked,3,in);
   check(out.hop==1,"retain current hop between replans despite nearest-anchor change");
   in.anchor=1;in.z=-10;in.now=.6;out=nav.Update(g,locked,3,in);

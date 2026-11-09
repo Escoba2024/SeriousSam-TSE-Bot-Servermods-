@@ -81,8 +81,9 @@ struct Timer {double TickQuantum=.05;} timer,*_pTimer=&timer;
 int _botRayBudget=20,bot_iRosterOffset=0;
 long _botSupplyMapSerial=7;
 long InterlockedCompareExchange(long* p,long,long){return *p;}
-int lockApproachEvents=0,lastApproachNode=-1,lastApproachHop=-1;unsigned long lastApproachRef=0;int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0;char lastEnd[32]={0};
+int lockApproachEvents=0,lastApproachNode=-1,lastApproachHop=-1;unsigned long lastApproachRef=0;int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0,groundReplanEvents=0;char lastEnd[32]={0};
 void BotLog(const char* format,...){
+ if(std::strstr(format,"[CecilGroundReplan]"))++groundReplanEvents;
  if(std::strstr(format,"[CecilLockApproach]")){
   ++lockApproachEvents;va_list args;va_start(args,format);(void)va_arg(args,int);(void)va_arg(args,int);
   (void)va_arg(args,unsigned long);lastApproachRef=va_arg(args,unsigned long);lastApproachNode=va_arg(args,int);
@@ -171,7 +172,7 @@ void setup(int nodes=3){
  BotCecilSettings()=botcore::CecilPreset(2);BotCecilSettings().fItemSearchCD=0;
  // Existing support/recovery fixtures explicitly exercise opt-in, off-graph pit avoidance.
  BotCecilSettings().bAvoidPits=1;
- lockApproachEvents=0;lockEvents=0;lastLocked=lastPresent=-1;goalEvents=endEvents=0;lastEnd[0]=0;_botSupplyMapSerial=7;_botRayBudget=40;rayCount=0;blockedItems=0;floorMode=0;floorPattern=0;wallMode=wallCount=0;floorEntity.type=CEntity::RT_MODEL;
+ lockApproachEvents=0;lockEvents=0;lastLocked=lastPresent=-1;goalEvents=endEvents=groundReplanEvents=0;lastEnd[0]=0;_botSupplyMapSerial=7;_botRayBudget=40;rayCount=0;blockedItems=0;floorMode=0;floorPattern=0;wallMode=wallCount=0;floorEntity.type=CEntity::RT_MODEL;
  floorPlane.bpl_plAbsolute=FLOAT3D(0,1,0);floorPolygon.bpo_pbplPlane=&floorPlane;floorPolygon.bpo_ulFlags=0;
  nearFootMode=nearFootRays=0;nearFootDistance=.26f;floorEntity.flags=0;invalidateAfterFloor=false;
  legacyCastCalls=sectorAdds=sectorTests=worldTests=normalizeCalls=0;wallPolygonFlags=0;forcePassableHit=false;
@@ -299,6 +300,96 @@ void liftOccupancyBridge(){
 
 }
 
+void groundedReplanFixture(){
+ setup(4);auto& g=BotSupplyGraph();
+ const float p[4][3]={{71,1,63},{63,1,63},{63.0233955f,38.367321f,63.126381f},{67.5f,36.5f,63.25f}};
+ for(int i=0;i<4;++i){g.points[i].x=p[i][0];g.points[i].y=p[i][1];g.points[i].z=p[i][2];g.points[i].radius=i==0?3:(i==1?4:1);g.points[i].links.clear();}
+ g.points[0].links={1};g.points[1].links={2};g.points[2].links={3};g.points[3].links={2};
+ auto& item=addItem(311,67.5f,63,botcore::CecilItemKind::Weapon);item.item.weapon=14;item.pl.pl_PositionVector(2)=36.001f;
+ auto& s=BotSupplyState(0);s.goal=3;s.goalEntity=311;s.goalSince=0;s.goalDeadline=12;s.scanTick=99999;s.anchor=2;
+ player.pl.pl_PositionVector=FLOAT3D(p[2][0],p[2][1],p[2][2]);player.m_pstState=PST_FALL;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ player.pl.pl_PositionVector=FLOAT3D(67.431f,.378f,63.419f);player.m_pstState=PST_STAND;
+ floorEntity.en_ulID=1;floorEntity.type=CEntity::RT_BRUSH;floorEntity.cls.name="Classes/WorldBase.ecl";
+ player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
+ s.anchor=0;s.RejectItem(999,.05);s.worldLock[1]=0;
+}
+SCecilMove groundedReplanHold(int budget=16){
+ SCecilMove move;for(int tick=2;tick<=43;++tick){_botRayBudget=budget;move=BotSupplyTick(&player,0,tick,1000);}return move;
+}
+void groundedReplanGuards(){
+ groundedReplanFixture();auto& s=BotSupplyState(0);const auto move=groundedReplanHold();
+ check(s.goalEntity==311&&endEvents==0&&groundReplanEvents==1&&!s.ItemRejected(311,2.15),"measured grounded Cannon landing retains the real attempt instead of unreachable_hold failure");
+ check(move.active&&s.hop==0&&std::hypot(move.forward,move.strafe)>0,"fresh floor hint outside its original radius is approached after failed air edge reset");
+ check(s.goalSince==0&&s.goalDeadline==12&&!s.goalRelocationBudgeted&&s.ItemRejected(999,2.15)&&s.worldLock[1]==0,
+   "grounded route reacquisition preserves deadline rejection and lock state without relocation extension");
+ for(int i=0;i<3;++i){const auto& point=BotSupplyGraph().points[i];player.pl.pl_PositionVector=FLOAT3D(point.x,point.y,point.z);s.anchor=i;_botRayBudget=16;
+   const auto next=BotSupplyTick(&player,0,44+i,1000);check(next.active&&s.hop==i+1,"only original radius arrival advances floor launcher and high source route");}
+ groundedReplanFixture();player.pl.pl_PositionVector=FLOAT3D(67.512f,.378f,64.154f);player.m_pstState=PST_CROUCH;
+ groundedReplanHold();check(BotSupplyState(0).goalEntity==311&&BotSupplyState(0).hop==0,"second native Cannon landing also reacquires while crouched");
+ for(int n=0;n<32;++n){
+  groundedReplanFixture();auto& state=BotSupplyState(0);
+  if(n==0)player.m_pstState=PST_FALL;
+  if(n==1)player.m_pstState=PST_SWIM;
+  if(n==2)player.en_penReference=nullptr;
+  if(n==3)floorEntity.flags=ENF_DELETED;
+  if(n==4)floorEntity.type=CEntity::RT_MODEL;
+  if(n==5)floorEntity.cls.name="Classes/MovingBrush.ecl";
+  if(n==6)player.world.wo_cenEntities.erase(player.world.wo_cenEntities.end()-1);
+  if(n==7)player.en_vCurrentTranslationAbsolute(1)=NAN;
+  if(n==8)player.en_vCurrentTranslationAbsolute(3)=.101f;
+  if(n==9)state.importantGoal=true;
+  if(n==10)BotSupplyGraph().points[2].flags=botcore::CECIL_UNREACHABLE;
+  if(n==11)BotSupplyGraph().points[2].flags=botcore::CECIL_TELEPORT;
+  if(n==12)BotSupplyGraph().points[0].flags=botcore::CECIL_UNREACHABLE;
+  if(n==13)BotSupplyGraph().points[2].y=1; // A legitimate ground launch source is not a failed air edge.
+  if(n==14)BotSupplyGraph().points[0].links.clear();
+  if(n==15)wallMode=2;
+  if(n==16)state.useReleaseTick=10000;
+  if(n==17){state.avoidNode=0;state.avoidUntil=100;}
+  if(n==18)state.anchor=2;
+  if(n==19)player.en_vCurrentTranslationAbsolute=FLOAT3D(.08f,.08f,0);
+  if(n==20)floorEntity.cls.name="Classes/WorldBaseFake.ecl";
+  if(n==21){player.hasWorld=false;botcore::CecilMotion denied;denied.active=true;denied.hop=3;
+   check(!BotCecilGroundedReplan(&player,state,denied,0,42),"grounded helper rejects missing world before any lookup");continue;}
+  if(n==22)BotSupplyGraph().points[2].flags=botcore::CECIL_IMPORTANT;
+  if(n==23)BotSupplyGraph().points[3].flags=botcore::CECIL_TELEPORT;
+  if(n==24)BotSupplyGraph().points[3].y=4;
+  if(n==25)BotSupplyGraph().points[0].y=5;
+  if(n==26){state.avoidNode=3;state.avoidUntil=100;}
+  if(n==27)state.interactionPoint=2;
+  if(n==28)state.navigator.Reset();
+  if(n==29)state.goal=2;
+  if(n==30){BotSupplyGraph().points[3].flags=botcore::CECIL_UNREACHABLE;
+   player.pl.pl_PositionVector=FLOAT3D(63.0233955f,.378f,63.126381f);state.anchor=1;BotSupplyGraph().points[1].radius=.1f;}
+  if(n==31)player.en_plViewpoint.pl_OrientationAngle(1)=NAN;
+  groundedReplanHold();check(groundReplanEvents==0,"unknown moving liquid invalid special disconnected or stale anchor context cannot rebase high edge");
+ }
+ groundedReplanFixture();groundedReplanHold(2);check(BotSupplyState(0).goalEntity!=311||BotSupplyState(0).hop!=0,"missing shared connector budget never authorizes grounded rebase");
+ groundedReplanFixture();bool bounded=true;for(int tick=2;tick<=43;++tick){_botRayBudget=16;const int before=rayCount;BotSupplyTick(&player,0,tick,1000);bounded&=rayCount-before<=16&&_botRayBudget>=2;}
+ check(bounded,"grounded acquisition uses shared ray budget and preserves final two safety probes");
+ groundedReplanFixture();SCecilMove reset;
+ for(int tick=2;tick<=42;++tick){_botRayBudget=16;reset=BotSupplyTick(&player,0,tick,1000);}
+ check(groundReplanEvents==1&&owns(reset,0)&&!reset.active&&reset.forward==0&&reset.strafe==0&&reset.up==0&&
+   BotSupplyState(0).hop==-1&&BotSupplyState(0).currentNavTime<0&&BotSupplyState(0).currentNavGoal==-1&&BotSupplyState(0).heldNode==-1,
+   "rebase occurs at unchanged two second boundary with owned neutral and no stale current-point exemption");
+ double f=.5,st=0,u=0;_botRayBudget=16;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),2.1,f,st,u,0,1,true)==0&&f==0&&st==0&&u==0,
+   "final floor veto still applies immediately after grounded navigator reset");
+ groundedReplanFixture();groundedReplanHold();_botRayBudget=16;BotSupplyTick(&player,0,241,1000);
+ check(endEvents==1&&std::strcmp(lastEnd,"timeout")==0,"original item lifetime still expires after grounded rebase without renewal");
+ groundedReplanFixture();allocations=0;measuring=true;groundedReplanHold();measuring=false;
+ check(allocations==0,"grounded rebase performs no per-tick heap allocation");
+ groundedReplanFixture();player.en_vGravityDir=FLOAT3D(0,1,0);player.body.m[0][0]=-1;player.body.m[1][1]=-1;
+ for(auto& point:BotSupplyGraph().points)point.y=-point.y;
+ player.pl.pl_PositionVector(2)=-player.pl.pl_PositionVector(2);items[0].pl.pl_PositionVector(2)=-items[0].pl.pl_PositionVector(2);
+ groundedReplanHold();check(groundReplanEvents==1&&BotSupplyState(0).goalEntity==311,"both high-point tests use actual gravity rather than world Y");
+ groundedReplanFixture();BotSupplyReset(0);check(BotSupplyState(0).navigator.SourceSlot(3)==-1&&groundReplanEvents==0,
+   "life or map reset discards the old committed source before another generation");
+ groundedReplanFixture();player.health=0;_botRayBudget=16;BotSupplyTick(&player,0,42,1000);
+ check(groundReplanEvents==0&&BotSupplyState(0).goalEntity==0,"death cannot preserve or reacquire an old airborne goal");
+}
+
 void groundProgressFixture(bool neutral=false){
  setup(1);auto& state=BotSupplyState(0);state.anchor=-1;state.scanTick=99999;
  BotSupplyGraph().points[0].z=neutral?-50:-20;
@@ -313,6 +404,86 @@ int groundProgressTick(int tick,bool accepted=true,double maxStrafe=1,int budget
  double f=move.forward,st=move.strafe,u=move.up;
  const int status=BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,move.yaw_delta,maxStrafe,accepted);
  groundF=f;groundSt=st;groundU=u;return status;
+}
+
+// Native039diag3b freezes: actual accepted offgraph pose is unchanged while
+// valid native brush support alternates with current NULL / physical NOHIT.
+void groundObservationFlicker(){
+ for(bool neutral:{false,true})for(int period:{20,2}){
+  groundProgressFixture(neutral);bool escaped=false,unknownNeutral=true,bounded=true;allocations=0;measuring=true;
+  unsigned priorTried=0;double priorCooldown=0;
+  for(int tick=1;tick<=110;++tick){
+   const bool supported=tick%period!=0;player.en_penReference=supported?&floorEntity:nullptr;
+   const int before=rayCount;const int status=groundProgressTick(tick);auto& state=BotSupplyState(0);
+   if(supported)escaped|=status==2;
+   else unknownNeutral&=status!=2&&groundF==0&&groundSt==0&&groundU==0&&
+      state.probe.reasonMask==0&&state.reacquireTried[0]==0&&
+      state.groundEscapeTried==priorTried&&near(state.groundEscapeAfter,priorCooldown);
+   bounded&=rayCount-before<=16&&_botRayBudget>=0&&std::hypot(groundF,groundSt)<=.300001&&groundU==0;
+   priorTried=state.groundEscapeTried;priorCooldown=state.groundEscapeAfter;
+  }
+  measuring=false;
+  check(escaped,"frozen native brush NULL flicker preserves observation until a currently supported verified escape");
+  check(unknownNeutral,"current unknown support emits neutral without rays NoFloor blacklist or resetting stationary-episode history");
+  check(bounded&&allocations==0,"flicker recovery preserves physical probe budget motion cap and allocation bound");
+ }
+ groundProgressFixture(true);player.en_penReference=nullptr;bool unknown=true;
+ for(int tick=1;tick<=60;++tick){unknown&=groundProgressTick(tick)!=2&&groundF==0&&groundSt==0;}
+ player.en_penReference=&floorEntity;
+ check(unknown&&groundProgressTick(61)==2,"three seconds of passive unknown-support observation cannot act until fresh support then recovers immediately");
+ groundProgressFixture(true);for(int tick=1;tick<=60;++tick)groundProgressTick(tick,true,1,1);
+ check(groundProgressTick(61)==2,"deferred safety budget preserves passive position time but cannot authorize before fresh probe budget");
+ groundProgressFixture();bool escaped=false;
+ for(int tick=1;tick<=110;++tick){player.en_penReference=(tick&1)?&floorEntity:nullptr;player.pl.pl_PositionVector(3)-=.02f;escaped|=groundProgressTick(tick)==2;}
+ check(!escaped,"real physical progress across support flicker still prevents a false watchdog escape");
+ groundProgressFixture(true);player.en_penReference=nullptr;for(int tick=1;tick<=60;++tick)groundProgressTick(tick);
+ double f=.3,st=0,u=0;const int before=rayCount;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),3,f,st,u,0,1,true)==0&&f==0&&st==0&&u==0&&rayCount==before,
+  "observed stall with no current support cannot test or emit a stale positive request");
+}
+
+void groundObservationHoldGuards(){
+ groundProgressFixture(true);for(int tick=1;tick<=43;++tick)groundProgressTick(tick);
+ auto& state=BotSupplyState(0);const double until=state.escapeUntil,cooldown=state.groundEscapeAfter;const unsigned tried=state.groundEscapeTried;
+ player.en_penReference=nullptr;const int before=rayCount;
+ check(groundProgressTick(44)==0&&groundF==0&&groundSt==0&&groundU==0&&state.probe.reasonMask==0&&
+   near(state.escapeUntil,until)&&near(state.groundEscapeAfter,cooldown)&&state.groundEscapeTried==tried&&rayCount-before==1,
+   "unknown current support pauses held recovery after its sole support query without expiry renewal or episode reset");
+ player.en_penReference=&floorEntity;
+ check(groundProgressTick(45)==2&&groundSt>0&&near(state.escapeUntil,until)&&state.probe.wallRays==1&&state.probe.floorRays==1,
+   "freshly supported held direction resumes only after actual wall and floor revalidation with original expiry");
+ groundProgressFixture(true);for(int tick=1;tick<=43;++tick)groundProgressTick(tick);
+ const double progressUntil=BotSupplyState(0).escapeUntil;player.pl.pl_PositionVector(1)+=.26f;
+ groundProgressTick(44);player.en_penReference=nullptr;
+ check(groundProgressTick(45)==0&&groundF==0&&groundSt==0&&!BotSupplyState(0).groundStalled&&near(BotSupplyState(0).escapeUntil,progressUntil),
+   "support loss also pauses a still-held successful escape after real progress reset the watchdog");
+ player.en_penReference=&floorEntity;
+ check(groundProgressTick(46)==2&&near(BotSupplyState(0).escapeUntil,progressUntil),
+   "successful held recovery can resume with current proof and no renewed deadline");
+ groundProgressFixture(true);for(int tick=1;tick<=43;++tick)groundProgressTick(tick);
+ const double expired=BotSupplyState(0).escapeUntil;player.en_penReference=nullptr;
+ for(int tick=44;tick<=60;++tick)groundProgressTick(tick);
+ check(near(BotSupplyState(0).escapeUntil,expired),"a suspended hold never renews its original elapsed expiry");
+ player.en_penReference=&floorEntity;
+ check(groundProgressTick(61)!=2&&BotSupplyState(0).escapeUntil==0,
+   "restored support after hold expiry cannot resurrect an expired world direction or bypass cooldown");
+ for(int loss=0;loss<6;++loss){
+  groundProgressFixture(true);player.en_penReference=nullptr;for(int tick=1;tick<=59;++tick)groundProgressTick(tick);
+  if(loss==0)groundProgressTick(60,false);
+  if(loss==1){player.m_pstState=PST_FALL;groundProgressTick(60);player.m_pstState=PST_STAND;}
+  if(loss==2){BotSupplyGraph().points[0].x=NAN;groundProgressTick(60);BotSupplyGraph().points[0].x=0;}
+  if(loss==3){player.en_vCurrentTranslationAbsolute(1)=NAN;groundProgressTick(60);player.en_vCurrentTranslationAbsolute(1)=0;}
+  if(loss==4){player.body.m[0][0]=0;groundProgressTick(60);player.body.m[0][0]=1;}
+  if(loss==5){++BotSupplyState(0).generation;groundProgressTick(60);}
+  player.en_penReference=&floorEntity;
+  check(groundProgressTick(61)!=2&&!BotSupplyState(0).groundStalled,
+    "passive unknown-support history cannot cross owner air graph velocity frame or generation context loss");
+ }
+ groundProgressFixture(true);player.en_vGravityDir=FLOAT3D(0,1,0);player.body.m[0][0]=-1;player.body.m[1][1]=-1;
+ floorPlane.bpl_plAbsolute=FLOAT3D(0,-1,0);bool escaped=false,neutral=true;
+ for(int tick=1;tick<=100;++tick){player.en_penReference=(tick&1)?&floorEntity:nullptr;int status=groundProgressTick(tick);
+  if(tick&1)escaped|=status==2;else neutral&=groundF==0&&groundSt==0&&groundU==0;}
+ check(escaped&&neutral,"dense support flicker retains current-proof action gating under rotated gravity");
 }
 
 void offgraphProgressGuards(){
@@ -444,7 +615,7 @@ void offgraphProgressBridge(){
 }
 
 int main(){
- offgraphProgressBridge();offgraphProgressGuards();
+ offgraphProgressBridge();offgraphProgressGuards();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
  liftOccupancyBridge();
  { // Reproduce Retail033's mask overwrite, including initialized-mask controls.
  for(bool physical:{false,true})for(ULONG initial:{0u,2048u}){
