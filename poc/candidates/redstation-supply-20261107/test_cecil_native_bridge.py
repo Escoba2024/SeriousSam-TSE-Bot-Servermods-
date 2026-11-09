@@ -26,6 +26,7 @@ void operator delete(void* p)noexcept{std::free(p);}
 void operator delete(void* p,size_t)noexcept{std::free(p);}
 using INDEX=int;using BOOL=int;using FLOAT=float;using ULONG=unsigned long;
 const int TRUE=1,FALSE=0,ENF_DELETED=1,BPOF_PASSABLE=1<<11;
+const unsigned EPF_TRANSLATEDBYGRAVITY=1u<<1;
 struct FLOAT3D {
  float a[3];FLOAT3D(float x=0,float y=0,float z=0):a{x,y,z}{}
  float operator()(int i)const{return a[i-1];} float& operator()(int i){return a[i-1];}
@@ -61,12 +62,14 @@ struct CWorld {
 };
 #define FOREACHINDYNAMICCONTAINER(c,t,it) for(auto it : c)
 struct CPlayerWeapons {CEntity* m_penRayHit=nullptr;float m_fRayHitDistance=1000;unsigned m_iAvailableWeapons=3;int m_iCurrentWeapon=2;unsigned usable=3,ammo=0;};
-enum PlayerState {PST_STAND=0,PST_SWIM=2,PST_DIVE=3};
+enum PlayerState {PST_STAND=0,PST_CROUCH=1,PST_SWIM=2,PST_DIVE=3,PST_FALL=4};
 struct CPlayer:CEntity {
- PlayerState m_pstState=PST_STAND;FLOATmatrix3D body;CPlacement3D en_plViewpoint;
+ PlayerState m_pstState=PST_STAND;FLOATmatrix3D body;CPlacement3D en_plViewpoint;FLOAT3D m_aLastRotation;
  const FLOATmatrix3D& GetRotationMatrix()const{return body;}
  CPlayerWeapons w;CPlayerWeapons* m_penWeapons=&w;CWorld world;CEntity* en_penReference=nullptr;
  float health=100,m_fArmor=0;FLOAT3D en_vGravityDir{0,-1,0};
+ FLOAT3D en_vCurrentTranslationAbsolute;unsigned physicsFlags=EPF_TRANSLATEDBYGRAVITY;
+ unsigned GetPhysicsFlags()const{return physicsFlags;}
  float GetHealth()const{return health;}CPlayerWeapons* GetPlayerWeapons(){return &w;}
  CWorld* GetWorld(){return &world;}
 };
@@ -102,13 +105,22 @@ struct CBrushPlane {FLOAT3D bpl_plAbsolute{0,1,0};};
 struct CBrushPolygon {CBrushPlane* bpo_pbplPlane=nullptr;unsigned bpo_ulFlags=0;};
 CEntity obstruction,floorEntity;CBrushPlane floorPlane;CBrushPolygon floorPolygon;
 int floorMode=0,rayCount=0,blockedItems=0,floorPattern=0,wallMode=0,wallCount=0;FLOAT3D lastFrom,lastTo,wallFrom,wallTo;
+int nearFootMode=0,nearFootRays=0;float nearFootDistance=.26f;
+FLOAT3D nearFootFrom,nearFootTo;bool nearFootPhysical=false,nearFootOverHit=true;
 struct CCastRay {
  enum {TT_NONE,TT_COLLISIONBOX};
  bool cr_bAllowOverHit=false,cr_bPhysical=false;int cr_ttHitModels=TT_NONE;
  CEntity* cr_penHit=nullptr;CBrushPolygon* cr_pbpoBrushPolygon=nullptr;FLOAT3D from,to;
+ FLOAT cr_fHitDistance=0;
  CCastRay(CPlayer*,const FLOAT3D& a,const FLOAT3D& b):from(a),to(b){}
  void Cast(CWorld*){
   ++rayCount;lastFrom=from;lastTo=to;
+  if(cr_ttHitModels==TT_NONE&&(to-from).Length()<1){
+   ++nearFootRays;nearFootFrom=from;nearFootTo=to;nearFootPhysical=cr_bPhysical;nearFootOverHit=cr_bAllowOverHit;
+   if(nearFootMode){cr_penHit=&floorEntity;cr_fHitDistance=nearFootDistance;
+    if(nearFootMode==2)cr_pbpoBrushPolygon=&floorPolygon;}
+   return;
+  }
   if(cr_ttHitModels==TT_NONE&&(to-from).Length()>4){
    if(floorPattern==1&&from(3)<=0)return;
    if(floorPattern==2&&from(3)<0&&from(1)<2)return;
@@ -136,6 +148,7 @@ void setup(int nodes=3){
  BotCecilSettings().bAvoidPits=1;
  lockEvents=0;lastLocked=lastPresent=-1;goalEvents=endEvents=0;lastEnd[0]=0;_botSupplyMapSerial=7;_botRayBudget=40;rayCount=0;blockedItems=0;floorMode=0;floorPattern=0;wallMode=wallCount=0;floorEntity.type=CEntity::RT_MODEL;
  floorPlane.bpl_plAbsolute=FLOAT3D(0,1,0);floorPolygon.bpo_pbplPlane=&floorPlane;floorPolygon.bpo_ulFlags=0;
+ nearFootMode=nearFootRays=0;nearFootDistance=.26f;floorEntity.flags=0;
 }
 CEntity& addItem(unsigned id,float x,float z,botcore::CecilItemKind kind=botcore::CecilItemKind::Health){
  items.emplace_back();auto& e=items.back();e.en_ulID=id;e.pickable=true;
@@ -146,7 +159,262 @@ template<class T>auto typed(const T& m,int)->decltype(m.itemGoal&&m.urgent){retu
 template<class T>bool typed(const T&,long){return false;}
 template<class T>auto owns(const T& m,int)->decltype(m.ownsMovement){return m.ownsMovement;}
 template<class T>bool owns(const T&,long){return false;}
+template<class T>auto finalSafety(T& f,T& st,T& up,double now,bool accepted,int)
+ ->decltype(BotCecilSafeMotion(&player,BotSupplyState(0),now,f,st,up,0,1,accepted)){
+ return BotCecilSafeMotion(&player,BotSupplyState(0),now,f,st,up,0,1,accepted);
+}
+template<class T>int finalSafety(T& f,T& st,T& up,double now,bool,long){
+ return BotCecilSafeMotion(&player,BotSupplyState(0),now,f,st,up,0,1);
+}
+void relocationFixture(bool longRoute=false){
+ setup(7);auto& g=BotSupplyGraph();
+ const FLOAT3D positions[7]={{0,0,0},{0,0,-10},{40,0,0},{40,0,-30},{40,0,-60},{0,0,-20},{100,0,100}};
+ for(int i=0;i<7;++i){g.points[i].x=positions[i](1);g.points[i].y=positions[i](2);g.points[i].z=positions[i](3);g.points[i].links.clear();}
+ g.points[0].links={1};g.points[1].links={5};g.points[2].links={3};g.points[3].links={4};g.points[4].links={5};g.points[6].links={2};
+ if(longRoute)g.points[4].x=400;
+ addItem(991,0,-20,botcore::CecilItemKind::Weapon);
+ auto& s=BotSupplyState(0);s.goal=5;s.goalEntity=991;s.goalSince=0;s.scanTick=999;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+}
+SCecilMove relocateTo(int node,int tick,int budget=16){
+ const auto& point=BotSupplyGraph().points[node];player.pl.pl_PositionVector=FLOAT3D(point.x,point.y,point.z);
+ BotSupplyState(0).anchor=node;_botRayBudget=budget;return BotSupplyTick(&player,0,tick,1000);
+}
+void nullReferenceFixture(){
+ setup(2);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);
+ nearFootMode=2;floorEntity.type=CEntity::RT_BRUSH;
+}
 int main(){
+ { // A rejected recovery proposal must not impose recovery-only policy on Human movement.
+ setup(2);BotCecilSettings().bAvoidPits=0;auto& proposal=BotSupplyState(0);proposal.reacquiring=true;
+ proposal.anchor=-1;proposal.reacquireNode=1;proposal.reacquireSince=.25;proposal.reacquireRetryAfter=7;proposal.reacquireTried[0]=3;
+ double f=.64,st=0,up=0;_botRayBudget=16;
+ check(finalSafety(f,st,up,0,false,0)==1&&near(f,.64)&&st==0&&up==0&&rayCount==1&&proposal.probe.floorRays==0,
+   "Human-owned motion keeps its requested speed and wall check when recovery was rejected and pit avoidance is disabled");
+ check(proposal.reacquiring&&proposal.reacquireNode==1&&proposal.reacquireSince==.25&&
+   proposal.reacquireRetryAfter==7&&proposal.reacquireTried[0]==3,
+   "final movement ownership never clears or renews the planner recovery target deadline or failed-LOS sweep");
+ setup(2);BotCecilSettings().bAvoidPits=1;BotSupplyState(0).reacquiring=true;f=.64;st=up=0;_botRayBudget=16;
+ check(finalSafety(f,st,up,0,false,0)==0&&f==0&&st==0&&BotSupplyState(0).probe.floorRays>0,
+   "Human-owned motion still obeys ordinary enabled pit avoidance without a current graph point");
+ setup(2);BotCecilSettings().bAvoidPits=0;BotSupplyState(0).reacquiring=true;f=.64;st=up=0;_botRayBudget=16;
+ check(finalSafety(f,st,up,0,true,0)==0&&f==0&&st==0&&BotSupplyState(0).probe.floorRays>0,
+   "accepted recovery always requires real lookahead floor even when ordinary pit avoidance is disabled");
+ setup(2);BotCecilSettings().bAvoidPits=0;BotSupplyState(0).reacquiring=true;floorMode=2;f=.64;st=.4;up=0;_botRayBudget=16;
+ check(finalSafety(f,st,up,0,true,0)==1&&std::hypot(f,st)<=.300001,
+   "accepted recovery keeps its horizontal norm cap before actual safety probes");
+ setup(2);BotCecilSettings().bAvoidPits=0;BotSupplyState(0).reacquiring=true;player.m_pstState=PST_DIVE;
+ f=.64;st=0;up=.1;_botRayBudget=16;
+ check(finalSafety(f,st,up,0,false,0)==1&&near(f,.64)&&near(up,.1)&&rayCount==1&&BotSupplyState(0).probe.floorRays==0,
+   "Human-owned liquid motion does not inherit a rejected recovery cap or any floor requirement");
+ }
+ { // Reproduce native accumulated FLOAT pitch, including composition and ApplyAction deltas.
+ auto composePitch=[](const SCecilMove& motion,FLOAT& local){
+   const FLOAT last=player.m_aLastRotation(2);
+   const FLOAT requested=last+(FLOAT)motion.pitch_delta;
+   const FLOAT axis=requested-local;local+=axis;
+   const FLOAT applied=local-last;player.m_aLastRotation(2)=local;
+   player.en_plViewpoint.pl_OrientationAngle(2)+=applied;
+ };
+ for(PlayerState state:{PST_SWIM,PST_DIVE}){
+   setup(2);player.m_pstState=state;player.en_plViewpoint.pl_OrientationAngle(2)=-1.4e-6f;
+   player.m_aLastRotation(2)=-33.84178161621094f;FLOAT local=player.m_aLastRotation(2);
+   auto& s=BotSupplyState(0);s.goal=1;s.anchor=0;s.scanTick=999;s.levelSwimView=true;
+   const FLOAT correction=(FLOAT)botcore::TestTurnDelta(player.en_plViewpoint.pl_OrientationAngle(2),0,9);
+   check(FLOAT(local+correction)==local,"native tiny-pitch fixture reproduces FLOAT addition loss before the network packet");
+   bool progresses=true;
+   for(int tick=1;tick<=60;++tick){_botRayBudget=16;const auto motion=BotSupplyTick(&player,0,tick,1000);
+     progresses=progresses&&motion.active&&motion.forward>0&&!s.levelSwimView;composePitch(motion,local);}
+   check(progresses&&player.en_plViewpoint.pl_OrientationAngle(2)==-1.4e-6f,
+     "unencodable native tiny pitch releases the latched swim or dive gate without mutating the view");
+   wallMode=2;_botRayBudget=16;double f=1,st=0,u=0;
+   check(BotCecilSafeMotion(&player,s,3.05,f,st,u,0,1)==0&&f==0&&st==0&&u==0,
+     "tiny pitch release never bypasses the actual native movement wall veto");
+   setup(2);player.m_pstState=state;player.en_plViewpoint.pl_OrientationAngle(2)=-1.4e-6f;local=0;
+   auto& encoded=BotSupplyState(0);encoded.goal=1;encoded.anchor=0;encoded.scanTick=999;encoded.levelSwimView=true;
+   _botRayBudget=16;const auto first=BotSupplyTick(&player,0,1,1000);
+   check(first.forward==0&&first.pitch_delta>0&&encoded.levelSwimView,"tiny encodable correction must still level before forward swim motion");
+   composePitch(first,local);_botRayBudget=16;const auto second=BotSupplyTick(&player,0,2,1000);
+   check(second.forward>0&&!encoded.levelSwimView&&player.en_plViewpoint.pl_OrientationAngle(2)==0,
+     "tiny encodable correction resumes movement only after the FLOAT composer reaches zero");
+   for(FLOAT pitch:{.01f,-.01f,std::nextafter(.01f,1.f),-std::nextafter(.01f,1.f),1.f,-1.f}){
+     setup(2);player.m_pstState=state;player.en_plViewpoint.pl_OrientationAngle(2)=pitch;player.m_aLastRotation(2)=1e8f;
+     auto& bounded=BotSupplyState(0);bounded.goal=1;bounded.anchor=0;bounded.scanTick=999;bounded.levelSwimView=true;
+     _botRayBudget=16;const auto motion=BotSupplyTick(&player,0,1,1000);
+     check(std::fabs(double(pitch))<=.01?motion.forward>0&&!bounded.levelSwimView:motion.forward==0&&bounded.levelSwimView,
+       "unencodable correction releases only inside the hard tiny-pitch bound even with huge accumulated angles");
+   }
+   setup(2);player.m_pstState=state;player.en_plViewpoint.pl_OrientationAngle(2)=state==PST_DIVE?90.f:-45.f;
+   player.m_aLastRotation(2)=17.25f;local=17.25f;
+   auto& full=BotSupplyState(0);full.goal=1;full.anchor=0;full.scanTick=999;full.levelSwimView=true;SCecilMove settled;
+   for(int tick=1;tick<=11;++tick){_botRayBudget=16;settled=BotSupplyTick(&player,0,tick,1000);composePitch(settled,local);}
+   check(settled.forward>0&&!full.levelSwimView&&player.en_plViewpoint.pl_OrientationAngle(2)==0,
+     "large initial pitch still completes genuine leveling through the native FLOAT composer at a normal offset");
+ }
+ for(FLOAT bad:{std::numeric_limits<FLOAT>::quiet_NaN(),std::numeric_limits<FLOAT>::infinity(),-std::numeric_limits<FLOAT>::infinity()}){
+   setup(2);player.m_pstState=PST_DIVE;player.m_aLastRotation(2)=bad;player.en_plViewpoint.pl_OrientationAngle(2)=-1.4e-6f;
+   auto& s=BotSupplyState(0);s.goal=1;s.anchor=0;s.scanTick=999;s.levelSwimView=true;
+   _botRayBudget=16;const auto motion=BotSupplyTick(&player,0,1,1000);
+   check(!motion.active&&motion.forward==0&&motion.strafe==0&&motion.up==0&&motion.pitch_delta==0,
+     "nonfinite accumulated native pitch fails closed before resolution-based swim release");
+ }
+ }
+ { // The helper also rejects malformed clocks independently of its normal Tick caller.
+ const double nan=std::numeric_limits<double>::quiet_NaN(),inf=std::numeric_limits<double>::infinity();
+ const double clocks[][2]={{nan,0},{inf,0},{-inf,0},{-.1,0},{.1,nan},{.1,inf},{.1,-inf},{.1,-.1},{-.1,-1}};
+ for(const auto& clock:clocks){
+   relocationFixture();auto& s=BotSupplyState(0);s.anchor=2;s.goalSince=clock[1];s.goalDeadline=12;
+   player.pl.pl_PositionVector=FLOAT3D(40,0,0);const auto input=BotCecilItemInput(&player,s,1000);
+   botcore::CecilMotion event;event.active=event.relocated=true;const int before=rayCount;_botRayBudget=16;
+   BotCecilRebudgetWeapon(&player,s,event,input,0,2,clock[0]);
+   check(s.goal==5&&s.goalEntity==991&&s.goalDeadline==12&&!s.goalRelocationBudgeted&&rayCount==before&&_botRayBudget==16,
+     "nonfinite or negative helper timestamps preserve the old weapon attempt without a grant or cast");
+ }
+ relocationFixture();auto& zero=BotSupplyState(0);zero.anchor=2;zero.goalSince=0;zero.goalDeadline=12;
+ for(auto& point:BotSupplyGraph().points)point.x=point.y=point.z=0;
+ items[0].pl.pl_PositionVector=player.pl.pl_PositionVector=FLOAT3D();
+ const auto input=BotCecilItemInput(&player,zero,1000);botcore::CecilMotion event;event.active=event.relocated=true;
+ const int before=rayCount;_botRayBudget=16;BotCecilRebudgetWeapon(&player,zero,event,input,0,200,10);
+ check(zero.goalEntity==991&&zero.goalDeadline==12&&!zero.goalRelocationBudgeted&&rayCount==before,
+   "zero remaining physical cost cannot earn a relocation extension from elapsed time alone");
+ }
+ { // Only a reached original-node relocation can increase a live ordinary weapon deadline.
+ relocationFixture();relocateTo(2,2);const double deadline=BotSupplyState(0).goalDeadline;
+ check(near(deadline,.1+(60+std::sqrt(3200.0))/6+5),"ordinary weapon relocation grants one fixed deadline from fresh directed remaining cost");
+ BotSupplyState(0).scanTick=0;_botRayBudget=16;BotSupplyTick(&player,0,21,1000);
+ check(BotSupplyState(0).goalDeadline==deadline,"ordinary acquisition scans cannot renew relocation budget");
+ BotSupplyState(0).anchor=6;BotSupplyState(0).scanTick=999;_botRayBudget=16;BotSupplyTick(&player,0,22,1000);
+ check(BotSupplyState(0).goalDeadline==deadline,"unreached anchor hint cannot extend an item deadline");
+ relocateTo(6,23);
+ check(BotSupplyState(0).goalDeadline==deadline,"second genuine relocation cannot extend the same weapon attempt again");
+ _botRayBudget=16;BotSupplyTick(&player,0,250,1000);
+ check(BotSupplyState(0).goalEntity==991,"valid once-rebudgeted weapon attempt survives its original twelve-second deadline");
+ relocationFixture(true);relocateTo(2,2);
+ check(near(BotSupplyState(0).goalDeadline,45),"long relocation route is capped at forty-five seconds since original admission");
+ relocationFixture();relocateTo(2,240);
+ check(BotSupplyState(0).goalEntity!=991,"already timed-out weapon attempt cannot revive on a relocation tick");
+ relocationFixture();player.w.usable|=botcore::CecilWeaponMask(4);player.w.m_iAvailableWeapons=player.w.usable;relocateTo(2,2);
+ check(BotSupplyState(0).goalEntity!=991,"gained goal weapon cancels before any relocation budget grant");
+ relocationFixture();items[0].pickable=false;relocateTo(2,2);
+ check(BotSupplyState(0).goalEntity!=991,"unavailable goal item cancels before any relocation budget grant");
+ relocationFixture();BotSupplyState(0).mappedWeaponGoal=true;BotSupplyState(0).goalDeadline=20;relocateTo(2,2);
+ check(BotSupplyState(0).goalDeadline==20,"mapped weapon deadline is untouched by ordinary relocation budgeting");
+ relocationFixture();relocateTo(2,2);BotSupplyState(0).ClearGoal();
+ auto& reset=BotSupplyState(0);reset.goal=5;reset.goalEntity=991;reset.goalSince=10;reset.anchor=0;reset.scanTick=999;
+ player.pl.pl_PositionVector=FLOAT3D();_botRayBudget=16;BotSupplyTick(&player,0,201,1000);relocateTo(2,202);
+ check(near(reset.goalDeadline,10.1+(60+std::sqrt(3200.0))/6+5),"clearing the item goal gives the next attempt its own single relocation budget");
+ relocationFixture();relocateTo(2,2,2);
+ check(BotSupplyState(0).goalDeadline==0&&_botRayBudget==2,"connector budget denial skips this relocation event without spending reserved rays");
+ _botRayBudget=16;BotSupplyTick(&player,0,3,1000);
+ check(BotSupplyState(0).goalDeadline==0,"fresh budget on a later scan cannot fabricate the missed relocation event");
+ relocateTo(6,4);
+ check(BotSupplyState(0).goalDeadline>12,"a later genuine relocation can grant the still-unused extension after budget denial");
+ relocationFixture();blockedItems=1;items[0].pl.pl_PositionVector(1)=1;const int before=rayCount;relocateTo(2,2);
+ check(BotSupplyState(0).goalDeadline==0&&rayCount-before==1,"blocked live item connector prevents relocation budgeting with one bounded physical cast");
+ relocationFixture();items[0].pl.pl_PositionVector(2)=4;relocateTo(2,2);
+ check(BotSupplyState(0).goalDeadline==0,"wrong-floor live item connector prevents relocation budgeting");
+ relocationFixture();BotSupplyGraph().points[2].links={5};BotSupplyGraph().points[2].x=10;relocateTo(2,2);
+ check(BotSupplyState(0).goalDeadline==0,"short relocation route does not consume an extension when twelve seconds are sufficient");
+ relocateTo(6,3);
+ check(BotSupplyState(0).goalDeadline>12,"later costly relocation can use the option not consumed by a short route");
+ relocationFixture();items[0].item.kind=botcore::CecilItemKind::Health;player.health=20;relocateTo(2,2);
+ check(BotSupplyState(0).goalEntity==991&&BotSupplyState(0).goalDeadline==0,"ordinary nonweapon attempts keep their twelve-second lifetime after relocation");
+ relocationFixture();BotSupplyGraph().points[2].links.clear();relocateTo(2,2);
+ check(BotSupplyState(0).goalDeadline==0,"unreachable directed suffix cannot grant relocation budget");
+ relocationFixture();CEntity lock;lock.en_ulID=1199;lock.pl.pl_PositionVector(1)=1;
+ player.world.wo_cenEntities.push_back(&lock);BotSupplyGraph().points[2].lock_entity=1199;relocateTo(2,2);
+ check(BotSupplyState(0).goalDeadline==0,"reached but physically locked relocation source cannot grant extra item lifetime");
+ relocationFixture();const int castsBefore=rayCount;relocateTo(2,2,3);
+ check(BotSupplyState(0).goalDeadline>12&&rayCount-castsBefore==1&&_botRayBudget==2,
+   "relocation connector spends exactly one cast while retaining the final two safety rays");
+ _botRayBudget=16;BotSupplyTick(&player,0,3,1000);
+ check(rayCount-castsBefore==1,"ordinary ticks after relocation never repeat the connector budgeting cast");
+ relocationFixture();items[0].pl.pl_PositionVector(1)=1;player.pl.pl_PositionVector=FLOAT3D(40.5f,0,0);
+ BotSupplyState(0).anchor=2;_botRayBudget=16;BotSupplyTick(&player,0,2,1000);
+ check(near(BotSupplyState(0).goalDeadline,.1+(.5+60+std::sqrt(3200.0)+1)/6+5),
+   "relocation budget includes current approach to the reached node and the live item connector");
+ relocationFixture();relocateTo(2,2);items[0].pickable=false;_botRayBudget=16;BotSupplyTick(&player,0,3,1000);
+ check(BotSupplyState(0).goalEntity==0&&BotSupplyState(0).goalDeadline==0,"extended attempt still clears immediately when its live item becomes unavailable");
+ relocationFixture();relocateTo(2,2);player.health=0;_botRayBudget=16;BotSupplyTick(&player,0,3,1000);
+ check(BotSupplyState(0).goalEntity==0&&BotSupplyState(0).goalDeadline==0,"death clears the extended attempt and its budget state");
+ relocationFixture(true);relocateTo(2,2);relocateTo(6,900);
+ check(BotSupplyState(0).goalEntity!=991,"absolute forty-five-second lifetime expires even on another real relocation");
+ }
+ { // A missing reference can coexist with an actual brush immediately below the feet.
+ nullReferenceFixture();BotCecilSettings().bAvoidPits=0;_botRayBudget=4;
+ const auto supported=BotSupplyTick(&player,0,1,1000);
+ check(supported.active&&owns(supported,0)&&BotSupplyState(0).reacquiring&&
+   std::hypot(supported.forward,supported.strafe)<=.300001&&BotSupplyState(0).anchor<0,
+   "near-foot physical brush support permits bounded NULL-reference recovery without fabricating an anchor");
+ check(nearFootRays==1&&nearFootPhysical&&!nearFootOverHit&&near(nearFootFrom(2),-4)&&
+   near(nearFootTo(2),-4.30)&&nearFootFrom(1)==0&&nearFootFrom(3)==2&&_botRayBudget==2,
+   "NULL recovery spends one physical thirty-centimetre foot cast and retains two final safety rays");
+ double f=supported.forward,st=supported.strafe,u=supported.up;floorMode=2;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),.05,f,st,u,0,1)==1&&_botRayBudget==0,
+   "minimum NULL-support budget still permits the final wall and lookahead floor probes");
+ const double selectedSince=BotSupplyState(0).reacquireSince;_botRayBudget=3;
+ check(!BotSupplyTick(&player,0,2,1000).active&&BotSupplyState(0).reacquireNode==0&&
+   BotSupplyState(0).reacquireSince==selectedSince&&nearFootRays==1,
+   "deferred current-support check never renews or rejects a selected target deadline");
+ nullReferenceFixture();_botRayBudget=16;auto edge=BotSupplyTick(&player,0,1,1000);
+ f=edge.forward;st=edge.strafe;u=edge.up;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),.05,f,st,u,0,1)==0&&f==0&&st==0&&u==0,
+   "current-foot support never bypasses the final unsupported lookahead-floor veto");
+ nullReferenceFixture();player.m_pstState=PST_CROUCH;_botRayBudget=16;
+ check(BotSupplyTick(&player,0,1,1000).active,"supported native crouch can use bounded NULL-reference recovery");
+ nullReferenceFixture();player.en_vCurrentTranslationAbsolute=FLOAT3D(2,.099f,3);_botRayBudget=16;
+ check(BotSupplyTick(&player,0,1,1000).active,"finite lateral motion with small vertical speed can retain actual foot support");
+ nullReferenceFixture();auto& sweep=BotSupplyState(0);sweep.reacquireTried[0]=1;sweep.reacquireScanTime=0;
+ for(int axis=0;axis<3;++axis){sweep.reacquireScanPosition[axis]=player.pl.pl_PositionVector(axis+1);sweep.reacquireScanGravity[axis]=player.en_vGravityDir(axis+1);}
+ _botRayBudget=16;const auto continued=BotSupplyTick(&player,0,1,1000);
+ check(continued.active&&sweep.reacquireTried[0]==1&&sweep.reacquireNode==1,
+   "positive current support preserves the failed-LOS prefix and continues to the next node");
+ nullReferenceFixture();player.pl.pl_PositionVector(2)=4.25f;player.body.m[0][0]=-1;player.body.m[1][1]=-1;
+ player.en_vGravityDir=FLOAT3D(0,1,0);floorPlane.bpl_plAbsolute=FLOAT3D(0,-1,0);_botRayBudget=16;
+ check(BotSupplyTick(&player,0,1,1000).active&&near(nearFootFrom(2),4)&&near(nearFootTo(2),4.30),
+   "near-foot support ray and upward normal follow actual inverted gravity");
+ for(float distance:{.25f,.30f}){nullReferenceFixture();nearFootDistance=distance;_botRayBudget=16;
+  check(BotSupplyTick(&player,0,1,1000).active,"near-foot support includes both native distance boundaries");}
+ for(int budget:{0,1,2,3}){nullReferenceFixture();auto& state=BotSupplyState(0);state.reacquireTried[0]=1;state.reacquireScanTime=0;
+  _botRayBudget=budget;const auto deferred=BotSupplyTick(&player,0,1,1000);
+  check(!deferred.active&&owns(deferred,0)&&rayCount==0&&state.reacquireTried[0]==1,
+    "insufficient support-plus-LOS-plus-safety budget defers without clearing failed-LOS evidence");}
+ nullReferenceFixture();nearFootMode=0;auto& denied=BotSupplyState(0);denied.reacquireTried[0]=1;denied.reacquireScanTime=0;
+ _botRayBudget=16;check(!BotSupplyTick(&player,0,1,1000).active&&denied.reacquireTried[0]==0,
+   "actual missing current-foot support rejects recovery and resets its LOS sweep");
+ for(PlayerState state:{PST_FALL}){nullReferenceFixture();player.m_pstState=state;_botRayBudget=16;
+  check(!BotSupplyTick(&player,0,1,1000).active,"native falling state cannot use the NULL support fallback");}
+ nullReferenceFixture();player.physicsFlags=0;_botRayBudget=16;
+ check(!BotSupplyTick(&player,0,1,1000).active,"gravity-disabled entity cannot use the NULL support fallback");
+ for(float speed:{-.1001f,.1001f,-20.f,20.f}){nullReferenceFixture();player.en_vCurrentTranslationAbsolute(2)=speed;_botRayBudget=16;
+  check(!BotSupplyTick(&player,0,1,1000).active,"ascending or descending native velocity rejects NULL support fallback");}
+ for(float bad:{std::numeric_limits<float>::quiet_NaN(),std::numeric_limits<float>::infinity()}){
+  for(int axis=1;axis<=3;++axis){nullReferenceFixture();player.en_vCurrentTranslationAbsolute(axis)=bad;_botRayBudget=16;
+   check(!BotSupplyTick(&player,0,1,1000).active,"nonfinite native velocity rejects NULL support fallback");}
+  nullReferenceFixture();nearFootDistance=bad;_botRayBudget=16;
+  check(!BotSupplyTick(&player,0,1,1000).active,"nonfinite physical hit distance rejects NULL support fallback");
+  nullReferenceFixture();floorPlane.bpl_plAbsolute(1)=bad;_botRayBudget=16;
+  check(!BotSupplyTick(&player,0,1,1000).active,"nonfinite native support normal rejects NULL support fallback");
+ }
+ for(float distance:{-.1f,.2499f,.3001f,1.f}){nullReferenceFixture();nearFootDistance=distance;_botRayBudget=16;
+  check(!BotSupplyTick(&player,0,1,1000).active,"support above the feet or beyond five centimetres below is rejected");}
+ for(int type:{CEntity::RT_MODEL,CEntity::RT_TERRAIN}){nullReferenceFixture();floorEntity.type=type;_botRayBudget=16;
+  check(!BotSupplyTick(&player,0,1,1000).active,"model or terrain hits cannot substitute for native brush support");}
+ nullReferenceFixture();nearFootMode=1;_botRayBudget=16;
+ check(!BotSupplyTick(&player,0,1,1000).active,"a physical hit without a brush polygon is insufficient");
+ nullReferenceFixture();floorPolygon.bpo_pbplPlane=nullptr;_botRayBudget=16;
+ check(!BotSupplyTick(&player,0,1,1000).active,"a brush hit without its actual plane is insufficient");
+ nullReferenceFixture();floorPolygon.bpo_ulFlags=BPOF_PASSABLE;_botRayBudget=16;
+ check(!BotSupplyTick(&player,0,1,1000).active,"passable brush polygon cannot authorize recovery");
+ for(float normal:{-1.f,0.f,.5f}){nullReferenceFixture();floorPlane.bpl_plAbsolute=FLOAT3D(0,normal,0);_botRayBudget=16;
+  check(!BotSupplyTick(&player,0,1,1000).active,"wrong or insufficient upward normal rejects NULL support fallback");}
+ nullReferenceFixture();floorEntity.flags=ENF_DELETED;_botRayBudget=16;
+ check(!BotSupplyTick(&player,0,1,1000).active,"deleted brush hit cannot authorize recovery");
+ setup(2);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ player.physicsFlags=0;player.en_vCurrentTranslationAbsolute(2)=20;_botRayBudget=16;
+ check(BotSupplyTick(&player,0,1,1000).active&&nearFootRays==0,
+   "existing non-NULL reference path remains unchanged by fallback restrictions");
+ }
  { // A committed item attempt may briefly leave its acquisition radius on a route.
  setup(3);auto& flamer=addItem(991,0,-10,botcore::CecilItemKind::Weapon);flamer.item.weapon=11;
  player.w.m_iAvailableWeapons=259;player.w.usable=259;player.pl.pl_PositionVector(2)=6;

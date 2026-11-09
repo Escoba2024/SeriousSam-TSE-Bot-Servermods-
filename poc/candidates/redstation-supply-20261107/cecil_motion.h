@@ -16,7 +16,7 @@ struct CecilMotionInput {
   bool alive=false,allow_jump=true,important_goal=false;
 };
 struct CecilMotion {
-  bool active=false,arrived=false,stuck=false;
+  bool active=false,arrived=false,stuck=false,relocated=false;
   int hop=-1;double forward=0,strafe=0,up=0,yaw_delta=0,pitch_delta=0;uint32_t flags=0;
 };
 class CecilNavigator {
@@ -60,6 +60,7 @@ class CecilNavigator {
     // is independent evidence to acquire a route from the actual new location.
     const bool relocated=source_>=0&&!at_hop&&in.anchor!=source_&&in.anchor!=hop_&&
       Reached(g.points[in.anchor],in);
+    out.relocated=relocated;
     if(new_goal||lock_change||recovered||relocated||hop_<0||in.now>=next_replan_||at_hop) {
       const bool committed=!new_goal&&!recovered&&!relocated&&!at_hop&&
         source_>=0&&hop_>=0&&hop_!=source_&&!locks_[hop_];

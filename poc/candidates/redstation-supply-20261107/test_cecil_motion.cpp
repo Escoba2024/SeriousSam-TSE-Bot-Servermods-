@@ -11,6 +11,8 @@ using namespace botcore;
 static int checks=0,failures=0;
 static void check(bool yes,const char* s){++checks;if(!yes){++failures;std::fprintf(stderr,"FAIL %s\n",s);}}
 static bool near(double a,double b){return std::fabs(a-b)<1e-8;}
+template<class T>auto relocated(const T& m,int)->decltype(m.relocated){return m.relocated;}
+template<class T>bool relocated(const T&,long){return false;}
 static CecilNavGraph graph(){
   CecilNavGraph g;g.version=6;g.next_point_id=3;g.points.resize(3);
   for(int i=0;i<3;++i){g.points[i].id=i;g.points[i].radius=1;}
@@ -120,6 +122,11 @@ int main(){
   nav.Update(g,open4,4,in);in.x=17;in.now=.4;nav.Update(g,open4,4,in);
   in.x=120;in.anchor=2;in.now=.45;out=nav.Update(g,open4,4,in);
   check(out.hop==3&&out.strafe>0,"native teleport onto a reached exit point reanchors without backtracking to its entry");
+  check(relocated(out,0),"actual reached relocation is exposed to the native caller");
+  in.now=.5;out=nav.Update(g,open4,4,in);
+  check(!relocated(out,0),"repeated scans at the relocated source do not repeat the relocation event");
+  in.x=126;in.anchor=0;in.now=.55;out=nav.Update(g,open4,4,in);
+  check(!relocated(out,0),"an unreached anchor hint cannot report relocation");
   nav.Reset();in=CecilMotionInput();in.alive=true;in.anchor=0;in.goal=3;
   nav.Update(g,open4,4,in);in.x=6;in.now=.5;open4[2]=1;
   out=nav.Update(g,open4,4,in);

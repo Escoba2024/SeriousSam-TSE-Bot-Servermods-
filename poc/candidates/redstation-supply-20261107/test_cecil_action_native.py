@@ -26,7 +26,7 @@ STUB = r'''
 #include <cmath>
 #include <limits>
 using FLOAT=float;using ULONG=unsigned long;using INDEX=int;using BOOL=int;
-const BOOL TRUE=1;
+const BOOL TRUE=1,FALSE=0;
 struct FLOAT3D {float v[3];FLOAT3D(float x=0,float y=0,float z=0):v{x,y,z}{}float& operator()(int i){return v[i-1];}
  float operator()(int i)const{return v[i-1];}};
 struct CPlacement3D {FLOAT3D pl_OrientationAngle;};
@@ -40,6 +40,12 @@ struct CPlayerSource {CPlayerAction pls_paAction;int pls_csAction=0,writes=0;
 struct CTSingleLock {CTSingleLock(int*,BOOL){}};
 void BotLog(const char*,...){}
 struct State {int bs_iTick=20;};
+struct SafetyState {};
+SafetyState& BotSupplyState(INDEX){static SafetyState state;return state;}
+static bool safetyRecovery=true;
+template<class T>int BotCecilSafeMotion(CPlayer*,SafetyState&,double,T&,T&,T&,double,double,bool recovery=true){
+ safetyRecovery=recovery;return 17;
+}
 '''
 TEST = r'''
 int main(){
@@ -130,10 +136,24 @@ static void ownership_paths(){
  player.m_penWeapons=nullptr;assert(!selected(true,s,&player,false,1000));
 }
 '''
-    test=TEST.replace("int main(){","int main(){rejection_paths();ownership_paths();")
+    final_call=re.search(r'cecilFloorStatus\s*=\s*BotCecilSafeMotion\([^;]+;',source)
+    if not final_call:raise ValueError("native final safety call missing")
+    # Compile the actual final call. Its default argument deliberately models
+    # existing callers so omission of final movement ownership is a behavioral RED.
+    safety=r'''
+static void safety_owner_paths(){
+ CPlayer actual;CPlayer* player=&actual;int iLP=0,cecilFloorStatus=0;
+ double now=0,finalYaw=0,maxStrafe=1;FLOAT moveFactor=.64f,humanStrafe=0,cecilUp=0;
+ for(BOOL supplyActive:{FALSE,TRUE}){
+ '''+final_call[0]+r'''
+ assert(cecilFloorStatus==17);assert(safetyRecovery==(supplyActive!=FALSE));
+ }
+}
+'''
+    test=TEST.replace("int main(){","int main(){rejection_paths();ownership_paths();safety_owner_paths();")
     with tempfile.TemporaryDirectory(prefix="cecil-action-contract-") as tmp:
         cpp=Path(tmp)/"test.cpp";exe=Path(tmp)/"test"
-        cpp.write_text('#include <initializer_list>\n#include "cecil_rules.h"\n#define SDK_ZOOM '+str(1<<int(flag[1]))+"\n"+STUB+bodies+rejection+ownership+test)
+        cpp.write_text('#include <initializer_list>\n#include "cecil_rules.h"\n#define SDK_ZOOM '+str(1<<int(flag[1]))+"\n"+STUB+bodies+rejection+ownership+safety+test)
         subprocess.run(["g++","-std=c++17","-Wall","-Wextra","-Werror","-fsanitize=address,undefined","-I",str(a.driver.parent),str(cpp),"-o",str(exe)],check=True)
         subprocess.run([str(exe)],check=True)
     print("PASS actual Driver action guards; SDK SHA256",hashlib.sha256(sdk).hexdigest())

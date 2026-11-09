@@ -53,7 +53,7 @@ struct SSupplyState {
   int escapeSide=1;
   bool escapeReverseUsed=false;
   double escapeBlockPosition[3]={0,0,0},escapeRequest[3]={0,0,0};
-  bool playable=false,hadUpgrade=false,importantGoal=false,levelSwimView=false,mappedWeaponGoal=false,reacquiring=false;
+  bool playable=false,hadUpgrade=false,importantGoal=false,levelSwimView=false,mappedWeaponGoal=false,reacquiring=false,goalRelocationBudgeted=false;
   botcore::CecilItemKind goalKind=botcore::CecilItemKind::Weapon;
   // 256 fixed records cover eight rejects/second for the thirty-second TTL.
   struct Rejection {uint32_t id=0;double until=0;bool localOnly=false;} rejected[256];
@@ -74,7 +74,7 @@ struct SSupplyState {
   void ClearRejections(){for(auto& r:rejected)r=Rejection();}
   void ClearReacquireScan(){std::fill(reacquireTried,reacquireTried+sizeof(reacquireTried),0);reacquireScanTime=-1;}
   void ClearAvoidance(){avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
-  void ClearGoal(){currentNavTime=-1;currentNavGoal=-1;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
+  void ClearGoal(){currentNavTime=-1;currentNavGoal=-1;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
@@ -406,14 +406,23 @@ static void BotCecilSwimMotion(CPlayer* player,const FLOAT3D& delta,double yaw,d
   double back=(std::sin(angle)*local.x+std::cos(angle)*local.z)/length;
   double side=(std::cos(angle)*local.x-std::sin(angle)*local.z)/length,up=local.y/length;
   const double viewPitch=player->en_plViewpoint.pl_OrientationAngle(2);
-  if(!std::isfinite(viewPitch)){move=botcore::CecilMotion();return;}
+  const FLOAT lastPitch=player->m_aLastRotation(2);
+  if(!std::isfinite(viewPitch)||!std::isfinite(lastPitch)){move=botcore::CecilMotion();return;}
   if(player->m_pstState==PST_DIVE||viewPitch<=-30)leveling=true;
   if(std::fabs(viewPitch)<=1e-6)leveling=false;
+  const double correction=botcore::TestTurnDelta(viewPitch,0,180*dt);
+  const FLOAT correctedPitch=lastPitch+(FLOAT)correction; // Same FLOAT accumulation as Driver bs_aPitch.
+  if(!std::isfinite(correction)||!std::isfinite(correctedPitch)){move=botcore::CecilMotion();return;}
+  // Native residuals can exceed the exact-zero gate while their correction is
+  // lost in accumulated FLOAT pitch. Release only an already tiny, unencodable
+  // correction; a large accumulated angle must never waive meaningful leveling.
+  if(leveling&&std::fabs(viewPitch)<=.01&&correctedPitch==lastPitch)leveling=false;
   // Level before forward input instead of guessing private composer gains.
   // Nominally <=0.5s at 180deg/s; actual view pitch remains the gate if combat
-  // arbitration postpones these actions. Once started, swimming levels fully.
+  // arbitration postpones these actions. Only the tiny FLOAT residual above
+  // may release the gate before exact zero.
   if(leveling&&std::fabs(back)>1e-6){
-    back=0;move.pitch_delta=botcore::TestTurnDelta(viewPitch,0,180*dt);
+    back=0;move.pitch_delta=correction;
   }
   const double scale=std::fmax(1,std::fmax(std::fabs(side),std::fmax(std::fabs(up),std::fabs(back))));
   move.active=true;move.forward=-back/scale;move.strafe=side/scale;move.up=up/scale;
@@ -424,9 +433,39 @@ static void BotCecilSwimMotion(CPlayer* player,const FLOAT3D& delta,double yaw,d
 // Recover that concrete hop using the same prepared directed search, without allocation.
 static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCecilMove& out){
   const bool liquid=BotCecilLiquid(player);
-  // Do not steer an uncommitted ballistic flight. Ground recovery requires an
-  // actual native support reference; swimming uses its ordinary 3D adapter.
-  if(!liquid&&player->en_penReference==NULL){state.ClearReacquireScan();return;}
+  // A NULL reference can coexist with native brush contact. Only a near-foot
+  // physical hit may substitute; the selected motion still needs wall/floor checks.
+  if(!liquid&&player->en_penReference==NULL){
+    const bool trace=((int)std::floor(now*20+.5))%20==0;
+    if(trace)BotLog("[CecilReacquireSupport] entity=%lu generation=%lu time=%.3f stage=begin state=%d physics=%lu velocity=(%.5f,%.5f,%.5f) budget=%d\n",(unsigned long)player->en_ulID,(unsigned long)state.generation,now,(int)player->m_pstState,(unsigned long)player->GetPhysicsFlags(),player->en_vCurrentTranslationAbsolute(1),player->en_vCurrentTranslationAbsolute(2),player->en_vCurrentTranslationAbsolute(3),_botRayBudget);
+    // One support cast, at least one LOS cast and the final two safety probes.
+    if(_botRayBudget<4)return; // Unknown support must not erase a deferred LOS sweep.
+    const FLOAT3D& velocity=player->en_vCurrentTranslationAbsolute;
+    bool valid=(player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
+      (player->GetPhysicsFlags()&EPF_TRANSLATEDBYGRAVITY);
+    double verticalSpeed=0;
+    for(int i=1;i<=3;++i){valid=valid&&std::isfinite(velocity(i));verticalSpeed+=double(velocity(i))*player->en_vGravityDir(i);}
+    if(!valid||!std::isfinite(verticalSpeed)||std::fabs(verticalSpeed)>.1){state.ClearReacquireScan();return;}
+    const FLOAT3D foot=player->GetPlacement().pl_PositionVector;
+    CCastRay supportRay(player,foot-player->en_vGravityDir*.25f,foot+player->en_vGravityDir*.05f);
+    --_botRayBudget;supportRay.cr_bPhysical=TRUE;supportRay.cr_bAllowOverHit=FALSE;
+    supportRay.cr_ttHitModels=CCastRay::TT_NONE;supportRay.Cast(player->GetWorld());
+    const CBrushPolygon* polygon=supportRay.cr_pbpoBrushPolygon;
+    if(!supportRay.cr_penHit||(supportRay.cr_penHit->GetFlags()&ENF_DELETED)||
+       supportRay.cr_penHit->GetRenderType()!=CEntity::RT_BRUSH||!polygon||
+       (polygon->bpo_ulFlags&BPOF_PASSABLE)||!polygon->bpo_pbplPlane||
+       !std::isfinite(supportRay.cr_fHitDistance)||supportRay.cr_fHitDistance<.25f||supportRay.cr_fHitDistance>.30f){
+      if(trace)BotLog("[CecilReacquireSupport] entity=%lu generation=%lu time=%.3f stage=geometry_rejected hit=%lu type=%d distance=%.7f polygon=%d passable=%d budget=%d\n",(unsigned long)player->en_ulID,(unsigned long)state.generation,now,supportRay.cr_penHit?(unsigned long)supportRay.cr_penHit->en_ulID:0,supportRay.cr_penHit?(int)supportRay.cr_penHit->GetRenderType():-1,supportRay.cr_fHitDistance,polygon!=NULL,polygon&&(polygon->bpo_ulFlags&BPOF_PASSABLE),_botRayBudget);
+      state.ClearReacquireScan();return;
+    }
+    const auto& normal=polygon->bpo_pbplPlane->bpl_plAbsolute;
+    const double support=-(double(normal(1))*player->en_vGravityDir(1)+double(normal(2))*player->en_vGravityDir(2)+double(normal(3))*player->en_vGravityDir(3));
+    if(!std::isfinite(support)||support<=.5){
+      if(trace)BotLog("[CecilReacquireSupport] entity=%lu generation=%lu time=%.3f stage=normal_rejected distance=%.7f support=%.7f budget=%d\n",(unsigned long)player->en_ulID,(unsigned long)state.generation,now,supportRay.cr_fHitDistance,support,_botRayBudget);
+      state.ClearReacquireScan();return;
+    }
+    if(trace)BotLog("[CecilReacquireSupport] entity=%lu generation=%lu time=%.3f stage=verified distance=%.7f support=%.7f budget=%d\n",(unsigned long)player->en_ulID,(unsigned long)state.generation,now,supportRay.cr_fHitDistance,support,_botRayBudget);
+  }
   const auto& graph=BotSupplyGraph();const FLOAT3D position=player->GetPlacement().pl_PositionVector;
   if(graph.points.size()>botcore::CecilNavGraph::kMaxPoints||state.blocked.size()!=graph.points.size())return;
   BotCecilLocks(player,state,now);
@@ -587,6 +626,39 @@ static bool BotCecilImportant(CPlayer* player,SSupplyState& state,INDEX slot,IND
   }
   return true;
 }
+// A native launch/relocation can replace a short ordinary weapon route with a
+// much longer directed return. Only the navigator's existing reached-node event
+// permits one fixed extension; scans and ordinary progress never renew it.
+static void BotCecilRebudgetWeapon(CPlayer* player,SSupplyState& s,const botcore::CecilMotion& move,
+    const botcore::CecilItemInput& input,INDEX slot,INDEX tick,double now){
+  if(!std::isfinite(now)||!std::isfinite(s.goalSince)||now<0||s.goalSince<0||
+     !move.relocated||!move.active||move.arrived||!s.goalEntity||s.mappedWeaponGoal||s.goalRelocationBudgeted||
+     now<s.goalSince||now-s.goalSince>=12)return;
+  const auto& graph=BotSupplyGraph();const size_t nodes=graph.points.size();
+  if(s.anchor<0||s.goal<0||(size_t)s.anchor>=nodes||(size_t)s.goal>=nodes||s.blocked.size()!=nodes||
+     s.blocked[s.anchor]||s.blocked[s.goal])return;
+  CEntity* entity=player->GetWorld()->EntityFromID(s.goalEntity);botcore::CecilItem item;
+  if(!entity||!BotCecilReadItem(player,entity,s.generation,input.owned,&item)||
+     item.kind!=botcore::CecilItemKind::Weapon||!botcore::CecilRetainItem(item,input))return;
+  if(!s.goals.Run(graph,s.anchor,s.blocked.data(),nodes))return;
+  const double remaining=s.goals.Distance(s.goal);if(!std::isfinite(remaining))return;
+  const auto& origin=graph.points[s.anchor];const auto& target=graph.points[s.goal];
+  const FLOAT3D position=player->GetPlacement().pl_PositionVector;
+  const FLOAT3D approach=FLOAT3D(origin.x,origin.y,origin.z)-position;
+  const FLOAT3D connector((FLOAT)item.x-target.x,(FLOAT)item.y-target.y,(FLOAT)item.z-target.z);
+  const double length=connector.Length();
+  if(length>8||std::fabs(BotCecilHeight(player,connector))>3)return;
+  const double cost=approach.Length()+remaining+length,oldDeadline=s.goalSince+12;
+  if(!std::isfinite(cost)||cost<=0)return;
+  const double deadline=std::fmin(s.goalSince+45,std::fmax(oldDeadline,now+cost/6+5));
+  if(!std::isfinite(deadline)||deadline<=oldDeadline||_botRayBudget<=2)return;
+  const FLOAT3D lift=player->en_vGravityDir*-.8f;
+  if(!BotSupplyClear(player,FLOAT3D(target.x,target.y,target.z)+lift,
+      FLOAT3D((FLOAT)item.x,(FLOAT)item.y,(FLOAT)item.z)+lift,entity))return;
+  s.goalDeadline=deadline;s.goalRelocationBudgeted=true;
+  BotLog("[CecilGoalBudget] local=%d tick=%d entity=%lu source=%d goal=%d cost=%.3f old=%.3f deadline=%.3f reason=relocation\n",
+    slot,tick,(unsigned long)s.goalEntity,s.anchor,s.goal,cost,oldDeadline,deadline);
+}
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
   SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.currentNavTime=-1;s.currentNavGoal=-1;s.reacquiring=false;result.useControl=tick<=s.useReleaseTick;
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
@@ -625,10 +697,11 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     if(usable){
       if(s.mappedWeaponGoal)usable=input.enemy_distance>=8&&BotCecilMappedWeaponNeeded(item,input);
       // Radius/visibility/ranking admit a new goal. A retained attempt uses its
-      // live typed need, directed path and unchanged twelve-second deadline.
+      // live typed need and directed path. Ordinary attempts start at twelve
+      // seconds; one reached-node relocation may grant a bounded fixed extension.
       else usable=botcore::CecilRetainItem(item,input);
     }
-    if(!usable||now<s.goalSince||(s.mappedWeaponGoal?now>=s.goalDeadline:now-s.goalSince>=12)){
+    if(!usable||now<s.goalSince||((s.mappedWeaponGoal||s.goalRelocationBudgeted)?now>=s.goalDeadline:now-s.goalSince>=12)){
       BotCecilGoalEnd(slot,tick,s,usable?"timeout":"unavailable");
       if(usable)s.RejectItem(s.goalEntity,now);
       s.ClearGoal();s.searchAfter=now;s.scanTick=0;
@@ -662,6 +735,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   if(!s.goalEntity&&!s.followEntity&&(point.important_entity>=0||(point.flags&botcore::CECIL_IMPORTANT)))s.importantGoal=true;
   in.important_goal=s.importantGoal;
   auto move=s.navigator.Update(BotSupplyGraph(),s.blocked.data(),s.blocked.size(),in);s.hop=move.hop;
+  BotCecilRebudgetWeapon(player,s,move,input,slot,tick,now);
   if(move.active||move.arrived){s.currentNavGoal=s.goal;s.currentNavTime=now;}
   if(!s.goalEntity&&!s.followEntity&&s.importantGoal&&(move.arrived||s.interactionPoint>=0)&&
      BotCecilImportant(player,s,slot,tick,now,in,result))return result;
@@ -778,7 +852,7 @@ static bool BotCecilClearMotion(CPlayer* player,double forward,double strafe,dou
 // one-tick reverse does not immediately undo itself. No progress earns a cooldown.
 template<class T>
 static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& forward,T& strafe,T& up,
-                             double finalBodyYaw,double maxStrafe){
+                             double finalBodyYaw,double maxStrafe,bool useReacquire=true){
   state.probe=SCecilProbe();state.probe.inputForward=forward;state.probe.inputStrafe=strafe;
   state.probe.inputUp=up;state.probe.finalYaw=finalBodyYaw;
   if(!BotCecilFrameReady(player)||!std::isfinite(now)||now<0||!std::isfinite(maxStrafe)||maxStrafe<0||maxStrafe>1||
@@ -793,13 +867,16 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   const size_t nodes=BotSupplyGraph().points.size();
   const bool currentPoint=std::fabs(now-state.currentNavTime)<=1e-6&&state.currentNavGoal==state.goal&&state.goal>=0&&(size_t)state.goal<nodes&&
     state.hop>=0&&(size_t)state.hop<nodes&&state.blocked.size()==nodes&&!state.blocked[state.hop];
-  const bool requireFloor=!BotCecilLiquid(player)&&(state.reacquiring||(BotCecilSettings().bAvoidPits&&!currentPoint));
-  const double maxForward=state.reacquiring?.3:1;
-  if(state.reacquiring)maxStrafe=std::fmin(maxStrafe,.3);
+  // The planner can propose recovery while visible combat owns the final input.
+  // Recovery-only limits belong to accepted movement, not the retained proposal.
+  const bool actualReacquire=useReacquire&&state.reacquiring;
+  const bool requireFloor=!BotCecilLiquid(player)&&(actualReacquire||(BotCecilSettings().bAvoidPits&&!currentPoint));
+  const double maxForward=actualReacquire?.3:1;
+  if(actualReacquire)maxStrafe=std::fmin(maxStrafe,.3);
   auto capMotion=[&](double& f,double& st){
     f=std::fmax(-maxForward,std::fmin(maxForward,f));st=std::fmax(-maxStrafe,std::fmin(maxStrafe,st));
     const double length=std::hypot(f,st);
-    if(state.reacquiring&&length>.3){f*=.3/length;st*=.3/length;}
+    if(actualReacquire&&length>.3){f*=.3/length;st*=.3/length;}
   };
   if(now<state.escapeClock)state.ClearEscape();
   state.escapeClock=now;

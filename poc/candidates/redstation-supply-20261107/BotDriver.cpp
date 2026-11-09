@@ -1305,7 +1305,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           continue;
         }
         const double maxStrafe=BotCecilSettings().bStrafe?Clamp(bot_fStrafeScale,0.0f,1.0f):0;
-        cecilFloorStatus=BotCecilSafeMotion(player,BotSupplyState(iLP),now,moveFactor,humanStrafe,cecilUp,finalYaw,maxStrafe);
+        cecilFloorStatus=BotCecilSafeMotion(player,BotSupplyState(iLP),now,moveFactor,humanStrafe,cecilUp,finalYaw,maxStrafe,supplyActive!=FALSE);
       }
     }
 
@@ -1385,13 +1385,15 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           (unsigned long)probe.hitEntity,probe.renderType,probe.support,probe.normal[0],probe.normal[1],probe.normal[2],
           probe.from[0],probe.from[1],probe.from[2],probe.to[0],probe.to[1],probe.to[2]);
       }
-      BotLog("[CecilState] local=%d tick=%d policy=cecil-human-v1 ready=%ld entity=%lu generation=%lu alive=%d pos=(%.3f,%.3f,%.3f) health=%.1f owned=%lu current=%d wanted=%d target=%d vis=%d goal_entity=%lu goal=%d hop=%d nav=%d move=%.2f strafe=%.2f up=%.2f fire=%d shots=%lu pickups=%u deaths=%u respawns=%u rays=%d liquid=%d immersion=%.2f gravity=(%.1f,%.1f,%.1f) floor=%d flags=%lu buttons=%lu body=(%.2f,%.2f,%.2f)\n",
+      BotLog("[CecilState] local=%d tick=%d policy=cecil-human-v1 ready=%ld entity=%lu generation=%lu alive=%d pos=(%.3f,%.3f,%.3f) health=%.1f owned=%lu current=%d wanted=%d target=%d vis=%d goal_entity=%lu goal=%d hop=%d nav=%d move=%.2f strafe=%.2f up=%.2f fire=%d shots=%lu pickups=%u deaths=%u respawns=%u rays=%d liquid=%d immersion=%.2f gravity=(%.1f,%.1f,%.1f) floor=%d flags=%lu buttons=%lu body=(%.2f,%.2f,%.2f) anchor=%d reacquire=%d support_ref=%lu level_swim=%d view_pitch=%.7f input_pitch=%.7f composed_pitch=%.7f last_pitch=%.7f\n",
         iLP,bs.bs_iTick,(long)_botSupplyMapReady,(unsigned long)entityId,(unsigned long)state.generation,
         player->GetHealth()>0,p(1),p(2),p(3),player->GetHealth(),w?(unsigned long)w->m_iAvailableWeapons:0,
         w?w->m_iCurrentWeapon:0,w?w->m_iWantedWeapon:0,bs.bs_iCombatTarget,targetVisible,(unsigned long)state.goalEntity,state.goal,state.hop,supplyActive,moveFactor,humanStrafe,cecilUp,bFire,
         (unsigned long)bs.bs_ulCombatFireActions,state.pickups,state.deaths,state.respawns,16-_botRayBudget,(int)player->m_pstState,player->en_fImmersionFactor,
         player->en_vGravityDir(1),player->en_vGravityDir(2),player->en_vGravityDir(3),cecilFloorStatus,(unsigned long)cecilFlags,(unsigned long)pa.pa_ulButtons,
-        player->GetPlacement().pl_OrientationAngle(1),player->GetPlacement().pl_OrientationAngle(2),player->GetPlacement().pl_OrientationAngle(3));
+        player->GetPlacement().pl_OrientationAngle(1),player->GetPlacement().pl_OrientationAngle(2),player->GetPlacement().pl_OrientationAngle(3),state.anchor,state.reacquireNode,
+        player->en_penReference?(unsigned long)player->en_penReference->en_ulID:0,state.levelSwimView,
+        player->en_plViewpoint.pl_OrientationAngle(2),localInput->m_aLocalRotation(2),pa.pa_aRotation(2),player->m_aLastRotation(2));
     }
 
     // 5) periodic status log (position read from our own player entity)
