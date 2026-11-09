@@ -2,6 +2,12 @@
 
 Fortgeschriebener Stand während der Build010-Qualifikation; keine vollständige Runtime-Abnahme. Vollständiger Auftrag und private Messreihen liegen in der privaten Evidence-Ablage. Keine Runtime-Abnahme aus Offline-Tests ableiten.
 
+## Current continuation — 09.11.2026
+
+The frozen gates below remain unchanged. Candidate030 passed the complete prospective single-bot supply gate and limited original Retail/Wine gameplay, but failed the four-bot stillness criterion; its incomplete duration attempts are not passes. Native diagnostic033 demonstrates that normal physical Cast overwrites the required movement mask and misses six measured solid shoot-through floor segments. The original Cecil explicit-sector helper hits all six. See [candidate030 results](2026-11-09-candidate030-native-results.md) and [native mask investigation](2026-11-09-retail107-physical-ray-mask.md).
+
+The reviewed helper correction and bounded aligned-recovery feedback are integrated for next normal candidate036. The portable bridge has 486 passing ASan/UBSan checks, including pinned SDK107 contracts; no final-hash native gate has yet passed. The five-map series, one/four/eight-bot full duration windows, original-client gameplay, weapons/actions, resources and controlled recovery all require fresh evidence. Independent isolated fixtures can run the full windows concurrently after the prospective supply and Hole600 prerequisites pass. No threshold, duration or population is reduced. Production and the previous public development DLL remain unchanged.
+
 ## Baseline und Vergleichsgrenzen
 A: sauber wiederholte bisherige Entwicklungs-DLL ce559971ce4a1677c1b299a7d0c27f148fa4ecace2a55d45e006bdb1598ac6a4 auf RedStation:360,56s/72 Samples, keine neuen Fehler. Messwerte stehen in baseline-clean-summary.json; keine vollständige Langzeitqualifikation dieser Baseline.
 B: gepinnte Cecil-Quell-/Tabellen-/NAV-Fixtures. Keine Originalmod-Runtimeparität: die ursprünglichen v60/v120-Toolsets fehlen, die vorhandene v143-Toolchain würde eine eigene Entities-/ABI-Qualifikation benötigen. Die Originalmod wird nicht in die Vanilla-Umgebung installiert.

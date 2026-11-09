@@ -25,7 +25,8 @@ void* operator new(size_t n){if(measuring)++allocations;void* p=std::malloc(n?n:
 void operator delete(void* p)noexcept{std::free(p);}
 void operator delete(void* p,size_t)noexcept{std::free(p);}
 using INDEX=int;using BOOL=int;using FLOAT=float;using ULONG=unsigned long;
-const int TRUE=1,FALSE=0,ENF_DELETED=1,BPOF_PASSABLE=1<<11;
+const int TRUE=1,FALSE=0,ENF_DELETED=1,BPOF_PASSABLE=1<<11,BPOF_SHOOTTHRU=1<<4;
+int normalizeCalls=0;
 const unsigned EPF_TRANSLATEDBYGRAVITY=1u<<1;
 struct FLOAT3D {
  float a[3];FLOAT3D(float x=0,float y=0,float z=0):a{x,y,z}{}
@@ -34,6 +35,7 @@ struct FLOAT3D {
  FLOAT3D operator-(const FLOAT3D& b)const{return {a[0]-b.a[0],a[1]-b.a[1],a[2]-b.a[2]};}
  FLOAT3D operator*(float s)const{return {a[0]*s,a[1]*s,a[2]*s};}
  double Length()const{return std::sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]);}
+ FLOAT3D& Normalize(){++normalizeCalls;const float length=(float)Length();for(float& v:a)v/=length;return *this;}
 };
 struct FLOATmatrix3D {double m[3][3]={{1,0,0},{0,1,0},{0,0,1}};};
 FLOAT3D operator*(const FLOAT3D& v,const FLOATmatrix3D& m){
@@ -71,7 +73,7 @@ struct CPlayer:CEntity {
  FLOAT3D en_vCurrentTranslationAbsolute;unsigned physicsFlags=EPF_TRANSLATEDBYGRAVITY;
  unsigned GetPhysicsFlags()const{return physicsFlags;}
  float GetHealth()const{return health;}CPlayerWeapons* GetPlayerWeapons(){return &w;}
- CWorld* GetWorld(){return &world;}
+ bool hasWorld=true;CWorld* GetWorld(){return hasWorld?&world:nullptr;}
 };
 struct CSessionProperties {BOOL sp_bInfiniteAmmo=FALSE;};
 struct Network {CSessionProperties session;const void* GetSessionProperties(){return &session;}} network,*_pNetwork=&network;
@@ -103,31 +105,48 @@ bool BotCecilReadItem(CPlayer*,CEntity* e,unsigned generation,unsigned,botcore::
 }
 struct CBrushPlane {FLOAT3D bpl_plAbsolute{0,1,0};};
 struct CBrushPolygon {CBrushPlane* bpo_pbplPlane=nullptr;unsigned bpo_ulFlags=0;};
+struct CBrushSector {};
 CEntity obstruction,floorEntity;CBrushPlane floorPlane;CBrushPolygon floorPolygon;
 int floorMode=0,rayCount=0,blockedItems=0,floorPattern=0,wallMode=0,wallCount=0;FLOAT3D lastFrom,lastTo,wallFrom,wallTo;
-int nearFootMode=0,nearFootRays=0;float nearFootDistance=.26f;
+int nearFootMode=0,nearFootRays=0;float nearFootDistance=.26f;bool invalidateAfterFloor=false;
+int legacyCastCalls=0,sectorAdds=0,sectorTests=0,worldTests=0;unsigned wallPolygonFlags=0;
+bool forcePassableHit=false;int rayConstructions=0,lastModels=-1;ULONG lastMask=0;
+bool lastPhysical=false,lastOverHit=true;bool invalidHitDistance=false;
 FLOAT3D nearFootFrom,nearFootTo;bool nearFootPhysical=false,nearFootOverHit=true;
 struct CCastRay {
- enum {TT_NONE,TT_COLLISIONBOX};
+ enum {TT_NONE=0,TT_COLLISIONBOX=2};
  bool cr_bAllowOverHit=false,cr_bPhysical=false;int cr_ttHitModels=TT_NONE;
- CEntity* cr_penHit=nullptr;CBrushPolygon* cr_pbpoBrushPolygon=nullptr;FLOAT3D from,to;
- FLOAT cr_fHitDistance=0;
- CCastRay(CPlayer*,const FLOAT3D& a,const FLOAT3D& b):from(a),to(b){}
- void Cast(CWorld*){
-  ++rayCount;lastFrom=from;lastTo=to;
+ CEntity* cr_penHit=nullptr;CBrushPolygon* cr_pbpoBrushPolygon=nullptr;FLOAT3D from,to;CPlayer* owner;
+ FLOAT cr_fHitDistance=0;ULONG cr_ulPassablePolygons=0;CEntity* cr_penOrigin;
+ CBrushSector* cr_pbscBrushSector=nullptr;FLOAT3D cr_vOrigin,cr_vTarget,cr_vHit;
+ CCastRay(CPlayer* p,const FLOAT3D& a,const FLOAT3D& b):from(a),to(b),owner(p),cr_penOrigin(p),cr_vOrigin(a),cr_vTarget(b),cr_vHit(b){++rayConstructions;cr_fHitDistance=(FLOAT)(b-a).Length();}
+ void AddSectorsAroundEntity(CEntity*){++sectorAdds;}
+ void TestThroughSectors(){++sectorTests;Query();if(invalidHitDistance)cr_fHitDistance=NAN;}
+ void TestWholeWorld(CWorld*){++worldTests;Query();if(invalidHitDistance)cr_fHitDistance=NAN;}
+ void Cast(CWorld*){++legacyCastCalls;cr_penHit=nullptr;cr_pbpoBrushPolygon=nullptr;cr_pbscBrushSector=nullptr;
+  // Retail033 measured Cast overwriting BOTH initial0 and initialPASSABLE.
+  cr_ulPassablePolygons=cr_bPhysical?2064u:1077936128u;Query();}
+ bool Passes(unsigned flags)const{return (flags&cr_ulPassablePolygons)!=0&&!(forcePassableHit&&(flags&BPOF_PASSABLE));}
+ void Query(){
+  ++rayCount;lastFrom=from;lastTo=to;lastMask=cr_ulPassablePolygons;lastModels=cr_ttHitModels;
+  lastPhysical=cr_bPhysical;lastOverHit=cr_bAllowOverHit;
   if(cr_ttHitModels==TT_NONE&&(to-from).Length()<1){
    ++nearFootRays;nearFootFrom=from;nearFootTo=to;nearFootPhysical=cr_bPhysical;nearFootOverHit=cr_bAllowOverHit;
-   if(nearFootMode){cr_penHit=&floorEntity;cr_fHitDistance=nearFootDistance;
+   if(nearFootMode&&!(nearFootMode==2&&Passes(floorPolygon.bpo_ulFlags))){cr_penHit=&floorEntity;cr_fHitDistance=nearFootDistance;
     if(nearFootMode==2)cr_pbpoBrushPolygon=&floorPolygon;}
    return;
   }
   if(cr_ttHitModels==TT_NONE&&(to-from).Length()>4){
+   if(invalidateAfterFloor)owner->en_plViewpoint.pl_OrientationAngle(1)=NAN;
    if(floorPattern==1&&from(3)<=0)return;
    if(floorPattern==2&&from(3)<0&&from(1)<2)return;
-   if(floorMode){cr_penHit=&floorEntity;if(floorMode==2)cr_pbpoBrushPolygon=&floorPolygon;}
+   if(floorPattern==3&&(from(1)<=.1f||from(3)>=-.1f))return;
+   if(floorPattern==4&&!(from(1)<-.2f&&from(3)<-.2f))return;
+   if(floorMode&&!(floorMode==2&&Passes(floorPolygon.bpo_ulFlags))){cr_penHit=&floorEntity;cr_fHitDistance=1;
+    if(floorMode==2)cr_pbpoBrushPolygon=&floorPolygon;}
   }else{
    ++wallCount;wallFrom=from;wallTo=to;
-   if(wallMode==2||(wallMode==1&&to(3)<from(3))||(to(1)>0 && to(1)<=blockedItems))cr_penHit=&obstruction;
+   if(!Passes(wallPolygonFlags)&&(wallMode==2||(wallMode==1&&to(3)<from(3))||(to(1)>0 && to(1)<=blockedItems)))cr_penHit=&obstruction;
   }
  }
 };
@@ -148,7 +167,9 @@ void setup(int nodes=3){
  BotCecilSettings().bAvoidPits=1;
  lockEvents=0;lastLocked=lastPresent=-1;goalEvents=endEvents=0;lastEnd[0]=0;_botSupplyMapSerial=7;_botRayBudget=40;rayCount=0;blockedItems=0;floorMode=0;floorPattern=0;wallMode=wallCount=0;floorEntity.type=CEntity::RT_MODEL;
  floorPlane.bpl_plAbsolute=FLOAT3D(0,1,0);floorPolygon.bpo_pbplPlane=&floorPlane;floorPolygon.bpo_ulFlags=0;
- nearFootMode=nearFootRays=0;nearFootDistance=.26f;floorEntity.flags=0;
+ nearFootMode=nearFootRays=0;nearFootDistance=.26f;floorEntity.flags=0;invalidateAfterFloor=false;
+ legacyCastCalls=sectorAdds=sectorTests=worldTests=normalizeCalls=0;wallPolygonFlags=0;forcePassableHit=false;
+ rayConstructions=0;lastModels=-1;lastMask=0;lastPhysical=false;lastOverHit=true;invalidHitDistance=false;
 }
 CEntity& addItem(unsigned id,float x,float z,botcore::CecilItemKind kind=botcore::CecilItemKind::Health){
  items.emplace_back();auto& e=items.back();e.en_ulID=id;e.pickable=true;
@@ -184,7 +205,261 @@ void nullReferenceFixture(){
  setup(2);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);
  nearFootMode=2;floorEntity.type=CEntity::RT_BRUSH;
 }
+SCecilMove recoveryFloorFixture(){
+ setup(2);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,0);player.en_penReference=&floorEntity;
+ auto& graph=BotSupplyGraph();graph.points[0].x=0;graph.points[0].z=-4;
+ graph.points[1].x=8;graph.points[1].z=-8;
+ floorMode=2;floorPattern=3;floorEntity.type=CEntity::RT_BRUSH;_botRayBudget=16;
+ return BotSupplyTick(&player,0,1,1000);
+}
+int recoverySafety(const SCecilMove& move,double now,bool accepted=true,int budget=16){
+ double f=move.forward,st=move.strafe,up=move.up;_botRayBudget=budget;
+ const double yaw=player.en_plViewpoint.pl_OrientationAngle(1)+move.yaw_delta;
+ const int result=BotCecilSafeMotion(&player,BotSupplyState(0),now,f,st,up,yaw,1,accepted);
+ if(std::isfinite(yaw))player.en_plViewpoint.pl_OrientationAngle(1)=(FLOAT)yaw;
+ check(result!=0||(f==0&&st==0&&up==0),"failed final recovery safety emits only neutral axes");
+ return result;
+}
+template<class R>auto physicalCast(R& ray,CWorld* world,int)->decltype(BotCecilPhysicalCast(ray,world)){
+ return BotCecilPhysicalCast(ray,world);
+}
+template<class R>bool physicalCast(R& ray,CWorld* world,long){ray.Cast(world);return true;}
 int main(){
+ { // Reproduce Retail033's mask overwrite, including initialized-mask controls.
+ for(bool physical:{false,true})for(ULONG initial:{0u,2048u}){
+   setup();floorMode=2;floorEntity.type=CEntity::RT_BRUSH;floorPolygon.bpo_ulFlags=274752625u;
+   CCastRay ray(&player,FLOAT3D(0,1,0),FLOAT3D(0,-4,0));ray.cr_bPhysical=physical;
+   ray.cr_ulPassablePolygons=initial;ray.Cast(player.GetWorld());
+   check(ray.cr_ulPassablePolygons==(physical?2064u:1077936128u)&&ray.cr_penHit==nullptr,
+     "Retail033 Cast control overwrites initialized masks and misses the observed nonpassable shoot-through floor");
+ }
+ setup();floorMode=2;floorEntity.type=CEntity::RT_BRUSH;floorPolygon.bpo_ulFlags=274752625u;
+ SCecilProbe probe;_botRayBudget=16;
+ check(BotCecilFloor(&player,.3,0,0,0,&probe)&&rayCount==1&&lastMask==2048&&
+   lastModels==CCastRay::TT_NONE&&lastPhysical&&!lastOverHit&&_botRayBudget==15,
+   "physical floor query hits a nonpassable shoot-through brush with the original PASSABLE mask and unchanged budget/model mode");
+ check(legacyCastCalls==0&&sectorAdds==1&&sectorTests==1,
+   "physical floor uses original Cecil sector traversal rather than the mask-resetting Cast wrapper");
+ setup();floorMode=2;floorEntity.type=CEntity::RT_BRUSH;floorPolygon.bpo_ulFlags=BPOF_PASSABLE|BPOF_SHOOTTHRU;
+ check(!BotCecilFloor(&player,.3,0,0,0,&probe)&&probe.primaryReason==SCecilProbe::reasonNoFloor,
+   "a genuinely passable shoot-through floor remains unsupported under the movement mask");
+ setup();floorMode=2;floorEntity.type=CEntity::RT_BRUSH;
+ check(BotCecilFloor(&player,.3,0,0,0)&&lastMask==2048,
+   "an ordinary solid floor remains supported under the same physical movement policy");
+ nullReferenceFixture();floorPolygon.bpo_ulFlags=BPOF_SHOOTTHRU;_botRayBudget=16;
+ const auto supported=BotSupplyTick(&player,0,1,1000);
+ check(supported.active&&nearFootRays==1&&nearFootPhysical&&!nearFootOverHit&&legacyCastCalls==0&&
+   _botRayBudget==14,"NULL-reference recovery verifies shoot-through current-foot support and keeps the support/LOS budget reserve");
+ setup();wallMode=2;wallPolygonFlags=BPOF_SHOOTTHRU;_botRayBudget=16;
+ check(!BotSupplyClear(&player,FLOAT3D(),FLOAT3D(0,0,-2))&&rayCount==1&&lastMask==2048&&
+   lastModels==CCastRay::TT_COLLISIONBOX&&lastPhysical&&!lastOverHit&&_botRayBudget==15,
+   "navigation and item connectors treat a shoot-through physical wall as blocking");
+ setup();wallMode=2;wallPolygonFlags=BPOF_SHOOTTHRU;_botRayBudget=16;probe=SCecilProbe();
+ check(!BotCecilClearMotion(&player,.3,0,0,0,&probe,false)&&probe.primaryReason==SCecilProbe::reasonWallHit&&
+   probe.wallRays==1&&probe.floorRays==0&&lastMask==2048&&lastModels==CCastRay::TT_COLLISIONBOX&&_botRayBudget==15,
+   "final wall safety independently rejects a nonpassable shoot-through barrier without adding floor casts");
+ setup();wallMode=2;wallPolygonFlags=BPOF_PASSABLE|BPOF_SHOOTTHRU;_botRayBudget=16;
+ check(BotCecilClearMotion(&player,.3,0,0,0,nullptr,false)&&lastMask==2048&&rayCount==1,
+   "physical wall safety continues through genuinely passable polygons");
+ }
+ { // Fresh and empty rays have defined results without inventing extra engine casts.
+ setup();floorMode=2;floorEntity.type=CEntity::RT_BRUSH;floorPolygon.bpo_ulFlags=BPOF_SHOOTTHRU;
+ CCastRay world(nullptr,FLOAT3D(0,1,0),FLOAT3D(0,-4,0));world.cr_bPhysical=true;world.cr_bAllowOverHit=false;
+ check(physicalCast(world,player.GetWorld(),0)&&world.cr_penHit==&floorEntity&&worldTests==1&&sectorAdds==0&&
+   world.cr_ulPassablePolygons==2048&&near(world.cr_vHit(2),0),
+   "original null-origin whole-world traversal preserves the physical mask and computes the finite hit position");
+ setup();const FLOAT3D origin(1,2,3);CCastRay empty(&player,origin,origin);
+ empty.cr_penHit=&obstruction;empty.cr_pbpoBrushPolygon=&floorPolygon;empty.cr_pbscBrushSector=(CBrushSector*)1;
+ check(physicalCast(empty,player.GetWorld(),0)&&rayCount==0&&normalizeCalls==0&&empty.cr_penHit==nullptr&&
+   empty.cr_pbpoBrushPolygon==nullptr&&empty.cr_pbscBrushSector==nullptr&&empty.cr_fHitDistance==0&&
+   empty.cr_vHit(1)==1&&empty.cr_vHit(2)==2&&empty.cr_vHit(3)==3,
+   "exactly zero segments clear stale hit metadata and return the origin without query or normalization");
+ setup();_botRayBudget=16;
+ check(BotSupplyClear(&player,origin,origin)&&rayCount==0&&rayConstructions==0&&_botRayBudget==15,
+   "coincident navigation endpoints are clear without constructing or querying a zero-length native ray");
+ for(int axis=1;axis<=3;++axis)for(float invalid:{NAN,INFINITY,-INFINITY}){
+   setup();FLOAT3D from(0,1,0),to(0,-4,0);from(axis)=invalid;_botRayBudget=16;
+   check(!BotSupplyClear(&player,from,to)&&rayCount==0&&rayConstructions==0&&normalizeCalls==0&&_botRayBudget==16,
+     "nonfinite navigation endpoints fail closed before native ray construction or budget use");
+   setup();player.pl.pl_PositionVector(axis)=invalid;SCecilProbe probe;_botRayBudget=16;
+   check(!BotCecilClearMotion(&player,.3,0,0,0,&probe,false)&&probe.primaryReason==SCecilProbe::reasonInvalid&&
+     rayCount==0&&rayConstructions==0&&_botRayBudget==16,
+     "invalid final wall geometry records Invalid before any cast so recovery cannot mistake it for NoFloor");
+ }
+ setup();FLOAT3D bad(NAN,0,0);CCastRay invalid(&player,bad,FLOAT3D(0,-4,0));
+ check(!physicalCast(invalid,player.GetWorld(),0)&&rayCount==0&&normalizeCalls==0,
+   "direct physical helper rejects malformed endpoints without normalizing or querying");
+ setup();player.hasWorld=false;_botRayBudget=16;
+ check(!BotSupplyClear(&player,origin,origin)&&rayCount==0&&rayConstructions==0&&_botRayBudget==16,
+   "empty navigation segment cannot grant clearance for an actor without a world");
+ setup();CCastRay orphan(&player,FLOAT3D(0,1,0),FLOAT3D(0,-4,0));
+ check(!physicalCast(orphan,nullptr,0)&&rayCount==0&&normalizeCalls==0,
+   "direct physical helper fails closed when the world is missing");
+ const FLOAT3D froms[]={{0,1,0},{std::numeric_limits<float>::max(),0,0},{1e30f,0,0},{std::numeric_limits<float>::denorm_min(),0,0}};
+ const FLOAT3D tos[]={{0,INFINITY,0},{-std::numeric_limits<float>::max(),0,0},{0,0,0},{0,0,0}};
+ for(int i=0;i<4;++i){setup();_botRayBudget=16;
+   check(!BotSupplyClear(&player,froms[i],tos[i])&&rayCount==0&&rayConstructions==0&&normalizeCalls==0&&_botRayBudget==16,
+     "nonfinite target or unrepresentable positive FLOAT segment fails before native construction and Normalize");
+ }
+ setup();player.pl.pl_PositionVector=FLOAT3D(1e30f,1e30f,1e30f);SCecilProbe collapsed;
+ check(!BotCecilClearMotion(&player,.3,0,0,0,&collapsed,false)&&collapsed.primaryReason==SCecilProbe::reasonInvalid&&
+   rayCount==0&&rayConstructions==0,"collapsed action geometry is Invalid rather than a false physical NoFloor observation");
+ setup();floorMode=2;floorEntity.type=CEntity::RT_BRUSH;invalidHitDistance=true;SCecilProbe uncertain;
+ check(!BotCecilFloor(&player,.3,0,0,0,&uncertain)&&uncertain.primaryReason==SCecilProbe::reasonInvalid&&normalizeCalls==0,
+   "malformed native hit distance fails closed without Normalize or a false physical floor approval");
+ }
+ { // Do not cycle targets while their real requested world direction is still turning.
+ recoveryFloorFixture();auto& graph=BotSupplyGraph();graph.points[0].x=-4;graph.points[0].z=-4;
+ graph.points[1].x=8;graph.points[1].z=-8;BotSupplyState(0).ClearAvoidance();
+ BotCecilSettings().bStrafe=0;floorPattern=4;bool moved=false,keptTarget=true;
+ int firstSafeTick=0;
+ for(int tick=1;tick<=60;++tick){
+   _botRayBudget=16;const auto move=BotSupplyTick(&player,0,tick,1000);auto& state=BotSupplyState(0);
+   const double yaw=player.en_plViewpoint.pl_OrientationAngle(1)+move.yaw_delta;
+   double f=move.forward,st=move.strafe,up=move.up;
+   const int safe=BotCecilSafeMotion(&player,state,tick*.05,f,st,up,yaw,0,true);
+   player.en_plViewpoint.pl_OrientationAngle(1)=(FLOAT)yaw;
+   keptTarget=keptTarget&&state.reacquireNode==0;
+   if(safe&&f!=0){moved=true;firstSafeTick=tick;break;}
+ }
+ check(moved&&firstSafeTick<=6&&keptTarget,"a strafe-disabled recovery turns toward its physically safe original target instead of cycling between opposite candidates");
+ }
+ { // Only an aligned, stationary native ground blockade supplies target feedback.
+ for(double yaw:{.999,1.001}){
+   auto move=recoveryFloorFixture();auto& state=BotSupplyState(0);move.forward=.3;move.strafe=0;move.yaw_delta=yaw;
+   check(recoverySafety(move,.05)==0&&(yaw<1?state.reacquireNode==-1:state.reacquireNode==0),
+     "floor feedback has a hard one-degree bound on the actual tested world direction");
+ }
+ for(bool sideways:{false,true}){
+   auto move=recoveryFloorFixture();auto& state=BotSupplyState(0);
+   move.forward=sideways?0:-.3;move.strafe=sideways?.3:0;move.yaw_delta=0;
+   check(recoverySafety(move,.05)==0&&state.reacquireNode==0&&state.reacquireTried[0]==0,
+     "matching view yaw cannot authorize floor feedback for backward or lateral motion away from the target");
+ }
+ const FLOAT3D velocities[]={{.11f,0,0},{0,.11f,0},{0,0,.11f},{.08f,.08f,0},
+   {NAN,0,0},{0,NAN,0},{0,0,NAN},{INFINITY,0,0},{0,-INFINITY,0},{0,0,INFINITY}};
+ for(const auto& velocity:velocities){
+   const auto move=recoveryFloorFixture();auto& state=BotSupplyState(0);player.en_vCurrentTranslationAbsolute=velocity;
+   check(recoverySafety(move,.05)==0&&state.reacquireNode==0&&state.reacquireTried[0]==0,
+     "moving or nonfinite native velocity cannot reject a recovery target as a stationary ground blockade");
+ }
+ for(PlayerState ground:{PST_STAND,PST_CROUCH}){
+   const auto move=recoveryFloorFixture();auto& state=BotSupplyState(0);player.m_pstState=ground;
+   player.en_vCurrentTranslationAbsolute=FLOAT3D(.05f,0,0);
+   check(recoverySafety(move,.05)==0&&state.reacquireNode==-1&&(state.reacquireTried[0]&1),
+     "stationary stand and crouch retain physical floor feedback with small finite native drift");
+ }
+ const auto move=recoveryFloorFixture();auto& state=BotSupplyState(0);player.m_pstState=PST_FALL;
+ check(recoverySafety(move,.05)==0&&state.reacquireNode==0&&state.reacquireTried[0]==0,
+   "falling recovery with a retained reference cannot reject a target as a ground blockade");
+ for(bool malformed:{false,true}){
+   const auto uncertain=recoveryFloorFixture();auto& target=BotSupplyGraph().points[0];auto& held=BotSupplyState(0);
+   target.x=malformed?NAN:0;target.z=0;
+   check(recoverySafety(uncertain,.05)==0&&held.reacquireNode==0&&held.reacquireTried[0]==0,
+     "nonfinite or zero horizontal target direction cannot authorize floor rejection");
+ }
+ const auto aligned=recoveryFloorFixture();recoverySafety(aligned,.05);player.pl.pl_PositionVector(1)=1;
+ _botRayBudget=16;const auto movedOrigin=BotSupplyTick(&player,0,2,1000);
+ check(movedOrigin.active&&BotSupplyState(0).reacquireNode==0&&(BotSupplyState(0).reacquireTried[0]&1)==0,
+   "a moved pose invalidates final-floor rejection exactly like prior LOS rejections");
+ setup(4096);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,0);player.en_penReference=&floorEntity;
+ for(auto& point:BotSupplyGraph().points){point.x=0;point.z=1000;}
+ BotSupplyGraph().points[4095].z=-4;_botRayBudget=16;const auto tail=BotSupplyTick(&player,0,1,1000);
+ check(tail.active&&BotSupplyState(0).reacquireNode==4095&&recoverySafety(tail,.05)==0&&
+   BotSupplyState(0).reacquireTried[511]==128&&BotSupplyState(0).reacquireNode==-1,
+   "physical floor feedback safely marks the last original node in the fixed 4096-bit sweep");
+ setup(2);player.pl.pl_PositionVector=FLOAT3D(0,0,-4.25f);player.en_vGravityDir=FLOAT3D(0,0,-1);
+ player.body=FLOATmatrix3D{{{1,0,0},{0,0,-1},{0,1,0}}};player.en_penReference=&floorEntity;
+ auto& tilted=BotSupplyGraph();tilted.points[0].x=0;tilted.points[0].y=4;tilted.points[0].z=0;
+ tilted.points[1].x=8;tilted.points[1].y=8;tilted.points[1].z=0;_botRayBudget=16;
+ const auto gravityRecovery=BotSupplyTick(&player,0,1,1000);
+ check(gravityRecovery.active&&BotSupplyState(0).reacquireNode==0&&recoverySafety(gravityRecovery,.05)==0&&
+   BotSupplyState(0).reacquireNode==-1&&(BotSupplyState(0).reacquireTried[0]&1),
+   "floor feedback compares actual world movement with the target projected along native rotated gravity");
+ }
+ { // A LOS-clear target is not viable when its original motion and every escape lack floor.
+ const auto first=recoveryFloorFixture();auto& state=BotSupplyState(0);
+ state.reacquireTried[0]|=0x80;state.goalDeadline=12.05;state.reacquireRejected=99;state.reacquireRetryAfter=9;
+ check(first.active&&state.reacquireNode==0,"floor-feedback fixture acquires the closest real original node");
+ check(recoverySafety(first,.05)==0&&state.probe.primaryReason==SCecilProbe::reasonNoFloor&&
+   state.probe.wallRays==4&&state.probe.floorRays==4,"original recovery and all three exact replacement motions physically fail floor");
+ check(state.reacquireNode==-1&&state.reacquireSince==-1&&(state.reacquireTried[0]&0x81)==0x81&&
+   state.reacquireRejected==99&&state.reacquireRetryAfter==9&&state.goalDeadline==12.05,
+   "final physical floor rejection marks only the selected node in the existing pose sweep without renewing deadlines or backoff");
+ const int casts=rayCount;_botRayBudget=16;const auto next=BotSupplyTick(&player,0,2,1000);
+ check(next.active&&owns(next,0)&&state.reacquireNode==1&&near(state.reacquireSince,.1)&&rayCount-casts<=3,
+   "next recovery tick selects another LOS-clear original direction without a six-second repeat");
+ check(recoverySafety(next,.1)==1&&state.reacquireNode==1&&state.anchor<0&&state.hop<0&&
+   !state.navigator.HasCommittedEdge(state.goal),"the next direction needs its own real floor approval without a fabricated anchor or edge");
+ }
+ { // A completely unsafe finite sweep reopens instead of permanently blacklisting the map.
+ recoveryFloorFixture();floorMode=0;floorPattern=0;bool bounded=true,complete=false,reopened=false,retried=false;
+ allocations=0;measuring=true;
+ for(int tick=1;tick<=32;++tick){
+   const int casts=rayCount;_botRayBudget=16;const auto move=BotSupplyTick(&player,0,tick,1000);
+   bounded=bounded&&rayCount-casts<=3;
+   if(complete&&!move.active&&BotSupplyState(0).reacquireTried[0]==0)reopened=true;
+   if(reopened&&move.active&&BotSupplyState(0).reacquireNode==0)retried=true;
+   if(move.active)bounded=bounded&&recoverySafety(move,tick*.05)==0;
+   else check(move.forward==0&&move.strafe==0&&move.up==0,"fully swept recovery remains neutral while reopening its candidate scan");
+   complete=complete||(BotSupplyState(0).reacquireTried[0]&3)==3;
+ }
+ measuring=false;check(bounded&&allocations==0,"floor-feedback sweeps keep the three-LOS cap and perform no per-tick allocation");
+ check(complete,"all physically unsafe original candidates are remembered within one pose sweep");
+ check(reopened,"a fully failed floor sweep clears for a bounded retry");
+ check(retried,"a reopened floor sweep retries the original nearest node and still emits neutral for unsafe geometry");
+ }
+ { // Uncertainty, another movement owner, and a successful escape are not target failures.
+ for(int budget:{0,1,2,3}){
+   const auto move=recoveryFloorFixture();auto& state=BotSupplyState(0);const double since=state.reacquireSince;
+   check(recoverySafety(move,.05,true,budget)==0&&state.reacquireNode==0&&state.reacquireSince==since&&
+     state.reacquireTried[0]==0&&(state.probe.reasonMask&(1u<<SCecilProbe::reasonBudget)),
+     "any original or fallback budget denial preserves the selected recovery target and sweep");
+ }
+ auto move=recoveryFloorFixture();auto* state=&BotSupplyState(0);
+ check(recoverySafety(move,.05,false)==0&&state->reacquireNode==0&&state->reacquireTried[0]==0,
+   "Human-owned physical floor rejection never rejects a planner recovery target");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);state->escapeUntil=1;state->escapeWorld[2]=-.3;
+ check(recoverySafety(move,.05)==0&&state->probe.floorRays==1&&state->reacquireNode==0&&state->reacquireTried[0]==0,
+   "held-escape-only floor rejection never claims that the original recovery request was tested");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);state->escapeAfter=1;
+ check(recoverySafety(move,.05)==0&&state->probe.floorRays==1&&state->reacquireNode==0&&state->reacquireTried[0]==0,
+   "deferred replacement attempts preserve a target until the existing escape cooldown permits full testing");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);wallMode=1;
+ check(recoverySafety(move,.05)==0&&state->probe.primaryReason==SCecilProbe::reasonWallHit&&
+   state->reacquireNode==0&&state->reacquireTried[0]==0,"an original wall rejection followed by floor failures is not original NoFloor feedback");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);floorPattern=0;floorPlane.bpl_plAbsolute=FLOAT3D(0,-1,0);
+ check(recoverySafety(move,.05)==0&&state->probe.primaryReason==SCecilProbe::reasonUnsupportedNormal&&
+   state->reacquireNode==0&&state->reacquireTried[0]==0,"unsupported original surface normal preserves the target under the NoFloor-only policy");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);floorPattern=0;floorPolygon.bpo_ulFlags=BPOF_PASSABLE;forcePassableHit=true;
+ check(recoverySafety(move,.05)==0&&state->probe.primaryReason==SCecilProbe::reasonPassable&&
+   state->reacquireNode==0&&state->reacquireTried[0]==0,"passable original surface preserves the target under the NoFloor-only policy");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);invalidateAfterFloor=true;
+ check(recoverySafety(move,.05)==0&&state->probe.primaryReason==SCecilProbe::reasonNoFloor&&
+   (state->probe.reasonMask&(1u<<SCecilProbe::reasonInvalid))&&state->reacquireNode==0&&state->reacquireTried[0]==0,
+   "invalid geometry during a replacement probe prevents physical target rejection after original NoFloor");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);move.forward=NAN;
+ check(recoverySafety(move,.05)==0&&state->probe.wallRays==0&&state->reacquireNode==0&&state->reacquireTried[0]==0,
+   "invalid original action cannot reject an untested recovery target");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);player.m_pstState=PST_SWIM;wallMode=2;
+ check(recoverySafety(move,.05)==0&&state->probe.floorRays==0&&state->reacquireNode==0&&state->reacquireTried[0]==0,
+   "liquid wall rejection never enters grounded NoFloor feedback");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);floorPattern=1;
+ check(recoverySafety(move,.05)==2&&state->probe.primaryReason==SCecilProbe::reasonNoFloor&&
+   state->reacquireNode==0&&state->reacquireTried[0]==0,"a physically approved replacement escape preserves the original recovery target");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);state->reacquiring=false;
+ check(recoverySafety(move,.05)==0&&state->reacquireNode==0&&state->reacquireTried[0]==0,
+   "a retained target alone never impersonates accepted recovery movement");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);state->reacquireNode=999;
+ check(recoverySafety(move,.05)==0&&state->reacquireNode==999&&state->reacquireTried[0]==0,
+   "out-of-range recovery target is never used as a sweep-mask index");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);state->blocked[0]=1;
+ check(recoverySafety(move,.05)==0&&state->reacquireNode==0&&state->reacquireTried[0]==0,
+   "a newly blocked target is left to normal lock invalidation rather than physical floor feedback");
+ move=recoveryFloorFixture();state=&BotSupplyState(0);state->blocked.clear();
+ check(recoverySafety(move,.05)==0&&state->reacquireNode==0&&state->reacquireTried[0]==0,
+   "malformed lock snapshot cannot authorize a recovery feedback index");
+ }
  { // A rejected recovery proposal must not impose recovery-only policy on Human movement.
  setup(2);BotCecilSettings().bAvoidPits=0;auto& proposal=BotSupplyState(0);proposal.reacquiring=true;
  proposal.anchor=-1;proposal.reacquireNode=1;proposal.reacquireSince=.25;proposal.reacquireRetryAfter=7;proposal.reacquireTried[0]=3;
@@ -324,7 +599,8 @@ int main(){
  relocationFixture();CEntity lock;lock.en_ulID=1199;lock.pl.pl_PositionVector(1)=1;
  player.world.wo_cenEntities.push_back(&lock);BotSupplyGraph().points[2].lock_entity=1199;relocateTo(2,2);
  check(BotSupplyState(0).goalDeadline==0,"reached but physically locked relocation source cannot grant extra item lifetime");
- relocationFixture();const int castsBefore=rayCount;relocateTo(2,2,3);
+ // Keep this a real nonzero connector; the empty-segment no-query case is tested separately.
+ relocationFixture();items[0].pl.pl_PositionVector(1)=.5f;const int castsBefore=rayCount;relocateTo(2,2,3);
  check(BotSupplyState(0).goalDeadline>12&&rayCount-castsBefore==1&&_botRayBudget==2,
    "relocation connector spends exactly one cast while retaining the final two safety rays");
  _botRayBudget=16;BotSupplyTick(&player,0,3,1000);
@@ -447,7 +723,7 @@ int main(){
  check(BotSupplyState(0).escapeUntil==0,"entering a new reacquisition target clears stale normal-speed escape");
  double rf=recover.forward,rs=recover.strafe,ru=recover.up;_botRayBudget=16;
  check(BotCecilSafeMotion(&player,BotSupplyState(0),.05,rf,rs,ru,0,1)==0&&rf==0&&rs==0,"offgraph recovery requires actual floor support even with original pit setting disabled");
- _botRayBudget=16;floorMode=2;rf=recover.forward;rs=recover.strafe;ru=0;
+ _botRayBudget=16;floorMode=2;recover=BotSupplyTick(&player,0,2,1000);rf=recover.forward;rs=recover.strafe;ru=0;
  check(BotCecilSafeMotion(&player,BotSupplyState(0),.1,rf,rs,ru,0,1)==1&&rf>0,"supported clear reacquisition action proceeds through ordinary safe motion");
  BotSupplyState(0).escapeUntil=1;BotSupplyState(0).escapeWorld[2]=-.8;BotSupplyState(0).escapeWorld[0]=.4;
  _botRayBudget=16;rf=1;rs=ru=0;
@@ -672,7 +948,7 @@ int main(){
  setup();floorMode=2;floorEntity.type=CEntity::RT_BRUSH;floorEntity.en_ulID=55;floorPlane.bpl_plAbsolute=FLOAT3D(0,-1,0);probeF=1;probeS=probeU=0;
  BotCecilSafeMotion(&player,BotSupplyState(0),0,probeF,probeS,probeU,0,1);
  check(BotSupplyState(0).probe.primaryReason==SCecilProbe::reasonUnsupportedNormal&&near(BotSupplyState(0).probe.support,-1)&&BotSupplyState(0).probe.normal[1]==-1&&BotSupplyState(0).probe.hitEntity==55,"unsupported normal records actual brush support dot and entity");
- setup();floorMode=2;floorPolygon.bpo_ulFlags=BPOF_PASSABLE;probeF=1;probeS=probeU=0;
+ setup();floorMode=2;floorPolygon.bpo_ulFlags=BPOF_PASSABLE;forcePassableHit=true;probeF=1;probeS=probeU=0;
  BotCecilSafeMotion(&player,BotSupplyState(0),0,probeF,probeS,probeU,0,1);
  check(BotSupplyState(0).probe.lastReason==SCecilProbe::reasonPassable,"passable brush has distinct rejection reason");
  setup();_botRayBudget=1;probeF=1;probeS=probeU=0;
@@ -1070,6 +1346,19 @@ def main():
         use_mask=mask("PLACT_USE")
         assert use_mask!=mask("PLACT_SNIPER_USE")
         print("SDK action contract",use_mask,mask("PLACT_SNIPER_USE"),hashlib.sha256(args.sdk_player.read_bytes()).hexdigest(),flush=True)
+        sdk=args.sdk_player.resolve().parents[1]/"Includes"/"Engine107"/"Engine"
+        brush=(sdk/"Brushes"/"Brush.h").read_text()
+        def polygon_mask(name):
+            match=re.search(r"^#define\s+"+name+r"\s+\(1UL\s*<<\s*(\d+)\)",brush,re.M)
+            if not match:raise ValueError("SDK polygon declaration missing: "+name)
+            return 1<<int(match[1])
+        ray_header=sdk/"World"/"WorldRayCasting.h"
+        kinds=re.search(r"enum TestType\s*\{(.*?)\};",ray_header.read_text(),re.S)
+        if not kinds:raise ValueError("SDK ray model enumeration missing")
+        model_types=re.findall(r"\bTT_[A-Z]+\b",kinds[1])
+        assert polygon_mask("BPOF_PASSABLE")==2048 and polygon_mask("BPOF_SHOOTTHRU")==16
+        assert model_types.index("TT_NONE")==0 and model_types.index("TT_COLLISIONBOX")==2
+        print("SDK107 physical ray contract PASSABLE=2048 SHOOTTHRU=16 COLLISIONBOX=2",hashlib.sha256(ray_header.read_bytes()).hexdigest(),flush=True)
     here = Path(__file__).resolve().parent
     support = args.support_dir or here
     source = (here / "BotSupplyNative.h").read_text()

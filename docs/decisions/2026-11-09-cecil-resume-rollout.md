@@ -125,3 +125,12 @@ Diagnostic026 also has a separate27.199s swimming stillness.027 logs actual view
 ## Native FLOAT composition and accepted movement ownership
 
 Diagnostic027 proves a sub-ULP FLOAT correction is lost in native accumulated angle composition. Bound the correction release to<=0.01 degrees and exact unchanged FLOAT sum; finite guards and larger-error leveling remain. A separate Human-owned floor-veto episode proves retained planner recovery incorrectly forces recovery cap/floor onto rejected navigation. Final safety now receives actual accepted supply ownership; ordinary wall/enabled-pit checks and accepted recovery floor/cap remain. Planner state is untouched. No geometry expansion follows029's nine negative radius casts. Merged320 sanitized bridge checks and actual Driver contracts pass; independent reviews clear. See candidate030-prequalification report. These corrections require a new normal published build and all final-hash native gates; no diagnostic qualifies deployment.
+
+
+## Retail physical ray masks and unchanged acceptance windows
+
+Diagnostic033 proves on six exact R0 floor segments that normal Retail1.07 Cast overwrites physical masks to PASSABLE|SHOOTTHRU and misses a nonpassable SHOOTTHRU floor. Original Cecil CastRayFlags keeps explicit PASSABLE and hits that same physical brush/plane. Reuse its bounded query path for navigation/support/wall/floor with retained GPL attribution, finite/zero-segment guards, unchanged budgets/model modes and no entity mutation. Combat visibility remains separate. This is native original-binary evidence, not an Engine1.10 ABI inference. No radius/plane-only movement bypass. See the Retail107 physical-ray-mask report.
+
+A reviewed stationary aligned final-NoFloor feedback correction also advances the existing original-node sweep; preserve turn progress, actual movement ownership, held/uncertain/successful-escape state and fixed attempt/backoff semantics. All affected native gates restart for the next normal hash.
+
+Prepare a second owned loopback-only eight-bot fixture for full RedStation7200s concurrently with the unchanged five-map600s series, after genuine supply and Hole gates. Declare exact hashes/helper pins/scenarios before launch. This changes scheduling only;1/4/8 populations,3600/3600/7200 durations, map coverage, resource warmup/windows, recovery and fleet900s remain unchanged. Matched A/C resource windows must describe the same concurrent load and exclude builds/tests. No public modification before actual qualification.

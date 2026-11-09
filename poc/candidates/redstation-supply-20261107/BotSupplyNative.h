@@ -43,8 +43,8 @@ struct SSupplyState {
   int interactionPoint=-1,useReleaseTick=-1;
   int reacquireNode=-1,reacquireRejected=-1;
   double reacquireSince=-1,reacquireRetryAfter=0;
-  // One bit per original node keeps failed LOS prefixes from monopolizing
-  // subsequent three-cast batches. Separate from the selected-target backoff.
+  // One bit per original node keeps failed LOS/final-floor approaches from
+  // monopolizing subsequent three-cast batches. Separate from target backoff.
   unsigned char reacquireTried[(botcore::CecilNavGraph::kMaxPoints+7)/8]={0};
   double reacquireScanTime=-1,reacquireScanPosition[3]={0,0,0},reacquireScanGravity[3]={0,0,0};
   bool reacquireScanLiquid=false;
@@ -170,12 +170,45 @@ static bool BotCecilFrameReady(const CPlayer* player){
 static double BotCecilHeight(const CPlayer* player,const FLOAT3D& delta){
   return delta(1)*player->en_vGravityDir(1)+delta(2)*player->en_vGravityDir(2)+delta(3)*player->en_vGravityDir(3);
 }
+static bool BotCecilRayLength(const FLOAT3D& from,const FLOAT3D& to,double& length){
+  length=0;bool same=true;
+  for(int i=1;i<=3;++i){
+    if(!std::isfinite(from(i))||!std::isfinite(to(i)))return false;
+    same=same&&from(i)==to(i);
+  }
+  if(same)return true;
+  const FLOAT3D delta=to-from;
+  for(int i=1;i<=3;++i)if(!std::isfinite(delta(i)))return false;
+  length=delta.Length();return std::isfinite(length)&&length>0;
+}
+// Adapted from Dreamy Cecil, Copyright (c) 2018-2025, GPL-2.0-only:
+// CecilBotMod 953b477e53fdc5a5d84c8ae8d759c84fdf6c973c,
+// Sources/Bots/SandboxCommon.cpp:173-206, CastRayFlags.
+// Retail107 Cast() overwrites a physical mask with PASSABLE|SHOOTTHRU.
+// Movement must stop at nonpassable shoot-through geometry, including floors.
+static bool BotCecilPhysicalCast(CCastRay& ray,CWorld* world){
+  ray.cr_pbpoBrushPolygon=NULL;ray.cr_pbscBrushSector=NULL;ray.cr_penHit=NULL;
+  ray.cr_ulPassablePolygons=BPOF_PASSABLE;ray.cr_bPhysical=TRUE;
+  ray.cr_vHit=ray.cr_vOrigin;
+  double length=0;
+  if(!world||!BotCecilRayLength(ray.cr_vOrigin,ray.cr_vTarget,length))return false;
+  if(length==0){ray.cr_fHitDistance=0;return true;} // Defined empty segment: no native query or Normalize.
+  if(ray.cr_penOrigin!=NULL){ray.AddSectorsAroundEntity(ray.cr_penOrigin);ray.TestThroughSectors();}
+  else ray.TestWholeWorld(world);
+  if(!std::isfinite(ray.cr_fHitDistance)||ray.cr_fHitDistance<0)return false;
+  ray.cr_vHit=ray.cr_vOrigin+(ray.cr_vTarget-ray.cr_vOrigin).Normalize()*ray.cr_fHitDistance;
+  return true;
+}
 static BOOL BotSupplyClear(CPlayer *player,const FLOAT3D &from,const FLOAT3D &to,CEntity *item=NULL){
+  double length=0;
+  if(!player||!player->GetWorld()||!BotCecilRayLength(from,to,length))return FALSE;
   // Reserve the final wall and floor probes for each action.
   if(_botRayBudget<=2)return FALSE;
   --_botRayBudget;
+  if(length==0)return TRUE;
   CCastRay ray(player,from,to);ray.cr_bAllowOverHit=FALSE;ray.cr_bPhysical=TRUE;
-  ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;ray.Cast(player->GetWorld());
+  ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;
+  if(!BotCecilPhysicalCast(ray,player->GetWorld()))return FALSE;
   return ray.cr_penHit==NULL||ray.cr_penHit==item;
 }
 static int BotSupplyNearest(CPlayer *player,const FLOAT3D &position,BOOL fromPlayer,CEntity *item=NULL){
@@ -447,9 +480,13 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
     for(int i=1;i<=3;++i){valid=valid&&std::isfinite(velocity(i));verticalSpeed+=double(velocity(i))*player->en_vGravityDir(i);}
     if(!valid||!std::isfinite(verticalSpeed)||std::fabs(verticalSpeed)>.1){state.ClearReacquireScan();return;}
     const FLOAT3D foot=player->GetPlacement().pl_PositionVector;
-    CCastRay supportRay(player,foot-player->en_vGravityDir*.25f,foot+player->en_vGravityDir*.05f);
+    const FLOAT3D from=foot-player->en_vGravityDir*.25f,to=foot+player->en_vGravityDir*.05f;
+    double length=0;
+    if(!BotCecilRayLength(from,to,length)||length==0){state.ClearReacquireScan();return;}
+    CCastRay supportRay(player,from,to);
     --_botRayBudget;supportRay.cr_bPhysical=TRUE;supportRay.cr_bAllowOverHit=FALSE;
-    supportRay.cr_ttHitModels=CCastRay::TT_NONE;supportRay.Cast(player->GetWorld());
+    supportRay.cr_ttHitModels=CCastRay::TT_NONE;
+    if(!BotCecilPhysicalCast(supportRay,player->GetWorld())){state.ClearReacquireScan();return;}
     const CBrushPolygon* polygon=supportRay.cr_pbpoBrushPolygon;
     if(!supportRay.cr_penHit||(supportRay.cr_penHit->GetFlags()&ENF_DELETED)||
        supportRay.cr_penHit->GetRenderType()!=CEntity::RT_BRUSH||!polygon||
@@ -811,14 +848,18 @@ static bool BotCecilFloor(CPlayer *player,double forward,double strafe,double up
   if(!std::isfinite(base(1))||!std::isfinite(base(2))||!std::isfinite(base(3))){BotCecilRejectedProbe(probe,SCecilProbe::reasonInvalid,player);return false;}
   if(BotCecilLiquid(player)||(forward==0&&strafe==0))return true;
   if(_botRayBudget<=0){BotCecilRejectedProbe(probe,SCecilProbe::reasonBudget,player);return false;}
-  --_botRayBudget;if(probe)++probe->floorRays;
   const double yaw=finalBodyYaw*3.141592653589793/180;
   const auto offset=BotCecilBodyFrame(player).ToWorld(-std::sin(yaw)*forward+std::cos(yaw)*strafe,0,
     -std::cos(yaw)*forward-std::sin(yaw)*strafe);
   const FLOAT3D from=base+FLOAT3D((FLOAT)offset.x,(FLOAT)offset.y,(FLOAT)offset.z)*(up>0?3.0f:1.5f)-player->en_vGravityDir;
   const FLOAT3D to=from+player->en_vGravityDir*(up>0?10.0f:5.0f);
+  double length=0;
+  // A collapsed floor segment cannot establish a physical NoFloor rejection.
+  if(!BotCecilRayLength(from,to,length)||length==0){BotCecilRejectedProbe(probe,SCecilProbe::reasonInvalid,player);return false;}
+  --_botRayBudget;if(probe)++probe->floorRays;
   CCastRay ray(player,from,to);
-  ray.cr_bPhysical=TRUE;ray.cr_bAllowOverHit=FALSE;ray.cr_ttHitModels=CCastRay::TT_NONE;ray.Cast(player->GetWorld());
+  ray.cr_bPhysical=TRUE;ray.cr_bAllowOverHit=FALSE;ray.cr_ttHitModels=CCastRay::TT_NONE;
+  if(!BotCecilPhysicalCast(ray,player->GetWorld())){BotCecilRejectedProbe(probe,SCecilProbe::reasonInvalid,player);return false;}
   if(!ray.cr_penHit){BotCecilRejectedProbe(probe,SCecilProbe::reasonNoFloor,player,&ray,&from,&to);return false;}
   if(ray.cr_penHit->GetRenderType()==CEntity::RT_TERRAIN)return true;
   const CBrushPolygon* polygon=ray.cr_pbpoBrushPolygon;
@@ -833,18 +874,25 @@ static bool BotCecilFloor(CPlayer *player,double forward,double strafe,double up
 }
 // Test the exact bounded action in the body/head frame before its floor probe.
 static bool BotCecilClearMotion(CPlayer* player,double forward,double strafe,double up,double yaw,SCecilProbe* probe=NULL,bool requireFloor=true){
+  if(!BotCecilFrameReady(player)||!std::isfinite(forward)||!std::isfinite(strafe)||!std::isfinite(up)||
+     !std::isfinite(yaw)||std::fabs(forward)>1.000001||std::fabs(strafe)>1.000001||std::fabs(up)>1.000001){
+    BotCecilRejectedProbe(probe,SCecilProbe::reasonInvalid,player);return false;
+  }
   const bool liquid=BotCecilLiquid(player);
   if(forward==0&&strafe==0&&(!liquid||up==0))
     return BotCecilFloor(player,forward,strafe,up,yaw,probe);
   if(_botRayBudget<((liquid||!requireFloor)?1:2)){BotCecilRejectedProbe(probe,SCecilProbe::reasonBudget,player);return false;}
-  --_botRayBudget;if(probe)++probe->wallRays;
   const double angle=yaw*3.141592653589793/180;
   const auto world=BotCecilBodyFrame(player).ToWorld(-std::sin(angle)*forward+std::cos(angle)*strafe,
     liquid?up:0,-std::cos(angle)*forward-std::sin(angle)*strafe);
   const FLOAT3D from=player->GetPlacement().pl_PositionVector-player->en_vGravityDir*.8f;
   const FLOAT3D to=from+FLOAT3D((FLOAT)world.x,(FLOAT)world.y,(FLOAT)world.z)*1.5f;
+  double length=0;
+  if(!BotCecilRayLength(from,to,length)||length==0){BotCecilRejectedProbe(probe,SCecilProbe::reasonInvalid,player);return false;}
+  --_botRayBudget;if(probe)++probe->wallRays;
   CCastRay ray(player,from,to);ray.cr_bPhysical=TRUE;ray.cr_bAllowOverHit=FALSE;
-  ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;ray.Cast(player->GetWorld());
+  ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;
+  if(!BotCecilPhysicalCast(ray,player->GetWorld())){BotCecilRejectedProbe(probe,SCecilProbe::reasonInvalid,player);return false;}
   if(ray.cr_penHit){BotCecilRejectedProbe(probe,SCecilProbe::reasonWallHit,player,&ray,&from,&to);return false;}
   return !requireFloor||BotCecilFloor(player,forward,strafe,up,yaw,probe);
 }
@@ -912,6 +960,41 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   }
   if(BotCecilClearMotion(player,forward,strafe,up,finalBodyYaw,&state.probe,requireFloor))return 1;
   if(now<state.escapeAfter){forward=strafe=up=0;return 0;}
+  // Only this branch tested the original request. Held-escape failures return
+  // above; deferred/uncertain probes or an approved escape preserve its target.
+  auto rejectOriginal=[&](){
+    const unsigned uncertain=(1u<<SCecilProbe::reasonBudget)|(1u<<SCecilProbe::reasonInvalid);
+    const int node=state.reacquireNode;
+    if(actualReacquire&&(player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
+       state.probe.primaryReason==SCecilProbe::reasonNoFloor&&
+       !(state.probe.reasonMask&uncertain)&&nodes<=botcore::CecilNavGraph::kMaxPoints&&
+       node>=0&&(size_t)node<nodes&&state.blocked.size()==nodes&&!state.blocked[node]){
+      double speed2=0;bool stationary=true;
+      for(int i=1;i<=3;++i){const double v=player->en_vCurrentTranslationAbsolute(i);
+        stationary=stationary&&std::isfinite(v);speed2+=v*v;}
+      const auto& point=BotSupplyGraph().points[node];
+      const FLOAT3D delta(point.x-position(1),point.y-position(2),point.z-position(3));
+      const double height=BotCecilHeight(player,delta);
+      const double x=delta(1)-player->en_vGravityDir(1)*height,
+        y=delta(2)-player->en_vGravityDir(2)*height,z=delta(3)-player->en_vGravityDir(3)*height;
+      const double targetNorm=std::sqrt(x*x+y*y+z*z),
+        requestNorm=std::sqrt(requested.x*requested.x+requested.y*requested.y+requested.z*requested.z);
+      bool aligned=false;
+      if(std::isfinite(targetNorm)&&targetNorm>0&&std::isfinite(requestNorm)&&requestNorm>0){
+        const double alignment=(requested.x*x+requested.y*y+requested.z*z)/(requestNorm*targetNorm);
+        aligned=std::isfinite(alignment)&&alignment>=.9998476951563913;
+      }
+      // A turning/projected action is not evidence against the eventual target
+      // direction. Only a stationary, aligned (<=1 degree) approach may reject it.
+      if(stationary&&std::isfinite(speed2)&&speed2<=.01&&aligned){
+        state.reacquireTried[node/8]|=(unsigned char)(1u<<(node%8));
+        state.reacquireNode=-1;state.reacquireSince=-1;state.ClearEscape();
+        BotLog("[CecilReacquireReject] entity=%lu generation=%lu time=%.3f node=%d reason=no_floor\n",
+          (unsigned long)state.entity,(unsigned long)state.generation,now,node);
+      }
+    }
+    forward=strafe=up=0;return 0;
+  };
   const double length=std::hypot((double)forward,(double)strafe);
   const double side=std::fmin(.4,maxStrafe)*state.escapeSide;
   const double candidates[3][2]={{0,side},{0,-side},{length>.05?-.4*forward/length:0,length>.05?-.4*strafe/length:0}};
@@ -934,6 +1017,6 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
       state.escapeUntil=now+.6;forward=(T)f;strafe=(T)st;up=0;return 2;
     }
   }
-  state.escapeAfter=now+.3;forward=strafe=up=0;return 0;
+  state.escapeAfter=now+.3;return rejectOriginal();
 }
 #endif
