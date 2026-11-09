@@ -1,13 +1,15 @@
 {
-  "schema_version": 1,
-  "snapshot_utc": "2026-11-07T19:05:04.953008+00:00",
-  "purpose": "Versionierter Zwischenstand aller 41 Originalbereiche; keine Runtime- oder Rolloutfreigabe.",
+  "schema_version": 2,
+  "snapshot_utc": "2026-11-09T17:18:57.767527+00:00",
+  "purpose": "Aktueller Quell- und Verdrahtungsstand aller 41 Bereiche; native Gesamtqualifikation und Flottenrollout bleiben offen.",
+  "qualified": false,
   "code_snapshot": {
-    "commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+    "commit": "e2804ac2d0cabdc082a3bb881ef0557cd0f66bfc",
     "source_layout": "poc/candidates/redstation-supply-20261107: vollständiger flacher Overlay, 28 Quelldateien; SDK-Game-Archiv ergänzt die übrigen Builddateien.",
     "sdk_commit": "aa7869c2c2c4db0562281814d0ac3784e6b9d6f0",
     "include_commit": "94ff8cd0e63941f8601294350b616472f772ed51",
-    "scope": "Sauberer Integrationscommit auf origin/main; keine Abhängigkeit von unveröffentlichten historischen ssam-Commits. Native Belege gelten ausschließlich für ihren eigenen DLL-Hash."
+    "scope": "Sauberer Integrationscommit auf origin/main; keine Abhängigkeit von unveröffentlichten historischen ssam-Commits. Native Belege gelten ausschließlich für ihren eigenen DLL-Hash.",
+    "tree": "9eecbbb40cd3213fd1f29758010380118fa1f5cf"
   },
   "original_reference": {
     "repository": "DreamyCecil/CecilBotMod",
@@ -31,115 +33,92 @@
     "instance_count": 6,
     "protected_boundary": "Unveränderte Dedicated-/Engine-/Entities-Komponenten und gewöhnliche CPlayerAction-Netzwerkspieler."
   },
-  "evidence_method": "Aktuelle portable Prüfungen der gelieferten Clean-Overlay-Dateien; BRIDGE normal und ASan/UBSan. Frühere Originaldaten-/Exportprüfungen bleiben mit ihrem eigenen Quellpin unter historical_offline_evidence erhalten. Buildmanifest und native Aussagen getrennt; dieser Dokumentationsauftrag verändert keine Runtime.",
+  "evidence_method": "Aktueller statischer Callsite-Audit aller 41 Originalbereiche plus separat gepinnte Tests für038. Historische Ergebnisse gelten ausschließlich für ihren eigenen Quell- und DLL-Stand.",
+  "current_implementation_summary": {
+    "historically_implemented_rows_still_wired": 33,
+    "existing_human_los_adapted": 1,
+    "architecturally_excluded": 4,
+    "not_applicable_scope": 2,
+    "native_acceptance_open": 1,
+    "new_concrete_missing_native_callsite_or_implementation_found": false,
+    "limit": "Gezielte finale Verknüpfung der bereits analysierten41Bereiche. Kein erneuter Vollcodekorrektheitsbeweis und keine native Verhaltenserfolgsbehauptung."
+  },
+  "source_file_sha256": {
+    "poc/candidates/redstation-supply-20261107/BotCecilItems.h": "9104f4b1dc0e9383d46cd829cb7ca27aee4381750887e96a422727eb50ca8f4f",
+    "poc/candidates/redstation-supply-20261107/BotDriver.cpp": "13b6e69614a01491437ec78dc9699af11aa974cdae707673cd7ab5029fd92bd7",
+    "poc/candidates/redstation-supply-20261107/BotSupplyNative.h": "8f89976aba8ac3874da3e986491f50c82e630da8b41d7d1526928ecf305858d6",
+    "poc/candidates/redstation-supply-20261107/Game.cpp": "43e14e8d0cb5270211436d203bc5aba4abce64fb8cb4b39c80d2bb0bcbea53d7",
+    "poc/candidates/redstation-supply-20261107/bot_human.h": "1c7ab600dd5cdd6eb245a23d3565af2086481eb0348057028630afaf98df78c8",
+    "poc/candidates/redstation-supply-20261107/bot_loadout.h": "27f109bc7c4f5e42ddb5faa245406bbff275f1c2e8f38ba339dba0f18cb8d06a",
+    "poc/candidates/redstation-supply-20261107/bot_perception.h": "70cc20b279bebc05bcec5bf00b966145dc7179a7fbd5b4e93d843bd075ffbba7",
+    "poc/candidates/redstation-supply-20261107/bot_weapon_input.h": "fa4a0453a42adf7df5d0461427660f51d25cfc263859e56c33601c26e3ea1277",
+    "poc/candidates/redstation-supply-20261107/cecil_motion.h": "314a7fe2192954ca654509d0186f949ff62580f680f6c863462de17ba4b01c8d",
+    "poc/candidates/redstation-supply-20261107/cecil_nav_data.h": "effd54cf03313084d8ca3e24b07a5d12d3b2face8e3da4ad3ddd2e78947a4212",
+    "poc/candidates/redstation-supply-20261107/cecil_rules.h": "b30bf1bf148964a89adf41ecf6e9f167fcb261345ba4f9af080279a539fde8f9",
+    "tools/audit_cecil_native_log.py": "7586ffc10f3c27c0c9d7e93328a9e1df0ccccfb8284e33cbacc4b6aea554c159",
+    "tools/audit_cecil_resource_windows.py": "f6e1b9044899a116f6c7a4c6232f23668e3ee239aa9469029febe8714afdf16c",
+    "tools/qualify_cecil_live.py": "0abb7c34e9c249c75a3177aa6cf5d411be712bbf7b218f0e6cd929b10e59b3a1"
+  },
+  "native_entrypoint_chain": [
+    {
+      "file": "poc/candidates/redstation-supply-20261107/Game.cpp",
+      "line": 759,
+      "function": "CGame timer entry"
+    },
+    {
+      "file": "poc/candidates/redstation-supply-20261107/Game.cpp",
+      "line": 2685,
+      "function": "CGame reconnect poll"
+    },
+    {
+      "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+      "line": 483,
+      "function": "BotDriver_HandleReconnect"
+    },
+    {
+      "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+      "line": 1041,
+      "function": "BotDriver_HandleTimer"
+    },
+    {
+      "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+      "line": 1206,
+      "function": "BotDriver_HandleTimer"
+    },
+    {
+      "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+      "line": 1308,
+      "function": "BotDriver_HandleTimer"
+    },
+    {
+      "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+      "line": 1356,
+      "function": "BotDriver_HandleTimer"
+    }
+  ],
   "offline_evidence": {
-    "NAV": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_nav.cpp",
-      "result": "281 synthetische Prüfungen, 0 Fehler. Dieser aktuelle Lauf umfasst keine privaten Original-NAV-Dateien; die neun Rundläufe und 221682 Prüfungen stehen separat als historischer Beleg.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": false,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+    "NAV038": {
+      "result": "Alle neun privaten Originaldateien byteidentisch zurückgeschrieben. Red Station:193 Punkte/879 gerichtete Kanten und zweimal37.249 Punktpaare gegen unabhängige Floyd-Suche;221.682 Prüfungen/0 Fehler.",
+      "source_commit": "e2804ac2d0cabdc082a3bb881ef0557cd0f66bfc",
+      "test_log_sha256": "d8e5734171d2fdc5de8d3bf37f2105855e980a476dd171897cfc2927bf9f0344",
+      "status": "PASS_PORTABLE_ORIGINAL_FIXTURE",
+      "limit": "Keine native Abnahme oder Rolloutfreigabe; private NAV-Dateien nicht veröffentlicht."
     },
-    "MOTION": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_motion.cpp",
-      "result": "45 Prüfungen, 0 Fehler; Körper-/Gravitationsbasis, Ankunft und Bewegungsflags.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": false,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
-    },
-    "FRAME": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_frame.cpp",
-      "result": "63 Prüfungen, 0 Fehler; orthonormale Basis, Transformationen und ungültige Eingaben.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": false,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
-    },
-    "HEAD_BODY": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_head_body.cpp",
-      "result": "PASS; lokale Kopfrotation und Körperbasis bleiben getrennt, einschließlich gedrehter Basis.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": false,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
-    },
-    "BRIDGE": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_native_bridge.py",
-      "result": "154 Prüfungen, 0 Fehler, normal und ASan/UBSan. Tatsächliche Adapterfunktionen mit World-/Ray-Stubs, Preset-Pit-Gate, frischer NAV-Kontext, Locks, Important-USE/Release, Schwimmen und Recovery. Loader und Itemdecoder separat.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": true,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis.",
-      "sdk_source_sha256": "85c92933fa5b0cc726be7b42a3bc82d4c95b255507ec8b1fffe2666fcf3888af"
-    },
-    "ACTION": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_action_native.py",
-      "result": "PASS; tatsächliche Driver-Aktionsschutzfunktionen, endliche Achsen und Sniper-Winkeldämpfung gegen gepinnten SDK-Vertrag.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": false,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
-    },
-    "HUMAN": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_human.cpp",
-      "result": "PASS für aktuelle Human-/Cecil-Adaption; portable Rückkopplungsfixtures.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": false,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
-    },
-    "INTEGRATION": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_integration.cpp",
-      "result": "PASS, einschließlich Double-Colt-Pickup, Teamfilter und Reisemesser-Zeitgrenze.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": false,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
-    },
-    "ITEMS": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_items_native.py",
-      "result": "PASS mit feldbasiertem Fake-SDK, einschließlich WeaponsStay-Eigenpickupvertrag; kein ABI-Nachweis.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": false,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
-    },
-    "RULES": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_rules.cpp",
-      "result": "PASS für Waffen, Presets, Items und Feuerzustand.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": false,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
-    },
-    "SUPPLY": {
-      "path": "poc/candidates/redstation-supply-20261107/test_supply_navigation.cpp",
-      "result": "PASS für erhaltenen Legacy-SupplyPlanner; kein Nachweis, dass dieser statt des Cecil-Planners aktiv ist.",
-      "status": "PASS",
-      "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-      "sanitizers": false,
-      "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
-    },
-    "EXPORT": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_rules_exports.py",
-      "result": "Historisch: 30 Original-Waffenzeilen und viermal 32 Settings einschließlich 119 Originalzuweisungen; kein neuer Lauf unter dem aktuellen Pin behauptet.",
-      "status": "PASS",
-      "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
-      "sanitizers": false,
-      "historical": true
+    "BRIDGE038": {
+      "result": "518 SDK107-Prüfungen unter ASan/UBSan,0 Fehler.",
+      "source_commit": "e2804ac2d0cabdc082a3bb881ef0557cd0f66bfc",
+      "status": "PASS_PORTABLE_SDK_STUB",
+      "limit": "Stubbasierte SDK-Prüfung; kein nativer Laufzeitnachweis."
     }
   },
   "native_build_observed": {
-    "build_ok": true,
-    "qualified": false,
-    "repo_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
-    "dll_sha256": "224ee607072982a521bdab36250554039f9e606a4db755fdd42716fb0f031475",
-    "configuration": "Release_TSE107 equivalent direct cl/link, Win32",
-    "build": "Build010"
+    "build": "Normal038",
+    "source_commit": "e2804ac2d0cabdc082a3bb881ef0557cd0f66bfc",
+    "dll_sha256": "eacc13bd22221f758c151875857fab48012eb2637ffa89abb24346b2af52ec1b",
+    "manifest": "build038.json",
+    "qualified": false
   },
-  "native_build_limit": "Build010 ist ein erfolgreicher PE32-x86-Build, keine Runtime-Abnahme. Entwicklungstest auf Skulls wird vom Hauptagenten geführt; zum Dokumentationssnapshot keine abgeschlossene aktuelle native Qualifikation. Die fünf Produktionsinstanzen sind unverändert.",
+  "native_build_limit": "Normal038 besteht nur begrenzte Hole/Trouble/Yodeller- und Vierbot-Beobachtungen, den separat nachgeprüften v11-Einzelbot-Versorgungsnachweis sowie118 tatsächliche Respawnfolgen. Skulls600s scheitert an271,19s/15,12s/12,12s unbegründetem Stillstand. Keine formalen3600/3600/7200s, Retail038 oder Flottenfreigabe. Siehe2026-11-09-candidate038-native-results.md.",
   "original_runtime_B": {
     "status": "QUELLEN_UND_FIXTURE_REFERENZ; ORIGINAL_RUNTIME_NOCH_NICHT_GEMESSEN",
     "available": [
@@ -180,21 +159,55 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Unveränderte NAV-Bytes werden vollständig geladen und per Map-/NAV-CRC gebunden.",
-      "remaining_or_boundary": "Native Kartenbindung und Laufbarkeit bleiben ungeprüft.",
+      "implementation": "Original NAV-Dateibytes werden vollständig geparst, CRC-gebunden und außerhalb des Timers geladen.",
+      "remaining_or_boundary": "Frische native Kartenbindung und Traversierung aller fünf Maps.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_nav_data.h",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h"
       ],
-      "offline_status": "PASS",
+      "offline_status": "PASS_PORTABLE_ORIGINAL_FIXTURE",
       "offline_evidence_ids": [
-        "NAV"
+        "NAV038"
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010",
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
       "historical_offline_evidence_ids": [
         "NAV"
-      ]
+      ],
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_WIRED",
+      "current_claim": "Original NAV-Dateibytes werden vollständig geparst, CRC-gebunden und außerhalb des Timers geladen.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_nav_data.h",
+          "line": 65,
+          "function": "CecilNavGraph::Load"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 96,
+          "function": "BotSupplyUpdateNavigation"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Frische native Kartenbindung und Traversierung aller fünf Maps.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "NAV"
+        ],
+        "historical_offline_evidence_ids": [
+          "NAV"
+        ]
+      },
+      "historical_implementation_text": "Unveränderte NAV-Bytes werden vollständig geladen und per Map-/NAV-CRC gebunden."
     },
     {
       "id": "T02",
@@ -213,20 +226,53 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Position, Radius, Flags, IDs, gerichtete Links, Important-/Next-/Lock-Felder bleiben erhalten; Pointer werden durch IDs und Slots ersetzt.",
-      "remaining_or_boundary": "Native Entity-Zuordnung je Karte prüfen.",
+      "implementation": "Originalpunktfelder inklusive Slots/IDs/Entitymetadaten bleiben vollständig erhalten; Entityauflösung erfolgt read-only.",
+      "remaining_or_boundary": "ID-/Kartengeneration und aktuelle Entityauflösung nativ korrelieren.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_nav_data.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "NAV"
-      ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
       "historical_offline_evidence_ids": [
         "NAV"
-      ]
+      ],
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_WIRED",
+      "current_claim": "Originalpunktfelder inklusive Slots/IDs/Entitymetadaten bleiben vollständig erhalten; Entityauflösung erfolgt read-only.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_nav_data.h",
+          "line": 21,
+          "function": "CecilNavPoint"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 258,
+          "function": "BotCecilLocks"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS",
+        "LIFECYCLE"
+      ],
+      "remaining_native_evidence": "ID-/Kartengeneration und aktuelle Entityauflösung nativ korrelieren.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "NAV"
+        ],
+        "historical_offline_evidence_ids": [
+          "NAV"
+        ]
+      },
+      "historical_implementation_text": "Position, Radius, Flags, IDs, gerichtete Links, Important-/Next-/Lock-Felder bleiben erhalten; Pointer werden durch IDs und Slots ersetzt."
     },
     {
       "id": "T03",
@@ -245,20 +291,52 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Alle gerichteten Kanten bleiben erhalten; keine automatische Symmetrisierung oder Begrenzung auf 256 Punkte.",
-      "remaining_or_boundary": "Physische Traversierung bleibt offen.",
+      "implementation": "Originale gerichtete Adjazenz wird unverändert geladen und gerichtet durchsucht; keine Ersatzkanten.",
+      "remaining_or_boundary": "Native Einweg-/Sonderübergänge nachweisen.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_nav_data.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "NAV"
-      ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
       "historical_offline_evidence_ids": [
         "NAV"
-      ]
+      ],
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_WIRED",
+      "current_claim": "Originale gerichtete Adjazenz wird unverändert geladen und gerichtet durchsucht; keine Ersatzkanten.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_nav_data.h",
+          "line": 65,
+          "function": "CecilNavGraph::Load"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_nav_data.h",
+          "line": 120,
+          "function": "CecilNavSearch::Run"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Native Einweg-/Sonderübergänge nachweisen.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "NAV"
+        ],
+        "historical_offline_evidence_ids": [
+          "NAV"
+        ]
+      },
+      "historical_implementation_text": "Alle gerichteten Kanten bleiben erhalten; keine automatische Symmetrisierung oder Begrenzung auf 256 Punkte."
     },
     {
       "id": "T04",
@@ -277,19 +355,44 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Originalradien und der zweite gravitationsbezogene Ankunftsbereich bleiben erhalten; die Bewegungsbasis verwendet Körperachsen und reale Gravitation.",
-      "remaining_or_boundary": "Ankunft und Stockwerkstrennung an echten Sprungplattformen sowie in Gravitationsübergängen bleiben nativ offen.",
+      "implementation": "Ankunft nutzt Originalradius und ursprüngliche gravitationsbezogene zweite Kugel;038 erweitert keinen Ankunftsradius.",
+      "remaining_or_boundary": "Reale Ankunft bei Stockwerken/Landungen/Gravitywechseln.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_motion.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "MOTION",
-        "FRAME",
-        "BRIDGE"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_WIRED",
+      "current_claim": "Ankunft nutzt Originalradius und ursprüngliche gravitationsbezogene zweite Kugel;038 erweitert keinen Ankunftsradius.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
+          "line": 139,
+          "function": "CecilNavigator::Reached"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Reale Ankunft bei Stockwerken/Landungen/Gravitywechseln.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "MOTION",
+          "FRAME",
+          "BRIDGE"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Originalradien und der zweite gravitationsbezogene Ankunftsbereich bleiben erhalten; die Bewegungsbasis verwendet Körperachsen und reale Gravitation."
     },
     {
       "id": "T05",
@@ -308,20 +411,52 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Dijkstra mit h=0 ersetzt bewusst Cecil-A*: gerichtete Kanten, Nullkosten-Teleports und Locks bleiben erhalten.",
-      "remaining_or_boundary": "Keine Behauptung identischer A*-Routen; native Routenwahl prüfen.",
+      "implementation": "Per-Bot Dijkstra/h=0 respektiert Directed Links, Locks und Nullkosten von TELEPORT; A*-Routenidentität wird nicht behauptet.",
+      "remaining_or_boundary": "Native funktionale Routen; Algorithmusabweichung ist bewusst dokumentiert.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_nav_data.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "NAV"
-      ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
       "historical_offline_evidence_ids": [
         "NAV"
-      ]
+      ],
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Per-Bot Dijkstra/h=0 respektiert Directed Links, Locks und Nullkosten von TELEPORT; A*-Routenidentität wird nicht behauptet.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_nav_data.h",
+          "line": 120,
+          "function": "CecilNavSearch::Run"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_nav_data.h",
+          "line": 143,
+          "function": "CecilNavSearch::Run"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Native funktionale Routen; Algorithmusabweichung ist bewusst dokumentiert.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "NAV"
+        ],
+        "historical_offline_evidence_ids": [
+          "NAV"
+        ]
+      },
+      "historical_implementation_text": "Dijkstra mit h=0 ersetzt bewusst Cecil-A*: gerichtete Kanten, Nullkosten-Teleports und Locks bleiben erhalten."
     },
     {
       "id": "T06",
@@ -340,18 +475,54 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Anker verwenden begrenzte Verbindungssicht, Distanz und Höhe entlang realer Gravitation statt festem Welt-Y.",
-      "remaining_or_boundary": "Nähe und ein freier Ray beweisen keine vollständige physische Laufbarkeit; schmale Wege, Stockwerke und inverted-gravity-Anker nativ prüfen.",
+      "implementation": "Ordinary-Anchor bleibt12m/3m mit physischer LOS; lange committed edges benötigen keinen erfundenen Luft-Anchor; Recovery bleibt getrennt.",
+      "remaining_or_boundary": "Frische sichere Anchor-/Stockwerk-/Luftkanten-/Offgraph-Beobachtung.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "BRIDGE",
-        "FRAME"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Ordinary-Anchor bleibt12m/3m mit physischer LOS; lange committed edges benötigen keinen erfundenen Luft-Anchor; Recovery bleibt getrennt.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 239,
+          "function": "BotSupplyNearest"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
+          "line": 38,
+          "function": "CecilNavigator::Update"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 492,
+          "function": "BotCecilReacquire"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "RECOVERY",
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Frische sichere Anchor-/Stockwerk-/Luftkanten-/Offgraph-Beobachtung.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "BRIDGE",
+          "FRAME"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Anker verwenden begrenzte Verbindungssicht, Distanz und Höhe entlang realer Gravitation statt festem Welt-Y."
     },
     {
       "id": "T07",
@@ -370,23 +541,55 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Important-Ziele, Wahrscheinlichkeit und Next-Ketten sind implementiert; der Kontext bleibt auf unmarkierten Kettenpunkten erhalten. Der committierte Adapter verwendet read-only Entityreferenzen, Marker-Zielanker und normale USE-Actions.",
-      "remaining_or_boundary": "Identität, gelöschte oder unbrauchbare Ziele, Rayhit und Nahdistanz werden geprüft; Interaktionsversuche sind auf fünf Sekunden begrenzt. Echte Entitytypen, Bedienbarkeit und Ketten auf den fünf Karten bleiben nativ ungeprüft.",
+      "implementation": "Important-Entities, Gewichtung, next-Ketten und begrenzter Interaktionszustand werden nativ konsumiert.",
+      "remaining_or_boundary": "Reale Ketten-/Marker-/Interaktionswirkung statt bloß gesetztem Flag.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
         "poc/candidates/redstation-supply-20261107/cecil_motion.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "NAV",
-        "MOTION",
-        "BRIDGE"
-      ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
       "historical_offline_evidence_ids": [
         "NAV"
-      ]
+      ],
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Important-Entities, Gewichtung, next-Ketten und begrenzter Interaktionszustand werden nativ konsumiert.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 621,
+          "function": "BotCecilImportant"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 810,
+          "function": "BotSupplyTick"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Reale Ketten-/Marker-/Interaktionswirkung statt bloß gesetztem Flag.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "NAV",
+          "MOTION",
+          "BRIDGE"
+        ],
+        "historical_offline_evidence_ids": [
+          "NAV"
+        ]
+      },
+      "historical_implementation_text": "Important-Ziele, Wahrscheinlichkeit und Next-Ketten sind implementiert; der Kontext bleibt auf unmarkierten Kettenpunkten erhalten. Der committierte Adapter verwendet read-only Entityreferenzen, Marker-Zielanker und normale USE-Actions."
     },
     {
       "id": "T08",
@@ -405,18 +608,53 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Direkte SendToTarget-/EET_TRIGGER-Aufrufe bleiben ausgeschlossen. Normales Retail-USE (Bit 5) für bestätigten nahen Rayhit auf brauchbare Switches/MovingBrush-Relays und read-only Marker-Zielanker bilden den Clientadapter.",
-      "remaining_or_boundary": "Driver priorisiert Interaktion samt echtem Release-Tick exklusiv vor Fire/Scope. Versuche sind auf fünf Sekunden begrenzt; ein USE-Log beweist keine Schalterwirkung. Bedienbarkeit, Ketten und physische Wirkung je Map bleiben offen.",
+      "implementation": "Markerketten und reguläre USE-Actions ersetzen direkte Entityevents; keine autoritative SendToTarget/EET_TRIGGER-Übernahme.",
+      "remaining_or_boundary": "Native USE-/MovingBrush-Wirkung und Loslassen belegen; keine volle Eventparität behaupten.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "BRIDGE"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_CLIENT_ACTION_ADAPTER",
+      "current_claim": "Markerketten und reguläre USE-Actions ersetzen direkte Entityevents; keine autoritative SendToTarget/EET_TRIGGER-Übernahme.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 603,
+          "function": "BotCecilUsableSwitch"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 621,
+          "function": "BotCecilImportant"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1207,
+          "function": "BotDriver_HandleTimer"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Native USE-/MovingBrush-Wirkung und Loslassen belegen; keine volle Eventparität behaupten.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "BRIDGE"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Direkte SendToTarget-/EET_TRIGGER-Aufrufe bleiben ausgeschlossen. Normales Retail-USE (Bit 5) für bestätigten nahen Rayhit auf brauchbare Switches/MovingBrush-Relays und read-only Marker-Zielanker bilden den Clientadapter."
     },
     {
       "id": "T09",
@@ -435,19 +673,55 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Read-only Placement-Vergleich sperrt veränderte Lock-Entities; fehlende Entities werden bewusst fail-closed behandelt. Vorbereitete pro-Bot-Snapshots protokollieren initiale und geänderte physische Lockzustände.",
-      "remaining_or_boundary": "Zeitweilige avoidNode-Sperren bleiben vom physischen Lock getrennt. Echte Entitybewegung, Lockwechsel und anschließende Traversierung auf Red Station und Hole nativ korrelieren.",
+      "implementation": "Locks lesen echte Placement-/Missing-Zustände fail-closed.038 erhält nur bestehende Liftkante bei aktuell validiertem Groundkontakt und neu beobachtetem0→1; globale Locks bleiben.",
+      "remaining_or_boundary": "038 muss tatsächliches LockApproach-Ereignis, anschließendes Original-Reached und sichere Supportverlustreaktion nativ zeigen.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
         "poc/candidates/redstation-supply-20261107/cecil_nav_data.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "NAV",
-        "BRIDGE"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Locks lesen echte Placement-/Missing-Zustände fail-closed.038 erhält nur bestehende Liftkante bei aktuell validiertem Groundkontakt und neu beobachtetem0→1; globale Locks bleiben.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 258,
+          "function": "BotCecilLocks"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 176,
+          "function": "BotCecilSupportedLockNode"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
+          "line": 74,
+          "function": "CecilNavigator::Update"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS",
+        "RECOVERY"
+      ],
+      "remaining_native_evidence": "038 muss tatsächliches LockApproach-Ereignis, anschließendes Original-Reached und sichere Supportverlustreaktion nativ zeigen.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "NAV",
+          "BRIDGE"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Read-only Placement-Vergleich sperrt veränderte Lock-Entities; fehlende Entities werden bewusst fail-closed behandelt. Vorbereitete pro-Bot-Snapshots protokollieren initiale und geänderte physische Lockzustände."
     },
     {
       "id": "T10",
@@ -466,24 +740,61 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "TELEPORT erhält gerichtete Nullkosten-Kanten; Bewegung muss den echten Trigger erreichen. Kein direktes Teleportieren.",
-      "remaining_or_boundary": "Insbesondere Red Station 12→34 und weitere reale Triggerfolgen prüfen.",
+      "implementation": "TELEPORT behält gerichtete Nullkosten; normale Bewegungsactions müssen den echten Maptrigger auslösen; keine Teleport-Mutation.",
+      "remaining_or_boundary": "Echten Trigger, Ausgangsposition und Folgepfad auf finalem DLL-Hash belegen.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_nav_data.h",
         "poc/candidates/redstation-supply-20261107/cecil_motion.h",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "NAV",
-        "MOTION",
-        "BRIDGE"
-      ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
       "historical_offline_evidence_ids": [
         "NAV"
-      ]
+      ],
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_CLIENT_ACTION_ADAPTER",
+      "current_claim": "TELEPORT behält gerichtete Nullkosten; normale Bewegungsactions müssen den echten Maptrigger auslösen; keine Teleport-Mutation.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_nav_data.h",
+          "line": 143,
+          "function": "CecilNavSearch::Run"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
+          "line": 38,
+          "function": "CecilNavigator::Update"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1356,
+          "function": "BotDriver_HandleTimer"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Echten Trigger, Ausgangsposition und Folgepfad auf finalem DLL-Hash belegen.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "NAV",
+          "MOTION",
+          "BRIDGE"
+        ],
+        "historical_offline_evidence_ids": [
+          "NAV"
+        ]
+      },
+      "historical_implementation_text": "TELEPORT erhält gerichtete Nullkosten-Kanten; Bewegung muss den echten Trigger erreichen. Kein direktes Teleportieren."
     },
     {
       "id": "T11",
@@ -502,21 +813,51 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "JUMP, CROUCH, WALK und OVERRIDE liefern normale vertikale bzw. horizontale Action-Intents; Sprünge besitzen einen Pulsabstand. Endliche finale Actions und begrenzte Achsen werden vor Ausgabe geprüft.",
-      "remaining_or_boundary": "Kopffreiheit, echter Absprung/Landung und Crouch-Passagen bleiben offen. Der horizontale Wandprobe-Adapter kann Sprunganläufe begrenzen; keine native Sprungfreiheit aus Intent- oder Stubtests ableiten.",
+      "implementation": "JUMP/CROUCH/WALK/OVERRIDE bestimmen native horizontale und vertikale Actions; Quell-/Ziel-Override-Semantik bleibt.",
+      "remaining_or_boundary": "Reale Absprünge/Plattformlandungen/Duckwege und Headclearance.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_motion.h",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "MOTION",
-        "BRIDGE",
-        "ACTION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_WIRED",
+      "current_claim": "JUMP/CROUCH/WALK/OVERRIDE bestimmen native horizontale und vertikale Actions; Quell-/Ziel-Override-Semantik bleibt.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
+          "line": 96,
+          "function": "CecilNavigator::Update"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1322,
+          "function": "BotDriver_HandleTimer"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Reale Absprünge/Plattformlandungen/Duckwege und Headclearance.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "MOTION",
+          "BRIDGE",
+          "ACTION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "JUMP, CROUCH, WALK und OVERRIDE liefern normale vertikale bzw. horizontale Action-Intents; Sprünge besitzen einen Pulsabstand. Endliche finale Actions und begrenzte Achsen werden vor Ausgabe geprüft."
     },
     {
       "id": "T12",
@@ -535,12 +876,37 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "NICHT_ANWENDBAR_5_FFA_MAPS",
-      "implementation": "Für die fünf betriebenen Karten liegen vollständige gepinnte NAV-Dateien vor; automatische Generierung ist zum Laden dieser Daten nicht erforderlich.",
-      "remaining_or_boundary": "Dies ist keine implementierte allgemeine Generierung für neue Karten.",
+      "implementation": "Client benötigt und implementiert keinen Auto-NAV-Generator für die fünf gepinnten Originalkarten.",
+      "remaining_or_boundary": "Keine allgemeine Unterstützung zusätzlicher Karten/Geometrie behauptet.",
       "code_references": [],
-      "offline_status": "NICHT_ANWENDBAR",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NICHT_ANWENDBAR"
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "historical_native_observation": {
+        "native_status": "NICHT_ANWENDBAR"
+      },
+      "current_source_status": "NOT_APPLICABLE_FIVE_PINNED_FFA_MAPS",
+      "current_claim": "Client benötigt und implementiert keinen Auto-NAV-Generator für die fünf gepinnten Originalkarten.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 96,
+          "function": "BotSupplyUpdateNavigation"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Keine allgemeine Unterstützung zusätzlicher Karten/Geometrie behauptet.",
+      "historical_status": "NICHT_ANWENDBAR_5_FFA_MAPS",
+      "historical_offline_observation": {
+        "offline_status": "NICHT_ANWENDBAR",
+        "offline_evidence_ids": [],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Für die fünf betriebenen Karten liegen vollständige gepinnte NAV-Dateien vor; automatische Generierung ist zum Laden dieser Daten nicht erforderlich.",
+      "native_build": "Normal038"
     },
     {
       "id": "T13",
@@ -559,12 +925,37 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "ARCHITEKTONISCH_AUSGESCHLOSSEN",
-      "implementation": "Cecil-NAV-Editor und eigene Netzbefehle werden nicht in Vanilla-Netzverkehr eingebaut. NAV-Daten werden außerhalb der laufenden Simulation vorbereitet.",
-      "remaining_or_boundary": "Ein eigener Editor ist kein Bestandteil dieser Integration.",
+      "implementation": "NAV-Editor und Cecil-Netzbefehle/Custompackets werden nicht übernommen; Datenbearbeitung erfolgt offline.",
+      "remaining_or_boundary": "Bewusste Vanilla-Grenze, kein offenes Pflichtfeature dieses Ports.",
       "code_references": [],
-      "offline_status": "NICHT_ANWENDBAR",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NICHT_ANWENDBAR"
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "historical_native_observation": {
+        "native_status": "NICHT_ANWENDBAR"
+      },
+      "current_source_status": "ARCHITECTURALLY_EXCLUDED",
+      "current_claim": "NAV-Editor und Cecil-Netzbefehle/Custompackets werden nicht übernommen; Datenbearbeitung erfolgt offline.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1356,
+          "function": "BotDriver_HandleTimer"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "INTEGRITY"
+      ],
+      "remaining_native_evidence": "Bewusste Vanilla-Grenze, kein offenes Pflichtfeature dieses Ports.",
+      "historical_status": "ARCHITEKTONISCH_AUSGESCHLOSSEN",
+      "historical_offline_observation": {
+        "offline_status": "NICHT_ANWENDBAR",
+        "offline_evidence_ids": [],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Cecil-NAV-Editor und eigene Netzbefehle werden nicht in Vanilla-Netzverkehr eingebaut. NAV-Daten werden außerhalb der laufenden Simulation vorbereitet.",
+      "native_build": "Normal038"
     },
     {
       "id": "T14",
@@ -583,22 +974,53 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Pro Slot existieren getrennte Navigation, Wahrnehmung, Aim, Waffen- und Feuerzustände; Source-, Entity-, Todes- und Mapwechsel setzen diese zurück.",
-      "remaining_or_boundary": "Mehrfacher Rejoin, Mapwechsel und 100 reale Todesfälle bleiben Abnahmepflicht.",
+      "implementation": "Vier separate Slotstates mit klaren Lifecycle-/Mapresets; Entity-/Ray-Lebensdauer unter Networklock.",
+      "remaining_or_boundary": "Map-/Source-/Slotwechsel, Tod, Rejoin und Mehrprozess-Dauerlauf final prüfen.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
         "poc/candidates/redstation-supply-20261107/bot_human.h",
         "poc/candidates/redstation-supply-20261107/bot_perception.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "BRIDGE",
-        "HUMAN",
-        "INTEGRATION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_WIRED",
+      "current_claim": "Vier separate Slotstates mit klaren Lifecycle-/Mapresets; Entity-/Ray-Lebensdauer unter Networklock.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 32,
+          "function": "SSupplyState"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 862,
+          "function": "BotDriver_HandleTimer"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "LIFECYCLE",
+        "DURATION"
+      ],
+      "remaining_native_evidence": "Map-/Source-/Slotwechsel, Tod, Rejoin und Mehrprozess-Dauerlauf final prüfen.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "BRIDGE",
+          "HUMAN",
+          "INTEGRATION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Pro Slot existieren getrennte Navigation, Wahrnehmung, Aim, Waffen- und Feuerzustände; Source-, Entity-, Todes- und Mapwechsel setzen diese zurück."
     },
     {
       "id": "T15",
@@ -617,19 +1039,50 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Fortschrittsmessung, maximal zweisekündige unbegründete NAV-Holds und zeitweise Meidung des blockierenden Hops begrenzen UNREACHABLE-/zu-hohe-Ziele. Important-Kontext bleibt erhalten.",
-      "remaining_or_boundary": "Vorherige Builds zeigten dennoch lange native Stillstände. Frischer Kandidat muss dieselbe unveränderte Grenze von höchstens zehn Sekunden unbegründetem Stillstand erfüllen; alte Fehlbefunde bleiben sichtbar.",
+      "implementation": "Fortschritts-/Stuckfenster, bounded Recovery und stationär ausgerichtetes finales NoFloor-Feedback sind verbunden;038 unterdrückt keine Stuck-Recovery.",
+      "remaining_or_boundary": "Keine allgemeine Sackgassengarantie; finale <=10s-Idle-/Spawnreaktionsgrenzen nachweisen.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_motion.h",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "MOTION",
-        "BRIDGE"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Fortschritts-/Stuckfenster, bounded Recovery und stationär ausgerichtetes finales NoFloor-Feedback sind verbunden;038 unterdrückt keine Stuck-Recovery.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
+          "line": 108,
+          "function": "CecilNavigator::Update"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 934,
+          "function": "BotCecilSafeMotion"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "RECOVERY",
+        "DURATION"
+      ],
+      "remaining_native_evidence": "Keine allgemeine Sackgassengarantie; finale <=10s-Idle-/Spawnreaktionsgrenzen nachweisen.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "MOTION",
+          "BRIDGE"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Fortschrittsmessung, maximal zweisekündige unbegründete NAV-Holds und zeitweise Meidung des blockierenden Hops begrenzen UNREACHABLE-/zu-hohe-Ziele. Important-Kontext bleibt erhalten."
     },
     {
       "id": "T16",
@@ -648,22 +1101,57 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Cecil verwendet eine einzige finale Wand-/Pit-Recovery in Körperbasis; der alte Welt-XZ-Hindernispfad bleibt für Cecil deaktiviert und für Legacy erhalten. Sichere seitliche Ausweichrichtungen werden kurz in Weltkoordinaten gehalten und vor jeder Ausgabe erneut geprüft.",
-      "remaining_or_boundary": "Strafe-Gates, Richtungsfortschritt, Cooldown und begrenzter Rückzug verhindern den portabel reproduzierten Pendelfall. Maximal 16 gemeinsame Rays pro Tick; keine Garantie allgemeiner Sackgassenfreiheit. Ecken, Ränder und dynamische Hindernisse nativ prüfen.",
+      "implementation": "Originalnodes mit maximal3 LOS/Tick,4096-bit Scan, festen6s-Deadline/Backoff, echter Supportprüfung und begrenzten final geprüften Ersatzactions.",
+      "remaining_or_boundary": "Frische native Ecken-/Blocker-/Bodenlücken-/Liquid-Recovery und stabile Wiederaufnahme.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_motion.h",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
         "poc/candidates/redstation-supply-20261107/bot_navigation.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "BRIDGE",
-        "FRAME",
-        "ACTION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Originalnodes mit maximal3 LOS/Tick,4096-bit Scan, festen6s-Deadline/Backoff, echter Supportprüfung und begrenzten final geprüften Ersatzactions.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 492,
+          "function": "BotCecilReacquire"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 934,
+          "function": "BotCecilSafeMotion"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1308,
+          "function": "BotDriver_HandleTimer"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "RECOVERY"
+      ],
+      "remaining_native_evidence": "Frische native Ecken-/Blocker-/Bodenlücken-/Liquid-Recovery und stabile Wiederaufnahme.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "BRIDGE",
+          "FRAME",
+          "ACTION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Cecil verwendet eine einzige finale Wand-/Pit-Recovery in Körperbasis; der alte Welt-XZ-Hindernispfad bleibt für Cecil deaktiviert und für Legacy erhalten. Sichere seitliche Ausweichrichtungen werden kurz in Weltkoordinaten gehalten und vor jeder Ausgabe erneut geprüft."
     },
     {
       "id": "T17",
@@ -682,19 +1170,55 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Das ursprüngliche Preset steuert Pit-Vermeidung: nur bAvoidPits, kein bestätigtes Liquid und kein frisch validierter aktueller NAV-Punkt verlangen Bodenunterstützung. Default-Presets mit bAvoidPits=0 erhalten kein zusätzliches Pit-Veto.",
-      "remaining_or_boundary": "Fresh-Goal-/Zeit-/Hop-/Lockprüfungen verhindern Ausnahmen aus alten Ankern oder fehlgeschlagener Suche. Frame-, Zahlen-, Wand- und Budgetprüfung bleiben aktiv. Opt-in/offgraph verwendet weiterhin konservative 5/10-m-Rays statt mutierendem WouldFallInNextPosition mit 16-m-StepDown; keine physikalische Äquivalenz behauptet. Brücken und erlaubte Abstiege nativ erneut prüfen.",
+      "implementation": "Physische FloorProbes ersetzen mutierendes WouldFall. Ordinary-Pit-Gate folgt Preset/currentPoint; akzeptierte Ground-Recovery erzwingt Floor. Originaler PASSABLE-Rayhelper ist angebunden.",
+      "remaining_or_boundary": "Reale Rand-/Brücken-/Abstieg-/Supportwirkung final prüfen; bAvoidPits=0 ist kein pauschaler Recovery-Floor-Bypass.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "BRIDGE",
-        "ACTION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_READONLY_REPLACEMENT",
+      "current_claim": "Physische FloorProbes ersetzen mutierendes WouldFall. Ordinary-Pit-Gate folgt Preset/currentPoint; akzeptierte Ground-Recovery erzwingt Floor. Originaler PASSABLE-Rayhelper ist angebunden.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 214,
+          "function": "BotCecilPhysicalCast"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 953,
+          "function": "BotCecilSafeMotion"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 875,
+          "function": "BotCecilFloor"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "RECOVERY",
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Reale Rand-/Brücken-/Abstieg-/Supportwirkung final prüfen; bAvoidPits=0 ist kein pauschaler Recovery-Floor-Bypass.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "BRIDGE",
+          "ACTION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Das ursprüngliche Preset steuert Pit-Vermeidung: nur bAvoidPits, kein bestätigtes Liquid und kein frisch validierter aktueller NAV-Punkt verlangen Bodenunterstützung. Default-Presets mit bAvoidPits=0 erhalten kein zusätzliches Pit-Veto."
     },
     {
       "id": "T18",
@@ -713,8 +1237,8 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Bestätigte PST_SWIM-/PST_DIVE-Zustände besitzen dreidimensionale normale Actions ohne Pit-Bodenpflicht. Körperbasis und reale Gravitation steuern NAV, Anker, Wand-/Bodenprüfung und Combat-Aim/FOV; ungültige Frames werden neutralisiert.",
-      "remaining_or_boundary": "Schwimmen nivelliert den tatsächlichen Blickpitch, bevor Vorwärtsbewegung freigegeben wird; Combatpriorität kann das verzögern. Normal-, invertierte und geneigte Basis sind portabel geprüft. Echte Skulls-ForceU-Traversierung und Hole-Wasserübergänge bleiben nativ offen. Fehlende eingehende Kanten zu Skulls294/295 sind kein N/A-Beleg.",
+      "implementation": "Native SWIM/DIVE/Gravity-Frames steuern3D-Actions. Levelingwaiver nur bei<=.01deg und tatsächlich unencodierbarer FLOAT-Addition; sonst ursprüngliches Leveling.",
+      "remaining_or_boundary": "Echte Wasser-/Luft-/Gravityübergänge, invertierte Wege und Rückkehr in Bewegung nachweisen.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_frame.h",
         "poc/candidates/redstation-supply-20261107/cecil_motion.h",
@@ -724,17 +1248,48 @@
         "poc/candidates/redstation-supply-20261107/bot_perception.h",
         "poc/candidates/redstation-supply-20261107/bot_human.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "FRAME",
-        "HEAD_BODY",
-        "MOTION",
-        "BRIDGE",
-        "ACTION",
-        "HUMAN"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Native SWIM/DIVE/Gravity-Frames steuern3D-Actions. Levelingwaiver nur bei<=.01deg und tatsächlich unencodierbarer FLOAT-Addition; sonst ursprüngliches Leveling.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 460,
+          "function": "BotCecilSwimMotion"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 154,
+          "function": "BotCecilBodyFrame"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "MAPS",
+        "RECOVERY"
+      ],
+      "remaining_native_evidence": "Echte Wasser-/Luft-/Gravityübergänge, invertierte Wege und Rückkehr in Bewegung nachweisen.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "FRAME",
+          "HEAD_BODY",
+          "MOTION",
+          "BRIDGE",
+          "ACTION",
+          "HUMAN"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Bestätigte PST_SWIM-/PST_DIVE-Zustände besitzen dreidimensionale normale Actions ohne Pit-Bodenpflicht. Körperbasis und reale Gravitation steuern NAV, Anker, Wand-/Bodenprüfung und Combat-Aim/FOV; ungültige Frames werden neutralisiert."
     },
     {
       "id": "T19",
@@ -753,19 +1308,50 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Follow nutzt ausschließlich eingefrorene wahrgenommene Positionen mit Entity-ID, Mapgeneration und Ablaufzeit; Items und unmittelbarer Kampf werden priorisiert.",
-      "remaining_or_boundary": "Originales allwissendes Follow und Coop-Catch-up werden nicht übernommen. iFollowPlayers ist für ausschließlich feindliche FFA-Spieler kein allgemeiner Freund-Follow-Adapter.",
+      "implementation": "Follow nutzt eingefrorene Beobachtung mit Entity-ID/Generation/Expiry und bestehender Zielarbitration.",
+      "remaining_or_boundary": "Native Sichtverlust-/Entityverlust-/Map-/Kampfarbitration; kein autoritatives Coop-Catch-up.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "BRIDGE",
-        "HUMAN"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Follow nutzt eingefrorene Beobachtung mit Entity-ID/Generation/Expiry und bestehender Zielarbitration.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 435,
+          "function": "BotCecilFollowValid"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 441,
+          "function": "BotCecilFollow"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "LIFECYCLE",
+        "MAPS"
+      ],
+      "remaining_native_evidence": "Native Sichtverlust-/Entityverlust-/Map-/Kampfarbitration; kein autoritatives Coop-Catch-up.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "BRIDGE",
+          "HUMAN"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Follow nutzt ausschließlich eingefrorene wahrgenommene Positionen mit Entity-ID, Mapgeneration und Ablaufzeit; Items und unmittelbarer Kampf werden priorisiert."
     },
     {
       "id": "T20",
@@ -784,18 +1370,48 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Cecil-Priorität aus Sichtbarkeit, relativer Gesundheit und Distanz arbeitet auf Human-reaktionsfreigegebenen Beobachtungen in stabiler Slotreihenfolge; fTargetCD gilt.",
-      "remaining_or_boundary": "Stabile Slots ersetzen bewusst Containerreihenfolge; fremde Bot-Zielpointer werden nicht gelesen.",
+      "implementation": "Cecil-Zielpriorität/Cooldown wird mit stabiler Reihenfolge im Human-Controller konsumiert; vorhandene Reaktions-/Perzeptionsgrenze bleibt.",
+      "remaining_or_boundary": "Reale Target-CD-/Sichtverlust-/Kampfwirkung.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/bot_human.h",
         "poc/candidates/redstation-supply-20261107/bot_perception.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "HUMAN"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_HYBRID",
+      "current_claim": "Cecil-Zielpriorität/Cooldown wird mit stabiler Reihenfolge im Human-Controller konsumiert; vorhandene Reaktions-/Perzeptionsgrenze bleibt.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_human.h",
+          "line": 368,
+          "function": "HumanBotPolicy::ChooseCecilTarget"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1041,
+          "function": "BotDriver_HandleTimer"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Reale Target-CD-/Sichtverlust-/Kampfwirkung.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "HUMAN"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Cecil-Priorität aus Sichtbarkeit, relativer Gesundheit und Distanz arbeitet auf Human-reaktionsfreigegebenen Beobachtungen in stabiler Slotreihenfolge; fTargetCD gilt."
     },
     {
       "id": "T21",
@@ -814,18 +1430,43 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Gleiche nichtleere Teams werden seit 7bc6cfa als Gegner ausgeschlossen. Leeres eigenes Team behält die Original-FFA-Semantik.",
-      "remaining_or_boundary": "Monster-/Template-Auswahl und Coop sind für diese fünf Fragmatch-Instanzen nicht anwendbar und nicht implementiert.",
+      "implementation": "Spieler-FFA und Teamnamenfilter sind angebunden; Monster-/Template-/Coop-Controller gehören nicht zum freigegebenen FFA-Port.",
+      "remaining_or_boundary": "Native Teamfilterwirkung; keine vollständige Monsterparität behauptet.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
         "poc/candidates/redstation-supply-20261107/bot_perception.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "INTEGRATION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_FFA_SUBSET",
+      "current_claim": "Spieler-FFA und Teamnamenfilter sind angebunden; Monster-/Template-/Coop-Controller gehören nicht zum freigegebenen FFA-Port.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1027,
+          "function": "BotDriver_HandleTimer"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Native Teamfilterwirkung; keine vollständige Monsterparität behauptet.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "INTEGRATION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Gleiche nichtleere Teams werden seit 7bc6cfa als Gegner ausgeschlossen. Leeres eigenes Team behält die Original-FFA-Semantik."
     },
     {
       "id": "T22",
@@ -844,21 +1485,56 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "BEREITS_VORHANDEN_OFFLINE_GEPRUEFT",
-      "implementation": "Budgetierte Human-Sichtprüfung und eingefrorene Weltpositions-Tracks bleiben erhalten; Aim/FOV transformieren die Welt-Differenz in die aktuelle Körperbasis. Item-Verbindungsstrahlen beziehen das jeweilige Item ein.",
-      "remaining_or_boundary": "TT_COLLISIONBOX bleibt eine bewusste Abweichung vom Original-TT_NONE. Reale Wand-/Modell-/Portalresultate sowie Sicht bei Gravitationswechsel sind nicht durch Stubs bewiesen.",
+      "implementation": "Combat-LOS bleibt Human-budgetiert mit Collisionbox und Gedächtnis; physische Movement-Rays sind getrennt. Kein Anspruch auf originales TT_NONE-Verhalten.",
+      "remaining_or_boundary": "Reale Wand-/Modell-/Portal-LOS separat prüfen; physische Maskkorrektur ist kein Combat-LOS-Paritätsbeleg.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
         "poc/candidates/redstation-supply-20261107/bot_perception.h"
       ],
-      "offline_status": "TEILWEISE",
-      "offline_evidence_ids": [
-        "HUMAN",
-        "BRIDGE",
-        "HEAD_BODY"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "EXISTING_HUMAN_LOS_ADAPTED",
+      "current_claim": "Combat-LOS bleibt Human-budgetiert mit Collisionbox und Gedächtnis; physische Movement-Rays sind getrennt. Kein Anspruch auf originales TT_NONE-Verhalten.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 718,
+          "function": "BotCombatVisible"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_human.h",
+          "line": 166,
+          "function": "HumanBotPolicy::PlanLosQueries"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_perception.h",
+          "line": 133,
+          "function": "Perception::Observe"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Reale Wand-/Modell-/Portal-LOS separat prüfen; physische Maskkorrektur ist kein Combat-LOS-Paritätsbeleg.",
+      "historical_status": "BEREITS_VORHANDEN_OFFLINE_GEPRUEFT",
+      "historical_offline_observation": {
+        "offline_status": "TEILWEISE",
+        "offline_evidence_ids": [
+          "HUMAN",
+          "BRIDGE",
+          "HEAD_BODY"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Budgetierte Human-Sichtprüfung und eingefrorene Weltpositions-Tracks bleiben erhalten; Aim/FOV transformieren die Welt-Differenz in die aktuelle Körperbasis. Item-Verbindungsstrahlen beziehen das jeweilige Item ein."
     },
     {
       "id": "T23",
@@ -877,20 +1553,51 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Ziel, Distanz und Gesundheit stammen aus derselben Beobachtung. Tod und Identitätswechsel löschen Tracks; verdeckte Positionen werden nicht aktualisiert.",
-      "remaining_or_boundary": "Human-Gedächtnisdauer bleibt bewusst profilabhängig; Reisemesser hat davon getrennt die Original-Zweisekundenregel.",
+      "implementation": "Sichtbeobachtungen werden eingefroren, Visible/Remembered getrennt und IDs/Lifecycle invalidiert; keine aktuelle verdeckte Entityposition als neue Beobachtung.",
+      "remaining_or_boundary": "Native Occlusion-/Cooldown-/Rejoin-Korrelation.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/bot_human.h",
         "poc/candidates/redstation-supply-20261107/bot_perception.h",
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "HUMAN",
-        "INTEGRATION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Sichtbeobachtungen werden eingefroren, Visible/Remembered getrennt und IDs/Lifecycle invalidiert; keine aktuelle verdeckte Entityposition als neue Beobachtung.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_perception.h",
+          "line": 133,
+          "function": "Perception::Observe"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_perception.h",
+          "line": 237,
+          "function": "Perception::Remembered"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT",
+        "LIFECYCLE"
+      ],
+      "remaining_native_evidence": "Native Occlusion-/Cooldown-/Rejoin-Korrelation.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "HUMAN",
+          "INTEGRATION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Ziel, Distanz und Gesundheit stammen aus derselben Beobachtung. Tod und Identitätswechsel löschen Tracks; verdeckte Positionen werden nicht aktualisiert."
     },
     {
       "id": "T24",
@@ -909,18 +1616,48 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Alle 30 originalen Waffenzeilen einschließlich NONE bleiben mit Herkunft erhalten; Ratings werden nicht als gemessene DPS bezeichnet.",
-      "remaining_or_boundary": "Coop-Tabelle ist datengetreu vorhanden, aber nicht im Fragmatch-Runtimepfad qualifiziert.",
+      "implementation": "30 Originalwaffenzeilen inklusive NONE sind vorhanden und über CecilBestWeapon tatsächlich aktiv; Coop-Daten sind kein aktiver Coop-Port.",
+      "remaining_or_boundary": "Native tatsächliche Benutzung final belegen; Tabellenwerte sind keine gemessenen DPS.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_rules.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "RULES",
-        "EXPORT"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_WIRED",
+      "current_claim": "30 Originalwaffenzeilen inklusive NONE sind vorhanden und über CecilBestWeapon tatsächlich aktiv; Coop-Daten sind kein aktiver Coop-Port.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_rules.h",
+          "line": 17,
+          "function": "CecilWeapons"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_loadout.h",
+          "line": 179,
+          "function": "WeaponSelector::Update"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Native tatsächliche Benutzung final belegen; Tabellenwerte sind keine gemessenen DPS.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "RULES",
+          "EXPORT"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Alle 30 originalen Waffenzeilen einschließlich NONE bleiben mit Herkunft erhalten; Ratings werden nicht als gemessene DPS bezeichnet."
     },
     {
       "id": "T25",
@@ -939,21 +1676,51 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Cecil-Scores nutzen sichere IDs, Besitz, Munitionsbedarf und Reichweite; Human-Hysterese bleibt erhalten. Single Colt wird nach Double-Colt-Pickup nicht festgehalten.",
-      "remaining_or_boundary": "Bewusste Korrekturen: sichere NONE-Behandlung und konservative Nahdistanz. Native Waffenwirksamkeit bleibt offen.",
+      "implementation": "Cecil-Rating nutzt owned/usable/ammo/range/allowed; Human-Hysterese und DoubleColt-Korrektur bleiben; SafeRange wird vor Feuer erneut geprüft.",
+      "remaining_or_boundary": "Fünf geforderte Waffen real besitzen/auswählen/wechseln und sicher feuern.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_rules.h",
         "poc/candidates/redstation-supply-20261107/bot_loadout.h",
         "poc/candidates/redstation-supply-20261107/BotCecilItems.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "RULES",
-        "ITEMS",
-        "INTEGRATION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_HYBRID",
+      "current_claim": "Cecil-Rating nutzt owned/usable/ammo/range/allowed; Human-Hysterese und DoubleColt-Korrektur bleiben; SafeRange wird vor Feuer erneut geprüft.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_loadout.h",
+          "line": 145,
+          "function": "WeaponSelector"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_rules.h",
+          "line": 78,
+          "function": "CecilFireRangeSafe"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Fünf geforderte Waffen real besitzen/auswählen/wechseln und sicher feuern.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "RULES",
+          "ITEMS",
+          "INTEGRATION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Cecil-Scores nutzen sichere IDs, Besitz, Munitionsbedarf und Reichweite; Human-Hysterese bleibt erhalten. Single Colt wird nach Double-Colt-Pickup nicht festgehalten."
     },
     {
       "id": "T26",
@@ -972,19 +1739,55 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Bestehende Retail-Gruppenpulse werden genau einmal nach Arbitration erzeugt. Feuer verlangt aktuelle, gewünschte und entschiedene Waffe identisch.",
-      "remaining_or_boundary": "Reale Wechselanimationen und Pickup→Current-Übergänge jeder relevanten Waffe prüfen.",
+      "implementation": "Ein WeaponInput.Poll nach Arbitration; Feuer verlangt current==wanted==desired und reguläre native Auswahlbuttons.",
+      "remaining_or_boundary": "Reale Switchlatenz inkl. Animation/CD sowie Feuer-/Respawnwechsel.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/bot_weapon_input.h",
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "INTEGRATION",
-        "RULES"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_CLIENT_ACTION_ADAPTER",
+      "current_claim": "Ein WeaponInput.Poll nach Arbitration; Feuer verlangt current==wanted==desired und reguläre native Auswahlbuttons.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1224,
+          "function": "BotDriver_HandleTimer"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_weapon_input.h",
+          "line": 18,
+          "function": "CombatWeaponInput::Poll"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_rules.h",
+          "line": 359,
+          "function": "CecilFireState::Poll"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT",
+        "LIFECYCLE"
+      ],
+      "remaining_native_evidence": "Reale Switchlatenz inkl. Animation/CD sowie Feuer-/Respawnwechsel.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "INTEGRATION",
+          "RULES"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Bestehende Retail-Gruppenpulse werden genau einmal nach Arbitration erzeugt. Feuer verlangt aktuelle, gewünschte und entschiedene Waffe identisch."
     },
     {
       "id": "T27",
@@ -1003,19 +1806,54 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Granaten besitzen Hold/Release-Zyklus mit mindestens einem losgelassenen Sample. Scope folgt sichtbarem Ziel und bestätigtem Sniping-Zustand mit 0,2 Sekunden Abstand.",
-      "remaining_or_boundary": "Granatenabwurf, Scope und normale Feuerfolgen sind noch nicht nativ nachgewiesen.",
+      "implementation": "FireState komponiert Grenade-Hold/Release und Scope-Toggle über normale Buttons mit Aim/Visible/Alive/Preset/Current/SafeRange-Gates.",
+      "remaining_or_boundary": "Granatenabgabe, Scopewirkung, explosive Nahsicherheit und Treffer/Score real belegen; Fireaction allein ist kein Treffer.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_rules.h",
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "RULES",
-        "HUMAN"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_CLIENT_ACTION_ADAPTER",
+      "current_claim": "FireState komponiert Grenade-Hold/Release und Scope-Toggle über normale Buttons mit Aim/Visible/Alive/Preset/Current/SafeRange-Gates.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_rules.h",
+          "line": 351,
+          "function": "CecilFireState::Poll"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_rules.h",
+          "line": 374,
+          "function": "CecilFireState::ScopeButtons"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1296,
+          "function": "BotDriver_HandleTimer"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Granatenabgabe, Scopewirkung, explosive Nahsicherheit und Treffer/Score real belegen; Fireaction allein ist kein Treffer.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "RULES",
+          "HUMAN"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Granaten besitzen Hold/Release-Zyklus mit mindestens einem losgelassenen Sample. Scope folgt sichtbarem Ziel und bestätigtem Sniping-Zustand mit 0,2 Sekunden Abstand."
     },
     {
       "id": "T28",
@@ -1034,8 +1872,8 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Human-Beschleunigung, Bremsen, Bias und Settling bleiben erhalten; Cecil-Drehparameter begrenzen den Delta. Vorhalt nutzt das Maximum beider Modelle. Native lokale Kopfwinkel, Körperbasis und Sniper-Winkeldämpfung werden konsistent berücksichtigt.",
-      "remaining_or_boundary": "Weltpositionen im Gedächtnis werden nicht mitgedreht. Bewusste Hybrid-Adaption, keine identische Cecil-Ballistik. Tatsächlicher Restwinkel, Feuer und Aim auf invertierter Gravitation bleiben native Prüfpflicht.",
+      "implementation": "Human-Aim/Settling/Bias bleibt; Cecil-Turnlimit/Prediction werden integriert, ohne doppelte Vorhalteaddition oder behauptete physikalische Ballistik.",
+      "remaining_or_boundary": "Reale Treffer/Score bei Weapon-/Gravitywechsel und relevanten Distanzen.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/bot_human.h",
         "poc/candidates/redstation-supply-20261107/bot_aim.h",
@@ -1043,15 +1881,45 @@
         "poc/candidates/redstation-supply-20261107/cecil_frame.h",
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "HUMAN",
-        "FRAME",
-        "HEAD_BODY",
-        "ACTION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_HYBRID",
+      "current_claim": "Human-Aim/Settling/Bias bleibt; Cecil-Turnlimit/Prediction werden integriert, ohne doppelte Vorhalteaddition oder behauptete physikalische Ballistik.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_human.h",
+          "line": 68,
+          "function": "CecilTurnLimit"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_human.h",
+          "line": 203,
+          "function": "HumanBotPolicy::Step"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Reale Treffer/Score bei Weapon-/Gravitywechsel und relevanten Distanzen.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "HUMAN",
+          "FRAME",
+          "HEAD_BODY",
+          "ACTION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Human-Beschleunigung, Bremsen, Bias und Settling bleiben erhalten; Cecil-Drehparameter begrenzen den Delta. Vorhalt nutzt das Maximum beider Modelle. Native lokale Kopfwinkel, Körperbasis und Sniper-Winkeldämpfung werden konsistent berücksichtigt."
     },
     {
       "id": "T29",
@@ -1070,21 +1938,51 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Human-Strafing, bevorzugte Distanz, Persönlichkeit und Health-Retreat bleiben auf ausdrücklichen Nutzerwunsch erhalten. Cecil-Speed-/Strafe-Gates greifen zusätzlich.",
-      "remaining_or_boundary": "Originales Waffen-Strafing-Rating bleibt unverändert als Daten erhalten, ersetzt aber nicht Human MoveIntent; keine Verhaltensparität für diese Formel behaupten.",
+      "implementation": "Human MoveIntent/Retreat und individuelle Profile bleiben; Cecil-Strafe-/Speed-/Turn-Gates begrenzen die resultierenden Actions.",
+      "remaining_or_boundary": "Native Distanz-/HP-/Profilwirkung; keine Deckungs-/Flankengarantie.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/bot_human.h",
         "poc/candidates/redstation-supply-20261107/cecil_rules.h",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "HUMAN",
-        "EXPORT",
-        "BRIDGE"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_HYBRID",
+      "current_claim": "Human MoveIntent/Retreat und individuelle Profile bleiben; Cecil-Strafe-/Speed-/Turn-Gates begrenzen die resultierenden Actions.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_human.h",
+          "line": 443,
+          "function": "HumanBotPolicy::MoveIntent"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1286,
+          "function": "BotDriver_HandleTimer"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Native Distanz-/HP-/Profilwirkung; keine Deckungs-/Flankengarantie.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "HUMAN",
+          "EXPORT",
+          "BRIDGE"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Human-Strafing, bevorzugte Distanz, Persönlichkeit und Health-Retreat bleiben auf ausdrücklichen Nutzerwunsch erhalten. Cecil-Speed-/Strafe-Gates greifen zusätzlich."
     },
     {
       "id": "T30",
@@ -1103,19 +2001,59 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Typisierte Policy priorisiert Waffen, Gesundheit, Powerups, Rüstung, Packs und Munition. Kandidaten werden vor der Nearest-Wahl auf Bedarf geprüft.",
-      "remaining_or_boundary": "Dokumentierte Fehlerkorrekturen betreffen Health-/Armor-Bänder, ungeeignete nächste Items und Packs außerhalb der Reichweite; reale Pickupquote offen.",
+      "implementation": "Acquisition und tatsächliche Retention-Need getrennt; fairer bounded Scan plus urgent mapped Weapon. Ordinary12s darf nur einmal nach echter Relocation bis absolut45s erweitert werden.",
+      "remaining_or_boundary": "Frische feste erste10 Ziele und mindestens10 frische Spawns mit Typ-/Ownershipkorrelation; keine ersetzten censored/failed Fälle.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_rules.h",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "RULES",
-        "BRIDGE"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Acquisition und tatsächliche Retention-Need getrennt; fairer bounded Scan plus urgent mapped Weapon. Ordinary12s darf nur einmal nach echter Relocation bis absolut45s erweitert werden.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_rules.h",
+          "line": 318,
+          "function": "CecilChooseItem"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_rules.h",
+          "line": 288,
+          "function": "CecilRetainItem"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 368,
+          "function": "BotCecilChooseGoal"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 694,
+          "function": "BotCecilRebudgetWeapon"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "SUPPLY"
+      ],
+      "remaining_native_evidence": "Frische feste erste10 Ziele und mindestens10 frische Spawns mit Typ-/Ownershipkorrelation; keine ersetzten censored/failed Fälle.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "RULES",
+          "BRIDGE"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Typisierte Policy priorisiert Waffen, Gesundheit, Powerups, Rüstung, Packs und Munition. Kandidaten werden vor der Nearest-Wahl auf Bedarf geprüft."
     },
     {
       "id": "T31",
@@ -1134,20 +2072,56 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Read-only Snapshots prüfen Klasse, Wert, OverTop, Eigen-Pickupmaske, Hidden/Deleted, Position und Generation. Packs bilden acht Reserven ab. Waffenbesitzzuwachs und bestätigter Eigenpickup eines WeaponsStay-Ziels werden getrennt protokolliert.",
-      "remaining_or_boundary": "WeaponsStay-Eigenpickup ist ein eng begrenzter Vertrag, kein universeller Erfolgsschluss aus Despawn oder Besitzänderung. ABI-/Entitylayout, reale Item-Sichtprüfung und Pickupquote bleiben offen; Legacy-AmmoItem 6/8/9 bleiben begründet ausgeschlossen.",
+      "implementation": "Typed Items prüfen Klasse, Verfügbarkeit, Masken, Bedarf, Position, Generation und physische Connectoren; lokale Augen-LOS-Rejections bleiben getrennt von globalen.",
+      "remaining_or_boundary": "Native Ownershipgain mit tatsächlichem Typed-Ziel corroborieren; bloß verschwundenes Ziel ist kein Pickupbeleg.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotCecilItems.h",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "ITEMS",
-        "RULES",
-        "BRIDGE"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Typed Items prüfen Klasse, Verfügbarkeit, Masken, Bedarf, Position, Generation und physische Connectoren; lokale Augen-LOS-Rejections bleiben getrennt von globalen.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotCecilItems.h",
+          "line": 57,
+          "function": "BotCecilReadItem"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotCecilItems.h",
+          "line": 50,
+          "function": "BotCecilWeaponGoalPicked"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 327,
+          "function": "BotCecilChooseMappedWeapon"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "SUPPLY",
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Native Ownershipgain mit tatsächlichem Typed-Ziel corroborieren; bloß verschwundenes Ziel ist kein Pickupbeleg.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "ITEMS",
+          "RULES",
+          "BRIDGE"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Read-only Snapshots prüfen Klasse, Wert, OverTop, Eigen-Pickupmaske, Hidden/Deleted, Position und Generation. Packs bilden acht Reserven ab. Waffenbesitzzuwachs und bestätigter Eigenpickup eines WeaponsStay-Ziels werden getrennt protokolliert."
     },
     {
       "id": "T32",
@@ -1166,18 +2140,48 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Seit 7bc6cfa ist Reisemesser von Bewegungs-Override getrennt und erst nach mehr als zwei Sekunden ohne Sichtkontakt erlaubt.",
-      "remaining_or_boundary": "Travel→Combat→Travel mit realer Waffenanimation und kurzen Occlusions prüfen.",
+      "implementation": "Reisemesser folgt>2s seit letzter Sichtung; tatsächlicher Auswahlpoll folgt Arbitration und wählt bei Kampf wieder passende Waffe.",
+      "remaining_or_boundary": "Reale Travel→Combat→Travel-Auswahl/Currentwechsel.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_rules.h",
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "INTEGRATION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ADAPTED",
+      "current_claim": "Reisemesser folgt>2s seit letzter Sichtung; tatsächlicher Auswahlpoll folgt Arbitration und wählt bei Kampf wieder passende Waffe.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_rules.h",
+          "line": 345,
+          "function": "CecilTravelKnife"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1221,
+          "function": "BotDriver_HandleTimer"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Reale Travel→Combat→Travel-Auswahl/Currentwechsel.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "INTEGRATION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Seit 7bc6cfa ist Reisemesser von Bewegungs-Override getrennt und erst nach mehr als zwei Sekunden ohne Sichtkontakt erlaubt."
     },
     {
       "id": "T33",
@@ -1196,20 +2200,51 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Respawn verwendet reguläre Fire-Press/Release-Actions und Presetverzögerung; fehlende Entities erlauben nur zuvor angehängten Sources eine Anfrage.",
-      "remaining_or_boundary": "Absolute akkumulierte Rotation bleibt erhalten. 100 Todesfälle, fehlende Entity und Rejoin sind nativ offen.",
+      "implementation": "Normale Fire-Respawn-Actions folgen Presetdelay; Entity-/Slot-/Source-/Path-/Firezustand resetten. Spawn-/Death-Telemetrie ist vorhanden.",
+      "remaining_or_boundary": "100 echte Todesfälle, Presetdelay+5s-Reaktion, fehlende Entity/Slot-/Rejoin-Lifecycle final nachweisen.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h"
       ],
-      "offline_status": "TEILWEISE",
-      "offline_evidence_ids": [
-        "BRIDGE",
-        "HUMAN",
-        "INTEGRATION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_CLIENT_ACTION_ADAPTER",
+      "current_claim": "Normale Fire-Respawn-Actions folgen Presetdelay; Entity-/Slot-/Source-/Path-/Firezustand resetten. Spawn-/Death-Telemetrie ist vorhanden.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1274,
+          "function": "BotDriver_HandleTimer"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 724,
+          "function": "BotSupplyTick"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "LIFECYCLE",
+        "DURATION"
+      ],
+      "remaining_native_evidence": "100 echte Todesfälle, Presetdelay+5s-Reaktion, fehlende Entity/Slot-/Rejoin-Lifecycle final nachweisen.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "TEILWEISE",
+        "offline_evidence_ids": [
+          "BRIDGE",
+          "HUMAN",
+          "INTEGRATION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Respawn verwendet reguläre Fire-Press/Release-Actions und Presetverzögerung; fehlende Entities erlauben nur zuvor angehängten Sources eine Anfrage."
     },
     {
       "id": "T34",
@@ -1228,22 +2263,58 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Vier Originalpresets mit 119 Zuweisungen plus Konstruktorfeldern bleiben getrennt von Human-Profilen erhalten. Speed/Strafe/Jump und der zuvor ignorierte bAvoidPits-Schalter sind an den nativen Ausgang angebunden.",
-      "remaining_or_boundary": "Keine Gleichsetzung mit den fünf Human-Skillstufen. b3rdPerson/iCrosshair sind lokale Darstellungswerte. Tatsächlich gewähltes Preset und aktive Werte je Instanz weiterhin dokumentieren.",
+      "implementation": "Vier originale Cecil-Presets bleiben separat von Human-Persönlichkeiten und werden nativ an Human/Navigation/Fire gereicht.",
+      "remaining_or_boundary": "Effektives Preset je Instanz korrelieren; Präsentationsoptionen sind keine zusätzlichen KI-Subsysteme.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_rules.h",
         "poc/candidates/redstation-supply-20261107/bot_human.h",
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "RULES",
-        "EXPORT",
-        "HUMAN",
-        "BRIDGE"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_WIRED",
+      "current_claim": "Vier originale Cecil-Presets bleiben separat von Human-Persönlichkeiten und werden nativ an Human/Navigation/Fire gereicht.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_rules.h",
+          "line": 117,
+          "function": "CecilPreset"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/bot_human.h",
+          "line": 85,
+          "function": "HumanBotPolicy::Configure"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 625,
+          "function": "BotHumanAttach"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "INTEGRITY",
+        "COMBAT"
+      ],
+      "remaining_native_evidence": "Effektives Preset je Instanz korrelieren; Präsentationsoptionen sind keine zusätzlichen KI-Subsysteme.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "RULES",
+          "EXPORT",
+          "HUMAN",
+          "BRIDGE"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Vier Originalpresets mit 119 Zuweisungen plus Konstruktorfeldern bleiben getrennt von Human-Profilen erhalten. Speed/Strafe/Jump und der zuvor ignorierte bAvoidPits-Schalter sind an den nativen Ausgang angebunden."
     },
     {
       "id": "T35",
@@ -1262,19 +2333,50 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Originales raw sizeof(struct)-Speichern ist ausgeschlossen. Ein streng versioniertes Textschema wählt explizit eines der vier Presets.",
-      "remaining_or_boundary": "Schema 1 erlaubt keine beliebigen Feldüberschreibungen; dies ist ein bewusster kleiner Konfigurationsumfang.",
+      "implementation": "Explizites versioniertes Preset-Textschema ersetzt rohe sizeof(Settings)-Serialisierung und wird im nativen Loader konsumiert.",
+      "remaining_or_boundary": "Native fehlende/ungültige/stale Schema-/Mapfälle; keine ABI-Raw-Parität behauptet.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/cecil_rules.h",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "RULES",
-        "EXPORT"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_SCHEMA_REPLACEMENT",
+      "current_claim": "Explizites versioniertes Preset-Textschema ersetzt rohe sizeof(Settings)-Serialisierung und wird im nativen Loader konsumiert.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/cecil_rules.h",
+          "line": 250,
+          "function": "CecilParseSettings"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 96,
+          "function": "BotSupplyUpdateNavigation"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "INTEGRITY",
+        "LIFECYCLE"
+      ],
+      "remaining_native_evidence": "Native fehlende/ungültige/stale Schema-/Mapfälle; keine ABI-Raw-Parität behauptet.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "RULES",
+          "EXPORT"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Originales raw sizeof(struct)-Speichern ist ausgeschlossen. Ein streng versioniertes Textschema wählt explizit eines der vier Presets."
     },
     {
       "id": "T36",
@@ -1293,8 +2395,8 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "IMPLEMENTIERT",
-      "implementation": "Enginefreie Regel-, Human-, Nav- und Bewegungsmodule werden durch read-only Snapshots mit einer finalen nativen Action-Komposition verbunden.",
-      "remaining_or_boundary": "Keine direkte Übernahme des entitygebundenen Originalcontrollers; native Lebensdauer und Last bleiben offen.",
+      "implementation": "Enginefreie Policy/Navigation wird im nativen Timer unter Networklock konsumiert; endliche finale Actions laufen über CPlayerSource::SetAction.",
+      "remaining_or_boundary": "Controller-Lifetime, ABI/Sync und Ressourcen erfordern finale native Dauerbelege.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
         "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
@@ -1302,14 +2404,51 @@
         "poc/candidates/redstation-supply-20261107/cecil_rules.h",
         "poc/candidates/redstation-supply-20261107/cecil_motion.h"
       ],
-      "offline_status": "PASS",
-      "offline_evidence_ids": [
-        "HUMAN",
-        "BRIDGE",
-        "INTEGRATION"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "PRESENT_ENGINEFREE_CORE_NATIVE_ADAPTER",
+      "current_claim": "Enginefreie Policy/Navigation wird im nativen Timer unter Networklock konsumiert; endliche finale Actions laufen über CPlayerSource::SetAction.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/Game.cpp",
+          "line": 759,
+          "function": "CGame timer entry"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 862,
+          "function": "BotDriver_HandleTimer"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1356,
+          "function": "BotDriver_HandleTimer"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "INTEGRITY",
+        "DURATION",
+        "RESOURCE"
+      ],
+      "remaining_native_evidence": "Controller-Lifetime, ABI/Sync und Ressourcen erfordern finale native Dauerbelege.",
+      "historical_status": "IMPLEMENTIERT",
+      "historical_offline_observation": {
+        "offline_status": "PASS",
+        "offline_evidence_ids": [
+          "HUMAN",
+          "BRIDGE",
+          "INTEGRATION"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Enginefreie Regel-, Human-, Nav- und Bewegungsmodule werden durch read-only Snapshots mit einer finalen nativen Action-Komposition verbunden."
     },
     {
       "id": "T37",
@@ -1328,12 +2467,37 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "ARCHITEKTONISCH_AUSGESCHLOSSEN",
-      "implementation": "PlayerBot-Subclass und ersetzte Server-Entities werden nicht ausgerollt. Bots bleiben gewöhnliche Netzwerkspieler mit regulären Actions.",
-      "remaining_or_boundary": "Unveränderte Engine-/Entities-/Dedicated-Hashes sind vor und nach Runtime-/Rolloutschritten separat nachzuweisen.",
+      "implementation": "Originale PlayerBot-/EntitiesMP-Subklassen werden nicht übernommen; Bots bleiben normale Netzwerkspieler mit Vanilla-Entities.",
+      "remaining_or_boundary": "Originalkomponenten vor/nach finalen Gates hashen; keine Server-/Clientänderung behaupten ohne Manifest.",
       "code_references": [],
-      "offline_status": "NICHT_ANWENDBAR",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NICHT_ANWENDBAR"
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "historical_native_observation": {
+        "native_status": "NICHT_ANWENDBAR"
+      },
+      "current_source_status": "ARCHITECTURALLY_EXCLUDED",
+      "current_claim": "Originale PlayerBot-/EntitiesMP-Subklassen werden nicht übernommen; Bots bleiben normale Netzwerkspieler mit Vanilla-Entities.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1356,
+          "function": "BotDriver_HandleTimer"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "INTEGRITY"
+      ],
+      "remaining_native_evidence": "Originalkomponenten vor/nach finalen Gates hashen; keine Server-/Clientänderung behaupten ohne Manifest.",
+      "historical_status": "ARCHITEKTONISCH_AUSGESCHLOSSEN",
+      "historical_offline_observation": {
+        "offline_status": "NICHT_ANWENDBAR",
+        "offline_evidence_ids": [],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "PlayerBot-Subclass und ersetzte Server-Entities werden nicht ausgerollt. Bots bleiben gewöhnliche Netzwerkspieler mit regulären Actions.",
+      "native_build": "Normal038"
     },
     {
       "id": "T38",
@@ -1352,12 +2516,38 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "ARCHITEKTONISCH_AUSGESCHLOSSEN",
-      "implementation": "Custom-Netzmessage 49, Detours und Cecil-Netzpatch werden nicht in die Vanilla-Integration übernommen.",
-      "remaining_or_boundary": "Die separate Originalreferenz B hätte eigene isolierte Modkomponenten; daraus folgt keine Freigabe für Produktionsserver.",
+      "implementation": "Cecil-Netzpatch, Detours/CPOL-Patcher und Custommessage49 werden nicht übernommen; normale Action-Pipeline bleibt.",
+      "remaining_or_boundary": "Finale Sync-/Joinbelege erforderlich; negative Quellensuche ersetzt keinen Netzwerknachweis.",
       "code_references": [],
-      "offline_status": "NICHT_ANWENDBAR",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NICHT_ANWENDBAR"
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "historical_native_observation": {
+        "native_status": "NICHT_ANWENDBAR"
+      },
+      "current_source_status": "ARCHITECTURALLY_EXCLUDED",
+      "current_claim": "Cecil-Netzpatch, Detours/CPOL-Patcher und Custommessage49 werden nicht übernommen; normale Action-Pipeline bleibt.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1356,
+          "function": "BotDriver_HandleTimer"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "INTEGRITY",
+        "DURATION"
+      ],
+      "remaining_native_evidence": "Finale Sync-/Joinbelege erforderlich; negative Quellensuche ersetzt keinen Netzwerknachweis.",
+      "historical_status": "ARCHITEKTONISCH_AUSGESCHLOSSEN",
+      "historical_offline_observation": {
+        "offline_status": "NICHT_ANWENDBAR",
+        "offline_evidence_ids": [],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Custom-Netzmessage 49, Detours und Cecil-Netzpatch werden nicht in die Vanilla-Integration übernommen.",
+      "native_build": "Normal038"
     },
     {
       "id": "T39",
@@ -1376,12 +2566,29 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "NICHT_ANWENDBAR_5_FFA_MAPS",
-      "implementation": "Im gepinnten Original wurde kein entsprechendes Lern-/Teamtaktik-Subsystem gefunden. Es wird keine nicht belegte Cecil-Funktion erfunden.",
-      "remaining_or_boundary": "Neue Lern- oder Taktikfunktionen wären eigenständige Anforderungen, nicht eine fehlende Originalübernahme.",
+      "implementation": "Originalmatrix belegt kein Lern-/Teamtaktiksubsystem; ein solches Feature wird nicht als Ceciltransfer erfunden.",
+      "remaining_or_boundary": "Neues Lernen/Teamtaktik wäre eine gesonderte Anforderung.",
       "code_references": [],
-      "offline_status": "NICHT_ANWENDBAR",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NICHT_ANWENDBAR"
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "historical_native_observation": {
+        "native_status": "NICHT_ANWENDBAR"
+      },
+      "current_source_status": "NOT_APPLICABLE_NO_ORIGINAL_SUBSYSTEM",
+      "current_claim": "Originalmatrix belegt kein Lern-/Teamtaktiksubsystem; ein solches Feature wird nicht als Ceciltransfer erfunden.",
+      "current_source_references": [],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [],
+      "remaining_native_evidence": "Neues Lernen/Teamtaktik wäre eine gesonderte Anforderung.",
+      "historical_status": "NICHT_ANWENDBAR_5_FFA_MAPS",
+      "historical_offline_observation": {
+        "offline_status": "NICHT_ANWENDBAR",
+        "offline_evidence_ids": [],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Im gepinnten Original wurde kein entsprechendes Lern-/Teamtaktik-Subsystem gefunden. Es wird keine nicht belegte Cecil-Funktion erfunden.",
+      "native_build": "Normal038"
     },
     {
       "id": "T40",
@@ -1400,28 +2607,71 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "OFFEN",
-      "implementation": "Build010 aus dem sauberen Quellpin ist erfolgreich erzeugt; sämtliche aktuelle native Abnahmen bleiben offen. Frühere Build003/006/007/008-Beobachtungen und der Build009-Syncfehler qualifizieren diesen Kandidaten nicht.",
-      "remaining_or_boundary": "1/4/8-Bot-Gates über 3600/3600/7200 Sekunden mit finalem DLL-Hash, fünf Maps, Retail-Gameplaybeitritt, 100 Todesfälle, Ressourcenvergleich, Recovery und komplette Flotte bleiben Pflicht. Kein externer Blocker oder native Gleichwertigkeit behauptet.",
+      "implementation": "Native Gleichwertigkeit/Last bleibt OPEN. Qualifier/Log-/Resourceauditor sind vorhandene Nachweiswerkzeuge und keine Selbstqualifikation.",
+      "remaining_or_boundary": "Alle038-DLL-Gates frisch; konkrete Originalmod-B-Toolset-/Entities-/ABI-Grenze bleibt ungelöst.",
       "code_references": [
         "poc/candidates/redstation-supply-20261107/BotDriver.cpp"
       ],
-      "offline_status": "TEILWEISE",
-      "offline_evidence_ids": [
-        "NAV",
-        "MOTION",
-        "FRAME",
-        "HEAD_BODY",
-        "BRIDGE",
-        "ACTION",
-        "HUMAN",
-        "INTEGRATION",
-        "ITEMS",
-        "RULES",
-        "SUPPLY",
-        "EXPORT"
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
+      "offline_evidence_ids": [],
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_build": "Normal038",
+      "historical_native_observation": {
+        "native_status": "NICHT_GEPRUEFT",
+        "native_build": "Build010"
+      },
+      "current_source_status": "NATIVE_ACCEPTANCE_OPEN",
+      "current_claim": "Native Gleichwertigkeit/Last bleibt OPEN. Qualifier/Log-/Resourceauditor sind vorhandene Nachweiswerkzeuge und keine Selbstqualifikation.",
+      "current_source_references": [
+        {
+          "file": "tools/qualify_cecil_live.py",
+          "line": 44,
+          "function": "main"
+        },
+        {
+          "file": "tools/audit_cecil_native_log.py",
+          "line": 304,
+          "function": "audit"
+        },
+        {
+          "file": "tools/audit_cecil_resource_windows.py",
+          "line": 221,
+          "function": "analyze"
+        }
       ],
-      "native_status": "NICHT_GEPRUEFT",
-      "native_build": "Build010"
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "INTEGRITY",
+        "SUPPLY",
+        "RECOVERY",
+        "COMBAT",
+        "LIFECYCLE",
+        "DURATION",
+        "RESOURCE",
+        "MAPS",
+        "FLEET"
+      ],
+      "remaining_native_evidence": "Alle038-DLL-Gates frisch; konkrete Originalmod-B-Toolset-/Entities-/ABI-Grenze bleibt ungelöst.",
+      "historical_status": "OFFEN",
+      "historical_offline_observation": {
+        "offline_status": "TEILWEISE",
+        "offline_evidence_ids": [
+          "NAV",
+          "MOTION",
+          "FRAME",
+          "HEAD_BODY",
+          "BRIDGE",
+          "ACTION",
+          "HUMAN",
+          "INTEGRATION",
+          "ITEMS",
+          "RULES",
+          "SUPPLY",
+          "EXPORT"
+        ],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Build010 aus dem sauberen Quellpin ist erfolgreich erzeugt; sämtliche aktuelle native Abnahmen bleiben offen. Frühere Build003/006/007/008-Beobachtungen und der Build009-Syncfehler qualifizieren diesen Kandidaten nicht."
     },
     {
       "id": "T41",
@@ -1440,116 +2690,272 @@
         "evidence_status": "source analysis; native NOT_TESTED"
       },
       "status": "ARCHITEKTONISCH_AUSGESCHLOSSEN",
-      "implementation": "Autoritativer Coop-Catch-up per pen->Teleport wird nicht übernommen; er ist von regulärem Follow und NAV-TELEPORT-Triggern getrennt.",
-      "remaining_or_boundary": "Für die fünf Fragmatch-Maps nicht anwendbar.",
+      "implementation": "Autoritativer Coop-Catch-up per Entity.Teleport wird nicht übernommen; normales Follow und NAV-TELEPORT sind ausdrücklich getrennt.",
+      "remaining_or_boundary": "Bewusste Vanilla-FFA-Grenze, kein offenes Client-Pflichtfeature.",
       "code_references": [],
-      "offline_status": "NICHT_ANWENDBAR",
+      "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NICHT_ANWENDBAR"
+      "native_status": "NOT_QUALIFIED_FINAL038",
+      "historical_native_observation": {
+        "native_status": "NICHT_ANWENDBAR"
+      },
+      "current_source_status": "ARCHITECTURALLY_EXCLUDED",
+      "current_claim": "Autoritativer Coop-Catch-up per Entity.Teleport wird nicht übernommen; normales Follow und NAV-TELEPORT sind ausdrücklich getrennt.",
+      "current_source_references": [
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
+          "line": 441,
+          "function": "BotCecilFollow"
+        },
+        {
+          "file": "poc/candidates/redstation-supply-20261107/BotDriver.cpp",
+          "line": 1356,
+          "function": "BotDriver_HandleTimer"
+        }
+      ],
+      "native038_result": "NOT_AUDITED_NOT_INHERITED",
+      "required_gate_ids": [
+        "INTEGRITY"
+      ],
+      "remaining_native_evidence": "Bewusste Vanilla-FFA-Grenze, kein offenes Client-Pflichtfeature.",
+      "historical_status": "ARCHITEKTONISCH_AUSGESCHLOSSEN",
+      "historical_offline_observation": {
+        "offline_status": "NICHT_ANWENDBAR",
+        "offline_evidence_ids": [],
+        "historical_offline_evidence_ids": null
+      },
+      "historical_implementation_text": "Autoritativer Coop-Catch-up per pen->Teleport wird nicht übernommen; er ist von regulärem Follow und NAV-TELEPORT-Triggern getrennt.",
+      "native_build": "Normal038"
     }
   ],
-  "earlier_native_observation": {
-    "build": "Build003",
-    "dll_sha256": "8e82a8e747156e13d409faa43361e02a8476274ab5fa6afcf5cb4fc910d0062e",
-    "source": "Privater strukturierter Entwicklungs-Smoke-Bericht; keine Rohlogs übernommen.",
-    "status": "BEGRENZTE_AKTIVITAET_BEOBACHTET",
-    "duration_seconds": 120.00101040198933,
-    "samples": 120,
-    "bots": 4,
-    "all_slots_moved_and_fired": true,
-    "respawns_observed": 8,
-    "observed_weapon_ids": [
-      1,
-      2,
-      3,
-      5,
-      14
-    ],
-    "reported_errors": [],
-    "qualification_gate": false,
-    "limit": "Früherer Build auf Red Station. Kein Nachweis für den aktuellen Code-Snapshot oder den Important-Adapter; keine Langzeit-, Fünf-Map-, Last- oder Flottenqualifikation. Ein leerer Fehlerbericht ist kein Beweis genereller Sync-Freiheit."
-  },
-  "historical_offline_evidence": {
-    "NAV": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_nav.cpp",
-      "result": "221682 Prüfungen, 0 Fehler; neun byteidentische Original-NAV-Rundläufe; Red-Station-All-Pairs mit und ohne Lock.",
-      "status": "PASS",
-      "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
-      "sanitizers": true,
-      "historical": true
-    },
-    "MOTION": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_motion.cpp",
-      "result": "36 Prüfungen, 0 Fehler.",
-      "status": "PASS",
-      "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
-      "sanitizers": true,
-      "historical": true
-    },
-    "BRIDGE": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_native_bridge.py",
-      "result": "89 Prüfungen, 0 Fehler; ASan/UBSan, tatsächliche Adapterfunktionen mit World-/Ray-Stubs. Eingelesener SDK-Vertrag USE=32, SNIPER_USE=4096; verkettete verschiedene Switches benötigen Press/Release/Press. Loader und Itemdecoder separat.",
-      "status": "PASS",
-      "source_commit": "1c68ef4469616c4cdf8b26b08b10d94e9126c446",
-      "sanitizers": true,
-      "sdk_source_sha256": "85c92933fa5b0cc726be7b42a3bc82d4c95b255507ec8b1fffe2666fcf3888af",
-      "historical": true
-    },
-    "HUMAN": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_human.cpp",
-      "result": "PASS; stationäres und langsam bewegtes Ziel über jeweils 2000 Ticks mit Command-Rückkopplung: jeweils 1899 Feuer-Ticks nach Warmup.",
-      "status": "PASS",
-      "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
-      "sanitizers": true,
-      "historical": true
-    },
-    "INTEGRATION": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_integration.cpp",
-      "result": "PASS, einschließlich Double-Colt-Pickup, Teamfilter und Reisemesser-Zeitgrenze.",
-      "status": "PASS",
-      "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
-      "sanitizers": true,
-      "historical": true
-    },
-    "ITEMS": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_items_native.py",
-      "result": "PASS mit feldbasiertem Fake-SDK; kein ABI- oder Runtime-Nachweis.",
-      "status": "PASS",
-      "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
-      "sanitizers": true,
-      "historical": true
-    },
-    "RULES": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_rules.cpp",
-      "result": "PASS für Waffen, Presets, Items und Feuerzustand.",
-      "status": "PASS",
-      "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
-      "sanitizers": true,
-      "historical": true
-    },
-    "EXPORT": {
-      "path": "poc/candidates/redstation-supply-20261107/test_cecil_rules_exports.py",
-      "result": "PASS: 30 Original-Waffenzeilen und viermal 32 Settings einschließlich 119 Originalzuweisungen.",
-      "status": "PASS",
-      "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
-      "sanitizers": false,
-      "historical": true
-    }
-  },
   "native_acceptance": {
-    "status": "AUSSTEHEND",
-    "qualification_gate": false,
-    "production_instances_changed": 0,
-    "stability_seconds": {
-      "1_bot": 3600,
-      "4_bots": 3600,
-      "8_bots": 7200
+    "status": "FAILED_SKULLS_BEHAVIOR_NO_RELEASE",
+    "evidence_transfer_from_older_candidates": false,
+    "production_deployment": "UNCHANGED",
+    "single_supply": "PASS_NATIVE_REVIEW_ONLY",
+    "respawn": "PASS_NATIVE_REVIEW_118_HEALTH_DEATHS",
+    "long_duration": "NOT_STARTED",
+    "retail038": "NOT_STARTED",
+    "thresholds_changed": false
+  },
+  "historical_snapshot": {
+    "code_snapshot": {
+      "commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+      "source_layout": "poc/candidates/redstation-supply-20261107: vollständiger flacher Overlay, 28 Quelldateien; SDK-Game-Archiv ergänzt die übrigen Builddateien.",
+      "sdk_commit": "aa7869c2c2c4db0562281814d0ac3784e6b9d6f0",
+      "include_commit": "94ff8cd0e63941f8601294350b616472f772ed51",
+      "scope": "Sauberer Integrationscommit auf origin/main; keine Abhängigkeit von unveröffentlichten historischen ssam-Commits. Native Belege gelten ausschließlich für ihren eigenen DLL-Hash."
     },
-    "recovery_required": true,
-    "five_maps_required": true,
-    "retail_gameplay_client_required": true,
-    "fleet_instances": 6,
-    "fleet_min_seconds": 900,
-    "thresholds_source": "qualification.md; vorab festgelegt, unverändert"
+    "native_build_observed": {
+      "build_ok": true,
+      "qualified": false,
+      "repo_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+      "dll_sha256": "224ee607072982a521bdab36250554039f9e606a4db755fdd42716fb0f031475",
+      "configuration": "Release_TSE107 equivalent direct cl/link, Win32",
+      "build": "Build010"
+    },
+    "offline_evidence": {
+      "NAV": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_nav.cpp",
+        "result": "281 synthetische Prüfungen, 0 Fehler. Dieser aktuelle Lauf umfasst keine privaten Original-NAV-Dateien; die neun Rundläufe und 221682 Prüfungen stehen separat als historischer Beleg.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": false,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+      },
+      "MOTION": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_motion.cpp",
+        "result": "45 Prüfungen, 0 Fehler; Körper-/Gravitationsbasis, Ankunft und Bewegungsflags.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": false,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+      },
+      "FRAME": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_frame.cpp",
+        "result": "63 Prüfungen, 0 Fehler; orthonormale Basis, Transformationen und ungültige Eingaben.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": false,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+      },
+      "HEAD_BODY": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_head_body.cpp",
+        "result": "PASS; lokale Kopfrotation und Körperbasis bleiben getrennt, einschließlich gedrehter Basis.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": false,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+      },
+      "BRIDGE": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_native_bridge.py",
+        "result": "154 Prüfungen, 0 Fehler, normal und ASan/UBSan. Tatsächliche Adapterfunktionen mit World-/Ray-Stubs, Preset-Pit-Gate, frischer NAV-Kontext, Locks, Important-USE/Release, Schwimmen und Recovery. Loader und Itemdecoder separat.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": true,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis.",
+        "sdk_source_sha256": "85c92933fa5b0cc726be7b42a3bc82d4c95b255507ec8b1fffe2666fcf3888af"
+      },
+      "ACTION": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_action_native.py",
+        "result": "PASS; tatsächliche Driver-Aktionsschutzfunktionen, endliche Achsen und Sniper-Winkeldämpfung gegen gepinnten SDK-Vertrag.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": false,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+      },
+      "HUMAN": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_human.cpp",
+        "result": "PASS für aktuelle Human-/Cecil-Adaption; portable Rückkopplungsfixtures.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": false,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+      },
+      "INTEGRATION": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_integration.cpp",
+        "result": "PASS, einschließlich Double-Colt-Pickup, Teamfilter und Reisemesser-Zeitgrenze.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": false,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+      },
+      "ITEMS": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_items_native.py",
+        "result": "PASS mit feldbasiertem Fake-SDK, einschließlich WeaponsStay-Eigenpickupvertrag; kein ABI-Nachweis.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": false,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+      },
+      "RULES": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_rules.cpp",
+        "result": "PASS für Waffen, Presets, Items und Feuerzustand.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": false,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+      },
+      "SUPPLY": {
+        "path": "poc/candidates/redstation-supply-20261107/test_supply_navigation.cpp",
+        "result": "PASS für erhaltenen Legacy-SupplyPlanner; kein Nachweis, dass dieser statt des Cecil-Planners aktiv ist.",
+        "status": "PASS",
+        "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+        "sanitizers": false,
+        "evidence_scope": "Portable Prüfung der gelieferten Quelldateien; kein ABI- oder Runtime-Nachweis."
+      },
+      "EXPORT": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_rules_exports.py",
+        "result": "Historisch: 30 Original-Waffenzeilen und viermal 32 Settings einschließlich 119 Originalzuweisungen; kein neuer Lauf unter dem aktuellen Pin behauptet.",
+        "status": "PASS",
+        "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
+        "sanitizers": false,
+        "historical": true
+      }
+    },
+    "earlier_native_observation": {
+      "build": "Build003",
+      "dll_sha256": "8e82a8e747156e13d409faa43361e02a8476274ab5fa6afcf5cb4fc910d0062e",
+      "source": "Privater strukturierter Entwicklungs-Smoke-Bericht; keine Rohlogs übernommen.",
+      "status": "BEGRENZTE_AKTIVITAET_BEOBACHTET",
+      "duration_seconds": 120.00101040198933,
+      "samples": 120,
+      "bots": 4,
+      "all_slots_moved_and_fired": true,
+      "respawns_observed": 8,
+      "observed_weapon_ids": [
+        1,
+        2,
+        3,
+        5,
+        14
+      ],
+      "reported_errors": [],
+      "qualification_gate": false,
+      "limit": "Früherer Build auf Red Station. Kein Nachweis für den aktuellen Code-Snapshot oder den Important-Adapter; keine Langzeit-, Fünf-Map-, Last- oder Flottenqualifikation. Ein leerer Fehlerbericht ist kein Beweis genereller Sync-Freiheit."
+    },
+    "historical_offline_evidence": {
+      "NAV": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_nav.cpp",
+        "result": "221682 Prüfungen, 0 Fehler; neun byteidentische Original-NAV-Rundläufe; Red-Station-All-Pairs mit und ohne Lock.",
+        "status": "PASS",
+        "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
+        "sanitizers": true,
+        "historical": true
+      },
+      "MOTION": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_motion.cpp",
+        "result": "36 Prüfungen, 0 Fehler.",
+        "status": "PASS",
+        "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
+        "sanitizers": true,
+        "historical": true
+      },
+      "BRIDGE": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_native_bridge.py",
+        "result": "89 Prüfungen, 0 Fehler; ASan/UBSan, tatsächliche Adapterfunktionen mit World-/Ray-Stubs. Eingelesener SDK-Vertrag USE=32, SNIPER_USE=4096; verkettete verschiedene Switches benötigen Press/Release/Press. Loader und Itemdecoder separat.",
+        "status": "PASS",
+        "source_commit": "1c68ef4469616c4cdf8b26b08b10d94e9126c446",
+        "sanitizers": true,
+        "sdk_source_sha256": "85c92933fa5b0cc726be7b42a3bc82d4c95b255507ec8b1fffe2666fcf3888af",
+        "historical": true
+      },
+      "HUMAN": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_human.cpp",
+        "result": "PASS; stationäres und langsam bewegtes Ziel über jeweils 2000 Ticks mit Command-Rückkopplung: jeweils 1899 Feuer-Ticks nach Warmup.",
+        "status": "PASS",
+        "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
+        "sanitizers": true,
+        "historical": true
+      },
+      "INTEGRATION": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_integration.cpp",
+        "result": "PASS, einschließlich Double-Colt-Pickup, Teamfilter und Reisemesser-Zeitgrenze.",
+        "status": "PASS",
+        "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
+        "sanitizers": true,
+        "historical": true
+      },
+      "ITEMS": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_items_native.py",
+        "result": "PASS mit feldbasiertem Fake-SDK; kein ABI- oder Runtime-Nachweis.",
+        "status": "PASS",
+        "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
+        "sanitizers": true,
+        "historical": true
+      },
+      "RULES": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_rules.cpp",
+        "result": "PASS für Waffen, Presets, Items und Feuerzustand.",
+        "status": "PASS",
+        "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
+        "sanitizers": true,
+        "historical": true
+      },
+      "EXPORT": {
+        "path": "poc/candidates/redstation-supply-20261107/test_cecil_rules_exports.py",
+        "result": "PASS: 30 Original-Waffenzeilen und viermal 32 Settings einschließlich 119 Originalzuweisungen.",
+        "status": "PASS",
+        "source_commit": "7bc6cfa015de6ecc6dd88eb2a881fc6e1ea99d17",
+        "sanitizers": false,
+        "historical": true
+      }
+    },
+    "native_acceptance": {
+      "status": "AUSSTEHEND",
+      "qualification_gate": false,
+      "production_instances_changed": 0,
+      "stability_seconds": {
+        "1_bot": 3600,
+        "4_bots": 3600,
+        "8_bots": 7200
+      },
+      "recovery_required": true,
+      "five_maps_required": true,
+      "retail_gameplay_client_required": true,
+      "fleet_instances": 6,
+      "fleet_min_seconds": 900,
+      "thresholds_source": "qualification.md; vorab festgelegt, unverändert"
+    }
   }
 }
