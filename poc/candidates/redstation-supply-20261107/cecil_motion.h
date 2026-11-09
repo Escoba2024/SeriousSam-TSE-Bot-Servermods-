@@ -45,16 +45,30 @@ class CecilNavigator {
     if(Reached(g.points[in.goal],in)) {
       out.arrived=true;out.hop=in.goal;hop_=in.goal;Progress(in);recovery_until_=-1;return out;
     }
+    bool recovered=false;
     if(recovery_until_>=0&&in.now>=recovery_until_) {
-      recovery_until_=-1;next_replan_=in.now;Progress(in);
+      recovered=true;recovery_until_=-1;next_replan_=in.now;Progress(in);
     }
     const bool at_hop=hop_>=0&&(size_t)hop_<n&&Reached(g.points[hop_],in);
-    if(new_goal||lock_change||hop_<0||in.now>=next_replan_||at_hop) {
-      source_=at_hop&&!new_goal&&!lock_change?hop_:in.anchor;
-      if(!search_.Run(g,source_,locks_.data(),n)){hop_=-1;return out;}
+    // Nearest anchors acquire a route; timer expiry must not undo a source
+    // already reached while the bot is still traversing its directed edge.
+    // A real relocation onto another reached node (for example a teleport exit)
+    // is independent evidence to acquire a route from the actual new location.
+    const bool relocated=source_>=0&&!at_hop&&in.anchor!=source_&&in.anchor!=hop_&&
+      Reached(g.points[in.anchor],in);
+    if(new_goal||lock_change||recovered||relocated||hop_<0||in.now>=next_replan_||at_hop) {
+      const bool committed=!new_goal&&!recovered&&!relocated&&!at_hop&&
+        source_>=0&&hop_>=0&&hop_!=source_&&!locks_[hop_];
+      if(!committed)source_=at_hop&&!new_goal&&!recovered&&!relocated?hop_:in.anchor;
+      // Search allows an occupied blocked origin to exit. An acquisition anchor
+      // outside its arrival radius is still a destination and must respect locks.
+      if(!committed&&locks_[source_]&&!Reached(g.points[source_],in)){hop_=-1;return out;}
+      // Validate the remaining suffix from the committed destination. Even an
+      // unrelated lock change must not replace the active edge or its flags.
+      if(!search_.Run(g,committed?hop_:source_,locks_.data(),n)){hop_=-1;return out;}
       const int next=search_.NextHop(in.goal);
       if(next<0){hop_=-1;return out;}
-      hop_=Reached(g.points[source_],in)?next:source_;
+      if(!committed)hop_=Reached(g.points[source_],in)?next:source_;
       next_replan_=in.now+1.0;
     }
     if(hop_<0||(size_t)hop_>=n)return out;

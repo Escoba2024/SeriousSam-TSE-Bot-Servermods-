@@ -90,5 +90,51 @@ int main(){
   g=graph();nav.Reset();in=CecilMotionInput();in.alive=true;in.anchor=0;in.goal=1;
   in.gravity[1]=1;in.frame.right[0]=-1;in.frame.up[1]=-1;in.yaw=90;g.points[1].x=10;g.points[1].z=0;
   out=nav.Update(g,locked,3,in);check(out.active&&near(out.forward,1)&&near(out.strafe,0)&&near(out.yaw_delta,0),"inverted body and ninety degree local head yaw compose correctly");
+  // A completed source stays completed while traversing a long directed edge.
+  g=graph();g.points[1].x=20;g.points[1].z=0;g.points[2].x=40;g.points[2].z=0;
+  g.points[1].flags=CECIL_CROUCH;g.points[2].flags=CECIL_JUMP;
+  nav.Prepare(3);in=CecilMotionInput();in.alive=true;in.anchor=0;in.goal=2;
+  out=nav.Update(g,locked,3,in);check(out.hop==1,"long-edge fixture begins toward first waypoint");
+  in.x=6;in.now=1.1;out=nav.Update(g,locked,3,in);
+  check(out.hop==1&&out.strafe>0,"first long edge retains completed initial source at timer expiry");
+  in.now=1.2;
+  in.x=20;in.anchor=1;out=nav.Update(g,locked,3,in);
+  check(out.hop==2&&out.flags==CECIL_CROUCH,"arrival commits next edge with reached-source flags");
+  in.x=26;in.now=1.6;out=nav.Update(g,locked,3,in);
+  check(out.hop==2&&out.strafe>0&&out.flags==CECIL_CROUCH,"periodic replan cannot return to completed nearest source or apply destination flags early");
+  bool forward_progress=true;
+  for(int tick=0;tick<8;++tick){in.x=27+tick;in.now=2.7+tick;out=nav.Update(g,locked,3,in);forward_progress=forward_progress&&out.hop==2&&out.strafe>0&&!out.stuck;}
+  check(forward_progress,"slow long-edge travel keeps its committed directed successor across repeated replans");
+  locked[2]=1;in.now+=.1;out=nav.Update(g,locked,3,in);
+  check(!out.active,"newly locked destination still invalidates committed edge immediately");locked[2]=0;
+  nav.Reset();in=CecilMotionInput();in.alive=true;in.anchor=0;in.goal=2;in.x=10;
+  out=nav.Update(g,locked,3,in);in.x=9;in.now=1.1;out=nav.Update(g,locked,3,in);
+  check(out.hop==0,"unreached approach source cannot be skipped by edge commitment");
+  // A real relocation onto another known node must re-anchor immediately.
+  g.points.resize(4);g.points[2].x=120;g.points[2].radius=1;g.points[2].links={3};
+  g.points[3].id=3;g.points[3].x=140;g.points[3].radius=1;g.points[1].flags=CECIL_TELEPORT;
+  nav.Prepare(4);unsigned char open4[4]={0,0,0,0};in=CecilMotionInput();in.alive=true;in.anchor=0;in.goal=3;
+  nav.Update(g,open4,4,in);in.x=17;in.now=.4;nav.Update(g,open4,4,in);
+  in.x=120;in.anchor=2;in.now=.45;out=nav.Update(g,open4,4,in);
+  check(out.hop==3&&out.strafe>0,"native teleport onto a reached exit point reanchors without backtracking to its entry");
+  nav.Reset();in=CecilMotionInput();in.alive=true;in.anchor=0;in.goal=3;
+  nav.Update(g,open4,4,in);in.x=6;in.now=.5;open4[2]=1;
+  out=nav.Update(g,open4,4,in);
+  check(!out.active,"locked suffix with no alternative invalidates travel before entering a dead end");
+  open4[2]=0;g.points[2].links.clear();g.points[1].links={3};
+  nav.Reset();in.x=0;in.now=0;nav.Update(g,open4,4,in);
+  in.x=6;in.now=.5;open4[2]=1;out=nav.Update(g,open4,4,in);
+  check(out.hop==1&&out.strafe>0,"unrelated lock cannot undo a completed source on an active edge");
+  open4[2]=0;g.points[1].flags=CECIL_CROUCH|CECIL_OVERRIDE;
+  in.now=1.6;out=nav.Update(g,open4,4,in);
+  check(out.hop==1&&out.up==-1,"destination override survives periodic validation and unrelated unlock");
+  in.goal=0;in.now=1.7;out=nav.Update(g,open4,4,in);
+  check(out.hop==0&&out.strafe<0,"new goal immediately clears the old forward commitment");
+  nav.Reset();in=CecilMotionInput();in.alive=true;in.anchor=0;in.goal=3;
+  nav.Update(g,open4,4,in);in.x=14;in.anchor=1;in.now=.5;open4[1]=1;
+  out=nav.Update(g,open4,4,in);
+  check(!out.active,"unreached locked nearest anchor cannot be approached as an allowed search origin");
+  in.x=20;in.now=.6;out=nav.Update(g,open4,4,in);
+  check(out.active&&out.hop==3,"a bot already inside a newly locked source may still exit it");
   std::printf("CECIL MOTION checks=%d failures=%d\n",checks,failures);return failures?1:0;
 }
