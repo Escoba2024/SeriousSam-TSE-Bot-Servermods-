@@ -37,6 +37,9 @@ struct SSupplyState {
   // separate current-support stamp used by opt-in floor/contact authorization.
   double groundRecoveryTime=-1,groundObservationTime=-1,recoveryMovementTime=-1,groundEscapeAfter=0;
   uint32_t groundProgressEntity=0,groundProgressGeneration=0;
+  double airMovementTime=-1,airMovementGravity[3]={0,0,0};
+  uint32_t airMovementEntity=0,airMovementGeneration=0;
+  int airMovementNode=-1; // Original hint only; never an anchor or support stamp.
   unsigned groundEscapeTried=0;
   unsigned groundEscapeCursor=0;
   bool groundSweepReady=false,groundSweepBodyOnly=false;
@@ -86,11 +89,12 @@ struct SSupplyState {
   void ClearAvoidance(){avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
   void ClearGoal(){currentNavTime=-1;currentNavGoal=-1;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
+  void ClearAirMovement(){airMovementTime=-1;airMovementEntity=airMovementGeneration=0;airMovementNode=-1;}
   void ClearGroundSweep(){groundEscapeTried=groundEscapeCursor=0;groundSweepReady=false;}
   void ClearGroundProgress(){if(groundEscapeActive)ClearEscape();groundProgress.Reset();groundRecoveryTime=groundObservationTime=recoveryMovementTime=-1;ClearGroundSweep();groundEscapeAfter=0;groundStalled=groundEscapeActive=false;groundProgressEntity=groundProgressGeneration=0;}
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
-    ClearGroundProgress();probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
+    ClearAirMovement();ClearGroundProgress();probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
     itemScanAfter=scanTick=spawnTick=0;searchAfter=goalSince=0;deadSince=-1;
     playable=hadUpgrade=levelSwimView=reacquiring=false;useReleaseTick=-1;lastUseEntity=0;useAfter=0;++generation;
   }
@@ -512,6 +516,11 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
   bool graphMetadataValid=graphShapeValid;
   if(graphShapeValid)for(const auto& point:graph.points)graphMetadataValid=graphMetadataValid&&std::isfinite(point.x)&&
     std::isfinite(point.y)&&std::isfinite(point.z)&&std::isfinite(point.radius)&&point.radius>0;
+  bool airContext=!contextOnly&&state.anchor<0&&!state.navigator.HasCommittedEdge(state.goal)&&
+    player->m_pstState==PST_FALL&&!liquid&&!BotCecilSettings().bAvoidPits&&
+    BotCecilFrameReady(player)&&player->GetWorld()&&player->GetHealth()>0&&player->m_penWeapons&&
+    std::isfinite(now)&&now>=0&&graphMetadataValid;
+  for(int i=1;airContext&&i<=3;++i)airContext=std::isfinite(player->en_vCurrentTranslationAbsolute(i));
   // Observing an accepted frozen ground pose does not prove current support.
   // Reference flicker or a deferred query cannot erase passive position time.
   if(groundEligible&&graphMetadataValid)state.groundObservationTime=now;
@@ -525,7 +534,7 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
   // A NULL reference can coexist with native brush contact. Only a near-foot
   // hit substitutes for support authority; default-policy stalled movement is
   // separate and still requires its own current wall validation.
-  if(!liquid&&player->en_penReference==NULL){
+  if(!airContext&&!liquid&&player->en_penReference==NULL){
     const bool trace=((int)std::floor(now*20+.5))%20==0;
     if(trace)BotLog("[CecilReacquireSupport] entity=%lu generation=%lu time=%.3f stage=begin state=%d physics=%lu velocity=(%.5f,%.5f,%.5f) budget=%d\n",(unsigned long)player->en_ulID,(unsigned long)state.generation,now,(int)player->m_pstState,(unsigned long)player->GetPhysicsFlags(),player->en_vCurrentTranslationAbsolute(1),player->en_vCurrentTranslationAbsolute(2),player->en_vCurrentTranslationAbsolute(3),_botRayBudget);
     // One support cast, at least one LOS cast and the final two safety probes.
@@ -635,7 +644,11 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
     if(liquid){botcore::CecilMotion motion;BotCecilSwimMotion(player,delta,yaw,_pTimer->TickQuantum,motion,state.levelSwimView);
       out.forward=.3*motion.forward;out.strafe=BotCecilSettings().bStrafe?.3*motion.strafe:0;out.up=.3*motion.up;out.pitch_delta=motion.pitch_delta;}
     if(state.reacquireNode!=slots[k]){state.reacquireNode=slots[k];state.reacquireSince=now;state.ClearEscape();}
-    out.active=true;state.reacquiring=true;return;
+    out.active=true;state.reacquiring=true;
+    if(airContext){state.airMovementTime=now;state.airMovementEntity=player->en_ulID;
+      state.airMovementGeneration=state.generation;state.airMovementNode=slots[k];
+      for(int i=0;i<3;++i)state.airMovementGravity[i]=player->en_vGravityDir(i+1);}
+    return;
   }
 }
 static int BotCecilTravelHop(SSupplyState& state,const botcore::CecilMotion& move,const FLOAT3D& position,const FLOAT3D& gravity){
@@ -812,7 +825,7 @@ static bool BotCecilGroundedReplan(CPlayer* player,SSupplyState& s,const botcore
   return true;
 }
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
-  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.currentNavTime=-1;s.currentNavGoal=-1;s.reacquiring=false;s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;result.useControl=tick<=s.useReleaseTick;
+  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.currentNavTime=-1;s.currentNavGoal=-1;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;result.useControl=tick<=s.useReleaseTick;
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
   if(!alive){if(s.playable){BotCecilGoalEnd(slot,tick,s,"death");++s.deaths;s.deadSince=now;
     BotLog("[CecilDeath] local=%d tick=%d entity=%lu generation=%lu deaths=%u\n",slot,tick,(unsigned long)s.entity,(unsigned long)s.generation,s.deaths);
@@ -1070,12 +1083,47 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
      !std::isfinite(forward)||!std::isfinite(strafe)||!std::isfinite(up)||!std::isfinite(finalBodyYaw)||
      std::fabs(forward)>1.000001||std::fabs(strafe)>1.000001||std::fabs(up)>1.000001){
     BotCecilRejectedProbe(&state.probe,SCecilProbe::reasonInvalid,player);
-    forward=strafe=up=0;state.ClearEscape();state.ClearGroundProgress();return 0;
+    forward=strafe=up=0;state.ClearEscape();state.ClearAirMovement();state.ClearGroundProgress();return 0;
   }
   // Cecil BotMovement.cpp517: pits are opt-in and checked only without a
   // current path point. Arrival still owns that point for the final item connector.
   // Clear/reset/failed updates and changed goals must never retain an exemption.
   const size_t nodes=BotSupplyGraph().points.size();
+  if(!useReacquire)state.ClearAirMovement();
+  const bool offgraphAir=state.anchor<0&&player->m_pstState==PST_FALL&&
+    !state.navigator.HasCommittedEdge(state.goal)&&!BotCecilSettings().bAvoidPits;
+  if(useReacquire&&(offgraphAir||state.airMovementTime>=0)){
+    // Original follow/path motion also steers in air. This is a single fresh
+    // hint proposal, never a ground proof, watchdog escape or remembered hold.
+    const int node=state.airMovementNode;
+    bool current=offgraphAir&&std::fabs(now-state.airMovementTime)<=1e-6&&
+      state.airMovementEntity==player->en_ulID&&state.airMovementGeneration==state.generation&&
+      state.reacquiring&&state.reacquireNode==node&&node>=0&&(size_t)node<nodes&&
+      nodes<=botcore::CecilNavGraph::kMaxPoints&&state.blocked.size()==nodes&&!state.blocked[node]&&
+      player->GetWorld()&&player->GetHealth()>0&&player->m_penWeapons&&!BotCecilLiquid(player)&&up==0;
+    for(int i=1;current&&i<=3;++i)current=std::isfinite(player->en_vCurrentTranslationAbsolute(i))&&
+      state.airMovementGravity[i-1]==player->en_vGravityDir(i);
+    if(current){
+      const auto& point=BotSupplyGraph().points[node];const auto& pos=player->GetPlacement().pl_PositionVector;
+      const FLOAT3D delta(point.x-pos(1),point.y-pos(2),point.z-pos(3));
+      const double d=double(delta(1))*delta(1)+double(delta(2))*delta(2)+double(delta(3))*delta(3);
+      current=std::isfinite(point.radius)&&point.radius>0&&std::isfinite(d)&&d<=1024&&
+        std::fabs(BotCecilHeight(player,delta))<=8;
+    }
+    state.ClearGroundProgress();state.ClearEscape(); // Accepted air owns no legacy escape direction.
+    if(!current){forward=strafe=up=0;state.ClearAirMovement();return 0;}
+    double f=std::fmax(-.3,std::fmin(.3,(double)forward)),st=BotCecilSettings().bStrafe?
+      std::fmax(-std::fmin(.3,maxStrafe),std::fmin(std::fmin(.3,maxStrafe),(double)strafe)):0;
+    const double length=std::hypot(f,st);if(length>.3){f*=.3/length;st*=.3/length;}
+    if(std::hypot(f,st)<.05||!BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,false,false)){
+      forward=strafe=up=0;return 0;
+    }
+    forward=(T)f;strafe=(T)st;up=0;
+    if(((int)std::floor(now*20+.5))%20==0)
+      BotLog("[CecilAirRecovery] entity=%lu generation=%lu time=%.3f action=steer hint=%d since=%.3f support_authorized=0 pit_avoidance=0 floor_required=0 forward=%.3f strafe=%.3f\n",
+        (unsigned long)player->en_ulID,(unsigned long)state.generation,now,node,state.reacquireSince,f,st);
+    return 1;
+  }
   const bool currentPoint=std::fabs(now-state.currentNavTime)<=1e-6&&state.currentNavGoal==state.goal&&state.goal>=0&&(size_t)state.goal<nodes&&
     state.hop>=0&&(size_t)state.hop<nodes&&state.blocked.size()==nodes&&!state.blocked[state.hop];
   // The planner can propose recovery while visible combat owns the final input.

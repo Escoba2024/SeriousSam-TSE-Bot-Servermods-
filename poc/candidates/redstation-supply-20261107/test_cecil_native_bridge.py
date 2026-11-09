@@ -577,6 +577,129 @@ int groundProgressTick(int tick,bool accepted=true,double maxStrafe=1,int budget
  groundF=f;groundSt=st;groundU=u;return status;
 }
 
+void airRecovery44Fixture(){
+ setup(2);auto& state=BotSupplyState(0);state.anchor=-1;state.scanTick=99999;
+ BotCecilSettings().bAvoidPits=0;player.en_ulID=100;player.en_penReference=nullptr;
+ player.m_pstState=PST_FALL;player.pl.pl_PositionVector=FLOAT3D(0,-4.5f,0);
+ player.en_vCurrentTranslationAbsolute=FLOAT3D(0,40,0);
+ auto& graph=BotSupplyGraph();graph.points[0].x=20;graph.points[0].z=0;
+ graph.points[1].x=30;graph.points[1].z=0;
+ floorMode=0;
+}
+void airRecovery44(){
+ airRecovery44Fixture();_botRayBudget=16;
+ const auto move=BotSupplyTick(&player,0,1,1000);auto& state=BotSupplyState(0);
+ check(move.active&&move.ownsMovement&&state.reacquireNode==0&&state.anchor<0&&state.goal<0&&state.hop<0,
+  "NORMAL44 actual airborne Tick selects original directed-node hint without fabricating a NAV anchor");
+ double f=move.forward,st=move.strafe,u=move.up;
+ const int status=BotCecilSafeMotion(&player,state,.05,f,st,u,move.yaw_delta,1,true);
+ check(status==1&&std::hypot(f,st)>.05&&std::hypot(f,st)<=.300001&&u==0&&state.probe.wallRays==1&&state.probe.floorRays==0,
+  "NORMAL44 selected air hint becomes actual accepted wall-checked horizontal input without a ground-stall or floor claim");
+ bool moving=true;const double since=state.reacquireSince;
+ for(int tick=2;tick<=20;++tick){player.pl.pl_PositionVector(2)=-4.5f+.02f*tick;
+  _botRayBudget=16;const auto m=BotSupplyTick(&player,0,tick,1000);f=m.forward;st=m.strafe;u=m.up;
+  moving&=m.active&&BotCecilSafeMotion(&player,state,tick*.05,f,st,u,m.yaw_delta,1,true)==1&&std::hypot(f,st)>.05;
+ }
+ check(moving&&near(state.reacquireSince,since)&&!state.groundStalled&&state.groundRecoveryTime<0&&state.anchor<0,
+  "NORMAL44 changing altitude receives current original-hint steering before two seconds without renewing attempt or entering ground watchdog");
+ // Controlled fixture arrival tests acquisition, not unimplemented engine flight.
+ player.pl.pl_PositionVector=FLOAT3D(19.5f,0,0);player.m_pstState=PST_STAND;
+ state.scanTick=0;_botRayBudget=16;const auto routed=BotSupplyTick(&player,0,21,1000);
+ check(state.anchor==0&&state.goal==1&&state.hop==1&&routed.active,
+  "NORMAL44 later physical fixture arrival uses ordinary original directed NAV acquisition independently of the air proposal");
+}
+
+int airSafety44(const SCecilMove& m,int tick,bool accepted=true,double maxStrafe=1){
+ groundF=m.forward;groundSt=m.strafe;groundU=m.up;
+ return BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,groundF,groundSt,groundU,m.yaw_delta,maxStrafe,accepted);
+}
+void airRecovery44Guards(){
+ for(int bad=0;bad<15;++bad){
+  airRecovery44Fixture();auto& s=BotSupplyState(0);
+  if(bad==0)BotCecilSettings().bAvoidPits=1;
+  if(bad==1)player.m_pstState=PST_STAND;
+  if(bad==2)player.m_pstState=PST_SWIM;
+  if(bad==3)player.m_pstState=PST_DIVE;
+  if(bad==4)player.health=0;
+  if(bad==5)player.hasWorld=false;
+  if(bad==6)player.en_vCurrentTranslationAbsolute(2)=NAN;
+  if(bad==7)player.body.m[0][0]=0;
+  if(bad==8)BotSupplyGraph().points[0].x=NAN;
+  if(bad==9)s.blocked.clear();
+  if(bad==10)s.useReleaseTick=10000;
+  if(bad==11){for(auto& p:BotSupplyGraph().points)p.y=9;}
+  if(bad==12){for(auto& p:BotSupplyGraph().points)p.x=40;}
+  if(bad==13){for(auto& p:BotSupplyGraph().points)p.lock_entity=999;}
+  if(bad==14)blockedItems=30;
+  _botRayBudget=16;const auto m=BotSupplyTick(&player,0,1,1000);
+  check(s.airMovementTime<0,"NORMAL44 opt-in otherstate USE death malformed graph/frame/velocity range locks and blocked LOS never stamp air authority");
+  // Liquid has its own unchanged controller; it must not be called air motion.
+  if(bad!=2&&bad!=3){airSafety44(m,1);check(groundF==0&&groundSt==0&&groundU==0,
+    "NORMAL44 absent eligible original air hint emits neutral rather than borrowing a legacy escape");}
+ }
+ airRecovery44Fixture();auto& budget=BotSupplyState(0);budget.escapeUntil=9;budget.escapeWorld[0]=.3;
+ _botRayBudget=2;auto m=BotSupplyTick(&player,0,1,1000);const int before=rayCount;
+ check(!m.active&&airSafety44(m,1)==0&&rayCount==before&&budget.escapeUntil==0,
+  "NORMAL44 insufficient original-hint LOS reserve cannot emit a stale legacy held direction");
+ airRecovery44Fixture();_botRayBudget=3;m=BotSupplyTick(&player,0,1,1000);
+ check(m.active&&_botRayBudget==2&&airSafety44(m,1)==1&&_botRayBudget==1,
+  "NORMAL44 original LOS reserves two safety rays and final exact air request spends only one wall ray");
+ airRecovery44Fixture();_botRayBudget=16;m=BotSupplyTick(&player,0,1,1000);_botRayBudget=0;
+ check(airSafety44(m,1)==0&&BotSupplyState(0).probe.lastReason==SCecilProbe::reasonBudget&&groundF==0&&groundSt==0,
+  "NORMAL44 exhausted final shared budget defers movement without an unchecked air input");
+ airRecovery44Fixture();_botRayBudget=16;m=BotSupplyTick(&player,0,1,1000);wallMode=2;
+ auto& wall=BotSupplyState(0);wall.escapeUntil=9;wall.escapeWorld[0]=.3;
+ check(airSafety44(m,1)==0&&wall.probe.wallRays==1&&wall.probe.floorRays==0&&wall.escapeUntil==0,
+  "NORMAL44 selected hint LOS cannot substitute for a blocked actual movement wall and no alternative hold is attempted");
+ for(int change=0;change<10;++change){
+  airRecovery44Fixture();_botRayBudget=16;m=BotSupplyTick(&player,0,1,1000);auto& s=BotSupplyState(0);
+  if(change==0)BotCecilSettings().bAvoidPits=1;
+  if(change==1)player.m_pstState=PST_STAND;
+  if(change==2)++player.en_ulID;
+  if(change==3)++s.generation;
+  if(change==4)player.health=0;
+  if(change==5)s.blocked[0]=1;
+  if(change==6)s.reacquireNode=1;
+  if(change==7)player.en_vCurrentTranslationAbsolute(1)=INFINITY;
+  if(change==8)player.hasWorld=false;
+  if(change==9)m.up=1;
+  const int rays=rayCount;
+  check(airSafety44(m,1)==0&&groundF==0&&groundSt==0&&groundU==0&&rayCount==rays,
+   "NORMAL44 setting state entity generation death lock hint velocity world or vertical-request change invalidates exact air proposal before query");
+ }
+ airRecovery44Fixture();_botRayBudget=16;m=BotSupplyTick(&player,0,1,1000);auto& stale=BotSupplyState(0);
+ check(airSafety44(m,2)==0&&groundF==0&&groundSt==0&&stale.airMovementTime<0,
+  "NORMAL44 previous-tick air authority cannot survive without another original-hint LOS proposal");
+ airRecovery44Fixture();_botRayBudget=16;m=BotSupplyTick(&player,0,1,1000);m.forward=.64;m.strafe=0;
+ check(airSafety44(m,1,false)==1&&near(groundF,.64)&&BotSupplyState(0).airMovementTime<0,
+  "NORMAL44 rejected Supply proposal cannot cap or replace Human-owned input and clears its air token");
+ airRecovery44Fixture();_botRayBudget=16;m=BotSupplyTick(&player,0,1,1000);
+ player.en_vGravityDir=FLOAT3D(0,1,0);player.body.m[0][0]=-1;player.body.m[1][1]=-1;
+ check(airSafety44(m,1)==0&&groundF==0&&groundSt==0,
+  "NORMAL44 changed gravity cannot reuse the previously proposed air direction");
+ airRecovery44Fixture();player.en_vGravityDir=FLOAT3D(0,1,0);player.body.m[0][0]=-1;player.body.m[1][1]=-1;
+ _botRayBudget=16;m=BotSupplyTick(&player,0,1,1000);
+ check(m.active&&airSafety44(m,1)==1&&groundU==0&&BotSupplyState(0).probe.floorRays==0,
+  "NORMAL44 newly proposed matched inverted-gravity air motion remains bounded and has no up/floor authority");
+ // A valid committed airborne route retains its ordinary controller and speed.
+ setup(3);auto& route=BotSupplyState(0);route.goal=2;route.scanTick=99999;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);player.m_pstState=PST_FALL;
+ player.pl.pl_PositionVector=FLOAT3D(0,5,-3);route.scanTick=0;
+ _botRayBudget=16;m=BotSupplyTick(&player,0,2,1000);
+ check(route.navigator.HasCommittedEdge(2)&&route.anchor==0&&route.airMovementTime<0&&m.active,
+  "NORMAL44 valid committed airborne route remains independent of offgraph air hints");
+ airRecovery44Fixture();auto& timed=BotSupplyState(0);double first=-1;bool deadline=true,bounded=true;
+ allocations=0;measuring=true;
+ for(int tick=1;tick<=160;++tick){const int rays=rayCount;_botRayBudget=16;m=BotSupplyTick(&player,0,tick,1000);
+  if(tick==1)first=timed.reacquireSince;
+  if(tick<=120)deadline&=near(timed.reacquireSince,first);
+  airSafety44(m,tick,true,.1);bounded&=rayCount-rays<=16&&_botRayBudget>=0&&std::hypot(groundF,groundSt)<=.300001&&std::fabs(groundSt)<=.100001&&groundU==0;
+ }
+ measuring=false;check(deadline&&timed.reacquireRejected==0&&timed.reacquireNode==1,
+  "NORMAL44 repeated original air proposals keep the fixed six-second target deadline and genuine next-target backoff");
+ check(bounded&&allocations==0,"NORMAL44 changing air hint attempts preserve sixteen shared rays motion caps and zero per-tick allocations");
+}
+
 // NORMAL042 A0 reaches an original isolated UNREACHABLE point, then has no
 // directed goal. A2 is stationary on a sidewall with current NULL/near-foot NOHIT.
 // Default Cecil pit policy permits bounded movement, not a claim of ground.
@@ -1151,7 +1274,7 @@ void nativeContactRecovery(){
 }
 int main(){
  nativeContactRecovery();farHintTests();farHintGuards();
- neutralRecovery43();neutralRecovery43Guards();groundSweep42();groundSweep42Guards();offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
+ airRecovery44();airRecovery44Guards();neutralRecovery43();neutralRecovery43Guards();groundSweep42();groundSweep42Guards();offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
  liftOccupancyBridge();
  { // Reproduce Retail033's mask overwrite, including initialized-mask controls.
  for(bool physical:{false,true})for(ULONG initial:{0u,2048u}){
