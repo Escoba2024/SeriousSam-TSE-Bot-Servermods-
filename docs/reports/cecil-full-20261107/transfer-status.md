@@ -1,6 +1,6 @@
-# Cecil-Übernahmematrix – Quellstand038
+# Cecil-Übernahmematrix – Quellstand039
 
-Quelle `e2804ac2d0cabdc082a3bb881ef0557cd0f66bfc`; DLL `eacc13bd22221f758c151875857fab48012eb2637ffa89abb24346b2af52ec1b`.
+Quelle `c11bc16d6892068f65bf3946fd60b31ff9d554b5`; DLL `42d2a536263d599edf47c3387b4056eb5e099ee836ab2337fb7dab6f7fbc267f`.
 
 Alle41 Originalbereiche sind auf aktuelle Aufrufstellen geprüft.33 übernommene Bereiche sind weiterhin verdrahtet. Ein vorhandener Human-LOS-Adapter bleibt erhalten; vier Bereiche sind architektonisch ausgeschlossen und zwei für die fünf FFA-Karten nicht anwendbar. Die native Gesamtabnahme bleibt offen. Eine geprüfte Aufrufstelle belegt die Implementierung, jedoch keinen erfolgreichen Laufzeittest.
 
@@ -51,3 +51,7 @@ Alle neun privaten NAV-Dateien bestanden den byteidentischen Rundlauf.221.682 Pr
 | T41 | Coop-Catch-up-Teleport | E | ARCHITECTURALLY_EXCLUDED: Autoritativer Coop-Catch-up per Entity.Teleport wird nicht übernommen; normales Follow und NAV-TELEPORT sind ausdrücklich getrennt. | Bewusste Vanilla-FFA-Grenze, kein offenes Client-Pflichtfeature. |
 
 Maschinenlesbare Einzelbelege, Quellhashes und getrennte historische Ergebnisse: [transfer-status.json](transfer-status.json). Private Rohlogs und vollständige NAV-Datensätze werden nicht veröffentlicht.
+
+## Normal039, 09.11.2026, 18:29 UTC
+
+**Nicht qualifiziert:** Skulls600,008s mit552,588s/19,164s/14,113s unbegründetem Stillstand; neue vollständige Versorgungskohorte nur7/10 Erwerbe, Median9,775s/P9533,05s. Keine Übertragung der038-Einzelgate-Erfolge. Der Positionswatchdog ist im Quellstand verdrahtet, seine vollständige native Wirksamkeit bleibt offen. [Aktueller Laufbericht](2026-11-09-candidate039-native-results.md). Alle41 Originalzeilen bleiben unverändert erhalten; aktuelle Aufrufstellen und Dateihashes sind für039 erneut gebunden. Stundenfenster und Flottenrollout nicht begonnen.

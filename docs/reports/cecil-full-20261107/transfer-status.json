@@ -1,15 +1,15 @@
 {
   "schema_version": 2,
-  "snapshot_utc": "2026-11-09T17:18:57.767527+00:00",
+  "snapshot_utc": "2026-11-09T18:27:54.378537+00:00",
   "purpose": "Aktueller Quell- und Verdrahtungsstand aller 41 Bereiche; native Gesamtqualifikation und Flottenrollout bleiben offen.",
   "qualified": false,
   "code_snapshot": {
-    "commit": "e2804ac2d0cabdc082a3bb881ef0557cd0f66bfc",
+    "commit": "c11bc16d6892068f65bf3946fd60b31ff9d554b5",
     "source_layout": "poc/candidates/redstation-supply-20261107: vollständiger flacher Overlay, 28 Quelldateien; SDK-Game-Archiv ergänzt die übrigen Builddateien.",
     "sdk_commit": "aa7869c2c2c4db0562281814d0ac3784e6b9d6f0",
     "include_commit": "94ff8cd0e63941f8601294350b616472f772ed51",
     "scope": "Sauberer Integrationscommit auf origin/main; keine Abhängigkeit von unveröffentlichten historischen ssam-Commits. Native Belege gelten ausschließlich für ihren eigenen DLL-Hash.",
-    "tree": "9eecbbb40cd3213fd1f29758010380118fa1f5cf"
+    "tree": "62148f3c357739f5e681eab1b73aa1e2b3593486"
   },
   "original_reference": {
     "repository": "DreamyCecil/CecilBotMod",
@@ -46,13 +46,13 @@
   "source_file_sha256": {
     "poc/candidates/redstation-supply-20261107/BotCecilItems.h": "9104f4b1dc0e9383d46cd829cb7ca27aee4381750887e96a422727eb50ca8f4f",
     "poc/candidates/redstation-supply-20261107/BotDriver.cpp": "13b6e69614a01491437ec78dc9699af11aa974cdae707673cd7ab5029fd92bd7",
-    "poc/candidates/redstation-supply-20261107/BotSupplyNative.h": "8f89976aba8ac3874da3e986491f50c82e630da8b41d7d1526928ecf305858d6",
+    "poc/candidates/redstation-supply-20261107/BotSupplyNative.h": "776984b2a1963ca4da08bc27508af954b9ff7619f16ebdc7686bc11492ef547a",
     "poc/candidates/redstation-supply-20261107/Game.cpp": "43e14e8d0cb5270211436d203bc5aba4abce64fb8cb4b39c80d2bb0bcbea53d7",
     "poc/candidates/redstation-supply-20261107/bot_human.h": "1c7ab600dd5cdd6eb245a23d3565af2086481eb0348057028630afaf98df78c8",
     "poc/candidates/redstation-supply-20261107/bot_loadout.h": "27f109bc7c4f5e42ddb5faa245406bbff275f1c2e8f38ba339dba0f18cb8d06a",
     "poc/candidates/redstation-supply-20261107/bot_perception.h": "70cc20b279bebc05bcec5bf00b966145dc7179a7fbd5b4e93d843bd075ffbba7",
     "poc/candidates/redstation-supply-20261107/bot_weapon_input.h": "fa4a0453a42adf7df5d0461427660f51d25cfc263859e56c33601c26e3ea1277",
-    "poc/candidates/redstation-supply-20261107/cecil_motion.h": "314a7fe2192954ca654509d0186f949ff62580f680f6c863462de17ba4b01c8d",
+    "poc/candidates/redstation-supply-20261107/cecil_motion.h": "2f6584350fdd568decfe6c8952f00db79d1297ac5fa556c393cadc824fb8d794",
     "poc/candidates/redstation-supply-20261107/cecil_nav_data.h": "effd54cf03313084d8ca3e24b07a5d12d3b2face8e3da4ad3ddd2e78947a4212",
     "poc/candidates/redstation-supply-20261107/cecil_rules.h": "b30bf1bf148964a89adf41ecf6e9f167fcb261345ba4f9af080279a539fde8f9",
     "tools/audit_cecil_native_log.py": "7586ffc10f3c27c0c9d7e93328a9e1df0ccccfb8284e33cbacc4b6aea554c159",
@@ -109,16 +109,24 @@
       "source_commit": "e2804ac2d0cabdc082a3bb881ef0557cd0f66bfc",
       "status": "PASS_PORTABLE_SDK_STUB",
       "limit": "Stubbasierte SDK-Prüfung; kein nativer Laufzeitnachweis."
+    },
+    "BRIDGE039": {
+      "result": "556 SDK107-Bridgeprüfungen unter ASan/UBSan,0 Fehler.",
+      "source_commit": "c11bc16d6892068f65bf3946fd60b31ff9d554b5",
+      "source_tree": "62148f3c357739f5e681eab1b73aa1e2b3593486",
+      "status": "PASS_PORTABLE_SDK_STUB",
+      "limit": "Der lokal geprüfte Integrationscommit a395350 und veröffentlichte c11bc16 besitzen exakt denselben Tree. Stubprüfung ersetzt keine Runtime; Timerstub verwendet double statt tatsächlichem SDK107-TIME float, separat als Prüfgrenze dokumentiert."
     }
   },
   "native_build_observed": {
-    "build": "Normal038",
-    "source_commit": "e2804ac2d0cabdc082a3bb881ef0557cd0f66bfc",
-    "dll_sha256": "eacc13bd22221f758c151875857fab48012eb2637ffa89abb24346b2af52ec1b",
-    "manifest": "build038.json",
+    "build": "Normal039",
+    "source_commit": "c11bc16d6892068f65bf3946fd60b31ff9d554b5",
+    "source_tree": "62148f3c357739f5e681eab1b73aa1e2b3593486",
+    "dll_sha256": "42d2a536263d599edf47c3387b4056eb5e099ee836ab2337fb7dab6f7fbc267f",
+    "manifest": "build039.json",
     "qualified": false
   },
-  "native_build_limit": "Normal038 besteht nur begrenzte Hole/Trouble/Yodeller- und Vierbot-Beobachtungen, den separat nachgeprüften v11-Einzelbot-Versorgungsnachweis sowie118 tatsächliche Respawnfolgen. Skulls600s scheitert an271,19s/15,12s/12,12s unbegründetem Stillstand. Keine formalen3600/3600/7200s, Retail038 oder Flottenfreigabe. Siehe2026-11-09-candidate038-native-results.md.",
+  "native_build_limit": "Normales Win32-Build bestanden; native Skulls- und Einzelbot-Versorgungsgates fehlgeschlagen. Keine globale Qualifikation oder Flottenfreigabe.",
   "original_runtime_B": {
     "status": "QUELLEN_UND_FIXTURE_REFERENZ; ORIGINAL_RUNTIME_NOCH_NICHT_GEMESSEN",
     "available": [
@@ -169,8 +177,8 @@
       "offline_evidence_ids": [
         "NAV038"
       ],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_offline_evidence_ids": [
         "NAV"
       ],
@@ -188,7 +196,7 @@
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 96,
+          "line": 102,
           "function": "BotSupplyUpdateNavigation"
         }
       ],
@@ -207,7 +215,8 @@
           "NAV"
         ]
       },
-      "historical_implementation_text": "Unveränderte NAV-Bytes werden vollständig geladen und per Map-/NAV-CRC gebunden."
+      "historical_implementation_text": "Unveränderte NAV-Bytes werden vollständig geladen und per Map-/NAV-CRC gebunden.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T02",
@@ -233,8 +242,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_offline_evidence_ids": [
         "NAV"
       ],
@@ -252,7 +261,7 @@
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 258,
+          "line": 264,
           "function": "BotCecilLocks"
         }
       ],
@@ -272,7 +281,8 @@
           "NAV"
         ]
       },
-      "historical_implementation_text": "Position, Radius, Flags, IDs, gerichtete Links, Important-/Next-/Lock-Felder bleiben erhalten; Pointer werden durch IDs und Slots ersetzt."
+      "historical_implementation_text": "Position, Radius, Flags, IDs, gerichtete Links, Important-/Next-/Lock-Felder bleiben erhalten; Pointer werden durch IDs und Slots ersetzt.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T03",
@@ -298,8 +308,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_offline_evidence_ids": [
         "NAV"
       ],
@@ -336,7 +346,8 @@
           "NAV"
         ]
       },
-      "historical_implementation_text": "Alle gerichteten Kanten bleiben erhalten; keine automatische Symmetrisierung oder Begrenzung auf 256 Punkte."
+      "historical_implementation_text": "Alle gerichteten Kanten bleiben erhalten; keine automatische Symmetrisierung oder Begrenzung auf 256 Punkte.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T04",
@@ -362,8 +373,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -373,7 +384,7 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
-          "line": 139,
+          "line": 165,
           "function": "CecilNavigator::Reached"
         }
       ],
@@ -392,7 +403,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Originalradien und der zweite gravitationsbezogene Ankunftsbereich bleiben erhalten; die Bewegungsbasis verwendet Körperachsen und reale Gravitation."
+      "historical_implementation_text": "Originalradien und der zweite gravitationsbezogene Ankunftsbereich bleiben erhalten; die Bewegungsbasis verwendet Körperachsen und reale Gravitation.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T05",
@@ -418,8 +430,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_offline_evidence_ids": [
         "NAV"
       ],
@@ -456,7 +468,8 @@
           "NAV"
         ]
       },
-      "historical_implementation_text": "Dijkstra mit h=0 ersetzt bewusst Cecil-A*: gerichtete Kanten, Nullkosten-Teleports und Locks bleiben erhalten."
+      "historical_implementation_text": "Dijkstra mit h=0 ersetzt bewusst Cecil-A*: gerichtete Kanten, Nullkosten-Teleports und Locks bleiben erhalten.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T06",
@@ -482,8 +495,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -493,17 +506,17 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 239,
+          "line": 245,
           "function": "BotSupplyNearest"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
-          "line": 38,
+          "line": 64,
           "function": "CecilNavigator::Update"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 492,
+          "line": 498,
           "function": "BotCecilReacquire"
         }
       ],
@@ -522,7 +535,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Anker verwenden begrenzte Verbindungssicht, Distanz und Höhe entlang realer Gravitation statt festem Welt-Y."
+      "historical_implementation_text": "Anker verwenden begrenzte Verbindungssicht, Distanz und Höhe entlang realer Gravitation statt festem Welt-Y.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T07",
@@ -549,8 +563,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_offline_evidence_ids": [
         "NAV"
       ],
@@ -563,12 +577,12 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 621,
+          "line": 642,
           "function": "BotCecilImportant"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 810,
+          "line": 831,
           "function": "BotSupplyTick"
         }
       ],
@@ -589,7 +603,8 @@
           "NAV"
         ]
       },
-      "historical_implementation_text": "Important-Ziele, Wahrscheinlichkeit und Next-Ketten sind implementiert; der Kontext bleibt auf unmarkierten Kettenpunkten erhalten. Der committierte Adapter verwendet read-only Entityreferenzen, Marker-Zielanker und normale USE-Actions."
+      "historical_implementation_text": "Important-Ziele, Wahrscheinlichkeit und Next-Ketten sind implementiert; der Kontext bleibt auf unmarkierten Kettenpunkten erhalten. Der committierte Adapter verwendet read-only Entityreferenzen, Marker-Zielanker und normale USE-Actions.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T08",
@@ -616,8 +631,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -627,12 +642,12 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 603,
+          "line": 624,
           "function": "BotCecilUsableSwitch"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 621,
+          "line": 642,
           "function": "BotCecilImportant"
         },
         {
@@ -654,7 +669,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Direkte SendToTarget-/EET_TRIGGER-Aufrufe bleiben ausgeschlossen. Normales Retail-USE (Bit 5) für bestätigten nahen Rayhit auf brauchbare Switches/MovingBrush-Relays und read-only Marker-Zielanker bilden den Clientadapter."
+      "historical_implementation_text": "Direkte SendToTarget-/EET_TRIGGER-Aufrufe bleiben ausgeschlossen. Normales Retail-USE (Bit 5) für bestätigten nahen Rayhit auf brauchbare Switches/MovingBrush-Relays und read-only Marker-Zielanker bilden den Clientadapter.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T09",
@@ -681,8 +697,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -692,17 +708,17 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 258,
+          "line": 264,
           "function": "BotCecilLocks"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 176,
+          "line": 182,
           "function": "BotCecilSupportedLockNode"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
-          "line": 74,
+          "line": 100,
           "function": "CecilNavigator::Update"
         }
       ],
@@ -721,7 +737,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Read-only Placement-Vergleich sperrt veränderte Lock-Entities; fehlende Entities werden bewusst fail-closed behandelt. Vorbereitete pro-Bot-Snapshots protokollieren initiale und geänderte physische Lockzustände."
+      "historical_implementation_text": "Read-only Placement-Vergleich sperrt veränderte Lock-Entities; fehlende Entities werden bewusst fail-closed behandelt. Vorbereitete pro-Bot-Snapshots protokollieren initiale und geänderte physische Lockzustände.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T10",
@@ -749,8 +766,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_offline_evidence_ids": [
         "NAV"
       ],
@@ -768,7 +785,7 @@
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
-          "line": 38,
+          "line": 64,
           "function": "CecilNavigator::Update"
         },
         {
@@ -794,7 +811,8 @@
           "NAV"
         ]
       },
-      "historical_implementation_text": "TELEPORT erhält gerichtete Nullkosten-Kanten; Bewegung muss den echten Trigger erreichen. Kein direktes Teleportieren."
+      "historical_implementation_text": "TELEPORT erhält gerichtete Nullkosten-Kanten; Bewegung muss den echten Trigger erreichen. Kein direktes Teleportieren.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T11",
@@ -822,8 +840,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -833,7 +851,7 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
-          "line": 96,
+          "line": 122,
           "function": "CecilNavigator::Update"
         },
         {
@@ -857,7 +875,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "JUMP, CROUCH, WALK und OVERRIDE liefern normale vertikale bzw. horizontale Action-Intents; Sprünge besitzen einen Pulsabstand. Endliche finale Actions und begrenzte Achsen werden vor Ausgabe geprüft."
+      "historical_implementation_text": "JUMP, CROUCH, WALK und OVERRIDE liefern normale vertikale bzw. horizontale Action-Intents; Sprünge besitzen einen Pulsabstand. Endliche finale Actions und begrenzte Achsen werden vor Ausgabe geprüft.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T12",
@@ -881,7 +900,7 @@
       "code_references": [],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
       "historical_native_observation": {
         "native_status": "NICHT_ANWENDBAR"
       },
@@ -890,7 +909,7 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 96,
+          "line": 102,
           "function": "BotSupplyUpdateNavigation"
         }
       ],
@@ -906,7 +925,8 @@
         "historical_offline_evidence_ids": null
       },
       "historical_implementation_text": "Für die fünf betriebenen Karten liegen vollständige gepinnte NAV-Dateien vor; automatische Generierung ist zum Laden dieser Daten nicht erforderlich.",
-      "native_build": "Normal038"
+      "native_build": "Normal039",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T13",
@@ -930,7 +950,7 @@
       "code_references": [],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
       "historical_native_observation": {
         "native_status": "NICHT_ANWENDBAR"
       },
@@ -955,7 +975,8 @@
         "historical_offline_evidence_ids": null
       },
       "historical_implementation_text": "Cecil-NAV-Editor und eigene Netzbefehle werden nicht in Vanilla-Netzverkehr eingebaut. NAV-Daten werden außerhalb der laufenden Simulation vorbereitet.",
-      "native_build": "Normal038"
+      "native_build": "Normal039",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T14",
@@ -984,8 +1005,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1020,7 +1041,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Pro Slot existieren getrennte Navigation, Wahrnehmung, Aim, Waffen- und Feuerzustände; Source-, Entity-, Todes- und Mapwechsel setzen diese zurück."
+      "historical_implementation_text": "Pro Slot existieren getrennte Navigation, Wahrnehmung, Aim, Waffen- und Feuerzustände; Source-, Entity-, Todes- und Mapwechsel setzen diese zurück.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T15",
@@ -1047,8 +1069,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1058,12 +1080,12 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/cecil_motion.h",
-          "line": 108,
+          "line": 134,
           "function": "CecilNavigator::Update"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 934,
+          "line": 955,
           "function": "BotCecilSafeMotion"
         }
       ],
@@ -1082,7 +1104,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Fortschrittsmessung, maximal zweisekündige unbegründete NAV-Holds und zeitweise Meidung des blockierenden Hops begrenzen UNREACHABLE-/zu-hohe-Ziele. Important-Kontext bleibt erhalten."
+      "historical_implementation_text": "Fortschrittsmessung, maximal zweisekündige unbegründete NAV-Holds und zeitweise Meidung des blockierenden Hops begrenzen UNREACHABLE-/zu-hohe-Ziele. Important-Kontext bleibt erhalten.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T16",
@@ -1111,8 +1134,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1122,12 +1145,12 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 492,
+          "line": 498,
           "function": "BotCecilReacquire"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 934,
+          "line": 955,
           "function": "BotCecilSafeMotion"
         },
         {
@@ -1151,7 +1174,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Cecil verwendet eine einzige finale Wand-/Pit-Recovery in Körperbasis; der alte Welt-XZ-Hindernispfad bleibt für Cecil deaktiviert und für Legacy erhalten. Sichere seitliche Ausweichrichtungen werden kurz in Weltkoordinaten gehalten und vor jeder Ausgabe erneut geprüft."
+      "historical_implementation_text": "Cecil verwendet eine einzige finale Wand-/Pit-Recovery in Körperbasis; der alte Welt-XZ-Hindernispfad bleibt für Cecil deaktiviert und für Legacy erhalten. Sichere seitliche Ausweichrichtungen werden kurz in Weltkoordinaten gehalten und vor jeder Ausgabe erneut geprüft.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T17",
@@ -1178,8 +1202,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1189,17 +1213,17 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 214,
+          "line": 220,
           "function": "BotCecilPhysicalCast"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 953,
+          "line": 998,
           "function": "BotCecilSafeMotion"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 875,
+          "line": 896,
           "function": "BotCecilFloor"
         }
       ],
@@ -1218,7 +1242,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Das ursprüngliche Preset steuert Pit-Vermeidung: nur bAvoidPits, kein bestätigtes Liquid und kein frisch validierter aktueller NAV-Punkt verlangen Bodenunterstützung. Default-Presets mit bAvoidPits=0 erhalten kein zusätzliches Pit-Veto."
+      "historical_implementation_text": "Das ursprüngliche Preset steuert Pit-Vermeidung: nur bAvoidPits, kein bestätigtes Liquid und kein frisch validierter aktueller NAV-Punkt verlangen Bodenunterstützung. Default-Presets mit bAvoidPits=0 erhalten kein zusätzliches Pit-Veto.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T18",
@@ -1250,8 +1275,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1261,12 +1286,12 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 460,
+          "line": 466,
           "function": "BotCecilSwimMotion"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 154,
+          "line": 160,
           "function": "BotCecilBodyFrame"
         }
       ],
@@ -1289,7 +1314,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Bestätigte PST_SWIM-/PST_DIVE-Zustände besitzen dreidimensionale normale Actions ohne Pit-Bodenpflicht. Körperbasis und reale Gravitation steuern NAV, Anker, Wand-/Bodenprüfung und Combat-Aim/FOV; ungültige Frames werden neutralisiert."
+      "historical_implementation_text": "Bestätigte PST_SWIM-/PST_DIVE-Zustände besitzen dreidimensionale normale Actions ohne Pit-Bodenpflicht. Körperbasis und reale Gravitation steuern NAV, Anker, Wand-/Bodenprüfung und Combat-Aim/FOV; ungültige Frames werden neutralisiert.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T19",
@@ -1316,8 +1342,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1327,12 +1353,12 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 435,
+          "line": 441,
           "function": "BotCecilFollowValid"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 441,
+          "line": 447,
           "function": "BotCecilFollow"
         }
       ],
@@ -1351,7 +1377,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Follow nutzt ausschließlich eingefrorene wahrgenommene Positionen mit Entity-ID, Mapgeneration und Ablaufzeit; Items und unmittelbarer Kampf werden priorisiert."
+      "historical_implementation_text": "Follow nutzt ausschließlich eingefrorene wahrgenommene Positionen mit Entity-ID, Mapgeneration und Ablaufzeit; Items und unmittelbarer Kampf werden priorisiert.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T20",
@@ -1378,8 +1405,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1411,7 +1438,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Cecil-Priorität aus Sichtbarkeit, relativer Gesundheit und Distanz arbeitet auf Human-reaktionsfreigegebenen Beobachtungen in stabiler Slotreihenfolge; fTargetCD gilt."
+      "historical_implementation_text": "Cecil-Priorität aus Sichtbarkeit, relativer Gesundheit und Distanz arbeitet auf Human-reaktionsfreigegebenen Beobachtungen in stabiler Slotreihenfolge; fTargetCD gilt.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T21",
@@ -1438,8 +1466,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1466,7 +1494,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Gleiche nichtleere Teams werden seit 7bc6cfa als Gegner ausgeschlossen. Leeres eigenes Team behält die Original-FFA-Semantik."
+      "historical_implementation_text": "Gleiche nichtleere Teams werden seit 7bc6cfa als Gegner ausgeschlossen. Leeres eigenes Team behält die Original-FFA-Semantik.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T22",
@@ -1494,8 +1523,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1534,7 +1563,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Budgetierte Human-Sichtprüfung und eingefrorene Weltpositions-Tracks bleiben erhalten; Aim/FOV transformieren die Welt-Differenz in die aktuelle Körperbasis. Item-Verbindungsstrahlen beziehen das jeweilige Item ein."
+      "historical_implementation_text": "Budgetierte Human-Sichtprüfung und eingefrorene Weltpositions-Tracks bleiben erhalten; Aim/FOV transformieren die Welt-Differenz in die aktuelle Körperbasis. Item-Verbindungsstrahlen beziehen das jeweilige Item ein.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T23",
@@ -1562,8 +1592,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1597,7 +1627,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Ziel, Distanz und Gesundheit stammen aus derselben Beobachtung. Tod und Identitätswechsel löschen Tracks; verdeckte Positionen werden nicht aktualisiert."
+      "historical_implementation_text": "Ziel, Distanz und Gesundheit stammen aus derselben Beobachtung. Tod und Identitätswechsel löschen Tracks; verdeckte Positionen werden nicht aktualisiert.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T24",
@@ -1623,8 +1654,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1657,7 +1688,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Alle 30 originalen Waffenzeilen einschließlich NONE bleiben mit Herkunft erhalten; Ratings werden nicht als gemessene DPS bezeichnet."
+      "historical_implementation_text": "Alle 30 originalen Waffenzeilen einschließlich NONE bleiben mit Herkunft erhalten; Ratings werden nicht als gemessene DPS bezeichnet.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T25",
@@ -1685,8 +1717,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1720,7 +1752,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Cecil-Scores nutzen sichere IDs, Besitz, Munitionsbedarf und Reichweite; Human-Hysterese bleibt erhalten. Single Colt wird nach Double-Colt-Pickup nicht festgehalten."
+      "historical_implementation_text": "Cecil-Scores nutzen sichere IDs, Besitz, Munitionsbedarf und Reichweite; Human-Hysterese bleibt erhalten. Single Colt wird nach Double-Colt-Pickup nicht festgehalten.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T26",
@@ -1747,8 +1780,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1787,7 +1820,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Bestehende Retail-Gruppenpulse werden genau einmal nach Arbitration erzeugt. Feuer verlangt aktuelle, gewünschte und entschiedene Waffe identisch."
+      "historical_implementation_text": "Bestehende Retail-Gruppenpulse werden genau einmal nach Arbitration erzeugt. Feuer verlangt aktuelle, gewünschte und entschiedene Waffe identisch.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T27",
@@ -1814,8 +1848,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1853,7 +1887,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Granaten besitzen Hold/Release-Zyklus mit mindestens einem losgelassenen Sample. Scope folgt sichtbarem Ziel und bestätigtem Sniping-Zustand mit 0,2 Sekunden Abstand."
+      "historical_implementation_text": "Granaten besitzen Hold/Release-Zyklus mit mindestens einem losgelassenen Sample. Scope folgt sichtbarem Ziel und bestätigtem Sniping-Zustand mit 0,2 Sekunden Abstand.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T28",
@@ -1883,8 +1918,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1919,7 +1954,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Human-Beschleunigung, Bremsen, Bias und Settling bleiben erhalten; Cecil-Drehparameter begrenzen den Delta. Vorhalt nutzt das Maximum beider Modelle. Native lokale Kopfwinkel, Körperbasis und Sniper-Winkeldämpfung werden konsistent berücksichtigt."
+      "historical_implementation_text": "Human-Beschleunigung, Bremsen, Bias und Settling bleiben erhalten; Cecil-Drehparameter begrenzen den Delta. Vorhalt nutzt das Maximum beider Modelle. Native lokale Kopfwinkel, Körperbasis und Sniper-Winkeldämpfung werden konsistent berücksichtigt.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T29",
@@ -1947,8 +1983,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -1982,7 +2018,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Human-Strafing, bevorzugte Distanz, Persönlichkeit und Health-Retreat bleiben auf ausdrücklichen Nutzerwunsch erhalten. Cecil-Speed-/Strafe-Gates greifen zusätzlich."
+      "historical_implementation_text": "Human-Strafing, bevorzugte Distanz, Persönlichkeit und Health-Retreat bleiben auf ausdrücklichen Nutzerwunsch erhalten. Cecil-Speed-/Strafe-Gates greifen zusätzlich.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T30",
@@ -2009,8 +2046,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -2030,12 +2067,12 @@
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 368,
+          "line": 374,
           "function": "BotCecilChooseGoal"
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 694,
+          "line": 715,
           "function": "BotCecilRebudgetWeapon"
         }
       ],
@@ -2053,7 +2090,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Typisierte Policy priorisiert Waffen, Gesundheit, Powerups, Rüstung, Packs und Munition. Kandidaten werden vor der Nearest-Wahl auf Bedarf geprüft."
+      "historical_implementation_text": "Typisierte Policy priorisiert Waffen, Gesundheit, Powerups, Rüstung, Packs und Munition. Kandidaten werden vor der Nearest-Wahl auf Bedarf geprüft.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T31",
@@ -2080,8 +2118,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -2101,7 +2139,7 @@
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 327,
+          "line": 333,
           "function": "BotCecilChooseMappedWeapon"
         }
       ],
@@ -2121,7 +2159,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Read-only Snapshots prüfen Klasse, Wert, OverTop, Eigen-Pickupmaske, Hidden/Deleted, Position und Generation. Packs bilden acht Reserven ab. Waffenbesitzzuwachs und bestätigter Eigenpickup eines WeaponsStay-Ziels werden getrennt protokolliert."
+      "historical_implementation_text": "Read-only Snapshots prüfen Klasse, Wert, OverTop, Eigen-Pickupmaske, Hidden/Deleted, Position und Generation. Packs bilden acht Reserven ab. Waffenbesitzzuwachs und bestätigter Eigenpickup eines WeaponsStay-Ziels werden getrennt protokolliert.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T32",
@@ -2148,8 +2187,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -2181,7 +2220,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Seit 7bc6cfa ist Reisemesser von Bewegungs-Override getrennt und erst nach mehr als zwei Sekunden ohne Sichtkontakt erlaubt."
+      "historical_implementation_text": "Seit 7bc6cfa ist Reisemesser von Bewegungs-Override getrennt und erst nach mehr als zwei Sekunden ohne Sichtkontakt erlaubt.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T33",
@@ -2208,8 +2248,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -2224,7 +2264,7 @@
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 724,
+          "line": 745,
           "function": "BotSupplyTick"
         }
       ],
@@ -2244,7 +2284,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Respawn verwendet reguläre Fire-Press/Release-Actions und Presetverzögerung; fehlende Entities erlauben nur zuvor angehängten Sources eine Anfrage."
+      "historical_implementation_text": "Respawn verwendet reguläre Fire-Press/Release-Actions und Presetverzögerung; fehlende Entities erlauben nur zuvor angehängten Sources eine Anfrage.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T34",
@@ -2272,8 +2313,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -2314,7 +2355,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Vier Originalpresets mit 119 Zuweisungen plus Konstruktorfeldern bleiben getrennt von Human-Profilen erhalten. Speed/Strafe/Jump und der zuvor ignorierte bAvoidPits-Schalter sind an den nativen Ausgang angebunden."
+      "historical_implementation_text": "Vier Originalpresets mit 119 Zuweisungen plus Konstruktorfeldern bleiben getrennt von Human-Profilen erhalten. Speed/Strafe/Jump und der zuvor ignorierte bAvoidPits-Schalter sind an den nativen Ausgang angebunden.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T35",
@@ -2341,8 +2383,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -2357,7 +2399,7 @@
         },
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 96,
+          "line": 102,
           "function": "BotSupplyUpdateNavigation"
         }
       ],
@@ -2376,7 +2418,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Originales raw sizeof(struct)-Speichern ist ausgeschlossen. Ein streng versioniertes Textschema wählt explizit eines der vier Presets."
+      "historical_implementation_text": "Originales raw sizeof(struct)-Speichern ist ausgeschlossen. Ein streng versioniertes Textschema wählt explizit eines der vier Presets.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T36",
@@ -2406,8 +2449,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -2448,7 +2491,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Enginefreie Regel-, Human-, Nav- und Bewegungsmodule werden durch read-only Snapshots mit einer finalen nativen Action-Komposition verbunden."
+      "historical_implementation_text": "Enginefreie Regel-, Human-, Nav- und Bewegungsmodule werden durch read-only Snapshots mit einer finalen nativen Action-Komposition verbunden.",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T37",
@@ -2472,7 +2516,7 @@
       "code_references": [],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
       "historical_native_observation": {
         "native_status": "NICHT_ANWENDBAR"
       },
@@ -2497,7 +2541,8 @@
         "historical_offline_evidence_ids": null
       },
       "historical_implementation_text": "PlayerBot-Subclass und ersetzte Server-Entities werden nicht ausgerollt. Bots bleiben gewöhnliche Netzwerkspieler mit regulären Actions.",
-      "native_build": "Normal038"
+      "native_build": "Normal039",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T38",
@@ -2521,7 +2566,7 @@
       "code_references": [],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
       "historical_native_observation": {
         "native_status": "NICHT_ANWENDBAR"
       },
@@ -2547,7 +2592,8 @@
         "historical_offline_evidence_ids": null
       },
       "historical_implementation_text": "Custom-Netzmessage 49, Detours und Cecil-Netzpatch werden nicht in die Vanilla-Integration übernommen.",
-      "native_build": "Normal038"
+      "native_build": "Normal039",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T39",
@@ -2571,7 +2617,7 @@
       "code_references": [],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
       "historical_native_observation": {
         "native_status": "NICHT_ANWENDBAR"
       },
@@ -2588,7 +2634,8 @@
         "historical_offline_evidence_ids": null
       },
       "historical_implementation_text": "Im gepinnten Original wurde kein entsprechendes Lern-/Teamtaktik-Subsystem gefunden. Es wird keine nicht belegte Cecil-Funktion erfunden.",
-      "native_build": "Normal038"
+      "native_build": "Normal039",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     },
     {
       "id": "T40",
@@ -2614,8 +2661,8 @@
       ],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
-      "native_build": "Normal038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
+      "native_build": "Normal039",
       "historical_native_observation": {
         "native_status": "NICHT_GEPRUEFT",
         "native_build": "Build010"
@@ -2671,7 +2718,8 @@
         ],
         "historical_offline_evidence_ids": null
       },
-      "historical_implementation_text": "Build010 aus dem sauberen Quellpin ist erfolgreich erzeugt; sämtliche aktuelle native Abnahmen bleiben offen. Frühere Build003/006/007/008-Beobachtungen und der Build009-Syncfehler qualifizieren diesen Kandidaten nicht."
+      "historical_implementation_text": "Build010 aus dem sauberen Quellpin ist erfolgreich erzeugt; sämtliche aktuelle native Abnahmen bleiben offen. Frühere Build003/006/007/008-Beobachtungen und der Build009-Syncfehler qualifizieren diesen Kandidaten nicht.",
+      "native039_result": "SKULLS_BEHAVIOR_FAIL_AND_SUPPLY_FAIL_NO_RELEASE"
     },
     {
       "id": "T41",
@@ -2695,7 +2743,7 @@
       "code_references": [],
       "offline_status": "CURRENT_SOURCE_WIRING_REVIEWED_TEST_SCOPE_SEPARATE",
       "offline_evidence_ids": [],
-      "native_status": "NOT_QUALIFIED_FINAL038",
+      "native_status": "NOT_QUALIFIED_FINAL039",
       "historical_native_observation": {
         "native_status": "NICHT_ANWENDBAR"
       },
@@ -2704,7 +2752,7 @@
       "current_source_references": [
         {
           "file": "poc/candidates/redstation-supply-20261107/BotSupplyNative.h",
-          "line": 441,
+          "line": 447,
           "function": "BotCecilFollow"
         },
         {
@@ -2725,17 +2773,18 @@
         "historical_offline_evidence_ids": null
       },
       "historical_implementation_text": "Autoritativer Coop-Catch-up per pen->Teleport wird nicht übernommen; er ist von regulärem Follow und NAV-TELEPORT-Triggern getrennt.",
-      "native_build": "Normal038"
+      "native_build": "Normal039",
+      "native039_result": "NOT_AUDITED_NOT_INHERITED"
     }
   ],
   "native_acceptance": {
-    "status": "FAILED_SKULLS_BEHAVIOR_NO_RELEASE",
+    "status": "FAILED_SKULLS_BEHAVIOR_AND_SINGLE_SUPPLY_NO_RELEASE",
     "evidence_transfer_from_older_candidates": false,
     "production_deployment": "UNCHANGED",
-    "single_supply": "PASS_NATIVE_REVIEW_ONLY",
-    "respawn": "PASS_NATIVE_REVIEW_118_HEALTH_DEATHS",
+    "single_supply": "FAIL_7_OF_10_P95_33_05",
+    "respawn": "NOT_QUALIFIED_ON_039",
     "long_duration": "NOT_STARTED",
-    "retail038": "NOT_STARTED",
+    "retail039": "NOT_STARTED",
     "thresholds_changed": false
   },
   "historical_snapshot": {
@@ -2956,6 +3005,33 @@
       "fleet_instances": 6,
       "fleet_min_seconds": 900,
       "thresholds_source": "qualification.md; vorab festgelegt, unverändert"
+    }
+  },
+  "historical_candidate038_snapshot": {
+    "code_snapshot": {
+      "commit": "e2804ac2d0cabdc082a3bb881ef0557cd0f66bfc",
+      "source_layout": "poc/candidates/redstation-supply-20261107: vollständiger flacher Overlay, 28 Quelldateien; SDK-Game-Archiv ergänzt die übrigen Builddateien.",
+      "sdk_commit": "aa7869c2c2c4db0562281814d0ac3784e6b9d6f0",
+      "include_commit": "94ff8cd0e63941f8601294350b616472f772ed51",
+      "scope": "Sauberer Integrationscommit auf origin/main; keine Abhängigkeit von unveröffentlichten historischen ssam-Commits. Native Belege gelten ausschließlich für ihren eigenen DLL-Hash.",
+      "tree": "9eecbbb40cd3213fd1f29758010380118fa1f5cf"
+    },
+    "native_build_observed": {
+      "build": "Normal038",
+      "source_commit": "e2804ac2d0cabdc082a3bb881ef0557cd0f66bfc",
+      "dll_sha256": "eacc13bd22221f758c151875857fab48012eb2637ffa89abb24346b2af52ec1b",
+      "manifest": "build038.json",
+      "qualified": false
+    },
+    "native_acceptance": {
+      "status": "FAILED_SKULLS_BEHAVIOR_NO_RELEASE",
+      "evidence_transfer_from_older_candidates": false,
+      "production_deployment": "UNCHANGED",
+      "single_supply": "PASS_NATIVE_REVIEW_ONLY",
+      "respawn": "PASS_NATIVE_REVIEW_118_HEALTH_DEATHS",
+      "long_duration": "NOT_STARTED",
+      "retail038": "NOT_STARTED",
+      "thresholds_changed": false
     }
   }
 }
