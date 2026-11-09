@@ -65,7 +65,7 @@ enum PlayerState {PST_STAND=0,PST_SWIM=2,PST_DIVE=3};
 struct CPlayer:CEntity {
  PlayerState m_pstState=PST_STAND;FLOATmatrix3D body;CPlacement3D en_plViewpoint;
  const FLOATmatrix3D& GetRotationMatrix()const{return body;}
- CPlayerWeapons w;CPlayerWeapons* m_penWeapons=&w;CWorld world;
+ CPlayerWeapons w;CPlayerWeapons* m_penWeapons=&w;CWorld world;CEntity* en_penReference=nullptr;
  float health=100,m_fArmor=0;FLOAT3D en_vGravityDir{0,-1,0};
  float GetHealth()const{return health;}CPlayerWeapons* GetPlayerWeapons(){return &w;}
  CWorld* GetWorld(){return &world;}
@@ -160,8 +160,41 @@ int main(){
  setup(3);player.pl.pl_PositionVector(2)=31;_botRayBudget=16;
  auto noEdge=BotSupplyTick(&player,0,1,1000);
  check(!noEdge.active&&owns(noEdge,0)&&noEdge.forward==0&&noEdge.strafe==0&&noEdge.yaw_delta==0,"unanchored bot without commitment owns neutral movement rather than Human wandering");
+ setup(2);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ BotCecilSettings().bAvoidPits=0;BotSupplyState(0).escapeUntil=9;BotSupplyState(0).escapeWorld[0]=1;_botRayBudget=16;
+ auto recover=BotSupplyTick(&player,0,1,1000);
+ check(recover.active&&owns(recover,0)&&recover.forward>0&&recover.forward<=.3&&BotSupplyState(0).anchor<0,"grounded offgraph bot uses bounded reacquisition without fabricating an anchor");
+ check(BotSupplyState(0).escapeUntil==0,"entering a new reacquisition target clears stale normal-speed escape");
+ double rf=recover.forward,rs=recover.strafe,ru=recover.up;_botRayBudget=16;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),.05,rf,rs,ru,0,1)==0&&rf==0&&rs==0,"offgraph recovery requires actual floor support even with original pit setting disabled");
+ _botRayBudget=16;floorMode=2;rf=recover.forward;rs=recover.strafe;ru=0;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),.1,rf,rs,ru,0,1)==1&&rf>0,"supported clear reacquisition action proceeds through ordinary safe motion");
+ BotSupplyState(0).escapeUntil=1;BotSupplyState(0).escapeWorld[2]=-.8;BotSupplyState(0).escapeWorld[0]=.4;
+ _botRayBudget=16;rf=1;rs=ru=0;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),.2,rf,rs,ru,0,1)==2&&std::hypot(rf,rs)<=.300001,"held escape is capped before its exact offgraph floor and wall probes");
+ const int acquiredNode=BotSupplyState(0).reacquireNode;const double acquiredSince=BotSupplyState(0).reacquireSince;
+ _botRayBudget=16;BotSupplyTick(&player,0,21,1000);
+ check(BotSupplyState(0).reacquireNode==acquiredNode&&BotSupplyState(0).reacquireSince==acquiredSince,"repeated acquisition scans preserve a fixed attempt deadline");
+ _botRayBudget=16;BotSupplyTick(&player,0,141,1000);
+ check(BotSupplyState(0).reacquireRejected==acquiredNode&&BotSupplyState(0).reacquireRetryAfter>7&&BotSupplyState(0).reacquireNode!=acquiredNode,"unsuccessful acquisition target expires into bounded backoff and another candidate");
+ setup(2);player.m_pstState=PST_DIVE;player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,0);
+ BotSupplyGraph().points[0].z=20;BotSupplyGraph().points[1].z=30;_botRayBudget=16;
+ auto waterRecovery=BotSupplyTick(&player,0,1,1000);
+ check(waterRecovery.active&&waterRecovery.up>0&&std::fabs(waterRecovery.forward)<=.3&&BotSupplyState(0).anchor<0,"water gap reacquires nearby three dimensional route with bounded native swim input");
+ setup(2);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;_botRayBudget=2;
+ auto deferred=BotSupplyTick(&player,0,1,1000);
+ check(!deferred.active&&owns(deferred,0)&&deferred.forward==0,"reacquisition ray exhaustion stays owned neutral until next sample");
  }
  { // Original map knowledge supplies a directed acquisition route beyond local LOS search.
+ setup(3);player.w.usable=3;BotSupplyGraph().points[0].links={1,2};
+ BotSupplyGraph().points[1].y=70;BotSupplyGraph().points[1].z=-10;BotSupplyGraph().points[1].links.clear();
+ BotSupplyGraph().points[2].z=-180;
+ auto& high=addItem(988,0,-10,botcore::CecilItemKind::Weapon);high.pl.pl_PositionVector(2)=70;
+ addItem(989,0,-180,botcore::CecilItemKind::Weapon);
+ BotSupplyGraph().points[1].important_entity=988;BotSupplyGraph().points[2].important_entity=989;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(BotSupplyState(0).goalEntity==989,"unarmed acquisition retains Cecil vertical preference over a shorter high-platform route");
+ check(near(BotSupplyState(0).goalDeadline,35.05),"mapped deadline uses physical route length rather than vertical ranking penalty");
  setup(3);player.w.usable=3;
  auto& weapon=addItem(991,0,-22,botcore::CecilItemKind::Weapon);
  BotSupplyGraph().points[2].important_entity=991;

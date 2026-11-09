@@ -41,12 +41,14 @@ struct SSupplyState {
   double searchAfter=0,goalSince=0,goalDeadline=0,deadSince=-1,followAfter=0,avoidUntil=0,holdSince=-1;
   uint32_t avoidFollowEntity=0,lastUseEntity=0;
   int interactionPoint=-1,useReleaseTick=-1;
+  int reacquireNode=-1,reacquireRejected=-1;
+  double reacquireSince=-1,reacquireRetryAfter=0;
   double interactionSince=-1,useAfter=0;
   double escapeUntil=0,escapeAfter=0,escapeClock=-1,escapeWorld[3]={0,0,0},escapeOrigin[3]={0,0,0};
   int escapeSide=1;
   bool escapeReverseUsed=false;
   double escapeBlockPosition[3]={0,0,0},escapeRequest[3]={0,0,0};
-  bool playable=false,hadUpgrade=false,importantGoal=false,levelSwimView=false,mappedWeaponGoal=false;
+  bool playable=false,hadUpgrade=false,importantGoal=false,levelSwimView=false,mappedWeaponGoal=false,reacquiring=false;
   botcore::CecilItemKind goalKind=botcore::CecilItemKind::Weapon;
   // 256 fixed records cover eight rejects/second for the thirty-second TTL.
   struct Rejection {uint32_t id=0;double until=0;bool localOnly=false;} rejected[256];
@@ -65,14 +67,14 @@ struct SSupplyState {
     rejected[victim].id=id;rejected[victim].until=now+30;rejected[victim].localOnly=localOnly;
   }
   void ClearRejections(){for(auto& r:rejected)r=Rejection();}
-  void ClearAvoidance(){avoidNode=heldNode=-1;avoidUntil=0;holdSince=-1;avoidFollowEntity=0;}
+  void ClearAvoidance(){avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;}
   void ClearGoal(){currentNavTime=-1;currentNavGoal=-1;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
     probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
     itemScanAfter=scanTick=spawnTick=0;searchAfter=goalSince=0;deadSince=-1;
-    playable=hadUpgrade=levelSwimView=false;useReleaseTick=-1;lastUseEntity=0;useAfter=0;++generation;
+    playable=hadUpgrade=levelSwimView=reacquiring=false;useReleaseTick=-1;lastUseEntity=0;useAfter=0;++generation;
   }
 };
 struct SCecilMove {
@@ -265,7 +267,7 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
   // Only original mapped WeaponItem references supply remote item knowledge.
   // No enemy visibility or ordinary preset search distance is changed.
   for(int attempt=0;attempt<8&&_botRayBudget>2;++attempt){
-    int best=-1;double bestCost=std::numeric_limits<double>::infinity();botcore::CecilItem chosen;
+    int best=-1;double bestScore=std::numeric_limits<double>::infinity(),bestCost=0;botcore::CecilItem chosen;
     for(size_t i=0;i<graph.points.size();++i){
       const auto& point=graph.points[i];if(point.important_entity<0||s.blocked[i]||!std::isfinite(s.goals.Distance((int)i)))continue;
       CEntity* entity=player->GetWorld()->EntityFromID((ULONG)point.important_entity);botcore::CecilItem item;
@@ -276,7 +278,12 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
       if(length>8||std::fabs(BotCecilHeight(player,connector))>3)continue;
       const double dx=graph.points[s.anchor].x-input.x,dy=graph.points[s.anchor].y-input.y,dz=graph.points[s.anchor].z-input.z;
       const double cost=std::sqrt(dx*dx+dy*dy+dz*dz)+s.goals.Distance((int)i)+length;
-      if(cost<bestCost){best=(int)i;bestCost=cost;chosen=item;}
+      // Preserve Cecil's preference for small height differences while equipping:
+      // a short launch route need not be the quickest first useful pickup.
+      // This ranks items only; graph costs/topology and physical deadlines stay unchanged.
+      const FLOAT3D displacement((FLOAT)(item.x-input.x),(FLOAT)(item.y-input.y),(FLOAT)(item.z-input.z));
+      const double score=cost+3*std::fabs(BotCecilHeight(player,displacement));
+      if(score<bestScore){best=(int)i;bestScore=score;bestCost=cost;chosen=item;}
     }
     if(best<0)return;
     CEntity* entity=player->GetWorld()->EntityFromID(chosen.id);const auto& point=graph.points[best];
@@ -408,6 +415,48 @@ static void BotCecilSwimMotion(CPlayer* player,const FLOAT3D& delta,double yaw,d
 }
 // The pure navigator reports its source when an UNREACHABLE next hop requests stay.
 // Recover that concrete hop using the same prepared directed search, without allocation.
+static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCecilMove& out){
+  const bool liquid=BotCecilLiquid(player);
+  // Do not steer an uncommitted ballistic flight. Ground recovery requires an
+  // actual native support reference; swimming uses its ordinary 3D adapter.
+  if(!liquid&&player->en_penReference==NULL)return;
+  const auto& graph=BotSupplyGraph();const FLOAT3D position=player->GetPlacement().pl_PositionVector;
+  BotCecilLocks(player,state,now);
+  if(state.reacquireNode>=0&&(now<state.reacquireSince||now-state.reacquireSince>=6)){
+    state.reacquireRejected=state.reacquireNode;state.reacquireRetryAfter=now+6;
+    state.reacquireNode=-1;state.reacquireSince=-1;state.ClearEscape();
+  }
+  int slots[3]={-1,-1,-1};double distance[3]={1024.000001,1024.000001,1024.000001};
+  if(state.reacquireNode>=0&&(size_t)state.reacquireNode<graph.points.size()&&!state.blocked[state.reacquireNode]){
+    const auto& point=graph.points[state.reacquireNode];const FLOAT3D delta(point.x-position(1),point.y-position(2),point.z-position(3));
+    if(delta.Length()<=32&&(liquid||std::fabs(BotCecilHeight(player,delta))<=8)){slots[0]=state.reacquireNode;distance[0]=-1;}
+  }
+  for(size_t i=0;i<graph.points.size();++i){
+    if(state.blocked[i]||(int)i==slots[0]||((int)i==state.reacquireRejected&&now<state.reacquireRetryAfter))continue;
+    const auto& point=graph.points[i];const FLOAT3D delta(point.x-position(1),point.y-position(2),point.z-position(3));
+    if(!liquid&&std::fabs(BotCecilHeight(player,delta))>8)continue;
+    const double d=double(delta(1))*delta(1)+double(delta(2))*delta(2)+double(delta(3))*delta(3);
+    if(d>1024)continue;
+    for(int k=0;k<3;++k)if(d<distance[k]){for(int j=2;j>k;--j){slots[j]=slots[j-1];distance[j]=distance[j-1];}slots[k]=(int)i;distance[k]=d;break;}
+  }
+  for(int k=0;k<3&&_botRayBudget>2;++k){
+    if(slots[k]<0)continue;
+    const auto& point=graph.points[slots[k]];const FLOAT3D target(point.x,point.y,point.z),lift=player->en_vGravityDir*-.8f;
+    if(!BotSupplyClear(player,position+lift,target+lift))continue;
+    const FLOAT3D delta=target-position;const double height=BotCecilHeight(player,delta);
+    const auto local=BotCecilBodyFrame(player).ToLocal(delta(1)+player->en_vGravityDir(1)*-height,
+      delta(2)+player->en_vGravityDir(2)*-height,delta(3)+player->en_vGravityDir(3)*-height);
+    if(!liquid&&local.x*local.x+local.z*local.z<.25)continue;
+    const auto aim=botcore::AimAt(local.x,0,local.z);const double yaw=player->en_plViewpoint.pl_OrientationAngle(1);
+    const double error=std::remainder(aim.yaw_deg-yaw,360.0)*3.141592653589793/180;
+    out.forward=.3*std::cos(error);out.strafe=BotCecilSettings().bStrafe?-.3*std::sin(error):0;
+    out.yaw_delta=botcore::TestTurnDelta(yaw,aim.yaw_deg,180*_pTimer->TickQuantum);
+    if(liquid){botcore::CecilMotion motion;BotCecilSwimMotion(player,delta,yaw,_pTimer->TickQuantum,motion,state.levelSwimView);
+      out.forward=.3*motion.forward;out.strafe=BotCecilSettings().bStrafe?.3*motion.strafe:0;out.up=.3*motion.up;out.pitch_delta=motion.pitch_delta;}
+    if(state.reacquireNode!=slots[k]){state.reacquireNode=slots[k];state.reacquireSince=now;state.ClearEscape();}
+    out.active=true;state.reacquiring=true;return;
+  }
+}
 static int BotCecilTravelHop(SSupplyState& state,const botcore::CecilMotion& move,const FLOAT3D& position,const FLOAT3D& gravity){
   const auto& graph=BotSupplyGraph();int hop=move.hop;
   if(hop<0||hop>=(int)graph.points.size())return -1;
@@ -514,7 +563,7 @@ static bool BotCecilImportant(CPlayer* player,SSupplyState& state,INDEX slot,IND
   return true;
 }
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
-  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.currentNavTime=-1;s.currentNavGoal=-1;result.useControl=tick<=s.useReleaseTick;
+  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.currentNavTime=-1;s.currentNavGoal=-1;s.reacquiring=false;result.useControl=tick<=s.useReleaseTick;
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
   if(!alive){if(s.playable){BotCecilGoalEnd(slot,tick,s,"death");++s.deaths;s.deadSince=now;
     BotLog("[CecilDeath] local=%d tick=%d entity=%lu generation=%lu deaths=%u\n",slot,tick,(unsigned long)s.entity,(unsigned long)s.generation,s.deaths);
@@ -560,7 +609,9 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   }
   if(tick>=s.scanTick){BotCecilChooseGoal(player,slot,tick,enemyDistance,!followValid);s.scanTick=tick+20;}
   if(followValid)BotCecilFollow(player,s,*follow,now);
-  if(s.anchor<0||s.goal<0||s.goal>=(int)BotSupplyGraph().points.size())return result;
+  if(s.anchor<0){BotCecilReacquire(player,s,now,result);return result;}
+  if(s.reacquireNode>=0){s.reacquireNode=-1;s.reacquireSince=-1;s.ClearEscape();}
+  if(s.goal<0||s.goal>=(int)BotSupplyGraph().points.size())return result;
   // Refresh the typed result after a new selection in this tick.
   if(s.goalEntity){
     CEntity* entity=player->GetWorld()->EntityFromID(s.goalEntity);botcore::CecilItem item;
@@ -710,10 +761,18 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   const size_t nodes=BotSupplyGraph().points.size();
   const bool currentPoint=std::fabs(now-state.currentNavTime)<=1e-6&&state.currentNavGoal==state.goal&&state.goal>=0&&(size_t)state.goal<nodes&&
     state.hop>=0&&(size_t)state.hop<nodes&&state.blocked.size()==nodes&&!state.blocked[state.hop];
-  const bool requireFloor=BotCecilSettings().bAvoidPits&&!BotCecilLiquid(player)&&!currentPoint;
+  const bool requireFloor=!BotCecilLiquid(player)&&(state.reacquiring||(BotCecilSettings().bAvoidPits&&!currentPoint));
+  const double maxForward=state.reacquiring?.3:1;
+  if(state.reacquiring)maxStrafe=std::fmin(maxStrafe,.3);
+  auto capMotion=[&](double& f,double& st){
+    f=std::fmax(-maxForward,std::fmin(maxForward,f));st=std::fmax(-maxStrafe,std::fmin(maxStrafe,st));
+    const double length=std::hypot(f,st);
+    if(state.reacquiring&&length>.3){f*=.3/length;st*=.3/length;}
+  };
   if(now<state.escapeClock)state.ClearEscape();
   state.escapeClock=now;
-  strafe=(T)std::fmax(-maxStrafe,std::fmin(maxStrafe,(double)strafe));
+  double requestedForward=forward,requestedStrafe=strafe;capMotion(requestedForward,requestedStrafe);
+  forward=(T)requestedForward;strafe=(T)requestedStrafe;
   if(std::fabs(forward)+std::fabs(strafe)+std::fabs(up)<.05){
     state.escapeUntil=0;forward=strafe=up=0;return 1;
   }
@@ -730,8 +789,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   if(state.escapeUntil>0){
     if(now+1e-9<state.escapeUntil){
       const auto local=frame.ToLocal(state.escapeWorld[0],state.escapeWorld[1],state.escapeWorld[2]);
-      const double f=-si*local.x-co*local.z;
-      const double st=std::fmax(-maxStrafe,std::fmin(maxStrafe,co*local.x-si*local.z));
+      double f=-si*local.x-co*local.z,st=co*local.x-si*local.z;capMotion(f,st);
       if(std::fabs(f)+std::fabs(st)>.05&&BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,requireFloor)){
         forward=(T)f;strafe=(T)st;up=0;return 2;
       }
@@ -750,7 +808,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   const double candidates[3][2]={{0,side},{0,-side},{length>.05?-.4*forward/length:0,length>.05?-.4*strafe/length:0}};
   for(int i=0;i<3;++i){
     if(i==2&&state.escapeReverseUsed)continue;
-    const double f=candidates[i][0],st=std::fmax(-maxStrafe,std::fmin(maxStrafe,candidates[i][1]));
+    double f=candidates[i][0],st=candidates[i][1];capMotion(f,st);
     if(std::fabs(f)+std::fabs(st)<.05)continue;
     if(BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,requireFloor)){
       // One retreat per blocked approach; retry only after forward progress or
