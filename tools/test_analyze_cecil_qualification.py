@@ -54,7 +54,7 @@ class QualificationEvidence(unittest.TestCase):
         self.assertEqual(result["duration_gate"]["status"], "NOT_MET")
         self.assertEqual(result["duration_gate"]["required_s"], 3600)
         self.assertEqual(result["slots"]["botA:0"]["fire_actions_delta"], 30)
-        self.assertNotIn("pos", str(result))
+        self.assertNotIn('"pos":', json.dumps(result))
 
     def test_running_or_failed_monitor_cannot_pass(self):
         for status in ["RUNNING", "FAILED"]:

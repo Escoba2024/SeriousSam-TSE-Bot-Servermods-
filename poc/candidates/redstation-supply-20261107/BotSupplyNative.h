@@ -251,13 +251,12 @@ static bool BotCecilHasRanged(const botcore::CecilItemInput& input){
   const uint32_t allowed=input.settings.iAllowedWeapons==-1?0x3fffu:(uint32_t)input.settings.iAllowedWeapons;
   return (input.usable&allowed&ranged)!=0;
 }
+static bool BotCecilMappedWeaponNeeded(const botcore::CecilItem& item,const botcore::CecilItemInput& input){
+  return item.kind==botcore::CecilItemKind::Weapon&&
+    (botcore::CecilWeaponMask(item.weapon)&0x3df8u)&&botcore::CecilRetainItem(item,input);
+}
 static bool BotCecilMappedWeaponEligible(const botcore::CecilItem& item,const botcore::CecilItemInput& input){
-  const uint32_t mask=botcore::CecilWeaponMask(item.weapon);
-  return input.settings.schema_version==1&&input.settings.bItemSearch&&!BotCecilHasRanged(input)&&
-    item.kind==botcore::CecilItemKind::Weapon&&item.pickable&&item.generation==input.generation&&
-    (mask&0x3df8u)&&!(input.usable&mask)&&
-    (input.settings.iAllowedWeapons==-1||((uint32_t)input.settings.iAllowedWeapons&mask))&&
-    std::isfinite(item.x)&&std::isfinite(item.y)&&std::isfinite(item.z);
+  return !BotCecilHasRanged(input)&&BotCecilMappedWeaponNeeded(item,input);
 }
 static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const botcore::CecilItemInput& input,
     INDEX slot,INDEX tick,double now){
@@ -598,7 +597,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     CEntity* entity=player->GetWorld()->EntityFromID(s.goalEntity);botcore::CecilItem item;
     bool usable=entity&&BotCecilReadItem(player,entity,s.generation,owned,&item);
     if(usable){
-      if(s.mappedWeaponGoal)usable=input.enemy_distance>=8&&BotCecilMappedWeaponEligible(item,input);
+      if(s.mappedWeaponGoal)usable=input.enemy_distance>=8&&BotCecilMappedWeaponNeeded(item,input);
       // Radius/visibility/ranking admit a new goal. A retained attempt uses its
       // live typed need, directed path and unchanged twelve-second deadline.
       else usable=botcore::CecilRetainItem(item,input);

@@ -217,9 +217,12 @@ int main(){
  const double deadline=BotSupplyState(0).goalDeadline;
  _botRayBudget=16;BotSupplyTick(&player,0,270,1000);
  check(BotSupplyState(0).goalDeadline==deadline,"repeated scans cannot renew mapped route deadline");
- player.w.usable=3|botcore::CecilWeaponMask(4);player.w.m_iAvailableWeapons=player.w.usable;
+ player.w.usable=3|botcore::CecilWeaponMask(8);player.w.m_iAvailableWeapons=player.w.usable;
  _botRayBudget=16;BotSupplyTick(&player,0,271,1000);
- check(BotSupplyState(0).goalEntity==0,"incidental usable gun clears mapped acquisition despite no-target distance sentinel");
+ check(BotSupplyState(0).goalEntity==991&&BotSupplyState(0).goalDeadline==deadline,"incidental different usable gun does not discard a still-needed mapped weapon attempt");
+ player.w.usable|=botcore::CecilWeaponMask(4);player.w.m_iAvailableWeapons=player.w.usable;
+ _botRayBudget=16;BotSupplyTick(&player,0,272,1000);
+ check(BotSupplyState(0).goalEntity==0,"selected mapped weapon becoming usable clears its attempt immediately");
  setup(3);player.w.usable=3|botcore::CecilWeaponMask(4);player.w.m_iAvailableWeapons=player.w.usable;
  addItem(992,0,-22,botcore::CecilItemKind::Weapon).item.weapon=8;BotSupplyGraph().points[2].important_entity=992;
  _botRayBudget=16;BotSupplyTick(&player,0,1,1000);

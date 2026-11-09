@@ -46,6 +46,43 @@ def window_coverage(rows, elapsed):
     return result
 
 
+def score_trajectory(samples, bots):
+    """Observed expected scores only; missing samples break change comparisons.
+
+    OBSERVED means at least two complete observations, never a behavior gate.
+    Between-sample changes, kill attribution and unobserved scores remain unknown.
+    """
+    result = {}
+    for name in ("Dev-" + str(i) for i in range(1, bots + 1)):
+        info = dict(status="OPEN", first=None, last=None, min=None, max=None,
+                    change_count=0, positive_change_count=0, negative_change_count=0,
+                    observed_samples=0, missing_samples=0)
+        previous = None
+        for sample in samples:
+            scores = sample.get("scores", {})
+            if not isinstance(scores, dict):
+                raise ValueError("invalid score sample")
+            if name not in scores:
+                info["missing_samples"] += 1
+                previous = None
+                continue
+            value = scores[name]
+            if type(value) not in (int, float) or (isinstance(value, float) and not math.isfinite(value)):
+                raise ValueError("invalid expected score")
+            if info["observed_samples"] == 0:
+                info.update(first=value, min=value, max=value)
+            info.update(last=value, min=min(info["min"], value), max=max(info["max"], value))
+            info["observed_samples"] += 1
+            if previous is not None and value != previous:
+                info["change_count"] += 1
+                info["positive_change_count" if value > previous else "negative_change_count"] += 1
+            previous = value
+        if info["observed_samples"] >= 2 and info["missing_samples"] == 0:
+            info["status"] = "OBSERVED"
+        result[name] = info
+    return result
+
+
 def slot_summary(rows):
     first, last = rows[0], rows[-1]
     resets = [k for k in COUNTERS if any(b[k] < a[k] for a, b in zip(rows, rows[1:]))]
@@ -279,6 +316,7 @@ def analyze(records, report, baseline=None):
         duration_status = "NOT_PROVEN_MONITOR_STATUS"
     else:
         duration_status = "DURATION_ONLY_MET"
+    trajectories = score_trajectory(samples, bots)
     scores = {}
     if samples:
         first, last = samples[0].get("scores", {}), samples[-1].get("scores", {})
@@ -295,7 +333,7 @@ def analyze(records, report, baseline=None):
                 sample_coverage=sample_coverage,
                 scenario_integrity=scenario_integrity,
                 missing_slots=sorted(expected - set(slots)), unexpected_slot_count=len(set(slots) - expected),
-                slots=summaries, score_deltas=scores,
+                slots=summaries, score_deltas=scores, score_trajectory=trajectories,
                 observed_maps=sorted({s["map"] for s in samples if s.get("map")}),
                 deaths_observed=sum(s["deaths_delta"] or 0 for s in summaries.values()),
                 death_count_gate="COUNT_ONLY_MET" if sum(s["deaths_delta"] or 0 for s in summaries.values()) >= 100 else "NOT_MET",
