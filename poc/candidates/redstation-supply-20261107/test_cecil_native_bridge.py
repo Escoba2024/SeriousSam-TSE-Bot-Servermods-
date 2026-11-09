@@ -145,6 +145,21 @@ CEntity& addItem(unsigned id,float x,float z,botcore::CecilItemKind kind=botcore
 template<class T>auto typed(const T& m,int)->decltype(m.itemGoal&&m.urgent){return m.itemGoal&&m.urgent;}
 template<class T>bool typed(const T&,long){return false;}
 int main(){
+ { // Bounded snapshots must not let unsuitable prefix items starve a weapon.
+ setup(2);player.health=100;player.w.usable=3;
+ for(unsigned i=0;i<128;++i){auto& e=addItem(100+i,0,-2,botcore::CecilItemKind::Ammo);e.item.ammo_mask=botcore::CecilWeaponMask(8);}
+ auto& useful=addItem(999,0,-2,botcore::CecilItemKind::Weapon);useful.item.weapon=4;
+ for(int tick=1;tick<=40;++tick){_botRayBudget=16;BotSupplyTick(&player,0,tick,1000);}
+ check(BotSupplyState(0).goalEntity==999&&goalEvents>0,"128 unsuitable ammo items cannot hide later useful weapon");
+ // Even eligible but occluded prefixes must not monopolize every snapshot.
+ setup(2);player.health=100;player.w.usable=3;
+ for(unsigned i=0;i<128;++i){auto& e=addItem(100+i,0,-2,botcore::CecilItemKind::Weapon);e.item.weapon=4;}
+ auto& later=addItem(999,0,-2,botcore::CecilItemKind::Weapon);later.item.weapon=4;
+ auto& fair=BotSupplyState(0);bool foundLater=false;
+ for(int scan=0;scan<3;++scan){fair.ClearGoal();_botRayBudget=40;BotCecilChooseGoal(&player,0,scan+1,1000,false);foundLater=foundLater||fair.goalEntity==999;}
+ check(foundLater,"bounded candidate window rotates beyond 128 eligible prefix items");
+ fair.Reset();check(fair.itemScanAfter==0,"lifecycle reset restarts item scan cursor");
+ }
  { // Preset control: absence of support is not an unconditional movement veto.
  setup();BotCecilSettings()=botcore::CecilPreset(2);double pitF=1,pitS=0,pitU=0;
  check(BotCecilSettings().bAvoidPits==0,"original normal preset does not enable pit avoidance");

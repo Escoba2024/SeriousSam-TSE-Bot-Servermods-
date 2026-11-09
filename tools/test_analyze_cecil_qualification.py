@@ -31,7 +31,8 @@ def event(t, text):
 def report():
     return dict(schema_version=1, status="DURATION_ACTIVITY_SYNC_PASS_BEHAVIOR_REVIEW_REQUIRED",
                 bots=1, elapsed_s=30, required_duration_s=30, gate=False,
-                dll_sha256="a" * 64, errors=[])
+                dll_sha256="a" * 64, errors=[], port=25650,
+                query_identity=dict(gamename="serioussamse", gamever="1.07", hostport="25650", mapname="Red Station"))
 
 
 class QualificationEvidence(unittest.TestCase):
@@ -64,7 +65,8 @@ class QualificationEvidence(unittest.TestCase):
 
     def test_stationary_firing_at_visible_target_is_separate(self):
         rows = [state(t, pos=[0, 0, 0]) for t in range(13)]
-        result = self.analyze(rows)["slots"]["botA:0"]
+        meta=report();meta["elapsed_s"]=12
+        result = self.analyze(rows,report=meta)["slots"]["botA:0"]
         self.assertEqual(result["max_stationary_s"], 12)
         self.assertEqual(result["max_unexplained_stationary_s"], 0)
         self.assertEqual(result["stationary_review"], "NO_OBSERVED_BREACH")
@@ -225,6 +227,49 @@ class QualificationEvidence(unittest.TestCase):
         result = self.analyze([], report=meta)
         self.assertEqual(result["duration_gate"]["required_s"], 7200)
         self.assertEqual(result["weapon_scenario"]["gate"], "NOT_APPLICABLE_POPULATION")
+
+    def test_duration_requires_coverage_of_the_entire_window(self):
+        meta = report(); meta.update(elapsed_s=3600, gate=True)
+        for times in (range(2880), range(721, 3601), [0, 1, 3599, 3600]):
+            with self.subTest(first=times[0], last=times[-1]):
+                result = self.analyze([state(t) for t in times], report=meta)
+                self.assertEqual(result["telemetry_coverage"]["status"], "INCOMPLETE")
+                self.assertNotEqual(result["duration_gate"]["status"], "DURATION_ONLY_MET")
+                self.assertEqual(result["slots"]["botA:0"]["stationary_review"], "NOT_PROVEN_INCOMPLETE_COVERAGE")
+
+    def test_complete_slots_and_query_samples_are_needed_for_duration(self):
+        meta = report(); meta.update(elapsed_s=3600, gate=True)
+        rows = [state(t) for t in range(0, 3601, 5)]
+        result = self.analyze(rows, report=meta)
+        self.assertEqual(result["telemetry_coverage"]["status"], "INCOMPLETE")
+        self.assertEqual(result["sample_coverage"]["status"], "MISSING")
+        result = self.analyze(rows + [sample(t) for t in range(0, 3601, 5)], report=meta)
+        self.assertEqual(result["telemetry_coverage"]["status"], "FULL_WINDOW_COVERED")
+        self.assertEqual(result["duration_gate"]["status"], "DURATION_ONLY_MET")
+        self.assertFalse(result["qualified"])
+
+    def test_crlf_goal_end_reason_has_no_carriage_return(self):
+        rows = [event(0, "[CecilGoal] local=0 tick=1 entity=100 kind=0 weapon=8 anchor=1\r"),
+                event(1, "[CecilGoalEnd] local=0 tick=21 entity=100 reason=unavailable\r")]
+        goal = self.analyze(rows)["weapon_scenario"]["first_ten"][0]
+        self.assertEqual(goal["outcome"], "unavailable")
+
+    def test_failed_monitor_or_missing_identity_cannot_attest_long_duration(self):
+        rows = [state(t) for t in range(0, 3601, 5)] + [sample(t) for t in range(0, 3601, 5)]
+        for change in ({"status":"FAILED"}, {"errors":[{"role":"botA"}]}, {"query_identity":None}):
+            with self.subTest(change=change):
+                meta=report();meta.update(elapsed_s=3600,gate=True);meta.update(change)
+                result=self.analyze(rows,report=meta)
+                self.assertNotEqual(result["duration_gate"]["status"],"DURATION_ONLY_MET")
+
+    def test_population_or_map_contamination_cannot_attest_long_duration(self):
+        for changed in ({"players":2}, {"map":"Yodeller"}):
+            rows = [state(t) for t in range(0, 3601, 5)] + [sample(t) for t in range(0, 3601, 5)]
+            rows[-1]["sample"].update(changed)
+            meta=report();meta.update(elapsed_s=3600,gate=True)
+            result=self.analyze(rows,report=meta)
+            self.assertEqual(result["scenario_integrity"],"FAILED")
+            self.assertNotEqual(result["duration_gate"]["status"],"DURATION_ONLY_MET")
 
 
 if __name__ == "__main__":

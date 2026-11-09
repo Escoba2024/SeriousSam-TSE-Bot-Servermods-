@@ -26,13 +26,20 @@ STUB = r'''
 #include <cmath>
 #include <limits>
 using FLOAT=float;using ULONG=unsigned long;using INDEX=int;using BOOL=int;
-struct FLOAT3D {float v[3]={0,0,0};float& operator()(int i){return v[i-1];}
+const BOOL TRUE=1;
+struct FLOAT3D {float v[3];FLOAT3D(float x=0,float y=0,float z=0):v{x,y,z}{}float& operator()(int i){return v[i-1];}
  float operator()(int i)const{return v[i-1];}};
 struct CPlacement3D {FLOAT3D pl_OrientationAngle;};
 struct CPlayerWeapons {float m_fSniperFOV=20,m_fSniperMaxFOV=80;};
 struct CPlayer {unsigned m_ulFlags=0;CPlayerWeapons* m_penWeapons=nullptr;
  CPlayerWeapons* GetPlayerWeapons(){return m_penWeapons;}CPlacement3D en_plViewpoint;};
-struct CPlayerAction {FLOAT3D pa_vTranslation,pa_aRotation,pa_aViewRotation;};
+struct CPlayerAction {FLOAT3D pa_vTranslation,pa_aRotation,pa_aViewRotation;unsigned pa_ulButtons=0;
+ void Clear(){*this=CPlayerAction();}};
+struct CPlayerSource {CPlayerAction pls_paAction;int pls_csAction=0,writes=0;
+ void SetAction(const CPlayerAction& action){pls_paAction=action;++writes;}};
+struct CTSingleLock {CTSingleLock(int*,BOOL){}};
+void BotLog(const char*,...){}
+struct State {int bs_iTick=20;};
 '''
 TEST = r'''
 int main(){
@@ -68,9 +75,42 @@ def main():
     flag=re.search(rb"^#define\s+PLF_ISZOOMING\s+\(1UL\s*<<\s*(\d+)\)",sdk,re.M)
     if not flag: raise ValueError("SDK zoom flag missing")
     bodies="\n".join(function(source,n) for n in ("BotCecilFinalBodyYaw","BotCecilActionFinite"))
+    if "static void BotCecilNeutralAction(" in source:
+        bodies+="\n"+function(source,"BotCecilNeutralAction")
+    guards=[]
+    for reason in ("rotation_state","nonfinite_input","nonfinite"):
+        guard=re.search(r'if\(![^\n]+\)\{\s*BotLog\("\[CecilInvalidAction\][^\n]*rejected='+reason+r'\\n"[^\n]*\n[\s\S]*?continue;\s*\}',source)
+        if not guard:raise ValueError("rejection path missing: "+reason)
+        condition=guard[0]
+        guards.append("""
+ { CPlayerSource src;CPlayerSource* ppls=&src;State bs;int iLP=0;bool bActed=false;
+   src.pls_paAction.pa_ulButtons=1;src.pls_paAction.pa_vTranslation(3)=-1;
+   src.pls_paAction.pa_aRotation(1)=37;src.pls_paAction.pa_aViewRotation(2)=12;
+   for(int once=0;once<1;++once){CPlayerAction pa;pa.pa_aRotation(1)=NAN;double finalYaw=NAN;
+   (void)finalYaw;(void)ppls;"""+condition+"""}
+   assert(src.writes==1);assert(BotCecilActionFinite(src.pls_paAction));
+   assert(src.pls_paAction.pa_ulButtons==0);
+   for(int axis=1;axis<=3;++axis)assert(src.pls_paAction.pa_vTranslation(axis)==0);
+   assert(src.pls_paAction.pa_aRotation(1)==37);assert(src.pls_paAction.pa_aViewRotation(2)==12);
+   (void)bActed;
+ }
+""")
+    if "static void BotCecilNeutralAction(" in source:
+        guards.append("""
+ { CPlayerSource src;src.pls_paAction.pa_ulButtons=0xffffffffu;
+   src.pls_paAction.pa_vTranslation(1)=INFINITY;
+   src.pls_paAction.pa_aRotation(2)=NAN;
+   BotCecilNeutralAction(&src);
+   assert(src.writes==1&&BotCecilActionFinite(src.pls_paAction));
+   assert(src.pls_paAction.pa_ulButtons==0);
+   for(int axis=1;axis<=3;++axis)assert(src.pls_paAction.pa_vTranslation(axis)==0);
+ }
+""")
+    rejection="static void rejection_paths(){\n"+"\n".join(guards)+"\n}\n"
+    test=TEST.replace("int main(){","int main(){rejection_paths();")
     with tempfile.TemporaryDirectory(prefix="cecil-action-contract-") as tmp:
         cpp=Path(tmp)/"test.cpp";exe=Path(tmp)/"test"
-        cpp.write_text("#include <initializer_list>\n#define SDK_ZOOM "+str(1<<int(flag[1]))+"\n"+STUB+bodies+TEST)
+        cpp.write_text("#include <initializer_list>\n#define SDK_ZOOM "+str(1<<int(flag[1]))+"\n"+STUB+bodies+rejection+test)
         subprocess.run(["g++","-std=c++17","-Wall","-Wextra","-Werror","-fsanitize=address,undefined","-I",str(a.driver.parent),str(cpp),"-o",str(exe)],check=True)
         subprocess.run([str(exe)],check=True)
     print("PASS actual Driver action guards; SDK SHA256",hashlib.sha256(sdk).hexdigest())

@@ -37,7 +37,7 @@ struct SSupplyState {
   uint32_t entity=0,generation=0,rng=1,goalEntity=0,owned=0,followEntity=0,followGeneration=0;
   double currentNavTime=-1;
   int currentNavGoal=-1; // Fresh navigator context; an anchor/old hop alone is not a current point.
-  int goal=-1,anchor=-1,hop=-1,spawnTick=0,scanTick=0,avoidNode=-1,heldNode=-1;
+  int goal=-1,anchor=-1,hop=-1,spawnTick=0,scanTick=0,itemScanAfter=0,avoidNode=-1,heldNode=-1;
   double searchAfter=0,goalSince=0,deadSince=-1,followAfter=0,avoidUntil=0,holdSince=-1;
   uint32_t avoidFollowEntity=0,lastUseEntity=0;
   int interactionPoint=-1,useReleaseTick=-1;
@@ -71,7 +71,7 @@ struct SSupplyState {
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
     probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
-    scanTick=spawnTick=0;searchAfter=goalSince=0;deadSince=-1;
+    itemScanAfter=scanTick=spawnTick=0;searchAfter=goalSince=0;deadSince=-1;
     playable=hadUpgrade=levelSwimView=false;useReleaseTick=-1;lastUseEntity=0;useAfter=0;++generation;
   }
 };
@@ -258,15 +258,21 @@ static void BotCecilChooseGoal(CPlayer *player,INDEX slot,INDEX tick,double enem
   // A retained item is one attempt with one lifetime, not a new goal every scan.
   if(!s.goalEntity&&now>=s.searchAfter&&settings.bItemSearch){
     botcore::CecilItem items[128];int count=0,scanned=0;
+    // Rotate the bounded snapshot window. Unusable prefix items never occupy it,
+    // and eligible prefixes cannot hide later candidates on every scan.
+    const int skip=s.itemScanAfter;s.itemScanAfter=0;
     {FOREACHINDYNAMICCONTAINER(player->GetWorld()->wo_cenEntities,CEntity,iten){
       if(++scanned>8192)break;
+      if(scanned<=skip)continue;
       botcore::CecilItem item;
       if(!BotCecilReadItem(player,&*iten,s.generation,input.owned,&item)||s.ItemRejected(item.id,now))continue;
       double d=std::fabs(item.x-input.x)+std::fabs(item.z-input.z)+3*std::fabs(item.y-input.y);
       if(d>128)continue;
       if(enemyDistance<8&&!(item.kind==botcore::CecilItemKind::Health&&BotCecilUrgentItem(item,input)))continue;
       item.visible=item.reachable=true;
-      if(count<128)items[count++]=item;
+      if(botcore::CecilChooseItem(&item,1,input)<0)continue;
+      items[count++]=item;
+      if(count==128){s.itemScanAfter=scanned;break;}
     }}
     for(int attempt=0;attempt<8&&_botRayBudget>3;++attempt){
       int index=botcore::CecilChooseItem(items,count,input);if(index<0)break;

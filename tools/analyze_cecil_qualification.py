@@ -17,7 +17,8 @@ import statistics
 DURATION = {1: 3600, 4: 3600, 8: 7200}
 COUNTERS = ("shots", "pickups", "deaths", "respawns")
 EVENT = re.compile(r"\[(CecilGoal|CecilGoalEnd|CecilPickup)\]\s+(.*)")
-FIELDS = re.compile(r"(\w+)=([^ ]+)")
+FIELDS = re.compile(r"(\w+)=([^\s]+)")
+MAX_OBSERVATION_GAP_S = 5
 
 
 def number(value):
@@ -30,6 +31,19 @@ def number(value):
 def percentile(values):
     """Nearest-rank P95, stated explicitly for reproducible comparisons."""
     return sorted(values)[max(0, math.ceil(.95 * len(values)) - 1)]
+
+
+def window_coverage(rows, elapsed):
+    """Bound observation gaps, including both censored window boundaries."""
+    result = dict(status="MISSING", max_allowed_gap_s=MAX_OBSERVATION_GAP_S)
+    if rows:
+        times = [number(row["elapsed_s"]) for row in rows]
+        leading, trailing = times[0], elapsed - times[-1]
+        gap = max((b - a for a, b in zip(times, times[1:])), default=0)
+        covered = 0 <= leading <= MAX_OBSERVATION_GAP_S and 0 <= trailing <= MAX_OBSERVATION_GAP_S and gap <= MAX_OBSERVATION_GAP_S
+        result.update(status="FULL_WINDOW_COVERED" if covered else "INCOMPLETE",
+                      leading_gap_s=leading, trailing_gap_s=trailing, max_sample_gap_s=gap)
+    return result
 
 
 def slot_summary(rows):
@@ -237,18 +251,49 @@ def analyze(records, report, baseline=None):
     if bots == 8:
         expected.update("botB:" + str(i) for i in range(4))
     summaries = {slot: slot_summary(rows) for slot, rows in sorted(slots.items())}
+    elapsed = number(report["elapsed_s"])
+    sample_coverage = window_coverage(samples, elapsed)
+    for slot, summary in summaries.items():
+        summary["coverage"] = window_coverage(slots[slot], elapsed)
+        if summary["coverage"]["status"] != "FULL_WINDOW_COVERED" and summary["stationary_review"] == "NO_OBSERVED_BREACH":
+            summary["stationary_review"] = "NOT_PROVEN_INCOMPLETE_COVERAGE"
+    complete_coverage = (set(slots) == expected and sample_coverage["status"] == "FULL_WINDOW_COVERED"
+                         and all(s["coverage"]["status"] == "FULL_WINDOW_COVERED" for s in summaries.values()))
+    # Older reports lack pinned endpoint identity: retain their observations,
+    # but do not upgrade them to a controlled duration gate.
+    identity = report.get("query_identity")
+    scenario_integrity = "NOT_PROVEN"
+    if isinstance(identity, dict) and isinstance(report.get("port"), int) and samples:
+        identity_ok = (identity.get("gamename") == "serioussamse" and identity.get("gamever") == "1.07"
+                       and identity.get("hostport") == str(report["port"]) and bool(identity.get("mapname")))
+        scenario_integrity = ("WITHIN_OBSERVED_SCENARIO" if identity_ok and
+                              all(s.get("players") == bots and s.get("map") == identity["mapname"] for s in samples)
+                              else "FAILED")
+    if elapsed < DURATION[bots]:
+        duration_status = "NOT_MET"
+    elif not complete_coverage:
+        duration_status = "NOT_PROVEN_INCOMPLETE_COVERAGE"
+    elif scenario_integrity != "WITHIN_OBSERVED_SCENARIO":
+        duration_status = "NOT_PROVEN_SCENARIO_INTEGRITY"
+    elif report["status"] != "DURATION_ACTIVITY_SYNC_PASS_BEHAVIOR_REVIEW_REQUIRED" or report.get("errors") != []:
+        duration_status = "NOT_PROVEN_MONITOR_STATUS"
+    else:
+        duration_status = "DURATION_ONLY_MET"
     scores = {}
     if samples:
         first, last = samples[0].get("scores", {}), samples[-1].get("scores", {})
         # Only expected development identities; no unknown player names are published.
         scores = {name: last[name] - first[name] for name in ("Dev-" + str(i) for i in range(1, bots + 1))
                   if name in first and name in last}
-    elapsed = number(report["elapsed_s"])
     return dict(schema_version=1, qualified=False, dll_sha256=report["dll_sha256"],
                 monitor_status=report["status"], monitor_gate_requested=bool(report["gate"]),
                 monitor_error_count=len(report.get("errors", [])),
                 duration_gate=dict(required_s=DURATION[bots], observed_s=elapsed,
-                                   status="DURATION_ONLY_MET" if elapsed >= DURATION[bots] else "NOT_MET"),
+                                   status=duration_status),
+                telemetry_coverage=dict(status="FULL_WINDOW_COVERED" if complete_coverage else "INCOMPLETE",
+                                        max_allowed_gap_s=MAX_OBSERVATION_GAP_S),
+                sample_coverage=sample_coverage,
+                scenario_integrity=scenario_integrity,
                 missing_slots=sorted(expected - set(slots)), unexpected_slot_count=len(set(slots) - expected),
                 slots=summaries, score_deltas=scores,
                 observed_maps=sorted({s["map"] for s in samples if s.get("map")}),

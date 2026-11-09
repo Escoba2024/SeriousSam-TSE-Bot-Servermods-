@@ -1,5 +1,6 @@
 import unittest
 import json, tempfile
+from contextlib import ExitStack
 from pathlib import Path
 from unittest.mock import patch
 import qualify_cecil_live as monitor
@@ -86,5 +87,86 @@ class NativeFailurePersistenceTests(unittest.TestCase):
         self.assertEqual(len(result["errors"]),1)
         self.assertEqual(result["errors"][0]["role"],"server")
         self.assertIn("new SYNCBAD",result["errors"][0]["line"])
+
+class NativeWindowCoverageTests(unittest.TestCase):
+    """Exercise main with real logs/reports and synthetic process/time/UDP boundaries."""
+    def observe(self, emit=lambda t: True, change_query=lambda t, q: None):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp);runtime=base/"runtime";proc=base/"proc";output=base/"output"
+            for role,pid in (("server",101),("botA",102)):
+                root=runtime/role;root.mkdir(parents=True)
+                (root/("Dedicated_BotTest.log" if role=="server" else "SeriousSam.log")).write_text("")
+                fake=proc/str(pid);fake.mkdir(parents=True);(fake/"cwd").symlink_to(root,target_is_directory=True)
+                fields=["0"]*22;fields[19]="99";fields[11]=fields[12]="1"
+                (fake/"stat").write_text(str(pid)+" (game) "+" ".join(fields))
+                (fake/"status").write_text("VmRSS: 1024 kB\n")
+                if role!="server":
+                    (root/"Bin").mkdir();dll=root/"Bin/GameMP.dll";dll.write_bytes(b"fixture")
+                    (fake/"maps").write_text(str(dll))
+            (proc/"meminfo").write_text("MemAvailable: 1000 kB\nSwapTotal: 0 kB\nSwapFree: 0 kB\n")
+            digest=monitor.sha(runtime/"botA/Bin/GameMP.dll");clock=[0.0]
+            def path(*args):
+                value=Path(*args)
+                return proc/value.relative_to("/proc") if value==Path("/proc") or Path("/proc") in value.parents else value
+            def query(*args,**kwargs):
+                t=clock[0]
+                if emit(t):
+                    row=("[CecilState] local=0 tick=%d ready=1 alive=1 shots=%d pickups=1 deaths=0 respawns=0 "
+                         "vis=1 nav=0 rays=4 owned=3 current=1 wanted=1 goal_entity=0 pos=(%.1f,0,0)\n")%(20+20*t,t,t)
+                    with (runtime/"botA/SeriousSam.log").open("a") as f:f.write(row)
+                q={"gamename":"serioussamse","gamever":"1.07","hostport":"25650","mapname":"Red Station",
+                   "numplayers":"1","player_0":"Dev-1","frags_0":"0"}
+                change_query(t,q)
+                return q
+            argv=["qualify","--runtime",str(runtime),"--unit-prefix","fixture","--port","25650","--bots","1",
+                  "--duration","60","--dll-sha256",digest,"--output",str(output)]
+            failure=None
+            with ExitStack() as stack:
+                for context in (patch.object(monitor,"Path",side_effect=path),
+                                patch.object(monitor.subprocess,"check_output",side_effect=lambda args,**kw:"101" if "-server.service" in args[2] else "102"),
+                                patch.object(monitor,"query",side_effect=query),
+                                patch.object(monitor,"host_cpu",side_effect=lambda:(1000+clock[0]*100,400+clock[0]*40)),
+                                patch.object(monitor.shutil,"disk_usage",return_value=type("Disk",(),{"free":16*2**30})()),
+                                patch.object(monitor.time,"monotonic",side_effect=lambda:clock[0]),
+                                patch.object(monitor.time,"sleep",side_effect=lambda dt:clock.__setitem__(0,clock[0]+dt)),
+                                patch("sys.argv",argv),patch("builtins.print")):
+                    stack.enter_context(context)
+                try:monitor.main()
+                except Exception as exc:failure=exc
+            return json.loads((output/"report.json").read_text()),failure
+
+    def test_continuous_native_samples_complete_observation(self):
+        result,failure=self.observe()
+        self.assertIsNone(failure)
+        self.assertEqual(result["status"],"DURATION_ACTIVITY_SYNC_PASS_BEHAVIOR_REVIEW_REQUIRED")
+
+    def test_missing_tail_fails_while_native_process_stays_alive(self):
+        result,failure=self.observe(emit=lambda t:t<48)
+        self.assertIsNotNone(failure)
+        self.assertEqual(result["status"],"FAILED")
+        self.assertIn("telemetry",result["failure"])
+
+    def test_late_first_sample_or_internal_gap_cannot_be_hidden(self):
+        for emit in (lambda t:t>=6,lambda t:not 20<=t<=25):
+            with self.subTest(emit=emit):
+                result,failure=self.observe(emit=emit)
+                self.assertIsNotNone(failure)
+                self.assertIn("telemetry",result["failure"])
+
+    def test_extra_player_invalidates_controlled_population(self):
+        def extra(t,q):
+            if t==10:q.update(numplayers="2",player_1="External")
+        result,failure=self.observe(change_query=extra)
+        self.assertIsNotNone(failure)
+        self.assertIn("population",result["failure"])
+
+    def test_wrong_query_identity_or_map_change_invalidates_scenario(self):
+        for field,value in (("gamename","other"),("gamever","1.10"),("hostport","25600"),("mapname","Yodeller")):
+            def change(t,q):
+                if t==10:q[field]=value
+            with self.subTest(field=field):
+                result,failure=self.observe(change_query=change)
+                self.assertIsNotNone(failure)
+                self.assertIn("query",result["failure"])
 
 if __name__=="__main__":unittest.main()

@@ -769,6 +769,16 @@ static bool BotCecilActionFinite(const CPlayerAction& action){
     if(!std::isfinite(action.pa_vTranslation(axis))||!std::isfinite(action.pa_aRotation(axis))||!std::isfinite(action.pa_aViewRotation(axis)))return false;
   return true;
 }
+// Invalid snapshots still replace the source action: skipping SetAction would
+// keep a previous move/fire command alive. Retain only finite absolute view axes.
+static void BotCecilNeutralAction(CPlayerSource* source){
+  CPlayerAction neutral;
+  {CTSingleLock actionLock(&source->pls_csAction,TRUE);neutral=source->pls_paAction;}
+  neutral.pa_vTranslation=FLOAT3D(0,0,0);neutral.pa_ulButtons=0;
+  if(!BotCecilActionFinite(neutral))neutral.Clear();
+  source->SetAction(neutral);
+}
+
 // Called only from the action path while the native world mutex is held.
 static void BotCecilLogReferences(CPlayer* player) {
   static LONG reported=-1;
@@ -1291,6 +1301,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         const double finalYaw=BotCecilFinalBodyYaw(player,bs.bs_aHeading-player->m_aLastRotation(1));
         if(!std::isfinite(finalYaw)){
           BotLog("[CecilInvalidAction] local=%d tick=%d rejected=rotation_state\n",iLP,bs.bs_iTick);
+          BotCecilNeutralAction(ppls);bActed=TRUE;
           continue;
         }
         const double maxStrafe=BotCecilSettings().bStrafe?Clamp(bot_fStrafeScale,0.0f,1.0f):0;
@@ -1320,6 +1331,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     // must not leak into this synthetic action; preserve the shared control buffer.
     if(!BotCecilActionFinite(pa)){
       BotLog("[CecilInvalidAction] local=%d tick=%d rejected=nonfinite_input\n",iLP,bs.bs_iTick);
+      BotCecilNeutralAction(ppls);bActed=TRUE;
       continue;
     }
     UBYTE controls[sizeof(lp.lp_ubPlayerControlsState)];
@@ -1337,6 +1349,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     // Reject malformed local snapshots before they enter the normal network path.
     if(!BotCecilActionFinite(pa)){
       BotLog("[CecilInvalidAction] local=%d tick=%d rejected=nonfinite\n",iLP,bs.bs_iTick);
+      BotCecilNeutralAction(ppls);bActed=TRUE;
       continue;
     }
     // 4) hand it to the network player source (stamps pa_llCreated internally)

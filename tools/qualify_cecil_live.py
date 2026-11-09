@@ -8,6 +8,9 @@ BAD=re.compile(r"SYNCBAD|Too many bad syncs|CRC check failed|Access violation|Fa
 STATE=re.compile(r"\[CecilState\] (.*)")
 FIELDS=re.compile(r"(\w+)=([^\s]+)")
 GATES={1:3600,4:3600,8:7200}
+# CecilState is emitted every 20 native ticks (normally one second).
+# This is an observation-coverage limit, not a relaxed gameplay threshold.
+MAX_OBSERVATION_GAP_S=5
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def parse_state(line):
     match=STATE.search(line)
@@ -44,6 +47,7 @@ def main():
     p.add_argument("--port",type=int,required=True);p.add_argument("--bots",type=int,choices=[1,4,8],required=True)
     p.add_argument("--duration",type=int,required=True);p.add_argument("--dll-sha256",required=True)
     p.add_argument("--output",type=Path,required=True);p.add_argument("--gate",action="store_true")
+    p.add_argument("--expected-map",help="pin mapname; otherwise pin the first valid query")
     a=p.parse_args()
     if a.duration<60 or (a.gate and a.duration<GATES[a.bots]):p.error("minimum duration not met")
     if not re.fullmatch(r"[a-f0-9]{64}",a.dll_sha256):p.error("invalid DLL hash")
@@ -66,9 +70,13 @@ def main():
             tails[role]=initial.pop()
             errors.extend({"elapsed_s":0.0,"role":role,"line":line} for line in initial if BAD.search(line))
     expected={"Dev-"+str(i) for i in range(1,a.bots+1)}
+    expected_slots={"botA:"+str(i) for i in range(min(a.bots,4))}
+    if a.bots==8:expected_slots.update("botB:"+str(i) for i in range(4))
+    expected_map=a.expected_map
     started=time.monotonic();previous=None;last_save=0;rows={};samples=[];events=[];state_counts={}
     record={"schema_version":1,"status":"RUNNING","utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
-            "bots":a.bots,"required_duration_s":a.duration,"gate":a.gate,"dll_sha256":a.dll_sha256,"pids":pids,"raw_private":True}
+            "bots":a.bots,"required_duration_s":a.duration,"gate":a.gate,"dll_sha256":a.dll_sha256,"pids":pids,"raw_private":True,
+            "max_observation_gap_s":MAX_OBSERVATION_GAP_S,"port":a.port,"query_identity":None}
     def save():
         record.update(elapsed_s=time.monotonic()-started,samples=len(samples),errors=errors,
                       slots={k:summarize(v) for k,v in rows.items()})
@@ -80,6 +88,7 @@ def main():
                 query_error=None
                 try:q=query("127.0.0.1",a.port+1,timeout=2,attempts=2)
                 except Exception as exc:q={};query_error=exc
+                now=time.monotonic();elapsed=now-started
                 # Preserve native errors before any population/process/resource failure.
                 fresh_lines=[]
                 for role,log in logs.items():
@@ -95,13 +104,29 @@ def main():
                     row=parse_state(line)
                     if row:
                         key=role+":"+str(row["local"]);row["elapsed_s"]=elapsed
+                        assert key in expected_slots,"unexpected telemetry slot"
                         assert row["ready"]==1 and row["rays"]<=16,"inactive graph or budget breach"
-                        if key in rows:assert row["tick"]>rows[key][-1]["tick"],"bot tick reset"
+                        if key in rows:
+                            assert row["tick"]>rows[key][-1]["tick"],"bot tick reset"
+                            assert elapsed-rows[key][-1]["elapsed_s"]<=MAX_OBSERVATION_GAP_S,"telemetry gap "+key
+                        else:assert elapsed<=MAX_OBSERVATION_GAP_S,"late initial telemetry "+key
                         rows.setdefault(key,[]).append(row);stream.write(json.dumps({"slot":key,"state":row})+"\n")
                     elif any(tag in line for tag in ("[CecilGoal", "[CecilPickup]", "[CecilInteraction]", "[CecilGravity]", "[CecilLock]", "[CecilMotionProbe]")):
                         event={"elapsed_s":elapsed,"role":role,"line":line};events.append(event);stream.write(json.dumps({"event":event})+"\n")
-                names={v for k,v in q.items() if re.fullmatch(r"player_\d+",k)}
+                listed=[v for k,v in q.items() if re.fullmatch(r"player_\d+",k)]
+                names=set(listed)
                 assert expected.issubset(names),"expected bot population missing"
+                assert names==expected and len(listed)==a.bots and q.get("numplayers")==str(a.bots),"unexpected player population"
+                assert q.get("gamename")=="serioussamse" and q.get("gamever")=="1.07" and q.get("hostport")==str(a.port),"unexpected query identity"
+                assert q.get("mapname"),"missing query map"
+                if expected_map is None:expected_map=q["mapname"]
+                assert q["mapname"]==expected_map,"query map changed"
+                record["query_identity"]={k:q[k] for k in ("gamename","gamever","hostport","mapname")}
+                if samples:assert elapsed-samples[-1]["elapsed_s"]<=MAX_OBSERVATION_GAP_S,"query sample gap"
+                else:assert elapsed<=MAX_OBSERVATION_GAP_S,"late initial query sample"
+                for key in expected_slots:
+                    last=rows[key][-1]["elapsed_s"] if key in rows else 0
+                    assert elapsed-last<=MAX_OBSERVATION_GAP_S,"stale or missing telemetry "+key
                 free_disk=shutil.disk_usage("/srv").free
                 assert free_disk>=8*2**30,"disk reserve breached"
                 proc_stats={r:process_stats(pid) for r,pid in pids.items()}
@@ -118,7 +143,10 @@ def main():
                 if elapsed-last_save>=10:stream.flush();save();last_save=elapsed
                 time.sleep(min(1,max(0,a.duration-(time.monotonic()-started))))
         assert len(rows)==a.bots,"per-bot telemetry missing"
+        ended=time.monotonic()-started
+        assert samples and ended-samples[-1]["elapsed_s"]<=MAX_OBSERVATION_GAP_S,"missing final query coverage"
         for key,values in rows.items():
+            assert ended-values[-1]["elapsed_s"]<=MAX_OBSERVATION_GAP_S,"missing final telemetry "+key
             summary=summarize(values)
             assert summary["samples"]>=a.duration*.8 and summary["positions"]>5,"missing sustained movement "+key
             if a.bots>1:assert summary["shots_delta"]>0,"no combat fire "+key
