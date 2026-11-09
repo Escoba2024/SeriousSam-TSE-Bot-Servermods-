@@ -8,6 +8,32 @@
 #include "botcore.h"
 #include "cecil_frame.h"
 namespace botcore {
+// Original Cecil NoPosChange also applies away from a graph edge. This detector
+// measures world displacement, never a ray approval, requested action or NAV scan.
+class CecilGroundProgress {
+ public:
+  void Reset(){last_=since_=-1;displacement_=0;continuous_=false;}
+  bool Continuous()const{return continuous_;}
+  double StationarySeconds()const{return since_>=0?last_-since_:0;}
+  double Displacement()const{return displacement_;}
+  bool Update(double now,const CecilVec& p,const CecilVec& g,bool eligible){
+    const double gravity=g.x*g.x+g.y*g.y+g.z*g.z;
+    if(!eligible||!std::isfinite(now)||now<0||!Finite(p)||!Finite(g)||
+       !std::isfinite(gravity)||std::fabs(gravity-1)>1e-3){Reset();return false;}
+    const double changed=(g.x-gravity_.x)*(g.x-gravity_.x)+(g.y-gravity_.y)*(g.y-gravity_.y)+(g.z-gravity_.z)*(g.z-gravity_.z);
+    const double moved=(p.x-position_.x)*(p.x-position_.x)+(p.y-position_.y)*(p.y-position_.y)+(p.z-position_.z)*(p.z-position_.z);
+    displacement_=std::sqrt(moved);
+    // Missing accepted frames must not accrue unobserved control time.
+    continuous_=last_>=0&&now>=last_&&now-last_<=.25&&changed<=1e-6;
+    if(!continuous_||moved>=.25*.25){
+      since_=now;position_=p;gravity_=g;displacement_=0;
+    }
+    last_=now;return now-since_+1e-9>=2;
+  }
+ private:
+  static bool Finite(const CecilVec& v){return std::isfinite(v.x)&&std::isfinite(v.y)&&std::isfinite(v.z);}
+  bool continuous_=false;double last_=-1,since_=-1,displacement_=0;CecilVec position_{0,0,0},gravity_{0,0,0};
+};
 struct CecilMotionInput {
   CecilFrame frame; // identity preserves legacy world-yaw callers; native supplies body axes and local head yaw.
   double x=0,y=0,z=0,yaw=0,gravity[3]={0,-1,0};

@@ -52,7 +52,7 @@ struct CEntity {
  unsigned en_ulID=0,flags=0;int type=RT_MODEL;CPlacement3D pl;
  bool pickable=false;botcore::CecilItem item;
  const CPlacement3D& GetPlacement()const{return pl;}
- unsigned GetFlags()const{return flags;}int GetRenderType()const{return type;}
+ unsigned GetFlags()const{return flags;}int GetRenderType(){return type;}
 };
 bool IsDerivedFromClass(CEntity*,const char*){return false;}
 struct CSwitch:CEntity {bool m_bUseable=true;CSwitch(){cls.name="Classes/Switch.ecl";}};
@@ -147,6 +147,7 @@ struct CCastRay {
    if(floorPattern==2&&from(3)<0&&from(1)<2)return;
    if(floorPattern==3&&(from(1)<=.1f||from(3)>=-.1f))return;
    if(floorPattern==4&&!(from(1)<-.2f&&from(3)<-.2f))return;
+   if(floorPattern==5&&!(std::fabs(from(1))<.1f&&from(3)<1.8f))return;
    if(floorMode&&!(floorMode==2&&Passes(floorPolygon.bpo_ulFlags))){cr_penHit=&floorEntity;cr_fHitDistance=1;
     if(floorMode==2)cr_pbpoBrushPolygon=&floorPolygon;}
   }else{
@@ -297,7 +298,153 @@ void liftOccupancyBridge(){
   "ordinary weapon deadline still expires while contact stays on a locked approach");
 
 }
+
+void groundProgressFixture(bool neutral=false){
+ setup(1);auto& state=BotSupplyState(0);state.anchor=-1;state.scanTick=99999;
+ BotSupplyGraph().points[0].z=neutral?-50:-20;
+ player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_ulID=100;
+ floorEntity.en_ulID=77;floorEntity.type=CEntity::RT_BRUSH;
+ player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
+ floorMode=2;BotCecilSettings().bAvoidPits=0;
+}
+double groundF=0,groundSt=0,groundU=0;
+int groundProgressTick(int tick,bool accepted=true,double maxStrafe=1,int budget=16){
+ _botRayBudget=budget;const auto move=BotSupplyTick(&player,0,tick,1000);
+ double f=move.forward,st=move.strafe,u=move.up;
+ const int status=BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,move.yaw_delta,maxStrafe,accepted);
+ groundF=f;groundSt=st;groundU=u;return status;
+}
+
+void offgraphProgressGuards(){
+ // A held ray-clear escape with no physical motion must progress through fair
+ // world directions, rather than relabeling the same side after escapeSide flips.
+ groundProgressFixture(true);double heldUntil=0;std::vector<std::pair<double,double>> directions;
+ for(int tick=1;tick<=150;++tick){
+  const int status=groundProgressTick(tick);auto& state=BotSupplyState(0);
+  if(status==2&&state.escapeUntil>heldUntil+.01){directions.push_back({groundF,groundSt});heldUntil=state.escapeUntil;}
+ }
+ check(directions.size()==3&&directions[0].second>0&&directions[1].second<0&&directions[2].first<0,
+  "frozen held escape tries left then genuinely opposite right then one backstep");
+
+
+ groundProgressFixture(true);for(int tick=1;tick<=43;++tick)groundProgressTick(tick);
+ const double successfulHold=BotSupplyState(0).escapeUntil;
+ player.pl.pl_PositionVector(1)+=.26f;
+ const int progressedHold=groundProgressTick(44);
+ check(progressedHold==2&&groundSt>0&&!BotSupplyState(0).groundStalled&&
+   near(BotSupplyState(0).escapeUntil,successfulHold),
+  "actual progress resets watchdog but preserves the remaining verified world-direction hold");
+
+ groundProgressFixture(true);for(int tick=1;tick<=43;++tick)groundProgressTick(tick);
+ player.en_vGravityDir=FLOAT3D(0,1,0);player.body.m[0][0]=-1;player.body.m[1][1]=-1;
+ floorPlane.bpl_plAbsolute=FLOAT3D(0,-1,0);
+ check(groundProgressTick(44)==1&&groundSt==0&&!BotSupplyState(0).groundEscapeActive,
+  "gravity change cancels an old held escape rather than treating reset as successful movement");
+
+ groundProgressFixture(true);for(int tick=1;tick<=43;++tick)groundProgressTick(tick);
+ check(groundProgressTick(49)==1&&groundSt==0&&!BotSupplyState(0).groundEscapeActive,
+  "missing accepted-frame interval cancels old held escape before its nominal end");
+
+ groundProgressFixture();for(int tick=1;tick<=43;++tick)groundProgressTick(tick);
+ player.body.m[0][0]=0;_botRayBudget=16;BotSupplyTick(&player,0,44,1000); // Driver may skip invalid final action.
+ player.body.m[0][0]=1;
+ check(groundProgressTick(45)==1&&groundSt==0&&!BotSupplyState(0).groundEscapeActive,
+  "invalid planner-frame reset cannot leave an orphan ground hold for later valid positive movement");
+ groundProgressFixture(true);for(int tick=1;tick<=45;++tick)groundProgressTick(tick);
+ BotSupplyState(0).ClearEscape();
+ check(groundProgressTick(46)==0,"planner ClearEscape cannot bypass stationary-episode direction cooldown");
+ groundProgressFixture(true);BotCecilSettings().bStrafe=0;bool backstep=false;bool bounded=true;
+ for(int tick=1;tick<=120;++tick){const int status=groundProgressTick(tick,true,0);
+  backstep|=status==2&&groundF<0;bounded=bounded&&groundSt==0&&groundU==0&&std::hypot(groundF,groundSt)<=.300001;}
+ check(backstep&&bounded,"neutral strafe-disabled recovery performs only a verified bounded body backstep");
+ groundProgressFixture(true);floorMode=0;bool escaped=false;
+ for(int tick=1;tick<=110;++tick)escaped|=groundProgressTick(tick)==2;
+ check(!escaped&&groundF==0&&groundSt==0&&BotSupplyState(0).reacquireTried[0]==0,
+  "synthetic neutral recovery still requires actual floor and cannot reject a NAV target as original NoFloor");
+
+ groundProgressFixture();floorPattern=5;bool retainedOriginal=true;
+ for(int tick=1;tick<=100;++tick){groundProgressTick(tick);retainedOriginal&=BotSupplyState(0).reacquireTried[0]==0;}
+ check(retainedOriginal,"ray-clear original followed by failed escape floors is never original NoFloor NAV feedback");
+ for(int negative=0;negative<10;++negative){
+  groundProgressFixture(true);
+  if(negative==0)player.en_penReference=nullptr;
+  if(negative==1)floorEntity.flags=ENF_DELETED;
+  if(negative==2)player.world.wo_cenEntities.clear();
+  if(negative==3)player.m_pstState=PST_FALL;
+  if(negative==4)player.m_pstState=PST_SWIM;
+  if(negative==5)player.en_vCurrentTranslationAbsolute(1)=NAN;
+  if(negative==6)BotSupplyState(0).blocked.clear();
+  if(negative==7)BotSupplyGraph().points[0].x=NAN;
+  if(negative==8)BotSupplyState(0).useReleaseTick=10000;
+  if(negative==9)player.body.m[0][0]=0;
+  escaped=false;for(int tick=1;tick<=100;++tick)escaped|=groundProgressTick(tick)==2;
+  check(!escaped,"unknown support air liquid invalid velocity graph USE and frame never authorize neutral recovery");
+ }
+ groundProgressFixture(true);escaped=false;
+ for(int tick=1;tick<=100;++tick)escaped|=groundProgressTick(tick,true,1,1)==2;
+ check(!escaped,"missing shared safety-probe budget cannot authorize neutral escape");
+ groundProgressFixture(true);escaped=false;
+ for(int tick=1;tick<=100;++tick)escaped|=groundProgressTick(tick,false)==2;
+ check(!escaped,"Human-owned movement cannot accrue or activate offgraph watchdog");
+ groundProgressFixture();escaped=false;
+ for(int tick=1;tick<=100;++tick){player.pl.pl_PositionVector(3)-=.02f;escaped|=groundProgressTick(tick)==2;}
+ check(!escaped,"meaningful actual physical progress prevents false recovery despite clear movement requests");
+ groundProgressFixture();escaped=false;
+ for(int tick=1;tick<=100;++tick){player.pl.pl_PositionVector(1)=(tick&1)?.01f:0;escaped|=groundProgressTick(tick)==2;}
+ check(escaped,"small physical jitter cannot renew stationary watchdog");
+ groundProgressFixture(true);player.en_penReference=nullptr;nearFootMode=2;escaped=false;
+ for(int tick=1;tick<=110;++tick)escaped|=groundProgressTick(tick)==2;
+ check(escaped&&nearFootRays>0,"physically verified near-foot NULL support authorizes neutral recovery");
+ groundProgressFixture(true);player.en_vGravityDir=FLOAT3D(0,1,0);player.body.m[0][0]=-1;player.body.m[1][1]=-1;
+ floorPlane.bpl_plAbsolute=FLOAT3D(0,-1,0);escaped=false;
+ for(int tick=1;tick<=110;++tick)escaped|=groundProgressTick(tick)==2;
+ check(escaped&&std::hypot(groundF,groundSt)<=.300001,"ground recovery follows rotated gravity and body axes with unchanged norm bound");
+ groundProgressFixture(true);for(int tick=1;tick<=50;++tick)groundProgressTick(tick);
+ check(BotSupplyState(0).groundStalled,"owner-reset fixture has a real physical stall");
+ groundProgressTick(51,false);groundProgressTick(52);
+ check(!BotSupplyState(0).groundStalled,"owner loss removes inherited physical stall and held escape immediately");
+ groundProgressFixture(true);for(int tick=1;tick<=50;++tick)groundProgressTick(tick);
+ player.en_ulID=101;groundProgressTick(51);
+ check(!BotSupplyState(0).groundStalled,"entity replacement cannot inherit physical watchdog");
+ groundProgressFixture(true);for(int tick=1;tick<=50;++tick)groundProgressTick(tick);
+ ++BotSupplyState(0).generation;groundProgressTick(51);
+ check(!BotSupplyState(0).groundStalled,"next generation cannot inherit physical watchdog");
+
+ groundProgressFixture(true);bool rayBounded=true;bool normBounded=true;allocations=0;measuring=true;
+ for(int tick=1;tick<=270;++tick){const int before=rayCount;groundProgressTick(tick,true,.1);
+  rayBounded&=rayCount-before<=16&&_botRayBudget>=0;normBounded&=std::hypot(groundF,groundSt)<=.300001&&std::fabs(groundSt)<=.100001&&groundU==0;}
+ measuring=false;check(rayBounded&&normBounded&&allocations==0,"all recovery directions retain shared sixteen-ray budget exact caps and no per-tick allocation");
+ groundProgressFixture(true);for(int tick=1;tick<=50;++tick)groundProgressTick(tick);
+ player.health=0;_botRayBudget=16;BotSupplyTick(&player,0,51,1000);
+ check(!BotSupplyState(0).groundStalled&&BotSupplyState(0).groundRecoveryTime<0,
+  "death clears watchdog even when Driver correctly skips final live safety");
+ groundProgressFixture(true);for(int tick=1;tick<=50;++tick)groundProgressTick(tick);
+ BotSupplyState(0).Reset();check(!BotSupplyState(0).groundStalled&&BotSupplyState(0).groundEscapeTried==0,
+  "map/reset lifecycle removes physical recovery direction history");
+ groundProgressFixture(true);for(int tick=1;tick<=50;++tick)groundProgressTick(tick);
+ BotSupplyState(0).anchor=0;groundProgressTick(51);
+ check(!BotSupplyState(0).groundStalled&&!BotSupplyState(0).groundEscapeActive,
+  "ordinary graph reacquisition immediately relinquishes local offgraph recovery");
+ groundProgressFixture(true);for(int tick=1;tick<=50;++tick)groundProgressTick(tick);
+ double f=0,st=0,u=0;_botRayBudget=16;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),2.6,f,st,u,0,1,true)==1&&f==0&&st==0&&!BotSupplyState(0).groundStalled,
+  "stale eligibility cannot authorize a later-tick neutral escape");
+ groundProgressFixture(true);for(int tick=1;tick<=50;++tick)groundProgressTick(tick);
+ groundProgressTick(1);check(!BotSupplyState(0).groundStalled&&!BotSupplyState(0).groundEscapeActive,"clock rewind removes inherited stall and held escape");
+}
+
+void offgraphProgressBridge(){
+ groundProgressFixture();int escapes=0;for(int tick=1;tick<=110;++tick)escapes+=groundProgressTick(tick)==2;
+ check(escapes>0,"clear rays plus frozen actual pose trigger a physically verified bounded escape");
+ groundProgressFixture(true);escapes=0;for(int tick=1;tick<=110;++tick)escapes+=groundProgressTick(tick)==2;
+ check(escapes>0&&BotSupplyState(0).anchor<0&&BotSupplyState(0).hop<0,
+  "eligible no-candidate neutral recovery can escape without fabricating graph context");
+ groundProgressFixture();escapes=0;for(int tick=1;tick<=270;++tick)escapes+=groundProgressTick(tick)==2;
+ check(escapes>0,"watchdog persists across fixed six-second target and six-second backoff cycles");
+}
+
 int main(){
+ offgraphProgressBridge();offgraphProgressGuards();
  liftOccupancyBridge();
  { // Reproduce Retail033's mask overwrite, including initialized-mask controls.
  for(bool physical:{false,true})for(ULONG initial:{0u,2048u}){

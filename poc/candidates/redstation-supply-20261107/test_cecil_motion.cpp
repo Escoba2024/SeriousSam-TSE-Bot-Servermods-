@@ -82,7 +82,42 @@ static CecilNavGraph graph(){
   g.points[1].z=-10;g.points[2].x=10;g.points[2].z=-10;
   g.points[0].links={1};g.points[1].links={2};return g;
 }
+
+// The incomplete-type fallback exposes the old missing watchdog as behavior RED.
+namespace botcore {class CecilGroundProgress;}
+template<class T,class=void>struct GroundFixture {
+ bool Update(double,const CecilVec&,const CecilVec&,bool){return false;}
+ void Reset(){}
+};
+template<class T>struct GroundFixture<T,decltype(void(sizeof(T)))> {
+ T value;bool Update(double n,const CecilVec& p,const CecilVec& g,bool e){return value.Update(n,p,g,e);}
+ void Reset(){value.Reset();}
+};
+static void offgraphProgress(){
+ GroundFixture<CecilGroundProgress> watch;CecilVec p{0,0,0},g{0,-1,0};bool stalled=false;
+ for(int i=0;i<=41;++i)stalled=watch.Update(i*.05,p,g,true);
+ check(stalled,"actual frozen world position triggers offgraph watchdog after two seconds");
+ p.x=.01;check(watch.Update(2.1,p,g,true),"substantial stall survives position jitter");
+ p.x=.26;check(!watch.Update(2.15,p,g,true),"actual quarter-meter displacement resets watchdog");
+ watch.Reset();for(int i=0;i<=250;++i)stalled=watch.Update(i*.05,{0,0,0},g,true);
+ check(stalled,"six-second candidate and cooldown epochs cannot renew physical progress");
+ check(!watch.Update(12.55,p,g,false),"loss of accepted eligibility resets physical watchdog");
+ check(!watch.Update(12.6,p,g,true),"a new eligible epoch has no inherited stall");
+ for(int i=0;i<42;++i)watch.Update(13+i*.05,p,g,true);
+ check(!watch.Update(15.1,p,{0,1,0},true),"gravity change resets physical watchdog");
+ check(!watch.Update(1,p,g,true),"clock rewind resets physical watchdog");
+ check(!watch.Update(NAN,p,g,true),"nonfinite clock cannot authorize escape");
+ check(!watch.Update(2,{NAN,0,0},g,true),"nonfinite position cannot authorize escape");
+ watch.Reset();for(int i=0;i<=41;++i)watch.Update(i*.05,p,g,true);
+ check(!watch.Update(2.4,p,g,true),"a gap in accepted updates cannot accrue unobserved stall time");
+ watch.Reset();for(int i=0;i<=41;++i)watch.Update(i*.05,p,g,true);
+ check(!watch.Update(2.1,p,{0,0,0},true),"invalid gravity cannot authorize physical recovery");
+ watch.Reset();for(int i=0;i<=41;++i)watch.Update(i*.05,p,g,true);
+ p.y+=.26;check(!watch.Update(2.1,p,g,true),"vertical world displacement also resets physical progress detector");
+}
+
 int main(){
+  offgraphProgress();
   liftOccupancy();
   auto g=graph();CecilNavigator nav;nav.Prepare(3);unsigned char locked[3]={0,0,0};
   CecilMotionInput in;in.alive=true;in.anchor=0;in.goal=2;

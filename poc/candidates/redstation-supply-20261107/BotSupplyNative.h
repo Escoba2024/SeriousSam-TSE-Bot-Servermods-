@@ -32,6 +32,11 @@ struct SCecilProbe {
 struct SSupplyState {
   SCecilProbe probe;
   botcore::CecilNavigator navigator;
+  botcore::CecilGroundProgress groundProgress;
+  double groundRecoveryTime=-1,groundEscapeAfter=0;
+  uint32_t groundProgressEntity=0,groundProgressGeneration=0;
+  unsigned groundEscapeTried=0;
+  bool groundStalled=false,groundEscapeActive=false;
   botcore::CecilNavSearch goals;
   std::vector<unsigned char> blocked,worldLock; // 0 open, 1 moved, 2 missing, 3 unseen.
   uint32_t entity=0,generation=0,rng=1,goalEntity=0,owned=0,followEntity=0,followGeneration=0;
@@ -76,9 +81,10 @@ struct SSupplyState {
   void ClearAvoidance(){avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
   void ClearGoal(){currentNavTime=-1;currentNavGoal=-1;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
+  void ClearGroundProgress(){if(groundEscapeActive)ClearEscape();groundProgress.Reset();groundRecoveryTime=-1;groundEscapeTried=0;groundEscapeAfter=0;groundStalled=groundEscapeActive=false;groundProgressEntity=groundProgressGeneration=0;}
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
-    probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
+    ClearGroundProgress();probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
     itemScanAfter=scanTick=spawnTick=0;searchAfter=goalSince=0;deadSince=-1;
     playable=hadUpgrade=levelSwimView=reacquiring=false;useReleaseTick=-1;lastUseEntity=0;useAfter=0;++generation;
   }
@@ -491,6 +497,16 @@ static void BotCecilSwimMotion(CPlayer* player,const FLOAT3D& delta,double yaw,d
 // Recover that concrete hop using the same prepared directed search, without allocation.
 static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCecilMove& out){
   const bool liquid=BotCecilLiquid(player);
+  bool groundEligible=BotCecilFrameReady(player)&&player->GetWorld()&&!liquid&&
+    (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
+    std::isfinite(now)&&now>=0;
+  for(int i=1;groundEligible&&i<=3;++i)groundEligible=std::isfinite(player->en_vCurrentTranslationAbsolute(i));
+  if(player->en_penReference){
+    CEntity* ref=player->en_penReference;
+    groundEligible=groundEligible&&!(ref->GetFlags()&ENF_DELETED)&&
+      (ref->GetRenderType()==CEntity::RT_BRUSH||ref->GetRenderType()==CEntity::RT_TERRAIN)&&
+      player->GetWorld()->EntityFromID(ref->en_ulID)==ref;
+  }
   // A NULL reference can coexist with native brush contact. Only a near-foot
   // physical hit may substitute; the selected motion still needs wall/floor checks.
   if(!liquid&&player->en_penReference==NULL){
@@ -529,7 +545,12 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
     if(trace)BotLog("[CecilReacquireSupport] entity=%lu generation=%lu time=%.3f stage=verified distance=%.7f support=%.7f budget=%d\n",(unsigned long)player->en_ulID,(unsigned long)state.generation,now,supportRay.cr_fHitDistance,support,_botRayBudget);
   }
   const auto& graph=BotSupplyGraph();const FLOAT3D position=player->GetPlacement().pl_PositionVector;
-  if(graph.points.size()>botcore::CecilNavGraph::kMaxPoints||state.blocked.size()!=graph.points.size())return;
+  if(graph.points.empty()||graph.points.size()>botcore::CecilNavGraph::kMaxPoints||state.blocked.size()!=graph.points.size())return;
+  // This is a same-update eligibility fact, including genuine no-candidate exits.
+  // No early unknown-support/invalid/budget return may authorize local recovery.
+  for(const auto& point:graph.points)groundEligible=groundEligible&&std::isfinite(point.x)&&
+    std::isfinite(point.y)&&std::isfinite(point.z)&&std::isfinite(point.radius)&&point.radius>0;
+  if(groundEligible&&_botRayBudget>=2)state.groundRecoveryTime=now;
   BotCecilLocks(player,state,now);
   if(state.reacquireNode>=0&&(now<state.reacquireSince||now-state.reacquireSince>=6)){
     state.reacquireRejected=state.reacquireNode;state.reacquireRetryAfter=now+6;
@@ -722,17 +743,17 @@ static void BotCecilRebudgetWeapon(CPlayer* player,SSupplyState& s,const botcore
     slot,tick,(unsigned long)s.goalEntity,s.anchor,s.goal,cost,oldDeadline,deadline);
 }
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
-  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.currentNavTime=-1;s.currentNavGoal=-1;s.reacquiring=false;result.useControl=tick<=s.useReleaseTick;
+  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.currentNavTime=-1;s.currentNavGoal=-1;s.reacquiring=false;s.groundRecoveryTime=-1;result.useControl=tick<=s.useReleaseTick;
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
   if(!alive){if(s.playable){BotCecilGoalEnd(slot,tick,s,"death");++s.deaths;s.deadSince=now;
     BotLog("[CecilDeath] local=%d tick=%d entity=%lu generation=%lu deaths=%u\n",slot,tick,(unsigned long)s.entity,(unsigned long)s.generation,s.deaths);
-    }s.playable=false;s.levelSwimView=false;s.ClearGoal();s.ClearEscape();s.ClearReacquireScan();return result;}
-  if(!BotCecilFrameReady(player)||!std::isfinite(player->en_plViewpoint.pl_OrientationAngle(2)))return result;
+    }s.ClearGroundProgress();s.playable=false;s.levelSwimView=false;s.ClearGoal();s.ClearEscape();s.ClearReacquireScan();return result;}
+  if(!BotCecilFrameReady(player)||!std::isfinite(player->en_plViewpoint.pl_OrientationAngle(2))){s.ClearGroundProgress();return result;}
   // Inactive/neutral navigation must not hand an unanchored bot to blind Human
   // travel. The Driver still retains visible-target combat arbitration.
   result.ownsMovement=true;
   if(result.useControl)return result; // Preserve a released action even across chained switches.
-  if(!s.playable){++s.respawns;s.spawnTick=tick;s.scanTick=0;s.ClearGoal();s.searchAfter=0;s.owned=0;s.ClearRejections();s.ClearAvoidance();s.ResetLockSnapshot();++s.generation;
+  if(!s.playable){s.ClearGroundProgress();++s.respawns;s.spawnTick=tick;s.scanTick=0;s.ClearGoal();s.searchAfter=0;s.owned=0;s.ClearRejections();s.ClearAvoidance();s.ResetLockSnapshot();++s.generation;
     const FLOAT3D position=player->GetPlacement().pl_PositionVector;
     BotLog("[CecilSpawn] local=%d tick=%d entity=%lu generation=%lu respawns=%u pos=(%.3f,%.3f,%.3f)\n",slot,tick,(unsigned long)player->en_ulID,(unsigned long)s.generation,s.respawns,(double)position(1),(double)position(2),(double)position(3));}
   s.playable=true;s.entity=player->en_ulID;
@@ -939,7 +960,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
      !std::isfinite(forward)||!std::isfinite(strafe)||!std::isfinite(up)||!std::isfinite(finalBodyYaw)||
      std::fabs(forward)>1.000001||std::fabs(strafe)>1.000001||std::fabs(up)>1.000001){
     BotCecilRejectedProbe(&state.probe,SCecilProbe::reasonInvalid,player);
-    forward=strafe=up=0;state.ClearEscape();return 0;
+    forward=strafe=up=0;state.ClearEscape();state.ClearGroundProgress();return 0;
   }
   // Cecil BotMovement.cpp517: pits are opt-in and checked only without a
   // current path point. Arrival still owns that point for the final item connector.
@@ -949,7 +970,31 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     state.hop>=0&&(size_t)state.hop<nodes&&state.blocked.size()==nodes&&!state.blocked[state.hop];
   // The planner can propose recovery while visible combat owns the final input.
   // Recovery-only limits belong to accepted movement, not the retained proposal.
-  const bool actualReacquire=useReacquire&&state.reacquiring;
+  const bool groundEligible=useReacquire&&state.anchor<0&&std::fabs(now-state.groundRecoveryTime)<=1e-6&&
+    _botRayBudget>=2&&player->GetHealth()>0&&player->m_penWeapons&&
+    (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH);
+  if(state.groundProgressEntity!=player->en_ulID||state.groundProgressGeneration!=state.generation){
+    state.groundProgress.Reset();state.groundEscapeTried=0;state.groundEscapeAfter=0;state.groundStalled=false;
+    if(state.groundEscapeActive)state.ClearEscape();
+    state.groundEscapeActive=false;
+    state.groundProgressEntity=player->en_ulID;state.groundProgressGeneration=state.generation;
+  }
+  const auto& groundPosition=player->GetPlacement().pl_PositionVector;
+  const bool stalled=state.groundProgress.Update(now,{groundPosition(1),groundPosition(2),groundPosition(3)},
+    {player->en_vGravityDir(1),player->en_vGravityDir(2),player->en_vGravityDir(3)},groundEligible);
+  if(!stalled){
+    state.groundEscapeTried=0;state.groundEscapeAfter=0;
+    // Real progress resets the detector, but a verified, still-owned escape
+    // finishes its original world-direction hold rather than undoing the step.
+    if(state.groundEscapeActive&&(!groundEligible||!state.groundProgress.Continuous()||now>=state.escapeUntil)){
+      state.ClearEscape();state.groundEscapeActive=false;
+    }
+  }else if(!state.groundStalled){
+    BotLog("[CecilGroundRecovery] entity=%lu generation=%lu time=%.3f action=stall eligible=1 reason=no_position_progress node=%d stationary=%.3f displacement=%.4f\n",
+      (unsigned long)player->en_ulID,(unsigned long)state.generation,now,state.reacquireNode,state.groundProgress.StationarySeconds(),state.groundProgress.Displacement());
+  }
+  state.groundStalled=stalled;
+  const bool actualReacquire=useReacquire&&(state.reacquiring||stalled||(groundEligible&&state.groundEscapeActive));
   const bool requireFloor=!BotCecilLiquid(player)&&(actualReacquire||(BotCecilSettings().bAvoidPits&&!currentPoint));
   const double maxForward=actualReacquire?.3:1;
   if(actualReacquire)maxStrafe=std::fmin(maxStrafe,.3);
@@ -962,7 +1007,8 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   state.escapeClock=now;
   double requestedForward=forward,requestedStrafe=strafe;capMotion(requestedForward,requestedStrafe);
   forward=(T)requestedForward;strafe=(T)requestedStrafe;
-  if(std::fabs(forward)+std::fabs(strafe)+std::fabs(up)<.05){
+  const bool neutralRequest=std::fabs(forward)+std::fabs(strafe)+std::fabs(up)<.05;
+  if(neutralRequest&&!stalled&&!(groundEligible&&state.groundEscapeActive&&now<state.escapeUntil)){
     state.escapeUntil=0;forward=strafe=up=0;return 1;
   }
   const auto frame=BotCecilBodyFrame(player);
@@ -990,14 +1036,17 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     state.escapeUntil=0;
     if(distance<.0225){state.escapeAfter=now+1;state.escapeSide=-state.escapeSide;}
   }
-  if(BotCecilClearMotion(player,forward,strafe,up,finalBodyYaw,&state.probe,requireFloor))return 1;
+  const bool originalClear=!neutralRequest&&BotCecilClearMotion(player,forward,strafe,up,finalBodyYaw,&state.probe,requireFloor);
+  if(originalClear&&!stalled)return 1;
+  const bool originalNoFloor=!neutralRequest&&!originalClear&&state.probe.primaryReason==SCecilProbe::reasonNoFloor;
+  if(stalled&&now+1e-9<state.groundEscapeAfter){forward=strafe=up=0;return 0;}
   if(now<state.escapeAfter){forward=strafe=up=0;return 0;}
   // Only this branch tested the original request. Held-escape failures return
   // above; deferred/uncertain probes or an approved escape preserve its target.
   auto rejectOriginal=[&](){
     const unsigned uncertain=(1u<<SCecilProbe::reasonBudget)|(1u<<SCecilProbe::reasonInvalid);
     const int node=state.reacquireNode;
-    if(actualReacquire&&(player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
+    if(originalNoFloor&&actualReacquire&&(player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
        state.probe.primaryReason==SCecilProbe::reasonNoFloor&&
        !(state.probe.reasonMask&uncertain)&&nodes<=botcore::CecilNavGraph::kMaxPoints&&
        node>=0&&(size_t)node<nodes&&state.blocked.size()==nodes&&!state.blocked[node]){
@@ -1028,9 +1077,12 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     forward=strafe=up=0;return 0;
   };
   const double length=std::hypot((double)forward,(double)strafe);
-  const double side=std::fmin(.4,maxStrafe)*state.escapeSide;
-  const double candidates[3][2]={{0,side},{0,-side},{length>.05?-.4*forward/length:0,length>.05?-.4*strafe/length:0}};
+  const double side=std::fmin(.4,maxStrafe)*(stalled?1:state.escapeSide);
+  const double candidates[3][2]={{0,side},{0,-side},{length>.05?-.4*forward/length:(stalled?-.3:0),length>.05?-.4*strafe/length:0}};
   for(int i=0;i<3;++i){
+    // Each approved direction is tried once per physical stationary episode,
+    // even when the planner's six-second target cycle clears its escape hold.
+    if(stalled&&(state.groundEscapeTried&(1u<<i)))continue;
     if(i==2&&state.escapeReverseUsed)continue;
     double f=candidates[i][0],st=candidates[i][1];capMotion(f,st);
     if(std::fabs(f)+std::fabs(st)<.05)continue;
@@ -1040,8 +1092,14 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
       if(i==2){
         state.escapeReverseUsed=true;
         for(int j=0;j<3;++j)state.escapeBlockPosition[j]=position(j+1);
-        state.escapeRequest[0]=requested.x/requestedLength;
-        state.escapeRequest[1]=requested.y/requestedLength;state.escapeRequest[2]=requested.z/requestedLength;
+        const auto direction=requestedLength>.05?botcore::CecilVec{requested.x/requestedLength,requested.y/requestedLength,requested.z/requestedLength}:
+          frame.ToWorld(-si,0,-co); // Explicit body-forward seed for a neutral backstep.
+        state.escapeRequest[0]=direction.x;state.escapeRequest[1]=direction.y;state.escapeRequest[2]=direction.z;
+      }
+      if(stalled){
+        state.groundEscapeTried|=1u<<i;state.groundEscapeActive=true;state.groundEscapeAfter=now+1.6;
+        BotLog("[CecilGroundRecovery] entity=%lu generation=%lu time=%.3f action=escape eligible=1 reason=no_position_progress dir=%d forward=%.3f strafe=%.3f stationary=%.3f displacement=%.4f\n",
+          (unsigned long)player->en_ulID,(unsigned long)state.generation,now,i,f,st,state.groundProgress.StationarySeconds(),state.groundProgress.Displacement());
       }
       const auto world=frame.ToWorld(-si*f+co*st,0,-co*f-si*st);
       state.escapeWorld[0]=world.x;state.escapeWorld[1]=world.y;state.escapeWorld[2]=world.z;
