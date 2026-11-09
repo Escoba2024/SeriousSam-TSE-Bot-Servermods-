@@ -571,10 +571,27 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
     state.reacquireScanLiquid=liquid;
   }
   state.reacquireScanTime=now;
-  int slots[3]={-1,-1,-1};double distance[3]={1024.000001,1024.000001,1024.000001};
-  if(state.reacquireNode>=0&&(size_t)state.reacquireNode<graph.points.size()&&!state.blocked[state.reacquireNode]){
+  // Only a geometrically absent local graph permits a farther original hint.
+  // LOS failures, tried bits and target backoff must never manufacture absence.
+  bool localPoint=false;
+  if(groundEligible)for(size_t i=0;i<graph.points.size();++i){
+    if(state.blocked[i])continue;
+    const auto& point=graph.points[i];const FLOAT3D delta(point.x-position(1),point.y-position(2),point.z-position(3));
+    const double height=BotCecilHeight(player,delta);
+    const double d=double(delta(1))*delta(1)+double(delta(2))*delta(2)+double(delta(3))*delta(3);
+    if(std::isfinite(height)&&std::fabs(height)<=8&&d<=1024){localPoint=true;break;}
+  }
+  // Mode validation is metadata-only; a deferred ray budget must not erase or
+  // renew an existing attempt. The unchanged LOS loop reserves two safety rays.
+  const bool farHint=groundEligible&&!liquid&&!localPoint;
+  const double limit=farHint?std::numeric_limits<double>::infinity():1024.000001;
+  int slots[3]={-1,-1,-1};double distance[3]={limit,limit,limit};
+  if(state.reacquireNode>=0&&(size_t)state.reacquireNode<graph.points.size()){
     const auto& point=graph.points[state.reacquireNode];const FLOAT3D delta(point.x-position(1),point.y-position(2),point.z-position(3));
-    if(delta.Length()<=32&&(liquid||std::fabs(BotCecilHeight(player,delta))<=8)){slots[0]=state.reacquireNode;distance[0]=-1;}
+    const double d=double(delta(1))*delta(1)+double(delta(2))*delta(2)+double(delta(3))*delta(3);
+    if(!state.blocked[state.reacquireNode]&&std::isfinite(d)&&(farHint?d>1024:d<=1024)&&
+       (liquid||std::fabs(BotCecilHeight(player,delta))<=8)){slots[0]=state.reacquireNode;distance[0]=-1;}
+    else if(d>1024){state.reacquireNode=-1;state.reacquireSince=-1;state.ClearEscape();}
   }
   for(size_t i=0;i<graph.points.size();++i){
     if(state.blocked[i]||(int)i==slots[0]||(state.reacquireTried[i/8]&(1u<<(i%8)))||
@@ -582,7 +599,7 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
     const auto& point=graph.points[i];const FLOAT3D delta(point.x-position(1),point.y-position(2),point.z-position(3));
     if(!liquid&&std::fabs(BotCecilHeight(player,delta))>8)continue;
     const double d=double(delta(1))*delta(1)+double(delta(2))*delta(2)+double(delta(3))*delta(3);
-    if(d>1024)continue;
+    if(!std::isfinite(d)||(farHint?d<=1024:d>1024))continue;
     for(int k=0;k<3;++k)if(d<distance[k]){for(int j=2;j>k;--j){slots[j]=slots[j-1];distance[j]=distance[j-1];}slots[k]=(int)i;distance[k]=d;break;}
   }
   // A complete failed sweep is retried, so changing physical LOS is never a
@@ -934,11 +951,47 @@ static void BotCecilRejectedProbe(SCecilProbe* probe,int reason,const CPlayer* p
     for(int i=0;i<3;++i){probe->normal[i]=normal(i+1);probe->support-=normal(i+1)*player->en_vGravityDir(i+1);}
   }
 }
+// A current native contact can include a positive-up slope below the ordinary
+// floor-normal cutoff. Reuse only that exact static-world polygon, within the
+// player's actual step bounds and the existing tested segment; never infer a
+// floor from proximity, a NULL reference, a different face or a missing cast.
+static bool BotCecilNativeContactFloor(CPlayer* player,const CCastRay& ray,double segmentLength){
+  if(!BotCecilFrameReady(player)||!player->GetWorld()||
+     !std::isfinite(player->GetHealth())||player->GetHealth()<=0||
+     (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH))return false;
+  CEntity* ref=player->en_penReference;
+  const CBrushPolygon* polygon=ray.cr_pbpoBrushPolygon;
+  if(!ref||ref!=ray.cr_penHit||(ref->GetFlags()&ENF_DELETED)||
+     ref->GetRenderType()!=CEntity::RT_BRUSH||(ref->GetPhysicsFlags()&EPF_MOVABLE)||
+     ref->en_pwoWorld!=player->GetWorld()||!BotCecilIsClass(ref,"WorldBase","WorldBase")||
+     !polygon||polygon!=player->en_pbpoStandOn||(polygon->bpo_ulFlags&BPOF_PASSABLE)||
+     !polygon->bpo_pbplPlane)return false;
+  const CBrushSector* sector=polygon->bpo_pbscSector;
+  const CBrushMip* mip=sector?sector->bsc_pbmBrushMip:NULL;
+  const CBrush3D* brush=mip?mip->bm_pbrBrush:NULL;
+  if(!brush||brush->br_penEntity!=ref)return false;
+  const auto& normal=polygon->bpo_pbplPlane->bpl_plAbsolute;
+  if(!std::isfinite(normal.pl_distance))return false;
+  double norm2=0,support=0;
+  for(int i=1;i<=3;++i){
+    const double n=normal(i);
+    if(!std::isfinite(n)||!std::isfinite(player->en_vCurrentTranslationAbsolute(i)))return false;
+    norm2+=n*n;support-=n*player->en_vGravityDir(i);
+  }
+  if(!std::isfinite(norm2)||std::fabs(norm2-1)>1e-3||!std::isfinite(support)||support<=0)return false;
+  const double stepDown=player->en_fStepDnHeight,stepUp=player->en_fStepUpHeight,
+    distance=ray.cr_fHitDistance;
+  if(!std::isfinite(stepDown)||stepDown<=0||!std::isfinite(stepUp)||stepUp<=0||
+     !std::isfinite(segmentLength)||segmentLength<=0||!std::isfinite(distance)||distance<0||distance>segmentLength)return false;
+  // Existing floor segments begin one gravity-unit above the requested foot.
+  const double height=1-distance;
+  return height>=-stepDown&&height<=stepUp;
+}
 // Explicit support probe. Original CheckPit uses WouldFallInNextPosition with
 // step-down16; this read-only 5/10m ray remains a conservative off-graph adapter,
 // not equivalent physics. SafeMotion applies the original bAvoidPits/current-point gate.
 // finalBodyYaw is current local head yaw plus the emitted yaw delta, never world yaw.
-static bool BotCecilFloor(CPlayer *player,double forward,double strafe,double up,double finalBodyYaw,SCecilProbe* probe=NULL){
+static bool BotCecilFloor(CPlayer *player,double forward,double strafe,double up,double finalBodyYaw,SCecilProbe* probe=NULL,bool allowCurrentContact=false){
   if(!BotCecilFrameReady(player)||!std::isfinite(forward)||!std::isfinite(strafe)||
      !std::isfinite(up)||!std::isfinite(finalBodyYaw)||std::fabs(forward)>1.000001||
      std::fabs(strafe)>1.000001||std::fabs(up)>1.000001){BotCecilRejectedProbe(probe,SCecilProbe::reasonInvalid,player);return false;}
@@ -967,18 +1020,19 @@ static bool BotCecilFloor(CPlayer *player,double forward,double strafe,double up
   }
   const auto& normal=polygon->bpo_pbplPlane->bpl_plAbsolute;
   const double support=-(normal(1)*player->en_vGravityDir(1)+normal(2)*player->en_vGravityDir(2)+normal(3)*player->en_vGravityDir(3));
+  if(!(support>.5)&&allowCurrentContact&&BotCecilNativeContactFloor(player,ray,length))return true;
   if(!(support>.5))BotCecilRejectedProbe(probe,SCecilProbe::reasonUnsupportedNormal,player,&ray,&from,&to);
   return support>.5;
 }
 // Test the exact bounded action in the body/head frame before its floor probe.
-static bool BotCecilClearMotion(CPlayer* player,double forward,double strafe,double up,double yaw,SCecilProbe* probe=NULL,bool requireFloor=true){
+static bool BotCecilClearMotion(CPlayer* player,double forward,double strafe,double up,double yaw,SCecilProbe* probe=NULL,bool requireFloor=true,bool allowCurrentContact=false){
   if(!BotCecilFrameReady(player)||!std::isfinite(forward)||!std::isfinite(strafe)||!std::isfinite(up)||
      !std::isfinite(yaw)||std::fabs(forward)>1.000001||std::fabs(strafe)>1.000001||std::fabs(up)>1.000001){
     BotCecilRejectedProbe(probe,SCecilProbe::reasonInvalid,player);return false;
   }
   const bool liquid=BotCecilLiquid(player);
   if(forward==0&&strafe==0&&(!liquid||up==0))
-    return BotCecilFloor(player,forward,strafe,up,yaw,probe);
+    return BotCecilFloor(player,forward,strafe,up,yaw,probe,allowCurrentContact);
   if(_botRayBudget<((liquid||!requireFloor)?1:2)){BotCecilRejectedProbe(probe,SCecilProbe::reasonBudget,player);return false;}
   const double angle=yaw*3.141592653589793/180;
   const auto world=BotCecilBodyFrame(player).ToWorld(-std::sin(angle)*forward+std::cos(angle)*strafe,
@@ -992,7 +1046,7 @@ static bool BotCecilClearMotion(CPlayer* player,double forward,double strafe,dou
   ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;
   if(!BotCecilPhysicalCast(ray,player->GetWorld())){BotCecilRejectedProbe(probe,SCecilProbe::reasonInvalid,player);return false;}
   if(ray.cr_penHit){BotCecilRejectedProbe(probe,SCecilProbe::reasonWallHit,player,&ray,&from,&to);return false;}
-  return !requireFloor||BotCecilFloor(player,forward,strafe,up,yaw,probe);
+  return !requireFloor||BotCecilFloor(player,forward,strafe,up,yaw,probe,allowCurrentContact);
 }
 // 1 original, 2 verified escape, 0 neutral. Hold world direction for 0.6s so a
 // one-tick reverse does not immediately undo itself. No progress earns a cooldown.
@@ -1049,6 +1103,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     forward=strafe=up=0;return 0;
   }
   const bool actualReacquire=useReacquire&&(state.reacquiring||stalled||(groundEligible&&state.groundEscapeActive));
+  const bool allowCurrentContact=groundEligible&&(stalled||state.groundEscapeActive);
   const bool requireFloor=!BotCecilLiquid(player)&&(actualReacquire||(BotCecilSettings().bAvoidPits&&!currentPoint));
   const double maxForward=actualReacquire?.3:1;
   if(actualReacquire)maxStrafe=std::fmin(maxStrafe,.3);
@@ -1079,7 +1134,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     if(now+1e-9<state.escapeUntil){
       const auto local=frame.ToLocal(state.escapeWorld[0],state.escapeWorld[1],state.escapeWorld[2]);
       double f=-si*local.x-co*local.z,st=co*local.x-si*local.z;capMotion(f,st);
-      if(std::fabs(f)+std::fabs(st)>.05&&BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,requireFloor)){
+      if(std::fabs(f)+std::fabs(st)>.05&&BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,requireFloor,allowCurrentContact)){
         forward=(T)f;strafe=(T)st;up=0;return 2;
       }
       state.escapeUntil=0;state.escapeAfter=now+.3;
@@ -1090,7 +1145,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     state.escapeUntil=0;
     if(distance<.0225){state.escapeAfter=now+1;state.escapeSide=-state.escapeSide;}
   }
-  const bool originalClear=!neutralRequest&&BotCecilClearMotion(player,forward,strafe,up,finalBodyYaw,&state.probe,requireFloor);
+  const bool originalClear=!neutralRequest&&BotCecilClearMotion(player,forward,strafe,up,finalBodyYaw,&state.probe,requireFloor,allowCurrentContact);
   if(originalClear&&!stalled)return 1;
   const bool originalNoFloor=!neutralRequest&&!originalClear&&state.probe.primaryReason==SCecilProbe::reasonNoFloor;
   if(stalled&&now+1e-9<state.groundEscapeAfter){forward=strafe=up=0;return 0;}
@@ -1132,18 +1187,23 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   };
   const double length=std::hypot((double)forward,(double)strafe);
   const double side=std::fmin(.4,maxStrafe)*(stalled?1:state.escapeSide);
-  const double candidates[3][2]={{0,side},{0,-side},{length>.05?-.4*forward/length:(stalled?-.3:0),length>.05?-.4*strafe/length:0}};
-  for(int i=0;i<3;++i){
+  // Original Cecil BotMovement.cpp580..589 uses side plus backward input for
+  // NoPosChange. Retain the existing alternatives first, then try both bounded
+  // diagonals only for an actually observed, currently supported ground stall.
+  const double candidates[5][2]={{0,side},{0,-side},{length>.05?-.4*forward/length:(stalled?-.3:0),length>.05?-.4*strafe/length:0},
+    {-.3,side},{-.3,-side}};
+  for(int i=0;i<5;++i){
+    if(i>=3&&(!stalled||std::fabs(side)<1e-9))continue;
     // Each approved direction is tried once per physical stationary episode,
     // even when the planner's six-second target cycle clears its escape hold.
     if(stalled&&(state.groundEscapeTried&(1u<<i)))continue;
     if(i==2&&state.escapeReverseUsed)continue;
     double f=candidates[i][0],st=candidates[i][1];capMotion(f,st);
     if(std::fabs(f)+std::fabs(st)<.05)continue;
-    if(BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,requireFloor)){
-      // One retreat per blocked approach; retry only after forward progress or
-      // a new world heading. Strafe-disabled bots cannot oscillate indefinitely.
-      if(i==2){
+    if(BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,requireFloor,allowCurrentContact)){
+      // Record backward motion for the ordinary straight-retreat guard. Each
+      // stalled diagonal has its own once-per-episode tried bit above.
+      if(i>=2){
         state.escapeReverseUsed=true;
         for(int j=0;j<3;++j)state.escapeBlockPosition[j]=position(j+1);
         const auto direction=requestedLength>.05?botcore::CecilVec{requested.x/requestedLength,requested.y/requestedLength,requested.z/requestedLength}:

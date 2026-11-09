@@ -27,7 +27,7 @@ void operator delete(void* p,size_t)noexcept{std::free(p);}
 using INDEX=int;using BOOL=int;using FLOAT=float;using ULONG=unsigned long;
 const int TRUE=1,FALSE=0,ENF_DELETED=1,BPOF_PASSABLE=1<<11,BPOF_SHOOTTHRU=1<<4;
 int normalizeCalls=0;
-const unsigned EPF_TRANSLATEDBYGRAVITY=1u<<1;
+const unsigned EPF_TRANSLATEDBYGRAVITY=1u<<1,EPF_MOVABLE=1u<<9;
 struct FLOAT3D {
  float a[3];FLOAT3D(float x=0,float y=0,float z=0):a{x,y,z}{}
  float operator()(int i)const{return a[i-1];} float& operator()(int i){return a[i-1];}
@@ -45,7 +45,10 @@ FLOAT3D operator*(const FLOAT3D& v,const FLOATmatrix3D& m){
 }
 struct CPlacement3D {FLOAT3D pl_PositionVector,pl_OrientationAngle;};
 struct StubClass {const char* name="Entity";const char* GetName()const{return name;}};
+int worldLookups=0;struct CWorld;struct CBrushPolygon;
 struct CEntity {
+ CWorld* en_pwoWorld=nullptr;unsigned entityPhysicsFlags=0;
+ unsigned GetPhysicsFlags()const{return entityPhysicsFlags;}
  enum {RT_BRUSH=4,RT_MODEL=2,RT_TERRAIN=11};
  StubClass cls;CEntity* target=nullptr;bool marker=false;
  StubClass* GetClass(){return &cls;}CEntity* GetTarget()const{return target;}bool IsMarker()const{return marker;}
@@ -60,12 +63,13 @@ struct CMovingBrush:CEntity {CEntity* m_penSwitch=nullptr;CMovingBrush(){cls.nam
 struct CMarker:CEntity {CMarker(){cls.name="Classes/Marker.ecl";marker=true;}};
 struct CWorld {
  std::vector<CEntity*> wo_cenEntities;
- CEntity* EntityFromID(ULONG id){for(auto e:wo_cenEntities)if(e->en_ulID==id)return e;return nullptr;}
+ CEntity* EntityFromID(ULONG id){++worldLookups;for(auto e:wo_cenEntities)if(e->en_ulID==id)return e;return nullptr;}
 };
 #define FOREACHINDYNAMICCONTAINER(c,t,it) for(auto it : c)
 struct CPlayerWeapons {CEntity* m_penRayHit=nullptr;float m_fRayHitDistance=1000;unsigned m_iAvailableWeapons=3;int m_iCurrentWeapon=2;unsigned usable=3,ammo=0;};
 enum PlayerState {PST_STAND=0,PST_CROUCH=1,PST_SWIM=2,PST_DIVE=3,PST_FALL=4};
 struct CPlayer:CEntity {
+ CBrushPolygon* en_pbpoStandOn=nullptr;float en_fStepUpHeight=1,en_fStepDnHeight=1.5f;
  PlayerState m_pstState=PST_STAND;FLOATmatrix3D body;CPlacement3D en_plViewpoint;FLOAT3D m_aLastRotation;
  const FLOATmatrix3D& GetRotationMatrix()const{return body;}
  CPlayerWeapons w;CPlayerWeapons* m_penWeapons=&w;CWorld world;CEntity* en_penReference=nullptr;
@@ -109,10 +113,17 @@ bool BotCecilReadItem(CPlayer*,CEntity* e,unsigned generation,unsigned,botcore::
  *out=e->item;out->id=e->en_ulID;out->generation=generation;out->pickable=true;
  out->x=e->pl.pl_PositionVector(1);out->y=e->pl.pl_PositionVector(2);out->z=e->pl.pl_PositionVector(3);return true;
 }
-struct CBrushPlane {FLOAT3D bpl_plAbsolute{0,1,0};};
-struct CBrushPolygon {CBrushPlane* bpo_pbplPlane=nullptr;unsigned bpo_ulFlags=0;};
-struct CBrushSector {};
+struct StubPlane:FLOAT3D {
+ float pl_distance=0;StubPlane(float x=0,float y=1,float z=0):FLOAT3D(x,y,z){}
+ StubPlane& operator=(const FLOAT3D& v){static_cast<FLOAT3D&>(*this)=v;return *this;}
+};
+struct CBrushPlane {StubPlane bpl_plAbsolute{0,1,0};};
+struct CBrush3D {CEntity* br_penEntity=nullptr;};
+struct CBrushMip {CBrush3D* bm_pbrBrush=nullptr;};
+struct CBrushSector {CBrushMip* bsc_pbmBrushMip=nullptr;};
+struct CBrushPolygon {CBrushPlane* bpo_pbplPlane=nullptr;unsigned bpo_ulFlags=0;CBrushSector* bpo_pbscSector=nullptr;};
 CEntity obstruction,floorEntity;CBrushPlane floorPlane;CBrushPolygon floorPolygon;
+float floorHitDistance=1;CBrushPolygon* floorHitPolygon=&floorPolygon;
 int floorMode=0,rayCount=0,blockedItems=0,floorPattern=0,wallMode=0,wallCount=0;FLOAT3D lastFrom,lastTo,wallFrom,wallTo;
 int nearFootMode=0,nearFootRays=0;float nearFootDistance=.26f;bool invalidateAfterFloor=false;
 int legacyCastCalls=0,sectorAdds=0,sectorTests=0,worldTests=0;unsigned wallPolygonFlags=0;
@@ -149,11 +160,13 @@ struct CCastRay {
    if(floorPattern==3&&(from(1)<=.1f||from(3)>=-.1f))return;
    if(floorPattern==4&&!(from(1)<-.2f&&from(3)<-.2f))return;
    if(floorPattern==5&&!(std::fabs(from(1))<.1f&&from(3)<1.8f))return;
-   if(floorMode&&!(floorMode==2&&Passes(floorPolygon.bpo_ulFlags))){cr_penHit=&floorEntity;cr_fHitDistance=1;
-    if(floorMode==2)cr_pbpoBrushPolygon=&floorPolygon;}
+   if(floorMode&&!(floorMode==2&&Passes(floorPolygon.bpo_ulFlags))){cr_penHit=&floorEntity;cr_fHitDistance=floorHitDistance;
+    if(floorMode==2)cr_pbpoBrushPolygon=floorHitPolygon;}
   }else{
    ++wallCount;wallFrom=from;wallTo=to;
-   if(!Passes(wallPolygonFlags)&&(wallMode==2||(wallMode==1&&to(3)<from(3))||(to(1)>0 && to(1)<=blockedItems)))cr_penHit=&obstruction;
+   if(!Passes(wallPolygonFlags)&&(wallMode==2||(wallMode==1&&to(3)<from(3))||
+      (wallMode==3&&(std::fabs(to(1)-from(1))<1e-5||std::fabs(to(3)-from(3))<1e-5))||
+      (to(1)>0 && to(1)<=blockedItems)))cr_penHit=&obstruction;
   }
  }
 };
@@ -173,6 +186,7 @@ void setup(int nodes=3){
  // Existing support/recovery fixtures explicitly exercise opt-in, off-graph pit avoidance.
  BotCecilSettings().bAvoidPits=1;
  lockApproachEvents=0;lockEvents=0;lastLocked=lastPresent=-1;goalEvents=endEvents=groundReplanEvents=0;lastEnd[0]=0;_botSupplyMapSerial=7;_botRayBudget=40;rayCount=0;blockedItems=0;floorMode=0;floorPattern=0;wallMode=wallCount=0;floorEntity.type=CEntity::RT_MODEL;
+ worldLookups=0;floorPlane.bpl_plAbsolute.pl_distance=0;floorHitDistance=1;floorHitPolygon=&floorPolygon;floorPolygon.bpo_pbscSector=nullptr;floorEntity.en_pwoWorld=nullptr;floorEntity.entityPhysicsFlags=0;
  floorPlane.bpl_plAbsolute=FLOAT3D(0,1,0);floorPolygon.bpo_pbplPlane=&floorPlane;floorPolygon.bpo_ulFlags=0;
  nearFootMode=nearFootRays=0;nearFootDistance=.26f;floorEntity.flags=0;invalidateAfterFloor=false;
  legacyCastCalls=sectorAdds=sectorTests=worldTests=normalizeCalls=0;wallPolygonFlags=0;forcePassableHit=false;
@@ -390,9 +404,162 @@ void groundedReplanGuards(){
  check(groundReplanEvents==0&&BotSupplyState(0).goalEntity==0,"death cannot preserve or reacquire an old airborne goal");
 }
 
+// Real040diag no-candidate bubble: the nearest ORIGINAL point lies ~55m away.
+void farHintFixture(){
+ setup(296);auto& graph=BotSupplyGraph();auto& state=BotSupplyState(0);
+ for(int i=0;i<296;++i){auto& point=graph.points[i];point.x=-200.f-i;point.y=-29.5f;point.z=-200;point.radius=1;point.links.clear();}
+ graph.points[236].x=122;graph.points[236].z=80;graph.points[236].radius=8;
+ graph.points[237].x=95;graph.points[237].z=80;
+ player.pl.pl_PositionVector=FLOAT3D(149.522f,-29.998f,127.651f);player.en_ulID=1847;
+ floorEntity.en_ulID=1;floorEntity.type=CEntity::RT_BRUSH;player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
+ floorMode=2;state.anchor=-1;state.scanTick=99999;state.generation=8;BotCecilSettings().bAvoidPits=0;_botRayBudget=16;
+}
+void farHintTests(){
+ farHintFixture();auto& state=BotSupplyState(0);const auto move=BotSupplyTick(&player,0,1,1000);
+ check(move.active&&owns(move,0)&&state.reacquireNode==236&&state.reacquiring&&state.anchor<0&&state.hop<0,
+   "genuine proved ground no-local-point case selects nearest original55m hint without anchor or graph edge");
+ check(rayCount==1&&_botRayBudget==15&&std::hypot(move.forward,move.strafe)<=.300001,
+   "far hint uses existing single LOS budget and bounded proposal");
+ double f=move.forward,st=move.strafe,u=move.up;
+ check(BotCecilSafeMotion(&player,state,.05,f,st,u,move.yaw_delta,1)==1&&std::hypot(f,st)>.05&&std::hypot(f,st)<=.300001&&state.anchor<0,
+   "far hint action must pass actual final wall and mandatory floor before bounded movement");
+ const double fixedSince=state.reacquireSince;_botRayBudget=16;BotSupplyTick(&player,0,21,1000);
+ check(state.reacquireNode==236&&state.reacquireSince==fixedSince,"held far hint preserves original six-second deadline");
+ _botRayBudget=2;const auto postponed=BotSupplyTick(&player,0,22,1000);
+ check(!postponed.active&&state.reacquireNode==236&&state.reacquireSince==fixedSince,
+   "budget-deferred far hint preserves attempt rather than rejecting or renewing it");
+ const auto original=BotSupplyGraph().points[236];botcore::CecilNavigator nav;nav.Prepare(296);
+ botcore::CecilMotionInput in;in.alive=true;in.anchor=in.goal=236;in.x=149.522;in.y=-29.998;in.z=127.651;
+ check(!nav.Update(BotSupplyGraph(),state.blocked.data(),state.blocked.size(),in).arrived,
+   "far hint does not change original arrival into distant reached state");
+ in.x=original.x;in.y=original.y;in.z=original.z+8.01;in.now=.05;
+ check(!nav.Update(BotSupplyGraph(),state.blocked.data(),state.blocked.size(),in).arrived,
+   "originalradius8 still rejects a physically outside far-hint arrival");
+ in.z=original.z+7.99;in.now=.1;
+ check(nav.Update(BotSupplyGraph(),state.blocked.data(),state.blocked.size(),in).arrived,
+   "far hint arrival occurs only after physical pose enters unchanged originalradius");
+}
+void farHintGuards(){
+ auto localPoint=[](float distance=20){auto& p=BotSupplyGraph().points[0];p.x=player.pl.pl_PositionVector(1)+distance;p.y=player.pl.pl_PositionVector(2);p.z=player.pl.pl_PositionVector(3);};
+ for(int unavailable=0;unavailable<3;++unavailable){
+  farHintFixture();localPoint();auto& state=BotSupplyState(0);
+  if(unavailable==0)wallMode=2;
+  else{
+   state.reacquireScanTime=0;
+   for(int axis=0;axis<3;++axis){state.reacquireScanPosition[axis]=player.pl.pl_PositionVector(axis+1);state.reacquireScanGravity[axis]=player.en_vGravityDir(axis+1);}
+   if(unavailable==1)state.reacquireTried[0]=1;
+   else{state.reacquireRejected=0;state.reacquireRetryAfter=10;}
+  }
+  bool noFar=true,bounded=true;
+  for(int tick=1;tick<=3;++tick){const int casts=rayCount;_botRayBudget=16;const auto m=BotSupplyTick(&player,0,tick,1000);
+   noFar&=m.active?state.reacquireNode==0:state.reacquireNode<0;bounded&=rayCount-casts<=1;}
+  check(noFar&&bounded,"local geometry prevents FAR even when its LOS fails, tried bit is set or retry is deferred");
+ }
+ for(float distance:{32.f,32.01f}){
+  farHintFixture();localPoint(distance);const auto m=BotSupplyTick(&player,0,1,1000);
+  check(m.active&&BotSupplyState(0).reacquireNode==0&&rayCount==1,
+    "inclusive32m local boundary and first farther point retain nearest original ranking");
+ }
+ for(float height:{8.f,8.01f}){
+  farHintFixture();localPoint(1);BotSupplyGraph().points[0].y+=height;const auto m=BotSupplyTick(&player,0,1,1000);
+  check(m.active&&BotSupplyState(0).reacquireNode==(height==8?0:236),
+    "FAR geometric absence uses unchanged inclusive gravity-relative8m height bound");
+ }
+ // A cached far target yields immediately to local geometry, even if that local
+ // target cannot currently pass LOS. Its old world escape must not survive.
+ farHintFixture();BotSupplyTick(&player,0,1,1000);auto& switched=BotSupplyState(0);
+ switched.escapeUntil=1;switched.escapeWorld[0]=.3;localPoint();wallMode=2;_botRayBudget=16;
+ const auto localBlocked=BotSupplyTick(&player,0,2,1000);
+ check(!localBlocked.active&&switched.reacquireNode<0&&switched.escapeUntil==0,
+   "new local geometry invalidates cached far mode and its held escape despite blocked local LOS");
+ farHintFixture();BotSupplyTick(&player,0,1,1000);localPoint();_botRayBudget=16;
+ check(BotSupplyTick(&player,0,2,1000).active&&BotSupplyState(0).reacquireNode==0,
+   "new visible local geometry switches a cached far target back to the existing near path");
+ farHintFixture();BotSupplyTick(&player,0,1,1000);const double initial=BotSupplyState(0).reacquireSince;
+ _botRayBudget=16;BotSupplyTick(&player,0,101,1000);
+ check(BotSupplyState(0).reacquireNode==236&&BotSupplyState(0).reacquireSince==initial,
+   "repeated FAR revalidation never renews the six-second attempt");
+ _botRayBudget=16;BotSupplyTick(&player,0,122,1000);
+ check(BotSupplyState(0).reacquireNode==237&&BotSupplyState(0).reacquireRejected==236&&
+   near(BotSupplyState(0).reacquireRetryAfter,12.1),"FAR target expires into unchanged six-second backoff and nearest alternative");
+ _botRayBudget=16;BotSupplyTick(&player,0,244,1000);
+ check(BotSupplyState(0).reacquireNode==236,"FAR target becomes eligible again after existing bounded retry");
+ for(int budget:{0,1,2,3,4,5,16}){
+  farHintFixture();_botRayBudget=budget;const auto m=BotSupplyTick(&player,0,1,1000);
+  check(m.active==(budget>2)&&rayCount==(budget>2?1:0)&&_botRayBudget==budget-(budget>2?1:0),
+    "FAR LOS cannot consume the last two shared safety rays at any initial budget");
+ }
+ farHintFixture();wallMode=2;_botRayBudget=5;const auto blocked=BotSupplyTick(&player,0,1,1000);
+ check(!blocked.active&&rayCount==3&&_botRayBudget==2,"FAR blocked batch remains at most three LOS rays with two reserved");
+ wallMode=0;_botRayBudget=16;const auto continued=BotSupplyTick(&player,0,2,1000);
+ check(continued.active&&BotSupplyState(0).reacquireNode!=236,
+   "FAR uses the existing bounded failed-LOS sweep rather than retrying nearest forever");
+ farHintFixture();player.en_penReference=nullptr;_botRayBudget=16;
+ check(!BotSupplyTick(&player,0,1,1000).active&&rayCount==1&&BotSupplyState(0).reacquireNode<0,
+   "unknown NULL support cannot authorize a FAR hint");
+ farHintFixture();player.en_penReference=nullptr;nearFootMode=2;_botRayBudget=4;
+ check(BotSupplyTick(&player,0,1,1000).active&&BotSupplyState(0).reacquireNode==236&&nearFootRays==1&&rayCount==2&&_botRayBudget==2,
+   "existing strictly verified NULL near-foot support may authorize FAR while retaining final safety reserve");
+ for(int budget:{0,1,2,3}){
+  farHintFixture();player.en_penReference=nullptr;nearFootMode=2;_botRayBudget=budget;
+  check(!BotSupplyTick(&player,0,1,1000).active&&rayCount==0,
+    "deferred NULL current-support budget never authorizes FAR from passive observation");
+ }
+ for(int invalid=0;invalid<13;++invalid){
+  farHintFixture();
+  if(invalid==0)player.m_pstState=PST_FALL;
+  if(invalid==1)player.m_pstState=PST_DIVE;
+  if(invalid==2)floorEntity.flags=ENF_DELETED;
+  if(invalid==3)floorEntity.type=CEntity::RT_MODEL;
+  if(invalid==4)player.world.wo_cenEntities.clear();
+  if(invalid==5)player.en_vCurrentTranslationAbsolute(1)=NAN;
+  if(invalid==6)player.en_vGravityDir=FLOAT3D(0,-2,0);
+  if(invalid==7)player.body.m[0][0]=0;
+  if(invalid==8)BotSupplyGraph().points[10].x=NAN;
+  if(invalid==9)BotSupplyGraph().points[10].radius=0;
+  if(invalid==10)BotSupplyState(0).blocked.pop_back();
+  if(invalid==11)player.health=0;
+  if(invalid==12)player.hasWorld=false;
+  const auto m=BotSupplyTick(&player,0,1,1000);
+  check(!m.active&&rayCount==0,"FAR refuses invalid graph/frame/lifecycle/medium/support instead of widening existing authority");
+ }
+ farHintFixture();player.m_pstState=PST_CROUCH;
+ check(BotSupplyTick(&player,0,1,1000).active,"native proved CROUCH can select FAR under unchanged ground policy");
+ farHintFixture();player.en_vGravityDir=FLOAT3D(0,1,0);player.body.m[0][0]=-1;player.body.m[1][1]=-1;
+ check(BotSupplyTick(&player,0,1,1000).active,"FAR height and bounded proposal remain valid under actual inverted gravity frame");
+ farHintFixture();CEntity lock;lock.en_ulID=990;player.world.wo_cenEntities.push_back(&lock);
+ BotSupplyGraph().points[236].lock_entity=990;lock.pl.pl_PositionVector(1)=1;
+ check(BotSupplyTick(&player,0,1,1000).active&&BotSupplyState(0).reacquireNode==237,
+   "actual moved physical lock excludes closest FAR point without unlocking or fabricating arrival");
+ farHintFixture();for(auto& point:BotSupplyGraph().points)point.lock_entity=991;
+ check(!BotSupplyTick(&player,0,1,1000).active&&rayCount==0,"all physically missing locked FAR points remain blocked");
+ farHintFixture();BotSupplyTick(&player,0,1,1000);auto& finalState=BotSupplyState(0);
+ _botRayBudget=16;const auto current=BotSupplyTick(&player,0,2,1000);double f=current.forward,st=current.strafe,u=current.up;
+ floorMode=0;const int veto=BotCecilSafeMotion(&player,finalState,.1,f,st,u,current.yaw_delta,1);
+ check(veto==0&&f==0&&st==0&&u==0,"selected FAR hint cannot bypass the final actual floor veto");
+ farHintFixture();bool bounded=true;allocations=0;measuring=true;
+ for(int tick=1;tick<=270;++tick){const int before=rayCount;_botRayBudget=16;const auto m=BotSupplyTick(&player,0,tick,1000);
+  bounded&=rayCount-before<=3&&_botRayBudget>=2&&std::hypot(m.forward,m.strafe)<=.300001;}
+ measuring=false;check(bounded&&allocations==0,"FAR metadata and fixed three-cast batches allocate nothing across repeated lifecycle deadlines");
+ setup(4096);auto& full=BotSupplyGraph();auto& sweep=BotSupplyState(0);
+ sweep.anchor=-1;sweep.scanTick=99999;player.pl.pl_PositionVector=FLOAT3D(149,-30,127);
+ floorEntity.en_ulID=1;floorEntity.type=CEntity::RT_BRUSH;player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
+ for(auto& point:full.points){point.x=189;point.y=-30;point.z=127;point.links.clear();}
+ full.points[4095].x=220;blockedItems=200;bool fullBound=true;SCecilMove tail;allocations=0;measuring=true;
+ for(int tick=1;tick<=1366;++tick){const int before=rayCount;_botRayBudget=16;tail=BotSupplyTick(&player,0,tick,1000);
+  fullBound&=rayCount-before<=3&&_botRayBudget>=13;}
+ measuring=false;
+ check(tail.active&&sweep.reacquireNode==4095&&fullBound&&allocations==0,
+   "FAR full4096-node failed-LOS prefix reaches final original point with fixed memory and at most3 rays");
+ setup(4097);BotSupplyState(0).anchor=-1;BotSupplyState(0).scanTick=99999;
+ floorEntity.en_ulID=1;floorEntity.type=CEntity::RT_BRUSH;player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
+ check(!BotSupplyTick(&player,0,1,1000).active&&rayCount==0,"FAR never admits a graph beyond4096 original points");
+}
 void groundProgressFixture(bool neutral=false){
  setup(1);auto& state=BotSupplyState(0);state.anchor=-1;state.scanTick=99999;
  BotSupplyGraph().points[0].z=neutral?-50:-20;
+ // A neutral fixture needs no height-eligible hint, including the far fallback.
+ if(neutral)BotSupplyGraph().points[0].y=20;
  player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_ulID=100;
  floorEntity.en_ulID=77;floorEntity.type=CEntity::RT_BRUSH;
  player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
@@ -486,16 +653,42 @@ void groundObservationHoldGuards(){
  check(escaped&&neutral,"dense support flicker retains current-proof action gating under rotated gravity");
 }
 
+void originalDiagonalRecovery(){
+ // Original BotMovement.cpp580..589: NoPosChange chooses side+back together.
+ // A corner with only diagonal exits cannot be escaped by three cardinal rays.
+ groundProgressFixture(true);wallMode=3;bool diagonal=false,bounded=true;allocations=0;measuring=true;
+ for(int tick=1;tick<=120;++tick){const int before=rayCount;const int status=groundProgressTick(tick);
+  if(status==2){diagonal|=groundF<-.05&&std::fabs(groundSt)>.05;
+   bounded&=tick>=40&&groundU==0&&std::hypot(groundF,groundSt)<=.300001;}
+  bounded&=rayCount-before<=16&&_botRayBudget>=0;
+ }
+ measuring=false;
+ check(diagonal,"original Cecil side-plus-back recovery can use a physically verified diagonal corner exit");
+ check(bounded&&allocations==0,"diagonal recovery retains actual stall delay normal cap shared sixteen rays and no allocation");
+ for(int negative=0;negative<5;++negative){
+  groundProgressFixture(true);wallMode=3;bool escaped=false;
+  if(negative==0)floorMode=0;
+  if(negative==1)player.en_penReference=nullptr;
+  if(negative==2)player.m_pstState=PST_FALL;
+  for(int tick=1;tick<=120;++tick)escaped|=groundProgressTick(tick,negative!=3,negative==4?0:1)==2;
+  check(!escaped,"diagonal exit never bypasses floor current support ground movement owner or disabled strafe");
+ }
+ groundProgressFixture(true);wallMode=3;bool escaped=false;
+ for(int tick=1;tick<=120;++tick)escaped|=groundProgressTick(tick,true,1,3)==2;
+ check(!escaped&&_botRayBudget>=0,"a diagonal cannot borrow missing wall-plus-floor budget after prior blocked directions");
+}
+
 void offgraphProgressGuards(){
  // A held ray-clear escape with no physical motion must progress through fair
  // world directions, rather than relabeling the same side after escapeSide flips.
  groundProgressFixture(true);double heldUntil=0;std::vector<std::pair<double,double>> directions;
- for(int tick=1;tick<=150;++tick){
+ for(int tick=1;tick<=220;++tick){
   const int status=groundProgressTick(tick);auto& state=BotSupplyState(0);
   if(status==2&&state.escapeUntil>heldUntil+.01){directions.push_back({groundF,groundSt});heldUntil=state.escapeUntil;}
  }
- check(directions.size()==3&&directions[0].second>0&&directions[1].second<0&&directions[2].first<0,
-  "frozen held escape tries left then genuinely opposite right then one backstep");
+ check(directions.size()==5&&directions[0].second>0&&directions[1].second<0&&directions[2].first<0&&
+   directions[3].first<0&&directions[3].second>0&&directions[4].first<0&&directions[4].second<0,
+  "frozen held escape tries opposite sides backstep and both original Cecil backward diagonals once each");
 
 
  groundProgressFixture(true);for(int tick=1;tick<=43;++tick)groundProgressTick(tick);
@@ -614,8 +807,100 @@ void offgraphProgressBridge(){
  check(escapes>0,"watchdog persists across fixed six-second target and six-second backoff cycles");
 }
 
+// Actual040diag A3: native StandOn and existing rejected floor hit are the
+// same static brush polygon, up=.3976075, distance2.4784, stepDn1.5.
+void nativeContactFixture(){
+ groundProgressFixture();floorEntity.cls.name="Classes/WorldBase.ecl";floorEntity.en_pwoWorld=&player.world;
+ static CBrush3D brush;static CBrushMip mip;static CBrushSector sector;
+ brush.br_penEntity=&floorEntity;mip.bm_pbrBrush=&brush;sector.bsc_pbmBrushMip=&mip;floorPolygon.bpo_pbscSector=&sector;
+ player.en_pbpoStandOn=&floorPolygon;player.en_fStepUpHeight=1;player.en_fStepDnHeight=1.5f;
+ floorPlane.bpl_plAbsolute=FLOAT3D(float(std::sqrt(1-.3976075*.3976075)),.3976075f,0);floorHitDistance=2.4784336f;
+}
+template<class P>auto contactFloor(P* p,bool allow,int)->decltype(BotCecilFloor(p,.3,0,0,0,nullptr,allow)){
+ return BotCecilFloor(p,.3,0,0,0,nullptr,allow);
+}
+template<class P>bool contactFloor(P* p,bool,long){return BotCecilFloor(p,.3,0,0,0);}
+template<class P>auto nativeProof(P* p,const CCastRay& ray,double length,int)->decltype(BotCecilNativeContactFloor(p,ray,length)){
+ return BotCecilNativeContactFloor(p,ray,length);
+}
+template<class P>bool nativeProof(P*,const CCastRay&,double,long){return false;}
+void nativeContactRecovery(){
+ nativeContactFixture();check(!BotCecilFloor(&player,.3,0,0,0),"same native steep polygon never widens ordinary floor normal policy");
+ check(contactFloor(&player,true,0),"explicit current recovery can use native contacted slope within actual stepDn");
+ nativeContactFixture();bool escaped=false,preStall=false,bounded=true;allocations=0;measuring=true;
+ for(int tick=1;tick<=70;++tick){const int result=groundProgressTick(tick);if(tick<40)preStall|=result!=0;
+  escaped|=result==2;bounded&=rayCount<=tick*16&&std::hypot(groundF,groundSt)<=.300001;}
+ measuring=false;check(escaped&&!preStall,"actual frozen current-supported offgraph owner escapes contacted native slope only after watchdog stall");
+ check(bounded&&allocations==0,"native-contact recovery preserves16ray bound .3norm and zero tick allocations");
+ for(int control=0;control<29;++control){
+  nativeContactFixture();CBrushPolygon different=floorPolygon;CWorld foreign;CEntity owner;
+  switch(control){
+   case 0:floorHitPolygon=&different;break;
+   case 1:floorPolygon.bpo_pbscSector->bsc_pbmBrushMip->bm_pbrBrush->br_penEntity=&owner;break;
+   case 2:player.en_penReference=&owner;break;
+   case 3:floorEntity.flags=ENF_DELETED;break;
+   case 4:floorEntity.cls.name="Classes/MovingBrush.ecl";break;
+   case 5:floorEntity.entityPhysicsFlags=EPF_MOVABLE;break;
+   case 6:player.en_penReference=nullptr;break;
+   case 7:player.m_pstState=PST_FALL;break;
+   case 8:player.health=0;break;
+   case 9:floorEntity.en_pwoWorld=&foreign;break;
+   case 10:floorPolygon.bpo_ulFlags=BPOF_PASSABLE;forcePassableHit=true;break;
+   case 11:floorPolygon.bpo_pbplPlane=nullptr;break;
+   case 12:floorPlane.bpl_plAbsolute(1)=NAN;break;
+   case 13:floorPlane.bpl_plAbsolute=FLOAT3D(0,0,1);break;
+   case 14:floorPlane.bpl_plAbsolute(2)=-.3976075f;break;
+   case 15:floorPlane.bpl_plAbsolute=FLOAT3D(0,.3976075f,0);break;
+   case 16:floorHitDistance=2.5001f;break;
+   case 17:floorHitDistance=.4f;player.en_fStepUpHeight=.5f;break;
+   case 18:player.en_fStepDnHeight=NAN;break;
+   case 19:player.en_fStepUpHeight=INFINITY;break;
+   case 20:player.en_fStepDnHeight=0;break;
+   case 21:floorHitDistance=5.0001f;player.en_fStepDnHeight=10;break;
+   case 22:floorHitDistance=NAN;break;
+   case 23:floorPolygon.bpo_pbscSector=nullptr;break;
+   case 24:floorEntity.type=CEntity::RT_MODEL;break;
+   case 25:floorPolygon.bpo_pbscSector->bsc_pbmBrushMip=nullptr;break;
+   case 26:floorPolygon.bpo_pbscSector->bsc_pbmBrushMip->bm_pbrBrush=nullptr;break;
+   case 27:floorPlane.bpl_plAbsolute.pl_distance=NAN;break;
+   case 28:floorPlane.bpl_plAbsolute.pl_distance=INFINITY;break;
+  }
+  _botRayBudget=16;check(!contactFloor(&player,true,0),"native-contact exception fails closed for foreign missing deleted moving air liquid badnormal invalidsteps and outside-segment contacts");
+ }
+ nativeContactFixture();const int lookups=worldLookups;_botRayBudget=16;
+ check(contactFloor(&player,true,0)&&worldLookups==lookups&&rayCount==1&&_botRayBudget==15,
+   "native-contact exception reads cached identity only and consumes exactly existing single floor ray");
+ nativeContactFixture();player.m_pstState=PST_SWIM;
+ CCastRay liquidRay(&player,FLOAT3D(0,1,0),FLOAT3D(0,-4,0));liquidRay.cr_penHit=&floorEntity;liquidRay.cr_pbpoBrushPolygon=&floorPolygon;liquidRay.cr_fHitDistance=floorHitDistance;
+ check(!nativeProof(&player,liquidRay,5,0),"liquid cannot authorize native contacted ground exception");
+ check(BotCecilFloor(&player,.3,0,0,0),"ordinary confirmed-liquid floor exemption remains unchanged");
+ nativeContactFixture();player.m_pstState=PST_CROUCH;check(contactFloor(&player,true,0),"actual crouched native static contact uses identical bounded rule");
+ nativeContactFixture();player.en_fStepDnHeight=1.4783f;check(!contactFloor(&player,true,0),"actual stepDn narrower than measured1.4784 drop cannot be guessed upward");
+ nativeContactFixture();floorHitDistance=2.5f;check(contactFloor(&player,true,0),"exact finite native stepDn boundary accepted without skin tolerance");
+ nativeContactFixture();floorHitDistance=.5f;player.en_fStepUpHeight=.5f;check(contactFloor(&player,true,0),"exact finite native stepUp boundary accepted without widening");
+ nativeContactFixture();bool humanEscape=false;BotCecilSettings().bAvoidPits=1;
+ for(int tick=1;tick<=70;++tick)humanEscape|=groundProgressTick(tick,false)!=0;
+ check(!humanEscape,"rejected Supply proposal never lends current-contact exception to Human-owned pit avoidance");
+ nativeContactFixture();_botRayBudget=0;const int priorRays=rayCount;
+ check(!contactFloor(&player,true,0)&&rayCount==priorRays,"same-contact metadata never substitutes for missing floor probe budget");
+ nativeContactFixture();bool held=false;double deadline=0;int tick=1;
+ for(;tick<=80;++tick)if(groundProgressTick(tick)==2){held=true;deadline=BotSupplyState(0).escapeUntil;break;}
+ check(held,"native-contact fixture starts a genuinely verified world-held ground escape");
+ if(held){
+  player.pl.pl_PositionVector(1)+=.26f;const int resumed=groundProgressTick(++tick);
+  check(resumed==2&&!BotSupplyState(0).groundStalled&&near(BotSupplyState(0).escapeUntil,deadline),
+    "current-proof active ground hold keeps native-contact allowance after actual progress without renewing deadline");
+  player.en_penReference=nullptr;const int paused=groundProgressTick(++tick);
+  check(paused==0&&groundF==0&&groundSt==0&&near(BotSupplyState(0).escapeUntil,deadline),
+    "held same-contact movement pauses immediately under unknown NULL without renewing its deadline");
+ }
+ nativeContactFixture();player.body.m[0][0]=-1;player.body.m[1][1]=-1;player.en_vGravityDir=FLOAT3D(0,1,0);
+ floorPlane.bpl_plAbsolute(2)=-.3976075f;
+ check(contactFloor(&player,true,0)&&lastTo(2)>lastFrom(2),"same-contact height and support follow real rotated gravity rather than world Y");
+}
 int main(){
- offgraphProgressBridge();offgraphProgressGuards();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
+ nativeContactRecovery();farHintTests();farHintGuards();
+ offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
  liftOccupancyBridge();
  { // Reproduce Retail033's mask overwrite, including initialized-mask controls.
  for(bool physical:{false,true})for(ULONG initial:{0u,2048u}){
