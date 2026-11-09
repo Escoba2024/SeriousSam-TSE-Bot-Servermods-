@@ -567,7 +567,7 @@ void groundProgressFixture(bool neutral=false){
  player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_ulID=100;
  floorEntity.en_ulID=77;floorEntity.type=CEntity::RT_BRUSH;
  player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
- floorMode=2;BotCecilSettings().bAvoidPits=0;
+ floorMode=2;BotCecilSettings().bAvoidPits=1;
 }
 double groundF=0,groundSt=0,groundU=0;
 int groundProgressTick(int tick,bool accepted=true,double maxStrafe=1,int budget=16){
@@ -575,6 +575,107 @@ int groundProgressTick(int tick,bool accepted=true,double maxStrafe=1,int budget
  double f=move.forward,st=move.strafe,u=move.up;
  const int status=BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,move.yaw_delta,maxStrafe,accepted);
  groundF=f;groundSt=st;groundU=u;return status;
+}
+
+// NORMAL042 A0 reaches an original isolated UNREACHABLE point, then has no
+// directed goal. A2 is stationary on a sidewall with current NULL/near-foot NOHIT.
+// Default Cecil pit policy permits bounded movement, not a claim of ground.
+void neutralRecovery43(){
+ groundProgressFixture(true);auto& orphan=BotSupplyState(0);
+ orphan.anchor=0;BotSupplyGraph().points[0].flags=botcore::CECIL_UNREACHABLE;
+ BotSupplyGraph().points[0].links.clear();BotCecilSettings().bAvoidPits=0;
+ bool escaped=false;for(int tick=1;tick<=80;++tick)escaped|=groundProgressTick(tick)==2;
+ check(escaped&&orphan.anchor==0&&orphan.goal<0&&orphan.hop<0,
+  "NORMAL43 isolated anchored no-goal accepted owner observes real no-progress without altering original NAV");
+ groundProgressFixture(true);player.en_penReference=nullptr;floorMode=0;
+ player.en_vCurrentTranslationAbsolute=FLOAT3D(-4.95f,.001f,0);BotCecilSettings().bAvoidPits=0;
+ escaped=false;bool bounded=true;for(int tick=1;tick<=80;++tick){const int before=rayCount;
+  const int status=groundProgressTick(tick);escaped|=status==2;
+  bounded&=rayCount-before<=16&&std::hypot(groundF,groundSt)<=.300001&&groundU==0;
+ }
+ check(escaped&&bounded&&BotSupplyState(0).groundRecoveryTime<0,
+  "NORMAL43 actual frozen NULL support with finite nonzero velocity permits default-policy wall-tested movement without ground proof");
+ for(int invalid=0;invalid<4;++invalid){
+  groundProgressFixture(true);BotCecilSettings().bAvoidPits=0;
+  if(invalid==0)floorEntity.flags=ENF_DELETED;
+  if(invalid==1)player.world.wo_cenEntities.clear();
+  if(invalid==2)floorEntity.type=CEntity::RT_MODEL;
+  if(invalid==3){player.en_penReference=nullptr;player.physicsFlags=0;}
+  bool denied=true;for(int tick=1;tick<=70;++tick)denied&=groundProgressTick(tick)!=2;
+  check(denied,"NORMAL43 default movement refuses deleted foreign nonphysical or gravity-disabled current context");
+ }
+}
+
+void neutralRecovery43Guards(){
+ // Both current policy and current context must authorize every emitted hold.
+ groundProgressFixture(true);BotCecilSettings().bAvoidPits=0;player.en_penReference=nullptr;floorMode=0;
+ for(int tick=1;tick<=41;++tick)groundProgressTick(tick);
+ auto& held=BotSupplyState(0);const double until=held.escapeUntil;
+ check(held.groundEscapeActive&&held.probe.wallRays==1&&held.probe.floorRays==0&&held.groundRecoveryTime<0,
+  "NORMAL43 default NULL recovery consumes a completed wall ray and never manufactures support or floor evidence");
+ player.pl.pl_PositionVector(1)+=.26f;
+ check(groundProgressTick(42)==2&&!held.groundStalled&&near(held.escapeUntil,until),
+  "NORMAL43 real progress resets watchdog while current default policy finishes the original bounded hold");
+ BotCecilSettings().bAvoidPits=1;
+ check(groundProgressTick(43)==0&&groundF==0&&groundSt==0&&near(held.escapeUntil,until),
+  "NORMAL43 changing to opt-in pits immediately suspends a NULL hold even after watchdog progress reset");
+ BotCecilSettings().bAvoidPits=0;
+ check(groundProgressTick(44)==2&&held.probe.floorRays==0&&near(held.escapeUntil,until),
+  "NORMAL43 restoring default policy revalidates the wall without renewing the original world hold");
+ const int rays=rayCount;double f=0,st=0,u=0;
+ check(BotCecilSafeMotion(&player,held,2.25,f,st,u,0,1)!=2&&f==0&&st==0&&!held.groundEscapeActive&&rayCount==rays,
+  "NORMAL43 an old movement-context timestamp cannot authorize a later tick held escape");
+ for(int mode=0;mode<3;++mode){
+  groundProgressFixture(true);BotCecilSettings().bAvoidPits=0;
+  for(int tick=1;tick<=41;++tick)groundProgressTick(tick);
+  auto& state=BotSupplyState(0);state.anchor=0;state.goal=0;
+  if(mode==1)BotSupplyGraph().points[0].flags=botcore::CECIL_UNREACHABLE;
+  if(mode==2){BotSupplyGraph().points[0].lock_entity=999;state.blocked[0]=1;}
+  groundProgressTick(42);
+  check(!state.groundStalled&&!state.groundEscapeActive&&state.groundObservationTime<0,
+   "NORMAL43 valid ordinary unreachable or locked goal context cancels no-goal watchdog authority");
+ }
+ for(int bad=0;bad<12;++bad){
+  groundProgressFixture(true);BotCecilSettings().bAvoidPits=0;player.en_penReference=nullptr;floorMode=0;
+  for(int tick=1;tick<=41;++tick)groundProgressTick(tick);
+  auto& state=BotSupplyState(0);
+  if(bad==0)state.useReleaseTick=10000;
+  if(bad==1)player.health=0;
+  if(bad==2)player.m_pstState=PST_FALL;
+  if(bad==3)player.m_pstState=PST_SWIM;
+  if(bad==4)player.en_vCurrentTranslationAbsolute(1)=NAN;
+  if(bad==5)BotSupplyGraph().points[0].x=NAN;
+  if(bad==6)state.blocked.clear();
+  if(bad==7)player.body.m[0][0]=0;
+  if(bad==8)player.hasWorld=false;
+  if(bad==9)++state.generation;
+  if(bad==10)++player.en_ulID;
+  const int status=groundProgressTick(42,bad!=11);
+  check(status!=2&&!state.groundEscapeActive&&!state.groundStalled,
+   "NORMAL43 USE death air liquid invalid graph/frame/physics life generation and owner loss cancel inherited recovery");
+ }
+ groundProgressFixture(true);BotCecilSettings().bAvoidPits=0;player.en_penReference=nullptr;floorMode=0;wallMode=2;
+ bool blocked=true;for(int tick=1;tick<=100;++tick)blocked&=groundProgressTick(tick)!=2;
+ check(blocked&&wallCount>0&&BotSupplyState(0).probe.floorRays==0&&BotSupplyState(0).reacquireTried[0]==0,
+  "NORMAL43 default policy never bypasses a physical wall or turns missing support into NoFloor NAV rejection");
+ groundProgressFixture();BotCecilSettings().bAvoidPits=0;floorMode=0;bool unstalled=true;
+ for(int tick=1;tick<=39;++tick)unstalled&=groundProgressTick(tick)!=2&&groundF==0&&groundSt==0;
+ check(unstalled&&BotSupplyState(0).probe.floorRays>0,
+  "NORMAL43 unstalled original Reacquire proposals keep the previous mandatory floor policy");
+ groundProgressFixture(true);BotCecilSettings().bAvoidPits=1;player.en_penReference=nullptr;floorMode=0;bool optIn=true;
+ for(int tick=1;tick<=100;++tick)optIn&=groundProgressTick(tick)!=2&&groundF==0&&groundSt==0;
+ check(optIn,"NORMAL43 opt-in pit policy still denies NULL-nohit movement throughout a genuine stall");
+ groundProgressFixture(true);BotSupplyState(0).anchor=0;BotCecilSettings().bAvoidPits=1;floorMode=0;bool orphanPit=true;
+ for(int tick=1;tick<=90;++tick)orphanPit&=groundProgressTick(tick)!=2;
+ check(orphanPit&&wallCount>0,"NORMAL43 anchored no-goal recovery with opt-in pits still requires a completed floor hit");
+ groundProgressFixture(true);BotCecilSettings().bAvoidPits=0;player.en_penReference=nullptr;floorMode=0;
+ bool progressed=true;for(int tick=1;tick<=90;++tick){player.pl.pl_PositionVector(1)+=.02f;progressed&=groundProgressTick(tick)!=2;}
+ check(progressed,"NORMAL43 meaningful actual position progress prevents default-policy false recovery");
+ groundProgressFixture(true);BotCecilSettings().bAvoidPits=0;player.en_penReference=nullptr;floorMode=0;
+ bool bounded=true;allocations=0;measuring=true;
+ for(int tick=1;tick<=300;++tick){const int before=rayCount;groundProgressTick(tick,true,0);
+  bounded&=rayCount-before<=16&&_botRayBudget>=0&&std::hypot(groundF,groundSt)<=.300001&&groundSt==0&&groundU==0;}
+ measuring=false;check(bounded&&allocations==0,"NORMAL43 repeated NULL sweeps preserve disabled strafe sixteen rays and zero allocations");
 }
 
 // Normal041 actual frozen pose exhausted all five approved directions for over
@@ -936,7 +1037,7 @@ void offgraphProgressGuards(){
  BotSupplyState(0).Reset();check(!BotSupplyState(0).groundStalled&&BotSupplyState(0).groundEscapeTried==0,
   "map/reset lifecycle removes physical recovery direction history");
  groundProgressFixture(true);for(int tick=1;tick<=50;++tick)groundProgressTick(tick);
- BotSupplyState(0).anchor=0;groundProgressTick(51);
+ BotSupplyState(0).anchor=0;BotSupplyState(0).goal=0;groundProgressTick(51);
  check(!BotSupplyState(0).groundStalled&&!BotSupplyState(0).groundEscapeActive,
   "ordinary graph reacquisition immediately relinquishes local offgraph recovery");
  groundProgressFixture(true);for(int tick=1;tick<=50;++tick)groundProgressTick(tick);
@@ -1033,7 +1134,7 @@ void nativeContactRecovery(){
  check(!humanEscape,"rejected Supply proposal never lends current-contact exception to Human-owned pit avoidance");
  nativeContactFixture();_botRayBudget=0;const int priorRays=rayCount;
  check(!contactFloor(&player,true,0)&&rayCount==priorRays,"same-contact metadata never substitutes for missing floor probe budget");
- nativeContactFixture();bool held=false;double deadline=0;int tick=1;
+ nativeContactFixture();BotCecilSettings().bAvoidPits=1;bool held=false;double deadline=0;int tick=1;
  for(;tick<=80;++tick)if(groundProgressTick(tick)==2){held=true;deadline=BotSupplyState(0).escapeUntil;break;}
  check(held,"native-contact fixture starts a genuinely verified world-held ground escape");
  if(held){
@@ -1050,7 +1151,7 @@ void nativeContactRecovery(){
 }
 int main(){
  nativeContactRecovery();farHintTests();farHintGuards();
- groundSweep42();groundSweep42Guards();offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
+ neutralRecovery43();neutralRecovery43Guards();groundSweep42();groundSweep42Guards();offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
  liftOccupancyBridge();
  { // Reproduce Retail033's mask overwrite, including initialized-mask controls.
  for(bool physical:{false,true})for(ULONG initial:{0u,2048u}){
