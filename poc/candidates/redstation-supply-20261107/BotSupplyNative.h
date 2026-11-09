@@ -43,6 +43,11 @@ struct SSupplyState {
   int interactionPoint=-1,useReleaseTick=-1;
   int reacquireNode=-1,reacquireRejected=-1;
   double reacquireSince=-1,reacquireRetryAfter=0;
+  // One bit per original node keeps failed LOS prefixes from monopolizing
+  // subsequent three-cast batches. Separate from the selected-target backoff.
+  unsigned char reacquireTried[(botcore::CecilNavGraph::kMaxPoints+7)/8]={0};
+  double reacquireScanTime=-1,reacquireScanPosition[3]={0,0,0},reacquireScanGravity[3]={0,0,0};
+  bool reacquireScanLiquid=false;
   double interactionSince=-1,useAfter=0;
   double escapeUntil=0,escapeAfter=0,escapeClock=-1,escapeWorld[3]={0,0,0},escapeOrigin[3]={0,0,0};
   int escapeSide=1;
@@ -67,7 +72,8 @@ struct SSupplyState {
     rejected[victim].id=id;rejected[victim].until=now+30;rejected[victim].localOnly=localOnly;
   }
   void ClearRejections(){for(auto& r:rejected)r=Rejection();}
-  void ClearAvoidance(){avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;}
+  void ClearReacquireScan(){std::fill(reacquireTried,reacquireTried+sizeof(reacquireTried),0);reacquireScanTime=-1;}
+  void ClearAvoidance(){avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
   void ClearGoal(){currentNavTime=-1;currentNavGoal=-1;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
@@ -207,11 +213,13 @@ static void BotCecilLocks(CPlayer *player,SSupplyState& state,double now){
       const unsigned char physical=present?(blocked?1:0):2;
       if(i<state.worldLock.size()&&state.worldLock[i]!=physical){
         state.worldLock[i]=physical;
+        state.ClearReacquireScan();
         BotLog("[CecilLock] node=%d entity=%d locked=%d present=%d player=%lu generation=%lu time=%.3f distance=%.4f angle=%.4f\n",
           (int)i,p.lock_entity,blocked,present,(unsigned long)player->en_ulID,(unsigned long)state.generation,now,std::sqrt(d),std::sqrt(a));
       }
     }
     blocked=blocked||(!state.importantGoal&&(int)i==state.avoidNode&&now<state.avoidUntil);
+    if(state.blocked[i]!=(blocked?1:0))state.ClearReacquireScan();
     state.blocked[i]=blocked?1:0;
   }
 }
@@ -418,34 +426,52 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
   const bool liquid=BotCecilLiquid(player);
   // Do not steer an uncommitted ballistic flight. Ground recovery requires an
   // actual native support reference; swimming uses its ordinary 3D adapter.
-  if(!liquid&&player->en_penReference==NULL)return;
+  if(!liquid&&player->en_penReference==NULL){state.ClearReacquireScan();return;}
   const auto& graph=BotSupplyGraph();const FLOAT3D position=player->GetPlacement().pl_PositionVector;
+  if(graph.points.size()>botcore::CecilNavGraph::kMaxPoints||state.blocked.size()!=graph.points.size())return;
   BotCecilLocks(player,state,now);
   if(state.reacquireNode>=0&&(now<state.reacquireSince||now-state.reacquireSince>=6)){
     state.reacquireRejected=state.reacquireNode;state.reacquireRetryAfter=now+6;
-    state.reacquireNode=-1;state.reacquireSince=-1;state.ClearEscape();
+    state.reacquireNode=-1;state.reacquireSince=-1;state.ClearEscape();state.ClearReacquireScan();
   }
+  double moved=0,turnedGravity=0;
+  for(int i=0;i<3;++i){const double p=position(i+1)-state.reacquireScanPosition[i],g=player->en_vGravityDir(i+1)-state.reacquireScanGravity[i];moved+=p*p;turnedGravity+=g*g;}
+  if(state.reacquireScanTime<0||now<state.reacquireScanTime||moved>=.75*.75||turnedGravity>1e-6||liquid!=state.reacquireScanLiquid){
+    state.ClearReacquireScan();
+    for(int i=0;i<3;++i){state.reacquireScanPosition[i]=position(i+1);state.reacquireScanGravity[i]=player->en_vGravityDir(i+1);}
+    state.reacquireScanLiquid=liquid;
+  }
+  state.reacquireScanTime=now;
   int slots[3]={-1,-1,-1};double distance[3]={1024.000001,1024.000001,1024.000001};
   if(state.reacquireNode>=0&&(size_t)state.reacquireNode<graph.points.size()&&!state.blocked[state.reacquireNode]){
     const auto& point=graph.points[state.reacquireNode];const FLOAT3D delta(point.x-position(1),point.y-position(2),point.z-position(3));
     if(delta.Length()<=32&&(liquid||std::fabs(BotCecilHeight(player,delta))<=8)){slots[0]=state.reacquireNode;distance[0]=-1;}
   }
   for(size_t i=0;i<graph.points.size();++i){
-    if(state.blocked[i]||(int)i==slots[0]||((int)i==state.reacquireRejected&&now<state.reacquireRetryAfter))continue;
+    if(state.blocked[i]||(int)i==slots[0]||(state.reacquireTried[i/8]&(1u<<(i%8)))||
+       ((int)i==state.reacquireRejected&&now<state.reacquireRetryAfter))continue;
     const auto& point=graph.points[i];const FLOAT3D delta(point.x-position(1),point.y-position(2),point.z-position(3));
     if(!liquid&&std::fabs(BotCecilHeight(player,delta))>8)continue;
     const double d=double(delta(1))*delta(1)+double(delta(2))*delta(2)+double(delta(3))*delta(3);
     if(d>1024)continue;
     for(int k=0;k<3;++k)if(d<distance[k]){for(int j=2;j>k;--j){slots[j]=slots[j-1];distance[j]=distance[j-1];}slots[k]=(int)i;distance[k]=d;break;}
   }
+  // A complete failed sweep is retried, so changing physical LOS is never a
+  // permanent blacklist. Ordinary scanTick expiry does not restart the sweep.
+  if(slots[0]<0){state.ClearReacquireScan();return;}
   for(int k=0;k<3&&_botRayBudget>2;++k){
     if(slots[k]<0)continue;
     const auto& point=graph.points[slots[k]];const FLOAT3D target(point.x,point.y,point.z),lift=player->en_vGravityDir*-.8f;
-    if(!BotSupplyClear(player,position+lift,target+lift))continue;
+    const bool clear=BotSupplyClear(player,position+lift,target+lift)!=FALSE;
+    if(!clear){
+      state.reacquireTried[slots[k]/8]|=(unsigned char)(1u<<(slots[k]%8));
+      if(state.reacquireNode==slots[k]){state.reacquireNode=-1;state.reacquireSince=-1;state.ClearEscape();}
+      continue;
+    }
     const FLOAT3D delta=target-position;const double height=BotCecilHeight(player,delta);
     const auto local=BotCecilBodyFrame(player).ToLocal(delta(1)+player->en_vGravityDir(1)*-height,
       delta(2)+player->en_vGravityDir(2)*-height,delta(3)+player->en_vGravityDir(3)*-height);
-    if(!liquid&&local.x*local.x+local.z*local.z<.25)continue;
+    if(!liquid&&local.x*local.x+local.z*local.z<.25){state.reacquireTried[slots[k]/8]|=(unsigned char)(1u<<(slots[k]%8));continue;}
     const auto aim=botcore::AimAt(local.x,0,local.z);const double yaw=player->en_plViewpoint.pl_OrientationAngle(1);
     const double error=std::remainder(aim.yaw_deg-yaw,360.0)*3.141592653589793/180;
     out.forward=.3*std::cos(error);out.strafe=BotCecilSettings().bStrafe?-.3*std::sin(error):0;
@@ -566,7 +592,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
   if(!alive){if(s.playable){BotCecilGoalEnd(slot,tick,s,"death");++s.deaths;s.deadSince=now;
     BotLog("[CecilDeath] local=%d tick=%d entity=%lu generation=%lu deaths=%u\n",slot,tick,(unsigned long)s.entity,(unsigned long)s.generation,s.deaths);
-    }s.playable=false;s.levelSwimView=false;s.ClearGoal();s.ClearEscape();return result;}
+    }s.playable=false;s.levelSwimView=false;s.ClearGoal();s.ClearEscape();s.ClearReacquireScan();return result;}
   if(!BotCecilFrameReady(player)||!std::isfinite(player->en_plViewpoint.pl_OrientationAngle(2)))return result;
   // Inactive/neutral navigation must not hand an unanchored bot to blind Human
   // travel. The Driver still retains visible-target combat arbitration.
@@ -611,6 +637,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   if(tick>=s.scanTick){BotCecilChooseGoal(player,slot,tick,enemyDistance,!followValid);s.scanTick=tick+20;}
   if(followValid)BotCecilFollow(player,s,*follow,now);
   if(s.anchor<0){BotCecilReacquire(player,s,now,result);return result;}
+  s.ClearReacquireScan();
   if(s.reacquireNode>=0){s.reacquireNode=-1;s.reacquireSince=-1;s.ClearEscape();}
   if(s.goal<0||s.goal>=(int)BotSupplyGraph().points.size())return result;
   // Refresh the typed result after a new selection in this tick.

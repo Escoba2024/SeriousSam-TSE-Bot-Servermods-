@@ -197,6 +197,89 @@ int main(){
  auto deferred=BotSupplyTick(&player,0,1,1000);
  check(!deferred.active&&owns(deferred,0)&&deferred.forward==0,"reacquisition ray exhaustion stays owned neutral until next sample");
  }
+ { // Failed nearest LOS candidates must not hide a clear fourth original node forever.
+ setup(4);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ for(int i=0;i<4;++i){auto& point=BotSupplyGraph().points[i];point.x=float(i+1);point.y=point.z=0;}
+ blockedItems=3;_botRayBudget=16;
+ const auto firstBlocked=BotSupplyTick(&player,0,1,1000);const int firstCasts=rayCount;
+ check(!firstBlocked.active&&owns(firstBlocked,0),"three physically blocked nearest recovery candidates initially stay owned neutral");
+ _botRayBudget=16;const auto fourthClear=BotSupplyTick(&player,0,2,1000);
+ check(firstCasts<=3&&rayCount-firstCasts<=3&&_botRayBudget>=13,"recovery candidate continuation keeps each tick within three LOS casts and the shared ray reserve");
+ check(fourthClear.active&&owns(fourthClear,0)&&BotSupplyState(0).reacquireNode==3&&
+   std::hypot(fourthClear.forward,fourthClear.strafe)<=.300001,
+   "bounded recovery eventually reaches the clear fourth original node after three nearer LOS failures");
+ check(BotSupplyState(0).anchor<0&&!BotSupplyState(0).navigator.HasCommittedEdge(BotSupplyState(0).goal),
+   "recovery candidate continuation never fabricates an ordinary anchor or committed graph edge");
+ const double selectedSince=BotSupplyState(0).reacquireSince;
+ _botRayBudget=16;BotSupplyTick(&player,0,21,1000);
+ check(BotSupplyState(0).reacquireNode==3&&BotSupplyState(0).reacquireSince==selectedSince,
+   "LOS continuation preserves the selected target and its original attempt deadline");
+ blockedItems=0;_botRayBudget=16;BotSupplyTick(&player,0,124,1000);
+ check(BotSupplyState(0).reacquireNode==0&&BotSupplyState(0).reacquireRejected==3&&BotSupplyState(0).reacquireRetryAfter>12,
+   "selected target timeout retains real backoff while another visible original node acquires a new deadline");
+ }
+ { // A failed LOS sweep is finite; budget denial is not a physical rejection.
+ setup(4);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ for(int i=0;i<4;++i){auto& point=BotSupplyGraph().points[i];point.x=float(i+1);point.y=point.z=0;}
+ blockedItems=4;
+ for(int tick=1;tick<=2;++tick){_botRayBudget=16;BotSupplyTick(&player,0,tick,1000);}
+ blockedItems=0;SCecilMove reopened;
+ for(int tick=3;tick<=4;++tick){_botRayBudget=16;reopened=BotSupplyTick(&player,0,tick,1000);}
+ check(reopened.active&&BotSupplyState(0).reacquireNode==0,"completed failed LOS sweep retries a newly clear nearest original node");
+ setup(1);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ BotSupplyGraph().points[0].x=1;_botRayBudget=2;BotSupplyTick(&player,0,1,1000);
+ _botRayBudget=16;const auto afterBudget=BotSupplyTick(&player,0,2,1000);
+ check(afterBudget.active&&BotSupplyState(0).reacquireNode==0,"budget-deferred recovery candidate remains immediately eligible without rejection backoff");
+ }
+ { // An active recovery target still needs a fresh physical LOS every tick.
+ setup(2);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ for(int i=0;i<2;++i){auto& point=BotSupplyGraph().points[i];point.x=float(i+1);point.y=point.z=0;}
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);const double firstSince=BotSupplyState(0).reacquireSince;
+ _botRayBudget=2;const auto postponed=BotSupplyTick(&player,0,2,1000);
+ check(!postponed.active&&owns(postponed,0)&&BotSupplyState(0).reacquireNode==0&&BotSupplyState(0).reacquireSince==firstSince,
+   "budget exhaustion neither rejects nor renews an already selected recovery target");
+ blockedItems=1;_botRayBudget=16;const auto switched=BotSupplyTick(&player,0,3,1000);
+ check(switched.active&&BotSupplyState(0).reacquireNode==1&&near(BotSupplyState(0).reacquireSince,.15),
+   "new physical occlusion replaces a selected recovery target with a clear node and a fresh fixed deadline");
+ }
+ { // Changing the local geometry must discard previous LOS failures.
+ setup(4);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ for(int i=0;i<4;++i){auto& point=BotSupplyGraph().points[i];point.x=float(i+1);point.y=point.z=0;}
+ blockedItems=3;_botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ player.pl.pl_PositionVector(1)=1;blockedItems=0;_botRayBudget=16;
+ const auto movedOrigin=BotSupplyTick(&player,0,2,1000);
+ check(movedOrigin.active&&BotSupplyState(0).reacquireNode==0,"moving recovery origin invalidates cached LOS failures before selecting a farther candidate");
+ setup(4);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ for(int i=0;i<4;++i){auto& point=BotSupplyGraph().points[i];point.x=float(i+1);point.y=point.z=0;}
+ CEntity lock;lock.en_ulID=992;player.world.wo_cenEntities.push_back(&lock);BotSupplyGraph().points[0].lock_entity=992;
+ blockedItems=3;_botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ lock.pl.pl_PositionVector(1)=1;blockedItems=0;_botRayBudget=16;
+ const auto changedLock=BotSupplyTick(&player,0,2,1000);
+ check(changedLock.active&&BotSupplyState(0).reacquireNode==1,"changed physical lock invalidates stale LOS failures while the newly blocked node stays excluded");
+ setup(4);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ for(int i=0;i<4;++i){auto& point=BotSupplyGraph().points[i];point.x=float(i+1);point.y=point.z=0;}
+ blockedItems=3;_botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ BotSupplyReset(0);blockedItems=0;_botRayBudget=16;
+ const auto resetRecovery=BotSupplyTick(&player,0,2,1000);
+ check(resetRecovery.active&&BotSupplyState(0).reacquireNode==0,"lifecycle reset discards all prior recovery LOS failures");
+ setup(4);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ for(int i=0;i<4;++i){auto& point=BotSupplyGraph().points[i];point.x=float(i+1);point.y=point.z=0;}
+ blockedItems=3;_botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ player.m_pstState=PST_DIVE;blockedItems=0;_botRayBudget=16;
+ const auto changedMedium=BotSupplyTick(&player,0,2,1000);
+ check(changedMedium.active&&BotSupplyState(0).reacquireNode==0,"switching to water invalidates grounded recovery LOS failures");
+ }
+ { // The hard graph limit must not turn a long blocked prefix into starvation.
+ setup(4096);player.pl.pl_PositionVector=FLOAT3D(0,-4.25f,2);player.en_penReference=&floorEntity;
+ for(auto& point:BotSupplyGraph().points){point.x=1;point.y=point.z=0;}
+ BotSupplyGraph().points[4095].x=4;blockedItems=3;
+ bool bounded=true;SCecilMove tail;allocations=0;measuring=true;
+ for(int tick=1;tick<=1366;++tick){const int before=rayCount;_botRayBudget=16;tail=BotSupplyTick(&player,0,tick,1000);
+   bounded=bounded&&rayCount-before<=3&&_botRayBudget>=13;}
+ measuring=false;
+ check(tail.active&&BotSupplyState(0).reacquireNode==4095,"recovery sweep reaches the final original node after a 4095-node blocked prefix");
+ check(bounded&&allocations==0,"full-size recovery scan has fixed memory and at most three LOS casts per tick without heap allocation");
+ }
  { // Original map knowledge supplies a directed acquisition route beyond local LOS search.
  setup(3);player.w.usable=3;BotSupplyGraph().points[0].links={1,2};
  BotSupplyGraph().points[1].y=70;BotSupplyGraph().points[1].z=-10;BotSupplyGraph().points[1].links.clear();
