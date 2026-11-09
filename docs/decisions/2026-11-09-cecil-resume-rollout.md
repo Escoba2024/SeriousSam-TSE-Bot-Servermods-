@@ -93,3 +93,12 @@ Build018's second single-bot trial exposed the same admission/continuation coupl
 A failing actual bridge regression now distinguishes incidental different-weapon gain from selected-weapon gain. The former keeps the original goal/deadline, the latter clears it. Sanitized bridge188 checks pass; focused independent review reports no remaining blocker. Build018's original prospective cases continue unchanged and all remain evidence; Build019 requires a new native hash and complete affected qualification.
 
 One inactive staging helper assumedbotB existed in one-bot copies and stopped after staging SupplybotA. The declared018 runner was already started before its new protocol filename was generated. All criteria/cases had already been fixed by the pre-start runner and published qualification/inherited016 protocol. The late metadata generation is recorded explicitly in protocol018; no trial is dropped or replaced, and no prospective filename timestamp is invented. Subsequent staging inventories actual roles and validates the complete plan before mutation.
+
+
+## Build019 supply gate passes; Hole idle requires diagnosis
+
+Build019's complete fixed ten-spawn supply series meets the unchanged criteria:9/10 reached goals corroborated by independent complete-log review, one unreachable_hold retained as failure; first-useful-pickup median4.625s/P9510.15s. The private certificate is limited to supply and explicitly rejects overall019 qualification. No cohort/trial was dropped.
+
+The new600-second Hole observation failed10s unexplained stillness with a21.179756s episode. No duration gates start. Geometric NAV coverage exists, but source logs do not distinguish absent support, a blocked nearest-three recovery prefix, or an unresolved remembered-target route. The failed own runtime was closed normally and raw evidence preserved.
+
+Use minimal private diagnostic overlays020/021 to log existing route/follow/support decisions and existing ray outcomes, without additional probes or movement/eligibility changes. Source and actual overlay hashes distinguish these diagnostics from the published base.020 was interrupted normally after the need for broader route-branch logging became clear. These are private native diagnosis, not release, performance or duration evidence. Source is available for the disputed branches, so new Ghidra/Frida sessions are not needed at this stage. Keep production/public-development binaries unchanged.
