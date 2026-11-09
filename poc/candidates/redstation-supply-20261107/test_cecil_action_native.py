@@ -107,10 +107,33 @@ def main():
  }
 """)
     rejection="static void rejection_paths(){\n"+"\n".join(guards)+"\n}\n"
-    test=TEST.replace("int main(){","int main(){rejection_paths();")
+    # Compile the actual Driver ownership condition. Neutral route ownership
+    # must suppress no-target wandering while preserving visible combat policy.
+    choice=re.search(r'if\((ready&&[\s\S]*?)\)\{\s*bs\.bs_aHeading=player->m_aLastRotation',source)
+    if not choice:raise ValueError("native supply arbitration missing")
+    native_move=re.search(r'struct SCecilMove\s*\{[\s\S]*?\n\};',(a.driver.parent/'BotSupplyNative.h').read_text())
+    if not native_move:raise ValueError("native move structure missing")
+    ownership=native_move[0]+"\nstatic bool selected(bool ready,const SCecilMove& supply,CPlayer* player,bool targetVisible,double humanTargetDistance){return "+choice[1]+";}\n"+r'''
+static void ownership_paths(){
+ CPlayer player;CPlayerWeapons weapon;player.m_penWeapons=&weapon;SCecilMove s;
+ s.ownsMovement=true;
+ assert(selected(true,s,&player,false,1000));
+ assert(!selected(true,s,&player,true,5));
+ assert(!selected(true,s,&player,true,50));
+ assert(!selected(false,s,&player,false,1000));
+ assert(!selected(true,s,nullptr,false,1000));
+ s.itemGoal=true;s.urgent=true;assert(selected(true,s,&player,true,5));
+ s.urgent=false;assert(!selected(true,s,&player,true,5));
+ assert(selected(true,s,&player,true,50));
+ s=SCecilMove();assert(!selected(true,s,&player,false,1000));
+ s.active=true;assert(selected(true,s,&player,false,1000));
+ player.m_penWeapons=nullptr;assert(!selected(true,s,&player,false,1000));
+}
+'''
+    test=TEST.replace("int main(){","int main(){rejection_paths();ownership_paths();")
     with tempfile.TemporaryDirectory(prefix="cecil-action-contract-") as tmp:
         cpp=Path(tmp)/"test.cpp";exe=Path(tmp)/"test"
-        cpp.write_text("#include <initializer_list>\n#define SDK_ZOOM "+str(1<<int(flag[1]))+"\n"+STUB+bodies+rejection+test)
+        cpp.write_text('#include <initializer_list>\n#include "cecil_rules.h"\n#define SDK_ZOOM '+str(1<<int(flag[1]))+"\n"+STUB+bodies+rejection+ownership+test)
         subprocess.run(["g++","-std=c++17","-Wall","-Wextra","-Werror","-fsanitize=address,undefined","-I",str(a.driver.parent),str(cpp),"-o",str(exe)],check=True)
         subprocess.run([str(exe)],check=True)
     print("PASS actual Driver action guards; SDK SHA256",hashlib.sha256(sdk).hexdigest())

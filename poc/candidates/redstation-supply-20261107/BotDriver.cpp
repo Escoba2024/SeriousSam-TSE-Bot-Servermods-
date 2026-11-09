@@ -1206,7 +1206,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         supply=BotSupplyTick(player,iLP,bs.bs_iTick,targetVisible?humanTargetDistance:1000,&navFollow);
         cecilUseControl=supply.useControl;cecilButtons=supply.buttons;
       }
-      if(ready&&supply.active&&player&&player->m_penWeapons&&
+      if(ready&&(supply.active||supply.ownsMovement)&&player&&player->m_penWeapons&&
          (supply.useControl||!targetVisible||(supply.itemGoal&&(supply.urgent||humanTargetDistance>10)))){
         bs.bs_aHeading=player->m_aLastRotation(1)+(FLOAT)supply.yaw_delta;
         bs.bs_aPitch=player->m_aLastRotation(2)+(FLOAT)supply.pitch_delta;

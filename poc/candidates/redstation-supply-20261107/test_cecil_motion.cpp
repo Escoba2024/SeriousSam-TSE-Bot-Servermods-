@@ -22,6 +22,7 @@ int main(){
   CecilMotionInput in;in.alive=true;in.anchor=0;in.goal=2;
   auto out=nav.Update(g,locked,3,in);
   check(out.active&&out.hop==1&&near(out.forward,1)&&near(out.yaw_delta,0),"route begins on directed next hop");
+  check(nav.HasCommittedEdge(2)&&!nav.HasCommittedEdge(1),"route commitment is bound to its exact goal");
   in.anchor=2;in.now=.5;out=nav.Update(g,locked,3,in);
   check(out.hop==1,"retain current hop between replans despite nearest-anchor change");
   in.anchor=1;in.z=-10;in.now=.6;out=nav.Update(g,locked,3,in);
@@ -110,6 +111,8 @@ int main(){
   nav.Reset();in=CecilMotionInput();in.alive=true;in.anchor=0;in.goal=2;in.x=10;
   out=nav.Update(g,locked,3,in);in.x=9;in.now=1.1;out=nav.Update(g,locked,3,in);
   check(out.hop==0,"unreached approach source cannot be skipped by edge commitment");
+  check(!nav.HasCommittedEdge(2),"acquisition approach is not a committed traversed edge");
+  nav.Reset();check(!nav.HasCommittedEdge(2),"lifecycle reset removes route commitment");
   // A real relocation onto another known node must re-anchor immediately.
   g.points.resize(4);g.points[2].x=120;g.points[2].radius=1;g.points[2].links={3};
   g.points[3].id=3;g.points[3].x=140;g.points[3].radius=1;g.points[1].flags=CECIL_TELEPORT;

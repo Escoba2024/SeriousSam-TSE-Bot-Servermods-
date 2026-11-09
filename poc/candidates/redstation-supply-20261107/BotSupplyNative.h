@@ -76,7 +76,7 @@ struct SSupplyState {
   }
 };
 struct SCecilMove {
-  bool active=false,itemGoal=false,urgent=false,followGoal=false,useControl=false;
+  bool active=false,ownsMovement=false,itemGoal=false,urgent=false,followGoal=false,useControl=false;
   botcore::CecilItemKind itemKind=botcore::CecilItemKind::Weapon;
   double forward=0,strafe=0,up=0,yaw_delta=0,pitch_delta=0;uint32_t flags=0,buttons=0;
 };
@@ -296,7 +296,11 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
 static void BotCecilChooseGoal(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,bool allowPatrol=true){
   SSupplyState& s=BotSupplyState(slot);const auto& graph=BotSupplyGraph();
   const FLOAT3D position=player->GetPlacement().pl_PositionVector;const double now=tick*_pTimer->TickQuantum;
-  s.anchor=BotSupplyNearest(player,position,TRUE);
+  const int acquired=BotSupplyNearest(player,position,TRUE);
+  if(acquired>=0)s.anchor=acquired;
+  // Acquisition nodes are hints, not a requirement to fly through a valid edge.
+  // Map/death/rejoin resets and goal identity invalidate this navigator context.
+  else if(!s.navigator.HasCommittedEdge(s.goal))s.anchor=-1;
   if(s.anchor<0)return;
   BotCecilLocks(player,s,now);
   s.goals.Run(graph,s.anchor,s.blocked.data(),s.blocked.size());
@@ -516,6 +520,9 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     BotLog("[CecilDeath] local=%d tick=%d entity=%lu generation=%lu deaths=%u\n",slot,tick,(unsigned long)s.entity,(unsigned long)s.generation,s.deaths);
     }s.playable=false;s.levelSwimView=false;s.ClearGoal();s.ClearEscape();return result;}
   if(!BotCecilFrameReady(player)||!std::isfinite(player->en_plViewpoint.pl_OrientationAngle(2)))return result;
+  // Inactive/neutral navigation must not hand an unanchored bot to blind Human
+  // travel. The Driver still retains visible-target combat arbitration.
+  result.ownsMovement=true;
   if(result.useControl)return result; // Preserve a released action even across chained switches.
   if(!s.playable){++s.respawns;s.spawnTick=tick;s.scanTick=0;s.ClearGoal();s.searchAfter=0;s.owned=0;s.ClearRejections();s.ClearAvoidance();s.ResetLockSnapshot();++s.generation;
     const FLOAT3D position=player->GetPlacement().pl_PositionVector;
@@ -587,7 +594,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
       if(now-s.holdSince+1e-9>=2){
         BotCecilGoalEnd(slot,tick,s,"unreachable_hold");s.RejectItem(s.goalEntity,now);
         s.avoidNode=travelHop;s.avoidUntil=now+10;s.avoidFollowEntity=s.followEntity;
-        s.ClearGoal();s.searchAfter=now;s.scanTick=0;result=SCecilMove();result.useControl=tick<=s.useReleaseTick;return result;
+        s.ClearGoal();s.searchAfter=now;s.scanTick=0;result=SCecilMove();result.ownsMovement=true;result.useControl=tick<=s.useReleaseTick;return result;
       }
     }else{s.heldNode=-1;s.holdSince=-1;}
   }else{s.heldNode=-1;s.holdSince=-1;}
@@ -599,7 +606,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
       const FLOAT3D delta=item?item->GetPlacement().pl_PositionVector-p:FLOAT3D(0,0,0);
       if(!item||std::fabs(BotCecilHeight(player,delta))>3||delta.Length()>8||
          !BotSupplyClear(player,BotCombatEye(player).pl_PositionVector,item->GetPlacement().pl_PositionVector-player->en_vGravityDir*.5f,item)){
-        BotCecilGoalEnd(slot,tick,s,"connector");s.RejectItem(s.goalEntity,now);s.ClearGoal();s.searchAfter=now;s.scanTick=0;result=SCecilMove();result.useControl=tick<=s.useReleaseTick;return result;
+        BotCecilGoalEnd(slot,tick,s,"connector");s.RejectItem(s.goalEntity,now);s.ClearGoal();s.searchAfter=now;s.scanTick=0;result=SCecilMove();result.ownsMovement=true;result.useControl=tick<=s.useReleaseTick;return result;
       }
       const auto local=in.frame.ToLocal(delta(1),delta(2),delta(3));
       const double yaw=std::atan2(-local.x,-local.z)*180/3.141592653589793;

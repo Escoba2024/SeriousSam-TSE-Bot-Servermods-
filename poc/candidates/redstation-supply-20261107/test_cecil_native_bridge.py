@@ -144,7 +144,23 @@ CEntity& addItem(unsigned id,float x,float z,botcore::CecilItemKind kind=botcore
 }
 template<class T>auto typed(const T& m,int)->decltype(m.itemGoal&&m.urgent){return m.itemGoal&&m.urgent;}
 template<class T>bool typed(const T&,long){return false;}
+template<class T>auto owns(const T& m,int)->decltype(m.ownsMovement){return m.ownsMovement;}
+template<class T>bool owns(const T&,long){return false;}
 int main(){
+ { // A ballistic edge can legitimately have no nearby same-floor acquisition node.
+ setup(3);player.w.usable=3;
+ BotSupplyGraph().points[1].y=38;BotSupplyGraph().points[2].y=38;
+ auto& weapon=addItem(990,0,-22,botcore::CecilItemKind::Weapon);weapon.pl.pl_PositionVector(2)=38;
+ BotSupplyGraph().points[2].important_entity=990;
+ _botRayBudget=16;auto takeoff=BotSupplyTick(&player,0,1,1000);
+ check(takeoff.active&&BotSupplyState(0).hop==1,"ballistic fixture commits directed ground to upper edge");
+ player.pl.pl_PositionVector=FLOAT3D(0,31,-9);_botRayBudget=16;
+ auto flying=BotSupplyTick(&player,0,21,1000);
+ check(flying.active&&BotSupplyState(0).anchor==0&&BotSupplyState(0).hop==1,"airborne anchor gap retains existing edge and navigation heading ownership");
+ setup(3);player.pl.pl_PositionVector(2)=31;_botRayBudget=16;
+ auto noEdge=BotSupplyTick(&player,0,1,1000);
+ check(!noEdge.active&&owns(noEdge,0)&&noEdge.forward==0&&noEdge.strafe==0&&noEdge.yaw_delta==0,"unanchored bot without commitment owns neutral movement rather than Human wandering");
+ }
  { // Original map knowledge supplies a directed acquisition route beyond local LOS search.
  setup(3);player.w.usable=3;
  auto& weapon=addItem(991,0,-22,botcore::CecilItemKind::Weapon);
@@ -499,7 +515,7 @@ int main(){
  auto& finalUse=BotSupplyState(0);finalUse.goal=finalUse.anchor=0;finalUse.importantGoal=true;finalUse.scanTick=999;
  player.w.m_penRayHit=&switchEntity;player.w.m_fRayHitDistance=1;
  BotSupplyTick(&player,0,1,1000);_botRayBudget=40;auto idleRelease=BotSupplyTick(&player,0,2,1000);
- check(!idleRelease.active&&idleRelease.useControl&&idleRelease.buttons==0,"idle release tick still reserves USE against scope");
+ check(!idleRelease.active&&idleRelease.useControl&&idleRelease.ownsMovement&&idleRelease.buttons==0,"idle release tick reserves neutral movement and USE against scope");
  setup(1);player.world.wo_cenEntities={&switchEntity};BotSupplyGraph().points[0].important_entity=600;
  auto& threatened=BotSupplyState(0);threatened.goal=threatened.anchor=0;threatened.importantGoal=true;threatened.scanTick=999;
  player.w.m_penRayHit=&switchEntity;player.w.m_fRayHitDistance=1;

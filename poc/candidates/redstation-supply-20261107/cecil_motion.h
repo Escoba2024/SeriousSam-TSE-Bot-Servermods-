@@ -30,6 +30,10 @@ class CecilNavigator {
     recovery_until_=-1;have_progress_=false;progress_time_=px_=py_=pz_=0;
     std::fill(locks_.begin(),locks_.end(),0);
   }
+  bool HasCommittedEdge(int goal)const {
+    return goal>=0&&goal_==goal&&source_>=0&&hop_>=0&&source_!=hop_&&
+      (size_t)source_<locks_.size()&&(size_t)hop_<locks_.size();
+  }
   CecilMotion Update(const CecilNavGraph& g,const unsigned char* blocked,size_t count,const CecilMotionInput& in) {
     CecilMotion out;const size_t n=g.points.size();
     if(!in.alive||n==0||n!=locks_.size()||in.anchor<0||(size_t)in.anchor>=n||
