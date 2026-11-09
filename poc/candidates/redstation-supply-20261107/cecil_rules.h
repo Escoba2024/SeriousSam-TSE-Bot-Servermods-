@@ -283,42 +283,58 @@ struct CecilItemInput {
   double x=0,y=0,z=0,health=100,armor=0,enemy_distance=1000;
   CecilSettings settings=CecilPreset(2);
 };
-inline int CecilChooseItem(const CecilItem* items,int count,const CecilItemInput& in) {
+// A committed goal still needs a live, needed typed item. Native code checks its
+// current path separately; acquisition visibility, radius and ranking do not apply.
+inline bool CecilRetainItem(const CecilItem& it,const CecilItemInput& in) {
   const CecilSettings& s=in.settings;
-  if(!items||count<0||count>1024||s.schema_version!=1||!s.bItemSearch||
+  const int kind=static_cast<int>(it.kind);
+  if(s.schema_version!=1||!s.bItemSearch||
      !std::isfinite(in.x)||!std::isfinite(in.y)||!std::isfinite(in.z)||
      !std::isfinite(in.health)||in.health<0||!std::isfinite(in.armor)||in.armor<0||
-     !std::isfinite(in.enemy_distance)||in.enemy_distance<0)return -1;
+     !std::isfinite(in.enemy_distance)||in.enemy_distance<0||
+     kind<0||kind>5||!it.pickable||it.generation!=in.generation||
+     !std::isfinite(it.x)||!std::isfinite(it.y)||!std::isfinite(it.z)||
+     !std::isfinite(it.value)||it.value<0)return false;
+  switch(it.kind){
+    case CecilItemKind::Weapon:{
+      const uint32_t mask=CecilWeaponMask(it.weapon);
+      // An empty owned gun can use its pickup; a usable owned gun is not an upgrade.
+      return mask&&it.weapon>=2&&!(in.usable&mask)&&
+        (s.iAllowedWeapons==-1||(static_cast<uint32_t>(s.iAllowedWeapons)&mask));
+    }
+    case CecilItemKind::Health:
+      // Corrected disjoint bands; filter every candidate before nearest selection.
+      return in.health<s.fHealthSearch&&((it.value>0&&it.value<=10&&in.health<75)||
+        (it.value>10&&it.value<=50&&in.health<85)||(it.value>=100&&in.health<150));
+    case CecilItemKind::Powerup:return true;
+    case CecilItemKind::Armor:
+      return in.armor<100&&((it.value>0&&it.value<=10&&in.armor<75)||
+        (it.value>10&&it.value<=50&&in.armor<85)||it.value>=100);
+    case CecilItemKind::AmmoPack:case CecilItemKind::Ammo:
+      return (it.ammo_mask&in.ammo_need_mask&in.owned)!=0;
+  }
+  return false;
+}
+inline int CecilChooseItem(const CecilItem* items,int count,const CecilItemInput& in) {
+  if(!items||count<0||count>1024)return -1;
+  const CecilSettings& s=in.settings;
   int best=-1,best_kind=6;double best_distance=0;
   for(int i=0;i<count;++i){
     const CecilItem& it=items[i];const int kind=static_cast<int>(it.kind);
-    if(kind<0||kind>5||!it.pickable||!it.reachable||it.generation!=in.generation||
-       (s.bItemVisibility&&!it.visible)||!std::isfinite(it.x)||!std::isfinite(it.y)||
-       !std::isfinite(it.z)||!std::isfinite(it.value)||it.value<0)continue;
+    if(!CecilRetainItem(it,in)||!it.reachable||(s.bItemVisibility&&!it.visible))continue;
     const double dx=it.x-in.x,dy=3*(it.y-in.y),dz=it.z-in.z;
     const double distance=std::sqrt(dx*dx+dy*dy+dz*dz);
-    double limit=0;bool needed=false;
+    double limit=0;
     switch(it.kind){
-      case CecilItemKind::Weapon:{
-        limit=s.fWeaponDist;const uint32_t mask=CecilWeaponMask(it.weapon);
-        // An empty owned gun can use its pickup; a usable owned gun is not an upgrade.
-        needed=mask&&(it.weapon>=2)&&!(in.usable&mask)&&distance<in.enemy_distance&&
-          (s.iAllowedWeapons==-1||(static_cast<uint32_t>(s.iAllowedWeapons)&mask));break;
-      }
-      case CecilItemKind::Health:
-        limit=s.fHealthDist;
-        // Corrected disjoint bands; filter every candidate before nearest selection.
-        needed=in.health<s.fHealthSearch&&((it.value>0&&it.value<=10&&in.health<75)||
-          (it.value>10&&it.value<=50&&in.health<85)||(it.value>=100&&in.health<150));break;
-      case CecilItemKind::Powerup:limit=s.fWeaponDist;needed=true;break;
-      case CecilItemKind::Armor:
-        limit=s.fArmorDist;needed=in.armor<100&&((it.value>0&&it.value<=10&&in.armor<75)||
-          (it.value>10&&it.value<=50&&in.armor<85)||it.value>=100);break;
+      case CecilItemKind::Weapon:case CecilItemKind::Powerup:limit=s.fWeaponDist;break;
+      case CecilItemKind::Health:limit=s.fHealthDist;break;
+      case CecilItemKind::Armor:limit=s.fArmorDist;break;
       case CecilItemKind::AmmoPack:case CecilItemKind::Ammo:
-        limit=s.fAmmoDist;needed=(it.ammo_mask&in.ammo_need_mask&in.owned)!=0;break;
+        limit=s.fAmmoDist;break;
     }
     // A rejected/far pack cannot hide eligible ammo. Native LOS is item-specific.
-    if(!needed||!std::isfinite(limit)||limit<=0||!std::isfinite(distance)||distance>=limit)continue;
+    if(!std::isfinite(limit)||limit<=0||!std::isfinite(distance)||distance>=limit||
+       (it.kind==CecilItemKind::Weapon&&distance>=in.enemy_distance))continue;
     if(kind<best_kind||(kind==best_kind&&(best<0||distance<best_distance))){
       best=i;best_kind=kind;best_distance=distance;
     }

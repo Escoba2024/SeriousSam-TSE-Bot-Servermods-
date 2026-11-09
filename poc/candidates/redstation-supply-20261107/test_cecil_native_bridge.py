@@ -147,6 +147,18 @@ template<class T>bool typed(const T&,long){return false;}
 template<class T>auto owns(const T& m,int)->decltype(m.ownsMovement){return m.ownsMovement;}
 template<class T>bool owns(const T&,long){return false;}
 int main(){
+ { // A committed item attempt may briefly leave its acquisition radius on a route.
+ setup(3);auto& flamer=addItem(991,0,-10,botcore::CecilItemKind::Weapon);flamer.item.weapon=11;
+ player.w.m_iAvailableWeapons=259;player.w.usable=259;player.pl.pl_PositionVector(2)=6;
+ auto& retained=BotSupplyState(0);retained.owned=259;retained.goal=1;retained.goalEntity=991;retained.goalSince=0;retained.scanTick=999;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(retained.goalEntity==991&&retained.goalSince==0&&endEvents==0,"ordinary retained flamer upgrade survives weighted acquisition-range crossing after grenade pickup");
+ _botRayBudget=16;auto closeThreat=BotSupplyTick(&player,0,2,4);
+ check(retained.goalEntity==991&&retained.goalSince==0&&!closeThreat.active&&!owns(closeThreat,0),"retained weapon attempt yields action ownership to close visible combat without renewing or dropping goal");
+ player.w.m_iAvailableWeapons|=botcore::CecilWeaponMask(11);player.w.usable=player.w.m_iAvailableWeapons;
+ _botRayBudget=16;BotSupplyTick(&player,0,3,1000);
+ check(retained.goalEntity!=991,"retained upgrade ends as soon as its native weapon becomes usable");
+ }
  { // A ballistic edge can legitimately have no nearby same-floor acquisition node.
  setup(3);player.w.usable=3;
  BotSupplyGraph().points[1].y=38;BotSupplyGraph().points[2].y=38;
@@ -378,7 +390,7 @@ int main(){
  setup(2);player.health=25;addItem(10,0,-10);auto& health=BotSupplyState(0);
  health.goal=1;health.anchor=0;health.goalEntity=10;health.scanTick=999;
  auto flee=BotSupplyTick(&player,0,1,5);
- check(flee.active&&typed(flee,0),"urgent health can navigate with a close threat and typed result");
+ check(flee.active&&owns(flee,0)&&typed(flee,0),"urgent health can navigate with a close threat and typed result");
  setup(2);player.health=70;addItem(10,0,-10);auto& mild=BotSupplyState(0);
  mild.goal=1;mild.anchor=0;mild.goalEntity=10;mild.scanTick=999;
  check(!BotSupplyTick(&player,0,1,5).active,"nonurgent health yields to close threat");

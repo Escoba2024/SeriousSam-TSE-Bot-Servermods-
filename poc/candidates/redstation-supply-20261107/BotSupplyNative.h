@@ -599,7 +599,9 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     bool usable=entity&&BotCecilReadItem(player,entity,s.generation,owned,&item);
     if(usable){
       if(s.mappedWeaponGoal)usable=input.enemy_distance>=8&&BotCecilMappedWeaponEligible(item,input);
-      else{item.visible=item.reachable=true;usable=botcore::CecilChooseItem(&item,1,input)==0;}
+      // Radius/visibility/ranking admit a new goal. A retained attempt uses its
+      // live typed need, directed path and unchanged twelve-second deadline.
+      else usable=botcore::CecilRetainItem(item,input);
     }
     if(!usable||now<s.goalSince||(s.mappedWeaponGoal?now>=s.goalDeadline:now-s.goalSince>=12)){
       BotCecilGoalEnd(slot,tick,s,usable?"timeout":"unavailable");
@@ -619,7 +621,11 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     s.goalKind=item.kind;urgent=BotCecilUrgentItem(item,input);
   }
   result.followGoal=s.followEntity!=0;result.itemGoal=s.goalEntity!=0;result.urgent=result.itemGoal&&urgent;result.itemKind=s.goalKind;
-  if(enemyDistance<8&&!(result.urgent&&result.itemKind==botcore::CecilItemKind::Health))return result;
+  if(enemyDistance<8&&!(result.urgent&&result.itemKind==botcore::CecilItemKind::Health)){
+    // Keep the bounded attempt, but let visible-target combat own this action.
+    // Inactive owned urgent-weapon output would otherwise suppress Human fire.
+    result.ownsMovement=false;return result;
+  }
   BotCecilLocks(player,s,now);
   const FLOAT3D p=player->GetPlacement().pl_PositionVector;
   botcore::CecilMotionInput in;in.x=p(1);in.y=p(2);in.z=p(3);in.yaw=player->en_plViewpoint.pl_OrientationAngle(1);in.frame=BotCecilBodyFrame(player);
