@@ -38,7 +38,7 @@ struct SSupplyState {
   double currentNavTime=-1;
   int currentNavGoal=-1; // Fresh navigator context; an anchor/old hop alone is not a current point.
   int goal=-1,anchor=-1,hop=-1,spawnTick=0,scanTick=0,itemScanAfter=0,avoidNode=-1,heldNode=-1;
-  double searchAfter=0,goalSince=0,deadSince=-1,followAfter=0,avoidUntil=0,holdSince=-1;
+  double searchAfter=0,goalSince=0,goalDeadline=0,deadSince=-1,followAfter=0,avoidUntil=0,holdSince=-1;
   uint32_t avoidFollowEntity=0,lastUseEntity=0;
   int interactionPoint=-1,useReleaseTick=-1;
   double interactionSince=-1,useAfter=0;
@@ -46,27 +46,27 @@ struct SSupplyState {
   int escapeSide=1;
   bool escapeReverseUsed=false;
   double escapeBlockPosition[3]={0,0,0},escapeRequest[3]={0,0,0};
-  bool playable=false,hadUpgrade=false,importantGoal=false,levelSwimView=false;
+  bool playable=false,hadUpgrade=false,importantGoal=false,levelSwimView=false,mappedWeaponGoal=false;
   botcore::CecilItemKind goalKind=botcore::CecilItemKind::Weapon;
   // 256 fixed records cover eight rejects/second for the thirty-second TTL.
-  struct Rejection {uint32_t id=0;double until=0;} rejected[256];
+  struct Rejection {uint32_t id=0;double until=0;bool localOnly=false;} rejected[256];
   unsigned deaths=0,respawns=0,pickups=0;
-  bool ItemRejected(uint32_t id,double now)const{
-    for(const auto& r:rejected)if(r.id==id&&now<r.until)return true;
+  bool ItemRejected(uint32_t id,double now,bool includeLocal=true)const{
+    for(const auto& r:rejected)if(r.id==id&&now<r.until&&(includeLocal||!r.localOnly))return true;
     return false;
   }
-  void RejectItem(uint32_t id,double now){
+  void RejectItem(uint32_t id,double now,bool localOnly=false){
     if(!id)return;
     size_t victim=0;
     for(size_t i=0;i<256;++i){
       if(rejected[i].id==id){victim=i;break;}
       if(rejected[i].until<rejected[victim].until)victim=i;
     }
-    rejected[victim].id=id;rejected[victim].until=now+30;
+    rejected[victim].id=id;rejected[victim].until=now+30;rejected[victim].localOnly=localOnly;
   }
   void ClearRejections(){for(auto& r:rejected)r=Rejection();}
   void ClearAvoidance(){avoidNode=heldNode=-1;avoidUntil=0;holdSince=-1;avoidFollowEntity=0;}
-  void ClearGoal(){currentNavTime=-1;currentNavGoal=-1;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=false;followEntity=followGeneration=0;followAfter=0;}
+  void ClearGoal(){currentNavTime=-1;currentNavGoal=-1;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
@@ -244,6 +244,55 @@ static void BotCecilGoalEnd(INDEX slot,INDEX tick,const SSupplyState& state,cons
   if(state.goalEntity)BotLog("[CecilGoalEnd] local=%d tick=%d entity=%lu reason=%s\n",
     slot,tick,(unsigned long)state.goalEntity,reason);
 }
+static bool BotCecilHasRanged(const botcore::CecilItemInput& input){
+  const uint32_t ranged=0x3df8u; // IDs4..14, excluding melee10; independent of enemy range.
+  const uint32_t allowed=input.settings.iAllowedWeapons==-1?0x3fffu:(uint32_t)input.settings.iAllowedWeapons;
+  return (input.usable&allowed&ranged)!=0;
+}
+static bool BotCecilMappedWeaponEligible(const botcore::CecilItem& item,const botcore::CecilItemInput& input){
+  const uint32_t mask=botcore::CecilWeaponMask(item.weapon);
+  return input.settings.schema_version==1&&input.settings.bItemSearch&&!BotCecilHasRanged(input)&&
+    item.kind==botcore::CecilItemKind::Weapon&&item.pickable&&item.generation==input.generation&&
+    (mask&0x3df8u)&&!(input.usable&mask)&&
+    (input.settings.iAllowedWeapons==-1||((uint32_t)input.settings.iAllowedWeapons&mask))&&
+    std::isfinite(item.x)&&std::isfinite(item.y)&&std::isfinite(item.z);
+}
+static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const botcore::CecilItemInput& input,
+    INDEX slot,INDEX tick,double now){
+  if(s.goalEntity||now<s.searchAfter||!std::isfinite(input.enemy_distance)||input.enemy_distance<8||
+     !input.settings.bItemSearch||BotCecilHasRanged(input))return;
+  const auto& graph=BotSupplyGraph();
+  // Only original mapped WeaponItem references supply remote item knowledge.
+  // No enemy visibility or ordinary preset search distance is changed.
+  for(int attempt=0;attempt<8&&_botRayBudget>2;++attempt){
+    int best=-1;double bestCost=std::numeric_limits<double>::infinity();botcore::CecilItem chosen;
+    for(size_t i=0;i<graph.points.size();++i){
+      const auto& point=graph.points[i];if(point.important_entity<0||s.blocked[i]||!std::isfinite(s.goals.Distance((int)i)))continue;
+      CEntity* entity=player->GetWorld()->EntityFromID((ULONG)point.important_entity);botcore::CecilItem item;
+      if(!BotCecilReadItem(player,entity,s.generation,input.owned,&item)||s.ItemRejected(item.id,now,false)||
+         !BotCecilMappedWeaponEligible(item,input))continue;
+      const FLOAT3D connector((FLOAT)item.x-point.x,(FLOAT)item.y-point.y,(FLOAT)item.z-point.z);
+      const double length=connector.Length();
+      if(length>8||std::fabs(BotCecilHeight(player,connector))>3)continue;
+      const double dx=graph.points[s.anchor].x-input.x,dy=graph.points[s.anchor].y-input.y,dz=graph.points[s.anchor].z-input.z;
+      const double cost=std::sqrt(dx*dx+dy*dy+dz*dz)+s.goals.Distance((int)i)+length;
+      if(cost<bestCost){best=(int)i;bestCost=cost;chosen=item;}
+    }
+    if(best<0)return;
+    CEntity* entity=player->GetWorld()->EntityFromID(chosen.id);const auto& point=graph.points[best];
+    const FLOAT3D lift=player->en_vGravityDir*-.8f;
+    if(!BotSupplyClear(player,FLOAT3D(point.x,point.y,point.z)+lift,
+         FLOAT3D((FLOAT)chosen.x,(FLOAT)chosen.y,(FLOAT)chosen.z)+lift,entity)){
+      s.RejectItem(chosen.id,now);continue;
+    }
+    s.ClearGoal();s.goal=best;s.goalEntity=chosen.id;s.goalKind=chosen.kind;s.goalSince=now;
+    s.mappedWeaponGoal=true;s.goalDeadline=now+std::fmin(45.0,std::fmax(20.0,bestCost/6.0+5.0));
+    s.searchAfter=now+input.settings.fItemSearchCD;
+    BotLog("[CecilGoal] local=%d tick=%d entity=%lu kind=%d weapon=%d anchor=%d pos=(%.3f,%.3f,%.3f) mapped=1 deadline=%.3f\n",
+      slot,tick,(unsigned long)chosen.id,(int)chosen.kind,chosen.weapon,best,chosen.x,chosen.y,chosen.z,s.goalDeadline);
+    return;
+  }
+}
 static void BotCecilChooseGoal(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,bool allowPatrol=true){
   SSupplyState& s=BotSupplyState(slot);const auto& graph=BotSupplyGraph();
   const FLOAT3D position=player->GetPlacement().pl_PositionVector;const double now=tick*_pTimer->TickQuantum;
@@ -280,17 +329,18 @@ static void BotCecilChooseGoal(CPlayer *player,INDEX slot,INDEX tick,double enem
       if(!entity){item.reachable=false;s.RejectItem(item.id,now);continue;}
       const FLOAT3D target=FLOAT3D((FLOAT)item.x,(FLOAT)item.y,(FLOAT)item.z)-player->en_vGravityDir*.5f;
       if(settings.bItemVisibility&&!BotSupplyClear(player,BotCombatEye(player).pl_PositionVector,target,entity)){
-        item.visible=false;s.RejectItem(item.id,now);continue;
+        item.visible=false;s.RejectItem(item.id,now,true);continue;
       }
       int anchor=BotSupplyNearest(player,FLOAT3D((FLOAT)item.x,(FLOAT)item.y,(FLOAT)item.z),FALSE,entity);
       if(anchor<0&&_botRayBudget<=2)break;
-      if(anchor<0||!std::isfinite(s.goals.Distance(anchor))){item.reachable=false;s.RejectItem(item.id,now);continue;}
+      if(anchor<0||!std::isfinite(s.goals.Distance(anchor))){item.reachable=false;s.RejectItem(item.id,now,true);continue;}
       s.ClearGoal();s.goal=anchor;s.goalEntity=item.id;s.goalSince=now;s.searchAfter=now+settings.fItemSearchCD;
       s.importantGoal=false;s.goalKind=item.kind;s.navigator.Reset();
       BotLog("[CecilGoal] local=%d tick=%d entity=%lu kind=%d weapon=%d anchor=%d pos=(%.3f,%.3f,%.3f)\n",
         slot,tick,(unsigned long)item.id,(int)item.kind,item.weapon,anchor,item.x,item.y,item.z);break;
     }
   }
+  BotCecilChooseMappedWeapon(player,s,input,slot,tick,now);
   if(s.goal<0&&allowPatrol){
     s.ClearGoal();
     const bool preferImportant=(BotCecilRandom(s)%1000)<(unsigned)(settings.fImportantChance*1000);
@@ -462,10 +512,14 @@ static bool BotCecilImportant(CPlayer* player,SSupplyState& state,INDEX slot,IND
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
   SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.currentNavTime=-1;s.currentNavGoal=-1;result.useControl=tick<=s.useReleaseTick;
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
-  if(!alive){if(s.playable){BotCecilGoalEnd(slot,tick,s,"death");++s.deaths;s.deadSince=now;}s.playable=false;s.levelSwimView=false;s.ClearGoal();s.ClearEscape();return result;}
+  if(!alive){if(s.playable){BotCecilGoalEnd(slot,tick,s,"death");++s.deaths;s.deadSince=now;
+    BotLog("[CecilDeath] local=%d tick=%d entity=%lu generation=%lu deaths=%u\n",slot,tick,(unsigned long)s.entity,(unsigned long)s.generation,s.deaths);
+    }s.playable=false;s.levelSwimView=false;s.ClearGoal();s.ClearEscape();return result;}
   if(!BotCecilFrameReady(player)||!std::isfinite(player->en_plViewpoint.pl_OrientationAngle(2)))return result;
   if(result.useControl)return result; // Preserve a released action even across chained switches.
-  if(!s.playable){++s.respawns;s.spawnTick=tick;s.scanTick=0;s.ClearGoal();s.searchAfter=0;s.owned=0;s.ClearRejections();s.ClearAvoidance();s.ResetLockSnapshot();++s.generation;}
+  if(!s.playable){++s.respawns;s.spawnTick=tick;s.scanTick=0;s.ClearGoal();s.searchAfter=0;s.owned=0;s.ClearRejections();s.ClearAvoidance();s.ResetLockSnapshot();++s.generation;
+    const FLOAT3D position=player->GetPlacement().pl_PositionVector;
+    BotLog("[CecilSpawn] local=%d tick=%d entity=%lu generation=%lu respawns=%u pos=(%.3f,%.3f,%.3f)\n",slot,tick,(unsigned long)player->en_ulID,(unsigned long)s.generation,s.respawns,(double)position(1),(double)position(2),(double)position(3));}
   s.playable=true;s.entity=player->en_ulID;
   if(!BotCecilLiquid(player))s.levelSwimView=false;
   CPlayerWeapons* weapons=player->GetPlayerWeapons();uint32_t owned=(uint32_t)weapons->m_iAvailableWeapons;
@@ -487,8 +541,11 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   if(s.goalEntity){
     CEntity* entity=player->GetWorld()->EntityFromID(s.goalEntity);botcore::CecilItem item;
     bool usable=entity&&BotCecilReadItem(player,entity,s.generation,owned,&item);
-    if(usable){item.visible=item.reachable=true;usable=botcore::CecilChooseItem(&item,1,input)==0;}
-    if(!usable||now<s.goalSince||now-s.goalSince>=12){
+    if(usable){
+      if(s.mappedWeaponGoal)usable=input.enemy_distance>=8&&BotCecilMappedWeaponEligible(item,input);
+      else{item.visible=item.reachable=true;usable=botcore::CecilChooseItem(&item,1,input)==0;}
+    }
+    if(!usable||now<s.goalSince||(s.mappedWeaponGoal?now>=s.goalDeadline:now-s.goalSince>=12)){
       BotCecilGoalEnd(slot,tick,s,usable?"timeout":"unavailable");
       if(usable)s.RejectItem(s.goalEntity,now);
       s.ClearGoal();s.searchAfter=now;s.scanTick=0;

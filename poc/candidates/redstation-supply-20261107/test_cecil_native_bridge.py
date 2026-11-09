@@ -145,6 +145,57 @@ CEntity& addItem(unsigned id,float x,float z,botcore::CecilItemKind kind=botcore
 template<class T>auto typed(const T& m,int)->decltype(m.itemGoal&&m.urgent){return m.itemGoal&&m.urgent;}
 template<class T>bool typed(const T&,long){return false;}
 int main(){
+ { // Original map knowledge supplies a directed acquisition route beyond local LOS search.
+ setup(3);player.w.usable=3;
+ auto& weapon=addItem(991,0,-22,botcore::CecilItemKind::Weapon);
+ BotSupplyGraph().points[2].important_entity=991;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(BotSupplyState(0).goalEntity==991&&BotSupplyState(0).goal==2,"unarmed bot acquires known reachable mapped weapon beyond ordinary sixteen metre search");
+ _botRayBudget=16;BotSupplyTick(&player,0,250,1000);
+ check(BotSupplyState(0).goalEntity==991,"mapped route has a fixed bounded lifetime beyond twelve seconds");
+ const double deadline=BotSupplyState(0).goalDeadline;
+ _botRayBudget=16;BotSupplyTick(&player,0,270,1000);
+ check(BotSupplyState(0).goalDeadline==deadline,"repeated scans cannot renew mapped route deadline");
+ player.w.usable=3|botcore::CecilWeaponMask(4);player.w.m_iAvailableWeapons=player.w.usable;
+ _botRayBudget=16;BotSupplyTick(&player,0,271,1000);
+ check(BotSupplyState(0).goalEntity==0,"incidental usable gun clears mapped acquisition despite no-target distance sentinel");
+ setup(3);player.w.usable=3|botcore::CecilWeaponMask(4);player.w.m_iAvailableWeapons=player.w.usable;
+ addItem(992,0,-22,botcore::CecilItemKind::Weapon).item.weapon=8;BotSupplyGraph().points[2].important_entity=992;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(BotSupplyState(0).goalEntity==0,"loaded allowed ranged weapon forbids fallback without a visible enemy");
+ setup(3);player.w.usable=3;addItem(993,0,-22,botcore::CecilItemKind::Weapon);
+ BotSupplyGraph().points[2].important_entity=993;BotSupplyGraph().points[1].links.clear();
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(BotSupplyState(0).goalEntity==0,"mapped fallback never invents a reverse or unreachable arc");
+ setup(3);player.w.usable=3;addItem(994,0,-22,botcore::CecilItemKind::Weapon).item.weapon=10;
+ BotSupplyGraph().points[2].important_entity=994;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(BotSupplyState(0).goalEntity==0,"mapped fallback excludes chainsaw as useful ranged acquisition");
+ setup(3);player.w.usable=3;addItem(995,0,-14,botcore::CecilItemKind::Weapon);
+ BotSupplyGraph().points[2].important_entity=995;wallMode=1;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(BotSupplyState(0).goalEntity==995,"ordinary eye LOS rejection cannot poison a valid mapped node connector");
+ _botRayBudget=16;BotSupplyTick(&player,0,2,4);
+ check(BotSupplyState(0).goalEntity==0&&!BotSupplyState(0).mappedWeaponGoal,"close threat clears mapped route and provenance immediately");
+ setup(3);player.w.usable=3;addItem(996,3,-22,botcore::CecilItemKind::Weapon);
+ BotSupplyGraph().points[2].important_entity=996;blockedItems=3;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(BotSupplyState(0).goalEntity==0&&BotSupplyState(0).ItemRejected(996,.05,false),"actual blocked mapped connector retains physical rejection backoff");
+ setup(3);player.w.usable=3;addItem(997,0,-22,botcore::CecilItemKind::Weapon);
+ BotSupplyGraph().points[2].important_entity=997;
+ BotSupplyState(0).anchor=0;BotSupplyState(0).goals.Run(BotSupplyGraph(),0);
+ _botRayBudget=2;BotCecilChooseMappedWeapon(&player,BotSupplyState(0),BotCecilItemInput(&player,BotSupplyState(0),1000),0,1,.05);
+ check(!BotSupplyState(0).ItemRejected(997,.05)&&BotSupplyState(0).goalEntity==0,"mapped budget exhaustion defers without blacklisting");
+ _botRayBudget=16;BotSupplyTick(&player,0,2,1000);items[0].pickable=false;
+ _botRayBudget=16;BotSupplyTick(&player,0,3,1000);
+ check(BotSupplyState(0).goalEntity==0,"disappearing mapped weapon clears route before stale movement");
+ setup(3);player.w.usable=3;BotSupplyGraph().points[1].z=-12;BotSupplyGraph().points[2].z=-14;
+ BotSupplyGraph().points[0].links={2};BotSupplyGraph().points[1].links.clear();
+ addItem(998,0,-12,botcore::CecilItemKind::Weapon);BotSupplyGraph().points[2].important_entity=998;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(BotSupplyState(0).goalEntity==998&&BotSupplyState(0).goal==2,"failed ordinary nearest anchor cannot poison a reachable original mapped anchor");
+ (void)weapon;
+ }
  { // Bounded snapshots must not let unsuitable prefix items starve a weapon.
  setup(2);player.health=100;player.w.usable=3;
  for(unsigned i=0;i<128;++i){auto& e=addItem(100+i,0,-2,botcore::CecilItemKind::Ammo);e.item.ammo_mask=botcore::CecilWeaponMask(8);}
