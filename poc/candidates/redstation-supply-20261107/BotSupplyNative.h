@@ -36,6 +36,9 @@ struct SSupplyState {
   double groundRecoveryTime=-1,groundObservationTime=-1,groundEscapeAfter=0;
   uint32_t groundProgressEntity=0,groundProgressGeneration=0;
   unsigned groundEscapeTried=0;
+  unsigned groundEscapeCursor=0;
+  bool groundSweepReady=false,groundSweepBodyOnly=false;
+  double groundSweepForward[3]={0,0,0},groundSweepRight[3]={0,0,0};
   bool groundStalled=false,groundEscapeActive=false;
   botcore::CecilNavSearch goals;
   std::vector<unsigned char> blocked,worldLock; // 0 open, 1 moved, 2 missing, 3 unseen.
@@ -81,7 +84,8 @@ struct SSupplyState {
   void ClearAvoidance(){avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
   void ClearGoal(){currentNavTime=-1;currentNavGoal=-1;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
-  void ClearGroundProgress(){if(groundEscapeActive)ClearEscape();groundProgress.Reset();groundRecoveryTime=groundObservationTime=-1;groundEscapeTried=0;groundEscapeAfter=0;groundStalled=groundEscapeActive=false;groundProgressEntity=groundProgressGeneration=0;}
+  void ClearGroundSweep(){groundEscapeTried=groundEscapeCursor=0;groundSweepReady=false;}
+  void ClearGroundProgress(){if(groundEscapeActive)ClearEscape();groundProgress.Reset();groundRecoveryTime=groundObservationTime=-1;ClearGroundSweep();groundEscapeAfter=0;groundStalled=groundEscapeActive=false;groundProgressEntity=groundProgressGeneration=0;}
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
     ClearGroundProgress();probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
@@ -1076,7 +1080,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     player->GetHealth()>0&&player->m_penWeapons&&
     (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH);
   if(state.groundProgressEntity!=player->en_ulID||state.groundProgressGeneration!=state.generation){
-    state.groundProgress.Reset();state.groundEscapeTried=0;state.groundEscapeAfter=0;state.groundStalled=false;
+    state.groundProgress.Reset();state.ClearGroundSweep();state.groundEscapeAfter=0;state.groundStalled=false;
     if(state.groundEscapeActive)state.ClearEscape();
     state.groundEscapeActive=false;
     state.groundProgressEntity=player->en_ulID;state.groundProgressGeneration=state.generation;
@@ -1086,7 +1090,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     {player->en_vGravityDir(1),player->en_vGravityDir(2),player->en_vGravityDir(3)},groundObserved);
   const bool stalled=observedStalled&&groundEligible;
   if(!observedStalled){
-    state.groundEscapeTried=0;state.groundEscapeAfter=0;
+    state.ClearGroundSweep();state.groundEscapeAfter=0;
     // Real progress resets the detector, but a verified, still-owned escape
     // finishes its original world-direction hold rather than undoing the step.
     if(state.groundEscapeActive&&(!groundObserved||!state.groundProgress.Continuous()||now>=state.escapeUntil)){
@@ -1123,6 +1127,58 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   const auto frame=BotCecilBodyFrame(player);
   const FLOAT3D position=player->GetPlacement().pl_PositionVector;
   const double angle=finalBodyYaw*3.141592653589793/180,si=std::sin(angle),co=std::cos(angle);
+  // Ground sweeps name fixed WORLD sectors, not indices relative to a changing
+  // planner request/yaw. Disabled strafe instead permits only current body +/-F.
+  const bool bodyOnly=maxStrafe==0;
+  const auto bodyHeading=frame.ToWorld(-si,0,-co);
+  const double gravityNorm=std::sqrt(double(player->en_vGravityDir(1))*player->en_vGravityDir(1)+
+    double(player->en_vGravityDir(2))*player->en_vGravityDir(2)+double(player->en_vGravityDir(3))*player->en_vGravityDir(3));
+  const botcore::CecilVec gravity{player->en_vGravityDir(1)/gravityNorm,player->en_vGravityDir(2)/gravityNorm,player->en_vGravityDir(3)/gravityNorm};
+  const double vertical=bodyHeading.x*gravity.x+bodyHeading.y*gravity.y+bodyHeading.z*gravity.z;
+  botcore::CecilVec heading{bodyHeading.x-vertical*gravity.x,bodyHeading.y-vertical*gravity.y,bodyHeading.z-vertical*gravity.z};
+  const double headingNorm=std::sqrt(heading.x*heading.x+heading.y*heading.y+heading.z*heading.z);
+  if((stalled||state.groundEscapeActive)&&(!std::isfinite(headingNorm)||headingNorm<1e-6)){
+    BotCecilRejectedProbe(&state.probe,SCecilProbe::reasonInvalid,player);forward=strafe=up=0;return 0;
+  }
+  if(headingNorm>0){heading.x/=headingNorm;heading.y/=headingNorm;heading.z/=headingNorm;}
+  if((stalled||state.groundEscapeActive)&&(state.groundSweepReady||state.groundEscapeActive)){
+    const double dx=heading.x-state.groundSweepForward[0],dy=heading.y-state.groundSweepForward[1],dz=heading.z-state.groundSweepForward[2];
+    // Recover the captured gravity normal from its two tangent basis axes. Even
+    // a turn below the position-clock tolerance changes world-sector identity.
+    const double gx=state.groundSweepForward[1]*state.groundSweepRight[2]-state.groundSweepForward[2]*state.groundSweepRight[1]-gravity.x,
+      gy=state.groundSweepForward[2]*state.groundSweepRight[0]-state.groundSweepForward[0]*state.groundSweepRight[2]-gravity.y,
+      gz=state.groundSweepForward[0]*state.groundSweepRight[1]-state.groundSweepForward[1]*state.groundSweepRight[0]-gravity.z;
+    // Body-only axes must rebind even after a small turn: no strafe is available
+    // to represent the previous world axis. Preserve the existing cooldown.
+    if(bodyOnly!=state.groundSweepBodyOnly||gx*gx+gy*gy+gz*gz>1e-24||(bodyOnly&&dx*dx+dy*dy+dz*dz>1e-24)){
+      if(state.groundEscapeActive)state.ClearEscape();
+      state.groundEscapeActive=false;state.ClearGroundSweep();
+    }
+  }
+  if(stalled&&!state.groundSweepReady){
+    const botcore::CecilVec right{gravity.y*heading.z-gravity.z*heading.y,
+      gravity.z*heading.x-gravity.x*heading.z,gravity.x*heading.y-gravity.y*heading.x};
+    state.groundSweepForward[0]=heading.x;state.groundSweepForward[1]=heading.y;state.groundSweepForward[2]=heading.z;
+    state.groundSweepRight[0]=right.x;state.groundSweepRight[1]=right.y;state.groundSweepRight[2]=right.z;
+    state.groundSweepReady=true;state.groundSweepBodyOnly=bodyOnly;
+  }
+  auto capGround=[&](double& f,double& st){
+    // Roundoff on an exactly body-aligned direction is not a strafe request.
+    if(std::fabs(st)<1e-12)st=0;
+    double scale=1;const double norm=std::hypot(f,st);
+    if(norm>.3)scale=.3/norm;
+    if(std::fabs(st)>maxStrafe)scale=std::fmin(scale,maxStrafe/std::fabs(st));
+    f*=scale;st*=scale;
+    return std::isfinite(f)&&std::isfinite(st)&&std::hypot(f,st)>0;
+  };
+  auto groundLocal=[&](double x,double y,double z,double& f,double& st){
+    const double norm=std::sqrt(x*x+y*y+z*z);const auto local=frame.ToLocal(x,y,z);
+    // A transient body/gravity mismatch must not project a remembered sector
+    // into a different world heading or add vertical motion with up=0.
+    if(!std::isfinite(norm)||norm<=0||std::fabs(x*gravity.x+y*gravity.y+z*gravity.z)>norm*1e-6||
+       std::fabs(local.y)>norm*1e-6)return false;
+    f=-si*local.x-co*local.z;st=co*local.x-si*local.z;return capGround(f,st);
+  };
   const double requestedLength=std::hypot((double)forward,(double)strafe);
   const auto requested=frame.ToWorld(-si*forward+co*strafe,0,-co*forward-si*strafe);
   if(state.escapeReverseUsed&&requestedLength>.05){
@@ -1133,8 +1189,10 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   if(state.escapeUntil>0){
     if(now+1e-9<state.escapeUntil){
       const auto local=frame.ToLocal(state.escapeWorld[0],state.escapeWorld[1],state.escapeWorld[2]);
-      double f=-si*local.x-co*local.z,st=co*local.x-si*local.z;capMotion(f,st);
-      if(std::fabs(f)+std::fabs(st)>.05&&BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,requireFloor,allowCurrentContact)){
+      double f=-si*local.x-co*local.z,st=co*local.x-si*local.z;
+      const bool held=state.groundEscapeActive?groundLocal(state.escapeWorld[0],state.escapeWorld[1],state.escapeWorld[2],f,st):
+        (capMotion(f,st),std::fabs(f)+std::fabs(st)>.05);
+      if(held&&BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,requireFloor,allowCurrentContact)){
         forward=(T)f;strafe=(T)st;up=0;return 2;
       }
       state.escapeUntil=0;state.escapeAfter=now+.3;
@@ -1185,11 +1243,46 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     }
     forward=strafe=up=0;return 0;
   };
+  if(stalled){
+    // Original NoPosChange repeats; permanently exhausting a finite tried mask
+    // is an adapter liveness bug. Eight bounded world sectors form one pass.
+    // A new pass retains the same pose clock/basis and all NAV/goal deadlines.
+    const unsigned count=bodyOnly?2:8;
+    if(state.groundEscapeCursor>=count){state.groundEscapeCursor=0;state.groundEscapeTried=0;}
+    const double directions[8][2]={{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1},{0,-1},{1,-1}};
+    for(unsigned n=0;n<count&&state.groundEscapeCursor<count;++n){
+      const unsigned i=state.groundEscapeCursor;
+      const double a=bodyOnly?(i==0?.3:-.3):.3*directions[i][0]/std::hypot(directions[i][0],directions[i][1]);
+      const double b=bodyOnly?0:.3*directions[i][1]/std::hypot(directions[i][0],directions[i][1]);
+      double f=0,st=0;
+      if(!groundLocal(a*state.groundSweepForward[0]+b*state.groundSweepRight[0],
+          a*state.groundSweepForward[1]+b*state.groundSweepRight[1],a*state.groundSweepForward[2]+b*state.groundSweepRight[2],f,st)){
+        BotCecilRejectedProbe(&state.probe,SCecilProbe::reasonInvalid,player);return rejectOriginal();
+      }
+      const bool clear=BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,true,allowCurrentContact);
+      if(!clear&&(state.probe.lastReason==SCecilProbe::reasonBudget||state.probe.lastReason==SCecilProbe::reasonInvalid))return rejectOriginal();
+      // A definite wall/floor rejection is an observed sector too. Retaining
+      // the cursor across budget deferral prevents early blocked rays starving
+      // the remaining sectors. No bit is consumed by an uncertain query.
+      state.groundEscapeTried|=1u<<i;++state.groundEscapeCursor;
+      if(clear){
+        const auto world=frame.ToWorld(-si*f+co*st,0,-co*f-si*st);
+        state.escapeWorld[0]=world.x;state.escapeWorld[1]=world.y;state.escapeWorld[2]=world.z;
+        for(int j=0;j<3;++j)state.escapeOrigin[j]=position(j+1);
+        state.groundEscapeActive=true;state.groundEscapeAfter=now+1.6;
+        state.escapeUntil=now+.6;forward=(T)f;strafe=(T)st;up=0;
+        BotLog("[CecilGroundRecovery] entity=%lu generation=%lu time=%.3f action=escape eligible=1 reason=no_position_progress dir=%u forward=%.3f strafe=%.3f stationary=%.3f displacement=%.4f\n",
+          (unsigned long)player->en_ulID,(unsigned long)state.generation,now,i,f,st,state.groundProgress.StationarySeconds(),state.groundProgress.Displacement());
+        return 2;
+      }
+    }
+    if(state.groundEscapeCursor>=count)state.groundEscapeAfter=now+1.6;
+    state.escapeAfter=now+.3;return rejectOriginal();
+  }
   const double length=std::hypot((double)forward,(double)strafe);
   const double side=std::fmin(.4,maxStrafe)*(stalled?1:state.escapeSide);
-  // Original Cecil BotMovement.cpp580..589 uses side plus backward input for
-  // NoPosChange. Retain the existing alternatives first, then try both bounded
-  // diagonals only for an actually observed, currently supported ground stall.
+  // Legacy non-stalled escape path retained unchanged. Ground stalls returned
+  // through the complete world sweep above; the old stalled clauses are inert.
   const double candidates[5][2]={{0,side},{0,-side},{length>.05?-.4*forward/length:(stalled?-.3:0),length>.05?-.4*strafe/length:0},
     {-.3,side},{-.3,-side}};
   for(int i=0;i<5;++i){

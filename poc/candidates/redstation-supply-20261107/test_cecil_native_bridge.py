@@ -127,6 +127,7 @@ float floorHitDistance=1;CBrushPolygon* floorHitPolygon=&floorPolygon;
 int floorMode=0,rayCount=0,blockedItems=0,floorPattern=0,wallMode=0,wallCount=0;FLOAT3D lastFrom,lastTo,wallFrom,wallTo;
 int nearFootMode=0,nearFootRays=0;float nearFootDistance=.26f;bool invalidateAfterFloor=false;
 int legacyCastCalls=0,sectorAdds=0,sectorTests=0,worldTests=0;unsigned wallPolygonFlags=0;
+int capturedWalls=0;bool captureWalls=false;double capturedWorld[4096][2];
 bool forcePassableHit=false;int rayConstructions=0,lastModels=-1;ULONG lastMask=0;
 bool lastPhysical=false,lastOverHit=true;bool invalidHitDistance=false;
 FLOAT3D nearFootFrom,nearFootTo;bool nearFootPhysical=false,nearFootOverHit=true;
@@ -164,8 +165,10 @@ struct CCastRay {
     if(floorMode==2)cr_pbpoBrushPolygon=floorHitPolygon;}
   }else{
    ++wallCount;wallFrom=from;wallTo=to;
+   if(captureWalls&&capturedWalls<4096){capturedWorld[capturedWalls][0]=to(1)-from(1);capturedWorld[capturedWalls++][1]=to(3)-from(3);}
    if(!Passes(wallPolygonFlags)&&(wallMode==2||(wallMode==1&&to(3)<from(3))||
       (wallMode==3&&(std::fabs(to(1)-from(1))<1e-5||std::fabs(to(3)-from(3))<1e-5))||
+      (wallMode==4&&!(std::fabs(to(1)-from(1))<1e-5&&to(3)<from(3)))||
       (to(1)>0 && to(1)<=blockedItems)))cr_penHit=&obstruction;
   }
  }
@@ -177,6 +180,7 @@ void check(bool yes,const char* name){++checks;if(!yes){++failures;std::printf("
 bool near(double a,double b){return std::fabs(a-b)<1e-5;}
 CPlayer player;std::vector<CEntity> items;
 void setup(int nodes=3){
+ captureWalls=false;capturedWalls=0;
  player=CPlayer();player.m_penWeapons=&player.w;items.clear();items.reserve(140);
  auto& g=BotSupplyGraph();g=botcore::CecilNavGraph();g.points.resize(nodes);
  for(int i=0;i<nodes;++i){g.points[i].id=i;g.points[i].z=-10*i;g.points[i].radius=1;if(i+1<nodes)g.points[i].links.push_back(i+1);}
@@ -573,6 +577,148 @@ int groundProgressTick(int tick,bool accepted=true,double maxStrafe=1,int budget
  groundF=f;groundSt=st;groundU=u;return status;
 }
 
+// Normal041 actual frozen pose exhausted all five approved directions for over
+// 200s. A complete bounded pass must include forward and be repeatable, not
+// convert another finite set of approved rays into a permanent neutral latch.
+void groundSweep42(){
+ groundProgressFixture(true);wallMode=4;bool forwardExit=false;
+ for(int tick=1;tick<=60;++tick)if(groundProgressTick(tick)==2)forwardExit|=groundF>0&&std::fabs(groundSt)<1e-6;
+ check(forwardExit,"NORMAL42 neutral stalled recovery tests the missing physically clear forward half-plane");
+ groundProgressFixture(true);int starts=0;double until=0;std::vector<std::pair<double,double>> dirs;
+ for(int tick=1;tick<=410;++tick){
+  const int status=groundProgressTick(tick);auto& state=BotSupplyState(0);
+  if(status==2&&state.escapeUntil>until+.01){dirs.push_back({groundF,groundSt});until=state.escapeUntil;++starts;}
+ }
+ check(starts>=10,"NORMAL42 exhausted physical stationary sweep repeats after cooldown without fake progress");
+ bool complete=dirs.size()>=8;
+ for(size_t i=0;i<dirs.size()&&i<8;++i)for(size_t j=0;j<i;++j)
+  complete&=std::hypot(dirs[i].first-dirs[j].first,dirs[i].second-dirs[j].second)>.1;
+ check(complete,"NORMAL42 first stationary pass covers eight distinct cardinal and diagonal directions");
+ check(BotSupplyState(0).anchor<0&&BotSupplyState(0).hop<0&&BotSupplyState(0).groundProgress.StationarySeconds()>19,
+  "NORMAL42 sweep wrap does not reset measured stationary time or invent NAV arrival");
+ groundProgressFixture(true);wallMode=2;captureWalls=true;
+ for(int tick=1;tick<=80&&capturedWalls<8;++tick)groundProgressTick(tick,true,1,2);
+ bool fair=capturedWalls>=8;
+ for(int i=0;i<capturedWalls&&i<8;++i)for(int j=0;j<i;++j)
+  fair&=std::hypot(capturedWorld[i][0]-capturedWorld[j][0],capturedWorld[i][1]-capturedWorld[j][1])>.1;
+ check(fair,"NORMAL42 definite blocked probes advance a persistent cursor despite only one completed wall check per frame");
+ groundProgressFixture(true);double groundUntil=0;bool yawStable=true;int sectors=0;
+ for(int tick=1;tick<=300;++tick){
+  _botRayBudget=16;BotSupplyTick(&player,0,tick,1000);double f=0,st=0,u=0;
+  const double yaw=tick<60?0:90;const int status=BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,yaw,1);
+  if(status==2&&BotSupplyState(0).escapeUntil>groundUntil+.01){
+   const double a=yaw*3.141592653589793/180;
+   const double x=-std::sin(a)*f+std::cos(a)*st,z=-std::cos(a)*f-std::sin(a)*st;
+   const double expected=sectors*3.141592653589793/4;
+   if(sectors<8)yawStable&=std::hypot(x-.3*std::sin(expected),z+.3*std::cos(expected))<1e-5;
+   ++sectors;groundUntil=BotSupplyState(0).escapeUntil;
+  }
+ }
+ check(yawStable&&sectors>=8,"NORMAL42 sector identity remains fixed in world space while final body yaw changes");
+}
+
+int groundSweepYawTick(int tick,double yaw,double maxStrafe=1,int budget=16){
+ _botRayBudget=budget;BotSupplyTick(&player,0,tick,1000);groundF=groundSt=groundU=0;
+ return BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,groundF,groundSt,groundU,yaw,maxStrafe);
+}
+void groundSweep42Guards(){
+ groundProgressFixture(true);for(int tick=1;tick<=41;++tick)groundSweepYawTick(tick,45);
+ const double until=BotSupplyState(0).escapeUntil;
+ check(groundSweepYawTick(42,0,.1)==2&&near(groundF,-groundSt)&&near(std::fabs(groundSt),.1)&&
+  near(BotSupplyState(0).escapeUntil,until),
+  "NORMAL42 held world direction scales uniformly at reduced strafe limit instead of independently clipping its heading");
+ groundProgressFixture(true);for(int tick=1;tick<=41;++tick)groundProgressTick(tick);
+ const unsigned cursor=BotSupplyState(0).groundEscapeCursor,bits=BotSupplyState(0).groundEscapeTried;
+ const double expiry=BotSupplyState(0).escapeUntil;
+ player.en_penReference=nullptr;
+ check(groundProgressTick(42)==0&&groundF==0&&groundSt==0&&BotSupplyState(0).groundEscapeCursor==cursor&&
+  BotSupplyState(0).groundEscapeTried==bits&&near(BotSupplyState(0).escapeUntil,expiry),
+  "NORMAL42 unknown NULL cannot advance sectors or renew a paused original held expiry");
+ player.en_penReference=&floorEntity;
+ check(groundProgressTick(43)==2&&near(BotSupplyState(0).escapeUntil,expiry),
+  "NORMAL42 world hold resumes only with current support and fresh wall/floor tests");
+ groundProgressFixture(true);for(int tick=1;tick<=40;++tick)groundProgressTick(tick);
+ invalidHitDistance=true;const unsigned before=BotSupplyState(0).groundEscapeCursor;
+ check(groundProgressTick(41)==0&&BotSupplyState(0).groundEscapeCursor==before&&BotSupplyState(0).groundEscapeTried==0,
+  "NORMAL42 invalid physical query defers the same sector without consuming a tried bit");
+ invalidHitDistance=false;
+ check(groundProgressTick(42)==2&&groundF>0&&BotSupplyState(0).groundEscapeCursor==1,
+  "NORMAL42 deferred invalid sector is retried rather than silently skipped");
+ groundProgressFixture(true);for(int tick=1;tick<=40;++tick)groundProgressTick(tick);
+ check(groundProgressTick(41,true,1,1)==0&&BotSupplyState(0).groundEscapeCursor==0&&BotSupplyState(0).groundEscapeTried==0,
+  "NORMAL42 missing current safety budget cannot consume the initial forward sector");
+ check(groundProgressTick(42)==2&&groundF>0,"NORMAL42 restored budget starts the original deferred forward sector");
+ groundProgressFixture(true);for(int tick=1;tick<=41;++tick)groundSweepYawTick(tick,0,0);
+ const double cooldown=BotSupplyState(0).groundEscapeAfter;
+ check(groundSweepYawTick(42,90,0)==0&&groundF==0&&groundSt==0&&near(BotSupplyState(0).groundEscapeAfter,cooldown),
+  "NORMAL42 body-only heading change cancels unrepresentable held world motion without bypassing cooldown");
+ bool bodyOnly=true;int bodyStarts=0;double bodyUntil=0;
+ for(int tick=43;tick<=160;++tick){const int status=groundSweepYawTick(tick,90,0);
+  bodyOnly&=groundSt==0&&groundU==0;
+  if(status==2&&BotSupplyState(0).escapeUntil>bodyUntil+.01){++bodyStarts;bodyUntil=BotSupplyState(0).escapeUntil;}
+ }
+ check(bodyOnly&&bodyStarts>=3&&BotSupplyState(0).groundEscapeCursor<=2,
+  "NORMAL42 disabled strafe repeats only the two current body-forward/back alternatives, never claims eight world sectors");
+
+ groundProgressFixture(true);for(int tick=1;tick<=41;++tick)groundSweepYawTick(tick,0,0);
+ groundSweepYawTick(42,.01,0);bool tinyBodyRebound=false;
+ for(int tick=43;tick<=110;++tick)tinyBodyRebound|=groundSweepYawTick(tick,.01,0)==2;
+ check(tinyBodyRebound,"NORMAL42 even a small actual body heading change cannot strand both zero-strafe alternatives in an old world basis");
+ groundProgressFixture(true);for(int tick=1;tick<=41;++tick)groundSweepYawTick(tick,0);
+ check(groundSweepYawTick(42,90,0)==0&&!BotSupplyState(0).groundEscapeActive,
+  "NORMAL42 switching to body-only cannot inherit a sideways world hold");
+ bool reenabled=false;
+ for(int tick=43;tick<=90;++tick)reenabled|=groundSweepYawTick(tick,90,1)==2;
+ check(reenabled&&BotSupplyState(0).groundSweepReady&&!BotSupplyState(0).groundSweepBodyOnly,
+  "NORMAL42 switching back to strafe-enabled starts a coherent newly bound world sweep after cooldown");
+ groundProgressFixture(true);wallMode=2;for(int tick=1;tick<=41;++tick)groundProgressTick(tick);
+ auto& exhausted=BotSupplyState(0);const double passAfter=exhausted.groundEscapeAfter;const int rays=rayCount;
+ for(int tick=42;tick<=60;++tick)groundProgressTick(tick);
+ check(exhausted.groundEscapeCursor==8&&exhausted.groundEscapeTried==255&&rayCount==rays&&passAfter>3.5,
+  "NORMAL42 a fully blocked pass waits its existing cooldown instead of replaying all eight every frame");
+ wallMode=0;bool repeated=false;for(int tick=61;tick<=90;++tick)repeated|=groundProgressTick(tick)==2;
+ check(repeated&&exhausted.groundProgress.StationarySeconds()>4,
+  "NORMAL42 a later clear physical sector can recover after a blocked pass without resetting real stationary time");
+ groundProgressFixture(true);player.en_vGravityDir=FLOAT3D(.6f,-.8f,0);
+ floorPlane.bpl_plAbsolute=FLOAT3D(-.6f,.8f,0);bool tangent=true;
+ for(int tick=1;tick<=200;++tick){const int status=groundSweepYawTick(tick,0);
+  if(status==2)tangent&=std::fabs(.6*groundSt)<1e-6;
+ }
+ check(tangent,"NORMAL42 gravity-relative world sectors cannot silently acquire a vertical component from an unmatched body plane");
+
+
+ groundProgressFixture(true);for(int tick=1;tick<=41;++tick)groundSweepYawTick(tick,0);
+ const double tiny=.0001,ct=std::cos(tiny),sn=std::sin(tiny);
+ player.en_vGravityDir=FLOAT3D(0,float(-ct),float(-sn));
+ player.body.m[1][1]=ct;player.body.m[1][2]=-sn;player.body.m[2][1]=sn;player.body.m[2][2]=ct;
+ floorPlane.bpl_plAbsolute=FLOAT3D(0,float(ct),float(sn));bool gravityRebound=false;
+ const double priorCooldown=BotSupplyState(0).groundEscapeAfter;
+ groundSweepYawTick(42,0);
+ check(near(BotSupplyState(0).groundEscapeAfter,priorCooldown),
+  "NORMAL42 a small current gravity turn must not bypass the previous physical-attempt cooldown");
+ for(int tick=43;tick<=130;++tick)gravityRebound|=groundSweepYawTick(tick,0)==2;
+ check(gravityRebound,"NORMAL42 a small stable gravity/body turn cannot leave all captured world sectors permanently unrepresentable");
+
+ // Other rotation axis: old forward remains representable, but the next old
+ // diagonal would be permanently Invalid without rebinding the sweep normal.
+ groundProgressFixture(true);for(int tick=1;tick<=41;++tick)groundSweepYawTick(tick,0);
+ const double oldExpiry=BotSupplyState(0).escapeUntil;
+ player.en_vGravityDir=FLOAT3D(float(sn),float(-ct),0);
+ player.body.m[0][0]=ct;player.body.m[0][1]=-sn;player.body.m[1][0]=sn;player.body.m[1][1]=ct;
+ floorPlane.bpl_plAbsolute=FLOAT3D(float(-sn),float(ct),0);
+ check(groundSweepYawTick(42,0)==0&&!BotSupplyState(0).groundEscapeActive,
+  "NORMAL42 a changed gravity normal cancels a previously held context even when its first axis still happens to fit");
+ bool secondAxis=false;
+ for(int tick=43;tick<=150;++tick){const int status=groundSweepYawTick(tick,0);
+  secondAxis|=status==2&&BotSupplyState(0).escapeUntil>oldExpiry+.01&&groundSt>0;
+ }
+ check(secondAxis,"NORMAL42 a small second-axis gravity turn reaches the newly rebound diagonal instead of permanent Invalid");
+ groundProgressFixture(true);bool bounded=true;allocations=0;measuring=true;
+ for(int tick=1;tick<=900;++tick){const int beforeRays=rayCount;groundSweepYawTick(tick,(tick*7)%360,.1);
+  bounded&=rayCount-beforeRays<=16&&_botRayBudget>=0&&std::hypot(groundF,groundSt)<=.300001&&std::fabs(groundSt)<=.100001&&groundU==0;}
+ measuring=false;check(bounded&&allocations==0,"NORMAL42 repeated world sweeps and rotating yaw retain sixteen shared rays, uniform caps and zero allocation");
+}
+
 // Native039diag3b freezes: actual accepted offgraph pose is unchanged while
 // valid native brush support alternates with current NULL / physical NOHIT.
 void groundObservationFlicker(){
@@ -617,7 +763,7 @@ void groundObservationHoldGuards(){
    near(state.escapeUntil,until)&&near(state.groundEscapeAfter,cooldown)&&state.groundEscapeTried==tried&&rayCount-before==1,
    "unknown current support pauses held recovery after its sole support query without expiry renewal or episode reset");
  player.en_penReference=&floorEntity;
- check(groundProgressTick(45)==2&&groundSt>0&&near(state.escapeUntil,until)&&state.probe.wallRays==1&&state.probe.floorRays==1,
+ check(groundProgressTick(45)==2&&groundF>0&&near(state.escapeUntil,until)&&state.probe.wallRays==1&&state.probe.floorRays==1,
    "freshly supported held direction resumes only after actual wall and floor revalidation with original expiry");
  groundProgressFixture(true);for(int tick=1;tick<=43;++tick)groundProgressTick(tick);
  const double progressUntil=BotSupplyState(0).escapeUntil;player.pl.pl_PositionVector(1)+=.26f;
@@ -673,9 +819,12 @@ void originalDiagonalRecovery(){
   for(int tick=1;tick<=120;++tick)escaped|=groundProgressTick(tick,negative!=3,negative==4?0:1)==2;
   check(!escaped,"diagonal exit never bypasses floor current support ground movement owner or disabled strafe");
  }
- groundProgressFixture(true);wallMode=3;bool escaped=false;
- for(int tick=1;tick<=120;++tick)escaped|=groundProgressTick(tick,true,1,3)==2;
- check(!escaped&&_botRayBudget>=0,"a diagonal cannot borrow missing wall-plus-floor budget after prior blocked directions");
+ groundProgressFixture(true);wallMode=3;
+ for(int tick=1;tick<=40;++tick)groundProgressTick(tick);
+ check(groundProgressTick(41,true,1,2)==0&&_botRayBudget==1,
+  "a diagonal cannot borrow missing wall-plus-floor budget after the first blocked forward direction");
+ check(groundProgressTick(42,true,1,2)==2&&_botRayBudget==0,
+  "a deferred diagonal may use exactly two fresh safety rays on the next frame");
 }
 
 void offgraphProgressGuards(){
@@ -686,16 +835,17 @@ void offgraphProgressGuards(){
   const int status=groundProgressTick(tick);auto& state=BotSupplyState(0);
   if(status==2&&state.escapeUntil>heldUntil+.01){directions.push_back({groundF,groundSt});heldUntil=state.escapeUntil;}
  }
- check(directions.size()==5&&directions[0].second>0&&directions[1].second<0&&directions[2].first<0&&
-   directions[3].first<0&&directions[3].second>0&&directions[4].first<0&&directions[4].second<0,
-  "frozen held escape tries opposite sides backstep and both original Cecil backward diagonals once each");
+ check(directions.size()>=5&&directions[0].first>0&&near(directions[0].second,0)&&
+   directions[1].first>0&&directions[1].second>0&&directions[2].second>0&&
+   directions[3].first<0&&directions[3].second>0&&directions[4].first<0,
+  "stationary world sweep starts forward and continues fairly through both forward and backward half-planes");
 
 
  groundProgressFixture(true);for(int tick=1;tick<=43;++tick)groundProgressTick(tick);
  const double successfulHold=BotSupplyState(0).escapeUntil;
  player.pl.pl_PositionVector(1)+=.26f;
  const int progressedHold=groundProgressTick(44);
- check(progressedHold==2&&groundSt>0&&!BotSupplyState(0).groundStalled&&
+ check(progressedHold==2&&groundF>0&&!BotSupplyState(0).groundStalled&&
    near(BotSupplyState(0).escapeUntil,successfulHold),
   "actual progress resets watchdog but preserves the remaining verified world-direction hold");
 
@@ -720,7 +870,7 @@ void offgraphProgressGuards(){
  groundProgressFixture(true);BotCecilSettings().bStrafe=0;bool backstep=false;bool bounded=true;
  for(int tick=1;tick<=120;++tick){const int status=groundProgressTick(tick,true,0);
   backstep|=status==2&&groundF<0;bounded=bounded&&groundSt==0&&groundU==0&&std::hypot(groundF,groundSt)<=.300001;}
- check(backstep&&bounded,"neutral strafe-disabled recovery performs only a verified bounded body backstep");
+ check(backstep&&bounded,"neutral strafe-disabled recovery uses only verified bounded body forward/back alternatives");
  groundProgressFixture(true);floorMode=0;bool escaped=false;
  for(int tick=1;tick<=110;++tick)escaped|=groundProgressTick(tick)==2;
  check(!escaped&&groundF==0&&groundSt==0&&BotSupplyState(0).reacquireTried[0]==0,
@@ -900,7 +1050,7 @@ void nativeContactRecovery(){
 }
 int main(){
  nativeContactRecovery();farHintTests();farHintGuards();
- offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
+ groundSweep42();groundSweep42Guards();offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
  liftOccupancyBridge();
  { // Reproduce Retail033's mask overwrite, including initialized-mask controls.
  for(bool physical:{false,true})for(ULONG initial:{0u,2048u}){
