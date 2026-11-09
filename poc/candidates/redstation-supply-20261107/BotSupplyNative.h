@@ -48,6 +48,14 @@ struct SSupplyState {
   botcore::CecilNavSearch goals;
   std::vector<unsigned char> blocked,worldLock; // 0 open, 1 moved, 2 missing, 3 unseen.
   uint32_t entity=0,generation=0,rng=1,goalEntity=0,owned=0,followEntity=0,followGeneration=0;
+  // Original five-second path checkpoint, restricted to ineffective static-ground edges.
+  double acquiredAnchorTime=-1;int acquiredAnchor=-1; // Same-tick ordinary nearest LOS, not support.
+  double hopCheckpointLast=-1,hopCheckpointSince=-1,hopCheckpointBest=0,hopCheckpointGainBase=0;
+  double hopCheckpointGravity[3]={0,0,0};
+  int hopCheckpointGoal=-1,hopCheckpointSource=-1,hopCheckpointHop=-1;
+  uint32_t hopCheckpointEntity=0,hopCheckpointGeneration=0;
+  CEntity* hopCheckpointReference=NULL;
+  bool currentNavTravel=false; // Active edge, not arrival connector or intentional recovery.
   double currentNavTime=-1;
   int currentNavGoal=-1; // Fresh navigator context; an anchor/old hop alone is not a current point.
   int goal=-1,anchor=-1,hop=-1,spawnTick=0,scanTick=0,itemScanAfter=0,avoidNode=-1,heldNode=-1;
@@ -87,7 +95,8 @@ struct SSupplyState {
   void ClearRejections(){for(auto& r:rejected)r=Rejection();}
   void ClearReacquireScan(){std::fill(reacquireTried,reacquireTried+sizeof(reacquireTried),0);reacquireScanTime=-1;}
   void ClearAvoidance(){avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
-  void ClearGoal(){currentNavTime=-1;currentNavGoal=-1;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
+  void ClearHopCheckpoint(){hopCheckpointLast=hopCheckpointSince=-1;hopCheckpointGoal=hopCheckpointSource=hopCheckpointHop=-1;hopCheckpointEntity=hopCheckpointGeneration=0;hopCheckpointReference=NULL;}
+  void ClearGoal(){acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ClearAirMovement(){airMovementTime=-1;airMovementEntity=airMovementGeneration=0;airMovementNode=-1;}
   void ClearGroundSweep(){groundEscapeTried=groundEscapeCursor=0;groundSweepReady=false;}
@@ -385,7 +394,7 @@ static void BotCecilChooseGoal(CPlayer *player,INDEX slot,INDEX tick,double enem
   SSupplyState& s=BotSupplyState(slot);const auto& graph=BotSupplyGraph();
   const FLOAT3D position=player->GetPlacement().pl_PositionVector;const double now=tick*_pTimer->TickQuantum;
   const int acquired=BotSupplyNearest(player,position,TRUE);
-  if(acquired>=0)s.anchor=acquired;
+  if(acquired>=0){s.anchor=acquired;s.acquiredAnchor=acquired;s.acquiredAnchorTime=now;}
   // Acquisition nodes are hints, not a requirement to fly through a valid edge.
   // Map/death/rejoin resets and goal identity invalidate this navigator context.
   else if(!s.navigator.HasCommittedEdge(s.goal))s.anchor=-1;
@@ -821,11 +830,11 @@ static bool BotCecilGroundedReplan(CPlayer* player,SSupplyState& s,const botcore
      !std::isfinite(s.goals.Distance(s.goal)))return false;
   BotLog("[CecilGroundReplan] local=%d tick=%d entity=%lu reason=landed_below_committed_edge source=%d hop=%d anchor=%d source_height=%.6f hop_height=%.6f goal=%d goal_entity=%lu\n",
     slot,tick,(unsigned long)player->en_ulID,source,hop,candidate,sourceHeight,hopHeight,s.goal,(unsigned long)s.goalEntity);
-  s.navigator.Reset();s.hop=s.heldNode=-1;s.holdSince=-1;s.currentNavTime=-1;s.currentNavGoal=-1;
+  s.navigator.Reset();s.hop=s.heldNode=-1;s.holdSince=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;
   return true;
 }
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
-  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.currentNavTime=-1;s.currentNavGoal=-1;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;result.useControl=tick<=s.useReleaseTick;
+  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;result.useControl=tick<=s.useReleaseTick;
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
   if(!alive){if(s.playable){BotCecilGoalEnd(slot,tick,s,"death");++s.deaths;s.deadSince=now;
     BotLog("[CecilDeath] local=%d tick=%d entity=%lu generation=%lu deaths=%u\n",slot,tick,(unsigned long)s.entity,(unsigned long)s.generation,s.deaths);
@@ -909,7 +918,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
       slot,tick,(unsigned long)player->en_ulID,(unsigned long)(player->en_penReference?player->en_penReference->en_ulID:0),move.hop,(double)held.radius,(double)delta.Length(),s.goal,s.hop);
   }
   BotCecilRebudgetWeapon(player,s,move,input,slot,tick,now);
-  if(move.active||move.arrived){s.currentNavGoal=s.goal;s.currentNavTime=now;}
+  if(move.active||move.arrived){s.currentNavGoal=s.goal;s.currentNavTime=now;s.currentNavTravel=move.active&&!move.arrived&&!move.stuck;}
   if(!s.goalEntity&&!s.followEntity&&s.importantGoal&&(move.arrived||s.interactionPoint>=0)&&
      BotCecilImportant(player,s,slot,tick,now,in,result))return result;
   if(move.active&&!move.arrived){
@@ -1072,6 +1081,69 @@ static bool BotCecilClearMotion(CPlayer* player,double forward,double strafe,dou
   if(ray.cr_penHit){BotCecilRejectedProbe(probe,SCecilProbe::reasonWallHit,player,&ray,&from,&to);return false;}
   return !requireFloor||BotCecilFloor(player,forward,strafe,up,yaw,probe,allowCurrentContact);
 }
+// Original BotMovement.cpp129..224 reacquires its nearest point every five
+// seconds. Preserve long-edge commitment except on an accepted static-ground
+// edge with no meaningful best-distance gain. World wiggle is not hop progress.
+// This adapter checkpoint adds no cast, arrival, relocation or item-attempt time.
+static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,bool accepted,bool currentPoint){
+  const auto& graph=BotSupplyGraph();const int source=s.navigator.SourceSlot(s.goal),hop=s.hop;
+  bool eligible=accepted&&currentPoint&&s.currentNavTravel&&s.playable&&source>=0&&hop>=0&&source!=hop&&
+    (size_t)source<graph.points.size()&&(size_t)hop<graph.points.size()&&
+    graph.points.size()<=botcore::CecilNavGraph::kMaxPoints&&s.blocked.size()==graph.points.size()&&
+    !s.blocked[source]&&!s.blocked[hop]&&!s.importantGoal&&!s.followEntity&&s.interactionPoint<0&&
+    (s.useReleaseTick<0||now>s.useReleaseTick*_pTimer->TickQuantum)&&
+    player->GetHealth()>0&&player->m_penWeapons&&player->GetWorld()&&!BotCecilLiquid(player)&&
+    (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH);
+  CEntity* ref=player->en_penReference;
+  eligible=eligible&&ref&&!(ref->GetFlags()&ENF_DELETED)&&ref->GetRenderType()==CEntity::RT_BRUSH&&
+    !(ref->GetPhysicsFlags()&EPF_MOVABLE)&&ref->en_pwoWorld==player->GetWorld()&&
+    BotCecilIsClass(ref,"WorldBase","World Base");
+  double distance2=0,vertical=0,gravity2=0;
+  const FLOAT3D position=player->GetPlacement().pl_PositionVector;
+  if(eligible){
+    const auto& a=graph.points[source];const auto& b=graph.points[hop];
+    const uint32_t special=botcore::CECIL_UNREACHABLE|botcore::CECIL_TELEPORT|botcore::CECIL_IMPORTANT|botcore::CECIL_JUMP;
+    eligible=!((a.flags|b.flags)&special)&&a.important_entity<0&&b.important_entity<0&&
+      a.lock_entity<0&&b.lock_entity<0&&
+      std::find(a.links.begin(),a.links.end(),hop)!=a.links.end();
+    for(int i=1;i<=3;++i){
+      const double d=(i==1?b.x:(i==2?b.y:b.z))-position(i),g=player->en_vGravityDir(i);
+      eligible=eligible&&std::isfinite(d)&&std::isfinite(g)&&std::isfinite(player->en_vCurrentTranslationAbsolute(i));
+      distance2+=d*d;vertical+=d*g;gravity2+=g*g;
+    }
+  }
+  // The original vertical stay is intentional, not an ineffective approach.
+  eligible=eligible&&std::isfinite(distance2)&&std::isfinite(vertical)&&std::isfinite(gravity2)&&
+    std::fabs(gravity2-1)<1e-3&&!(distance2-vertical*vertical<1&&std::fabs(vertical)>4);
+  if(!eligible){s.ClearHopCheckpoint();if(!accepted){s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;}return false;}
+  const double distance=std::sqrt(distance2);
+  bool continuous=s.hopCheckpointLast>=0&&now>=s.hopCheckpointLast&&now-s.hopCheckpointLast<=.25&&
+    s.hopCheckpointGoal==s.goal&&s.hopCheckpointSource==source&&s.hopCheckpointHop==hop&&
+    s.hopCheckpointEntity==player->en_ulID&&s.hopCheckpointGeneration==s.generation&&s.hopCheckpointReference==ref;
+  for(int i=0;i<3;++i)continuous=continuous&&s.hopCheckpointGravity[i]==player->en_vGravityDir(i+1);
+  if(!continuous){
+    s.hopCheckpointSince=now;s.hopCheckpointBest=s.hopCheckpointGainBase=distance;
+    s.hopCheckpointGoal=s.goal;s.hopCheckpointSource=source;s.hopCheckpointHop=hop;
+    s.hopCheckpointEntity=player->en_ulID;s.hopCheckpointGeneration=s.generation;s.hopCheckpointReference=ref;
+    for(int i=0;i<3;++i)s.hopCheckpointGravity[i]=player->en_vGravityDir(i+1);
+  }
+  s.hopCheckpointLast=now;s.hopCheckpointBest=std::fmin(s.hopCheckpointBest,distance);
+  if(s.hopCheckpointGainBase-s.hopCheckpointBest>=.75){s.hopCheckpointSince=now;s.hopCheckpointGainBase=s.hopCheckpointBest;}
+  if(now-s.hopCheckpointSince+1e-9<5)return false;
+  // Wait for same-tick successful ordinary nearest LOS. Never force an extra
+  // scan or treat a cached, merely nearby anchor as a fresh acquisition.
+  const int anchor=s.anchor;
+  if(s.acquiredAnchor!=anchor||std::fabs(now-s.acquiredAnchorTime)>1e-6)return false;
+  if(anchor<0||(size_t)anchor>=graph.points.size()||s.blocked[anchor])return false;
+  const auto& a=graph.points[anchor];const FLOAT3D delta(a.x-position(1),a.y-position(2),a.z-position(3));
+  const double height=BotCecilHeight(player,delta),d2=double(delta(1))*delta(1)+double(delta(2))*delta(2)+double(delta(3))*delta(3);
+  if(!std::isfinite(height)||!std::isfinite(d2)||std::fabs(height)>3||d2-height*height>144)return false;
+  BotLog("[CecilHopCheckpoint] entity=%lu generation=%lu time=%.3f source=%d hop=%d goal=%d anchor=%d since=%.3f best_distance=%.6f current_distance=%.6f reset_reason=no_hop_progress\n",
+    (unsigned long)player->en_ulID,(unsigned long)s.generation,now,source,hop,s.goal,anchor,
+    s.hopCheckpointSince,s.hopCheckpointBest,distance);
+  s.navigator.Reset();s.hop=s.heldNode=-1;s.holdSince=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;
+  s.ClearEscape();s.ClearHopCheckpoint();return true;
+}
 // 1 original, 2 verified escape, 0 neutral. Hold world direction for 0.6s so a
 // one-tick reverse does not immediately undo itself. No progress earns a cooldown.
 template<class T>
@@ -1083,7 +1155,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
      !std::isfinite(forward)||!std::isfinite(strafe)||!std::isfinite(up)||!std::isfinite(finalBodyYaw)||
      std::fabs(forward)>1.000001||std::fabs(strafe)>1.000001||std::fabs(up)>1.000001){
     BotCecilRejectedProbe(&state.probe,SCecilProbe::reasonInvalid,player);
-    forward=strafe=up=0;state.ClearEscape();state.ClearAirMovement();state.ClearGroundProgress();return 0;
+    forward=strafe=up=0;state.ClearEscape();state.ClearAirMovement();state.ClearGroundProgress();state.ClearHopCheckpoint();state.acquiredAnchorTime=-1;state.acquiredAnchor=-1;return 0;
   }
   // Cecil BotMovement.cpp517: pits are opt-in and checked only without a
   // current path point. Arrival still owns that point for the final item connector.
@@ -1110,7 +1182,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
       current=std::isfinite(point.radius)&&point.radius>0&&std::isfinite(d)&&d<=1024&&
         std::fabs(BotCecilHeight(player,delta))<=8;
     }
-    state.ClearGroundProgress();state.ClearEscape(); // Accepted air owns no legacy escape direction.
+    state.ClearGroundProgress();state.ClearEscape();state.ClearHopCheckpoint(); // Accepted air owns no legacy escape direction.
     if(!current){forward=strafe=up=0;state.ClearAirMovement();return 0;}
     double f=std::fmax(-.3,std::fmin(.3,(double)forward)),st=BotCecilSettings().bStrafe?
       std::fmax(-std::fmin(.3,maxStrafe),std::fmin(std::fmin(.3,maxStrafe),(double)strafe)):0;
@@ -1126,6 +1198,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   }
   const bool currentPoint=std::fabs(now-state.currentNavTime)<=1e-6&&state.currentNavGoal==state.goal&&state.goal>=0&&(size_t)state.goal<nodes&&
     state.hop>=0&&(size_t)state.hop<nodes&&state.blocked.size()==nodes&&!state.blocked[state.hop];
+  if(BotCecilHopCheckpoint(player,state,now,useReacquire,currentPoint)){forward=strafe=up=0;return 0;}
   // The planner can propose recovery while visible combat owns the final input.
   // Recovery-only limits belong to accepted movement, not the retained proposal.
   const bool recoveryContext=state.anchor<0||(state.anchor<(int)nodes&&state.goal<0);

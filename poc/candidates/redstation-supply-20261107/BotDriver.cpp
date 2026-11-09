@@ -570,6 +570,141 @@ void BotDriver_Init(void)
 /* Per-local-player bot state                                                 */
 /* ------------------------------------------------------------------------ */
 
+// BEGIN CECIL WEAPON OBSERVER
+// Read-only observation after SetAction, under the existing network/world lock.
+// Retail107: current/wanted are NOT native BringUp-completion markers. Earlier
+// policy opportunity/dwell remains unobserved; only actual final choice is timed.
+struct SWeaponObservationModel {
+  INDEX anim=0; double start=0; ULONG flags=0; bool valid=false;
+};
+struct SWeaponObservationFrame {
+  size_t source=0,world=0,weapon=0; ULONG entity=0,generation=0,weaponEntity=0;
+  INDEX tick=0,desired=0,current=0,wanted=0,previous=0,change=0,anim=0,count=0;
+  ULONG owned=0,lastButtons=0,finalButtons=0,pulse=0; double time=0,timer=0,cd=0;
+  long stack[16]={}; SWeaponObservationModel model[2]; bool valid=false,phase=false,ready=false;
+};
+struct SWeaponObservation {
+  SWeaponObservationFrame last; bool known=false,active=false,sawPhase=false,sawPulse=false,sawWanted=false,left=false,censor=false;
+  unsigned long long sequence=0,epoch=0,emittedEpoch=0; unsigned dropped=0,rateCount=0; INDEX emitted=-1;
+  double rateSecond=-1;size_t rateWorld=0;
+};
+static SWeaponObservation _weaponObservations[4];
+static void BotWeaponObserverReset(INDEX slot) {
+  if(slot<0||slot>=4)return;
+  auto& s=_weaponObservations[slot];s.censor=s.censor||s.active;
+  if(s.known&&s.epoch!=(std::numeric_limits<unsigned long long>::max)())++s.epoch;
+  s.rateSecond=-1;s.rateCount=0;s.rateWorld=0;
+  s.known=false;s.active=false;s.sawPhase=false;
+}
+static SWeaponObservationModel BotWeaponObserverModel(const CModelObject& m) {
+  SWeaponObservationModel out;out.anim=m.ao_iCurrentAnim;out.start=m.ao_tmAnimStart;out.flags=m.ao_ulFlags;
+  out.valid=m.ao_AnimData&&m.ao_AnimData->ad_Anims&&out.anim>=0&&out.anim<m.ao_AnimData->ad_NumberOfAnims&&std::isfinite(out.start);
+  return out;
+}
+static bool BotWeaponObserverModelChanged(const SWeaponObservationModel& a,const SWeaponObservationModel& b) {
+  return a.anim!=b.anim||a.start!=b.start||a.flags!=b.flags||a.valid!=b.valid;
+}
+static void BotWeaponObserverAfterAction(CPlayer* player,CPlayerSource* source,INDEX slot,INDEX tick,
+    ULONG generation,INDEX desired,ULONG finalButtons,ULONG pulse,bool enabled,double cd) {
+  if(slot<0||slot>=4)return;
+  auto& s=_weaponObservations[slot];SWeaponObservationFrame f;
+  f.tick=tick;f.desired=desired;f.generation=generation;f.finalButtons=finalButtons&(31UL<<14);
+  f.pulse=pulse&(31UL<<14);f.cd=cd;f.source=(size_t)source;
+  CPlayerWeapons* w=NULL;
+  if(enabled&&source&&player&&_pNetwork&&std::isfinite(player->GetHealth())&&player->GetHealth()>0&&
+     !(player->GetFlags()&ENF_DELETED)&&player->GetWorld()&&player->m_penWeapons!=NULL){
+    w=player->GetPlayerWeapons();
+    if(w&&!(w->GetFlags()&ENF_DELETED)&&w->GetWorld()==player->GetWorld()&&(CEntity*)w->m_penPlayer==player){
+      f.world=(size_t)player->GetWorld();f.weapon=(size_t)w;f.entity=player->en_ulID;f.weaponEntity=w->en_ulID;
+      f.current=w->m_iCurrentWeapon;f.wanted=w->m_iWantedWeapon;f.previous=w->m_iPreviousWeapon;
+      f.owned=(ULONG)w->m_iAvailableWeapons;f.change=w->m_bChangeWeapon;f.anim=w->m_iAnim;
+      f.lastButtons=player->m_ulLastButtons;f.time=_pNetwork->GetGameTime();f.timer=w->en_timeTimer;
+      const auto& stack=w->en_stslStateStack;f.count=stack.sa_UsedCount;
+      f.valid=std::isfinite(f.time)&&std::isfinite(f.timer)&&std::isfinite(cd)&&cd>=0&&
+        f.current>=0&&f.current<=14&&f.wanted>=0&&f.wanted<=14&&desired>=0&&desired<=14&&
+        f.count>=0&&f.count<=16&&stack.sa_Count>=f.count&&stack.sa_Count<=4096&&
+        (f.count==0||stack.sa_Array!=NULL);
+      if(f.valid){
+        for(INDEX n=0;n<f.count;++n){f.stack[n]=stack.sa_Array[n];
+          f.phase=f.phase||(f.stack[n]>=0x01920007L&&f.stack[n]<=0x0192001cL);
+          f.ready=f.ready||f.stack[n]==0x019200c9L||(f.stack[n]>=0x0192001dL&&f.stack[n]<=0x0192002dL);}
+        f.model[0]=BotWeaponObserverModel(w->m_moWeapon);f.model[1]=BotWeaponObserverModel(w->m_moWeaponSecond);
+      }
+    }
+  }
+  const auto& old=s.last;
+  const bool continuous=s.known&&old.valid&&f.valid&&f.tick==old.tick+1&&f.source==old.source&&
+    f.world==old.world&&f.weapon==old.weapon&&f.weaponEntity==old.weaponEntity&&f.entity==old.entity&&f.generation==old.generation&&
+    f.time>=old.time&&f.time-old.time<=.25&&f.cd==old.cd;
+  bool censored=s.censor||(s.active&&!continuous);
+  unsigned long long censorChain=censored?s.sequence:0;s.censor=false;
+  if(!continuous){s.active=false;s.sawPhase=false;s.sawPulse=false;s.sawWanted=false;s.left=false;}
+  const bool choice=f.valid&&(!continuous||f.desired!=old.desired);
+  if(continuous&&choice&&s.active){censored=true;censorChain=s.sequence;s.active=false;s.sawPhase=false;}
+  const bool wasActive=s.active;
+  if(f.valid&&f.desired>0&&choice&&
+      (f.current!=f.desired||f.wanted!=f.desired||f.pulse)){
+    if(s.sequence!=(std::numeric_limits<unsigned long long>::max)())++s.sequence;
+    else censored=true;
+    s.active=true;s.sawPhase=false;s.sawPulse=false;s.sawWanted=false;s.left=f.phase||f.wanted==f.desired;
+  }
+  if(s.active&&f.pulse&&f.finalButtons==f.pulse&&
+      f.pulse==((ULONG)botcore::CombatWeaponGroup(f.desired)<<14))s.sawPulse=true;
+  if(s.active&&s.sawWanted&&f.wanted!=f.desired){censored=true;censorChain=s.sequence;s.left=true;s.active=false;}
+  if(s.active&&f.wanted==f.desired)s.sawWanted=true;
+  if(s.active&&f.phase&&f.wanted==f.desired)s.sawPhase=true;
+  const bool modelGap=s.active&&(!f.model[0].valid||
+    ((f.current==3||f.previous==3)&&!f.model[1].valid));
+  if(modelGap&&!s.left){censored=true;censorChain=s.sequence;s.left=true;}
+  // Original107 registry: Idle c9 or Fire/continuations1d..2d corroborate
+  // exit; absence from the switch family alone (empty/unknown stack) is OPEN.
+  const bool completed=s.active&&s.sawPulse&&s.sawPhase&&!s.left&&!f.phase&&f.ready&&f.valid&&
+    f.current==f.desired&&f.wanted==f.desired;
+  const bool unobservedExit=s.active&&(!s.sawPhase||!s.sawPulse||s.left||!f.ready)&&!f.phase&&f.valid&&
+    f.current==f.desired&&f.wanted==f.desired;
+  if(unobservedExit){censored=true;censorChain=s.sequence;}
+  bool nativeChanged=f.valid!=old.valid||(f.valid&&(!continuous||f.current!=old.current||f.wanted!=old.wanted||f.owned!=old.owned));
+  bool phaseChanged=!continuous||f.count!=old.count||f.phase!=old.phase;
+  if(continuous)for(INDEX n=0;n<f.count;++n)phaseChanged=phaseChanged||f.stack[n]!=old.stack[n];
+  const bool observing=s.active||wasActive||completed;
+  const bool animChanged=BotWeaponObserverModelChanged(f.model[0],old.model[0])||
+    BotWeaponObserverModelChanged(f.model[1],old.model[1]);
+  const bool event=!s.known||choice||f.pulse||nativeChanged||censored||completed||s.dropped||
+    (observing&&(f.phase||old.phase)&&(phaseChanged||animChanged));
+  const double second=std::floor(f.valid?f.time:(s.known?old.time:s.rateSecond));
+  if((f.valid&&f.world!=s.rateWorld)||second>s.rateSecond){s.rateSecond=second;s.rateWorld=f.world;s.rateCount=0;}
+  if(event&&((s.emitted==tick&&s.emittedEpoch==s.epoch)||s.rateCount>=40)){
+    if(s.dropped!=(std::numeric_limits<unsigned>::max)())++s.dropped;
+    s.active=false;s.sawPhase=false;s.censor=true;
+  }else if(event){
+    double lengths[2]={-1,-1};bool called[2]={false,false};
+    if(w&&f.valid&&(observing||!s.known)){
+      if(f.model[0].valid){called[0]=true;lengths[0]=w->m_moWeapon.GetAnimLength(f.model[0].anim);}
+      if(f.model[1].valid){called[1]=true;lengths[1]=w->m_moWeaponSecond.GetAnimLength(f.model[1].anim);}
+    }
+    bool lengthGap=false;for(int n=0;n<2;++n)lengthGap=lengthGap||
+      (called[n]&&(!std::isfinite(lengths[n])||lengths[n]<0));
+    if(lengthGap){censored=true;censorChain=s.sequence;s.left=true;}
+    char states[16*9+1]={};size_t used=0;
+    if(f.valid)for(INDEX n=0;n<f.count;++n){
+      const int written=std::snprintf(states+used,sizeof(states)-used,"%08lx%s",(unsigned long)f.stack[n],n+1<f.count?",":"");
+      if(written<0||(size_t)written>=sizeof(states)-used){censored=true;break;}used+=(size_t)written;
+    }
+    BotLog("[CecilWeaponObserve] local=%d tick=%d entity=%lu generation=%lu weapon_entity=%lu native_time=%.6f cd=%.3f desired=%d pulse=%lu final=%lu last=%lu current=%d wanted=%d previous=%d owned=%lu change=%d chain=%llu observer_epoch=%llu active=%d saw_pulse=%d saw_phase=%d censor_chain=%llu left_censored=%d completed=%d censored=%d valid=%d dropped=%u count=%d states=%s timer=%.6f native_anim=%d model_valid1=%d anim1=%d start1=%.6f flags1=%lu length1=%.6f model_valid2=%d anim2=%d start2=%.6f flags2=%lu length2=%.6f\n",
+      slot,tick,(unsigned long)f.entity,(unsigned long)f.generation,(unsigned long)f.weaponEntity,f.time,cd,
+      desired,(unsigned long)f.pulse,(unsigned long)f.finalButtons,(unsigned long)f.lastButtons,f.current,f.wanted,
+      f.previous,(unsigned long)f.owned,f.change,s.sequence,s.epoch,(int)s.active,(int)s.sawPulse,(int)s.sawPhase,censorChain,(int)s.left,
+      (int)(completed&&!censored&&!s.dropped),(int)censored,(int)f.valid,s.dropped,f.count,states,f.timer,f.anim,
+      (int)f.model[0].valid,f.model[0].anim,f.model[0].start,(unsigned long)f.model[0].flags,lengths[0],
+      (int)f.model[1].valid,f.model[1].anim,f.model[1].start,(unsigned long)f.model[1].flags,lengths[1]);
+    s.emitted=tick;s.emittedEpoch=s.epoch;++s.rateCount;s.dropped=0;
+  }
+  if(completed||unobservedExit)s.active=false;
+  s.last=f;s.known=true;
+}
+// END CECIL WEAPON OBSERVER
+
+
 struct SBotState {
   CPlayerSource *bs_ppls;     // player source this state belongs to
   ANGLE  bs_aHeading;         // accumulated heading (relative to spawn direction)
@@ -634,6 +769,7 @@ static void BotHumanAttach(INDEX iLP)
 static void BotResetNavigation(void)
 {
   for (INDEX slot=0; slot<4; ++slot) {
+    BotWeaponObserverReset(slot);
     BotSupplyReset(slot);
     _absBots[slot].bs_navigation.Reset();
     _absBots[slot].bs_navEntity=0;
@@ -886,12 +1022,14 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
 
     // if this local player exists
     if (ppls==NULL) {
+      BotWeaponObserverReset(iLP);
       BotSupplyReset(iLP);bs.bs_supplyEntity=0;
       bs.bs_navigation.Reset(); bs.bs_navEntity=0;bs.bs_ppls=NULL;bs.bs_deadSince=-1;
       continue;
     }
     CPlayer *localInput = (CPlayer *)CEntity::GetPlayerEntity(ppls->pls_Index);
     if (localInput==NULL) {
+      BotWeaponObserverReset(iLP);
       BotTelemetry_NoEntity();
       BotSupplyReset(iLP);bs.bs_supplyEntity=0;
       bs.bs_navigation.Reset(); bs.bs_navEntity=0;
@@ -1354,6 +1492,8 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     }
     // 4) hand it to the network player source (stamps pa_llCreated internally)
     ppls->SetAction(pa);
+    BotWeaponObserverAfterAction(player,ppls,iLP,bs.bs_iTick,BotSupplyState(iLP).generation,
+      combatWeapon,pa.pa_ulButtons,combatSelect,automatic&&bot_bSupplyNavigation,BotCecilSettings().fWeaponCD);
     // Count emitted combat fire input independently of sampled status logs.
     if (bFire && automatic && !respawnInput) ++bs.bs_ulCombatFireActions;
     BotTelemetry_Action(iLP);
