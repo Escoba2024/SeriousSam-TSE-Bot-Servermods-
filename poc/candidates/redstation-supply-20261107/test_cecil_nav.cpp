@@ -130,9 +130,32 @@ static void all_pairs(const CecilNavGraph& g,int lock) {
   }
   std::printf("ALL_PAIRS nodes=%zu lock=%d pairs=%zu reachable_including_self=%zu\n",n,lock,n*n,reachable);
 }
+template<class T>auto avoiding(const T& s,const CecilNavGraph& g,int goal,int from,int to,const unsigned char* b,size_t n,int)
+ ->decltype(s.PathAvoidsEdge(g,goal,from,to,b,n)){return s.PathAvoidsEdge(g,goal,from,to,b,n);}
+template<class T>bool avoiding(const T&,const CecilNavGraph&,int,int,int,const unsigned char*,size_t,long){return false;}
+template<class T>auto raw_path(const T& g,const int* p,size_t n,int start,int goal,int from,int to,int)
+ ->decltype(CecilNavPathAvoidsEdge(g,p,n,start,goal,from,to,nullptr,0)){
+ return CecilNavPathAvoidsEdge(g,p,n,start,goal,from,to,nullptr,0);
+}
+template<class T>bool raw_path(const T&,const int*,size_t,int,int,int,int,long){return false;}
+static void bounded_path_tests(){
+ auto g=chain(5);g.points[0].links={1};g.points[1].links={4};g.points[2].links={3};g.points[3].links={4};
+ CecilNavSearch s;s.Prepare(5);s.Run(g,2);unsigned char b[5]={};
+ count_allocations=true;allocations=0;const bool bypass=avoiding(s,g,4,0,1,b,5,0);count_allocations=false;
+ check(bypass&&allocations==0,"prepared real parent suffix reaches actual start and avoids failed edge without allocation");
+ s.Run(g,0);check(!avoiding(s,g,4,0,1,b,5,0),"different candidate whose parent suffix reuses failed edge is rejected");
+ s.Run(g,2);b[3]=1;check(!avoiding(s,g,4,0,1,b,5,0),"current intermediate lock invalidates cached suffix");b[3]=0;
+ check(!avoiding(s,g,0,0,1,b,5,0)&&!avoiding(s,g,6,0,1,b,5,0)&&!avoiding(s,g,4,0,1,b,4,0),
+  "unreachable out of range or inconsistent blocked snapshot is not a valid bypass");
+ g.points[3].links.clear();check(!avoiding(s,g,4,0,1,b,5,0),"cached parent must still be an actual original directed edge");
+ auto malformed=chain(3);malformed.points[1].links={2};malformed.points[2].links={1};
+ const int cycle[3]={-1,2,1},oob[3]={-1,99,1},noStart[3]={-1,-1,1};
+ check(!raw_path(malformed,cycle,3,0,2,0,1,0)&&!raw_path(malformed,oob,3,0,2,0,1,0)&&
+  !raw_path(malformed,noStart,3,0,2,0,1,0),"cycle OOB and disconnected parent chains cannot masquerade as failed-edge absence");
+}
 int main(int argc,char** argv) {
   loader_tests();if(argc==2&&std::strcmp(argv[1],"--loader")==0)return failures?1:0;
-  search_tests();
+  search_tests();bounded_path_tests();
   for(int i=1;i<argc;++i) {
     std::ifstream f(argv[i],std::ios::binary);Bytes raw((std::istreambuf_iterator<char>(f)),{});
     CecilNavGraph g;std::string error;const bool ok=g.Load(raw.data(),raw.size(),&error);

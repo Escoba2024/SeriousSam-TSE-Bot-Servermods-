@@ -46,15 +46,26 @@ struct SSupplyState {
   double groundSweepForward[3]={0,0,0},groundSweepRight[3]={0,0,0};
   bool groundStalled=false,groundEscapeActive=false;
   botcore::CecilNavSearch goals;
+  botcore::CecilNavSearch patrolSearch; // Prepared separately: ordinary goal scans overwrite goals.
+  CWorld* patrolWorld=NULL;
+  long patrolMap=-1;
+  uint32_t patrolEntity=0,patrolGeneration=0;
+  int patrolGoal=-1,patrolSource=-1,patrolHop=-1,patrolHint=-1;
+  double patrolLast=-1,patrolBest=0,patrolGainBase=0,patrolGravity[3]={0,0,0};
+  double patrolSince=-1,patrolProposalTime=-1;
+  unsigned patrolStrikes=0;bool patrolAlternate=false;
+  uint64_t patrolLocks=0;
+  unsigned char patrolTried[(botcore::CecilNavGraph::kMaxPoints+7)/8]={0};
   std::vector<unsigned char> blocked,worldLock; // 0 open, 1 moved, 2 missing, 3 unseen.
   uint32_t entity=0,generation=0,rng=1,goalEntity=0,owned=0,followEntity=0,followGeneration=0;
-  // Original five-second path checkpoint, restricted to ineffective static-ground edges.
+  // Passive edge progress survives ground-reference flicker. A checkpoint
+  // still needs a currently authorized static-ground acquisition below.
   double acquiredAnchorTime=-1;int acquiredAnchor=-1; // Same-tick ordinary nearest LOS, not support.
   double hopCheckpointLast=-1,hopCheckpointSince=-1,hopCheckpointBest=0,hopCheckpointGainBase=0;
   double hopCheckpointGravity[3]={0,0,0};
   int hopCheckpointGoal=-1,hopCheckpointSource=-1,hopCheckpointHop=-1;
   uint32_t hopCheckpointEntity=0,hopCheckpointGeneration=0;
-  CEntity* hopCheckpointReference=NULL;
+  CWorld* hopCheckpointWorld=NULL;
   bool currentNavTravel=false; // Active edge, not arrival connector or intentional recovery.
   double currentNavTime=-1;
   int currentNavGoal=-1; // Fresh navigator context; an anchor/old hop alone is not a current point.
@@ -95,8 +106,11 @@ struct SSupplyState {
   void ClearRejections(){for(auto& r:rejected)r=Rejection();}
   void ClearReacquireScan(){std::fill(reacquireTried,reacquireTried+sizeof(reacquireTried),0);reacquireScanTime=-1;}
   void ClearAvoidance(){avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
-  void ClearHopCheckpoint(){hopCheckpointLast=hopCheckpointSince=-1;hopCheckpointGoal=hopCheckpointSource=hopCheckpointHop=-1;hopCheckpointEntity=hopCheckpointGeneration=0;hopCheckpointReference=NULL;}
-  void ClearGoal(){acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
+  void ClearHopCheckpoint(){hopCheckpointLast=hopCheckpointSince=-1;hopCheckpointGoal=hopCheckpointSource=hopCheckpointHop=-1;hopCheckpointEntity=hopCheckpointGeneration=0;hopCheckpointWorld=NULL;}
+  void ClearPatrolEpisode(){patrolWorld=NULL;patrolMap=-1;patrolEntity=patrolGeneration=0;patrolGoal=patrolSource=patrolHop=patrolHint=-1;
+    patrolLast=patrolSince=patrolProposalTime=-1;patrolStrikes=0;patrolAlternate=false;patrolLocks=0;
+    std::fill(patrolTried,patrolTried+sizeof(patrolTried),0);}
+  void ClearGoal(){acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ClearAirMovement(){airMovementTime=-1;airMovementEntity=airMovementGeneration=0;airMovementNode=-1;}
   void ClearGroundSweep(){groundEscapeTried=groundEscapeCursor=0;groundSweepReady=false;}
@@ -163,7 +177,7 @@ static void BotSupplyUpdateNavigation(CGame *game){
   }
   SSupplyState prepared[4];
   for(int i=0;i<4;++i){
-    prepared[i].navigator.Prepare(loaded.points.size());prepared[i].goals.Prepare(loaded.points.size());
+    prepared[i].navigator.Prepare(loaded.points.size());prepared[i].goals.Prepare(loaded.points.size());prepared[i].patrolSearch.Prepare(loaded.points.size());
     prepared[i].blocked.resize(loaded.points.size());prepared[i].worldLock.assign(loaded.points.size(),3);prepared[i].generation=(uint32_t)serial+1;
     prepared[i].rng=(uint32_t)bot_iProfileSeed^(0x9e3779b9u*(1+i+bot_iRosterOffset));
     if(!prepared[i].rng)prepared[i].rng=1;
@@ -249,16 +263,18 @@ static bool BotCecilPhysicalCast(CCastRay& ray,CWorld* world){
   ray.cr_vHit=ray.cr_vOrigin+(ray.cr_vTarget-ray.cr_vOrigin).Normalize()*ray.cr_fHitDistance;
   return true;
 }
-static BOOL BotSupplyClear(CPlayer *player,const FLOAT3D &from,const FLOAT3D &to,CEntity *item=NULL){
+static BOOL BotSupplyClear(CPlayer *player,const FLOAT3D &from,const FLOAT3D &to,CEntity *item=NULL,bool* validProbe=NULL){
+  if(validProbe)*validProbe=false;
   double length=0;
   if(!player||!player->GetWorld()||!BotCecilRayLength(from,to,length))return FALSE;
   // Reserve the final wall and floor probes for each action.
   if(_botRayBudget<=2)return FALSE;
   --_botRayBudget;
-  if(length==0)return TRUE;
+  if(length==0){if(validProbe)*validProbe=true;return TRUE;}
   CCastRay ray(player,from,to);ray.cr_bAllowOverHit=FALSE;ray.cr_bPhysical=TRUE;
   ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;
   if(!BotCecilPhysicalCast(ray,player->GetWorld()))return FALSE;
+  if(validProbe)*validProbe=true;
   return ray.cr_penHit==NULL||ray.cr_penHit==item;
 }
 static int BotSupplyNearest(CPlayer *player,const FLOAT3D &position,BOOL fromPlayer,CEntity *item=NULL){
@@ -397,7 +413,7 @@ static void BotCecilChooseGoal(CPlayer *player,INDEX slot,INDEX tick,double enem
   if(acquired>=0){s.anchor=acquired;s.acquiredAnchor=acquired;s.acquiredAnchorTime=now;}
   // Acquisition nodes are hints, not a requirement to fly through a valid edge.
   // Map/death/rejoin resets and goal identity invalidate this navigator context.
-  else if(!s.navigator.HasCommittedEdge(s.goal))s.anchor=-1;
+  else if(!s.patrolAlternate&&!s.navigator.HasCommittedEdge(s.goal))s.anchor=-1;
   if(s.anchor<0)return;
   BotCecilLocks(player,s,now);
   s.goals.Run(graph,s.anchor,s.blocked.data(),s.blocked.size());
@@ -833,8 +849,140 @@ static bool BotCecilGroundedReplan(CPlayer* player,SSupplyState& s,const botcore
   s.navigator.Reset();s.hop=s.heldNode=-1;s.holdSince=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;
   return true;
 }
+// Two accepted checkpoints can prove repeated same-source rebasing ineffective.
+// Observe the fixed failed hop across real source reapproach; this history is
+// never static-contact authority, a new anchor, or a renewed patrol deadline.
+static bool BotCecilPatrolContext(CPlayer* player,const SSupplyState& s,double now){
+  const auto& graph=BotSupplyGraph();
+  if(!BotCecilFrameReady(player)||!std::isfinite(now)||now<0||!s.playable||player->GetHealth()<=0||
+     !player->m_penWeapons||!player->GetWorld()||(player->GetFlags()&ENF_DELETED)||BotCecilLiquid(player)||
+     (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH)||s.goalEntity||s.followEntity||s.importantGoal||
+     s.interactionPoint>=0||(s.useReleaseTick>=0&&now<=s.useReleaseTick*_pTimer->TickQuantum)||
+     s.patrolGoal!=s.goal||s.patrolWorld!=player->GetWorld()||s.patrolEntity!=player->en_ulID||s.patrolGeneration!=s.generation||
+     s.patrolMap!=InterlockedCompareExchange(&_botSupplyMapSerial,0,0)||
+     s.patrolLast<0||now<s.patrolLast||now-s.patrolLast>.25||graph.points.empty()||graph.points.size()>botcore::CecilNavGraph::kMaxPoints||
+     s.blocked.size()!=graph.points.size()||s.goal<0||(size_t)s.goal>=graph.points.size()||s.patrolSource<0||s.patrolHop<0||
+     (size_t)s.patrolSource>=graph.points.size()||(size_t)s.patrolHop>=graph.points.size())return false;
+  const auto& a=graph.points[s.patrolSource];const auto& b=graph.points[s.patrolHop];
+  if(a.flags||b.flags||a.important_entity>=0||b.important_entity>=0||a.lock_entity>=0||b.lock_entity>=0||
+     s.blocked[s.patrolSource]||s.blocked[s.patrolHop]||
+     std::find(a.links.begin(),a.links.end(),s.patrolHop)==a.links.end())return false;
+  for(int i=1;i<=3;++i)if(!std::isfinite(player->en_vCurrentTranslationAbsolute(i))||
+    s.patrolGravity[i-1]!=player->en_vGravityDir(i))return false;
+  CEntity* ref=player->en_penReference;
+  return !ref||(!(ref->GetFlags()&ENF_DELETED)&&ref->en_pwoWorld==player->GetWorld()&&ref->GetRenderType()==CEntity::RT_BRUSH);
+}
+static bool BotCecilPatrolStatic(CPlayer* player){
+  CEntity* ref=player->en_penReference;
+  return ref&&!(ref->GetFlags()&ENF_DELETED)&&ref->GetRenderType()==CEntity::RT_BRUSH&&
+    !(ref->GetPhysicsFlags()&EPF_MOVABLE)&&ref->en_pwoWorld==player->GetWorld()&&BotCecilIsClass(ref,"WorldBase","World Base");
+}
+static bool BotCecilPatrolAtHop(CPlayer* player,const SSupplyState& s){
+  const auto& point=BotSupplyGraph().points[s.patrolHop];const auto& p=player->GetPlacement().pl_PositionVector;
+  const double radius=point.radius;if(!std::isfinite(radius)||radius<=0)return false;
+  double first=0,second=0;
+  for(int i=1;i<=3;++i){const double d=(i==1?point.x:(i==2?point.y:point.z))-p(i);
+    first+=d*d;const double shifted=d-player->en_vGravityDir(i)*radius*.5;second+=shifted*shifted;}
+  return first<radius*radius||second<radius*radius; // Unchanged CecilNavigator::Reached geometry.
+}
+static void BotCecilPatrolObserve(CPlayer* player,SSupplyState& s,double now,bool accepted){
+  if(s.patrolSource<0)return;
+  const int source=s.navigator.SourceSlot(s.goal);
+  // SourceSlot deliberately reports only a committed edge. After a checkpoint
+  // the navigator first approaches the original source (source_ == hop_).
+  const bool sourceApproach=s.hop==s.patrolSource&&s.anchor==s.patrolSource&&
+    s.currentNavGoal==s.goal&&std::fabs(now-s.currentNavTime)<=1e-6;
+  if(!accepted||!BotCecilPatrolContext(player,s,now)||(!s.patrolAlternate&&
+     (!s.currentNavTravel||(source!=s.patrolSource&&!sourceApproach)||
+      (s.hop!=s.patrolSource&&s.hop!=s.patrolHop)))){s.ClearPatrolEpisode();return;}
+  if(BotCecilPatrolAtHop(player,s)){
+    if(s.patrolAlternate)BotLog("[CecilPatrolRecovery] entity=%lu generation=%lu time=%.3f action=original_hop_arrival source=%d hop=%d goal=%d\n",
+      (unsigned long)player->en_ulID,(unsigned long)s.generation,now,s.patrolSource,s.patrolHop,s.goal);
+    s.ClearPatrolEpisode();return;
+  }
+  const auto& point=BotSupplyGraph().points[s.patrolHop];const auto& p=player->GetPlacement().pl_PositionVector;
+  const double dx=point.x-p(1),dy=point.y-p(2),dz=point.z-p(3),distance=std::sqrt(dx*dx+dy*dy+dz*dz);
+  const double vertical=dx*player->en_vGravityDir(1)+dy*player->en_vGravityDir(2)+dz*player->en_vGravityDir(3);
+  if(!std::isfinite(distance)||(distance*distance-vertical*vertical<1&&std::fabs(vertical)>4)){s.ClearPatrolEpisode();return;}
+  s.patrolLast=now;s.patrolBest=std::fmin(s.patrolBest,distance);
+  if(s.patrolGainBase-s.patrolBest>=.75){s.patrolGainBase=s.patrolBest;s.patrolStrikes=0;}
+}
+static void BotCecilPatrolStrike(CPlayer* player,SSupplyState& s,double now,int source,int hop,double best){
+  const auto& a=BotSupplyGraph().points[source];const auto& b=BotSupplyGraph().points[hop];
+  if(s.goalEntity||s.followEntity||s.importantGoal||a.flags||b.flags||a.important_entity>=0||b.important_entity>=0||
+     a.lock_entity>=0||b.lock_entity>=0)return;
+  if(s.patrolSource!=source||s.patrolHop!=hop||!BotCecilPatrolContext(player,s,now)){
+    s.ClearPatrolEpisode();s.patrolWorld=player->GetWorld();s.patrolEntity=player->en_ulID;s.patrolGeneration=s.generation;
+    s.patrolMap=InterlockedCompareExchange(&_botSupplyMapSerial,0,0);
+    s.patrolGoal=s.goal;s.patrolSource=source;s.patrolHop=hop;s.patrolLast=now;s.patrolBest=s.patrolGainBase=best;
+    for(int i=0;i<3;++i)s.patrolGravity[i]=player->en_vGravityDir(i+1);
+  }
+  if(++s.patrolStrikes<2)return;
+  s.patrolAlternate=true;s.patrolSince=now;s.patrolHint=-1;s.patrolProposalTime=-1;
+  std::fill(s.patrolTried,s.patrolTried+sizeof(s.patrolTried),0);s.ClearGroundProgress();
+  BotLog("[CecilPatrolRecovery] entity=%lu generation=%lu time=%.3f action=enter source=%d hop=%d goal=%d deadline=%.3f best_distance=%.6f\n",
+    (unsigned long)player->en_ulID,(unsigned long)s.generation,now,source,hop,s.goal,now+6,s.patrolBest);
+}
+static void BotCecilPatrolFail(CPlayer* player,SSupplyState& s,double now,const char* reason){
+  BotLog("[CecilPatrolRecovery] entity=%lu generation=%lu time=%.3f action=failed source=%d hop=%d goal=%d reason=%s\n",
+    (unsigned long)player->en_ulID,(unsigned long)s.generation,now,s.patrolSource,s.patrolHop,s.goal,reason);
+  s.ClearGoal();s.ClearEscape();s.searchAfter=now;s.scanTick=0;
+}
+static void BotCecilPatrolPlan(CPlayer* player,SSupplyState& s,double now,SCecilMove& out){
+  if(now-s.patrolSince>=6){BotCecilPatrolFail(player,s,now,"deadline");return;}
+  if(!BotCecilPatrolStatic(player)||_botRayBudget<=2)return;
+  BotCecilLocks(player,s,now);const auto& graph=BotSupplyGraph();uint64_t locks=1469598103934665603ULL;
+  for(unsigned char value:s.blocked){locks^=value;locks*=1099511628211ULL;}
+  if(locks!=s.patrolLocks){s.patrolHint=-1;s.patrolLocks=locks;}
+  const FLOAT3D position=player->GetPlacement().pl_PositionVector;
+  auto candidate=[&](int node){
+    if(node<0||(size_t)node>=graph.points.size()||node==s.patrolSource||node==s.patrolHop||s.blocked[node]||
+       ((s.patrolTried[node/8]|s.reacquireTried[node/8])&(1u<<(node%8)))||
+       (node==s.reacquireRejected&&now<s.reacquireRetryAfter))return false;
+    const auto& p=graph.points[node];const FLOAT3D d(p.x-position(1),p.y-position(2),p.z-position(3));
+    const double height=BotCecilHeight(player,d),length2=double(d(1))*d(1)+double(d(2))*d(2)+double(d(3))*d(3);
+    return !p.flags&&p.important_entity<0&&p.lock_entity<0&&std::isfinite(p.radius)&&p.radius>0&&
+      std::isfinite(length2)&&std::isfinite(height)&&length2<=1024&&std::fabs(height)<=8&&length2-height*height>=.25;
+  };
+  if(s.patrolHint>=0&&(!candidate(s.patrolHint)||
+     !s.patrolSearch.PathAvoidsEdge(graph,s.goal,s.patrolSource,s.patrolHop,s.blocked.data(),s.blocked.size())))s.patrolHint=-1;
+  int slots[3]={-1,-1,-1};double distances[3]={1024.000001,1024.000001,1024.000001};
+  if(s.patrolHint>=0){slots[0]=s.patrolHint;distances[0]=-1;}
+  for(size_t i=0;i<graph.points.size();++i)if((int)i!=slots[0]&&candidate((int)i)){
+    const auto& p=graph.points[i];const double d=double(p.x-position(1))*(p.x-position(1))+
+      double(p.y-position(2))*(p.y-position(2))+double(p.z-position(3))*(p.z-position(3));
+    for(int k=0;k<3;++k)if(d<distances[k]){for(int j=2;j>k;--j){slots[j]=slots[j-1];distances[j]=distances[j-1];}slots[k]=(int)i;distances[k]=d;break;}
+  }
+  if(slots[0]<0){BotCecilPatrolFail(player,s,now,"exhausted_candidates");return;}
+  for(int k=0;k<3&&_botRayBudget>2;++k){
+    const int node=slots[k];if(node<0)continue;const auto& p=graph.points[node];
+    const FLOAT3D target(p.x,p.y,p.z),lift=player->en_vGravityDir*-.8f;bool valid=false;
+    if(!BotSupplyClear(player,position+lift,target+lift,NULL,&valid)){
+      if(!valid)return;
+      s.patrolTried[node/8]|=(unsigned char)(1u<<(node%8));if(s.patrolHint==node)s.patrolHint=-1;continue;
+    }
+    if(s.patrolHint!=node){
+      if(!s.patrolSearch.Run(graph,node,s.blocked.data(),s.blocked.size())||
+         !s.patrolSearch.PathAvoidsEdge(graph,s.goal,s.patrolSource,s.patrolHop,s.blocked.data(),s.blocked.size())){
+        s.patrolTried[node/8]|=(unsigned char)(1u<<(node%8));return; // One new prepared search per update.
+      }
+      s.patrolHint=node;
+      BotLog("[CecilPatrolRecovery] entity=%lu generation=%lu time=%.3f action=hint source=%d hop=%d goal=%d hint=%d deadline=%.3f\n",
+        (unsigned long)player->en_ulID,(unsigned long)s.generation,now,s.patrolSource,s.patrolHop,s.goal,node,s.patrolSince+6);
+    }
+    const FLOAT3D delta=target-position;const double height=BotCecilHeight(player,delta);
+    const auto local=BotCecilBodyFrame(player).ToLocal(delta(1)-player->en_vGravityDir(1)*height,
+      delta(2)-player->en_vGravityDir(2)*height,delta(3)-player->en_vGravityDir(3)*height);
+    const double yaw=player->en_plViewpoint.pl_OrientationAngle(1);const auto aim=botcore::AimAt(local.x,0,local.z);
+    const double error=std::remainder(aim.yaw_deg-yaw,360.0)*3.141592653589793/180;
+    out.forward=.3*std::cos(error);out.strafe=BotCecilSettings().bStrafe?-.3*std::sin(error):0;
+    out.yaw_delta=botcore::TestTurnDelta(yaw,aim.yaw_deg,180*_pTimer->TickQuantum);out.up=0;
+    out.active=true;s.patrolProposalTime=now;return;
+  }
+}
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
   SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;result.useControl=tick<=s.useReleaseTick;
+  s.patrolProposalTime=-1;
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
   if(!alive){if(s.playable){BotCecilGoalEnd(slot,tick,s,"death");++s.deaths;s.deadSince=now;
     BotLog("[CecilDeath] local=%d tick=%d entity=%lu generation=%lu deaths=%u\n",slot,tick,(unsigned long)s.entity,(unsigned long)s.generation,s.deaths);
@@ -883,6 +1031,18 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   }
   if(tick>=s.scanTick){BotCecilChooseGoal(player,slot,tick,enemyDistance,!followValid);s.scanTick=tick+20;}
   if(followValid)BotCecilFollow(player,s,*follow,now);
+  if(s.patrolAlternate){
+    if(!BotCecilPatrolContext(player,s,now)){s.ClearPatrolEpisode();return result;}
+    else if(s.acquiredAnchor>=0&&s.acquiredAnchor!=s.patrolSource&&std::fabs(now-s.acquiredAnchorTime)<=1e-6){
+      BotLog("[CecilPatrolRecovery] entity=%lu generation=%lu time=%.3f action=ordinary_acquisition node=%d goal=%d\n",
+        (unsigned long)player->en_ulID,(unsigned long)s.generation,now,s.acquiredAnchor,s.goal);
+      s.ClearPatrolEpisode();s.navigator.Reset();
+    }
+  }
+  if(s.patrolAlternate){
+    if(enemyDistance<8){result.ownsMovement=false;return result;}
+    BotCecilPatrolPlan(player,s,now,result);return result;
+  }
   if(s.anchor<0){BotCecilReacquire(player,s,now,result);return result;}
   s.ClearReacquireScan();
   if(s.reacquireNode>=0){s.reacquireNode=-1;s.reacquireSince=-1;s.ClearEscape();}
@@ -1082,54 +1242,57 @@ static bool BotCecilClearMotion(CPlayer* player,double forward,double strafe,dou
   return !requireFloor||BotCecilFloor(player,forward,strafe,up,yaw,probe,allowCurrentContact);
 }
 // Original BotMovement.cpp129..224 reacquires its nearest point every five
-// seconds. Preserve long-edge commitment except on an accepted static-ground
-// edge with no meaningful best-distance gain. World wiggle is not hop progress.
+// seconds. Passive accepted ground observation measures best-distance gain
+// across reference flicker; it never authorizes a reset. Current static ground
+// and fresh nearest LOS remain required. World wiggle is not hop progress.
 // This adapter checkpoint adds no cast, arrival, relocation or item-attempt time.
 static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,bool accepted,bool currentPoint){
+  BotCecilPatrolObserve(player,s,now,accepted);
   const auto& graph=BotSupplyGraph();const int source=s.navigator.SourceSlot(s.goal),hop=s.hop;
-  bool eligible=accepted&&currentPoint&&s.currentNavTravel&&s.playable&&source>=0&&hop>=0&&source!=hop&&
+  bool observeEligible=accepted&&currentPoint&&s.currentNavTravel&&s.playable&&source>=0&&hop>=0&&source!=hop&&
     (size_t)source<graph.points.size()&&(size_t)hop<graph.points.size()&&
     graph.points.size()<=botcore::CecilNavGraph::kMaxPoints&&s.blocked.size()==graph.points.size()&&
     !s.blocked[source]&&!s.blocked[hop]&&!s.importantGoal&&!s.followEntity&&s.interactionPoint<0&&
     (s.useReleaseTick<0||now>s.useReleaseTick*_pTimer->TickQuantum)&&
     player->GetHealth()>0&&player->m_penWeapons&&player->GetWorld()&&!BotCecilLiquid(player)&&
     (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH);
-  CEntity* ref=player->en_penReference;
-  eligible=eligible&&ref&&!(ref->GetFlags()&ENF_DELETED)&&ref->GetRenderType()==CEntity::RT_BRUSH&&
-    !(ref->GetPhysicsFlags()&EPF_MOVABLE)&&ref->en_pwoWorld==player->GetWorld()&&
-    BotCecilIsClass(ref,"WorldBase","World Base");
+  CEntity* ref=player->en_penReference;CWorld* world=player->GetWorld();
+  observeEligible=observeEligible&&(!ref||(!(ref->GetFlags()&ENF_DELETED)&&
+    ref->GetRenderType()==CEntity::RT_BRUSH&&ref->en_pwoWorld==world));
   double distance2=0,vertical=0,gravity2=0;
   const FLOAT3D position=player->GetPlacement().pl_PositionVector;
-  if(eligible){
+  if(observeEligible){
     const auto& a=graph.points[source];const auto& b=graph.points[hop];
     const uint32_t special=botcore::CECIL_UNREACHABLE|botcore::CECIL_TELEPORT|botcore::CECIL_IMPORTANT|botcore::CECIL_JUMP;
-    eligible=!((a.flags|b.flags)&special)&&a.important_entity<0&&b.important_entity<0&&
+    observeEligible=!((a.flags|b.flags)&special)&&a.important_entity<0&&b.important_entity<0&&
       a.lock_entity<0&&b.lock_entity<0&&
       std::find(a.links.begin(),a.links.end(),hop)!=a.links.end();
     for(int i=1;i<=3;++i){
       const double d=(i==1?b.x:(i==2?b.y:b.z))-position(i),g=player->en_vGravityDir(i);
-      eligible=eligible&&std::isfinite(d)&&std::isfinite(g)&&std::isfinite(player->en_vCurrentTranslationAbsolute(i));
+      observeEligible=observeEligible&&std::isfinite(d)&&std::isfinite(g)&&std::isfinite(player->en_vCurrentTranslationAbsolute(i));
       distance2+=d*d;vertical+=d*g;gravity2+=g*g;
     }
   }
   // The original vertical stay is intentional, not an ineffective approach.
-  eligible=eligible&&std::isfinite(distance2)&&std::isfinite(vertical)&&std::isfinite(gravity2)&&
+  observeEligible=observeEligible&&std::isfinite(distance2)&&std::isfinite(vertical)&&std::isfinite(gravity2)&&
     std::fabs(gravity2-1)<1e-3&&!(distance2-vertical*vertical<1&&std::fabs(vertical)>4);
-  if(!eligible){s.ClearHopCheckpoint();if(!accepted){s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;}return false;}
+  if(!observeEligible){s.ClearHopCheckpoint();if(!accepted){s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;}return false;}
   const double distance=std::sqrt(distance2);
   bool continuous=s.hopCheckpointLast>=0&&now>=s.hopCheckpointLast&&now-s.hopCheckpointLast<=.25&&
     s.hopCheckpointGoal==s.goal&&s.hopCheckpointSource==source&&s.hopCheckpointHop==hop&&
-    s.hopCheckpointEntity==player->en_ulID&&s.hopCheckpointGeneration==s.generation&&s.hopCheckpointReference==ref;
+    s.hopCheckpointEntity==player->en_ulID&&s.hopCheckpointGeneration==s.generation&&s.hopCheckpointWorld==world;
   for(int i=0;i<3;++i)continuous=continuous&&s.hopCheckpointGravity[i]==player->en_vGravityDir(i+1);
   if(!continuous){
     s.hopCheckpointSince=now;s.hopCheckpointBest=s.hopCheckpointGainBase=distance;
     s.hopCheckpointGoal=s.goal;s.hopCheckpointSource=source;s.hopCheckpointHop=hop;
-    s.hopCheckpointEntity=player->en_ulID;s.hopCheckpointGeneration=s.generation;s.hopCheckpointReference=ref;
+    s.hopCheckpointEntity=player->en_ulID;s.hopCheckpointGeneration=s.generation;s.hopCheckpointWorld=world;
     for(int i=0;i<3;++i)s.hopCheckpointGravity[i]=player->en_vGravityDir(i+1);
   }
   s.hopCheckpointLast=now;s.hopCheckpointBest=std::fmin(s.hopCheckpointBest,distance);
   if(s.hopCheckpointGainBase-s.hopCheckpointBest>=.75){s.hopCheckpointSince=now;s.hopCheckpointGainBase=s.hopCheckpointBest;}
   if(now-s.hopCheckpointSince+1e-9<5)return false;
+  // NULL/moving support can preserve observations, never supply authority.
+  if(!ref||(ref->GetPhysicsFlags()&EPF_MOVABLE)||!BotCecilIsClass(ref,"WorldBase","World Base"))return false;
   // Wait for same-tick successful ordinary nearest LOS. Never force an extra
   // scan or treat a cached, merely nearby anchor as a fresh acquisition.
   const int anchor=s.anchor;
@@ -1141,6 +1304,7 @@ static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,boo
   BotLog("[CecilHopCheckpoint] entity=%lu generation=%lu time=%.3f source=%d hop=%d goal=%d anchor=%d since=%.3f best_distance=%.6f current_distance=%.6f reset_reason=no_hop_progress\n",
     (unsigned long)player->en_ulID,(unsigned long)s.generation,now,source,hop,s.goal,anchor,
     s.hopCheckpointSince,s.hopCheckpointBest,distance);
+  BotCecilPatrolStrike(player,s,now,source,hop,s.hopCheckpointBest);
   s.navigator.Reset();s.hop=s.heldNode=-1;s.holdSince=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;
   s.ClearEscape();s.ClearHopCheckpoint();return true;
 }
@@ -1155,7 +1319,21 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
      !std::isfinite(forward)||!std::isfinite(strafe)||!std::isfinite(up)||!std::isfinite(finalBodyYaw)||
      std::fabs(forward)>1.000001||std::fabs(strafe)>1.000001||std::fabs(up)>1.000001){
     BotCecilRejectedProbe(&state.probe,SCecilProbe::reasonInvalid,player);
-    forward=strafe=up=0;state.ClearEscape();state.ClearAirMovement();state.ClearGroundProgress();state.ClearHopCheckpoint();state.acquiredAnchorTime=-1;state.acquiredAnchor=-1;return 0;
+    forward=strafe=up=0;state.ClearEscape();state.ClearAirMovement();state.ClearGroundProgress();state.ClearHopCheckpoint();state.ClearPatrolEpisode();state.acquiredAnchorTime=-1;state.acquiredAnchor=-1;return 0;
+  }
+  if(!useReacquire)state.ClearPatrolEpisode();
+  if(state.patrolAlternate){
+    BotCecilPatrolObserve(player,state,now,true);
+    if(!state.patrolAlternate){forward=strafe=up=0;return 0;}
+    if(now-state.patrolSince>=6){BotCecilPatrolFail(player,state,now,"deadline");forward=strafe=up=0;return 0;}
+    const bool current=std::fabs(now-state.patrolProposalTime)<=1e-6&&BotCecilPatrolStatic(player)&&
+      _botRayBudget>=2&&up==0&&state.patrolHint>=0;
+    if(!current){forward=strafe=up=0;return 0;}
+    double f=std::fmax(-.3,std::fmin(.3,(double)forward));
+    double st=BotCecilSettings().bStrafe?std::fmax(-std::fmin(.3,maxStrafe),std::fmin(std::fmin(.3,maxStrafe),(double)strafe)):0;
+    const double norm=std::hypot(f,st);if(norm>.3){f*=.3/norm;st*=.3/norm;}
+    if(norm<.05||!BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,true,false)){forward=strafe=up=0;return 0;}
+    forward=(T)f;strafe=(T)st;up=0;return 1;
   }
   // Cecil BotMovement.cpp517: pits are opt-in and checked only without a
   // current path point. Arrival still owns that point for the final item connector.

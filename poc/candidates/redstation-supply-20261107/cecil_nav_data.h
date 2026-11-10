@@ -108,6 +108,25 @@ struct CecilNavGraph {
     return false;
   }
 };
+// Read only an already prepared parent chain. Edge absence alone is not proof:
+// every original arc must be valid and the bounded chain must reach its start.
+inline bool CecilNavPathAvoidsEdge(const CecilNavGraph& graph,const int* parents,size_t size,
+    int start,int goal,int from,int to,const unsigned char* blocked=nullptr,size_t count=0){
+  const size_t n=graph.points.size();
+  if(!parents||n==0||n>CecilNavGraph::kMaxPoints||size!=n||start<0||goal<0||from<0||to<0||
+     (size_t)start>=n||(size_t)goal>=n||(size_t)from>=n||(size_t)to>=n||
+     (blocked?count!=n:count!=0))return false;
+  int at=goal;
+  for(size_t step=0;step<n;++step){
+    if(at<0||(size_t)at>=n||(blocked&&blocked[at]))return false;
+    if(at==start)return true;
+    const int parent=parents[at];
+    if(parent<0||(size_t)parent>=n||(parent==from&&at==to)||
+       std::find(graph.points[parent].links.begin(),graph.points[parent].links.end(),at)==graph.points[parent].links.end())return false;
+    at=parent;
+  }
+  return false;
+}
 class CecilNavSearch {
  public:
   // Allocate once per map, before publishing this per-bot search context.
@@ -161,6 +180,11 @@ class CecilNavSearch {
   }
   double Distance(int goal) const {
     return start_>=0&&goal>=0&&(size_t)goal<distances_.size()?distances_[goal]:Infinity();
+  }
+  bool PathAvoidsEdge(const CecilNavGraph& graph,int goal,int from,int to,
+      const unsigned char* blocked=nullptr,size_t count=0)const{
+    return std::isfinite(Distance(goal))&&
+      CecilNavPathAvoidsEdge(graph,parents_.data(),parents_.size(),start_,goal,from,to,blocked,count);
   }
  private:
   static double Infinity(){return std::numeric_limits<double>::infinity();}

@@ -77,7 +77,8 @@ struct CPlayer:CEntity {
  FLOAT3D en_vCurrentTranslationAbsolute;unsigned physicsFlags=EPF_TRANSLATEDBYGRAVITY;
  unsigned GetPhysicsFlags()const{return physicsFlags;}
  float GetHealth()const{return health;}CPlayerWeapons* GetPlayerWeapons(){return &w;}
- bool hasWorld=true;CWorld* GetWorld(){return hasWorld?&world:nullptr;}
+ bool hasWorld=true;CWorld* worldOverride=nullptr;
+ CWorld* GetWorld(){return hasWorld?(worldOverride?worldOverride:&world):nullptr;}
 };
 struct CSessionProperties {BOOL sp_bInfiniteAmmo=FALSE;};
 struct Network {CSessionProperties session;const void* GetSessionProperties(){return &session;}} network,*_pNetwork=&network;
@@ -186,7 +187,7 @@ void setup(int nodes=3){
  player=CPlayer();player.m_penWeapons=&player.w;items.clear();items.reserve(140);
  auto& g=BotSupplyGraph();g=botcore::CecilNavGraph();g.points.resize(nodes);
  for(int i=0;i<nodes;++i){g.points[i].id=i;g.points[i].z=-10*i;g.points[i].radius=1;if(i+1<nodes)g.points[i].links.push_back(i+1);}
- auto& s=BotSupplyState(0);s=SSupplyState();s.navigator.Prepare(nodes);s.goals.Prepare(nodes);s.blocked.resize(nodes);s.worldLock.assign(nodes,3);
+ auto& s=BotSupplyState(0);s=SSupplyState();s.navigator.Prepare(nodes);s.goals.Prepare(nodes);s.patrolSearch.Prepare(nodes);s.blocked.resize(nodes);s.worldLock.assign(nodes,3);
  s.playable=true;s.generation=1;s.anchor=0;s.owned=3;
  BotCecilSettings()=botcore::CecilPreset(2);BotCecilSettings().fItemSearchCD=0;
  // Existing support/recovery fixtures explicitly exercise opt-in, off-graph pit avoidance.
@@ -377,6 +378,433 @@ void hopCheckpoint45Wiggle(int tick){
  const float cycle[3][3]={{-11.821f,-64.496f,-60.495f},{-11.137f,-64.496f,-57.992f},{-11.996f,-64.496f,-57.378f}};
  const int at=((tick-2)/20)%3;player.pl.pl_PositionVector=FLOAT3D(cycle[at][0],cycle[at][1],cycle[at][2]);
 }
+void hopCheckpoint46Flicker(){
+ // Actual Tick + final-owner safety at20Hz: a reference is not progress.
+ // This isolates the observed long-cycle mechanism without asserting the
+ // unlogged native reference520 class or inventing native collision geometry.
+ for(int mode=0;mode<3;++mode){
+  hopCheckpoint45Fixture();auto& s=BotSupplyState(0);s.scanTick=2;
+  CMovingBrush mover;mover.type=CEntity::RT_BRUSH;mover.entityPhysicsFlags=EPF_MOVABLE;
+  mover.en_pwoWorld=&player.world;bool reacquired=false,bounded=true;int first=-1;
+  for(int tick=2;tick<=4562;++tick){
+   hopCheckpoint45Wiggle(tick);player.en_vCurrentTranslationAbsolute=FLOAT3D(2,0,-3);
+   player.en_penReference=&floorEntity;
+   if(mode==0&&tick%20==0)player.en_penReference=nullptr;
+   if(mode==1&&tick%20==0)player.en_penReference=&mover;
+   if(mode==2)player.en_penReference=tick%3==0?nullptr:(tick%3==1?&mover:&floorEntity);
+   const int rays=rayCount;hopCheckpoint45Tick(tick);
+   if(hopCheckpointEvents&&first<0)first=tick;
+   reacquired|=s.hop==0;bounded&=rayCount-rays<=16&&_botRayBudget>=0;
+  }
+  check(first>=102&&first<=122&&reacquired,
+   "228s same-hop wiggle across sparse or dense NULL and moving-reference flicker keeps passive five-second observation");
+  check(bounded,"reference-flicker observation preserves shared sixteen-ray budget");
+  check(s.goal==2&&s.goalSince==7&&s.goalDeadline==47&&!s.goalRelocationBudgeted&&endEvents==0,
+   "reference-flicker checkpoint does not renew goal attempt or fabricate relocation");
+ }
+}
+void hopCheckpoint46Authority(){
+ // An expired passive interval is neither a NULL nor a moving-ground permit.
+ for(int kind=0;kind<3;++kind){
+  hopCheckpoint45Fixture();auto& s=BotSupplyState(0);s.scanTick=2;
+  CMovingBrush mover;mover.type=CEntity::RT_BRUSH;mover.en_pwoWorld=&player.world;
+  mover.entityPhysicsFlags=kind==1?EPF_MOVABLE:0;
+  for(int tick=2;tick<=121;++tick){
+   hopCheckpoint45Wiggle(tick);player.en_penReference=kind==0?nullptr:&mover;hopCheckpoint45Tick(tick);
+  }
+  check(hopCheckpointEvents==0&&s.hopCheckpointSince>=0&&s.hopCheckpointSince<=.15&&
+    near(s.hopCheckpointLast,6.05)&&s.navigator.SourceSlot(2)==0&&s.hop==1,
+   "NULL and movable or non-WorldBase brush preserve passive history but never authorize checkpoint");
+  player.en_penReference=&floorEntity;hopCheckpoint45Wiggle(122);const auto reset=hopCheckpoint45Tick(122);
+  check(hopCheckpointEvents==1&&s.hop==-1&&reset.forward==0&&reset.strafe==0&&reset.up==0,
+   "current static WorldBase and actual fresh nearest grant expired observation without another five second wait");
+ }
+ // A different valid static brush pointer in the same world is not progress.
+ hopCheckpoint45Fixture();auto& s=BotSupplyState(0);s.scanTick=2;
+ CEntity second=floorEntity;second.en_ulID=2;
+ for(int tick=2;tick<=102;++tick){
+  hopCheckpoint45Wiggle(tick);player.en_penReference=tick%2?&second:&floorEntity;hopCheckpoint45Tick(tick);
+ }
+ check(hopCheckpointEvents==1,"same-world static reference identity changes cannot erase ineffective edge history");
+ for(int denied=0;denied<3;++denied){
+  hopCheckpoint45Fixture();auto& state=BotSupplyState(0);state.scanTick=2;
+  for(int tick=2;tick<=121;++tick){hopCheckpoint45Wiggle(tick);player.en_penReference=nullptr;hopCheckpoint45Tick(tick);}
+  player.en_penReference=&floorEntity;
+  if(denied==0)wallMode=2;
+  if(denied==2)state.scanTick=99999; // A cached anchor is not this tick's LOS.
+  hopCheckpoint45Wiggle(122);hopCheckpoint45Tick(122,true,denied==1?2:16);
+  check(hopCheckpointEvents==0&&state.hopCheckpointSince<=.15&&state.hop==1,
+   "expired mixed-reference observation waits through blocked budget or cached nearest without dropping committed edge");
+  wallMode=0;state.scanTick=142;
+  for(int tick=123;tick<=142;++tick){hopCheckpoint45Wiggle(tick);hopCheckpoint45Tick(tick);}
+  check(hopCheckpointEvents==1,"later ordinary fresh LOS authorizes retained observation without forcing a scan");
+ }
+ // The current passive-only final helper adds no queries or allocation.
+ hopCheckpoint45Fixture();auto& passive=BotSupplyState(0);passive.scanTick=2;
+ for(int tick=2;tick<=121;++tick){hopCheckpoint45Wiggle(tick);player.en_penReference=nullptr;hopCheckpoint45Tick(tick);}
+ const int casts=rayCount,lookups=worldLookups,budget=_botRayBudget;
+ allocations=0;measuring=true;const bool granted=BotCecilHopCheckpoint(&player,passive,6.05,true,true);measuring=false;
+ check(!granted&&hopCheckpointEvents==0&&casts==rayCount&&lookups==worldLookups&&budget==_botRayBudget&&allocations==0,
+  "expired passive NULL observation performs no cast World lookup heap allocation or action authorization");
+}
+void hopCheckpoint46Resets(){
+ // Every loss starts a new accepted interval, even if previous support was NULL.
+ for(int loss=0;loss<15;++loss){
+  hopCheckpoint45Fixture();auto& s=BotSupplyState(0);s.scanTick=2;CWorld alternate;
+  for(int tick=2;tick<=100;++tick){hopCheckpoint45Wiggle(tick);player.en_penReference=nullptr;hopCheckpoint45Tick(tick);}
+  player.en_penReference=&floorEntity;int next=101;
+  if(loss==0)next=110;
+  if(loss==1)++s.generation;
+  if(loss==2){s.ClearGoal();s.goal=2;s.scanTick=101;}
+  if(loss==3){player.worldOverride=&alternate;floorEntity.en_pwoWorld=&alternate;}
+  if(loss==4){player.en_vGravityDir=FLOAT3D(0,1,0);player.body.m[0][0]=-1;player.body.m[1][1]=-1;}
+  hopCheckpoint45Wiggle(next);
+  if(loss==5)player.m_pstState=PST_FALL;
+  if(loss==6)player.m_pstState=PST_SWIM;
+  if(loss==7)player.m_pstState=PST_DIVE;
+  if(loss==8)floorEntity.flags=ENF_DELETED;
+  if(loss==9)floorEntity.type=CEntity::RT_MODEL;
+  if(loss==10)floorEntity.en_pwoWorld=&alternate;
+  if(loss==11)player.en_vCurrentTranslationAbsolute(2)=NAN;
+  if(loss==12)s.useReleaseTick=999;
+  if(loss==13)s.followEntity=777;
+  hopCheckpoint45Tick(next,loss!=14);
+  check(hopCheckpointEvents==0,"context loss cannot spend old NULL-reference progress history");
+  player.m_pstState=PST_STAND;floorEntity.flags=0;floorEntity.type=CEntity::RT_BRUSH;
+  floorEntity.en_pwoWorld=player.GetWorld();player.en_vCurrentTranslationAbsolute=FLOAT3D();
+  s.useReleaseTick=-1;s.followEntity=0;
+  for(int tick=next+1;tick<=next+95;++tick){hopCheckpoint45Wiggle(tick);hopCheckpoint45Tick(tick);}
+  check(hopCheckpointEvents==0,"world life goal owner medium metadata or clock loss requires new five second history");
+ }
+ // Positive crouch control: observation is native grounded context, not speed.
+ hopCheckpoint45Fixture();auto& crouch=BotSupplyState(0);crouch.scanTick=2;player.m_pstState=PST_CROUCH;
+ for(int tick=2;tick<=122;++tick){
+  hopCheckpoint45Wiggle(tick);player.en_penReference=tick<122?nullptr:&floorEntity;hopCheckpoint45Tick(tick);
+ }
+ check(hopCheckpointEvents==1,"native crouch passive observation survives NULL and waits for current static acquisition");
+}
+void hopCheckpoint46ProgressAndProtection(){
+ hopCheckpoint45Fixture();auto& g=BotSupplyGraph();auto& s=BotSupplyState(0);
+ g.points[0].x=g.points[0].y=g.points[0].z=0;
+ g.points[1].x=g.points[1].y=0;g.points[1].z=-100;
+ s.ClearGoal();s.goal=2;s.scanTick=2;
+ for(int tick=2;tick<=250;++tick){
+  player.pl.pl_PositionVector=FLOAT3D(0,0,float(-(tick-2)*.05));
+  player.en_penReference=tick%20?&floorEntity:nullptr;hopCheckpoint45Tick(tick);
+ }
+ check(hopCheckpointEvents==0&&s.hopCheckpointSince>11.4&&s.hop==1,
+  "actual monotonic hop gain resets passive clock despite support flicker, preserving valid long-edge travel");
+ for(int protection=0;protection<9;++protection){
+  hopCheckpoint45Fixture();auto& s=BotSupplyState(0);auto& graph=BotSupplyGraph();s.scanTick=2;
+  for(int tick=2;tick<=100;++tick){hopCheckpoint45Wiggle(tick);player.en_penReference=nullptr;hopCheckpoint45Tick(tick);}
+  if(protection==0)graph.points[0].flags=botcore::CECIL_TELEPORT;
+  if(protection==1)graph.points[1].flags=botcore::CECIL_UNREACHABLE;
+  if(protection==2)graph.points[0].flags=botcore::CECIL_IMPORTANT;
+  if(protection==3)graph.points[1].flags=botcore::CECIL_JUMP;
+  if(protection==4)graph.points[0].lock_entity=777;
+  if(protection==5)graph.points[1].lock_entity=777;
+  if(protection==6)s.importantGoal=true;
+  if(protection==7)s.interactionPoint=1;
+  if(protection==8){graph.points[1].x=player.pl.pl_PositionVector(1);graph.points[1].z=player.pl.pl_PositionVector(3);}
+  hopCheckpoint45Tick(101);
+  check(hopCheckpointEvents==0&&s.hopCheckpointSince<0,
+   "current protected edge or intentional stay erases passive history before any later static authorization");
+ }
+ for(int mapped=0;mapped<2;++mapped){
+  hopCheckpoint45Fixture();auto& s=BotSupplyState(0);const auto& goal=BotSupplyGraph().points[2];
+  auto& item=addItem(991,goal.x,goal.z,botcore::CecilItemKind::Weapon);item.item.weapon=4;item.pl.pl_PositionVector(2)=goal.y;
+  s.goalEntity=991;s.goalSince=0;s.goalDeadline=mapped?20:12;s.mappedWeaponGoal=mapped;s.scanTick=2;
+  for(int tick=2;tick<=122;++tick){
+   hopCheckpoint45Wiggle(tick);player.en_penReference=tick<122?nullptr:&floorEntity;hopCheckpoint45Tick(tick);
+  }
+  check(hopCheckpointEvents==1&&s.goalEntity==991&&s.goalSince==0&&s.goalDeadline==(mapped?20:12)&&!s.goalRelocationBudgeted,
+   "mixed-reference checkpoint preserves ordinary and mapped fixed item deadline without relocation grant");
+  if(!mapped){
+   for(int tick=123;tick<=240;++tick){hopCheckpoint45Wiggle(tick);hopCheckpoint45Tick(tick);}
+   check(endEvents==1&&std::strcmp(lastEnd,"timeout")==0&&s.ItemRejected(991,12),
+    "ordinary item still expires at twelve seconds after reference-flicker checkpoint");
+  }
+ }
+}
+void patrolAlternate46Fixture(int nodes=4){
+ setup(nodes);auto& g=BotSupplyGraph();
+ const FLOAT3D xyz[4]={{0,0,0},{20,6,0},{0,0,-16},{18,0,-16}};
+ for(int i=0;i<4;++i){g.points[i].x=xyz[i](1);g.points[i].y=xyz[i](2);g.points[i].z=xyz[i](3);g.points[i].radius=1;g.points[i].links.clear();}
+ g.points[0].links={1};g.points[2].links={3};g.points[3].links={1};
+ for(int i=4;i<nodes;++i){g.points[i].x=1000;g.points[i].links.clear();}
+ auto& s=BotSupplyState(0);s.goal=1;s.anchor=0;s.scanTick=2;
+ floorEntity.type=CEntity::RT_BRUSH;floorEntity.cls.name="Classes/WorldBase.ecl";floorEntity.en_ulID=1;
+ floorEntity.en_pwoWorld=&player.world;player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
+ floorMode=2;BotCecilSettings().bAvoidPits=0;hopCheckpoint45Tick(1);
+}
+void patrolAlternate46Pose(int tick){
+ // Real original-source reapproach follows a checkpoint; a selected hint is
+ // never substituted for an anchor or a physically reached original point.
+ const auto& s=BotSupplyState(0);
+ player.pl.pl_PositionVector=s.hop==0?FLOAT3D(.25f,0,0):FLOAT3D(5,0,float(((tick/20)%3-1)*2));
+}
+void patrolAlternate46Red(){
+ patrolAlternate46Fixture();auto& s=BotSupplyState(0);bool guided=false,bounded=true,ordinaryOnlySource=true,sourceApproached=false;int first=-1;
+ double firstDistance=0,bestDistance=1e9;
+ for(int tick=2;tick<=300;++tick){
+  patrolAlternate46Pose(tick);
+  const bool insideSource=s.hop==0&&player.pl.pl_PositionVector.Length()<1;
+  const double distance=(FLOAT3D(20,6,0)-player.pl.pl_PositionVector).Length();
+  if(tick==2)firstDistance=distance;
+  bestDistance=std::fmin(bestDistance,distance);
+  if(tick%20==0){_botRayBudget=16;ordinaryOnlySource&=BotSupplyNearest(&player,player.pl.pl_PositionVector,TRUE)==0;}
+  const int rays=rayCount;const auto move=hopCheckpoint45Tick(tick);
+  sourceApproached|=insideSource&&s.hop==1;
+  bounded&=rayCount-rays<=16&&_botRayBudget>=0;
+  if(s.anchor==0&&s.goal==1&&s.hop<0&&move.active&&move.forward>.15&&
+     std::hypot(move.forward,move.strafe)<=.300001&&move.up==0){guided=true;first=tick;break;}
+ }
+ check(ordinaryOnlySource,"ordinary twelve/three acquisition has only the failed original source in repeated-edge fixture");
+ check(hopCheckpointEvents>=2&&sourceApproached,"repeated-edge fixture actually has two accepted checkpoints and original-radius source reapproach");
+ check(firstDistance-bestDistance<.75,"two-checkpoint wiggle has less than the genuine monotonic best-distance gain threshold");
+ check(guided&&hopCheckpointEvents>=2&&first>=202,
+  "two accepted failed checkpoints across real source reapproach offer bounded alternative original hint without fake anchor");
+ check(bounded,"repeated-edge proposal and final safety retain sixteen shared ray bound");
+}
+
+int patrolAlternate46Enter(int nodes=4,int variant=0){
+ patrolAlternate46Fixture(nodes);auto& g=BotSupplyGraph();
+ if(variant==1)for(int i=2;i<nodes;++i){g.points[i].x=float(i-1);g.points[i].z=float(-16-2*(i-2));g.points[i].links={1};}
+ if(variant==2){g.points[4].x=50;g.points[4].y=10;g.points[4].z=0;g.points[4].flags=botcore::CECIL_UNREACHABLE|botcore::CECIL_CROUCH;g.points[1].links={4};BotSupplyState(0).goal=4;}
+ auto& s=BotSupplyState(0);
+ for(int tick=2;tick<=300;++tick){patrolAlternate46Pose(tick);hopCheckpoint45Tick(tick);if(s.patrolAlternate)return tick;}
+ check(false,"alternative guard fixture must enter from two actual accepted original-edge checkpoints");return 300;
+}
+void patrolAlternate46Gain(){
+ patrolAlternate46Fixture();auto& s=BotSupplyState(0);int first=-1,second=-1;double base=0;
+ for(int tick=2;tick<=600;++tick){
+  patrolAlternate46Pose(tick);
+  if(first>=0&&tick>first+3&&s.hop!=0){
+   const double distance=base-.764778;
+   player.pl.pl_PositionVector(1)=float(20-std::sqrt(distance*distance-36));
+  }
+  hopCheckpoint45Tick(tick);
+  if(first<0&&hopCheckpointEvents==1){first=tick;base=s.patrolBest;}
+  if(hopCheckpointEvents>=2){second=tick;break;}
+ }
+ check(first>0&&second>first&&base-s.patrolBest>.7647&&base-s.patrolBest<.7649,
+  "real .764778 fixed-hop gain is observed across original source reapproach");
+ check(!s.patrolAlternate&&s.patrolStrikes==1,
+  "genuine .764778 gain resets first strike so second accepted checkpoint cannot enter alternate mode");
+}
+void patrolAlternate46Safety(){
+ for(int denial=0;denial<7;++denial){
+  const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  if(denial==0)floorMode=0;
+  if(denial==1)wallMode=2;
+  if(denial==2)invalidHitDistance=true;
+  if(denial==3)player.en_penReference=nullptr;
+  if(denial==4)floorEntity.entityPhysicsFlags=EPF_MOVABLE;
+  if(denial==5)floorEntity.cls.name="Classes/MovingBrush.ecl";
+  if(denial==6)floorEntity.flags=ENF_DELETED;
+  const double deadline=s.patrolSince;const int rays=rayCount;
+  const auto move=hopCheckpoint45Tick(tick,true,denial==2?3:16);
+  check(move.forward==0&&move.strafe==0&&move.up==0,
+   "alternate guidance is neutral without fresh full wall floor valid query and current static reference even when AvoidPits0");
+  check(rayCount-rays<=16&&_botRayBudget>=0&&s.goal==1&&s.anchor==0,
+   "alternate denial preserves real source goal and bounded shared budget");
+  if(denial<6)check(s.patrolAlternate&&s.patrolSince==deadline,
+   "temporary unsupported or rejected alternative never renews the fixed six second episode");
+ }
+ for(int cap=0;cap<3;++cap){
+  const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  if(cap==1)BotCecilSettings().bStrafe=0;
+  _botRayBudget=16;const auto move=BotSupplyTick(&player,0,tick,1000);
+  double f=move.forward,st=move.strafe,u=move.up;const int before=rayCount;
+  const int ok=BotCecilSafeMotion(&player,s,tick*.05,f,st,u,cap==2?90:0,cap==0?.05:1,true);
+  check(ok==1&&std::hypot(f,st)<=.300001&&std::fabs(st)<=(cap==0?.050001:1)&&u==0&&(!cap||cap!=1||st==0),
+   "alternate final safety uniformly caps movement honors strafe setting and emits no up");
+  check(rayCount-before==2&&s.probe.wallRays==1&&s.probe.floorRays==1,
+   "accepted alternative checks exactly fresh final-yaw wall plus mandatory floor");
+  if(cap==2)check(std::fabs(wallTo(3)-wallFrom(3))>.05,
+   "alternate wall probe follows actual final composed yaw rather than cached planner heading");
+ }
+}
+void patrolAlternate46Lifecycle(){
+ for(int loss=0;loss<21;++loss){
+  const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;CWorld foreign;
+  switch(loss){
+   case 0:player.m_pstState=PST_FALL;break;
+   case 1:player.m_pstState=PST_SWIM;break;
+   case 2:player.health=0;break;
+   case 3:s.goal=3;break;
+   case 4:s.goalEntity=991;break;
+   case 5:s.followEntity=991;break;
+   case 6:s.importantGoal=true;break;
+   case 7:s.interactionPoint=0;break;
+   case 8:s.useReleaseTick=tick+1;break;
+   case 9:player.en_vCurrentTranslationAbsolute(2)=NAN;break;
+   case 10:player.en_vGravityDir=FLOAT3D(0,0,-1);break;
+   case 11:++s.generation;break;
+   case 12:++player.en_ulID;break;
+   case 13:player.worldOverride=&foreign;break;
+   case 14:BotSupplyGraph().points[0].flags=botcore::CECIL_JUMP;break;
+   case 15:BotSupplyGraph().points[1].important_entity=77;break;
+   case 16:BotSupplyGraph().points[0].lock_entity=77;break;
+   case 17:BotSupplyGraph().points[0].links.clear();break;
+   case 19:++_botSupplyMapSerial;break;
+   case 20:player.pl.pl_PositionVector=FLOAT3D(20,0,0);break;
+  }
+  const int before=rayCount;double f=.3,st=0,u=0;
+  BotCecilSafeMotion(&player,s,tick*.05,f,st,u,0,1,loss!=18);
+  check(!s.patrolAlternate&&s.patrolSource<0,
+   "alternate episode clears on owner world life goal medium gravity invalid special lock interaction or topology context loss");
+  if(loss!=18)check(f==0&&st==0&&u==0&&rayCount==before,
+   "invalid alternate context emits no unverified recovery action or query");
+ }
+ for(int badTime=0;badTime<3;++badTime){
+  const int tick=patrolAlternate46Enter();auto& s=BotSupplyState(0);double f=.3,st=0,u=0;
+  const double now=badTime==0?tick*.05-.1:(badTime==1?tick*.05+.3:NAN);
+  BotCecilSafeMotion(&player,s,now,f,st,u,0,1,true);
+  check(!s.patrolAlternate&&f==0&&st==0,"alternate rewind gap or nonfinite clock cannot retain episode authority");
+ }
+}
+void patrolAlternate46Search(){
+ // A suffix that simply returns via the failed edge is not a bypass.
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;auto& g=BotSupplyGraph();
+  g.points[2].links={0};g.points[3].links={0};const auto move=hopCheckpoint45Tick(tick);
+  check(s.patrolAlternate&&s.patrolHint<0&&move.forward==0&&move.strafe==0,
+   "different original hint whose directed suffix reuses failed edge cannot claim recovery");
+  check((s.patrolTried[0]&4)!=0&&(s.patrolTried[0]&8)==0,
+   "at most one newly LOS clear suffix search rejects one candidate in a frame");
+  hopCheckpoint45Tick(tick+1);check(s.patrolAlternate&&(s.patrolTried[0]&12)==12,
+   "second rejected suffix gets its separate next-frame search before sweep exhaustion");
+  hopCheckpoint45Tick(tick+2);check(!s.patrolAlternate&&s.goal<0,
+   "only fully exhausted finite suffix sweep terminates failed patrol attempt");
+ }
+ {const int tick=patrolAlternate46Enter(6,1)+1;auto& s=BotSupplyState(0);s.scanTick=99999;blockedItems=3;
+  const int before=rayCount;const auto first=hopCheckpoint45Tick(tick);
+  check(s.patrolAlternate&&s.goal==1&&rayCount-before==3&&!first.active,
+   "three physical LOS rejections leave later eligible candidates for a later frame");
+  const auto next=hopCheckpoint45Tick(tick+1);
+  check(s.patrolAlternate&&s.patrolHint==5&&next.active&&std::hypot(next.forward,next.strafe)>.15,
+   "fourth original candidate gets fair bounded next-frame opportunity after first three blocked LOS");
+ }
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  const int before=rayCount;const auto defer=hopCheckpoint45Tick(tick,true,2);
+  check(s.patrolAlternate&&s.patrolHint<0&&s.patrolTried[0]==0&&rayCount==before&&defer.forward==0,
+   "reserved-budget deferral neither blacklists candidate nor falsely exhausts sweep");
+  const auto go=hopCheckpoint45Tick(tick+1);
+  check(s.patrolHint==2&&go.active&&std::hypot(go.forward,go.strafe)>.15,
+   "deferred candidate can pass fresh LOS suffix and final probes next frame");
+  s.goals.Run(BotSupplyGraph(),1,s.blocked.data(),s.blocked.size());
+  const auto cached=hopCheckpoint45Tick(tick+2);
+  check(s.patrolHint==2&&cached.active&&std::hypot(cached.forward,cached.strafe)>.15,
+   "dedicated prepared suffix survives ordinary goal-search parent overwrite");
+ }
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  hopCheckpoint45Tick(tick);s.avoidNode=3;s.avoidUntil=100;
+  const auto locked=hopCheckpoint45Tick(tick+1);
+  check(s.patrolHint<0&&locked.forward==0&&locked.strafe==0,
+   "current blocked intermediate invalidates cached finite suffix before guidance");
+ }
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  allocations=0;measuring=true;const auto go=hopCheckpoint45Tick(tick);measuring=false;
+  check(go.active&&allocations==0,"prepared alternative ranking suffix and safety allocate no heap during accepted tick");
+ }
+}
+
+void patrolAlternate46ExtraGuards(){
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  s.reacquireRejected=2;s.reacquireRetryAfter=100;
+  const auto move=hopCheckpoint45Tick(tick);
+  check(s.patrolHint!=2&&move.active,"active original recovery rejection backoff excludes its node from alternate selection");
+ }
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  _botRayBudget=16;const auto proposal=BotSupplyTick(&player,0,tick,1000);
+  double f=proposal.forward,st=proposal.strafe,u=proposal.up;const int rays=rayCount;
+  BotCecilSafeMotion(&player,s,tick*.05+.05,f,st,u,0,1,true);
+  check(f==0&&st==0&&u==0&&rayCount==rays,"stale alternative proposal never authorizes even a single final ray or action");
+ }
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  _botRayBudget=16;const auto proposal=BotSupplyTick(&player,0,tick,1000);
+  player.en_penReference=nullptr;double f=proposal.forward,st=proposal.strafe,u=proposal.up;const int rays=rayCount;
+  BotCecilSafeMotion(&player,s,tick*.05,f,st,u,0,1,true);
+  check(f==0&&st==0&&u==0&&rayCount==rays,"support lost after alternative proposal cannot emit from remembered static authority");
+ }
+}
+
+void patrolAlternate46Metadata(){
+ for(int invalid=0;invalid<9;++invalid){
+  const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;auto& p=BotSupplyGraph().points[2];
+  switch(invalid){
+   case 0:p.flags=botcore::CECIL_JUMP;break;
+   case 1:p.flags=botcore::CECIL_UNREACHABLE;break;
+   case 2:p.important_entity=77;break;
+   case 3:p.lock_entity=77;break;
+   case 4:p.z=-33;break;
+   case 5:p.y=8.01f;break;
+   case 6:p.radius=0;break;
+   case 7:s.reacquireTried[0]|=4;break;
+   case 8:s.reacquireRejected=2;s.reacquireRetryAfter=tick*.05+6;break;
+  }
+  const auto move=hopCheckpoint45Tick(tick);
+  check(s.patrolAlternate&&s.patrolHint==3&&move.active&&std::hypot(move.forward,move.strafe)>.15,
+   "alternate hints respect original flags important locks 32m 8height radius tried and live rejection metadata");
+ }
+ {const int tick=patrolAlternate46Enter(5,2)+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  const auto move=hopCheckpoint45Tick(tick);
+  check(s.goal==4&&s.patrolAlternate&&s.patrolHint==2&&move.active,
+   "remote patrol goal flags do not exclude a current ordinary failed edge or rewrite that goal");
+ }
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;invalidHitDistance=true;
+  hopCheckpoint45Tick(tick);check(s.patrolAlternate&&s.patrolTried[0]==0&&s.patrolHint<0,
+   "invalid physical LOS result cannot blacklist a candidate as a real geometric failure");
+ }
+ {patrolAlternate46Fixture();auto& s=BotSupplyState(0);int tick=2;
+  for(;tick<200&&hopCheckpointEvents==0;++tick){patrolAlternate46Pose(tick);hopCheckpoint45Tick(tick);}
+  check(s.patrolStrikes==1,"real first checkpoint establishes one durable failed-edge strike");
+  player.pl.pl_PositionVector=FLOAT3D(0,0,-16);s.scanTick=tick;hopCheckpoint45Tick(tick);
+  check(s.patrolSource<0&&!s.patrolAlternate&&s.anchor==2&&s.hop==3,
+   "actual relocation onto a different original directed route clears old failed-edge strikes");
+ }
+ {patrolAlternate46Fixture();auto& g=BotSupplyGraph();auto& s=BotSupplyState(0);
+  for(auto& p:g.points){const float x=p.x;p.x=-p.y;p.y=x;}
+  player.en_vGravityDir=FLOAT3D(1,0,0);player.body.m[0][0]=0;player.body.m[0][1]=-1;player.body.m[1][0]=1;player.body.m[1][1]=0;
+  floorPlane.bpl_plAbsolute=FLOAT3D(-1,0,0);s.navigator.Reset();bool moved=false;
+  for(int tick=2;tick<300;++tick){
+   patrolAlternate46Pose(tick);const auto p=player.pl.pl_PositionVector;player.pl.pl_PositionVector=FLOAT3D(-p(2),p(1),p(3));
+   const auto move=hopCheckpoint45Tick(tick);
+   if(s.patrolAlternate&&move.active&&std::hypot(move.forward,move.strafe)>.15){moved=true;break;}
+  }
+  check(moved&&s.patrolHint==2&&s.anchor==0&&s.goal==1,
+   "alternative bounds guidance and mandatory floor use actual rotated gravity without world-up assumptions");
+ }
+}
+void patrolAlternate46Exit(){
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  // Real acquisition can precede original radius arrival. It must not become a fake reached point.
+  player.pl.pl_PositionVector=FLOAT3D(0,0,-10);s.scanTick=tick;const auto acquire=hopCheckpoint45Tick(tick);
+  check(!s.patrolAlternate&&s.anchor==2&&s.goal==1&&s.hop==2&&acquire.active,
+   "fresh ordinary alternative acquisition ends episode but navigator still approaches original hint radius");
+  player.pl.pl_PositionVector=FLOAT3D(0,0,-15.5);const auto reached=hopCheckpoint45Tick(tick+1);
+  check(s.hop==3&&s.anchor==2&&s.goal==1&&reached.active,
+   "only actual original-radius arrival at acquired alternative advances to its directed next edge");
+ }
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  player.pl.pl_PositionVector=FLOAT3D(20,6,0);const auto arrived=hopCheckpoint45Tick(tick,true,0);
+  check(!s.patrolAlternate&&s.patrolSource<0&&arrived.forward==0&&arrived.strafe==0&&s.goal==1,
+   "actual original failed-hop arrival ends alternate episode even without nearest scan budget");
+ }
+ {const int tick=patrolAlternate46Enter();auto& s=BotSupplyState(0);const double since=s.patrolSince;bool kept=true;
+  for(int next=tick+1;next<tick+120;++next){player.en_penReference=next%2?nullptr:&floorEntity;s.scanTick=next;
+   hopCheckpoint45Tick(next,true,next%3?2:16);kept&=s.patrolAlternate&&s.patrolSince==since&&s.goal==1&&s.anchor==0;}
+  check(kept,"support scan hint and budget changes do not renew fixed six second alternate attempt");
+  hopCheckpoint45Tick(tick+120);check(!s.patrolAlternate&&s.goal<0&&s.goalEntity==0,
+   "six second unsuccessful patrol attempt explicitly ends without fabricating recovery or item success");
+ }
+ {const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;
+  auto& g=BotSupplyGraph();g.points[2].flags=botcore::CECIL_JUMP;g.points[3].important_entity=77;
+  const auto failed=hopCheckpoint45Tick(tick);check(s.goal<0&&!s.patrolAlternate&&!failed.active,
+   "complete absence of eligible ordinary hints fails only this patrol goal explicitly");
+ }
+}
+
 void hopCheckpoint45Guards(){
  // Positive control: expiry cancels only the old movement context, not the goal.
  hopCheckpoint45Fixture();auto& held=BotSupplyState(0);held.scanTick=2;
@@ -1484,7 +1912,7 @@ void nativeContactRecovery(){
 }
 int main(){
  nativeContactRecovery();farHintTests();farHintGuards();
- hopCheckpoint45();hopCheckpoint45Freshness();hopCheckpoint45Guards();hopCheckpoint45Deferral();hopCheckpoint45ItemDeadline();hopCheckpoint45Arrival();airRecovery44();airRecovery44Guards();neutralRecovery43();neutralRecovery43Guards();groundSweep42();groundSweep42Guards();offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
+ hopCheckpoint45();hopCheckpoint45Freshness();hopCheckpoint46Flicker();hopCheckpoint46Authority();hopCheckpoint46Resets();hopCheckpoint46ProgressAndProtection();patrolAlternate46Red();patrolAlternate46Gain();patrolAlternate46Safety();patrolAlternate46Lifecycle();patrolAlternate46Search();patrolAlternate46ExtraGuards();patrolAlternate46Metadata();patrolAlternate46Exit();hopCheckpoint45Guards();hopCheckpoint45Deferral();hopCheckpoint45ItemDeadline();hopCheckpoint45Arrival();airRecovery44();airRecovery44Guards();neutralRecovery43();neutralRecovery43Guards();groundSweep42();groundSweep42Guards();offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
  liftOccupancyBridge();
  { // Reproduce Retail033's mask overwrite, including initialized-mask controls.
  for(bool physical:{false,true})for(ULONG initial:{0u,2048u}){
