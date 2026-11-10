@@ -856,7 +856,7 @@ static bool BotCecilPatrolContext(CPlayer* player,const SSupplyState& s,double n
   const auto& graph=BotSupplyGraph();
   if(!BotCecilFrameReady(player)||!std::isfinite(now)||now<0||!s.playable||player->GetHealth()<=0||
      !player->m_penWeapons||!player->GetWorld()||(player->GetFlags()&ENF_DELETED)||BotCecilLiquid(player)||
-     (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH)||s.goalEntity||s.followEntity||s.importantGoal||
+     (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH&&player->m_pstState!=PST_FALL)||s.goalEntity||s.followEntity||s.importantGoal||
      s.interactionPoint>=0||(s.useReleaseTick>=0&&now<=s.useReleaseTick*_pTimer->TickQuantum)||
      s.patrolGoal!=s.goal||s.patrolWorld!=player->GetWorld()||s.patrolEntity!=player->en_ulID||s.patrolGeneration!=s.generation||
      s.patrolMap!=InterlockedCompareExchange(&_botSupplyMapSerial,0,0)||
@@ -874,7 +874,9 @@ static bool BotCecilPatrolContext(CPlayer* player,const SSupplyState& s,double n
 }
 static bool BotCecilPatrolStatic(CPlayer* player){
   CEntity* ref=player->en_penReference;
-  return ref&&!(ref->GetFlags()&ENF_DELETED)&&ref->GetRenderType()==CEntity::RT_BRUSH&&
+  // Passive FALL history is not current standing/contact authority.
+  return (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
+    ref&&!(ref->GetFlags()&ENF_DELETED)&&ref->GetRenderType()==CEntity::RT_BRUSH&&
     !(ref->GetPhysicsFlags()&EPF_MOVABLE)&&ref->en_pwoWorld==player->GetWorld()&&BotCecilIsClass(ref,"WorldBase","World Base");
 }
 static bool BotCecilPatrolAtHop(CPlayer* player,const SSupplyState& s){
@@ -893,7 +895,8 @@ static void BotCecilPatrolObserve(CPlayer* player,SSupplyState& s,double now,boo
   const bool sourceApproach=s.hop==s.patrolSource&&s.anchor==s.patrolSource&&
     s.currentNavGoal==s.goal&&std::fabs(now-s.currentNavTime)<=1e-6;
   if(!accepted||!BotCecilPatrolContext(player,s,now)||(!s.patrolAlternate&&
-     (!s.currentNavTravel||(source!=s.patrolSource&&!sourceApproach)||
+     (s.currentNavGoal!=s.goal||!(std::fabs(now-s.currentNavTime)<=1e-6)||
+      (source!=s.patrolSource&&!sourceApproach)||
       (s.hop!=s.patrolSource&&s.hop!=s.patrolHop)))){s.ClearPatrolEpisode();return;}
   if(BotCecilPatrolAtHop(player,s)){
     if(s.patrolAlternate)BotLog("[CecilPatrolRecovery] entity=%lu generation=%lu time=%.3f action=original_hop_arrival source=%d hop=%d goal=%d\n",
@@ -1249,13 +1252,13 @@ static bool BotCecilClearMotion(CPlayer* player,double forward,double strafe,dou
 static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,bool accepted,bool currentPoint){
   BotCecilPatrolObserve(player,s,now,accepted);
   const auto& graph=BotSupplyGraph();const int source=s.navigator.SourceSlot(s.goal),hop=s.hop;
-  bool observeEligible=accepted&&currentPoint&&s.currentNavTravel&&s.playable&&source>=0&&hop>=0&&source!=hop&&
+  bool observeEligible=accepted&&currentPoint&&s.playable&&source>=0&&hop>=0&&source!=hop&&
     (size_t)source<graph.points.size()&&(size_t)hop<graph.points.size()&&
     graph.points.size()<=botcore::CecilNavGraph::kMaxPoints&&s.blocked.size()==graph.points.size()&&
     !s.blocked[source]&&!s.blocked[hop]&&!s.importantGoal&&!s.followEntity&&s.interactionPoint<0&&
     (s.useReleaseTick<0||now>s.useReleaseTick*_pTimer->TickQuantum)&&
     player->GetHealth()>0&&player->m_penWeapons&&player->GetWorld()&&!BotCecilLiquid(player)&&
-    (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH);
+    (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH||player->m_pstState==PST_FALL);
   CEntity* ref=player->en_penReference;CWorld* world=player->GetWorld();
   observeEligible=observeEligible&&(!ref||(!(ref->GetFlags()&ENF_DELETED)&&
     ref->GetRenderType()==CEntity::RT_BRUSH&&ref->en_pwoWorld==world));
@@ -1291,6 +1294,9 @@ static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,boo
   s.hopCheckpointLast=now;s.hopCheckpointBest=std::fmin(s.hopCheckpointBest,distance);
   if(s.hopCheckpointGainBase-s.hopCheckpointBest>=.75){s.hopCheckpointSince=now;s.hopCheckpointGainBase=s.hopCheckpointBest;}
   if(now-s.hopCheckpointSince+1e-9<5)return false;
+  // FALL and the navigator's bounded STUCK action are observations only.
+  // An expired clock still needs current normal ground travel before rebasing.
+  if(!s.currentNavTravel||(player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH))return false;
   // NULL/moving support can preserve observations, never supply authority.
   if(!ref||(ref->GetPhysicsFlags()&EPF_MOVABLE)||!BotCecilIsClass(ref,"WorldBase","World Base"))return false;
   // Wait for same-tick successful ordinary nearest LOS. Never force an extra

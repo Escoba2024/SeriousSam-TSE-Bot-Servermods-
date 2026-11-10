@@ -459,7 +459,7 @@ void hopCheckpoint46Resets(){
   if(loss==3){player.worldOverride=&alternate;floorEntity.en_pwoWorld=&alternate;}
   if(loss==4){player.en_vGravityDir=FLOAT3D(0,1,0);player.body.m[0][0]=-1;player.body.m[1][1]=-1;}
   hopCheckpoint45Wiggle(next);
-  if(loss==5)player.m_pstState=PST_FALL;
+  if(loss==5)player.m_pstState=static_cast<PlayerState>(5); // Unknown native state still cancels; FALL is covered separately.
   if(loss==6)player.m_pstState=PST_SWIM;
   if(loss==7)player.m_pstState=PST_DIVE;
   if(loss==8)floorEntity.flags=ENF_DELETED;
@@ -629,7 +629,7 @@ void patrolAlternate46Lifecycle(){
  for(int loss=0;loss<21;++loss){
   const int tick=patrolAlternate46Enter()+1;auto& s=BotSupplyState(0);s.scanTick=99999;CWorld foreign;
   switch(loss){
-   case 0:player.m_pstState=PST_FALL;break;
+   case 0:player.m_pstState=static_cast<PlayerState>(5);break; // Unknown state; passive FALL has dedicated authority tests.
    case 1:player.m_pstState=PST_SWIM;break;
    case 2:player.health=0;break;
    case 3:s.goal=3;break;
@@ -802,6 +802,84 @@ void patrolAlternate46Exit(){
   auto& g=BotSupplyGraph();g.points[2].flags=botcore::CECIL_JUMP;g.points[3].important_entity=77;
   const auto failed=hopCheckpoint45Tick(tick);check(s.goal<0&&!s.patrolAlternate&&!failed.active,
    "complete absence of eligible ordinary hints fails only this patrol goal explicitly");
+ }
+}
+
+//047 separates passive committed-hop history from current ground authority.
+void hopCheckpoint47Passive(){
+ for(int mode=0;mode<2;++mode){
+  hopCheckpoint45Fixture();auto& s=BotSupplyState(0);s.scanTick=2;bool expiredInAir=false;int first=-1;
+  for(int tick=2;tick<=145;++tick){
+   hopCheckpoint45Wiggle(tick);
+   // Real20Hz accepted Tick+Safety. NativeFALL need not imply new edge/life.
+   player.m_pstState=(mode==0?(tick%80>=32&&tick%80<=44):(tick<=121))?PST_FALL:PST_STAND;
+   hopCheckpoint45Tick(tick);
+   if(player.m_pstState==PST_FALL){
+    expiredInAir|=tick>=102&&s.hopCheckpointSince>=0&&s.hopCheckpointSince<=.15;
+    check(hopCheckpointEvents==0,"passive FALL never authorizes grounded checkpoint even with nonNULL static reference");
+   }
+   if(hopCheckpointEvents){first=tick;break;}
+  }
+  check(first>=102&&first<=142,"accepted20Hz FALL intervals retain five-second committed-hop history until actual grounded fresh LOS");
+  if(mode==1)check(expiredInAir,"fully airborne expired history is observed but has no checkpoint authority");
+  check(s.goal==2&&s.goalSince==7&&s.goalDeadline==47&&!s.goalRelocationBudgeted,
+   "passive FALL history never extends original item or patrol goal lifetime");
+ }
+ // Real pureNavigator STUCK is an existing .5s action, not a changed hop.
+ hopCheckpoint45Fixture();auto& s=BotSupplyState(0);s.scanTick=99999;
+ player.pl.pl_PositionVector=FLOAT3D(-11.821f,-64.496f,-60.495f);
+ bool sawStuck=false,preserved=false;
+ for(int tick=2;tick<=47;++tick){
+  _botRayBudget=16;const auto move=BotSupplyTick(&player,0,tick,1000);
+  const bool stuck=!s.currentNavTravel&&s.currentNavGoal==2&&s.currentNavTime==tick*.05&&s.navigator.SourceSlot(2)==0&&s.hop==1;
+  double f=move.forward,st=move.strafe,u=move.up;BotCecilSafeMotion(&player,s,tick*.05,f,st,u,0,1,true);
+  if(stuck){sawStuck=true;preserved|=s.hopCheckpointSince>=0&&s.hopCheckpointSince<=.15&&near(s.hopCheckpointLast,tick*.05);}
+ }
+ check(sawStuck,"stationary actual navigator fixture reaches its real STUCK interval on the unchanged committed edge");
+ check(preserved,"existing navigator STUCK interval preserves passive committed-hop history without checkpoint authority");
+ check(hopCheckpointEvents==0,"currentNavTravel false STUCK cannot authorize a checkpoint despite preserved observation");
+}
+void patrolAlternate47Passive(){
+ patrolAlternate46Fixture();auto& s=BotSupplyState(0);int first=-1,entered=-1;bool retained=false,sourceApproach=false;
+ for(int tick=2;tick<=360;++tick){
+  patrolAlternate46Pose(tick);player.m_pstState=tick%80>=32&&tick%80<=44?PST_FALL:PST_STAND;
+  const bool approached=s.hop==0;
+  hopCheckpoint45Tick(tick);
+  if(hopCheckpointEvents&&first<0)first=tick;
+  if(first>=0&&player.m_pstState==PST_FALL)retained|=s.patrolStrikes==1&&s.patrolSource==0&&s.patrolHop==1;
+  sourceApproach|=first>=0&&approached;
+  if(s.patrolAlternate){entered=tick;break;}
+ }
+ check(first>=102&&retained&&sourceApproach,"two-strike history survives real source reapproach and later passive FALL");
+ check(entered>first&&hopCheckpointEvents>=2,"second actual accepted checkpoint can enter fixed alternate episode across repeated FALL");
+ if(!s.patrolAlternate)return;
+ const double since=s.patrolSince;const int tick=entered+1;
+ player.m_pstState=PST_FALL;s.scanTick=99999;const int rays=rayCount;
+ _botRayBudget=16;const auto air=BotSupplyTick(&player,0,tick,1000);double f=.3,st=0,u=0;
+ BotCecilSafeMotion(&player,s,tick*.05,f,st,u,0,1,true);
+ check(s.patrolAlternate&&s.patrolSince==since&&s.goal==1&&s.anchor==0,
+  "active alternate FALL pauses action but preserves original episode deadline and real anchor goal");
+ check(!air.active&&f==0&&st==0&&u==0&&rayCount==rays,
+  "passive alternate FALL with nonNULL static ref authorizes no hint query wall floor or remembered motion");
+ player.m_pstState=PST_STAND;const auto grounded=hopCheckpoint45Tick(tick+1);
+ check(s.patrolAlternate&&s.patrolSince==since&&grounded.active&&std::hypot(grounded.forward,grounded.strafe)>.15,
+  "return to current proved ground resumes freshly tested alternate movement without renewed deadline");
+ check(s.probe.wallRays==1&&s.probe.floorRays==1,"resumed alternate action still needs mandatory fresh wall and floor");
+}
+
+void patrolObservation47Freshness(){
+ for(int defect=0;defect<3;++defect){
+  patrolAlternate46Fixture();auto& s=BotSupplyState(0);int tick=2;
+  for(;tick<180&&!hopCheckpointEvents;++tick){patrolAlternate46Pose(tick);hopCheckpoint45Tick(tick);}
+  check(s.patrolStrikes==1,"freshness guard begins after one genuine accepted checkpoint");
+  player.pl.pl_PositionVector=FLOAT3D(.25f,0,0);_botRayBudget=16;BotSupplyTick(&player,0,tick,1000);
+  check(s.navigator.SourceSlot(1)==0&&s.hop==1,"freshness counterexample keeps the genuine committed original edge");
+  if(defect==0)s.currentNavTime=NAN;
+  if(defect==1)s.currentNavTime-=.05;
+  if(defect==2)s.currentNavGoal=-1;
+  BotCecilPatrolObserve(&player,s,tick*.05,true);
+  check(s.patrolStrikes==0&&s.patrolSource<0,
+   "nonfinite stale or wrong-goal derived navigation stamp cannot preserve failed-edge strikes");
  }
 }
 
@@ -1912,7 +1990,7 @@ void nativeContactRecovery(){
 }
 int main(){
  nativeContactRecovery();farHintTests();farHintGuards();
- hopCheckpoint45();hopCheckpoint45Freshness();hopCheckpoint46Flicker();hopCheckpoint46Authority();hopCheckpoint46Resets();hopCheckpoint46ProgressAndProtection();patrolAlternate46Red();patrolAlternate46Gain();patrolAlternate46Safety();patrolAlternate46Lifecycle();patrolAlternate46Search();patrolAlternate46ExtraGuards();patrolAlternate46Metadata();patrolAlternate46Exit();hopCheckpoint45Guards();hopCheckpoint45Deferral();hopCheckpoint45ItemDeadline();hopCheckpoint45Arrival();airRecovery44();airRecovery44Guards();neutralRecovery43();neutralRecovery43Guards();groundSweep42();groundSweep42Guards();offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
+ hopCheckpoint45();hopCheckpoint45Freshness();hopCheckpoint46Flicker();hopCheckpoint46Authority();hopCheckpoint46Resets();hopCheckpoint46ProgressAndProtection();patrolAlternate46Red();patrolAlternate46Gain();patrolAlternate46Safety();patrolAlternate46Lifecycle();patrolAlternate46Search();patrolAlternate46ExtraGuards();patrolAlternate46Metadata();patrolAlternate46Exit();hopCheckpoint47Passive();patrolAlternate47Passive();patrolObservation47Freshness();hopCheckpoint45Guards();hopCheckpoint45Deferral();hopCheckpoint45ItemDeadline();hopCheckpoint45Arrival();airRecovery44();airRecovery44Guards();neutralRecovery43();neutralRecovery43Guards();groundSweep42();groundSweep42Guards();offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
  liftOccupancyBridge();
  { // Reproduce Retail033's mask overwrite, including initialized-mask controls.
  for(bool physical:{false,true})for(ULONG initial:{0u,2048u}){

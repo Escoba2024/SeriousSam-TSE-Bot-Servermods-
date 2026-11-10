@@ -41,6 +41,7 @@
 #include <Engine/World/WorldRayCasting.h>
 #include "SessionProperties.h"
 #include <cstdarg>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -569,6 +570,42 @@ void BotDriver_Init(void)
 /* ------------------------------------------------------------------------ */
 /* Per-local-player bot state                                                 */
 /* ------------------------------------------------------------------------ */
+
+// BEGIN CECIL PLAYER OBSERVER
+// Existing one-second telemetry only. Observe a composed nonneutral action
+// whose native player velocity is near zero; never repair native state here.
+static void BotPlayerObserverTelemetry(const CPlayer* player,INDEX slot,INDEX tick,
+    ULONG generation,const CPlayerAction& action) {
+  if(slot<0||slot>=4||tick<0||!player||!_pNetwork||!player->en_pwoWorld||
+     (player->GetFlags()&ENF_DELETED))return;
+  double request2=0,speed2=0;
+  for(int i=1;i<=3;++i){
+    const double request=action.pa_vTranslation(i),speed=player->en_vCurrentTranslationAbsolute(i);
+    if(!std::isfinite(request)||!std::isfinite(speed))return;
+    request2+=request*request;speed2+=speed*speed;
+  }
+  if(request2<.0025||speed2>.01)return;
+  const auto& stack=player->en_stslStateStack;const INDEX count=stack.sa_UsedCount;
+  const bool valid=count>=0&&count<=16&&stack.sa_Count>=count&&stack.sa_Count<=4096&&
+    (count==0||stack.sa_Array!=NULL);
+  char states[145]={};size_t used=0;
+  if(valid)for(INDEX n=0;n<count;++n)
+    used+=(size_t)std::snprintf(states+used,sizeof(states)-used,"%s%08lx",n?",":"",
+      (unsigned long)(uint32_t)stack.sa_Array[n]);
+  const CEntity* camera=player->m_penCamera;const CEntity* marker=player->m_penActionMarker;
+  const auto localEntity=[&](const CEntity* entity){return entity&&!(entity->GetFlags()&ENF_DELETED)&&
+    entity->en_pwoWorld==player->en_pwoWorld;};
+  const bool cameraValid=localEntity(camera),markerValid=localEntity(marker);
+  BotLog("[CecilPlayerObserve] local=%d tick=%d entity=%lu generation=%lu native_time=%.9f player_flags=%lu camera_present=%d camera=%lu camera_valid=%d marker_present=%d marker=%lu marker_valid=%d states_valid=%d count=%d states=%s input=(%.4f,%.4f,%.4f) desired=(%.4f,%.4f,%.4f) velocity=(%.4f,%.4f,%.4f) action_rotation=(%.4f,%.4f,%.4f) last_buttons=%lu\n",
+    slot,tick,(unsigned long)player->en_ulID,(unsigned long)generation,(double)_pNetwork->GetGameTime(),
+    (unsigned long)player->m_ulFlags,camera!=NULL,cameraValid?(unsigned long)camera->en_ulID:0UL,cameraValid,
+    marker!=NULL,markerValid?(unsigned long)marker->en_ulID:0UL,markerValid,valid,count,states,
+    (double)action.pa_vTranslation(1),(double)action.pa_vTranslation(2),(double)action.pa_vTranslation(3),
+    (double)player->en_vDesiredTranslationRelative(1),(double)player->en_vDesiredTranslationRelative(2),(double)player->en_vDesiredTranslationRelative(3),
+    (double)player->en_vCurrentTranslationAbsolute(1),(double)player->en_vCurrentTranslationAbsolute(2),(double)player->en_vCurrentTranslationAbsolute(3),
+    (double)action.pa_aRotation(1),(double)action.pa_aRotation(2),(double)action.pa_aRotation(3),(unsigned long)player->m_ulLastButtons);
+}
+// END CECIL PLAYER OBSERVER
 
 // BEGIN CECIL WEAPON OBSERVER
 // Read-only observation after SetAction, under the existing network/world lock.
@@ -1534,6 +1571,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         player->GetPlacement().pl_OrientationAngle(1),player->GetPlacement().pl_OrientationAngle(2),player->GetPlacement().pl_OrientationAngle(3),state.anchor,state.reacquireNode,
         player->en_penReference?(unsigned long)player->en_penReference->en_ulID:0,state.levelSwimView,
         player->en_plViewpoint.pl_OrientationAngle(2),localInput->m_aLocalRotation(2),pa.pa_aRotation(2),player->m_aLastRotation(2));
+      BotPlayerObserverTelemetry(player,iLP,bs.bs_iTick,state.generation,pa);
     }
 
     // 5) periodic status log (position read from our own player entity)
