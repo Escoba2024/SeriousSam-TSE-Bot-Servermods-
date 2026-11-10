@@ -1,51 +1,55 @@
-# Cecil-Transfer: aktueller Quellstand045
+# Cecil-Transfer: aktueller Quellstand 046
 
-Quelle `7033ce290755f6cd819a18c2a38356370168c235`, Tree `0471a4476826c95770b9af187b4b99d39b2c2d99`. Alle41Originalbereiche tatsächlich neu gelesen,94aktuelle Quellanker und14Dateihashes gebunden.33Bereiche implementiert, eine vorhandene Human-LOS adaptiert, vier Architekturteile begründet ausgeschlossen, zwei im FFA-Scope nicht anwendbar; native Gesamtqualifikation weiterhin offen.
+Quelle `c298cf241b514b28f6d28e815bb5718a5a1d3d6c`, Tree `dba553b039a8a4dd10de27168f37671a1da48d84`, DLL `b148ae2e9ccfb337a6311bd81c4cdedafb9eac5d48bbb31126673eec51554816`. Alle 41 Originalbereiche sind an 109 aktuelle Quellanker und 14 Dateihashes gebunden. 33 Bereiche sind implementiert, eine vorhandene Human-LOS ist adaptiert, vier Architekturteile sind ausgeschlossen und zwei Bereiche liegen außerhalb des FFA-Scope. Das beschreibt Quellintegration, keine vollständige Originalmod-Laufzeitparität.
 
-Diese Matrix bestätigt Verdrahtung und ausdrücklich genannte Anpassungen. Sie behauptet keine vollständige Originalmod-Laufzeitparität und überträgt keine früheren nativen Ergebnisse auf045. Aktuelle gemessene Resultate stehen im [045-Bericht](2026-11-09-candidate045-native-results.md); noch laufende oder nicht geprüfte Gates bleiben offen. Der vollständige039-Stand bleibt per unveränderlichem Commit/Dateihash in der [maschinenlesbaren Matrix](transfer-status.json) verlinkt.
+Die tatsächlichen 046-Ergebnisse stehen im [Native-Bericht](2026-11-10-candidate046-native-results.md): Supply-P95 und Hole-Stillstand/Spawnaktivität scheitern; Skulls hat trotz erfüllter numerischer Grenzen offene Routenkontexte. Von 151 aktuellen gesundheitskorrelierten Respawnpaaren folgt kein Respawn-PASS, weil eine Aktivitätsgrenze verletzt ist. Nicht gemessene Gates bleiben offen.
 
-| ID | Bereich | Quellstatus | Aktueller nativer Nachweisbedarf |
+Die unveränderlichen 045- und 039-Referenzen bleiben in der [maschinenlesbaren Matrix](transfer-status.json) erhalten. Frühere native Resultate werden nicht übertragen. GPL-Attribution, die begründete Patcher-/CPOL-Architekturgrenze und das Veröffentlichungsverbot für originale NAV-/Retail-Daten bleiben bestehen.
+
+| ID | Bereich | Quellstatus | Begrenzter aktueller 046-Befund |
 | --- | --- | --- | --- |
-| T01 | NAV-Dateien | IMPLEMENTIERT | Exact current DLL/map/NAV-CRC load and successful native traversal on each required map. |
-| T02 | Punktstruktur | IMPLEMENTIERT | Current native special-point, lock and important-entity behavior tied to original IDs. |
-| T03 | Gerichtete Verbindungen | IMPLEMENTIERT | Native source/hop sequence and actual position progress on real directed paths. |
-| T04 | Punktradien | IMPLEMENTIERT | Arrival matched to actual position/original radius; no action-only arrival inference. |
-| T05 | A*-Suche | IMPLEMENTIERT | Reachable/unreachable and lock/teleport path behavior; no claim of identical original tie-breaking. |
-| T06 | Nächster Navpunkt | IMPLEMENTIERT | Fresh actual original-node acquisition after offgraph/flight/relocation, with same-life autonomous path resumption. |
-| T07 | Important-Ziele | IMPLEMENTIERT | Important target interaction effect and following original next-slot chain. |
-| T08 | Switch-/Marker-Events | IMPLEMENTIERT | Actual USE pulse plus native switch/marker effect; 1Hz state can miss a pulse, keep OPEN without effect proof. |
-| T09 | Locks | IMPLEMENTIERT | Actual supported fresh lock approach, later original arrival, and support-loss control on current DLL. |
-| T10 | Teleport | IMPLEMENTIERT | Matched native teleport entry/exit/map/identity; movement request alone is insufficient. |
-| T11 | Jump/Crouch/Override | IMPLEMENTIERT | Actual crouch/jump/override action and physical position follow-up. |
-| T12 | Auto-NAV-Generierung | NICHT_ANWENDBAR_5_FFA_MAPS | No native implementation claim for the deliberately excluded/out-of-scope subsystem; verify unchanged vanilla boundary in current native integrity gates. |
-| T13 | NAV-Editor/Netzbefehle | ARCHITEKTONISCH_AUSGESCHLOSSEN | No native implementation claim for the deliberately excluded/out-of-scope subsystem; verify unchanged vanilla boundary in current native integrity gates. |
-| T14 | Per-Bot Pfadzustand | IMPLEMENTIERT | Native generation, death/rejoin and map state continuity without cross-bot leakage. |
-| T15 | Stuck-Erkennung | IMPLEMENTIERT | Actual ineffective-hop cycle produces checkpoint, then genuine closer hop/arrival/path progress, not merely displacement. |
-| T16 | Recovery-Bewegung | IMPLEMENTIERT | Actual safe escape displacement followed by autonomous navigation resumption; distinguish combat release/loop/wiggle. |
-| T17 | Abgrundvermeidung | IMPLEMENTIERT | Current default0 unknown-support wall movement and opt-in1 floor behavior; narrow exact-contact proof and final action corroboration. |
-| T18 | Schwimmen/Gravitation | IMPLEMENTIERT | Actual liquid transitions/leveling, rotated gravity, and air-hint steering followed by autonomous navigation. |
-| T19 | Follow-Verhalten | IMPLEMENTIERT | Observed target memory expiry and reachable follow; no teleport claim. |
-| T20 | Gegnerauswahl | IMPLEMENTIERT | Native selected entity/visibility/reaction/cooldown chronology. |
-| T21 | Team-/Monsterauswahl | IMPLEMENTIERT | FFA team exclusions; monster/cooperative behavior remains outside scope. |
-| T22 | Sichtprüfung | BEREITS_VORHANDEN_OFFLINE_GEPRUEFT | Current native LOS identity and bounded queries; no original TT_NONE equivalence assertion. |
-| T23 | Zielgedächtnis/Timer | IMPLEMENTIERT | Native visible-to-hidden expiry/identity changes; no hidden-position use. |
-| T24 | Waffentabellen | IMPLEMENTIERT | Native five required weapons owned and chosen using the current table/selector. |
-| T25 | Waffenbewertung | IMPLEMENTIERT | Owned/wanted/current/actual emitted fire in safe range; unsafe range suppression and dwell evidence. |
-| T26 | Waffenwechsel | IMPLEMENTIERT | Ordered actual choice -> emitted group -> native wanted -> complete whole-family exit per identity; drops/censoring OPEN. Earlier policy opportunity and exact CD/dwell upper bound remain OPEN even with completed observer chains. |
-| T27 | Feuer/Granate/Scope | IMPLEMENTIERT | Actual emitted fire/grenade release/scope and final safe-range guards; hits require separate hit/damage evidence. |
-| T28 | Aim/Vorhalten | IMPLEMENTIERT | Native angle/visible motion/settling chronology; no hit inference. |
-| T29 | Strafing/Distanz | IMPLEMENTIERT | Actual movement near opponent, accepted owner and final safety action. |
-| T30 | Itempriorität | IMPLEMENTIERT | Fixed first-ten selected typed goals and fixed ten initial lives under current DLL; no censored-attempt drop. Legitimate relocation budget and no checkpoint deadline renewal. |
-| T31 | Itemkandidaten/LOS | IMPLEMENTIERT | Selected typed item/weapon-bit gain/GoalEnd correlated in same life, including incidental weapons and native pickup geometry. |
-| T32 | Reisemesser | IMPLEMENTIERT | Actual final knife selection after >2s sighting delay and navigation arbitration. |
-| T33 | Respawn | IMPLEMENTIERT | >=100 health<=0 -> same entity next generation Spawn pairs plus each-bot actual respawn activity <=6s using qualification timing definition. |
-| T34 | Schwierigkeiten | IMPLEMENTIERT | Native preset/settings pin and actual behavior; source assignments alone are not runtime parity. |
-| T35 | Configserialisierung | IMPLEMENTIERT | Current config hash/schema/invalid readiness controls. |
-| T36 | Controller als Modul | IMPLEMENTIERT | Current source/DLL/PID/start/tick binding, ordinary action processing and all native gates. |
-| T37 | PlayerBot/EntitiesMP | ARCHITEKTONISCH_AUSGESCHLOSSEN | No native implementation claim for the deliberately excluded/out-of-scope subsystem; verify unchanged vanilla boundary in current native integrity gates. |
-| T38 | Netzpatch/Patcher | ARCHITEKTONISCH_AUSGESCHLOSSEN | No native implementation claim for the deliberately excluded/out-of-scope subsystem; verify unchanged vanilla boundary in current native integrity gates. |
-| T39 | Lernen/Teamtaktik | NICHT_ANWENDBAR_5_FFA_MAPS | No native implementation claim for the deliberately excluded/out-of-scope subsystem; verify unchanged vanilla boundary in current native integrity gates. |
-| T40 | Native Gleichwertigkeit/Last | OFFEN | Current five-map functionality; weapons/features; health respawns; 1h one-bot/1h four-bot/2h eight-bot; recovery; matched CPU windows <=1.2 and RSS; original Retail gameplay; rotation; six instances plus 900s. Source/portable/build evidence cannot fill these gates. |
-| T41 | Coop-Catch-up-Teleport | ARCHITEKTONISCH_AUSGESCHLOSSEN | No native implementation claim for the deliberately excluded/out-of-scope subsystem; verify unchanged vanilla boundary in current native integrity gates. |
+| T01 | NAV-Dateien | IMPLEMENTIERT | Exakte map-/NAV-gepinnte Loads für Supply-Red und zwei Kartenfenster beobachtet; weitere Karten und vollständige Traversierung offen. |
+| T02 | Punktstruktur | IMPLEMENTIERT | Originalpunkte in Checkpoint-/Patrol-Kontexten korreliert; Sonderpunktwirkung nicht vollständig belegt. |
+| T03 | Gerichtete Verbindungen | IMPLEMENTIERT | Skulls hält zwei gleiche Hops152/32s ohne wirksame Zielannäherung; Hole weitere Routenfragen. Keine vollständige gerichtete Traversierungsfreigabe. |
+| T04 | Punktradien | IMPLEMENTIERT | Begrenzte ursprüngliche Hop-/Ankerfortschritte beobachtet; Hint52 ist keine Radiusankunft oder abgeschlossene Zielerreichung. |
+| T05 | A*-Suche | IMPLEMENTIERT | Vorbereitete Suffixprüfung portabel geprüft; zwei alternative Erwerbe und drei echte Ausschöpfungsfehler nativ erhalten, keine globale Suchparität. |
+| T06 | Nächster Navpunkt | IMPLEMENTIERT | Hole: zwei gewöhnliche Erwerbe von Originalpunkt52 mit physischem Fortschritt im selben Zielkontext; drei ausgeschöpfte Versuche und offene lange Routen bleiben erhalten. |
+| T07 | Important-Ziele | IMPLEMENTIERT | Item-/Important-Kontexte beobachtet; vollständige native Wirkung der Important-/Next-Slot-Ketten offen. |
+| T08 | Switch-/Marker-Events | IMPLEMENTIERT | Hole protokolliert Interaktionsabsichten; tatsächliche USE-Wirkung oder ausgelöster Engine-Event nicht vollständig nachgewiesen. |
+| T09 | Locks | IMPLEMENTIERT | Hole-Lock-Snapshots und ein Approach-Tag erfasst; keine pauschale erfolgreiche Lock-/Lift-Traversierung daraus. |
+| T10 | Teleport | IMPLEMENTIERT | Teleportflags oder späte Positionssprünge ersetzen keine geprüfte Entry-/Exit-/Entity-Kette. |
+| T11 | Jump/Crouch/Override | IMPLEMENTIERT | Vollständige finale Jump-/Crouch-/Override-Eingabe mit physischer Folge bleibt offen. |
+| T12 | Auto-NAV-Generierung | NICHT_ANWENDBAR_5_FFA_MAPS | Bewusst außerhalb des gepinnten Architektur-/FFA-Scope; kein nativer Implementierungs- oder Paritätskredit. |
+| T13 | NAV-Editor/Netzbefehle | ARCHITEKTONISCH_AUSGESCHLOSSEN | Bewusst außerhalb des gepinnten Architektur-/FFA-Scope; kein nativer Implementierungs- oder Paritätskredit. |
+| T14 | Per-Bot Pfadzustand | IMPLEMENTIERT | 151 tatsächliche Health-Death-/Folgegeneration-Paare über zwei Karten; In-Process-Map-/Rejoin-/Recovery-Gates nicht gelaufen. |
+| T15 | Stuck-Erkennung | IMPLEMENTIERT | Skulls152/32s ineffektive Hop-Kontexte; Hole31,291447s unbegründeter Stillstand trotz numerischer Aktivität anderer Slots. |
+| T16 | Recovery-Bewegung | IMPLEMENTIERT | Zwei begrenzte alternative Erwerbe mit Fortschritt; drei ausgeschöpfte Versuche, offene Routen und Hole-Spawnaktivität32,1s verhindern Freigabe. |
+| T17 | Abgrundvermeidung | IMPLEMENTIERT | Patrol verlangt im Code aktuelle statische Referenz sowie Wand/Boden auch bei Pit-Policy0; SafeMotion-Rückgabewert ist kein direkter Floor-Cast-Beleg. |
+| T18 | Schwimmen/Gravitation | IMPLEMENTIERT | PST_FALL ist kein Flüssigkeitszustand; vollständige Schwimm-/Gravitationsfolgen und autonome Wiederaufnahme nicht abgeschlossen. |
+| T19 | Follow-Verhalten | IMPLEMENTIERT | Combat-/Target-Kontexte liegen vor; Follow-/Gedächtnis-/Erreichbarkeitsvertrag nicht vollständig abgenommen. |
+| T20 | Gegnerauswahl | IMPLEMENTIERT | Alle acht zeigen in beiden Karten positive Scoreänderungen und Feueraktivität; keine vollständige Reaktions-/Cooldown-Abnahme. |
+| T21 | Team-/Monsterauswahl | IMPLEMENTIERT | Native Beobachtungen betreffen FFA; Team-/Monster-/Coop-Parität wird nicht behauptet. |
+| T22 | Sichtprüfung | BEREITS_VORHANDEN_OFFLINE_GEPRUEFT | Bestehende LOS-/Querypfade und begrenzte Beobachtungen; keine Gleichsetzung mit originalem Ray-Verhalten. |
+| T23 | Zielgedächtnis/Timer | IMPLEMENTIERT | Sicht-/Zielproben sind vorhanden; vollständige Gedächtnisablauf-/Identitätsmessung bleibt offen. |
+| T24 | Waffentabellen | IMPLEMENTIERT | Typisierte Waffenbesitzwechsel vorhanden; die Pflichtfünfergruppe3/8/9/11/14 ist nicht vollständig nativ abgenommen. |
+| T25 | Waffenbewertung | IMPLEMENTIERT | Begrenzte Auswahl-/Besitz-/Current-Belege; vollständige Nahbereichs-/Dwell-/Bewertungsabnahme fehlt. |
+| T26 | Waffenwechsel | IMPLEMENTIERT | Strenger Observer bleibt lesend und zeitlich unqualifiziert. Nur echte unzensierte046-Ketten können zählen; keine frühere Policy-Opportunity oder angenommene Clock-Gleichheit. |
+| T27 | Feuer/Granate/Scope | IMPLEMENTIERT | Emittierte Feueraktionen und Scoreänderungen beobachtet; komplette Granaten-/Scope-/Sicherheitsdistanzprüfung und genaue Trefferzuordnung offen. |
+| T28 | Aim/Vorhalten | IMPLEMENTIERT | Native Winkel-/Combat-Proben ersetzen keine vollständige Vorhalte-/Trefferprüfung. |
+| T29 | Strafing/Distanz | IMPLEMENTIERT | Bewegung und Strafing beobachtet; Kreiseln oder seitliche Ausweichaktionen sind kein Hop-Fortschritt. |
+| T30 | Itempriorität | IMPLEMENTIERT | Zehn feste Erstziele10/10, aber zehn feste Initialleben Median9,9s/P9530,5s überschreiten unverändert30s; tatsächlicher Nichtkohorten-Timeout erhalten. |
+| T31 | Itemkandidaten/LOS | IMPLEMENTIERT | Zehn ausgewählte Ziele typisiert korreliert; alle26 Waffenstarts25korreliert+1Timeout und alle34Goalstarts erhalten. Keine pauschale Pickupreichweite. |
+| T32 | Reisemesser | IMPLEMENTIERT | Reisemesser-/Arbitrations- und Sichtungsverzögerung nicht vollständig nativ adjudiziert. |
+| T33 | Respawn | IMPLEMENTIERT | 151 unterschiedliche046-Health-Paare belegt (64Skulls+87Hole), Death→Spawn max1,9s. HoleB2 benötigt nach Spawn32,1s bis Aktivität statt höchstens5s; kein Respawn-Gesamt-PASS. |
+| T34 | Schwierigkeiten | IMPLEMENTIERT | Gepinnter aktueller Preset gemessen; nicht alle Schwierigkeiten nativ abgenommen. |
+| T35 | Configserialisierung | IMPLEMENTIERT | Supply17 Schutzpins und Postrun289Pins erhalten; keine vollständige Invalid-/Konfigurationsmatrix nativ abgenommen. |
+| T36 | Controller als Modul | IMPLEMENTIERT | Build-/PID-/Start-/Inputbindung begrenzt geprüft; Supply/Hole fehlen, Skulls-Routen offen. Kein All6-Rollout. |
+| T37 | PlayerBot/EntitiesMP | ARCHITEKTONISCH_AUSGESCHLOSSEN | Bewusst außerhalb des gepinnten Architektur-/FFA-Scope; kein nativer Implementierungs- oder Paritätskredit. |
+| T38 | Netzpatch/Patcher | ARCHITEKTONISCH_AUSGESCHLOSSEN | Bewusst außerhalb des gepinnten Architektur-/FFA-Scope; kein nativer Implementierungs- oder Paritätskredit. |
+| T39 | Lernen/Teamtaktik | NICHT_ANWENDBAR_5_FFA_MAPS | Bewusst außerhalb des gepinnten Architektur-/FFA-Scope; kein nativer Implementierungs- oder Paritätskredit. |
+| T40 | Native Gleichwertigkeit/Last | OFFEN | Supply-P95 und Hole-Stillstand/Spawnaktivität scheitern. Drei weitere Karten, Stunden, Retail046, Ressourcen, Rotation, Recovery und Flotte nicht durchgeführt. |
+| T41 | Coop-Catch-up-Teleport | ARCHITEKTONISCH_AUSGESCHLOSSEN | Bewusst außerhalb des gepinnten Architektur-/FFA-Scope; kein nativer Implementierungs- oder Paritätskredit. |
 
-Die gezielten Neubewertungen betreffen insbesondere Nearest/Recovery, getrennte Default0-Wandbewegung bei unbekanntem Support, Luftkontext, statischen Hop-Checkpoint und rein lesende Waffenphasenbeobachtung. Aktuelle/gewünschte Waffe allein bleibt kein Animationsabschluss; früheste Policy-Opportunity bleibt ungemessen. Kein fehlender Pflicht-Callsite wurde in diesem Quellreview gefunden. Native Wirksamkeit und Freigabe werden ausschließlich durch die gesonderten festen Gates belegt.
+Die verbleibenden Nachweise jeder Zeile sind in `remaining_native_evidence` konkret benannt. T33 trennt ausdrücklich Death→Spawn (tatsächlicher Presetdelay plus 5 s, hier 6 s) von Aktivität höchstens 5 s **nach Spawn**. Die zusätzliche vorbereitete Suffixsuche und die LOS-Arbeit bleiben im gemeinsamen Strahlenbudget, sind aber ohne neue Messung kein CPU-/RSS-Nachweis.
+
+Die getrennte 047-Änderung an passiver Hop-Beobachtung ist kein Bestandteil dieser 046-DLL und erhält aus diesen Läufen keinen Kredit. Main hat die sechs finalen Dateien einschließlich aller 41 Bereiche, 109 Quellanker, Build-/Native-Bindungen und unveränderten historischen Anhänge geprüft. Die Veröffentlichung führt Main getrennt aus.
