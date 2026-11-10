@@ -856,7 +856,7 @@ static bool BotCecilPatrolContext(CPlayer* player,const SSupplyState& s,double n
   const auto& graph=BotSupplyGraph();
   if(!BotCecilFrameReady(player)||!std::isfinite(now)||now<0||!s.playable||player->GetHealth()<=0||
      !player->m_penWeapons||!player->GetWorld()||(player->GetFlags()&ENF_DELETED)||BotCecilLiquid(player)||
-     (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH&&player->m_pstState!=PST_FALL)||s.goalEntity||s.followEntity||s.importantGoal||
+     (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH&&player->m_pstState!=PST_FALL)||s.goalEntity||s.followEntity||
      s.interactionPoint>=0||(s.useReleaseTick>=0&&now<=s.useReleaseTick*_pTimer->TickQuantum)||
      s.patrolGoal!=s.goal||s.patrolWorld!=player->GetWorld()||s.patrolEntity!=player->en_ulID||s.patrolGeneration!=s.generation||
      s.patrolMap!=InterlockedCompareExchange(&_botSupplyMapSerial,0,0)||
@@ -912,7 +912,7 @@ static void BotCecilPatrolObserve(CPlayer* player,SSupplyState& s,double now,boo
 }
 static void BotCecilPatrolStrike(CPlayer* player,SSupplyState& s,double now,int source,int hop,double best){
   const auto& a=BotSupplyGraph().points[source];const auto& b=BotSupplyGraph().points[hop];
-  if(s.goalEntity||s.followEntity||s.importantGoal||a.flags||b.flags||a.important_entity>=0||b.important_entity>=0||
+  if(s.goalEntity||s.followEntity||a.flags||b.flags||a.important_entity>=0||b.important_entity>=0||
      a.lock_entity>=0||b.lock_entity>=0)return;
   if(s.patrolSource!=source||s.patrolHop!=hop||!BotCecilPatrolContext(player,s,now)){
     s.ClearPatrolEpisode();s.patrolWorld=player->GetWorld();s.patrolEntity=player->en_ulID;s.patrolGeneration=s.generation;
@@ -1255,7 +1255,7 @@ static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,boo
   bool observeEligible=accepted&&currentPoint&&s.playable&&source>=0&&hop>=0&&source!=hop&&
     (size_t)source<graph.points.size()&&(size_t)hop<graph.points.size()&&
     graph.points.size()<=botcore::CecilNavGraph::kMaxPoints&&s.blocked.size()==graph.points.size()&&
-    !s.blocked[source]&&!s.blocked[hop]&&!s.importantGoal&&!s.followEntity&&s.interactionPoint<0&&
+    !s.blocked[source]&&!s.blocked[hop]&&!s.followEntity&&s.interactionPoint<0&&
     (s.useReleaseTick<0||now>s.useReleaseTick*_pTimer->TickQuantum)&&
     player->GetHealth()>0&&player->m_penWeapons&&player->GetWorld()&&!BotCecilLiquid(player)&&
     (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH||player->m_pstState==PST_FALL);
@@ -1267,7 +1267,10 @@ static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,boo
   if(observeEligible){
     const auto& a=graph.points[source];const auto& b=graph.points[hop];
     const uint32_t special=botcore::CECIL_UNREACHABLE|botcore::CECIL_TELEPORT|botcore::CECIL_IMPORTANT|botcore::CECIL_JUMP;
-    observeEligible=!((a.flags|b.flags)&special)&&a.important_entity<0&&b.important_entity<0&&
+    // An important destination does not exempt an ordinary intermediate edge.
+    // Keep its terminal/special edge excluded; ordinary-goal flag policy is unchanged.
+    observeEligible=(!s.importantGoal||!(a.flags|b.flags))&&
+      !((a.flags|b.flags)&special)&&a.important_entity<0&&b.important_entity<0&&
       a.lock_entity<0&&b.lock_entity<0&&
       std::find(a.links.begin(),a.links.end(),hop)!=a.links.end();
     for(int i=1;i<=3;++i){
@@ -1528,6 +1531,21 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   const bool originalNoFloor=!neutralRequest&&!originalClear&&state.probe.primaryReason==SCecilProbe::reasonNoFloor;
   if(stalled&&now+1e-9<state.groundEscapeAfter){forward=strafe=up=0;return 0;}
   if(now<state.escapeAfter){forward=strafe=up=0;return 0;}
+  // A blocked diagonal need not block its already selected liquid vertical axis.
+  // This is a fresh component query, never extra intent or ground authority.
+  const unsigned liquidUncertain=(1u<<SCecilProbe::reasonBudget)|(1u<<SCecilProbe::reasonInvalid);
+  if(useReacquire&&currentPoint&&state.currentNavTravel&&BotCecilLiquid(player)&&
+     state.playable&&state.entity==player->en_ulID&&player->GetWorld()&&
+     !(player->GetFlags()&ENF_DELETED)&&std::isfinite(player->GetHealth())&&player->GetHealth()>0&&player->m_penWeapons&&
+     !state.followEntity&&state.interactionPoint<0&&
+     (state.useReleaseTick<0||now>state.useReleaseTick*_pTimer->TickQuantum)&&
+     std::isfinite(player->en_vCurrentTranslationAbsolute(1))&&std::isfinite(player->en_vCurrentTranslationAbsolute(2))&&
+     std::isfinite(player->en_vCurrentTranslationAbsolute(3))&&requestedLength>.05&&std::fabs(up)>=.05&&
+     !originalClear&&state.probe.primaryReason==SCecilProbe::reasonWallHit&&
+     !(state.probe.reasonMask&liquidUncertain)&&_botRayBudget>2&&
+     BotCecilClearMotion(player,0,0,up,finalBodyYaw,&state.probe,false,false)){
+    forward=strafe=0;state.ClearEscape();return 1;
+  }
   // Only this branch tested the original request. Held-escape failures return
   // above; deferred/uncertain probes or an approved escape preserve its target.
   auto rejectOriginal=[&](){

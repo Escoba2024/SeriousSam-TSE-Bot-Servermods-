@@ -1,0 +1,9 @@
+# Observe current navigation and checkpoint context at the existing cadence
+
+Normal047's completed Skulls window contains a169-second same-goal movement cycle that alternating hops hide from a same-hop-only scan. Its one-second samples record position, goal, hop and anchor, but cannot distinguish current important-goal classification, a committed edge and a source approach, or whether the passive checkpoint clock still exists. Static predicates and a portable replay can identify a concrete exclusion; they cannot reconstruct every unsampled native callback.
+
+Append eight scalar values to the existing `[CecilState]` line at its existing20-callback cadence: `important`, `nav_source`, `nav_travel`, and `hop_clock=(goal,source,hop,last,since)`. `nav_source` calls the const, bounded `CecilNavigator::SourceSlot` accessor; all remaining values are direct reads of the same const supply-state reference. There are no new rays, entity lookups, clocks, allocations, retained observations, actions or game-field writes. The existing Player/Weapon observers and their clocks are unchanged.
+
+This is a point-in-time diagnostic, not proof of an intervening reset cause, applied network input, original-radius arrival, successful interaction or physical route recovery. Negative source and clock sentinels remain visible. `last` and `since` use the adapter's existing callback-time convention; they are not asserted equal to the native Player/weapon clock. Existing readers accept additional key/value fields. The extra formatted output still belongs in the final DLL's native resource and sync verification; a compile or source review supplies no runtime qualification.
+
+Validation uses the real Driver/SDK action contract, unchanged Player/Weapon observer suites, independent format/argument and callsite review, and the actual MSVC build. No test merely duplicates the new format string.

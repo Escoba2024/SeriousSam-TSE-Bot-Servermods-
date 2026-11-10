@@ -127,6 +127,7 @@ struct CBrushSector {CBrushMip* bsc_pbmBrushMip=nullptr;};
 struct CBrushPolygon {CBrushPlane* bpo_pbplPlane=nullptr;unsigned bpo_ulFlags=0;CBrushSector* bpo_pbscSector=nullptr;};
 CEntity obstruction,floorEntity;CBrushPlane floorPlane;CBrushPolygon floorPolygon;
 float floorHitDistance=1;CBrushPolygon* floorHitPolygon=&floorPolygon;
+int liquidAxisQueries=0;bool liquidAxisBlocked=false,liquidAxisInvalid=false;
 int floorMode=0,rayCount=0,blockedItems=0,floorPattern=0,wallMode=0,wallCount=0;FLOAT3D lastFrom,lastTo,wallFrom,wallTo;
 int nearFootMode=0,nearFootRays=0;float nearFootDistance=.26f;bool invalidateAfterFloor=false;
 int legacyCastCalls=0,sectorAdds=0,sectorTests=0,worldTests=0;unsigned wallPolygonFlags=0;
@@ -168,10 +169,13 @@ struct CCastRay {
     if(floorMode==2)cr_pbpoBrushPolygon=floorHitPolygon;}
   }else{
    ++wallCount;wallFrom=from;wallTo=to;
+   const bool liquidAxis=std::fabs(to(2)-from(2))>1e-5&&std::hypot(to(1)-from(1),to(3)-from(3))<1e-5;
+   if(liquidAxis){++liquidAxisQueries;if(liquidAxisInvalid){cr_fHitDistance=NAN;return;}if(liquidAxisBlocked){cr_penHit=&obstruction;return;}}
    if(captureWalls&&capturedWalls<4096){capturedWorld[capturedWalls][0]=to(1)-from(1);capturedWorld[capturedWalls++][1]=to(3)-from(3);}
    if(!Passes(wallPolygonFlags)&&(wallMode==2||(wallMode==1&&to(3)<from(3))||
       (wallMode==3&&(std::fabs(to(1)-from(1))<1e-5||std::fabs(to(3)-from(3))<1e-5))||
       (wallMode==4&&!(std::fabs(to(1)-from(1))<1e-5&&to(3)<from(3)))||
+      (wallMode==5&&std::fabs(to(2)-from(2))>1e-5&&std::hypot(to(1)-from(1),to(3)-from(3))>1e-5)||
       (to(1)>0 && to(1)<=blockedItems)))cr_penHit=&obstruction;
   }
  }
@@ -183,7 +187,7 @@ void check(bool yes,const char* name){++checks;if(!yes){++failures;std::printf("
 bool near(double a,double b){return std::fabs(a-b)<1e-5;}
 CPlayer player;std::vector<CEntity> items;
 void setup(int nodes=3){
- captureWalls=false;capturedWalls=0;
+ liquidAxisQueries=0;liquidAxisBlocked=liquidAxisInvalid=false;captureWalls=false;capturedWalls=0;
  player=CPlayer();player.m_penWeapons=&player.w;items.clear();items.reserve(140);
  auto& g=BotSupplyGraph();g=botcore::CecilNavGraph();g.points.resize(nodes);
  for(int i=0;i<nodes;++i){g.points[i].id=i;g.points[i].z=-10*i;g.points[i].radius=1;if(i+1<nodes)g.points[i].links.push_back(i+1);}
@@ -503,7 +507,7 @@ void hopCheckpoint46ProgressAndProtection(){
   if(protection==3)graph.points[1].flags=botcore::CECIL_JUMP;
   if(protection==4)graph.points[0].lock_entity=777;
   if(protection==5)graph.points[1].lock_entity=777;
-  if(protection==6)s.importantGoal=true;
+  if(protection==6){s.importantGoal=true;graph.points[1].important_entity=777;}
   if(protection==7)s.interactionPoint=1;
   if(protection==8){graph.points[1].x=player.pl.pl_PositionVector(1);graph.points[1].z=player.pl.pl_PositionVector(3);}
   hopCheckpoint45Tick(101);
@@ -635,7 +639,7 @@ void patrolAlternate46Lifecycle(){
    case 3:s.goal=3;break;
    case 4:s.goalEntity=991;break;
    case 5:s.followEntity=991;break;
-   case 6:s.importantGoal=true;break;
+   case 6:s.importantGoal=true;BotSupplyGraph().points[1].flags=botcore::CECIL_IMPORTANT;break;
    case 7:s.interactionPoint=0;break;
    case 8:s.useReleaseTick=tick+1;break;
    case 9:player.en_vCurrentTranslationAbsolute(2)=NAN;break;
@@ -924,7 +928,7 @@ void hopCheckpoint45Guards(){
    if(invalid==7)floorEntity.type=CEntity::RT_MODEL;
    if(invalid==8)floorEntity.en_pwoWorld=&foreign;
    if(invalid==9)floorEntity.cls.name="Classes/WorldBaseFake.ecl";
-   if(invalid==10)s.importantGoal=true;
+   if(invalid==10){s.importantGoal=true;graph.points[1].flags=botcore::CECIL_IMPORTANT;}
    if(invalid==11)s.interactionPoint=1;
    if(invalid==12)s.useReleaseTick=999;
    if(invalid==13)graph.points[0].flags=botcore::CECIL_TELEPORT;
@@ -1988,7 +1992,169 @@ void nativeContactRecovery(){
  floorPlane.bpl_plAbsolute(2)=-.3976075f;
  check(contactFloor(&player,true,0)&&lastTo(2)>lastFrom(2),"same-contact height and support follow real rotated gravity rather than world Y");
 }
+
+// Synthetic topology reuses the existing historical fixture; no new original NAV data.
+void importantTransit48(){
+ for(int kind=0;kind<3;++kind)for(bool fall:{false,true}){
+  const bool entity=kind!=0;hopCheckpoint45Fixture();auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();
+  g.points[2].flags=kind==2?(botcore::CECIL_JUMP|botcore::CECIL_OVERRIDE):(entity?0:botcore::CECIL_IMPORTANT);g.points[2].important_entity=entity?777:-1;s.scanTick=2;
+  bool observed=false,bounded=true,airDenied=true;int first=-1;
+  for(int tick=2;tick<=142;++tick){
+   hopCheckpoint45Wiggle(tick);player.m_pstState=fall&&tick%40==0?PST_FALL:PST_STAND;
+   const int before=rayCount;hopCheckpoint45Tick(tick);observed|=s.hopCheckpointSince>=0;
+   if(player.m_pstState==PST_FALL)airDenied&=hopCheckpointEvents==0;
+   bounded&=rayCount-before<=16&&_botRayBudget>=0;
+   if(hopCheckpointEvents){first=tick;break;}
+  }
+  check(s.importantGoal&&first>=102&&first<=122&&observed,
+    "ordinary intermediate edge toward remote important endpoint receives unchanged five-second checkpoint");
+  check(s.goal==2&&s.goalEntity==0&&s.goalSince==7&&s.goalDeadline==47&&s.interactionPoint<0&&s.useReleaseTick<0,
+    "important transit checkpoint retains same endpoint identity and lifetime without interaction or item relocation");
+  check(bounded&&airDenied,"important transit observation never lends air authority or extra ray budget");
+ }
+ // Terminal/special protection is about the actual edge, not remote intent.
+ for(int invalid=0;invalid<24;++invalid){
+  hopCheckpoint45Fixture();auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();
+  g.points[2].flags=0;g.points[2].important_entity=777;s.scanTick=2;
+  const unsigned flags[]={botcore::CECIL_WALK,botcore::CECIL_CROUCH,botcore::CECIL_OVERRIDE,
+    botcore::CECIL_UNREACHABLE,botcore::CECIL_TELEPORT,botcore::CECIL_IMPORTANT,botcore::CECIL_JUMP};
+  for(int tick=2;tick<=145;++tick){
+   hopCheckpoint45Wiggle(tick);
+   if(invalid<14)g.points[invalid/7].flags=flags[invalid%7];
+   if(invalid==14)g.points[0].important_entity=777;
+   if(invalid==15)g.points[1].important_entity=777;
+   if(invalid==16)g.points[0].lock_entity=777;
+   if(invalid==17)g.points[1].lock_entity=777;
+   if(invalid==18)s.interactionPoint=1;
+   if(invalid==19)s.useReleaseTick=999;
+   if(invalid==20)player.m_pstState=PST_FALL;
+   if(invalid==21)player.en_penReference=nullptr;
+   if(invalid==22)floorEntity.entityPhysicsFlags=EPF_MOVABLE;
+   hopCheckpoint45Tick(tick,invalid!=23);
+  }
+  check(hopCheckpointEvents==0,
+    "remote important goal cannot override terminal flags entity locks interaction USE current-ground contact or owner guards");
+ }
+}
+void importantPatrol48Fixture(bool entity){
+ patrolAlternate46Fixture(5);auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();
+ g.points[4].x=50;g.points[4].y=10;g.points[4].z=0;
+ g.points[4].flags=entity?0:botcore::CECIL_IMPORTANT;g.points[4].important_entity=entity?777:-1;g.points[1].links={4};
+ s.ClearGoal();s.goal=4;s.goalSince=7;s.anchor=0;s.scanTick=2;
+ player.pl.pl_PositionVector=FLOAT3D();hopCheckpoint45Tick(1);
+}
+int importantPatrol48Enter(bool entity){
+ importantPatrol48Fixture(entity);auto& s=BotSupplyState(0);
+ for(int tick=2;tick<=300;++tick){patrolAlternate46Pose(tick);hopCheckpoint45Tick(tick);if(s.patrolAlternate)return tick;}
+ return -1;
+}
+void importantPatrol48(){
+ for(bool entity:{false,true}){
+  const int entered=importantPatrol48Enter(entity);auto& s=BotSupplyState(0);
+  check(entered>=202&&hopCheckpointEvents>=2&&s.patrolAlternate,
+    "two real failed checkpoints allow existing alternate ordinary transit toward SAME important endpoint");
+  if(entered<0)continue;
+  const double since=s.patrolSince;check(s.importantGoal&&s.goal==4&&s.goalSince==7&&s.goalEntity==0,
+    "alternate recovery preserves important goal and original goal time");
+  player.m_pstState=PST_FALL;const auto air=hopCheckpoint45Tick(entered+1);
+  check(air.forward==0&&air.strafe==0&&air.up==0&&s.goal==4&&s.patrolSince==since,
+    "important alternate remains neutral in air without renewing six-second lifetime");
+  player.m_pstState=PST_STAND;const int casts=rayCount;const auto deferred=hopCheckpoint45Tick(entered+2,true,2);
+  check(deferred.forward==0&&deferred.strafe==0&&s.goal==4&&s.patrolSince==since&&rayCount==casts,
+    "important alternate budget deferral retains SAME goal and fixed deadline without an unverified step");
+  const auto move=hopCheckpoint45Tick(entered+3);
+  check(move.active&&std::hypot(move.forward,move.strafe)<=.300001&&move.up==0&&
+    (move.buttons&EXPECTED_NATIVE_USE)==0&&s.interactionPoint<0&&s.useReleaseTick<0&&s.goal==4,
+    "important alternate uses only existing bounded verified hint movement and never synthesizes endpoint USE or completion");
+  for(int tick=entered+4;tick<entered+120;++tick)hopCheckpoint45Tick(tick,true,2);
+  const auto expired=hopCheckpoint45Tick(entered+120);
+  check(!s.patrolAlternate&&s.goal<0&&!expired.active&&expired.buttons==0&&endEvents==0,
+    "fixed six-second exhausted important alternate explicitly abandons rather than pretending endpoint arrival or interaction");
+ }
+}
+
+
+SCecilMove liquidProjection48Fixture(double sign=1){
+ setup(2);auto& g=BotSupplyGraph();g.points[0].x=g.points[0].y=g.points[0].z=0;g.points[0].radius=.5;
+ g.points[1].x=0;g.points[1].y=float(sign);g.points[1].z=-12;g.points[1].radius=.25;
+ auto& s=BotSupplyState(0);s.goal=1;s.anchor=0;s.scanTick=99999;
+ player.m_pstState=PST_DIVE;BotCecilSettings().bAvoidPits=0;_botRayBudget=16;
+ return BotSupplyTick(&player,0,1,1000);
+}
+int liquidProjection48Safety(SCecilMove& move,double now=.05,bool owner=true){
+ return BotCecilSafeMotion(&player,BotSupplyState(0),now,move.forward,move.strafe,move.up,0,1,owner);
+}
+void liquidProjection48(){
+ for(double sign:{-1,1}){
+  auto move=liquidProjection48Fixture(sign);const auto request=move;auto& s=BotSupplyState(0);wallMode=5;
+  const int rays=rayCount,lookups=worldLookups;allocations=0;measuring=true;
+  const int result=liquidProjection48Safety(move);measuring=false;
+  check(result==1&&move.forward==0&&move.strafe==0&&move.up==request.up&&std::fabs(move.up)>.05,
+    "blocked diagonal liquid NAV preserves exact already-selected signed vertical component only after its own fresh physical cast");
+  check(rayCount-rays==2&&liquidAxisQueries==1&&_botRayBudget==14&&s.probe.wallRays==2&&s.probe.floorRays==0&&
+    lastModels==CCastRay::TT_COLLISIONBOX&&lastMask==BPOF_PASSABLE&&lastPhysical&&!lastOverHit&&worldLookups==lookups&&allocations==0,
+    "liquid projection uses exactly one extra existing physical cast within shared sixteen budget without floor authority lookup or allocation");
+  check(s.goal==1&&s.anchor==0&&s.goalSince==0&&s.goalDeadline==0&&s.escapeUntil==0,
+    "verified projection creates no target arrival goal deadline or persistent escape hold");
+ }
+ auto clear=liquidProjection48Fixture();const auto wanted=clear;const int rays=rayCount;
+ check(liquidProjection48Safety(clear)==1&&clear.forward==wanted.forward&&clear.strafe==wanted.strafe&&clear.up==wanted.up&&
+   rayCount-rays==1&&liquidAxisQueries==0,"unobstructed diagonal remains bit-for-bit unchanged with no projection query");
+ for(int denied=0;denied<24;++denied){
+  auto move=liquidProjection48Fixture();auto& s=BotSupplyState(0);wallMode=5;bool owner=true;
+  if(denied==0)owner=false;
+  if(denied==1)player.m_pstState=PST_STAND;
+  if(denied==2)s.currentNavTime=-1;
+  if(denied==3)s.currentNavTravel=false;
+  if(denied==4)s.interactionPoint=0;
+  if(denied==5)s.useReleaseTick=999;
+  if(denied==6)s.followEntity=777;
+  if(denied==7)move.up=0;
+  if(denied==8)_botRayBudget=3;
+  if(denied==9)s.escapeAfter=.2;
+  if(denied==10)player.health=0;
+  if(denied==11)player.m_penWeapons=nullptr;
+  if(denied==12)++player.en_ulID;
+  if(denied==13)s.playable=false;
+  if(denied==14)player.flags=ENF_DELETED;
+  if(denied==15)move.up=NAN;
+  if(denied==16)move.up=.04999;
+  if(denied==17)_botRayBudget=0;
+  if(denied==18)player.en_vCurrentTranslationAbsolute(2)=NAN;
+  if(denied==19){move.forward=.04;move.strafe=0;}
+  if(denied==20)s.currentNavGoal=-1;
+  if(denied==21)s.hop=-1;
+  if(denied==22)s.blocked[s.hop]=1;
+  if(denied==23)move.forward=NAN;
+  const auto request=move;liquidProjection48Safety(move,.05,owner);
+  check(liquidAxisQueries==0&&!(move.forward==0&&move.strafe==0&&std::isfinite(request.up)&&std::fabs(request.up)>=.05&&move.up==request.up),
+    "Human ground stale nontravel interaction USE follow zero-up budget cooldown dead identity invalid or subthreshold intent cannot acquire liquid projection");
+ }
+ for(int blocked=0;blocked<4;++blocked){
+  auto move=liquidProjection48Fixture();wallMode=5;liquidAxisBlocked=blocked!=3;liquidAxisInvalid=blocked==3;CWorld foreign;
+  obstruction.type=CEntity::RT_BRUSH;obstruction.entityPhysicsFlags=blocked==0?EPF_MOVABLE:0;
+  obstruction.en_pwoWorld=blocked==1?&foreign:player.GetWorld();obstruction.flags=blocked==2?ENF_DELETED:0;
+  const int result=liquidProjection48Safety(move);
+  check(liquidAxisQueries==1&&move.up==0&&result==2&&std::fabs(move.strafe)>.05,
+    "vertical HIT or invalid query never emits vertical input and retains independently checked legacy horizontal escape");
+ }
+ auto reserve=liquidProjection48Fixture();wallMode=5;_botRayBudget=4;
+ check(liquidProjection48Safety(reserve)==1&&liquidAxisQueries==1&&_botRayBudget==2&&reserve.forward==0&&reserve.up>.05,
+   "projection reserves two final shared rays at its exact four-before-primary budget boundary");
+ auto held=liquidProjection48Fixture();wallMode=5;
+ check(liquidProjection48Safety(held,.05,false)==2&&held.up==0,"existing Human-owned fixture establishes legacy horizontal hold");
+ auto& s=BotSupplyState(0);const double until=s.escapeUntil;
+ _botRayBudget=16;auto pending=BotSupplyTick(&player,0,2,1000);const int axis=liquidAxisQueries;
+ check(liquidProjection48Safety(pending,.1,true)==2&&pending.up==0&&s.escapeUntil==until&&liquidAxisQueries==axis,
+   "new projection never overrides or extends an already verified legacy point-six-second hold");
+ for(int tick=3;tick<=34;++tick){_botRayBudget=16;pending=BotSupplyTick(&player,0,tick,1000);liquidProjection48Safety(pending,tick*.05,true);}
+ check(pending.forward==0&&pending.strafe==0&&pending.up>.05&&liquidAxisQueries>axis,
+   "fresh diagonal after original hold and unchanged no-progress cooldown can use verified existing vertical intent");
+}
+
 int main(){
+ liquidProjection48();
+ importantTransit48();importantPatrol48();
  nativeContactRecovery();farHintTests();farHintGuards();
  hopCheckpoint45();hopCheckpoint45Freshness();hopCheckpoint46Flicker();hopCheckpoint46Authority();hopCheckpoint46Resets();hopCheckpoint46ProgressAndProtection();patrolAlternate46Red();patrolAlternate46Gain();patrolAlternate46Safety();patrolAlternate46Lifecycle();patrolAlternate46Search();patrolAlternate46ExtraGuards();patrolAlternate46Metadata();patrolAlternate46Exit();hopCheckpoint47Passive();patrolAlternate47Passive();patrolObservation47Freshness();hopCheckpoint45Guards();hopCheckpoint45Deferral();hopCheckpoint45ItemDeadline();hopCheckpoint45Arrival();airRecovery44();airRecovery44Guards();neutralRecovery43();neutralRecovery43Guards();groundSweep42();groundSweep42Guards();offgraphProgressBridge();offgraphProgressGuards();originalDiagonalRecovery();groundObservationFlicker();groundObservationHoldGuards();groundedReplanGuards();
  liftOccupancyBridge();
