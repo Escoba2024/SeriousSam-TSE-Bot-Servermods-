@@ -6,12 +6,12 @@
     "disconnects": 0,
     "clients": [
       {
-        "token": "2363d66d",
         "loopback": false,
         "max": 1,
         "events": 1,
         "first": 919.9,
-        "last": 919.9
+        "last": 919.9,
+        "peer": "external-peer-1"
       }
     ]
   },
@@ -29,20 +29,20 @@
     "disconnects": 3,
     "clients": [
       {
-        "token": "2363d66d",
         "loopback": false,
         "max": 10,
         "events": 25,
         "first": 91.4,
-        "last": 270.11
+        "last": 270.11,
+        "peer": "external-peer-1"
       },
       {
-        "token": "3a2e3da0",
         "loopback": false,
         "max": 10,
         "events": 11,
         "first": 247.41,
-        "last": 270.11
+        "last": 270.11,
+        "peer": "external-peer-2"
       }
     ]
   }

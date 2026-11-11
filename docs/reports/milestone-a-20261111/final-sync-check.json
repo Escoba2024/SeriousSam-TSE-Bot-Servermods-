@@ -1,0 +1,97 @@
+{
+  "utc": "2026-11-11T19:16:11.848319+00:00",
+  "logs": [
+    {
+      "root": "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-redstation-live-20261101/botA",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-redstation-live-20261101/botB",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-yodeller-live-20261107/server",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-yodeller-live-20261107/botA",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-yodeller-live-20261107/botB",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-skulls-live-20261107/server",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-skulls-live-20261107/botA",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-skulls-live-20261107/botB",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-trouble-live-20261107/server",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-trouble-live-20261107/botA",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-trouble-live-20261107/botB",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-hole-live-20261107/server",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-hole-live-20261107/botA",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-hole-live-20261107/botB",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-development-live-20261107/server",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-development-live-20261107/botA",
+      "bad": 0,
+      "disconnects": 0
+    },
+    {
+      "root": "/srv/tse-development-live-20261107/botB",
+      "bad": 0,
+      "disconnects": 0
+    }
+  ],
+  "dev_spawn_symbol": 3.0,
+  "locks_available": true
+}

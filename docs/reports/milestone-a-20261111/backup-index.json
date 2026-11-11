@@ -54,5 +54,22 @@
       "url": "https://drive.google.com/file/d/19cOKnuAcrWg3xuPC6kLGdNASurDCcJhE/view",
       "sha256": "4e73ad15ed4809a5ec615c95dc8df0aff8c61cdc725e0366b8ac86aa310dd78e"
     }
-  ]
+  ],
+  "after": {
+    "after_url": "https://drive.google.com/file/d/1AY_m0ApX_XrUuvZTFE_vVDFPIDM2vhUG/view",
+    "sha256": "4230396b834f64c74f8820f26f4438916af63085353407530a5857837dce9c27",
+    "bytes": 11731684,
+    "regular_files_restored": 283,
+    "source_remote_sha": "b6ae14e5497f6013bf198fad5cd105bfe658f05c",
+    "native_launch_from_restore": false,
+    "roundtrip_verified": true
+  },
+  "publication": {
+    "remote_sha": "b6ae14e5497f6013bf198fad5cd105bfe658f05c",
+    "local_sha": "64aa881",
+    "tree_sha": "c6f5a8bb67add95267729edcd51d55c03cae8c71",
+    "trees_equal": true,
+    "publication": "GitHub connector create-tree/create-commit/update-ref without force; git ls-remote verified",
+    "url": "https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/commit/b6ae14e5497f6013bf198fad5cd105bfe658f05c"
+  }
 }
