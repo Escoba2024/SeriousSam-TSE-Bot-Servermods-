@@ -1,0 +1,114 @@
+{
+  "utc": "2026-11-11T20:14:03.577885+00:00",
+  "logs": [
+    {
+      "cwd": "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server",
+      "pid": 915604,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-redstation-live-20261101/botA",
+      "pid": 915810,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-redstation-live-20261101/botB",
+      "pid": 915991,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-yodeller-live-20261107/server",
+      "pid": 917039,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-yodeller-live-20261107/botA",
+      "pid": 917109,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-yodeller-live-20261107/botB",
+      "pid": 917222,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-skulls-live-20261107/server",
+      "pid": 918250,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-skulls-live-20261107/botA",
+      "pid": 918321,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-skulls-live-20261107/botB",
+      "pid": 918465,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-trouble-live-20261107/server",
+      "pid": 919467,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-trouble-live-20261107/botA",
+      "pid": 919534,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-trouble-live-20261107/botB",
+      "pid": 919679,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-hole-live-20261107/server",
+      "pid": 920722,
+      "bad_events": 9,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-hole-live-20261107/botA",
+      "pid": 920791,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-hole-live-20261107/botB",
+      "pid": 920933,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-development-live-20261107/server",
+      "pid": 922954,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-development-live-20261107/botA",
+      "pid": 923026,
+      "bad_events": 0,
+      "disconnect_events": 0
+    },
+    {
+      "cwd": "/srv/tse-development-live-20261107/botB",
+      "pid": 923202,
+      "bad_events": 0,
+      "disconnect_events": 0
+    }
+  ],
+  "scope": "Current fleet logs only; failed Dev logs preserved separately; not WAN longterm acceptance"
+}

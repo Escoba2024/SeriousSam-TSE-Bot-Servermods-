@@ -58,6 +58,7 @@ struct CEntity {
  unsigned GetFlags()const{return flags;}int GetRenderType(){return type;}
 };
 bool IsDerivedFromClass(CEntity*,const char*){return false;}
+struct CWeaponItem:CEntity {int m_ulPickedMask=0,m_bPickupOnce=0,m_bDropped=0,m_bRespawn=0,m_EwitType=1;};
 struct CSwitch:CEntity {bool m_bUseable=true;CSwitch(){cls.name="Classes/Switch.ecl";}};
 struct CMovingBrush:CEntity {CEntity* m_penSwitch=nullptr;CMovingBrush(){cls.name="Classes/MovingBrush.ecl";}};
 struct CMarker:CEntity {CMarker(){cls.name="Classes/Marker.ecl";marker=true;}};
@@ -69,6 +70,7 @@ struct CWorld {
 struct CPlayerWeapons {CEntity* m_penRayHit=nullptr;float m_fRayHitDistance=1000;unsigned m_iAvailableWeapons=3;int m_iCurrentWeapon=2;unsigned usable=3,ammo=0;};
 enum PlayerState {PST_STAND=0,PST_CROUCH=1,PST_SWIM=2,PST_DIVE=3,PST_FALL=4};
 struct CPlayer:CEntity {
+ int GetMyPlayerIndex()const{return 5;}
  CBrushPolygon* en_pbpoStandOn=nullptr;float en_fStepUpHeight=1,en_fStepDnHeight=1.5f;
  PlayerState m_pstState=PST_STAND;FLOATmatrix3D body;CPlacement3D en_plViewpoint;FLOAT3D m_aLastRotation;
  const FLOATmatrix3D& GetRotationMatrix()const{return body;}
@@ -80,15 +82,17 @@ struct CPlayer:CEntity {
  bool hasWorld=true;CWorld* worldOverride=nullptr;
  CWorld* GetWorld(){return hasWorld?(worldOverride?worldOverride:&world):nullptr;}
 };
-struct CSessionProperties {BOOL sp_bInfiniteAmmo=FALSE;};
+struct CSessionProperties {BOOL sp_bInfiniteAmmo=FALSE,sp_bWeaponsStay=TRUE;};
 struct Network {CSessionProperties session;const void* GetSessionProperties(){return &session;}} network,*_pNetwork=&network;
 struct Timer {double TickQuantum=.05;} timer,*_pTimer=&timer;
 int _botRayBudget=20,bot_iRosterOffset=0;
+bool bot_bDiagnostics=false;int supplyDiagLines=0;std::string supplyDiagText;
 long _botSupplyMapSerial=7;
 long InterlockedCompareExchange(long* p,long,long){return *p;}
 int hopCheckpointEvents=0;
 int lockApproachEvents=0,lastApproachNode=-1,lastApproachHop=-1;unsigned long lastApproachRef=0;int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0,groundReplanEvents=0;char lastEnd[32]={0};
 void BotLog(const char* format,...){
+ if(std::strstr(format,"[CecilSupplyDiag")){++supplyDiagLines;char text[2048];va_list a;va_start(a,format);std::vsnprintf(text,sizeof(text),format,a);va_end(a);supplyDiagText+=text;}
  if(std::strstr(format,"[CecilHopCheckpoint]"))++hopCheckpointEvents;
  if(std::strstr(format,"[CecilGroundReplan]"))++groundReplanEvents;
  if(std::strstr(format,"[CecilLockApproach]")){
@@ -111,8 +115,9 @@ CPlacement3D BotCombatEye(CPlayer* p){return p->GetPlacement();}
 unsigned BotCecilUsableWeapons(CPlayerWeapons* p,bool){return p->usable;}
 unsigned BotCecilAmmoNeed(CPlayerWeapons* p){return p->ammo;}
 bool BotCecilWeaponGoalPicked(CPlayer*,CEntity*){return false;}
-bool BotCecilReadItem(CPlayer*,CEntity* e,unsigned generation,unsigned,botcore::CecilItem* out){
- if(!e||!e->pickable||(e->flags&ENF_DELETED))return false;
+bool BotCecilReadItem(CPlayer*,CEntity* e,unsigned generation,unsigned,botcore::CecilItem* out,const char** reason=nullptr){
+ if(reason)*reason="ok";
+ if(!e||!e->pickable||(e->flags&ENF_DELETED)){if(reason)*reason="stub_unpickable";return false;}
  *out=e->item;out->id=e->en_ulID;out->generation=generation;out->pickable=true;
  out->x=e->pl.pl_PositionVector(1);out->y=e->pl.pl_PositionVector(2);out->z=e->pl.pl_PositionVector(3);return true;
 }
@@ -2244,7 +2249,99 @@ void liquidProjection48(){
    "fresh diagonal after original hold and unchanged no-progress cooldown can use verified existing vertical intent");
 }
 
+void supplyDiagnosticsBoundsAndReasons(){
+ setup(25);bot_bDiagnostics=true;supplyDiagLines=0;supplyDiagText.clear();
+ for(int i=1;i<25;++i){addItem(1000+i,0,float(-10*i),botcore::CecilItemKind::Weapon);BotSupplyGraph().points[i].important_entity=1000+i;}
+ auto& s=BotSupplyState(0);s.goals.Run(BotSupplyGraph(),0,s.blocked.data(),s.blocked.size());
+ auto input=BotCecilItemInput(&player,s,1000);_botRayBudget=16;
+ BotCecilChooseMappedWeapon(&player,s,input,0,1,.05);
+ check(supplyDiagLines==17&&supplyDiagText.find("eligible=24 emitted=16")!=std::string::npos,
+   "selection bounds candidate rows at sixteen and reports omitted eligible candidates");
+ const int lines=supplyDiagLines;s.ClearGoal();_botRayBudget=16;BotCecilChooseMappedWeapon(&player,s,input,0,2,.10);
+ check(supplyDiagLines==lines,"selection cooldown survives ClearGoal and cannot spam repeated decisions");
+ s.ClearGoal();_botRayBudget=16;BotCecilChooseMappedWeapon(&player,s,input,0,21,1.05);
+ check(supplyDiagLines==lines+17,"selection diagnostic resumes at one second without changing admission");
+ check(s.goals.Parent(-1)==-1&&s.goals.Parent(25)==-1&&s.goals.Parent(0)==-1&&s.goals.Parent(24)==23,
+   "diagnostic parent accessor handles absent root out-of-range and actual selected parent");
+ BotSupplyGraph().points[5].flags=botcore::CECIL_TELEPORT;
+ BotSupplyGraph().points[6].flags=botcore::CECIL_OVERRIDE;
+ BotSupplyGraph().points[20].flags=botcore::CECIL_JUMP;
+ s.goals.Run(BotSupplyGraph(),0,s.blocked.data(),s.blocked.size());int from,to;unsigned flags;
+ BotCecilSupplyDiagPath(s,24,from,to,flags);
+ check(from==4&&to==5&&(flags&botcore::CECIL_TELEPORT),"first special edge is from actual selected path including teleport endpoints before override");
+ BotCecilSupplyDiagPath(s,999,from,to,flags);check(from==-1&&to==-1&&flags==0,"invalid diagnostic path is absent");
+ CWeaponItem weapon;weapon.cls.name="Classes/WeaponItem.ecl";weapon.en_ulID=991;weapon.m_ulPickedMask=1u<<4;
+ weapon.m_bPickupOnce=1;weapon.m_bDropped=0;weapon.m_bRespawn=1;weapon.m_EwitType=10;
+ s.goalEntity=991;supplyDiagText.clear();supplyDiagLines=0;
+ BotCecilSupplyDiagUnavailable(&player,s,&weapon,0,22,1.1,"hidden",input);
+ check(supplyDiagText.find("reason=hidden")!=std::string::npos&&supplyDiagText.find("player_index=5 picked_mask=16 picked_for_player=0 pickup_once=1 dropped=0 respawn=1 raw_weapon_type=10 weapons_stay=1")!=std::string::npos,
+   "unavailable diagnostic distinguishes another player's picked bit from visibility rejection and exact item settings");
+ BotCecilSupplyDiagUnavailable(&player,s,&weapon,0,23,1.15,"hidden",input);
+ check(supplyDiagLines==1,"unavailable diagnostic is independently cooldown bounded");
+ check(supplyDiagText.find("weapon_metadata_valid=1")!=std::string::npos,"real weapon metadata is explicitly valid");
+ CEntity notWeapon;CWeaponItem deletedWeapon;deletedWeapon.cls.name="Classes/WeaponItem.ecl";deletedWeapon.flags=ENF_DELETED;
+ for(CEntity* absent:{static_cast<CEntity*>(nullptr),static_cast<CEntity*>(&deletedWeapon),&notWeapon}){
+  s.diagUnavailableLast=-1;supplyDiagText.clear();
+  BotCecilSupplyDiagUnavailable(&player,s,absent,0,24,1.2,"unavailable",input);
+  check(supplyDiagText.find("weapon_metadata_valid=0")!=std::string::npos&&supplyDiagText.find("picked_for_player=-1")!=std::string::npos,
+    "missing deleted and nonweapon objects never claim a known false pickup bit");
+ }
+
+ s.Reset();check(s.diagSelectionLast==-1&&s.diagUnavailableLast==-1&&s.diagTerminalLast==-1,"lifecycle reset clears only diagnostic clocks as well as normal reset");
+ bot_bDiagnostics=false;
+ double last=-1;check(!BotCecilSupplyDiagDue(1,last)&&last==-1,"disabled diagnostics do not update telemetry clocks");
+ bot_bDiagnostics=true;check(!BotCecilSupplyDiagDue(NAN,last)&&!BotCecilSupplyDiagDue(-1,last)&&last==-1,"invalid diagnostic time never emits");
+ bot_bDiagnostics=false;
+}
+void supplyDiagnosticsRetentionAndTerminal(){
+ SCecilMove before[2],after[2];double starts[2],deadlines[2],f[2],st[2],up[2];int codes[2],rays[2];
+ for(int mode=0;mode<2;++mode){
+  setup(3);bot_bDiagnostics=mode;auto& weapon=addItem(991,0,-22,botcore::CecilItemKind::Weapon);
+  BotSupplyGraph().points[2].important_entity=991;_botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+  auto& s=BotSupplyState(0);starts[mode]=s.goalSince;deadlines[mode]=s.goalDeadline;
+  player.pl.pl_PositionVector=FLOAT3D(0,0,-10);s.anchor=1;_botRayBudget=16;before[mode]=BotSupplyTick(&player,0,2,1000);
+  supplyDiagLines=0;supplyDiagText.clear();player.en_vCurrentTranslationAbsolute=FLOAT3D(1,2,3);
+  f[mode]=before[mode].forward;st[mode]=before[mode].strafe;up[mode]=before[mode].up;
+  codes[mode]=BotCecilSafeMotion(&player,s,.10,f[mode],st[mode],up[mode],0,1,true);rays[mode]=rayCount;
+  if(mode){
+   check(supplyDiagLines==1&&supplyDiagText.find("[CecilSupplyDiagTerminal]")!=std::string::npos&&
+     supplyDiagText.find("support=0 support_render=-1")!=std::string::npos&&supplyDiagText.find("velocity=(1.000,2.000,3.000)")!=std::string::npos,
+     "terminal diagnostic reports actual absent support and motion without claiming grounded authority");
+   BotCecilSupplyDiagTerminal(&player,s,.15,true,true);check(supplyDiagLines==1,"terminal diagnostic has independent one-second bound");
+  }else check(supplyDiagLines==0,"disabled terminal telemetry emits no output");
+  _botRayBudget=16;after[mode]=BotSupplyTick(&player,0,3,7.9);
+  check(s.goalEntity==991&&s.goalSince==starts[mode]&&s.goalDeadline==deadlines[mode]&&!after[mode].ownsMovement,
+    "telemetry preserves retained goal and original deadline through close-combat action yield");
+  weapon.pickable=false;supplyDiagLines=0;supplyDiagText.clear();_botRayBudget=16;
+  BotSupplyTick(&player,0,4,7.9);
+  check(s.goalEntity==0&&std::strcmp(lastEnd,"unavailable")==0,"telemetry preserves real unavailable ending");
+  if(mode)check(supplyDiagText.find("reason=stub_unpickable")!=std::string::npos,"unavailable ending uses the actual read-filter rejection reason");
+ }
+ check(f[0]==f[1]&&st[0]==st[1]&&up[0]==up[1]&&codes[0]==codes[1]&&rays[0]==rays[1]&&
+  starts[0]==starts[1]&&deadlines[0]==deadlines[1],"terminal telemetry leaves final safety commands rays and lifetime pins unchanged");
+ bot_bDiagnostics=false;
+}
+void supplyDiagnosticsParity(){
+ SCecilMove outputs[2];int goals[2],rays[2],lookups[2];unsigned random[2];double deadlines[2];
+ for(int mode=0;mode<2;++mode){
+  setup(3);bot_bDiagnostics=mode;supplyDiagLines=0;supplyDiagText.clear();player.w.usable=3;
+  addItem(991,0,-22,botcore::CecilItemKind::Weapon);BotSupplyGraph().points[2].important_entity=991;
+  _botRayBudget=16;worldLookups=0;outputs[mode]=BotSupplyTick(&player,0,1,1000);
+  auto& s=BotSupplyState(0);goals[mode]=s.goal;deadlines[mode]=s.goalDeadline;random[mode]=s.rng;
+  rays[mode]=rayCount;lookups[mode]=worldLookups;
+  check(mode?supplyDiagLines>0:supplyDiagLines==0,"supply telemetry is opt-in and emits selected mapped candidate evidence");
+  if(mode)check(supplyDiagText.find("entity=991")!=std::string::npos&&supplyDiagText.find("path_distance=")!=std::string::npos,
+    "mapped diagnostic carries actual candidate identity and path score inputs");
+ }
+ const auto& a=outputs[0];const auto& b=outputs[1];
+ check(a.active==b.active&&a.ownsMovement==b.ownsMovement&&a.itemGoal==b.itemGoal&&a.urgent==b.urgent&&
+ a.forward==b.forward&&a.strafe==b.strafe&&a.up==b.up&&a.yaw_delta==b.yaw_delta&&a.pitch_delta==b.pitch_delta&&a.buttons==b.buttons&&a.flags==b.flags&&
+ goals[0]==goals[1]&&deadlines[0]==deadlines[1]&&random[0]==random[1]&&rays[0]==rays[1]&&lookups[0]==lookups[1],
+ "diagnostics change neither command nor goal deadline RNG casts or world lookup count");
+ bot_bDiagnostics=false;
+}
 int main(){
+ supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
  itemTransit49();itemTransit49Guards();
  liquidProjection48();
  importantTransit48();importantPatrol48();

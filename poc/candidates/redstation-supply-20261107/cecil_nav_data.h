@@ -166,6 +166,10 @@ class CecilNavSearch {
     }
     return true;
   }
+  // Read-only selected-path observation; no search or allocation.
+  int Parent(int slot) const {
+    return start_>=0&&slot>=0&&(size_t)slot<parents_.size()?parents_[slot]:-1;
+  }
   int NextHop(int goal) const {
     if(!std::isfinite(Distance(goal)))return -1;
     if(goal==start_)return start_;

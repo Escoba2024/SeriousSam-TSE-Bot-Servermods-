@@ -1,6 +1,6 @@
 # Meilenstein A: implementierter Zwischenstand, keine Gesamtfreigabe
 
-Stand 11.11.2026 UTC. Auftrag wird auf dem vorhandenen Hetzner ausgeführt. **A ist nicht abgenommen; B wurde nicht begonnen.** Drei bestätigte externe Sync-Abbrüche im Dev-Test verhindern die Freigabe. Neue Kampf-DLL und Namen wurden nicht produktiv aktiviert. Die fünf öffentlichen Instanzen behalten ihre bisherigen DLLs/Maps und haben die neue Spawn-Konfiguration geladen; die Dev-Spawn-Konfiguration wurde um 19:11:37 UTC auf den gesicherten Ausgangsstand zurückgesetzt (Receipt im Handoff).
+Stand 11.11.2026 UTC. Auftrag wird auf dem vorhandenen Hetzner ausgeführt. **A ist nicht abgenommen; B wurde nicht begonnen.** Drei bestätigte externe Sync-Abbrüche im Dev-Test verhindern die Freigabe. Neue Kampf-DLL und Namen wurden nicht produktiv aktiviert. Alle Instanzen behalten ihre bisherigen DLLs/Maps. Vier öffentliche Instanzen haben die neue Spawn-Konfiguration geladen; Dev wurde um19:11 UTC und Hole um20:20 UTC vorsorglich auf den gesicherten Ausgangsstand zurückgesetzt. Hole hatte neun SYNCBAD ohne Disconnect, Dev zuvor drei bestätigte Disconnects; die Ursache ist offen. Aktueller Hole-Beleg: `milestone-a-20261111/hole-precautionary-rollback.json`.
 
 ## 1. Tatsächliche Änderungen und Betrieb
 
@@ -120,3 +120,10 @@ Der volle Meilensteinauftrag bleibt aktiv. Der aktuelle Stand ersetzt die frühe
 - Erster240s-Arenavergleich: Originalserver/Spawn0, vier alte048 gegen vier neueMITTEL-Bots, plus unveränderter Retail-Client,100 gültige Queries,0 Syncmeldungen/Abbrüche. Scoreänderung alte Gruppe+7, neue+25. Ein einzelnes Duellfenster liefert keinen allgemeinen Schwierigkeitsnachweis. Log-Schussaktionen sind keine separat zugerechneten Trefferdaten. Weitere Stufen mit vertauschter Joinreihenfolge folgen. CPU44,3–47,0% in der Stichprobe, mindestens2,37GiB verfügbarer RAM.
 
 Die öffentliche Flotte hat weiterhin ihre alten DLLs; Dev weiterhin Spawn3 nach dem gesicherten Rückbau. B bleibt unverändert gesperrt bis zur Gesamt-A-Abnahme.
+
+
+## Fortsetzung 20:22 UTC: Hole-Rückweg und Build004
+
+Hole wurde nach neun SYNCBAD eines externen Clients, maximaler Zähler8, ohne beobachteten Disconnect vorsorglich normal neu gestartet und auf seine bytegenaue ursprüngliche Mapstartdatei zurückgesetzt. Baseline vorA1:0BAD/0Disconnect; gesicherter Spawn0-Lauf:9BAD/0Disconnect. Keine kausale Aussage. Frische Query und Prozess-/Inode-/Hashzuordnung bestätigen wieder acht eigene Bots und keine weiteren Spieler; tatsächlich gelesener Originalengine-Sessionwert3,0. Die bisherigen DLLs blieben erhalten, keine neue Kandidaten-DLL produktiv. Sechs Runtime-Identitätsdateien aktualisiert. Vier öffentliche Instanzen verbleiben auf Config0, Hole undDev auf3; A bleibt offen.
+
+Diagnosecommit7e96f03 enthält ausschließlich standardmäßig abgeschaltete Itementscheidungsausgaben, unabhängig geprüft. Fehlende Waffenmetadaten werden ausdrücklich unbekannt statt als false markiert. Main bestätigte1406Bridgechecks mit SDK107 und ASan/UBSan. Build004 Quelle7e96f03, DLL SHA256 `43908fa08d7cb40c058fd03d455797feae8b40c9be4cf94667aa9ee179b14310`, build_oktrue/qualifiedfalse. Nur eigener isolierter Retail/Wine-Versuch, gleiche DLL mit Diagnostik aus/an; noch kein neuer Verhaltensfix, keine Freigabe aus Logs.

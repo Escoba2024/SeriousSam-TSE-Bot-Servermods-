@@ -58,6 +58,18 @@ int main(){
   weapon.m_ulPickedMask=1;assert(BotCecilWeaponGoalPicked(&p,&weapon));
   p.index=1;weapon.m_ulPickedMask=0;
   botcore::CecilItem out;
+  const char* reason=nullptr;
+  assert(BotCecilReadItem(&p,&weapon,7,0,&out,&reason)&&std::strcmp(reason,"ok")==0);
+  weapon.flags=ENF_HIDDEN;
+  assert(!BotCecilReadItem(&p,&weapon,7,0,&out,&reason)&&std::strcmp(reason,"hidden")==0);
+  weapon.flags=0;weapon.render=0;
+  assert(!BotCecilReadItem(&p,&weapon,7,0,&out,&reason)&&std::strcmp(reason,"render_type")==0);
+  weapon.render=CEntity::RT_MODEL;weapon.m_ulPickedMask=2;
+  assert(!BotCecilReadItem(&p,&weapon,7,0,&out,&reason)&&std::strcmp(reason,"picked_for_player")==0);
+  weapon.m_ulPickedMask=1;
+  assert(BotCecilReadItem(&p,&weapon,7,0,&out,&reason)&&std::strcmp(reason,"ok")==0);
+  weapon.m_ulPickedMask=0;
+
   assert(BotCecilReadItem(&p,&weapon,7,bit(2),&out));
   assert(out.weapon==3&&out.id==42&&out.generation==7&&out.x==1&&out.y==2&&out.z==3);
   assert(out.pickable&&!out.visible&&!out.reachable);

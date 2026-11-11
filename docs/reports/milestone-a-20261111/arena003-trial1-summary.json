@@ -1,0 +1,43 @@
+{
+  "build": 3,
+  "tier": 1,
+  "elapsed_s": 240.02097978815436,
+  "queries": 100,
+  "score_changes": {
+    "Dev-1": -1,
+    "CECIL-Retail-Check": 0,
+    "Dev-2": 1,
+    "Dev-3": 3,
+    "Dev-4": 4,
+    "Dev-5": 13,
+    "Dev-6": 11,
+    "Dev-7": 0,
+    "Dev-8": 6
+  },
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "cleanup": "NORMAL",
+  "accepted": false,
+  "reasons": [
+    "rapid first useful ranged acquisition still fails in some lives",
+    "fixed start-position matched comparisons and finaltier ordering not complete",
+    "exact postrespawn damage and other map gates still open"
+  ],
+  "next": "Default-off read-only selection/unavailability telemetry, same-binary on/off control; no guessed fix"
+}

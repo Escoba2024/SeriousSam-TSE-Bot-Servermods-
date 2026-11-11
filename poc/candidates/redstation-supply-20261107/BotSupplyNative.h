@@ -31,6 +31,8 @@ struct SCecilProbe {
 };
 struct SSupplyState {
   SCecilProbe probe;
+  // Diagnostic clocks are not consulted by any decision or movement gate.
+  double diagSelectionLast=-1,diagUnavailableLast=-1,diagTerminalLast=-1;
   botcore::CecilNavigator navigator;
   botcore::CecilGroundProgress groundProgress;
   // Observation and default-policy movement context never substitute for the
@@ -126,6 +128,7 @@ struct SSupplyState {
   void ClearGroundProgress(){if(groundEscapeActive)ClearEscape();groundProgress.Reset();groundRecoveryTime=groundObservationTime=recoveryMovementTime=-1;ClearGroundSweep();groundEscapeAfter=0;groundStalled=groundEscapeActive=false;groundProgressEntity=groundProgressGeneration=0;}
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
+    diagSelectionLast=diagUnavailableLast=diagTerminalLast=-1;
     ClearAirMovement();ClearGroundProgress();probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
     itemScanAfter=scanTick=spawnTick=0;searchAfter=goalSince=0;deadSince=-1;
     playable=hadUpgrade=levelSwimView=reacquiring=false;useReleaseTick=-1;lastUseEntity=0;useAfter=0;++generation;
@@ -362,6 +365,59 @@ static void BotCecilGoalEnd(INDEX slot,INDEX tick,const SSupplyState& state,cons
   if(state.goalEntity)BotLog("[CecilGoalEnd] local=%d tick=%d entity=%lu reason=%s\n",
     slot,tick,(unsigned long)state.goalEntity,reason);
 }
+// At most one selection batch, one unavailable row and one terminal row per
+// second per local bot. No rays, entity lookups, search, heap allocation or RNG.
+static bool BotCecilSupplyDiagDue(double now,double& last){
+  if(!bot_bDiagnostics||!std::isfinite(now)||now<0)return false;
+  if(last>=0&&now>=last&&now-last<1)return false;
+  last=now;return true;
+}
+static void BotCecilSupplyDiagPath(const SSupplyState& s,int goal,int& firstFrom,int& firstTo,unsigned& flags){
+  const auto& graph=BotSupplyGraph();firstFrom=firstTo=-1;flags=0;
+  int child=goal;
+  for(size_t step=0;step<graph.points.size()&&step<botcore::CecilNavGraph::kMaxPoints;++step){
+    if(child<0||(size_t)child>=graph.points.size())return;
+    const int parent=s.goals.Parent(child);
+    if(parent<0||(size_t)parent>=graph.points.size())return;
+    const auto& a=graph.points[parent];const auto& b=graph.points[child];
+    // Union describes special path endpoints, not the effective movement flags.
+    const unsigned endpointFlags=a.flags|b.flags;
+    if((endpointFlags&(botcore::CECIL_JUMP|botcore::CECIL_CROUCH|botcore::CECIL_UNREACHABLE|botcore::CECIL_TELEPORT|botcore::CECIL_IMPORTANT))||
+       a.lock_entity>=0||b.lock_entity>=0){firstFrom=parent;firstTo=child;flags=endpointFlags;}
+    child=parent;
+  }
+}
+static void BotCecilSupplyDiagUnavailable(CPlayer* player,SSupplyState& s,CEntity* entity,
+    INDEX slot,INDEX tick,double now,const char* reason,const botcore::CecilItemInput& input){
+  if(!BotCecilSupplyDiagDue(now,s.diagUnavailableLast))return;
+  const int index=player->GetMyPlayerIndex();
+  const bool weapon=entity&&!(entity->GetFlags()&ENF_DELETED)&&BotCecilIsClass(entity,"WeaponItem","Weapon Item");
+  const CWeaponItem* item=weapon?static_cast<CWeaponItem*>(entity):nullptr;
+  const unsigned mask=item?(unsigned)item->m_ulPickedMask:0;
+  BotLog("[CecilSupplyDiagUnavailable] local=%d tick=%d generation=%lu entity=%lu reason=%s flags=%lu render=%d weapon_metadata_valid=%d player_index=%d picked_mask=%lu picked_for_player=%d pickup_once=%d dropped=%d respawn=%d raw_weapon_type=%d weapons_stay=%d current=%d owned=%lu usable=%lu mapped=%d since=%.3f deadline=%.3f\n",
+    slot,tick,(unsigned long)s.generation,(unsigned long)s.goalEntity,reason,
+    entity?(unsigned long)entity->GetFlags():0ul,entity?(int)entity->GetRenderType():-1,item?1:0,index,(unsigned long)mask,
+    item&&index>=0&&index<16?(mask&(1u<<index))!=0:-1,item?(int)item->m_bPickupOnce:-1,item?(int)item->m_bDropped:-1,
+    item?(int)item->m_bRespawn:-1,item?(int)item->m_EwitType:-1,
+    (int)static_cast<const CSessionProperties*>(_pNetwork->GetSessionProperties())->sp_bWeaponsStay,player->GetPlayerWeapons()->m_iCurrentWeapon,
+    (unsigned long)input.owned,(unsigned long)input.usable,(int)s.mappedWeaponGoal,s.goalSince,s.goalDeadline);
+}
+static void BotCecilSupplyDiagTerminal(CPlayer* player,SSupplyState& s,double now,bool accepted,bool currentPoint){
+  const auto& graph=BotSupplyGraph();const int source=s.navigator.SourceSlot(s.goal),hop=s.hop;
+  if(!bot_bDiagnostics||!s.goalEntity||hop!=s.goal||source<0||hop<0||
+     (size_t)source>=graph.points.size()||(size_t)hop>=graph.points.size()||
+     !BotCecilSupplyDiagDue(now,s.diagTerminalLast))return;
+  const auto& a=graph.points[source];const auto& b=graph.points[hop];
+  const auto& p=player->GetPlacement().pl_PositionVector;const auto& v=player->en_vCurrentTranslationAbsolute;
+  const FLOAT3D delta(b.x-p(1),b.y-p(2),b.z-p(3));CEntity* ref=player->en_penReference;
+  BotLog("[CecilSupplyDiagTerminal] entity=%lu generation=%lu time=%.3f goal_entity=%lu goal=%d source=%d hop=%d anchor=%d source_flags=%lu hop_flags=%lu accepted=%d current_point=%d nav_travel=%d state=%d support=%lu support_render=%d support_physics=%lu distance=%.6f height=%.6f velocity=(%.3f,%.3f,%.3f) gravity=(%.3f,%.3f,%.3f) acquired_time=%.3f use_point=%d use_release=%d since=%.3f deadline=%.3f\n",
+    (unsigned long)player->en_ulID,(unsigned long)s.generation,now,(unsigned long)s.goalEntity,s.goal,source,hop,s.anchor,
+    (unsigned long)a.flags,(unsigned long)b.flags,(int)accepted,(int)currentPoint,(int)s.currentNavTravel,(int)player->m_pstState,
+    ref?(unsigned long)ref->en_ulID:0ul,ref?(int)ref->GetRenderType():-1,ref?(unsigned long)ref->GetPhysicsFlags():0ul,
+    (double)delta.Length(),BotCecilHeight(player,delta),(double)v(1),(double)v(2),(double)v(3),
+    (double)player->en_vGravityDir(1),(double)player->en_vGravityDir(2),(double)player->en_vGravityDir(3),
+    s.acquiredAnchorTime,s.interactionPoint,s.useReleaseTick,s.goalSince,s.goalDeadline);
+}
 static bool BotCecilHasRanged(const botcore::CecilItemInput& input){
   const uint32_t ranged=0x3df8u; // IDs4..14, excluding melee10; independent of enemy range.
   const uint32_t allowed=input.settings.iAllowedWeapons==-1?0x3fffu:(uint32_t)input.settings.iAllowedWeapons;
@@ -379,9 +435,11 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
   if(s.goalEntity||now<s.searchAfter||!std::isfinite(input.enemy_distance)||input.enemy_distance<8||
      !input.settings.bItemSearch||BotCecilHasRanged(input))return;
   const auto& graph=BotSupplyGraph();
+  const bool diagnostics=BotCecilSupplyDiagDue(now,s.diagSelectionLast);
   // Only original mapped WeaponItem references supply remote item knowledge.
   // No enemy visibility or ordinary preset search distance is changed.
   for(int attempt=0;attempt<8&&_botRayBudget>2;++attempt){
+    unsigned eligible=0,emitted=0;
     int best=-1;double bestScore=std::numeric_limits<double>::infinity(),bestCost=0;botcore::CecilItem chosen;
     for(size_t i=0;i<graph.points.size();++i){
       const auto& point=graph.points[i];if(point.important_entity<0||s.blocked[i]||!std::isfinite(s.goals.Distance((int)i)))continue;
@@ -398,7 +456,21 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
       // This ranks items only; graph costs/topology and physical deadlines stay unchanged.
       const FLOAT3D displacement((FLOAT)(item.x-input.x),(FLOAT)(item.y-input.y),(FLOAT)(item.z-input.z));
       const double score=cost+3*std::fabs(BotCecilHeight(player,displacement));
+      if(diagnostics){
+        ++eligible;
+        if(attempt==0&&emitted<16){
+          int from,to;unsigned flags;BotCecilSupplyDiagPath(s,(int)i,from,to,flags);++emitted;
+          BotLog("[CecilSupplyDiagCandidate] local=%d tick=%d generation=%lu entity=%lu weapon=%d anchor=%d path_distance=%.6f connector=%.6f vertical=%.6f total=%.6f special_from=%d special_to=%d special_flags=%lu\n",
+            slot,tick,(unsigned long)s.generation,(unsigned long)item.id,item.weapon,(int)i,s.goals.Distance((int)i),length,
+            std::fabs(BotCecilHeight(player,displacement)),score,from,to,(unsigned long)flags);
+        }
+      }
       if(score<bestScore){best=(int)i;bestScore=score;bestCost=cost;chosen=item;}
+    }
+    if(diagnostics){
+      int from,to;unsigned flags;BotCecilSupplyDiagPath(s,best,from,to,flags);
+      BotLog("[CecilSupplyDiagSelection] local=%d tick=%d attempt=%d eligible=%u emitted=%u chosen=%lu weapon=%d anchor=%d path_distance=%.6f cost=%.6f score=%.6f special_from=%d special_to=%d special_flags=%lu\n",
+        slot,tick,attempt,eligible,emitted,(unsigned long)(best<0?0:chosen.id),best<0?0:chosen.weapon,best,s.goals.Distance(best),bestCost,bestScore,from,to,(unsigned long)flags);
     }
     if(best<0)return;
     CEntity* entity=player->GetWorld()->EntityFromID(chosen.id);const auto& point=graph.points[best];
@@ -1027,7 +1099,8 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   bool urgent=false;
   if(s.goalEntity){
     CEntity* entity=player->GetWorld()->EntityFromID(s.goalEntity);botcore::CecilItem item;
-    bool usable=entity&&BotCecilReadItem(player,entity,s.generation,owned,&item);
+    const char* readReason="missing_entity";
+    bool usable=entity&&BotCecilReadItem(player,entity,s.generation,owned,&item,bot_bDiagnostics?&readReason:nullptr);
     if(usable){
       // Close combat pauses movement below; it does not make a live needed
       // weapon unavailable. Keep the same attempt and fixed deadline through
@@ -1037,8 +1110,10 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
       // live typed need and directed path. Ordinary attempts start at twelve
       // seconds; one reached-node relocation may grant a bounded fixed extension.
       else usable=botcore::CecilRetainItem(item,input);
+      if(!usable)readReason="typed_need";
     }
     if(!usable||now<s.goalSince||((s.mappedWeaponGoal||s.goalRelocationBudgeted)?now>=s.goalDeadline:now-s.goalSince>=12)){
+      if(!usable)BotCecilSupplyDiagUnavailable(player,s,entity,slot,tick,now,readReason,input);
       BotCecilGoalEnd(slot,tick,s,usable?"timeout":"unavailable");
       if(usable)s.RejectItem(s.goalEntity,now);
       s.ClearGoal();s.searchAfter=now;s.scanTick=0;
@@ -1315,6 +1390,7 @@ static bool BotCecilItemTransitFailed(CPlayer* player,SSupplyState& s,double now
 // seconds. Passive observation never authorizes movement: the checkpoint still
 // needs current static ground and fresh nearest LOS. World wiggle is not gain.
 static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,bool accepted,bool currentPoint){
+  BotCecilSupplyDiagTerminal(player,s,now,accepted,currentPoint);
   if(BotCecilItemTransitFailed(player,s,now,accepted,currentPoint))return true;
   BotCecilPatrolObserve(player,s,now,accepted);
   const auto& graph=BotSupplyGraph();const int source=s.navigator.SourceSlot(s.goal),hop=s.hop;

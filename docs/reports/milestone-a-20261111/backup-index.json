@@ -71,5 +71,44 @@
     "trees_equal": true,
     "publication": "GitHub connector create-tree/create-commit/update-ref without force; git ls-remote verified",
     "url": "https://github.com/Escoba2024/SeriousSam-TSE-Bot-Servermods-/commit/b6ae14e5497f6013bf198fad5cd105bfe658f05c"
+  },
+  "build002_progress": {
+    "archive": "/srv/tse-milestone-a-evidence-20261111/build002-native-progress-20261111.tar.gz",
+    "bytes": 6852961,
+    "sha256": "d7c8ad227798ad44cb48ba1c87693dae8a81ade30610c2bad91e55bbedf9fbe8",
+    "regular_files_restored": 242,
+    "links_indexed_not_materialized": [
+      {
+        "path": "unqualified-build002/Sources/EntitiesTSE",
+        "target": "/srv/tse-sdk-20261021/Sources/EntitiesTSE"
+      },
+      {
+        "path": "unqualified-build002/Sources/Includes",
+        "target": "/srv/tse-sdk-20261021/Sources/Includes"
+      }
+    ],
+    "qualified": false,
+    "scope": "Build002/source and completed spawn controls/trial1; trial2 running, not accepted",
+    "roundtrip_verified": true,
+    "url": "https://drive.google.com/file/d/1GoR32sMm91ryFm718RT7PDK8MUElLLST/view"
+  },
+  "build003_progress": {
+    "archive": "/srv/tse-milestone-a-evidence-20261111/build003-native-progress-20261111.tar.gz",
+    "bytes": 9131523,
+    "sha256": "1990e2400ff14e6421d36ae25b928af40eb5aa1bbdfa2a7930f5beb4a035aadb",
+    "dll_sha256": "0ae31bb552ea4d97bd6c6f9d74ea90c84dd4b80b06f84e2c965d24936e5ee9c4",
+    "qualified": false,
+    "remote_commit": "5eaef8df42d7504a7fc01657bdf457678d18d406",
+    "scope": "Source/build003 and completed native names/controls/002windows;003trial1stillrunning",
+    "roundtrip_verified": true,
+    "url": "https://drive.google.com/file/d/1wgbVRXSqDe9dVlzLf3Kgn57iTq47Y_1L/view",
+    "separate_restore": {
+      "status": "PASS_SEPARATE_FILE_RESTORE",
+      "regular_files": 362,
+      "indexed_links": 2,
+      "bytes": 76673062,
+      "native_launch": false,
+      "links_materialized": false
+    }
   }
 }

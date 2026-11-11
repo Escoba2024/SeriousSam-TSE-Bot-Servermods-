@@ -55,24 +55,29 @@ inline bool BotCecilWeaponGoalPicked(CPlayer* player,CEntity* entity) {
   return (static_cast<uint32_t>(static_cast<CWeaponItem*>(entity)->m_ulPickedMask)&(1u<<index))!=0;
 }
 inline bool BotCecilReadItem(CPlayer* player,CEntity* entity,uint32_t generation,
-                             uint32_t owned,botcore::CecilItem* out) {
-  if(!out)return false;
+                             uint32_t owned,botcore::CecilItem* out,const char** reason=nullptr) {
+  auto reject=[&](const char* why){if(reason)*reason=why;return false;};
+  if(reason)*reason="ok";
+  if(!out)return reject("null_output");
   *out=botcore::CecilItem();
-  if(!player||!entity||!std::isfinite(player->GetHealth())||player->GetHealth()<=0||
-     (entity->GetFlags()&(ENF_DELETED|ENF_HIDDEN))||
-     (entity->GetRenderType()!=CEntity::RT_MODEL&&entity->GetRenderType()!=CEntity::RT_SKAMODEL))return false;
+  if(!player)return reject("null_player");
+  if(!entity)return reject("missing_entity");
+  if(!std::isfinite(player->GetHealth())||player->GetHealth()<=0)return reject("player_not_alive");
+  if(entity->GetFlags()&ENF_DELETED)return reject("deleted");
+  if(entity->GetFlags()&ENF_HIDDEN)return reject("hidden");
+  if(entity->GetRenderType()!=CEntity::RT_MODEL&&entity->GetRenderType()!=CEntity::RT_SKAMODEL)return reject("render_type");
   const int index=player->GetMyPlayerIndex();
-  if(index<0||index>=16)return false;
+  if(index<0||index>=16)return reject("player_index");
   botcore::CecilItem result;result.id=entity->en_ulID;result.generation=generation;
   const FLOAT3D& pos=entity->GetPlacement().pl_PositionVector;
   result.x=pos(1);result.y=pos(2);result.z=pos(3);
-  if(!std::isfinite(result.x)||!std::isfinite(result.y)||!std::isfinite(result.z))return false;
+  if(!std::isfinite(result.x)||!std::isfinite(result.y)||!std::isfinite(result.z))return reject("position");
   CItem* item=nullptr;
   if(BotCecilIsClass(entity,"WeaponItem","Weapon Item")){
     CWeaponItem* weapon=static_cast<CWeaponItem*>(entity);item=weapon;
     static const int types[]={0,2,4,5,6,7,8,9,13,11,12,10,14};
     const int type=static_cast<int>(weapon->m_EwitType);
-    if(type<1||type>12)return false;
+    if(type<1||type>12)return reject("weapon_type");
     result.weapon=types[type];
     if(result.weapon==2&&(owned&botcore::CecilWeaponMask(2)))result.weapon=3;
     result.kind=botcore::CecilItemKind::Weapon;
@@ -87,7 +92,7 @@ inline bool BotCecilReadItem(CPlayer* player,CEntity* entity,uint32_t generation
     const double top=player->m_fMaxHealth,cap=top+(over?100:0);
     if(!std::isfinite(top)||top<=0||!std::isfinite(old)||old<0||
        !std::isfinite(item->m_fValue)||item->m_fValue<=0||
-       std::ceil(std::fmin(old+item->m_fValue,cap))<=std::ceil(old))return false;
+       std::ceil(std::fmin(old+item->m_fValue,cap))<=std::ceil(old))return reject("health_armor_no_gain_or_invalid");
     result.kind=health?botcore::CecilItemKind::Health:botcore::CecilItemKind::Armor;
   }else if(BotCecilIsClass(entity,"AmmoPack","Ammo Pack")){
     CAmmoPack* pack=static_cast<CAmmoPack*>(entity);item=pack;
@@ -96,23 +101,23 @@ inline bool BotCecilReadItem(CPlayer* player,CEntity* entity,uint32_t generation
       pack->m_iElectricity,pack->m_iIronBalls,pack->m_iNapalm,pack->m_iSniperBullets};
     const int kinds[]={1,2,3,4,5,7,10,11};
     for(int i=0;i<8;++i)if(amounts[i]>0)result.ammo_mask|=botcore::CecilAmmoWeaponMask(kinds[i]);
-    if(!result.ammo_mask)return false;
+    if(!result.ammo_mask)return reject("empty_ammo_pack");
   }else if(BotCecilIsClass(entity,"AmmoItem","Ammo Item")){
     CAmmoItem* ammo=static_cast<CAmmoItem*>(entity);item=ammo;
     result.kind=botcore::CecilItemKind::Ammo;
     // Legacy kinds 8/9 are explicitly "don't use" in AmmoItem.es; real packs
     // use CAmmoPack above. Nuke ammo (6) has no supported retail weapon.
     result.ammo_mask=botcore::CecilAmmoWeaponMask(static_cast<int>(ammo->m_EaitType));
-    if(!result.ammo_mask||!std::isfinite(item->m_fValue)||item->m_fValue<=0)return false;
+    if(!result.ammo_mask||!std::isfinite(item->m_fValue)||item->m_fValue<=0)return reject("ammo_kind_or_value");
   }else if(BotCecilIsClass(entity,"PowerUpItem","PowerUp Item")){
     CPowerUpItem* power=static_cast<CPowerUpItem*>(entity);item=power;
     const int type=static_cast<int>(power->m_puitType);
     // PowerUpItem.es ItemCollected refuses a fourth Serious Bomb.
-    if(type<0||type>4||(type==4&&player->m_iSeriousBombCount>=3))return false;
+    if(type<0||type>4||(type==4&&player->m_iSeriousBombCount>=3))return reject("powerup_type_or_capacity");
     result.kind=botcore::CecilItemKind::Powerup;
-  }else return false;
-  if((static_cast<uint32_t>(item->m_ulPickedMask)&(1u<<index))||
-     !std::isfinite(item->m_fValue)||item->m_fValue<0)return false;
+  }else return reject("item_class");
+  if(static_cast<uint32_t>(item->m_ulPickedMask)&(1u<<index))return reject("picked_for_player");
+  if(!std::isfinite(item->m_fValue)||item->m_fValue<0)return reject("item_value");
   result.value=item->m_fValue;result.pickable=true;
   // Caller sets visible/reachable only after its budgeted item ray/path checks.
   *out=result;return true;

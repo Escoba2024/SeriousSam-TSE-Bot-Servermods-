@@ -1,0 +1,54 @@
+{
+  "utc": "2026-11-11T20:20:27.775794+00:00",
+  "scope": "PRECAUTIONARY_CONFIG_ROLLBACK_NOT_CAUSAL_FIX",
+  "new_candidate_deployed": false,
+  "original_config_restored": true,
+  "live_session_spawn": 3.0,
+  "verified_own_bots": 8,
+  "additional_unknown": 0,
+  "roles": [
+    {
+      "role": "server",
+      "dll_sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+    },
+    {
+      "role": "botA",
+      "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+    },
+    {
+      "role": "botB",
+      "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+    }
+  ],
+  "preserved_baseline": {
+    "bad_events": 0,
+    "sync_ok_events": 26357,
+    "disconnect_events": 0,
+    "affected_connections": 0,
+    "max_counter": 0,
+    "segments": []
+  },
+  "preserved_zero_session": {
+    "bad_events": 9,
+    "sync_ok_events": 14794,
+    "disconnect_events": 0,
+    "affected_connections": 1,
+    "max_counter": 8,
+    "segments": [
+      {
+        "first_tick": 806.53,
+        "last_tick": 813.87,
+        "first_counter": 1,
+        "last_counter": 8,
+        "events_seen": 8
+      },
+      {
+        "first_tick": 997.58,
+        "last_tick": 997.58,
+        "first_counter": 1,
+        "last_counter": 1,
+        "events_seen": 1
+      }
+    ]
+  }
+}
