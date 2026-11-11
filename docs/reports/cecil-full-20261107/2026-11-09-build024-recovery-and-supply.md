@@ -1,0 +1,35 @@
+# Build024 recovery correction and supply failure, 9 November 2026
+
+Status: **NOT QUALIFIED; no production rollout**.
+
+Published source `bd422158466dbfc24344591aaac2870ec5c3a581`, exact tree `9aa43e1c9de03b9162146dd41f6bb51a409a6f56`; normal Win32 native DLL `802bb63f6e4efc0a822be855506988bc43df066d43546d9912303d3327195650`. All15 units/link succeeded.204 sanitized actual-bridge checks,174 tools and native Driver contracts pass; independent focused source review found no blocker. The new failed-LOS mask changes neither floor/swim rules nor goal lifetimes.
+
+## Full prospective supply cohort failed
+
+All ten fresh60-second RedStation cases completed with normal process shutdown, unique native epochs, exact single-bot query populations and pinned raw logs. No recognized native errors. First ten actual weapon goals are fixed chronologically in counts4+3+3 across cases1–3. At most eight are corroborated by matching goal ownership gains. Case1 flamer248 ends timeout; case2 cannon311 remains open at60s and is retained as a censored nonacquisition. Neither failure is replaced. First-useful-pickup median4.50s/P9510.30s meets the timing bound, but does not close the failed9/10 goal criterion.
+
+The flamer attempt starts at tick404 and times out exactly at644. An incidental different-weapon pickup does not cancel it. The player is physically launched, lands within the original arrival radius of another actual graph node, and follows a much longer directed route toward the same weapon. Original graph geometry and nearby native samples give an initial planned total of approximately21.62m, versus145.33m after the reached relocation. The exact tick404 source position was not logged; the initial estimate uses a sample0.20s before selection. The new cost at the reached node is directly corroborated. The same launch/timeout pattern occurs in019-07, while019-06 completes a similar upper route. This is not an established regression caused by the recovery mask.
+
+An initial cost-only deadline would miss the later route change. Investigate a single fixed extension only following the navigator's existing reached-original-node relocation event, fresh finite directed remaining cost and actual typed item validation. Keep a hard45-second total lifetime and all original admission/need/threat/physical rules. Periodic scans, ordinary movement and another relocation must not repeatedly renew the attempt. No changed supply threshold or cohort is authorized by this correction.
+
+## Partial eight-bot observation and distinct diagnostic failure
+
+The owned024 Hole observation was explicitly aborted before duration qualification once the supply cohort could no longer pass. Its partial window, not a completed600-second gate, is preserved. Own bots exited through verified windows, slots drained, then the dedicated server exited through SIGINT and service cgroups drained. No1/4/8 duration gate started; no public instance changed.
+
+Earlier diagnostic023 completed600s with no recognized native errors but failed unexplained stillness:52.501158s in the blocked-nearest-prefix branch, and40.358506s in a distinct no-reference branch. In the latter, repeated samples show no native reference/stand polygon, zero velocity and PST_STAND. Recovery returns before any LOS/floor probe. Those sampled fields do not prove continuous loss of reference, airborne state or physical support. Native view feedback also demonstrates exact-zero leveling, without a confirmed pitch-quantization lock.
+
+Private diagnostic026, based on024, measures existing flags/content/fall-time and up to five budgeted physical downward rays only within the denied no-reference branch. It never changes actions. These extra casts make it diagnosis only, not performance/release evidence. An early airborne control has downward velocity, native PST_FALL and no hits; separate moving near-ground controls have actual upward-normal brush hits despite a sampled null reference. A stationary failure and its physical support remain under observation. Diagnostic025 was built but never installed;026 adds state fields to that private overlay.
+
+All final-hash native duration, resource, original-Retail gameplay, weapons/special-waypoint, recovery and fleet gates remain open. Five production instances retain their baseline DLLs; public development retains013. Raw logs, runtime files and NAV payloads stay private.
+
+Private024 supply audit SHA256: `c25b3e1428ca39cf31290e4c0f713c82bf61cd820b778b69f656aaaa5bd24cfc`.
+
+## Reviewed corrections prepared after024
+
+The actual navigator relocation predicate is now exposed as a read-only result. An active ordinary weapon attempt may receive one fixed extension only on that event, before its original12s expiry, after fresh typed need/current locks/directed route and a physically clear bounded item connector. Remaining cost includes the current approach and live connector. The deadline is min(goalSince+45,max(goalSince+12,eventTime+cost/6+5)); only an actual increase consumes the one-time option. Mapped deadlines are unchanged. Budget denial skips the event, without deferred scan-based grants. Invalid clocks/costs, disappeared/gained weapons, lifecycle reset, blocked paths and a second relocation cannot revive or renew it.
+
+A separate current-support correction retains the reference path and substitutes for a null reference only with STAND/CROUCH, gravity physics, finite velocity and absolute gravity-axis speed<=0.1m/s, plus a real physical30cm ray from25cm above the foot to5cm below. A live nonpassable brush polygon with finite upward normal dot>0.5 and hit distance[0.25f,0.30f] is required. No model/terrain or infinite reference-plane inference. One support cast plus at least one LOS and two final wall/floor casts require budget>=4; budget deferral retains search state. The final selected/escape action remains capped0.3 and independently wall/floor-checked. This conservative classification is portable-tested, not a native fix claim for023's unreproduced stationary no-reference episode.
+
+Combined actual bridge passes287 checks with ASan/UBSan and pinned SDK107; Motion65 and all nine pure C++ suites pass, as do native Action/Item/export contracts. Independent source reviews found no blocker after finite-clock guards were added. Existing1Hz CecilState gains read-only anchor/recovery/reference/leveling/actual-view/local/composed/last-angle fields without extra casts. These fields distinguish navigation from combat arbitration in later acceptance logs. A new published source and native hash require all new affected gates.
+
+Diagnostic026 completed600.007s with full coverage and no recognized errors, but a separate27.199s PST_SWIM(2) stillness remains unexplained. It did not reproduce a>5s stationary no-reference case. Diagnostic027 adds existing actual view/route/recovery-choice observations to classify the liquid branch; no corresponding precision/leveling cause is assumed before evidence. No diagnostic result qualifies the new corrections or authorizes production.

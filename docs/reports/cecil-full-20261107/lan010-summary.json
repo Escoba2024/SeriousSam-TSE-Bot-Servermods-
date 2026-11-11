@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "qualified": false,
+  "scope": "SKULLS_300S_CONFIG_INTERVENTION_ONLY",
+  "dll_sha256": "224ee607072982a521bdab36250554039f9e606a4db755fdd42716fb0f031475",
+  "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+  "duration_s": 300.00485152693,
+  "log_errors": 0,
+  "death_observations": 41,
+  "server_max_bps": 8000,
+  "client_b_max_bps": 100000,
+  "client_b_min_bps": 6000,
+  "client_a_changed_during_window": false,
+  "slots": {
+    "botA:0": {
+      "fire_actions_delta": 167,
+      "pickups_delta": 5,
+      "deaths_delta": 11,
+      "respawns_delta": 11,
+      "max_unexplained_stationary_s": 0,
+      "movement_observations": 270,
+      "current_weapons": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7
+      ],
+      "score_delta": 4
+    },
+    "botA:1": {
+      "fire_actions_delta": 115,
+      "pickups_delta": 1,
+      "deaths_delta": 5,
+      "respawns_delta": 5,
+      "max_unexplained_stationary_s": 0,
+      "movement_observations": 285,
+      "current_weapons": [
+        1,
+        2,
+        3
+      ],
+      "score_delta": 5
+    },
+    "botA:2": {
+      "fire_actions_delta": 203,
+      "pickups_delta": 5,
+      "deaths_delta": 6,
+      "respawns_delta": 6,
+      "max_unexplained_stationary_s": 0,
+      "movement_observations": 277,
+      "current_weapons": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        8
+      ],
+      "score_delta": 4
+    },
+    "botA:3": {
+      "fire_actions_delta": 228,
+      "pickups_delta": 4,
+      "deaths_delta": 6,
+      "respawns_delta": 6,
+      "max_unexplained_stationary_s": 0,
+      "movement_observations": 282,
+      "current_weapons": [
+        1,
+        2,
+        6
+      ],
+      "score_delta": 4
+    },
+    "botB:0": {
+      "fire_actions_delta": 193,
+      "pickups_delta": 6,
+      "deaths_delta": 2,
+      "respawns_delta": 2,
+      "max_unexplained_stationary_s": 7.048580921953544,
+      "movement_observations": 266,
+      "current_weapons": [
+        1,
+        2,
+        5,
+        6,
+        7
+      ],
+      "score_delta": 3
+    },
+    "botB:1": {
+      "fire_actions_delta": 236,
+      "pickups_delta": 2,
+      "deaths_delta": 4,
+      "respawns_delta": 4,
+      "max_unexplained_stationary_s": 3.0233119619078934,
+      "movement_observations": 269,
+      "current_weapons": [
+        1,
+        2,
+        7
+      ],
+      "score_delta": 5
+    },
+    "botB:2": {
+      "fire_actions_delta": 285,
+      "pickups_delta": 2,
+      "deaths_delta": 4,
+      "respawns_delta": 4,
+      "max_unexplained_stationary_s": 0,
+      "movement_observations": 288,
+      "current_weapons": [
+        1,
+        2,
+        3
+      ],
+      "score_delta": 7
+    },
+    "botB:3": {
+      "fire_actions_delta": 260,
+      "pickups_delta": 1,
+      "deaths_delta": 3,
+      "respawns_delta": 3,
+      "max_unexplained_stationary_s": 3.028171609970741,
+      "movement_observations": 282,
+      "current_weapons": [
+        1,
+        2,
+        5,
+        8
+      ],
+      "score_delta": 7
+    }
+  },
+  "limitations": [
+    "Not a long stability gate or full map acceptance.",
+    "Configuration and B restart occurred together; no restart-only control.",
+    "Resources are not a clean baseline comparison: offline stop fixture ran concurrently.",
+    "Sampled respawn timing; last A1 activity window is right-censored."
+  ],
+  "input_sha256": {
+    "report": "22fc120386d9ea17f3db613b032cd962341f0b6e502331d3bd6855c57d539762",
+    "timeseries": "357614a60689d468c72f44dcb28c87d9b04554438c6527f90813afde75e8208d"
+  }
+}

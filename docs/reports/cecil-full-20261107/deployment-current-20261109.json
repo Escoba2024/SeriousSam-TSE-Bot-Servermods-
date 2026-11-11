@@ -1,0 +1,598 @@
+{
+  "schema_version": 3,
+  "inventory_utc": "2026-11-09T16:31:03.616455+00:00",
+  "disk_free_gib": 61.79025650024414,
+  "qualified": false,
+  "private_data_omitted": [
+    "player names and identities",
+    "raw configurations",
+    "raw logs",
+    "NAV coordinates"
+  ],
+  "instances": [
+    {
+      "id": "redstation",
+      "role": "production",
+      "address": "91.99.75.33:25600",
+      "name": "ssam.ai | Red Station | AI2 8 Bots",
+      "map": "Red Station",
+      "settings": {
+        "gametype": "Fragmatch",
+        "gamever": "1.07",
+        "activemod": "",
+        "maxplayers": "16",
+        "difficulty": "Serious",
+        "friendlyfire": "1",
+        "weaponsstay": "1",
+        "ammostays": "1",
+        "healthandarmorstays": "1",
+        "allowhealth": "0",
+        "allowarmor": "0",
+        "infiniteammo": "0",
+        "respawninplace": "0"
+      },
+      "expected_bots": 8,
+      "observed_own_bots": 8,
+      "additional_players": 0,
+      "observed_players": 8,
+      "server": {
+        "unit": "ssam-tse-live.service",
+        "pid_at_inventory": 432027,
+        "root": "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server",
+        "binary_hashes": {
+          "EntitiesMP.dll": "7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350",
+          "DedicatedServer.exe": "9596f53c260c6fe5f6b7b6666fdf210bcac9952e4eec4b2ee2ee82f37153052d",
+          "SeriousSam.exe": "9f8f9a0b8fd718616036ed2c3584904e2dfd58e49515bf4c8ecc45175d02cc53",
+          "Engine.dll": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+          "GameMP.dll": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        "configuration_hashes": {
+          "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server/Scripts/PersistentSymbols.ini": "529db1107f559d0bc8557a31da86cda0a704325377be3428d72f63c672689f93",
+          "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server/Scripts/Dedicated/BotTest/init.ini": "5e77f3ff7a41cc20341dca9f07b16b1199f663ff61a4d010d785a8e49be8fff3",
+          "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server/Scripts/Dedicated/BotTest/1_end.ini": "39677c727fba2266a84b7cb1bde5ad7aa6dd546ab1c2d86a0733d1734c48ef85",
+          "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server/Scripts/Dedicated/BotTest/1_begin.ini": "bc7bbf70054cbc642fb6346e038d3bf921af1941e63d8fad6d980133fb0bf427"
+        }
+      },
+      "clients": [
+        {
+          "role": "botA",
+          "unit": "ssam-redstation-bota.service",
+          "root": "/srv/tse-redstation-live-20261101/botA",
+          "pid_at_inventory": 494696,
+          "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "mapped_inode_verified": true,
+          "config_sha256": "87bc133bf9adb4cb6ca2a0b4d3d66a9a457a6bf8e5a3a4732831ea358071ab84",
+          "active_values": {},
+          "roster_verified_count": 4,
+          "start_ticks": 68182451,
+          "last_observed_cecil_policy": null
+        },
+        {
+          "role": "botB",
+          "unit": "ssam-redstation-botb.service",
+          "root": "/srv/tse-redstation-live-20261101/botB",
+          "pid_at_inventory": 494700,
+          "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "mapped_inode_verified": true,
+          "config_sha256": "0aa3aa3f97419cbf30fb73fab1a82125e190e43fa44ff993b241e6280abf87fd",
+          "active_values": {},
+          "roster_verified_count": 4,
+          "start_ticks": 68182453,
+          "last_observed_cecil_policy": null
+        }
+      ],
+      "candidate_status": "UNCHANGED_PRODUCTION_BASELINE"
+    },
+    {
+      "id": "yodeller",
+      "role": "production",
+      "address": "91.99.75.33:25610",
+      "name": "ssam.ai | Yodeller | AI2 8 Bots",
+      "map": "Yodeller",
+      "settings": {
+        "gametype": "Fragmatch",
+        "gamever": "1.07",
+        "activemod": "",
+        "maxplayers": "16",
+        "difficulty": "Serious",
+        "friendlyfire": "1",
+        "weaponsstay": "1",
+        "ammostays": "1",
+        "healthandarmorstays": "1",
+        "allowhealth": "0",
+        "allowarmor": "0",
+        "infiniteammo": "0",
+        "respawninplace": "0"
+      },
+      "expected_bots": 8,
+      "observed_own_bots": 8,
+      "additional_players": 0,
+      "observed_players": 8,
+      "server": {
+        "unit": "ssam-yodeller-server.service",
+        "pid_at_inventory": 493947,
+        "root": "/srv/tse-yodeller-live-20261107/server",
+        "binary_hashes": {
+          "EntitiesMP.dll": "7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350",
+          "DedicatedServer.exe": "9596f53c260c6fe5f6b7b6666fdf210bcac9952e4eec4b2ee2ee82f37153052d",
+          "SeriousSam.exe": "9f8f9a0b8fd718616036ed2c3584904e2dfd58e49515bf4c8ecc45175d02cc53",
+          "Engine.dll": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+          "GameMP.dll": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        "configuration_hashes": {
+          "/srv/tse-yodeller-live-20261107/server/Scripts/PersistentSymbols.ini": "529db1107f559d0bc8557a31da86cda0a704325377be3428d72f63c672689f93",
+          "/srv/tse-yodeller-live-20261107/server/Scripts/Dedicated/BotTest/init.ini": "5e77f3ff7a41cc20341dca9f07b16b1199f663ff61a4d010d785a8e49be8fff3",
+          "/srv/tse-yodeller-live-20261107/server/Scripts/Dedicated/BotTest/1_end.ini": "39677c727fba2266a84b7cb1bde5ad7aa6dd546ab1c2d86a0733d1734c48ef85",
+          "/srv/tse-yodeller-live-20261107/server/Scripts/Dedicated/BotTest/1_begin.ini": "5aa777202f428bad0bde28a321e18d973f43fb2760aaf5008b8767082956fac2"
+        }
+      },
+      "clients": [
+        {
+          "role": "botA",
+          "unit": "ssam-yodeller-bota.service",
+          "root": "/srv/tse-yodeller-live-20261107/botA",
+          "pid_at_inventory": 494089,
+          "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "mapped_inode_verified": true,
+          "config_sha256": "d5c1c8e90723ffb21649e6797fe97f999bc44eb9288511dbeed9592ecd38f9f9",
+          "active_values": {
+            "bot_bEnabled=1;": null,
+            "bot_bNullRender=1;": null,
+            "bot_iNullRenderFps=20;": null,
+            "bot_bHumanAI=0;": null,
+            "bot_bAutoCombat=1;": null,
+            "bot_iProfile0=7;": null,
+            "bot_iProfile1=7;": null,
+            "bot_iProfile2=7;": null,
+            "bot_iProfile3=7;": null,
+            "bot_fStrafeScale=0.5;": null
+          },
+          "roster_verified_count": 4,
+          "start_ticks": 68113107,
+          "last_observed_cecil_policy": null
+        },
+        {
+          "role": "botB",
+          "unit": "ssam-yodeller-botb.service",
+          "root": "/srv/tse-yodeller-live-20261107/botB",
+          "pid_at_inventory": 494090,
+          "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "mapped_inode_verified": true,
+          "config_sha256": "8e65034a0a091093000da13aaa7fd90773e4fa2e750f5fc179a8c63b97525f11",
+          "active_values": {
+            "bot_bEnabled=1;": null,
+            "bot_bNullRender=1;": null,
+            "bot_iNullRenderFps=20;": null,
+            "bot_bHumanAI=0;": null,
+            "bot_bAutoCombat=1;": null,
+            "bot_iProfile0=7;": null,
+            "bot_iProfile1=7;": null,
+            "bot_iProfile2=7;": null,
+            "bot_iProfile3=7;": null,
+            "bot_fStrafeScale=0.5;": null
+          },
+          "roster_verified_count": 4,
+          "start_ticks": 68113108,
+          "last_observed_cecil_policy": null
+        }
+      ],
+      "candidate_status": "UNCHANGED_PRODUCTION_BASELINE"
+    },
+    {
+      "id": "skulls",
+      "role": "production",
+      "address": "91.99.75.33:25620",
+      "name": "ssam.ai | Skulls and Bones | AI2 8 Bots",
+      "map": "We Got Skulls'n'Bones Too",
+      "settings": {
+        "gametype": "Fragmatch",
+        "gamever": "1.07",
+        "activemod": "",
+        "maxplayers": "16",
+        "difficulty": "Serious",
+        "friendlyfire": "1",
+        "weaponsstay": "1",
+        "ammostays": "1",
+        "healthandarmorstays": "1",
+        "allowhealth": "0",
+        "allowarmor": "0",
+        "infiniteammo": "0",
+        "respawninplace": "0"
+      },
+      "expected_bots": 8,
+      "observed_own_bots": 8,
+      "additional_players": 0,
+      "observed_players": 8,
+      "server": {
+        "unit": "ssam-skulls-server.service",
+        "pid_at_inventory": 495865,
+        "root": "/srv/tse-skulls-live-20261107/server",
+        "binary_hashes": {
+          "EntitiesMP.dll": "7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350",
+          "DedicatedServer.exe": "9596f53c260c6fe5f6b7b6666fdf210bcac9952e4eec4b2ee2ee82f37153052d",
+          "SeriousSam.exe": "9f8f9a0b8fd718616036ed2c3584904e2dfd58e49515bf4c8ecc45175d02cc53",
+          "Engine.dll": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+          "GameMP.dll": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        "configuration_hashes": {
+          "/srv/tse-skulls-live-20261107/server/Scripts/PersistentSymbols.ini": "529db1107f559d0bc8557a31da86cda0a704325377be3428d72f63c672689f93",
+          "/srv/tse-skulls-live-20261107/server/Scripts/Dedicated/BotTest/init.ini": "5e77f3ff7a41cc20341dca9f07b16b1199f663ff61a4d010d785a8e49be8fff3",
+          "/srv/tse-skulls-live-20261107/server/Scripts/Dedicated/BotTest/1_end.ini": "39677c727fba2266a84b7cb1bde5ad7aa6dd546ab1c2d86a0733d1734c48ef85",
+          "/srv/tse-skulls-live-20261107/server/Scripts/Dedicated/BotTest/1_begin.ini": "ae95a18eda4f725eb3a9b57124d6019344751219756c7e394e9648f489f97690"
+        }
+      },
+      "clients": [
+        {
+          "role": "botA",
+          "unit": "ssam-skulls-bota.service",
+          "root": "/srv/tse-skulls-live-20261107/botA",
+          "pid_at_inventory": 496126,
+          "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "mapped_inode_verified": true,
+          "config_sha256": "d5c1c8e90723ffb21649e6797fe97f999bc44eb9288511dbeed9592ecd38f9f9",
+          "active_values": {
+            "bot_bEnabled=1;": null,
+            "bot_bNullRender=1;": null,
+            "bot_iNullRenderFps=20;": null,
+            "bot_bHumanAI=0;": null,
+            "bot_bAutoCombat=1;": null,
+            "bot_iProfile0=7;": null,
+            "bot_iProfile1=7;": null,
+            "bot_iProfile2=7;": null,
+            "bot_iProfile3=7;": null,
+            "bot_fStrafeScale=0.5;": null
+          },
+          "roster_verified_count": 4,
+          "start_ticks": 68553797,
+          "last_observed_cecil_policy": null
+        },
+        {
+          "role": "botB",
+          "unit": "ssam-skulls-botb.service",
+          "root": "/srv/tse-skulls-live-20261107/botB",
+          "pid_at_inventory": 496132,
+          "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "mapped_inode_verified": true,
+          "config_sha256": "8e65034a0a091093000da13aaa7fd90773e4fa2e750f5fc179a8c63b97525f11",
+          "active_values": {
+            "bot_bEnabled=1;": null,
+            "bot_bNullRender=1;": null,
+            "bot_iNullRenderFps=20;": null,
+            "bot_bHumanAI=0;": null,
+            "bot_bAutoCombat=1;": null,
+            "bot_iProfile0=7;": null,
+            "bot_iProfile1=7;": null,
+            "bot_iProfile2=7;": null,
+            "bot_iProfile3=7;": null,
+            "bot_fStrafeScale=0.5;": null
+          },
+          "roster_verified_count": 4,
+          "start_ticks": 68553800,
+          "last_observed_cecil_policy": null
+        }
+      ],
+      "candidate_status": "UNCHANGED_PRODUCTION_BASELINE"
+    },
+    {
+      "id": "trouble",
+      "role": "production",
+      "address": "91.99.75.33:25630",
+      "name": "ssam.ai | Little Trouble | AI2 8 Bots",
+      "map": "Little Trouble",
+      "settings": {
+        "gametype": "Fragmatch",
+        "gamever": "1.07",
+        "activemod": "",
+        "maxplayers": "16",
+        "difficulty": "Serious",
+        "friendlyfire": "1",
+        "weaponsstay": "1",
+        "ammostays": "1",
+        "healthandarmorstays": "1",
+        "allowhealth": "0",
+        "allowarmor": "0",
+        "infiniteammo": "0",
+        "respawninplace": "0"
+      },
+      "expected_bots": 8,
+      "observed_own_bots": 8,
+      "additional_players": 0,
+      "observed_players": 8,
+      "server": {
+        "unit": "ssam-trouble-server.service",
+        "pid_at_inventory": 495866,
+        "root": "/srv/tse-trouble-live-20261107/server",
+        "binary_hashes": {
+          "EntitiesMP.dll": "7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350",
+          "DedicatedServer.exe": "9596f53c260c6fe5f6b7b6666fdf210bcac9952e4eec4b2ee2ee82f37153052d",
+          "SeriousSam.exe": "9f8f9a0b8fd718616036ed2c3584904e2dfd58e49515bf4c8ecc45175d02cc53",
+          "Engine.dll": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+          "GameMP.dll": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        "configuration_hashes": {
+          "/srv/tse-trouble-live-20261107/server/Scripts/PersistentSymbols.ini": "529db1107f559d0bc8557a31da86cda0a704325377be3428d72f63c672689f93",
+          "/srv/tse-trouble-live-20261107/server/Scripts/Dedicated/BotTest/init.ini": "5e77f3ff7a41cc20341dca9f07b16b1199f663ff61a4d010d785a8e49be8fff3",
+          "/srv/tse-trouble-live-20261107/server/Scripts/Dedicated/BotTest/1_end.ini": "39677c727fba2266a84b7cb1bde5ad7aa6dd546ab1c2d86a0733d1734c48ef85",
+          "/srv/tse-trouble-live-20261107/server/Scripts/Dedicated/BotTest/1_begin.ini": "cb419d25ba673c9cb27fed0b03f548e8f6bc42f4032a61f93ae13aef00aef713"
+        }
+      },
+      "clients": [
+        {
+          "role": "botA",
+          "unit": "ssam-trouble-bota.service",
+          "root": "/srv/tse-trouble-live-20261107/botA",
+          "pid_at_inventory": 496598,
+          "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "mapped_inode_verified": true,
+          "config_sha256": "d5c1c8e90723ffb21649e6797fe97f999bc44eb9288511dbeed9592ecd38f9f9",
+          "active_values": {
+            "bot_bEnabled=1;": null,
+            "bot_bNullRender=1;": null,
+            "bot_iNullRenderFps=20;": null,
+            "bot_bHumanAI=0;": null,
+            "bot_bAutoCombat=1;": null,
+            "bot_iProfile0=7;": null,
+            "bot_iProfile1=7;": null,
+            "bot_iProfile2=7;": null,
+            "bot_iProfile3=7;": null,
+            "bot_fStrafeScale=0.5;": null
+          },
+          "roster_verified_count": 4,
+          "start_ticks": 68562792,
+          "last_observed_cecil_policy": null
+        },
+        {
+          "role": "botB",
+          "unit": "ssam-trouble-botb.service",
+          "root": "/srv/tse-trouble-live-20261107/botB",
+          "pid_at_inventory": 496135,
+          "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "mapped_inode_verified": true,
+          "config_sha256": "8e65034a0a091093000da13aaa7fd90773e4fa2e750f5fc179a8c63b97525f11",
+          "active_values": {
+            "bot_bEnabled=1;": null,
+            "bot_bNullRender=1;": null,
+            "bot_iNullRenderFps=20;": null,
+            "bot_bHumanAI=0;": null,
+            "bot_bAutoCombat=1;": null,
+            "bot_iProfile0=7;": null,
+            "bot_iProfile1=7;": null,
+            "bot_iProfile2=7;": null,
+            "bot_iProfile3=7;": null,
+            "bot_fStrafeScale=0.5;": null
+          },
+          "roster_verified_count": 4,
+          "start_ticks": 68553801,
+          "last_observed_cecil_policy": null
+        }
+      ],
+      "candidate_status": "UNCHANGED_PRODUCTION_BASELINE"
+    },
+    {
+      "id": "hole",
+      "role": "production",
+      "address": "91.99.75.33:25640",
+      "name": "ssam.ai | Hole | AI2 8 Bots",
+      "map": "Hole",
+      "settings": {
+        "gametype": "Fragmatch",
+        "gamever": "1.07",
+        "activemod": "",
+        "maxplayers": "16",
+        "difficulty": "Serious",
+        "friendlyfire": "1",
+        "weaponsstay": "1",
+        "ammostays": "1",
+        "healthandarmorstays": "1",
+        "allowhealth": "0",
+        "allowarmor": "0",
+        "infiniteammo": "0",
+        "respawninplace": "0"
+      },
+      "expected_bots": 8,
+      "observed_own_bots": 8,
+      "additional_players": 0,
+      "observed_players": 8,
+      "server": {
+        "unit": "ssam-hole-server.service",
+        "pid_at_inventory": 496783,
+        "root": "/srv/tse-hole-live-20261107/server",
+        "binary_hashes": {
+          "EntitiesMP.dll": "7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350",
+          "DedicatedServer.exe": "9596f53c260c6fe5f6b7b6666fdf210bcac9952e4eec4b2ee2ee82f37153052d",
+          "SeriousSam.exe": "9f8f9a0b8fd718616036ed2c3584904e2dfd58e49515bf4c8ecc45175d02cc53",
+          "Engine.dll": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+          "GameMP.dll": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        "configuration_hashes": {
+          "/srv/tse-hole-live-20261107/server/Scripts/PersistentSymbols.ini": "529db1107f559d0bc8557a31da86cda0a704325377be3428d72f63c672689f93",
+          "/srv/tse-hole-live-20261107/server/Scripts/Dedicated/BotTest/init.ini": "5e77f3ff7a41cc20341dca9f07b16b1199f663ff61a4d010d785a8e49be8fff3",
+          "/srv/tse-hole-live-20261107/server/Scripts/Dedicated/BotTest/1_end.ini": "39677c727fba2266a84b7cb1bde5ad7aa6dd546ab1c2d86a0733d1734c48ef85",
+          "/srv/tse-hole-live-20261107/server/Scripts/Dedicated/BotTest/1_begin.ini": "9f8da79a99494b0cc928d0cb29f704e23da92fb7046cbe5308313544aa9765de"
+        }
+      },
+      "clients": [
+        {
+          "role": "botA",
+          "unit": "ssam-hole-bota.service",
+          "root": "/srv/tse-hole-live-20261107/botA",
+          "pid_at_inventory": 496857,
+          "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "mapped_inode_verified": true,
+          "config_sha256": "d5c1c8e90723ffb21649e6797fe97f999bc44eb9288511dbeed9592ecd38f9f9",
+          "active_values": {
+            "bot_bEnabled=1;": null,
+            "bot_bNullRender=1;": null,
+            "bot_iNullRenderFps=20;": null,
+            "bot_bHumanAI=0;": null,
+            "bot_bAutoCombat=1;": null,
+            "bot_iProfile0=7;": null,
+            "bot_iProfile1=7;": null,
+            "bot_iProfile2=7;": null,
+            "bot_iProfile3=7;": null,
+            "bot_fStrafeScale=0.5;": null
+          },
+          "roster_verified_count": 4,
+          "start_ticks": 68586419,
+          "last_observed_cecil_policy": null
+        },
+        {
+          "role": "botB",
+          "unit": "ssam-hole-botb.service",
+          "root": "/srv/tse-hole-live-20261107/botB",
+          "pid_at_inventory": 496929,
+          "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "mapped_inode_verified": true,
+          "config_sha256": "8e65034a0a091093000da13aaa7fd90773e4fa2e750f5fc179a8c63b97525f11",
+          "active_values": {
+            "bot_bEnabled=1;": null,
+            "bot_bNullRender=1;": null,
+            "bot_iNullRenderFps=20;": null,
+            "bot_bHumanAI=0;": null,
+            "bot_bAutoCombat=1;": null,
+            "bot_iProfile0=7;": null,
+            "bot_iProfile1=7;": null,
+            "bot_iProfile2=7;": null,
+            "bot_iProfile3=7;": null,
+            "bot_fStrafeScale=0.5;": null
+          },
+          "roster_verified_count": 4,
+          "start_ticks": 68588422,
+          "last_observed_cecil_policy": null
+        }
+      ],
+      "candidate_status": "UNCHANGED_PRODUCTION_BASELINE"
+    },
+    {
+      "id": "development",
+      "role": "development",
+      "address": "91.99.75.33:25650",
+      "name": "ssam.ai | DEVELOPMENT TEST | Red Station",
+      "map": "Hole",
+      "settings": {
+        "gametype": "Fragmatch",
+        "gamever": "1.07",
+        "activemod": "",
+        "maxplayers": "16",
+        "difficulty": "Serious",
+        "friendlyfire": "1",
+        "weaponsstay": "1",
+        "ammostays": "1",
+        "healthandarmorstays": "1",
+        "allowhealth": "0",
+        "allowarmor": "0",
+        "infiniteammo": "0",
+        "respawninplace": "0"
+      },
+      "expected_bots": 8,
+      "observed_own_bots": 8,
+      "additional_players": 0,
+      "observed_players": 8,
+      "server": {
+        "unit": "ssam-development-server.service",
+        "pid_at_inventory": 611239,
+        "root": "/srv/tse-development-live-20261107/server",
+        "binary_hashes": {
+          "EntitiesMP.dll": "7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350",
+          "DedicatedServer.exe": "9596f53c260c6fe5f6b7b6666fdf210bcac9952e4eec4b2ee2ee82f37153052d",
+          "SeriousSam.exe": "9f8f9a0b8fd718616036ed2c3584904e2dfd58e49515bf4c8ecc45175d02cc53",
+          "Engine.dll": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+          "GameMP.dll": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        "configuration_hashes": {
+          "/srv/tse-development-live-20261107/server/Scripts/PersistentSymbols.ini": "529db1107f559d0bc8557a31da86cda0a704325377be3428d72f63c672689f93",
+          "/srv/tse-development-live-20261107/server/Scripts/Dedicated/BotTest/init.ini": "5e77f3ff7a41cc20341dca9f07b16b1199f663ff61a4d010d785a8e49be8fff3",
+          "/srv/tse-development-live-20261107/server/Scripts/Dedicated/BotTest/1_end.ini": "39677c727fba2266a84b7cb1bde5ad7aa6dd546ab1c2d86a0733d1734c48ef85",
+          "/srv/tse-development-live-20261107/server/Scripts/Dedicated/BotTest/1_begin.ini": "0bd403c9120772a4317af443ef0fbd2f8bcb5f2e4419349d5834d6dd00fc500d"
+        }
+      },
+      "clients": [
+        {
+          "role": "botA",
+          "unit": "ssam-development-bota.service",
+          "root": "/srv/tse-development-live-20261107/botA",
+          "pid_at_inventory": 616230,
+          "dll_sha256": "0b3b44de97a55629526d450016f089b3342fb15cd918720fb6bd12ab884683e7",
+          "mapped_inode_verified": true,
+          "config_sha256": "3f4e70818632bbbf72ed8f350228ecb9e5f14b4bd56b5e4e3d9f9ab3d217a8c5",
+          "active_values": {
+            "bot_bEnabled=1;": null,
+            "bot_bNullRender=1;": null,
+            "bot_iNullRenderFps=20;": null,
+            "bot_bHumanAI=1;": null,
+            "bot_bAutoCombat=1;": null,
+            "bot_iProfile0=7;": null,
+            "bot_iProfile1=7;": null,
+            "bot_iProfile2=7;": null,
+            "bot_iProfile3=7;": null,
+            "bot_fStrafeScale=0.5;": null,
+            "bot_bSupplyNavigation=1;": null
+          },
+          "roster_verified_count": 4,
+          "nav_config_hashes": {
+            "Fortress_5652374B.nav": "bde550e7ffcdcf99fc5274f164752b444f8646fb7b9e15a4149ae04d031b2730",
+            "Hole_1AD627D0.nav": "6ae46f0a18e2f5071b981f111d1dcc338a02144b963da0bdbed777a3a1ff2646",
+            "Yodeller_FC72665B.nav": "adc56723662da0107dd777bfaacb78f5561bf43bc43da476b82af300436d5c41",
+            "DesertTemple_E6B24B0F.nav": "1775a7ae51561c14d772ee54592c2ee2b4a19c7b715aaa6d11101fb99252c2e9",
+            "settings.txt": "997ba93194bb1ae76632819184effdbb5e894636ccf57940beca4b09ba6b287a",
+            "RedStation_5AF1A276.nav": "70e2839587b0f14c024ef978579133e84eed594a3cbbd0fa1f1db98d99aa37c6",
+            "maps.txt": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78",
+            "DM_LittleTrouble_6C64BF87.nav": "252d7e4c003804fe9ae2afef359843feb39b5dda29c1d6eadb0835fbe64a30ac",
+            "WeGotSkullsNBonesToo_9B573405.nav": "6aafa5eb0f80826033ff23a75b1dc21138127719756d207614561bffd23ce874",
+            "DM_TheLostTomb_AACB1C67.nav": "f9ed26706819bca6920cd5415915aa51ee209f164d1ab61d1e51f93da744aff1",
+            "KuntaKinte_AFD9424F.nav": "d5cd11f6853d641a7ccdf82d780d9505e8feae6a95f11ac687940994b3d4a3e5"
+          },
+          "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+          "start_ticks": 85155871,
+          "last_observed_cecil_policy": "cecil-human-v1"
+        },
+        {
+          "role": "botB",
+          "unit": "ssam-development-botb.service",
+          "root": "/srv/tse-development-live-20261107/botB",
+          "pid_at_inventory": 617422,
+          "dll_sha256": "0b3b44de97a55629526d450016f089b3342fb15cd918720fb6bd12ab884683e7",
+          "mapped_inode_verified": true,
+          "config_sha256": "81382adf3c3fb5c612ba3f83fff1e38659f0c05c82373a1d5b40c856db9a9f2a",
+          "active_values": {
+            "bot_bEnabled=1;": null,
+            "bot_bNullRender=1;": null,
+            "bot_iNullRenderFps=20;": null,
+            "bot_bHumanAI=1;": null,
+            "bot_bAutoCombat=1;": null,
+            "bot_iProfile0=7;": null,
+            "bot_iProfile1=7;": null,
+            "bot_iProfile2=7;": null,
+            "bot_iProfile3=7;": null,
+            "bot_fStrafeScale=0.5;": null,
+            "bot_bSupplyNavigation=1;": null
+          },
+          "roster_verified_count": 4,
+          "nav_config_hashes": {
+            "Fortress_5652374B.nav": "bde550e7ffcdcf99fc5274f164752b444f8646fb7b9e15a4149ae04d031b2730",
+            "Hole_1AD627D0.nav": "6ae46f0a18e2f5071b981f111d1dcc338a02144b963da0bdbed777a3a1ff2646",
+            "Yodeller_FC72665B.nav": "adc56723662da0107dd777bfaacb78f5561bf43bc43da476b82af300436d5c41",
+            "DesertTemple_E6B24B0F.nav": "1775a7ae51561c14d772ee54592c2ee2b4a19c7b715aaa6d11101fb99252c2e9",
+            "settings.txt": "997ba93194bb1ae76632819184effdbb5e894636ccf57940beca4b09ba6b287a",
+            "RedStation_5AF1A276.nav": "70e2839587b0f14c024ef978579133e84eed594a3cbbd0fa1f1db98d99aa37c6",
+            "maps.txt": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78",
+            "DM_LittleTrouble_6C64BF87.nav": "252d7e4c003804fe9ae2afef359843feb39b5dda29c1d6eadb0835fbe64a30ac",
+            "WeGotSkullsNBonesToo_9B573405.nav": "6aafa5eb0f80826033ff23a75b1dc21138127719756d207614561bffd23ce874",
+            "DM_TheLostTomb_AACB1C67.nav": "f9ed26706819bca6920cd5415915aa51ee209f164d1ab61d1e51f93da744aff1",
+            "KuntaKinte_AFD9424F.nav": "d5cd11f6853d641a7ccdf82d780d9505e8feae6a95f11ac687940994b3d4a3e5"
+          },
+          "source_commit": "df1ca40d3feb3788b7be1cb098d26a035a4a3b0e",
+          "start_ticks": 85162275,
+          "last_observed_cecil_policy": "cecil-human-v1"
+        }
+      ],
+      "candidate_status": "BUILD013_RUNNING_NOT_QUALIFIED"
+    }
+  ],
+  "scope": "READ_ONLY_CHECK_TIME_SNAPSHOT_NO_NEW_PRODUCTION_DEPLOYMENT",
+  "latest_built_candidate": {
+    "source_commit": "2f216fe5b93297456fea2c2736b946752029ea90",
+    "dll_sha256": "d3889413432b4eccbe8e375c2f1e5cf6d06c7af0edbb5908da1cf8225ca26a39",
+    "status": "SUPPLY_FAILED_NOT_QUALIFIED"
+  }
+}
