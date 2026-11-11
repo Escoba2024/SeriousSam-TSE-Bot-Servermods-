@@ -1,0 +1,57 @@
+{
+  "scope": "PASS_LIMITED_BOUNDED_ACTION_DIAGNOSTIC_RUNTIME_NOT_GAMEPLAY_ACCEPTANCE",
+  "qualified": false,
+  "window": "arena008hook2-checked-swap1-trial-1-224612",
+  "observed_seconds": 120.00585882016458,
+  "candidate_source": "0ff1d54a122b09b1e452d65b497bd4a9cccccb4d",
+  "candidate_dll_sha256": "07113052dac65df7143f8418e5e2c3ef1c9f1ebd5acc96b6fba55c4166bffb4b",
+  "controller_sha256": "6f8af76f32ef466095bdf5f916300adbe802dea487bdcc4bf5537fc733bfeebc",
+  "hook": {
+    "calls": 1,
+    "total_calls": 30,
+    "other_pad_calls": 29,
+    "unmatched_player_calls": 0,
+    "records_received": 1,
+    "faults": 0,
+    "dropped": 0,
+    "detached": true,
+    "original_body_restored": true,
+    "coverage": {
+      "armed_ms": 1794437217429,
+      "expires_ms": 1794437342429,
+      "stopped_ms": 1794437338887,
+      "last_observed_ms": 1794437338888,
+      "gameplay_window_start_ms": 1794437218801.3875,
+      "gameplay_window_end_ms": 1794437338805.2031,
+      "observed_overlap_ms": 120003.81567382812,
+      "entire_gameplay_window_covered": true,
+      "meaning": "observed listener lifetime overlap; not complete gameplay/event proof"
+    }
+  },
+  "observer_input_schedule": "one normal mouse pulse before observation; no periodic input during bounded action diagnostic",
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "all_four_roles_closed": true,
+  "action_rows": 328,
+  "limits": [
+    "Default-off action observation only; candidate gameplay remains007 behavior.",
+    "Action transition analysis pending; no fix, three-tier comparison or general map acceptance.",
+    "No periodic observer GUI controls during sampling; one normal mouse pulse precedes measured window."
+  ]
+}

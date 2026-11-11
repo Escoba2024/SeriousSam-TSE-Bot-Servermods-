@@ -188,5 +188,35 @@
     "symlinks_indexed_not_materialized": 8,
     "native_launch_from_restore": false,
     "contains": "Build005/006 sources and artifacts, all closed checked/early005/006 windows and controllers/dependencies, original frozen harness, source bundle including local and connector Git histories, and complete separately deployed notice task source/build/rollout evidence. Progress only; no A release acceptance."
+  },
+  "build007_frida_progress": {
+    "bytes": 61015280,
+    "sha256": "2d7fb024d64d2b1f86cc17815eb53383edc9a5ac47cb40a21e88847be56fbd32",
+    "repo_head": "09381faa3fcd49918876693e44ae157a37702dc8",
+    "regular_files_written_rehashed": 270,
+    "restored_bytes": 109738306,
+    "symlinks_indexed_not_materialized": 2,
+    "native_launch_from_restore": false,
+    "drive_id": "12o17XhR84MXDuWUxWr-Oo9IPaHQDxSZ1",
+    "roundtrip_bytes": 61015280,
+    "roundtrip_sha256": "2d7fb024d64d2b1f86cc17815eb53383edc9a5ac47cb40a21e88847be56fbd32",
+    "scope": "PROGRESS_NOT_RELEASE_ACCEPTANCE",
+    "covers": "Build007, final007 smoke/full/explicit bootstrap FAIL, metadata and first hook, source bundle both histories, private scripts, frozen hook helpers/tests, pinned offline Frida17.26.2 wheel. Requires separately verified baseline, fixture and005/006 delta.",
+    "drive_url": "https://drive.google.com/file/d/12o17XhR84MXDuWUxWr-Oo9IPaHQDxSZ1/view"
+  },
+  "build008_action_console_progress": {
+    "bytes": 8472990,
+    "sha256": "8872028711f6cc477c4af908aee1a92b2b04d9bf93cc40064be96b00f97035a0",
+    "repo_head": "d2d6200ad47503b272955188f266548dbc0b2cff",
+    "regular_files_written_rehashed": 257,
+    "restored_bytes": 52819008,
+    "symlinks_indexed_not_materialized": 2,
+    "native_launch_from_restore": false,
+    "drive_id": "1iXjZ2aUy3-nq0_3Ee1ghy8nwNrA0uPyh",
+    "roundtrip_bytes": 8472990,
+    "roundtrip_sha256": "8872028711f6cc477c4af908aee1a92b2b04d9bf93cc40064be96b00f97035a0",
+    "scope": "PROGRESS_NOT_RELEASE_ACCEPTANCE",
+    "covers": "Build008; closed Hook2/008 action diagnostic, first failed legacy console and successful exact-rebased console; frozen v2 hook/controller/errorguard and console helpers/tests; source bundle through d2d6200. Requires earlier baseline/fixture/005006/007 deltas.",
+    "drive_url": "https://drive.google.com/file/d/1iXjZ2aUy3-nq0_3Ee1ghy8nwNrA0uPyh/view"
   }
 }

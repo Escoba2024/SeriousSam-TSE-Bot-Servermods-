@@ -75,7 +75,7 @@ struct CPlayer:CEntity {
  PlayerState m_pstState=PST_STAND;FLOATmatrix3D body;CPlacement3D en_plViewpoint;FLOAT3D m_aLastRotation;
  const FLOATmatrix3D& GetRotationMatrix()const{return body;}
  CPlayerWeapons w;CPlayerWeapons* m_penWeapons=&w;CWorld world;CEntity* en_penReference=nullptr;
- float health=100,m_fArmor=0;FLOAT3D en_vGravityDir{0,-1,0};
+ float health=100,m_fArmor=0,en_fImmersionFactor=0;FLOAT3D en_vGravityDir{0,-1,0};
  FLOAT3D en_vCurrentTranslationAbsolute;unsigned physicsFlags=EPF_TRANSLATEDBYGRAVITY;
  unsigned GetPhysicsFlags()const{return physicsFlags;}
  float GetHealth()const{return health;}CPlayerWeapons* GetPlayerWeapons(){return &w;}
@@ -2365,6 +2365,115 @@ void supplyConnectorDiagnostics(){
    "connector observation changes no ray lookup RNG or rejection decision");
  bot_bDiagnostics=false;
 }
+void approachArrivalGeometry(){
+ setup(35);auto& g=BotSupplyGraph();for(auto& p:g.points)p.links.clear();
+ g.points[8].x=-37.783684f;g.points[8].y=24.503325f;g.points[8].z=63.127693f;g.points[8].radius=2;g.points[8].links={12};
+ g.points[12].x=-51;g.points[12].y=24.5;g.points[12].z=63;g.points[12].radius=4;g.points[12].flags=42;g.points[12].links={34};
+ g.points[34].x=63.094364f;g.points[34].y=49.254681f;g.points[34].z=-63.054783f;
+ botcore::CecilMotionInput in;in.alive=true;in.anchor=8;in.goal=34;
+ in.x=g.points[8].x;in.y=g.points[8].y;in.z=g.points[8].z;
+ auto& n=BotSupplyState(0).navigator;auto first=n.Update(g,nullptr,0,in);
+ check(first.hop==12&&first.flags==42&&first.up==1,"authored target override requests jump on initial8-to12 action");
+ in.now=.05;in.x=-49.036;in.y=29.482;in.z=63.019;
+ auto next=n.Update(g,nullptr,0,in);
+ check(n.SourceSlot(34)==12&&next.hop==34,"recorded high airborne position satisfies existing shifted-radius arrival without contact input");
+ // This is current mathematical behavior, not a native proof of which action
+ // caused the miss or authorization to change the authored flags/radius.
+}
+void approach008Transitions(){
+ // Actual Build008 per-action positions translated by node12's origin. This
+ // replays navigation mathematics only, never engine dynamics or a proposed fix.
+ const double samples[2][3][3]={
+  {{15.016300,-.605696,.126614},{3.511040,4.749033,.030994},{2.633575,4.635935,.023247}},
+  {{14.587944,-.540466,.125698},{3.082676,4.814253,.027962},{2.205212,4.701155,.020004}}
+ };
+ for(int run=0;run<2;++run){
+  setup(35);auto& g=BotSupplyGraph();for(auto& p:g.points)p.links.clear();
+  g.points[7].x=53.802741f;g.points[7].y=-6.014077f;g.points[7].z=.080601f;g.points[7].radius=2;g.points[7].links={8};
+  g.points[8].x=13.216316f;g.points[8].y=.003325f;g.points[8].z=.127693f;g.points[8].radius=2;g.points[8].links={12};
+  g.points[12].x=0;g.points[12].y=0;g.points[12].z=0;g.points[12].radius=4;g.points[12].flags=42;g.points[12].links={34};
+  g.points[34].x=114.094364f;g.points[34].y=24.754681f;g.points[34].z=-126.054783f;
+  auto& n=BotSupplyState(0).navigator;botcore::CecilMotionInput in;in.alive=true;in.goal=34;in.anchor=7;
+  in.x=g.points[7].x;in.y=g.points[7].y;in.z=g.points[7].z;in.yaw=90;n.Update(g,nullptr,0,in);
+  in.now=.05;in.x=samples[run][0][0];in.y=samples[run][0][1];in.z=samples[run][0][2];
+  const auto first=n.Update(g,nullptr,0,in);
+  check(n.SourceSlot(34)==8&&first.hop==12&&first.flags==42&&first.up==1,
+    "008 exact first transition inherits Override42 and requests normal jump toward12");
+  in.anchor=8;in.now=.70;in.x=samples[run][1][0];in.y=samples[run][1][1];in.z=samples[run][1][2];
+  const auto prior=n.Update(g,nullptr,0,in);
+  check(n.SourceSlot(34)==8&&prior.hop==12,"008 action immediately before observed reachedHop remains8-to12");
+  in.now=.75;in.x=samples[run][2][0];in.y=samples[run][2][1];in.z=samples[run][2][2];
+  const auto arrival=n.Update(g,nullptr,0,in);
+  check(n.SourceSlot(34)==12&&arrival.hop==34&&arrival.forward<0,
+    "008 observed airborne reachedHop switches to34 and reverses requested forward direction");
+  check(in.x*in.x+in.y*in.y+in.z*in.z>16&&in.x*in.x+(in.y-2)*(in.y-2)+in.z*in.z<16,
+    "008 both airborne arrivals require shifted sphere; neither is within original centered radius");
+ }
+}
+void approachDiagnostics(){
+ for(int mode=0;mode<2;++mode){
+  setup(35);bot_bDiagnostics=mode;supplyDiagText.clear();supplyDiagLines=0;
+  auto& s=BotSupplyState(0);auto& node=BotSupplyGraph().points[12];
+  node.x=-51;node.y=24.5;node.z=63;node.radius=4;node.flags=42;
+  s.goal=34;s.goalEntity=243;s.goalDeadline=99;s.entity=player.en_ulID;s.playable=true;
+  botcore::CecilMotion move;move.active=true;move.hop=12;move.flags=42;move.forward=1;move.up=1;
+  const auto rng=s.rng;const int rays=rayCount,lookups=worldLookups;
+  BotCecilApproachCapture(s,100,5,8,12,false,move);
+  BotCecilApproachFinal(&player,s,0,100,5,true,1,true,FLOAT3D(1,2,3),FLOAT3D(4,5,6),7);
+  if(mode)check(supplyDiagText.find("prev_source=8 prev_hop=12 reached=0 update=1")!=std::string::npos&&
+    supplyDiagText.find("requested=(1.000000,0.000000,1.000000)")!=std::string::npos&&supplyDiagText.find("action=(1.000000,2.000000,3.000000)")!=std::string::npos,
+    "approach telemetry keeps original Update and composed action separate");
+  else check(supplyDiagLines==0&&s.approach.start<0,"disabled approach diagnostics do not arm or log");
+  BotCecilApproachFinal(&player,s,0,101,5.05,false,0,true,FLOAT3D(),FLOAT3D(),0);
+  if(mode)check(supplyDiagText.find("prev_source=-1 prev_hop=-1 reached=0 update=0")!=std::string::npos,
+    "combat yield records absent Update without carrying previous planned movement");
+  const int beforeDuplicate=supplyDiagLines;
+  BotCecilApproachFinal(&player,s,0,101,5.05,false,0,true,FLOAT3D(),FLOAT3D(),0);
+  BotCecilApproachFinal(&player,s,0,102,NAN,false,0,true,FLOAT3D(),FLOAT3D(),0);
+  BotCecilApproachFinal(&player,s,0,102,4.99,false,0,true,FLOAT3D(),FLOAT3D(),0);
+  check(supplyDiagLines==beforeDuplicate,"duplicate backward and nonfinite clock cannot add action evidence");
+  for(int i=102;i<250;++i)BotCecilApproachFinal(&player,s,0,i,5+(i-100)*.01,true,1,false,FLOAT3D(),FLOAT3D(),0);
+  check(supplyDiagLines==(mode?120:0),"approach episode hard bounds total action rows to120");
+  check(s.goal==34&&s.goalEntity==243&&s.goalDeadline==99&&s.rng==rng&&rayCount==rays&&worldLookups==lookups,
+    "approach observer changes no goal deadline RNG rays or world lookups");
+  s.Reset();check(s.approach.start<0&&s.approach.rows==0,"life/map reset clears diagnostic episode");
+ }
+ setup(35);bot_bDiagnostics=true;auto& s=BotSupplyState(0);botcore::CecilMotion move;move.hop=12;
+ BotCecilApproachCapture(s,1,.05,8,12,false,move);check(s.approach.start<0,"unrelated map geometry cannot arm node-specific observer");
+ auto& p=BotSupplyGraph().points[12];p.x=-51;p.y=24.5;p.z=63;p.radius=4;p.flags=42;
+ BotCecilApproachCapture(s,1,.05,1,2,false,move);check(s.approach.start<0,"unrelated edge cannot arm observer");
+ BotCecilApproachCapture(s,2,.1,7,8,true,move);
+ check(s.approach.start==.1&&s.approach.previousHop==8,"arrival at8 captures first newly requested jump toward12 in same action");
+ supplyDiagLines=0;BotCecilApproachFinal(&player,s,0,3,6.1,true,1,false,FLOAT3D(),FLOAT3D(),0);
+ check(supplyDiagLines==0,"six second episode boundary is exclusive");
+ BotCecilApproachCapture(s,200,10,8,12,false,move);check(s.approach.start==.1,"expired episode never re-arms within life");
+ bot_bDiagnostics=false;
+}
+void approachDeathRespawnDiagnostics(){
+ setup(35);bot_bDiagnostics=true;supplyDiagText.clear();supplyDiagLines=0;
+ auto& s=BotSupplyState(0);auto& p=BotSupplyGraph().points[12];
+ p.x=-51;p.y=24.5;p.z=63;p.radius=4;p.flags=42;
+ s.playable=true;s.entity=player.en_ulID;const auto entity=player.en_ulID,generation=s.generation;
+ botcore::CecilMotion move;move.hop=12;
+ BotCecilApproachCapture(s,10,.5,8,12,false,move);
+ BotCecilApproachFinal(&player,s,0,10,.5,true,1,false,FLOAT3D(),FLOAT3D(),0);
+ check(s.approach.rows==1,"lifecycle fixture starts a genuine live approach episode");
+ player.health=0;BotSupplyTick(&player,0,11,1000);
+ check(!s.playable&&s.approach.start<0&&s.approach.rows==0,"actual death Tick discards previous life diagnostic episode");
+ const int lines=supplyDiagLines;
+ BotCecilApproachFinal(&player,s,0,11,.55,false,0,false,FLOAT3D(),FLOAT3D(),0);
+ check(supplyDiagLines==lines,"death action cannot emit the old approach episode");
+ // A diagnostic remnant must also be cleared by the real !playable spawn path,
+ // independently of whether a dead Tick was observed by this observer.
+ s.approach.start=.5;s.approach.rows=120;
+ player.health=100;_botRayBudget=40;BotSupplyTick(&player,0,12,1000);
+ check(player.en_ulID==entity&&s.generation==generation+1&&s.playable&&s.approach.start<0&&s.approach.rows==0,
+   "same entity respawn increments generation and discards exhausted diagnostic state without Reset");
+ BotCecilApproachCapture(s,13,.65,8,12,false,move);
+ BotCecilApproachFinal(&player,s,0,13,.65,true,1,false,FLOAT3D(),FLOAT3D(),0);
+ check(s.approach.start==.65&&s.approach.rows==1,"next life on same entity can arm a fresh bounded episode");
+ bot_bDiagnostics=false;
+}
 void supplyDiagnosticsParity(){
  SCecilMove outputs[2];int goals[2],rays[2],lookups[2];unsigned random[2];double deadlines[2];
  for(int mode=0;mode<2;++mode){
@@ -2571,7 +2680,7 @@ void flightVisibleOwnership(){
 }
 int main(){
  flightVisibleOwnership();flightLossRegression();flightLossGuards();
- boundedSupplySegment(); supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
+ boundedSupplySegment(); approachArrivalGeometry();approach008Transitions();approachDiagnostics();approachDeathRespawnDiagnostics();supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
  itemTransit49();itemTransit49Guards();
  liquidProjection48();
  importantTransit48();importantPatrol48();

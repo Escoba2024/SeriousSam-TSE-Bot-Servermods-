@@ -1,0 +1,293 @@
+{
+  "scope": "native bounded approach/action evidence; no general A acceptance",
+  "build": "008",
+  "dll_sha256": "07113052dac65df7143f8418e5e2c3ef1c9f1ebd5acc96b6fba55c4166bffb4b",
+  "source": "0ff1d54",
+  "private_fixture": "arena008hook2-checked-swap1-trial-1-224612",
+  "completed": true,
+  "window_seconds": 120.00585882016458,
+  "all_four_roles_closed": true,
+  "errors": [],
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "diagnostic_rows": 328,
+  "hook": {
+    "calls": 1,
+    "total_calls": 30,
+    "other_pad_calls": 29,
+    "unmatched_player_calls": 0,
+    "faults": 0,
+    "dropped": 0,
+    "detached": true,
+    "original_body_restored": true
+  },
+  "hook_complete_window_overlap": true,
+  "failed_approaches": [
+    {
+      "local": 3,
+      "generation": 5,
+      "bouncer234_calls": 0,
+      "events": [
+        {
+          "client_action_tick": 945,
+          "client_action_time": 47.25,
+          "botA_log_line": 887,
+          "previous_source": 7,
+          "previous_hop": 8,
+          "reached_hop": true,
+          "output_hop": 12,
+          "original_up": 1.0,
+          "composed_up": 11.0,
+          "nav_owns": true,
+          "safe_motion_result": 1,
+          "support_entity": 54,
+          "player_state": 0,
+          "vertical_translation": 2.613636,
+          "distance_from_node12": [
+            15.0163,
+            -0.605696,
+            0.126614
+          ],
+          "requested_yaw_delta": -0.517983
+        },
+        {
+          "client_action_tick": 946,
+          "client_action_time": 47.299999,
+          "botA_log_line": 892,
+          "previous_source": 8,
+          "previous_hop": 12,
+          "reached_hop": false,
+          "output_hop": 12,
+          "original_up": 0.0,
+          "composed_up": 0.0,
+          "nav_owns": true,
+          "safe_motion_result": 1,
+          "support_entity": 0,
+          "player_state": 0,
+          "vertical_translation": 17.238045,
+          "distance_from_node12": [
+            14.052265,
+            0.256207,
+            0.12318
+          ],
+          "requested_yaw_delta": -0.019158
+        },
+        {
+          "client_action_tick": 958,
+          "client_action_time": 47.900002,
+          "botA_log_line": 904,
+          "previous_source": 8,
+          "previous_hop": 12,
+          "reached_hop": false,
+          "output_hop": 12,
+          "original_up": 0.0,
+          "composed_up": 0.0,
+          "nav_owns": true,
+          "safe_motion_result": 1,
+          "support_entity": 0,
+          "player_state": 4,
+          "vertical_translation": -0.761953,
+          "distance_from_node12": [
+            3.51104,
+            4.749033,
+            0.030994
+          ],
+          "requested_yaw_delta": -4e-06
+        },
+        {
+          "client_action_tick": 959,
+          "client_action_time": 47.950001,
+          "botA_log_line": 906,
+          "previous_source": 8,
+          "previous_hop": 12,
+          "reached_hop": true,
+          "output_hop": 34,
+          "original_up": 0.0,
+          "composed_up": 0.0,
+          "nav_owns": true,
+          "safe_motion_result": 1,
+          "support_entity": 0,
+          "player_state": 4,
+          "vertical_translation": -2.261953,
+          "distance_from_node12": [
+            2.633575,
+            4.635935,
+            0.023247
+          ],
+          "requested_yaw_delta": -9.0
+        },
+        {
+          "client_action_tick": 960,
+          "client_action_time": 48.0,
+          "botA_log_line": 914,
+          "previous_source": 12,
+          "previous_hop": 34,
+          "reached_hop": false,
+          "output_hop": 34,
+          "original_up": 0.0,
+          "composed_up": 0.0,
+          "nav_owns": true,
+          "safe_motion_result": 1,
+          "support_entity": 0,
+          "player_state": 4,
+          "vertical_translation": -3.761953,
+          "distance_from_node12": [
+            1.756111,
+            4.447838,
+            0.015499
+          ],
+          "requested_yaw_delta": -9.0
+        }
+      ]
+    },
+    {
+      "local": 1,
+      "generation": 7,
+      "bouncer234_calls": 0,
+      "events": [
+        {
+          "client_action_tick": 2528,
+          "client_action_time": 126.400002,
+          "botA_log_line": 2446,
+          "previous_source": 7,
+          "previous_hop": 8,
+          "reached_hop": true,
+          "output_hop": 12,
+          "original_up": 1.0,
+          "composed_up": 11.0,
+          "nav_owns": true,
+          "safe_motion_result": 1,
+          "support_entity": 54,
+          "player_state": 0,
+          "vertical_translation": 2.613634,
+          "distance_from_node12": [
+            14.587944,
+            -0.540466,
+            0.125698
+          ],
+          "requested_yaw_delta": -0.578494
+        },
+        {
+          "client_action_tick": 2529,
+          "client_action_time": 126.450005,
+          "botA_log_line": 2447,
+          "previous_source": 8,
+          "previous_hop": 12,
+          "reached_hop": false,
+          "output_hop": 12,
+          "original_up": 0.0,
+          "composed_up": 0.0,
+          "nav_owns": true,
+          "safe_motion_result": 1,
+          "support_entity": 0,
+          "player_state": 0,
+          "vertical_translation": 17.238028,
+          "distance_from_node12": [
+            13.623917,
+            0.321436,
+            0.122566
+          ],
+          "requested_yaw_delta": -0.021758
+        },
+        {
+          "client_action_tick": 2541,
+          "client_action_time": 127.050003,
+          "botA_log_line": 2465,
+          "previous_source": 8,
+          "previous_hop": 12,
+          "reached_hop": false,
+          "output_hop": 12,
+          "original_up": 0.0,
+          "composed_up": 0.0,
+          "nav_owns": true,
+          "safe_motion_result": 1,
+          "support_entity": 0,
+          "player_state": 4,
+          "vertical_translation": -0.761968,
+          "distance_from_node12": [
+            3.082676,
+            4.814253,
+            0.027962
+          ],
+          "requested_yaw_delta": -3.4e-05
+        },
+        {
+          "client_action_tick": 2542,
+          "client_action_time": 127.099998,
+          "botA_log_line": 2467,
+          "previous_source": 8,
+          "previous_hop": 12,
+          "reached_hop": true,
+          "output_hop": 34,
+          "original_up": 0.0,
+          "composed_up": 0.0,
+          "nav_owns": true,
+          "safe_motion_result": 1,
+          "support_entity": 0,
+          "player_state": 4,
+          "vertical_translation": -2.261969,
+          "distance_from_node12": [
+            2.205212,
+            4.701155,
+            0.020004
+          ],
+          "requested_yaw_delta": -9.0
+        },
+        {
+          "client_action_tick": 2543,
+          "client_action_time": 127.150002,
+          "botA_log_line": 2468,
+          "previous_source": 12,
+          "previous_hop": 34,
+          "reached_hop": false,
+          "output_hop": 34,
+          "original_up": 1.0,
+          "composed_up": 11.0,
+          "nav_owns": true,
+          "safe_motion_result": 1,
+          "support_entity": 0,
+          "player_state": 4,
+          "vertical_translation": -3.761969,
+          "distance_from_node12": [
+            1.327747,
+            4.513056,
+            0.012047
+          ],
+          "requested_yaw_delta": -9.0
+        }
+      ]
+    }
+  ],
+  "successful_control": {
+    "local": 2,
+    "generation": 6,
+    "entity_id": 567,
+    "bouncer234_calls": 1,
+    "before_support_entity": 234,
+    "after_support_null": true,
+    "minigun_pickup_tick": 1116,
+    "owned_before": 259,
+    "owned_after": 323,
+    "added_bit": 64,
+    "initial_11_to12_actions_not_captured": true
+  },
+  "clock_limit": "client action time is not native server time or window elapsed; never convert client ticks to native lifetime without alignment",
+  "proposal_implemented": false,
+  "native_qualified": false
+}

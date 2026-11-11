@@ -1,0 +1,206 @@
+{
+  "schema": 1,
+  "trial": "arena007hook-checked-swap0-trial-1-221254",
+  "scope": "read-only attribution of completed first bounded Bouncer hook; not a candidate failure reproduction or release qualification",
+  "sources": {
+    "botA.log": "45624366d9c1040197cd95c7384c5b9ed2ff3bafd7f94ffb2b928c280ba4d42b",
+    "botB.log": "e3c1a1220856a7840cb76266ec9a47f2b5e54b64be33505d96aa91e8bddab857",
+    "inventory.jsonl": "873a98c6428ce4f4f965ba70eee5cb3ed98c11411e52fa59b8842704d3eaad26",
+    "session-health.jsonl": "93b7d025d17a96a24d2c97254a07189ec1b642c3d9b90e3112e57d194d914a22",
+    "frida-bouncer.jsonl": "faa9db0cc6b8f7d7074b27333e25fba014e67bcb544350a698b7a1f3d407e7ca",
+    "result.json": "aff2596817907aad8f1c209e3a5f70a71853e4638b9c59294207471cb7121c0f"
+  },
+  "identity_mapping": [
+    {
+      "role": "botA",
+      "local": 0,
+      "entity_id": 565,
+      "global_slot": 0
+    },
+    {
+      "role": "botA",
+      "local": 1,
+      "entity_id": 566,
+      "global_slot": 2
+    },
+    {
+      "role": "botA",
+      "local": 2,
+      "entity_id": 567,
+      "global_slot": 3
+    },
+    {
+      "role": "botA",
+      "local": 3,
+      "entity_id": 568,
+      "global_slot": 4
+    },
+    {
+      "role": "botB",
+      "local": 0,
+      "entity_id": 569,
+      "global_slot": 5
+    },
+    {
+      "role": "botB",
+      "local": 1,
+      "entity_id": 570,
+      "global_slot": 6
+    },
+    {
+      "role": "botB",
+      "local": 2,
+      "entity_id": 571,
+      "global_slot": 7
+    },
+    {
+      "role": "botB",
+      "local": 3,
+      "entity_id": 572,
+      "global_slot": 8
+    },
+    {
+      "role": "vanilla_by_remaining_identity",
+      "entity_id": 563,
+      "global_slot": 1
+    }
+  ],
+  "identity_evidence": {
+    "botA.log": [
+      208,
+      209,
+      210,
+      211
+    ],
+    "botB.log": [
+      208,
+      209,
+      210,
+      211
+    ],
+    "inventory": "entity_id to global slot constant across complete file",
+    "group_labels_are_not_cohorts": true,
+    "full_214804_report_mapping_review": "existing report already uses correct actual slots; no cohort-value correction established"
+  },
+  "event": {
+    "count": 1,
+    "player_id": 565,
+    "pad_id": 234,
+    "role": "botA",
+    "local": 0,
+    "global_slot": 0,
+    "generation": 8,
+    "entered_unix_ms": 1794435265891,
+    "before_velocity": [
+      -13.373310089111328,
+      -6.190357208251953,
+      -0.12204085290431976
+    ],
+    "after_velocity": [
+      59.78152847290039,
+      63.71126937866211,
+      -80.09534454345703
+    ],
+    "before_support_entity_id": 234,
+    "after_support_null": true,
+    "native_tick_bracket": [
+      45.49959182739258,
+      45.59959030151367
+    ],
+    "spawn_native_tick": 34.89975357055664
+  },
+  "chronology": [
+    {
+      "source": "botA.log",
+      "line": 758,
+      "local_tick": 878,
+      "event": "Minigun243 goal selected in generation8"
+    },
+    {
+      "source": "botA.log",
+      "line": 927,
+      "local_tick": 1080,
+      "event": "source8 hop12 flags42; no support sampled"
+    },
+    {
+      "source": "botA.log",
+      "line": 936,
+      "local_tick": 1089,
+      "event": "owned3 to259; Grenade acquired before Bouncer event"
+    },
+    {
+      "source": "inventory.jsonl",
+      "line": 920,
+      "native_tick": 45.49959182739258,
+      "event": "same-life prelaunch velocity downward; owned259"
+    },
+    {
+      "source": "inventory.jsonl",
+      "line": 923,
+      "native_tick": 45.59959030151367,
+      "event": "same-life postlaunch upward velocity; support null"
+    },
+    {
+      "source": "botA.log",
+      "line": 945,
+      "local_tick": 1100,
+      "event": "source12 hop34 flags42; goal243 retained in flight"
+    },
+    {
+      "source": "botA.log",
+      "line": 987,
+      "local_tick": 1165,
+      "event": "owned259 to323; Minigunbit64 acquired"
+    },
+    {
+      "source": "botA.log",
+      "line": 990,
+      "local_tick": 1165,
+      "native_tick": 49.249535,
+      "event": "native weapon observation confirms owned323"
+    },
+    {
+      "source": "botA.log",
+      "line": 997,
+      "local_tick": 1180,
+      "event": "anchor34 source34; alive100HP; next goal556"
+    },
+    {
+      "source": "inventory.jsonl",
+      "line": 1003,
+      "native_tick": 52.449485778808594,
+      "event": "owned323 corroborated server-side; same spawn clock and100HP; supported"
+    }
+  ],
+  "limits": {
+    "inventory_acquisition_gap_native_tick": [
+      48.899539947509766,
+      52.449485778808594
+    ],
+    "candidate_source12_state_samples": 0,
+    "candidate_minigun243_goal_samples": 0,
+    "hook_dropped": 0,
+    "hook_faults": 0,
+    "observed_seconds": 60.05069603398442,
+    "sync_checks": {
+      "server": {
+        "bad": 0,
+        "disconnects": 0
+      },
+      "botA": {
+        "bad": 0,
+        "disconnects": 0
+      },
+      "vanilla": {
+        "bad": 0,
+        "disconnects": 0
+      },
+      "botB": {
+        "bad": 0,
+        "disconnects": 0
+      }
+    },
+    "performance": "reader and instrumentation costs are not a measured frame-time equivalence comparison",
+    "cause_of_006_failed_route": "unresolved; successful old control proves native launch and destination acquisition are possible"
+  }
+}

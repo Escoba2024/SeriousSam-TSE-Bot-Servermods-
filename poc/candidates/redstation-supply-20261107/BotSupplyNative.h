@@ -29,7 +29,13 @@ struct SCecilProbe {
   ULONG hitEntity=0;
   double support=0,normal[3]={0,0,0},from[3]={0,0,0},to[3]={0,0,0};
 };
+struct SCecilApproachDiagnostic {
+  double start=-1,updated=-1;int updateTick=-1,lastTick=-1,previousSource=-1,previousHop=-1;
+  bool reached=false;unsigned rows=0;int goal=-1;ULONG goalEntity=0;double deadline=0;botcore::CecilMotion move;
+};
 struct SSupplyState {
+  SCecilApproachDiagnostic approach; // Passive, bounded per-life action observer only.
+
   SCecilProbe probe;
   // Diagnostic clocks are not consulted by any decision or movement gate.
   double diagSelectionLast=-1,diagUnavailableLast=-1,diagTerminalLast=-1;
@@ -135,6 +141,7 @@ struct SSupplyState {
   void ClearGroundProgress(){if(groundEscapeActive)ClearEscape();groundProgress.Reset();groundRecoveryTime=groundObservationTime=recoveryMovementTime=-1;ClearGroundSweep();groundEscapeAfter=0;groundStalled=groundEscapeActive=false;groundProgressEntity=groundProgressGeneration=0;}
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
+    approach=SCecilApproachDiagnostic();
     diagSelectionLast=diagUnavailableLast=diagTerminalLast=-1;
     ClearAirMovement();ClearGroundProgress();probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
     itemScanAfter=scanTick=spawnTick=0;searchAfter=goalSince=0;deadSince=-1;
@@ -150,6 +157,43 @@ struct SCecilMove {
 static SSupplyState &BotSupplyState(INDEX slot){static SSupplyState states[4];return states[slot&3];}
 static botcore::CecilNavGraph &BotSupplyGraph(){static botcore::CecilNavGraph graph;return graph;}
 static botcore::CecilSettings &BotCecilSettings(){static botcore::CecilSettings settings=botcore::CecilPreset(2);return settings;}
+// Capture the existing navigator result before native adjustments. This state
+// is never consulted by the navigator, movement ownership or safety decisions.
+static void BotCecilApproachCapture(SSupplyState& s,int tick,double now,int source,int hop,
+    bool reached,const botcore::CecilMotion& move){
+  if(!bot_bDiagnostics||!std::isfinite(now)||now<0||tick<0)return;
+  auto& d=s.approach;
+  if(d.start<0){
+    const auto& g=BotSupplyGraph();
+    if(g.points.size()<=34||!((hop==8&&move.hop==12)||(source==8&&hop==12)||(source==12&&hop==34)))return;
+    const auto& p=g.points[12];
+    if(p.x!=-51||p.y!=24.5||p.z!=63||p.radius!=4||p.flags!=42)return;
+    d.start=now;
+  }
+  if(now<d.start||now-d.start>=6||d.rows>=120)return;
+  d.updated=now;d.updateTick=tick;d.previousSource=source;d.previousHop=hop;d.reached=reached;d.move=move;d.goal=s.goal;d.goalEntity=s.goalEntity;d.deadline=s.goalDeadline;
+}
+static void BotCecilApproachFinal(CPlayer* player,SSupplyState& s,int slot,int tick,double now,
+    bool nav,int safety,bool visible,const FLOAT3D& action,const FLOAT3D& rotation,ULONG buttons){
+  auto& d=s.approach;
+  if(!bot_bDiagnostics||!player||d.start<0||!std::isfinite(now)||now<d.start||
+     now-d.start>=6||d.rows>=120||tick<=d.lastTick)return;
+  const bool updated=d.updateTick==tick&&d.updated==now;
+  const botcore::CecilMotion empty;const auto& m=updated?d.move:empty;
+  const FLOAT3D& p=player->GetPlacement().pl_PositionVector;
+  const FLOAT3D& v=player->en_vCurrentTranslationAbsolute;
+  BotLog("[CecilSupplyDiagApproach] local=%d tick=%d time=%.6f entity=%lu generation=%lu map=%ld goal_entity=%lu goal=%d deadline=%.6f prev_source=%d prev_hop=%d reached=%d update=%d update_goal=%d update_entity=%lu update_deadline=%.6f out_hop=%d active=%d arrived=%d stuck=%d relocated=%d flags=%lu requested=(%.6f,%.6f,%.6f) requested_yaw=%.6f allow_jump=%d nav=%d safety=%d visible=%d action=(%.6f,%.6f,%.6f) rotation=(%.6f,%.6f,%.6f) buttons=%lu pos=(%.6f,%.6f,%.6f) velocity=(%.6f,%.6f,%.6f) support=%lu state=%d immersion=%.6f gravity=(%.6f,%.6f,%.6f) body_yaw=%.6f view_yaw=%.6f\n",
+    slot,tick,now,(unsigned long)player->en_ulID,(unsigned long)s.generation,(long)_botSupplyMapSerial,
+    (unsigned long)s.goalEntity,s.goal,s.goalDeadline,updated?d.previousSource:-1,updated?d.previousHop:-1,
+    updated&&d.reached,updated,updated?d.goal:-1,updated?(unsigned long)d.goalEntity:0,updated?d.deadline:0,m.hop,m.active,m.arrived,m.stuck,m.relocated,(unsigned long)m.flags,
+    m.forward,m.strafe,m.up,m.yaw_delta,(int)(BotCecilSettings().bJump!=0),nav,safety,visible,
+    (double)action(1),(double)action(2),(double)action(3),(double)rotation(1),(double)rotation(2),(double)rotation(3),(unsigned long)buttons,
+    (double)p(1),(double)p(2),(double)p(3),(double)v(1),(double)v(2),(double)v(3),
+    player->en_penReference?(unsigned long)player->en_penReference->en_ulID:0,(int)player->m_pstState,(double)player->en_fImmersionFactor,
+    (double)player->en_vGravityDir(1),(double)player->en_vGravityDir(2),(double)player->en_vGravityDir(3),
+    (double)player->GetPlacement().pl_OrientationAngle(1),(double)player->en_plViewpoint.pl_OrientationAngle(1));
+  ++d.rows;d.lastTick=tick;
+}
 static void BotSupplyReset(INDEX slot){BotSupplyState(slot).Reset();}
 static unsigned BotCecilRandom(SSupplyState &s){s.rng^=s.rng<<13;s.rng^=s.rng>>17;s.rng^=s.rng<<5;return s.rng;}
 static void BotSupplyUpdateNavigation(CGame *game){
@@ -1146,7 +1190,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;result.useControl=tick<=s.useReleaseTick;
   s.patrolProposalTime=-1;
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
-  if(!alive){if(s.playable){BotCecilGoalEnd(slot,tick,s,"death");++s.deaths;s.deadSince=now;
+  if(!alive){s.approach=SCecilApproachDiagnostic();if(s.playable){BotCecilGoalEnd(slot,tick,s,"death");++s.deaths;s.deadSince=now;
     BotLog("[CecilDeath] local=%d tick=%d entity=%lu generation=%lu deaths=%u\n",slot,tick,(unsigned long)s.entity,(unsigned long)s.generation,s.deaths);
     }s.ClearGroundProgress();s.playable=false;s.levelSwimView=false;s.ClearGoal();s.ClearEscape();s.ClearReacquireScan();return result;}
   if(!BotCecilFrameReady(player)||!std::isfinite(player->en_plViewpoint.pl_OrientationAngle(2))){s.ClearGroundProgress();return result;}
@@ -1154,7 +1198,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   // travel. The Driver still retains visible-target combat arbitration.
   result.ownsMovement=true;
   if(result.useControl)return result; // Preserve a released action even across chained switches.
-  if(!s.playable){s.ClearGroundProgress();++s.respawns;s.spawnTick=tick;s.scanTick=0;s.ClearGoal();s.searchAfter=0;s.owned=0;s.ClearRejections();s.ClearAvoidance();s.ResetLockSnapshot();++s.generation;
+  if(!s.playable){s.approach=SCecilApproachDiagnostic();s.ClearGroundProgress();++s.respawns;s.spawnTick=tick;s.scanTick=0;s.ClearGoal();s.searchAfter=0;s.owned=0;s.ClearRejections();s.ClearAvoidance();s.ResetLockSnapshot();++s.generation;
     const FLOAT3D position=player->GetPlacement().pl_PositionVector;
     BotLog("[CecilSpawn] local=%d tick=%d entity=%lu generation=%lu respawns=%u pos=(%.3f,%.3f,%.3f)\n",slot,tick,(unsigned long)player->en_ulID,(unsigned long)s.generation,s.respawns,(double)position(1),(double)position(2),(double)position(3));}
   s.playable=true;s.entity=player->en_ulID;
@@ -1254,6 +1298,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   const int previousSource=s.navigator.SourceSlot(s.goal),previousHop=s.hop;
   const bool reachedHop=BotCecilAtNode(player,previousHop);
   auto move=s.navigator.Update(BotSupplyGraph(),s.blocked.data(),s.blocked.size(),in);s.hop=move.hop;
+  BotCecilApproachCapture(s,tick,now,previousSource,previousHop,reachedHop,move);
   if(s.flightFinishing){
     if(!flightCarried||!move.active||move.arrived||move.stuck||move.relocated||!BotCecilFlightEdge(s)){
       BotCecilFlightEnd(s,slot,tick,now,"edge_changed");return result;

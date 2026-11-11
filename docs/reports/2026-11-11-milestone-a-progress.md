@@ -1,6 +1,6 @@
 # Meilenstein A: implementierter Zwischenstand, keine Gesamtfreigabe
 
-Aktueller Betriebsstand: **11.11.2026, 21:46:05 UTC**. Der Auftrag bleibt aktiv. **A ist nicht abgenommen; B wurde nicht begonnen.** Keine neue A-Kampf-DLL und keine neuen Namen sind produktiv aktiviert. Die frische Prüfung bestätigt auf allen sechs Servern je acht zugeordnete eigene Bots, keine weiteren UNKNOWN und aktuell keine SYNCBAD-/Disconnectmeldungen in den 18 laufenden Logs. Effektiver, aus der Originalengine gelesener Sessionwert für Spawn-Unverwundbarkeit: überall0.0. Das ist keine erste-Tick-Damage- oder Langzeitfreigabe.
+Aktueller Betriebsstand: **11.11.2026, 22:38:22 UTC**. Der Auftrag bleibt aktiv. **A ist nicht abgenommen; B wurde nicht begonnen.** Keine neue A-Kampf-DLL und keine neuen Namen sind produktiv aktiviert. Die frische Prüfung bestätigt auf allen sechs Servern je acht zugeordnete eigene Bots, keine weiteren UNKNOWN und aktuell keine SYNCBAD-/Disconnectmeldungen in den 18 laufenden Logs. Effektiver, aus der Originalengine gelesener Sessionwert für Spawn-Unverwundbarkeit: überall0.0. Das ist keine erste-Tick-Damage- oder Langzeitfreigabe.
 
 Eine separate Community-Notice-Aufgabe hat inzwischen alle BotA-DLLs ausgerollt. Diese fremde Änderung wird erhalten; BotB verbleibt auf Legacy7fc beziehungsweise Dev048. Die früheren eigenen Rücksetzungen von Dev(19:11) und Hole(20:20) auf Spawn3 sind historische Belege. Wann und durch wen sie erneut auf0 gestellt wurden, ist nicht belegt; die Notice-Vorherbackups enthielten bereits0. Siehe `2026-11-11-preserve-community-notice.md` und frischen Snapshot `milestone-a-20261111/fleet-after-hole-rollback.json`. Die nachfolgenden älteren Abschnitte dokumentieren frühere Prüfzeitpunkte und sind kein aktuelles Laufzeitinventar.
 
@@ -17,7 +17,7 @@ Eine separate Community-Notice-Aufgabe hat inzwischen alle BotA-DLLs ausgerollt.
 
 Ausgangsbasis `4d04ab4ad190a0f6cd078d96f5416e0eea9e1da0`. Lokale Implementierungscommits: `c261a540f258a271f559d0db790b9cee1352e8fd` (Kampf), `41b2369` (Namen), `904bf8a` (Retail-FLOAT-Vorlagen). Build `tse-milestone-a-build-001-20261111`, MSVC Win32 unter Wine, `build_ok=true`, **qualified=false**, DLL-SHA256 `def7c044ba64a65b742c63d76c775c955b892655e626bf96a1380d778d35719a`. Manifest enthält SDK-/Include-Commits, Quell-/Overlay-Hashes und Compilerflags. Der Build ist **nicht deployed**.
 
-| Rolle | Aktive GameMP-SHA256, geprüft21:46 UTC |
+| Rolle | Aktive GameMP-SHA256, geprüft22:38 UTC |
 |---|---|
 | Öffentliche BotA, bestehende Notice-Erweiterung | `407fc5d6aa53e339c36ebd70bd68df19f9ffc8e43fe01b8e17bbed1b7357b33f` |
 | Öffentliche BotB, Legacy | `7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835` |
@@ -147,3 +147,12 @@ A1-Wiederholungen für erstes Schadensereignis/Vanilla/Mapwechsel/Neustart, endg
 Die beiden begrenzten Ursachenfixes sind in Quelle297c1bc integriert. Build007 DLL `ce15842a36fee25d56fb1ffcb0f0a45878c254d9b0c5b95b129ce7708abf4b7f` ist unqualified und ausschließlich isoliert.1563 gemeinsame SDK107Sanitizer-Bridgechecks, tatsächliche Driver-Action- und Itemadaptertests bestanden. Eine15,5968s-Original-Retail/Wine-Probe endet regulär mit0Syncfehlern,426 konsistenten passiven Inventargruppen und9 verworfenen wechselnden Lesungen. Details `milestone-a-20261111/native007-inventory-smoke.json`; dies bestätigt weder schnelle Beschaffung noch erstes Schadensereignis.
 
 Ein nachfolgender Versuch scheitert schon im Bootstrap an der Instruktionsprüfung des Pause-Lesers. Beide gestarteten Prozesse normal beendet; kein Kampffenster. Die konkreten abweichenden Bytes wurden nicht gespeichert. Eine unabhängige statische Prüfung findet eine ungültige Annahme im Leser: ein absoluter Original-Engine-Operand wird bisher ohne echte PE-Relokation verglichen. Der Leser wird auf exakt berechnete Umzugsbytes korrigiert, bevor der Test erneut startet; keine pauschale Lockerung der Signaturprüfung.
+
+
+### 22:38 UTC — gerichteter Bouncerfehler eingegrenzt, Backups erweitert
+
+Build007 hat im vollständig geschlossenen240s-Vergleich53Leben mit passiver Originalinventarprüfung,0Syncfehlern und37:12Frags, aber weiterhin langsame/ausbleibende erste Waffenaufnahme. Das zusätzliche120s-Fenster mit vertauschtenDLLs und begrenztem Original-Bouncer-Hook zeigt zwei echte007-Starts (einer mit Minigunaufnahme, einer mit Konkurrentenverlust und fortgesetztem Flug) sowie vier andere Anflüge ohne234-Call. Die Fehlanflüge überfliegen das Pad von einer anderen Zugangsroute; exakter Arrival-/Jumptick bleibt zu messen. Siehe `2026-11-11-bouncer-hook2-directed-approaches.md`. Kein allgemeiner Navigations-PASS.
+
+Ein separater Legacy7fc-Konsolentest ist vor jeder Eingabe an der strikten Ladeadressprüfung gescheitert; alle vier Rollen normalgeschlossen, kein Kampffenster. Exakte tatsächlicheMismatchadresse wurde nicht gespeichert. Der nächste Leser muss echtePE-Relokationen exakt unterstützen; keine pauschale Signaturmaskierung.
+
+Quellstand09381fa ist aufGitHub alsbe41c86 mit identischem, zurückgeholtem Baum8731ca005b984653d5792a03783892aa76228def gesichert. Build007/Frida-Backup61015280Bytes, SHA2d7fb024d64d2b1f86cc17815eb53383edc9a5ac47cb40a21e88847be56fbd32: Drive-Rückdownload identisch,270reguläre Dateien separatgeschrieben/erneutgehasht,2Links nurindexiert. Neuere Hook2-/Legacyfehlversuchsbelege brauchen den nächsten Nachtrag; keine Freigabe aus Sicherung.

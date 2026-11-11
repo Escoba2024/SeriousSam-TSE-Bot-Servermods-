@@ -1,0 +1,339 @@
+{
+  "schema": 1,
+  "trial": "arena007hook2-checked-swap1-trial-1-222849",
+  "scope": "completed120s diagnostic; identity-based mapping, not sampling group labels",
+  "sources": {
+    "botA.log": "f384751e9bcd849085dc708dd90ec7bdc4532f846779db8759e024ddc00c7265",
+    "botB.log": "207617be2a4d739fc4502ae9882c8ce5a3f217418b12f2356bc49ca0298b3584",
+    "inventory.jsonl": "3c14472dfafe670ff108c721126ca82e6a8c05a8f58ceb602829485187ad267c",
+    "session-health.jsonl": "dd43d89939d5e0939d610f2f87eb9da826a4dfe3b491b3923d46aefba217474b",
+    "frida-bouncer.jsonl": "9d3b4c87677c36c067673919bb81c5bdbdbc1c5732bc99831d80b195b0de97d0",
+    "result.json": "c1c35066f351ef3d88a03e7ca378f9b75581d0b8c34e04792e9a9c11e81397b4"
+  },
+  "cohorts": {
+    "candidate007": {
+      "physical_role": "botA",
+      "game_sha256": "ce15842a36fee25d56fb1ffcb0f0a45878c254d9b0c5b95b129ce7708abf4b7f",
+      "locals": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "entity_ids": [
+        565,
+        566,
+        567,
+        568
+      ],
+      "global_slots": [
+        0,
+        2,
+        3,
+        4
+      ]
+    },
+    "old048": {
+      "physical_role": "botB",
+      "game_sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530",
+      "entity_ids": [
+        569,
+        570,
+        571,
+        572
+      ],
+      "global_slots": [
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    "vanilla": {
+      "remaining_entity_id": 563,
+      "global_slot": 1
+    }
+  },
+  "hook_events": [
+    {
+      "entity_id": 565,
+      "local": 0,
+      "global_slot": 0,
+      "entered_ms": 1794436252294,
+      "elapsed_from_window_start_seconds": 75.69907885742188,
+      "before_velocity": [
+        -1.7196404933929443,
+        -11.393714904785156,
+        2.585447311401367
+      ],
+      "after_velocity": [
+        68.47701263427734,
+        61.731876373291016,
+        -74.00727844238281
+      ],
+      "before_support_id": 234,
+      "after_support_null": true
+    },
+    {
+      "entity_id": 566,
+      "local": 1,
+      "global_slot": 2,
+      "entered_ms": 1794436254638,
+      "elapsed_from_window_start_seconds": 78.04307885742188,
+      "before_velocity": [
+        0.4080013930797577,
+        -11.54527759552002,
+        10.340786933898926
+      ],
+      "after_velocity": [
+        72.62348937988281,
+        63.78218078613281,
+        -68.26051330566406
+      ],
+      "before_support_id": 234,
+      "after_support_null": true
+    }
+  ],
+  "candidate_source12_episodes": [
+    {
+      "local": 3,
+      "generation": 5,
+      "entity_id": 568,
+      "first_source12_tick": 1040,
+      "first_source12_line": 980,
+      "sample_ticks": [
+        1040,
+        1060,
+        1080,
+        1100,
+        1120,
+        1140,
+        1160
+      ],
+      "incoming_route": [
+        6,
+        7,
+        8,
+        12
+      ],
+      "bouncer234_call_observed": false,
+      "outcome": "no_pad234_call_and_fall_to_lower_level"
+    },
+    {
+      "local": 2,
+      "generation": 5,
+      "entity_id": 567,
+      "first_source12_tick": 1300,
+      "first_source12_line": 1158,
+      "sample_ticks": [
+        1300,
+        1320,
+        1340,
+        1360,
+        1380
+      ],
+      "incoming_route": [
+        6,
+        7,
+        8,
+        12
+      ],
+      "bouncer234_call_observed": false,
+      "outcome": "no_pad234_call_and_fall_to_lower_level"
+    },
+    {
+      "local": 0,
+      "generation": 6,
+      "entity_id": 565,
+      "first_source12_tick": 1380,
+      "first_source12_line": 1198,
+      "sample_ticks": [
+        1380,
+        1400,
+        1420,
+        1440,
+        1460,
+        1480,
+        1500
+      ],
+      "incoming_route": [
+        6,
+        7,
+        8,
+        12
+      ],
+      "bouncer234_call_observed": false,
+      "outcome": "no_pad234_call_and_fall_to_lower_level"
+    },
+    {
+      "local": 0,
+      "generation": 7,
+      "entity_id": 565,
+      "first_source12_tick": 1720,
+      "first_source12_line": 1469,
+      "sample_ticks": [
+        1720,
+        1740,
+        1760,
+        1780
+      ],
+      "incoming_route": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "bouncer234_call_observed": true,
+      "outcome": "launch_and_minigun_acquisition"
+    },
+    {
+      "local": 2,
+      "generation": 6,
+      "entity_id": 567,
+      "first_source12_tick": 1720,
+      "first_source12_line": 1473,
+      "sample_ticks": [
+        1720,
+        1740,
+        1760,
+        1780
+      ],
+      "incoming_route": [
+        6,
+        7,
+        8,
+        12
+      ],
+      "bouncer234_call_observed": false,
+      "outcome": "no_pad234_call_and_fall_to_lower_level"
+    },
+    {
+      "local": 1,
+      "generation": 6,
+      "entity_id": 566,
+      "first_source12_tick": 1760,
+      "first_source12_line": 1508,
+      "sample_ticks": [
+        1760,
+        1780,
+        1800,
+        1820,
+        1840
+      ],
+      "incoming_route": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "bouncer234_call_observed": true,
+      "outcome": "launch_and_contested_item_flight_finish"
+    }
+  ],
+  "denominator": {
+    "observed_candidate_source12_life_episodes": 6,
+    "native_pad234_launches": 2,
+    "minigun_acquisition_after_launch": 1,
+    "contested_item_flight_finish_after_launch": 1,
+    "no_pad234_call_and_failed_approach": 4
+  },
+  "dense_failure": {
+    "local": 3,
+    "generation": 5,
+    "entity_id": 568,
+    "inventory_lines": [
+      817,
+      820,
+      835,
+      838,
+      841,
+      847,
+      850
+    ],
+    "native_ticks": [
+      40.599666595458984,
+      40.749664306640625,
+      41.34965515136719,
+      41.49965286254883,
+      41.59965133666992,
+      41.849647521972656,
+      41.9996452331543
+    ],
+    "evidence": "supported ramp then airborne ordinary-speed arc; passes horizontal area of successful contact positions about4.7 units above them; no234call, continues beyond pad and falls",
+    "important_limit": "geometry crossing is not a complete collision-volume/ETouch proof; no per-action arrival decision capture"
+  },
+  "local2_gen6_gap": {
+    "inventory_lines": [
+      1414,
+      1415
+    ],
+    "native_tick_bounds": [
+      72.89984893798828,
+      76.45006561279297
+    ],
+    "cecil_transition_ticks": [
+      1700,
+      1720
+    ],
+    "evidence": "no234call despite source8/hop12 then source12/hop34; goal243 retained through fall until rival pickup1797"
+  },
+  "flight_finish": {
+    "local": 1,
+    "generation": 6,
+    "begin_tick": 1797,
+    "begin_line": 1552,
+    "end_tick": 1846,
+    "end_line": 1638,
+    "end_reason": "context",
+    "unchanged_logged_deadline": 111.222,
+    "native_supported_later": {
+      "inventory_line": 1575,
+      "game_tick": 83.3504867553711,
+      "owned": 259,
+      "health": 67.25028228759766
+    },
+    "minigun_taken_by_local0_tick": 1797,
+    "no_minigun_gain_for_local1_during_finish": true
+  },
+  "receipt": {
+    "records_received": 2,
+    "calls": 2,
+    "total_calls": 44,
+    "other_pad_calls": 42,
+    "unmatched_player_calls": 0,
+    "faults": 0,
+    "dropped": 0,
+    "coverage": {
+      "armed_ms": 1794436175905,
+      "expires_ms": 1794436300905,
+      "stopped_ms": 1794436296765,
+      "last_observed_ms": 1794436296766,
+      "gameplay_window_start_ms": 1794436176594.9211,
+      "gameplay_window_end_ms": 1794436296687.124,
+      "observed_overlap_ms": 120092.20288085938,
+      "entire_gameplay_window_covered": true,
+      "meaning": "observed listener lifetime overlap; not complete gameplay/event proof"
+    },
+    "detached": true,
+    "original_body_restored": true
+  },
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "remaining_cause_limit": "real directed approach failure established, exact arrival/jump/collision decision defect not established; no gameplay fix authorized by this report"
+}

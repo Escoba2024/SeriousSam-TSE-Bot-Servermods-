@@ -1,0 +1,95 @@
+{
+  "scope": "PASS_LIMITED_NORMAL_CONSOLE_ASSIGN_AND_RESTORE_OWN_RETAIL_WINE",
+  "qualified": false,
+  "window": "arena007legacy2-console-checked-swap0-trial-1-224143",
+  "started_utc": "2026-11-11T22:41:43.049805+00:00",
+  "finished_utc": "2026-11-11T22:43:05.408264+00:00",
+  "legacy_dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+  "reader_sha256": "e509fbc954847593d6b0025ae5fa8e8baabf1e611e5434bb773ca6e2438da6d7",
+  "controller_sha256": "a3d3ef3258d3a71483edb4bf1781d1ffb6582ecf904b475ea2a7238a49bdcf22",
+  "actual_bases": {
+    "SeriousSam.exe": "0x400000",
+    "GameMP.dll": "0x1fac0000"
+  },
+  "period_probe": {
+    "initial": {
+      "console_state": 0,
+      "editing_line": "",
+      "fire_period": 1.0,
+      "fire_period_bytes": "0000803f"
+    },
+    "steps": [
+      {
+        "before": {
+          "console_state": 0,
+          "editing_line": "",
+          "fire_period": 1.0,
+          "fire_period_bytes": "0000803f"
+        },
+        "after": {
+          "console_state": 1,
+          "editing_line": "",
+          "fire_period": 0.05000000074505806,
+          "fire_period_bytes": "cdcc4c3d"
+        },
+        "closed": {
+          "console_state": 0,
+          "editing_line": "",
+          "fire_period": 0.05000000074505806,
+          "fire_period_bytes": "cdcc4c3d"
+        },
+        "normal_keyboard_only": true
+      },
+      {
+        "before": {
+          "console_state": 0,
+          "editing_line": "",
+          "fire_period": 0.05000000074505806,
+          "fire_period_bytes": "cdcc4c3d"
+        },
+        "after": {
+          "console_state": 1,
+          "editing_line": "",
+          "fire_period": 1.0,
+          "fire_period_bytes": "0000803f"
+        },
+        "closed": {
+          "console_state": 0,
+          "editing_line": "",
+          "fire_period": 1.0,
+          "fire_period_bytes": "0000803f"
+        },
+        "normal_keyboard_only": true
+      }
+    ],
+    "normal_input_only": true,
+    "qualified": false,
+    "restored_original_period": true
+  },
+  "observed_seconds_after_restore": 15.60219325684011,
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "all_four_roles_closed": true,
+  "keymap_cleanup_required_by_successful_helper_exit": true,
+  "limits": [
+    "Actual keyboard F1/slash-shell assignment, exact prefix/float readback, empty console, original1.0 restored and server pause/tick/PRNG unchanged during assignment.",
+    "No simulation advance occurred at temporary0.05, so synchronous spawn preparation and fair baseline comparison are NOT proved.",
+    "Prior fixed-base failure remains explicit FAIL; exact historical mismatch was not saved. This successful trial records actual Gamebase0x1fac0000."
+  ]
+}

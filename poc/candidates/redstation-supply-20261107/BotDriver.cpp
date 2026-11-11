@@ -1534,6 +1534,9 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     }
     // 4) hand it to the network player source (stamps pa_llCreated internally)
     ppls->SetAction(pa);
+    if(bot_bDiagnostics&&bot_bSupplyNavigation&&player)
+      BotCecilApproachFinal(player,BotSupplyState(iLP),iLP,bs.bs_iTick,bs.bs_iTick*fTick,
+        supplyActive!=FALSE,cecilFloorStatus,targetVisible!=FALSE,pa.pa_vTranslation,pa.pa_aRotation,pa.pa_ulButtons);
     BotWeaponObserverAfterAction(player,ppls,iLP,bs.bs_iTick,BotSupplyState(iLP).generation,
       combatWeapon,pa.pa_ulButtons,combatSelect,automatic&&bot_bSupplyNavigation,BotCecilSettings().fWeaponCD);
     // Count emitted combat fire input independently of sampled status logs.
