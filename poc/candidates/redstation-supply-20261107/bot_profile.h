@@ -79,6 +79,7 @@ struct SkillParams {
   double preferred_range_m;  // nominal engagement distance
   double retreat_health;     // 0..1, fall back below this health fraction
   double search_rate_deg_s;  // scan speed while no target is known
+  double tracking_gain_s = 10.0; // proportional response, 1/s; legacy controller default
 };
 
 /* ------------------------------------------------------------------------ */
@@ -225,7 +226,8 @@ enum class ProfileError {
   kRetreatHealthOutOfRange,
   kSearchRateOutOfRange,
   kNonFinite,
-  kSeedZero
+  kSeedZero,
+  kTrackingGainOutOfRange
 };
 
 inline bool InRange(double v, double lo, double hi) {
@@ -243,7 +245,8 @@ inline ProfileError ValidateSkill(const SkillParams& s) {
       !std::isfinite(s.fire_tol_deg) || !std::isfinite(s.settle_s) ||
       !std::isfinite(s.prediction_gain) || !std::isfinite(s.weapon_dwell_s) ||
       !std::isfinite(s.switch_margin) || !std::isfinite(s.preferred_range_m) ||
-      !std::isfinite(s.retreat_health) || !std::isfinite(s.search_rate_deg_s)) {
+      !std::isfinite(s.retreat_health) || !std::isfinite(s.search_rate_deg_s) ||
+      !std::isfinite(s.tracking_gain_s)) {
     return ProfileError::kNonFinite;
   }
   if (!InRange(s.reaction_s, 0.05, 2.0)) return ProfileError::kReactionOutOfRange;
@@ -263,6 +266,7 @@ inline ProfileError ValidateSkill(const SkillParams& s) {
   if (!InRange(s.preferred_range_m, 1.0, 60.0)) return ProfileError::kPreferredRangeOutOfRange;
   if (!InRange(s.retreat_health, 0.0, 0.95)) return ProfileError::kRetreatHealthOutOfRange;
   if (!InRange(s.search_rate_deg_s, 5.0, 180.0)) return ProfileError::kSearchRateOutOfRange;
+  if (!InRange(s.tracking_gain_s, 1.0, 20.0)) return ProfileError::kTrackingGainOutOfRange;
   if (s.max_los_per_tick < 1 || s.max_los_per_tick > 16) {
     return ProfileError::kSightRangeOutOfRange;
   }
@@ -427,6 +431,7 @@ inline SkillParams ArenaSkill(int tier) {
   s.aim_sigma_deg=tier==3?.15:(tier==2?.45:.9);
   s.turn_rate_deg_s=tier==3?540:(tier==2?420:300);
   s.turn_accel_deg_s2=tier==3?2400:(tier==2?1600:1000);
+  s.tracking_gain_s=tier==3?20:(tier==2?14:10);
   s.settle_s=tier==3?0:(tier==2?.05:.10);
   s.prediction_gain=tier==3?1:(tier==2?.9:.75);
   return s;

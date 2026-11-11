@@ -63,3 +63,14 @@ Execution status, rollback and next steps are maintained in `docs/reports/2026-1
 ## Execution update 2026-11-11 19:15 UTC
 
 Inventory and file-restore completed. Task2 PARTIAL: public five load zero; Dev rolled back after three actual sync kicks. Task3 portable implementation/tests complete, native rendering/deployment open. Task4 bounded implementation/build complete, requested gameplay/comparison gates open. Task5 nine-map audit complete, no candidate whitelist. Task6 before backups verified; final source publication and after backup completed with remote verification, Drive roundtrip and isolated file restore. No new DLL promotion. Task7 not begun. See full report and HANDOFF for receipts and current exact scope.
+
+## Autonomous continuation 2026-11-11 19:22 UTC
+
+Goal remains all A then all B. Previous turn made concrete code/runtime/backup progress; no completion claim. Current inventory refreshed (18 native fleet processes, original DLLs, five public zero configs, Dev3 after rollback). Windows RDC still offline. Own isolated Wine original-client probe created with private namespace/display/roots; actual exported session getter disassembled and read-only observed. All250 names now pass the original Engine decoder and LengthNaked in a new native executable run (not merely old parser examples); native visible rendering/query still open. Two agents fixing observed A3 trigger/aim and A4 item-route-cycle defects in separate worktrees. B remains gated.
+
+### Continuation evidence / rulings
+
+- A3 RED/GREEN: pre-turn aim trigger suppressed aligned moving-target shots; final-residual settle and ordered response gain implemented, with hard bounds unchanged. Ordinary item pursuit no longer suppresses feasible combat; urgent acquisition remains.
+- A4 RED/GREEN: retained old048 Hole44s/Skulls25s bounded same-hop cycles are FAIL evidence, not merely missing verdicts. Extended mapped/relocated item transit now ends after10s without0.75m best-distance gain, preserving fixed deadline and existing30s rejection expiry; fresh typed/needed/reachable selection follows. Independent code review found no material issue; native rerun still required.
+- Main replayed1372bridgechecks and183tools tests; build002 succeeded, qualifiedfalse. Two isolated native320s spawn3/0 field controls precede denser comparison. No goal narrowing to the completed subset and no B implementation.
+- Ruling: Windows RDC offline does not block all Retail functional work; use licensed unchanged original client under Wine with private namespace/normal input and explicit Wine evidence scope. No Windows/GPU/WAN acceptance inferred.

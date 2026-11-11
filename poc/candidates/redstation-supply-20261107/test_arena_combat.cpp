@@ -28,9 +28,14 @@ static void MigrationAndConfiguration() {
     assert(x.reaction_s>y.reaction_s&&y.reaction_s>z.reaction_s);
     assert(x.aim_sigma_deg>y.aim_sigma_deg&&y.aim_sigma_deg>z.aim_sigma_deg);
     assert(x.turn_rate_deg_s<y.turn_rate_deg_s&&y.turn_rate_deg_s<z.turn_rate_deg_s);
+    assert(x.tracking_gain_s<y.tracking_gain_s&&y.tracking_gain_s<z.tracking_gain_s);
     assert(x.max_los_per_tick==z.max_los_per_tick&&x.sight_range_m==z.sight_range_m);
     assert(x.weapon_dwell_s==a.skill.weapon_dwell_s);
   }
+  for(int tier=1;tier<=5;++tier)assert(SkillFor(tier).tracking_gain_s==10);
+  auto invalid=Roster(7);invalid.skill.tracking_gain_s=21;
+  assert(ValidateProfile(invalid)==ProfileError::kTrackingGainOutOfRange);
+  invalid.skill.tracking_gain_s=NAN;assert(ValidateProfile(invalid)==ProfileError::kNonFinite);
 }
 static BotCommand Run(HumanBotPolicy& policy,WorldView& w,SenseInput* enemies,bool* los,int tick,int count=2){
   w.tick=tick;policy.BeginTick(w);return policy.Step(w,enemies,los,count,.05);
@@ -114,4 +119,85 @@ static void TrackingAndBounds() {
     }
   }
 }
-int main(){MigrationAndConfiguration();ShortColtsAndOwnership();ReactionIsolationAndLifetime();HumanOnlyArenaLoadout();TrackingAndBounds();puts("Arena migration, tier and short-Colt contracts PASS");}
+static void MovingTargetFire() {
+  // Same seed/start/target for each tier. This 20 deg/s crossing exposed the
+  // pre-turn trigger bug: DEMON tracked within tolerance but fired 7/699 ticks.
+  for(double speed:{20.,40.,60.}){
+  int totals[3]={};double errors[3]={};
+  for(unsigned seed:{123u,77123u,20261111u})for(int tier=1;tier<=3;++tier){
+    BotProfile p;assert(BuildRosterProfile(0,0,seed,&p,tier));
+    auto settings=CecilPreset(2);HumanBotPolicy h;h.Configure(&p,&settings);
+    WorldView w;w.cecil=true;w.alive=true;w.health=100;
+    w.current_weapon=6;w.usable_weapons=CecilWeaponMask(6);
+    SenseInput e{};e.index=1;e.entity_id=1;e.health=100;e.alive=true;bool los=true;
+    int fired=0,aligned=0;double previous_yaw=0,previous_pitch=0;
+    for(int t=0;t<800;++t){
+      const double angle=std::asin(std::sin(t*.05*speed*kDegToRad));
+      e.x=-30*std::sin(angle);e.z=-30*std::cos(angle);
+      auto cmd=Run(h,w,&e,&los,t,1);
+      assert(!cmd.fire||cmd.aim_error_deg<=p.skill.fire_tol_deg);
+      if(cmd.target>=0&&t>10){
+        assert(std::fabs(cmd.yaw_delta_deg-previous_yaw)<=p.skill.turn_accel_deg_s2*.05*.05+1e-9);
+        assert(std::fabs(cmd.pitch_delta_deg-previous_pitch)<=p.skill.turn_accel_deg_s2*.05*.05+1e-9);
+      }
+      previous_yaw=cmd.yaw_delta_deg;previous_pitch=cmd.pitch_delta_deg;
+      w.pose.yaw_deg+=cmd.yaw_delta_deg;w.pose.pitch_deg+=cmd.pitch_delta_deg;
+      if(t>100){fired+=cmd.fire;aligned+=cmd.aim_error_deg<=p.skill.fire_tol_deg;
+        errors[tier-1]+=cmd.aim_error_deg;}
+    }
+    if(tier==3)assert(fired>600); // sustained aligned tracking must not starve trigger
+    totals[tier-1]+=fired;
+    std::printf("arena crossing speed=%.0f seed=%u tier=%d fire=%d aligned=%d\n",speed,seed,tier,fired,aligned);
+  }
+  assert(totals[0]<totals[1]&&totals[1]<totals[2]);
+  assert(errors[0]>errors[1]&&errors[1]>errors[2]);
+  std::printf("arena aggregate speed=%.0f fire=%d/%d/%d mean_error=%.3f/%.3f/%.3f\n",
+    speed,totals[0],totals[1],totals[2],errors[0]/2097,errors[1]/2097,errors[2]/2097);
+  }
+}
+static void TriggerLifetime() {
+  auto settings=CecilPreset(2);
+  for(int tier=1;tier<=3;++tier){
+    BotProfile p;assert(BuildRosterProfile(0,0,123,&p,tier));
+    // Remove motor noise to measure settle duration separately from tracking.
+    p.skill.aim_sigma_deg=0;p.skill.reaction_s=0;
+    HumanBotPolicy h;h.Configure(&p,&settings);
+    WorldView w;w.cecil=true;w.alive=true;w.health=100;
+    w.current_weapon=6;w.usable_weapons=CecilWeaponMask(6);
+    SenseInput e{};e.index=1;e.entity_id=1;e.health=100;e.alive=true;e.z=-20;
+    bool los=true;int tick=0;
+    for(;tick<10;++tick)Run(h,w,&e,&los,tick,1);
+    assert(Run(h,w,&e,&los,tick++,1).fire);
+    los=false;assert(!Run(h,w,&e,&los,tick++,1).fire);los=true;
+    assert(Run(h,w,&e,&los,tick++,1).target==-1); // minimum one-tick reacquisition
+    for(int consecutive=0;consecutive<3;++consecutive)
+      assert(Run(h,w,&e,&los,tick++,1).fire==(consecutive>=3-tier));
+    // A rejected frame cannot leave an old settle window armed.
+    w.pose.x=NAN;assert(!Run(h,w,&e,&los,tick++,1).fire);w.pose.x=0;
+    assert(Run(h,w,&e,&los,tick++,1).target==-1);
+    for(int consecutive=0;consecutive<3;++consecutive)
+      assert(Run(h,w,&e,&los,tick++,1).fire==(consecutive>=3-tier));
+    for(double invalid:{INFINITY,NAN}){
+      w.tick=tick++;h.BeginTick(w);assert(!h.Step(w,&e,&los,1,invalid).fire);
+    }
+    // No trigger while the engine still holds the previous weapon.
+    w.current_weapon=1;assert(!Run(h,w,&e,&los,tick++,1).fire);
+    w.current_weapon=6;
+    for(int consecutive=0;consecutive<3;++consecutive)
+      assert(Run(h,w,&e,&los,tick++,1).fire==(consecutive>=3-tier));
+  }
+}
+static void TriggerIsolation() {
+  BotProfile profile;assert(BuildRosterProfile(0,0,123,&profile,1));profile.skill.aim_sigma_deg=0;
+  auto settings=CecilPreset(2);HumanBotPolicy policies[2];WorldView worlds[2];
+  for(int i=0;i<2;++i){policies[i].Configure(&profile,&settings);worlds[i].cecil=true;
+    worlds[i].alive=true;worlds[i].health=100;worlds[i].current_weapon=6;worlds[i].usable_weapons=CecilWeaponMask(6);}
+  SenseInput e{};e.index=1;e.entity_id=1;e.alive=true;e.health=100;e.z=-20;
+  for(int tick=0;tick<30;++tick)for(int i=0;i<2;++i){
+    bool los=i==1||tick<20;
+    if(i==0&&tick==25)worlds[i].alive=false;
+    auto cmd=Run(policies[i],worlds[i],&e,&los,tick,1);
+    if(tick>=10)assert(cmd.fire==(i==1||tick<20));
+  }
+}
+int main(){MigrationAndConfiguration();ShortColtsAndOwnership();ReactionIsolationAndLifetime();HumanOnlyArenaLoadout();TrackingAndBounds();MovingTargetFire();TriggerLifetime();TriggerIsolation();puts("Arena migration, tier and short-Colt contracts PASS");}

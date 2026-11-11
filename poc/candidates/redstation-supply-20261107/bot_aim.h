@@ -128,7 +128,9 @@ class AimController {
     const double max_rate = skill_.turn_rate_deg_s;
     const double accel = skill_.turn_accel_deg_s2;
     const double brake = accel * (1.0 - 0.75 * skill_.overshoot);  // weak brakes
-    const double kp = 10.0;  // 1/s, only shapes the final centimetres
+    // Tracking response is independent of the hard rate/acceleration limits.
+    // Legacy profiles retain 10/s; arena tiers shorten steady crossing lag.
+    const double kp = skill_.tracking_gain_s;
 
     // Stop-distance planning. A player who plans with their full acceleration
     // but can only brake with a fraction of it (high `overshoot`) will swing

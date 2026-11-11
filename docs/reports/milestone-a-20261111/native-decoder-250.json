@@ -1,0 +1,1506 @@
+{
+  "status": "PASS_NATIVE_ORIGINAL_ENGINE_DECODER",
+  "count": 250,
+  "cases": [
+    {
+      "raw": "Avaro",
+      "visible": "Avaro",
+      "native_length": 5,
+      "style": "plain"
+    },
+    {
+      "raw": "Nixlen",
+      "visible": "Nixlen",
+      "native_length": 6,
+      "style": "plain"
+    },
+    {
+      "raw": "Sorenix",
+      "visible": "Sorenix",
+      "native_length": 7,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cEEEEEEVelko^I^r",
+      "visible": "Velko",
+      "native_length": 5,
+      "style": "italic"
+    },
+    {
+      "raw": "^cA5D66AIvara^r",
+      "visible": "Ivara",
+      "native_length": 5,
+      "style": "single"
+    },
+    {
+      "raw": "^b^cA5D66AOrven^B^r",
+      "visible": "Orven",
+      "native_length": 5,
+      "style": "bold"
+    },
+    {
+      "raw": "Zayle",
+      "visible": "Zayle",
+      "native_length": 5,
+      "style": "plain"
+    },
+    {
+      "raw": "Fenrik",
+      "visible": "Fenrik",
+      "native_length": 6,
+      "style": "plain"
+    },
+    {
+      "raw": "^cEEEEEEKelvo^r",
+      "visible": "Kelvo",
+      "native_length": 5,
+      "style": "single"
+    },
+    {
+      "raw": "Oryxen",
+      "visible": "Oryxen",
+      "native_length": 6,
+      "style": "plain"
+    },
+    {
+      "raw": "Talvi",
+      "visible": "Talvi",
+      "native_length": 5,
+      "style": "plain"
+    },
+    {
+      "raw": "Briska",
+      "visible": "Briska",
+      "native_length": 6,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^i^cFF6655Norex^I^B^r",
+      "visible": "Norex",
+      "native_length": 5,
+      "style": "bolditalic"
+    },
+    {
+      "raw": "^cFF6655Jasko^r",
+      "visible": "Jasko",
+      "native_length": 5,
+      "style": "single"
+    },
+    {
+      "raw": "Virel",
+      "visible": "Virel",
+      "native_length": 5,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^cFF6655Caldra^B^r",
+      "visible": "Caldra",
+      "native_length": 6,
+      "style": "bold"
+    },
+    {
+      "raw": "Evrenix",
+      "visible": "Evrenix",
+      "native_length": 7,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cCC88FFLunek^I^r",
+      "visible": "Lunek",
+      "native_length": 5,
+      "style": "italic"
+    },
+    {
+      "raw": "^cA5D66AKrysa^r",
+      "visible": "Krysa",
+      "native_length": 5,
+      "style": "single"
+    },
+    {
+      "raw": "Ruvik",
+      "visible": "Ruvik",
+      "native_length": 5,
+      "style": "plain"
+    },
+    {
+      "raw": "Sylaro",
+      "visible": "Sylaro",
+      "native_length": 6,
+      "style": "plain"
+    },
+    {
+      "raw": "Erynd",
+      "visible": "Erynd",
+      "native_length": 5,
+      "style": "plain"
+    },
+    {
+      "raw": "Vasko",
+      "visible": "Vasko",
+      "native_length": 5,
+      "style": "plain"
+    },
+    {
+      "raw": "^cCC88FFZelrin^r",
+      "visible": "Zelrin",
+      "native_length": 6,
+      "style": "single"
+    },
+    {
+      "raw": "Mirvo",
+      "visible": "Mirvo",
+      "native_length": 5,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^c66CCFFTundraQuill^B^r",
+      "visible": "TundraQuill",
+      "native_length": 11,
+      "style": "bold"
+    },
+    {
+      "raw": "^i^cA5D66ACopperOtter^I^r",
+      "visible": "CopperOtter",
+      "native_length": 11,
+      "style": "italic"
+    },
+    {
+      "raw": "AmberRook",
+      "visible": "AmberRook",
+      "native_length": 9,
+      "style": "plain"
+    },
+    {
+      "raw": "FrostTern",
+      "visible": "FrostTern",
+      "native_length": 9,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cFFCC66SlateWarden^I^r",
+      "visible": "SlateWarden",
+      "native_length": 11,
+      "style": "italic"
+    },
+    {
+      "raw": "^b^cEEEEEEBirchRacer^B^r",
+      "visible": "BirchRacer",
+      "native_length": 10,
+      "style": "bold"
+    },
+    {
+      "raw": "MossCavalier",
+      "visible": "MossCavalier",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "DuneFencer",
+      "visible": "DuneFencer",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "FlintHeron",
+      "visible": "FlintHeron",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^i^c66CCFFHazelDrift^I^B^r",
+      "visible": "HazelDrift",
+      "native_length": 10,
+      "style": "bolditalic"
+    },
+    {
+      "raw": "^i^cFF6655FennelFury^I^r",
+      "visible": "FennelFury",
+      "native_length": 10,
+      "style": "italic"
+    },
+    {
+      "raw": "WickerFalcon",
+      "visible": "WickerFalcon",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "CedarComet",
+      "visible": "CedarComet",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "^cA5D66ASilverBadger^r",
+      "visible": "SilverBadger",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "IronIbis",
+      "visible": "IronIbis",
+      "native_length": 8,
+      "style": "plain"
+    },
+    {
+      "raw": "MeadowGhost",
+      "visible": "MeadowGhost",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "TawnyVector",
+      "visible": "TawnyVector",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^c33DDCCPebbleCorsair^B^r",
+      "visible": "PebbleCorsair",
+      "native_length": 13,
+      "style": "bold"
+    },
+    {
+      "raw": "OnyxDart",
+      "visible": "OnyxDart",
+      "native_length": 8,
+      "style": "plain"
+    },
+    {
+      "raw": "GraniteOwl",
+      "visible": "GraniteOwl",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "AlpineStoat",
+      "visible": "AlpineStoat",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "PineSpecter",
+      "visible": "PineSpecter",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "RiverRascal",
+      "visible": "RiverRascal",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "StormPlover",
+      "visible": "StormPlover",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "MossMariner",
+      "visible": "MossMariner",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "CircuitSage",
+      "visible": "CircuitSage",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^cFFCC66PixelDrifter^B^r",
+      "visible": "PixelDrifter",
+      "native_length": 12,
+      "style": "bold"
+    },
+    {
+      "raw": "^b^cCC88FFCacheCobra^B^r",
+      "visible": "CacheCobra",
+      "native_length": 10,
+      "style": "bold"
+    },
+    {
+      "raw": "^cCC88FFTurboAcorn^r",
+      "visible": "TurboAcorn",
+      "native_length": 10,
+      "style": "single"
+    },
+    {
+      "raw": "^b^c66CCFFByteBard^B^r",
+      "visible": "ByteBard",
+      "native_length": 8,
+      "style": "bold"
+    },
+    {
+      "raw": "KernelKite",
+      "visible": "KernelKite",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "RasterRider",
+      "visible": "RasterRider",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^c33DDCCDuplexDrake^I^r",
+      "visible": "DuplexDrake",
+      "native_length": 11,
+      "style": "italic"
+    },
+    {
+      "raw": "^cCC88FFSocketSprite^r",
+      "visible": "SocketSprite",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "^i^cFFCC66BitBanshee^I^r",
+      "visible": "BitBanshee",
+      "native_length": 10,
+      "style": "italic"
+    },
+    {
+      "raw": "ProxyPirate",
+      "visible": "ProxyPirate",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^c33DDCCVectorVixen^B^r",
+      "visible": "VectorVixen",
+      "native_length": 11,
+      "style": "bold"
+    },
+    {
+      "raw": "^c33DDCCGlitchGrouse^r",
+      "visible": "GlitchGrouse",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "^cFFCC66NeonNettle^r",
+      "visible": "NeonNettle",
+      "native_length": 10,
+      "style": "single"
+    },
+    {
+      "raw": "FrameFox",
+      "visible": "FrameFox",
+      "native_length": 8,
+      "style": "plain"
+    },
+    {
+      "raw": "OpcodeOtter",
+      "visible": "OpcodeOtter",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cFFCC66BinaryBasilisk^I^r",
+      "visible": "BinaryBasilisk",
+      "native_length": 14,
+      "style": "italic"
+    },
+    {
+      "raw": "ChipChimera",
+      "visible": "ChipChimera",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^c66CCFFRenderRook^B^r",
+      "visible": "RenderRook",
+      "native_length": 10,
+      "style": "bold"
+    },
+    {
+      "raw": "PortPanther",
+      "visible": "PortPanther",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "CyberJuniper",
+      "visible": "CyberJuniper",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "MatrixMink",
+      "visible": "MatrixMink",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^c66CCFFDataDervish^B^r",
+      "visible": "DataDervish",
+      "native_length": 11,
+      "style": "bold"
+    },
+    {
+      "raw": "FibreFalcon",
+      "visible": "FibreFalcon",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^cFF6655SiliconStoat^r",
+      "visible": "SiliconStoat",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "^cFFCC66AstraLancer^r",
+      "visible": "AstraLancer",
+      "native_length": 11,
+      "style": "single"
+    },
+    {
+      "raw": "^i^cFFCC66LunarLynx^I^r",
+      "visible": "LunarLynx",
+      "native_length": 9,
+      "style": "italic"
+    },
+    {
+      "raw": "SolarSickle",
+      "visible": "SolarSickle",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "CometCavalier",
+      "visible": "CometCavalier",
+      "native_length": 13,
+      "style": "plain"
+    },
+    {
+      "raw": "OrbitHawk",
+      "visible": "OrbitHawk",
+      "native_length": 9,
+      "style": "plain"
+    },
+    {
+      "raw": "^cFFCC66NebulaNomad^r",
+      "visible": "NebulaNomad",
+      "native_length": 11,
+      "style": "single"
+    },
+    {
+      "raw": "^cCC88FFPulsarPike^r",
+      "visible": "PulsarPike",
+      "native_length": 10,
+      "style": "single"
+    },
+    {
+      "raw": "VenusVandal",
+      "visible": "VenusVandal",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "MeteorMarten",
+      "visible": "MeteorMarten",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "CosmoCinder",
+      "visible": "CosmoCinder",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "StarlitShiv",
+      "visible": "StarlitShiv",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "ZenithZebra",
+      "visible": "ZenithZebra",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^i^cA5D66AEclipseEel^I^B^r",
+      "visible": "EclipseEel",
+      "native_length": 10,
+      "style": "bolditalic"
+    },
+    {
+      "raw": "AuroraArcher",
+      "visible": "AuroraArcher",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "SaturnSable",
+      "visible": "SaturnSable",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "QuasarQuail",
+      "visible": "QuasarQuail",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "AndroAsh",
+      "visible": "AndroAsh",
+      "native_length": 8,
+      "style": "plain"
+    },
+    {
+      "raw": "HelioHarrier",
+      "visible": "HelioHarrier",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^cEEEEEEAstralAxe^B^r",
+      "visible": "AstralAxe",
+      "native_length": 9,
+      "style": "bold"
+    },
+    {
+      "raw": "^cCC88FFIonIvy^r",
+      "visible": "IonIvy",
+      "native_length": 6,
+      "style": "single"
+    },
+    {
+      "raw": "LunarLagoon",
+      "visible": "LunarLagoon",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^cA5D66APhotonPlover^r",
+      "visible": "PhotonPlover",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "CosmicCairn",
+      "visible": "CosmicCairn",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "CelestialCub",
+      "visible": "CelestialCub",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "^cFFCC66GravityGull^r",
+      "visible": "GravityGull",
+      "native_length": 11,
+      "style": "single"
+    },
+    {
+      "raw": "[EU] Taro",
+      "visible": "[EU] Taro",
+      "native_length": 9,
+      "style": "plain"
+    },
+    {
+      "raw": "[NOVA] Ilex",
+      "visible": "[NOVA] Ilex",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^cFFCC66[RUNE] Elko^B^r",
+      "visible": "[RUNE] Elko",
+      "native_length": 11,
+      "style": "bold"
+    },
+    {
+      "raw": "[GG] Ferra",
+      "visible": "[GG] Ferra",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "[NXT] Osku",
+      "visible": "[NXT] Osku",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "[VLT] Neris",
+      "visible": "[VLT] Neris",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^cEEEEEE[OWL] Talon^B^r",
+      "visible": "[OWL] Talon",
+      "native_length": 11,
+      "style": "bold"
+    },
+    {
+      "raw": "[BYTE] Edda",
+      "visible": "[BYTE] Edda",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cA5D66A[FOX] Rilo^I^r",
+      "visible": "[FOX] Rilo",
+      "native_length": 10,
+      "style": "italic"
+    },
+    {
+      "raw": "^i^cEEEEEE[NORD] Lumi^I^r",
+      "visible": "[NORD] Lumi",
+      "native_length": 11,
+      "style": "italic"
+    },
+    {
+      "raw": "[ARC] Sivo",
+      "visible": "[ARC] Sivo",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "[ZEN] Kiro",
+      "visible": "[ZEN] Kiro",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "[ECHO] Asta",
+      "visible": "[ECHO] Asta",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "[RAY] Fenna",
+      "visible": "[RAY] Fenna",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^c33DDCC[ICE] Runa^B^r",
+      "visible": "[ICE] Runa",
+      "native_length": 10,
+      "style": "bold"
+    },
+    {
+      "raw": "[FLUX] Tavi",
+      "visible": "[FLUX] Tavi",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^i^cFF6655[HEX] Brano^I^B^r",
+      "visible": "[HEX] Brano",
+      "native_length": 11,
+      "style": "bolditalic"
+    },
+    {
+      "raw": "[DUNE] Yari",
+      "visible": "[DUNE] Yari",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^i^cFF6655[ALT] Vega^I^B^r",
+      "visible": "[ALT] Vega",
+      "native_length": 10,
+      "style": "bolditalic"
+    },
+    {
+      "raw": "^i^cCC88FF[WAVE] Olin^I^r",
+      "visible": "[WAVE] Olin",
+      "native_length": 11,
+      "style": "italic"
+    },
+    {
+      "raw": "^b^cFFCC66[LOOP] Kora^B^r",
+      "visible": "[LOOP] Kora",
+      "native_length": 11,
+      "style": "bold"
+    },
+    {
+      "raw": "[ASH] Pavo",
+      "visible": "[ASH] Pavo",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^c33DDCC[DASH] Enzo^B^r",
+      "visible": "[DASH] Enzo",
+      "native_length": 11,
+      "style": "bold"
+    },
+    {
+      "raw": "[MINT] Alva",
+      "visible": "[MINT] Alva",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "[RIFT] Tilda",
+      "visible": "[RIFT] Tilda",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "Str4feLynx",
+      "visible": "Str4feLynx",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "Pr1smFox",
+      "visible": "Pr1smFox",
+      "native_length": 8,
+      "style": "plain"
+    },
+    {
+      "raw": "N3onMantis",
+      "visible": "N3onMantis",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "R0cketWren",
+      "visible": "R0cketWren",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "C0smicJolt",
+      "visible": "C0smicJolt",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "Fr0stJavelin",
+      "visible": "Fr0stJavelin",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "C1nderDart",
+      "visible": "C1nderDart",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "^cCC88FFV3ctorWisp^r",
+      "visible": "V3ctorWisp",
+      "native_length": 10,
+      "style": "single"
+    },
+    {
+      "raw": "Ph4ntomPike",
+      "visible": "Ph4ntomPike",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^c66CCFFR4venCircuit^I^r",
+      "visible": "R4venCircuit",
+      "native_length": 12,
+      "style": "italic"
+    },
+    {
+      "raw": "Gl1tchFable",
+      "visible": "Gl1tchFable",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "Ech0Ranger",
+      "visible": "Ech0Ranger",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "N1mbusRail",
+      "visible": "N1mbusRail",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "Cr0maViper",
+      "visible": "Cr0maViper",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "J4deVortex",
+      "visible": "J4deVortex",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "Br4ssBishop",
+      "visible": "Br4ssBishop",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^cFF6655T1dalArrow^B^r",
+      "visible": "T1dalArrow",
+      "native_length": 10,
+      "style": "bold"
+    },
+    {
+      "raw": "0rbitWarden",
+      "visible": "0rbitWarden",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^cFFCC66Sc0peSparrow^r",
+      "visible": "Sc0peSparrow",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "H3lixHawk",
+      "visible": "H3lixHawk",
+      "native_length": 9,
+      "style": "plain"
+    },
+    {
+      "raw": "L4serLichen",
+      "visible": "L4serLichen",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "W1nterQuill",
+      "visible": "W1nterQuill",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "F1reWillow",
+      "visible": "F1reWillow",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "^cCC88FFQu4sarFennel^r",
+      "visible": "Qu4sarFennel",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "^b^i^cFF6655P1xelBreeze^I^B^r",
+      "visible": "P1xelBreeze",
+      "native_length": 11,
+      "style": "bolditalic"
+    },
+    {
+      "raw": "^b^cFFCC66CoffeeCrossbow^B^r",
+      "visible": "CoffeeCrossbow",
+      "native_length": 14,
+      "style": "bold"
+    },
+    {
+      "raw": "^c66CCFFToastTornado^r",
+      "visible": "ToastTornado",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "^cEEEEEEWaffleWarlock^r",
+      "visible": "WaffleWarlock",
+      "native_length": 13,
+      "style": "single"
+    },
+    {
+      "raw": "^cEEEEEEPicklePaladin^r",
+      "visible": "PicklePaladin",
+      "native_length": 13,
+      "style": "single"
+    },
+    {
+      "raw": "DumplingDash",
+      "visible": "DumplingDash",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "^cFFCC66PretzelPhantom^r",
+      "visible": "PretzelPhantom",
+      "native_length": 14,
+      "style": "single"
+    },
+    {
+      "raw": "^i^cCC88FFBiscuitBandit^I^r",
+      "visible": "BiscuitBandit",
+      "native_length": 13,
+      "style": "italic"
+    },
+    {
+      "raw": "CocoaCorsair",
+      "visible": "CocoaCorsair",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "NoodleNimbus",
+      "visible": "NoodleNimbus",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "MustardMage",
+      "visible": "MustardMage",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "PancakeProwler",
+      "visible": "PancakeProwler",
+      "native_length": 14,
+      "style": "plain"
+    },
+    {
+      "raw": "EspressoEcho",
+      "visible": "EspressoEcho",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "^cEEEEEERavioliRanger^r",
+      "visible": "RavioliRanger",
+      "native_length": 13,
+      "style": "single"
+    },
+    {
+      "raw": "MuesliMarauder",
+      "visible": "MuesliMarauder",
+      "native_length": 14,
+      "style": "plain"
+    },
+    {
+      "raw": "^cA5D66ACrumpetComet^r",
+      "visible": "CrumpetComet",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "BagelBarrage",
+      "visible": "BagelBarrage",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cA5D66AGarlicGunner^I^r",
+      "visible": "GarlicGunner",
+      "native_length": 12,
+      "style": "italic"
+    },
+    {
+      "raw": "^cFF6655HazelnutHavoc^r",
+      "visible": "HazelnutHavoc",
+      "native_length": 13,
+      "style": "single"
+    },
+    {
+      "raw": "PuddingParry",
+      "visible": "PuddingParry",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "SorbetSniper",
+      "visible": "SorbetSniper",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "FalafelFencer",
+      "visible": "FalafelFencer",
+      "native_length": 13,
+      "style": "plain"
+    },
+    {
+      "raw": "CroissantCrush",
+      "visible": "CroissantCrush",
+      "native_length": 14,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^i^cFF6655GoulashGhost^I^B^r",
+      "visible": "GoulashGhost",
+      "native_length": 12,
+      "style": "bolditalic"
+    },
+    {
+      "raw": "WontonWraith",
+      "visible": "WontonWraith",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "MuffinMeteor",
+      "visible": "MuffinMeteor",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cFFCC66SideStepSage^I^r",
+      "visible": "SideStepSage",
+      "native_length": 12,
+      "style": "italic"
+    },
+    {
+      "raw": "BackflipBirch",
+      "visible": "BackflipBirch",
+      "native_length": 13,
+      "style": "plain"
+    },
+    {
+      "raw": "WallrunWisp",
+      "visible": "WallrunWisp",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cEEEEEEHopscotchHawk^I^r",
+      "visible": "HopscotchHawk",
+      "native_length": 13,
+      "style": "italic"
+    },
+    {
+      "raw": "ZigzagZephyr",
+      "visible": "ZigzagZephyr",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "SlidekickSlate",
+      "visible": "SlidekickSlate",
+      "native_length": 14,
+      "style": "plain"
+    },
+    {
+      "raw": "QuickstepQuill",
+      "visible": "QuickstepQuill",
+      "native_length": 14,
+      "style": "plain"
+    },
+    {
+      "raw": "DriftDancer",
+      "visible": "DriftDancer",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^cA5D66APivotPike^r",
+      "visible": "PivotPike",
+      "native_length": 9,
+      "style": "single"
+    },
+    {
+      "raw": "^cFFCC66SwerveSable^r",
+      "visible": "SwerveSable",
+      "native_length": 11,
+      "style": "single"
+    },
+    {
+      "raw": "^c33DDCCVaultVesper^r",
+      "visible": "VaultVesper",
+      "native_length": 11,
+      "style": "single"
+    },
+    {
+      "raw": "DodgeDruid",
+      "visible": "DodgeDruid",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cCC88FFTempoTalon^I^r",
+      "visible": "TempoTalon",
+      "native_length": 10,
+      "style": "italic"
+    },
+    {
+      "raw": "JukeJuniper",
+      "visible": "JukeJuniper",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "SprintSphinx",
+      "visible": "SprintSphinx",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "StutterStrafe",
+      "visible": "StutterStrafe",
+      "native_length": 13,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^cCC88FFCrossstepCairn^B^r",
+      "visible": "CrossstepCairn",
+      "native_length": 14,
+      "style": "bold"
+    },
+    {
+      "raw": "DashDervish",
+      "visible": "DashDervish",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "ParryPlover",
+      "visible": "ParryPlover",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^cA5D66AReboundRook^r",
+      "visible": "ReboundRook",
+      "native_length": 11,
+      "style": "single"
+    },
+    {
+      "raw": "^b^cFFCC66GlideGambit^B^r",
+      "visible": "GlideGambit",
+      "native_length": 11,
+      "style": "bold"
+    },
+    {
+      "raw": "SwingstepSwift",
+      "visible": "SwingstepSwift",
+      "native_length": 14,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cEEEEEEOverstepOwl^I^r",
+      "visible": "OverstepOwl",
+      "native_length": 11,
+      "style": "italic"
+    },
+    {
+      "raw": "^c66CCFFAirwalkAster^r",
+      "visible": "AirwalkAster",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "^cFFCC66BoundBramble^r",
+      "visible": "BoundBramble",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "vElVeT.vaNe",
+      "visible": "vElVeT.vaNe",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^cCC88FFlowkey.Lynx^r",
+      "visible": "lowkey.Lynx",
+      "native_length": 11,
+      "style": "single"
+    },
+    {
+      "raw": "m0ss.Mage",
+      "visible": "m0ss.Mage",
+      "native_length": 9,
+      "style": "plain"
+    },
+    {
+      "raw": "^cFFCC66aStral.noise^r",
+      "visible": "aStral.noise",
+      "native_length": 12,
+      "style": "single"
+    },
+    {
+      "raw": "^cA5D66Aquiet.Quill^r",
+      "visible": "quiet.Quill",
+      "native_length": 11,
+      "style": "single"
+    },
+    {
+      "raw": "tWiSted.twig",
+      "visible": "tWiSted.twig",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "p0lar.Pulse",
+      "visible": "p0lar.Pulse",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "dusk.drifter",
+      "visible": "dusk.drifter",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "miDnight.Mint",
+      "visible": "miDnight.Mint",
+      "native_length": 13,
+      "style": "plain"
+    },
+    {
+      "raw": "n0va.Nest",
+      "visible": "n0va.Nest",
+      "native_length": 9,
+      "style": "plain"
+    },
+    {
+      "raw": "br1sk.Breeze",
+      "visible": "br1sk.Breeze",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "^c33DDCCteaTime.Talon^r",
+      "visible": "teaTime.Talon",
+      "native_length": 13,
+      "style": "single"
+    },
+    {
+      "raw": "^b^cCC88FFh0llow.Hawk^B^r",
+      "visible": "h0llow.Hawk",
+      "native_length": 11,
+      "style": "bold"
+    },
+    {
+      "raw": "echo.Errant",
+      "visible": "echo.Errant",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cA5D66AoddOrbit^I^r",
+      "visible": "oddOrbit",
+      "native_length": 8,
+      "style": "italic"
+    },
+    {
+      "raw": "offAxis",
+      "visible": "offAxis",
+      "native_length": 7,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^c66CCFFstarboard.Sable^B^r",
+      "visible": "starboard.Sable",
+      "native_length": 15,
+      "style": "bold"
+    },
+    {
+      "raw": "lunar.lilt",
+      "visible": "lunar.lilt",
+      "native_length": 10,
+      "style": "plain"
+    },
+    {
+      "raw": "^b^c33DDCCp1ne.Pirate^B^r",
+      "visible": "p1ne.Pirate",
+      "native_length": 11,
+      "style": "bold"
+    },
+    {
+      "raw": "cobalt.Cricket",
+      "visible": "cobalt.Cricket",
+      "native_length": 14,
+      "style": "plain"
+    },
+    {
+      "raw": "^c66CCFFaMber.Arc^r",
+      "visible": "aMber.Arc",
+      "native_length": 9,
+      "style": "single"
+    },
+    {
+      "raw": "^c66CCFFnotQuiteNinja^r",
+      "visible": "notQuiteNinja",
+      "native_length": 13,
+      "style": "single"
+    },
+    {
+      "raw": "sleepy.Saturn",
+      "visible": "sleepy.Saturn",
+      "native_length": 13,
+      "style": "plain"
+    },
+    {
+      "raw": "kinetic.Kiwi",
+      "visible": "kinetic.Kiwi",
+      "native_length": 12,
+      "style": "plain"
+    },
+    {
+      "raw": "dusty.Delta",
+      "visible": "dusty.Delta",
+      "native_length": 11,
+      "style": "plain"
+    },
+    {
+      "raw": "^cFF6655Varda17^r",
+      "visible": "Varda17",
+      "native_length": 7,
+      "style": "single"
+    },
+    {
+      "raw": "Kairo9",
+      "visible": "Kairo9",
+      "native_length": 6,
+      "style": "plain"
+    },
+    {
+      "raw": "Neris42",
+      "visible": "Neris42",
+      "native_length": 7,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^cFF6655Pavo23^I^r",
+      "visible": "Pavo23",
+      "native_length": 6,
+      "style": "italic"
+    },
+    {
+      "raw": "^cA5D66AElian7^r",
+      "visible": "Elian7",
+      "native_length": 6,
+      "style": "single"
+    },
+    {
+      "raw": "Juno31",
+      "visible": "Juno31",
+      "native_length": 6,
+      "style": "plain"
+    },
+    {
+      "raw": "^cFF6655Lumen88^r",
+      "visible": "Lumen88",
+      "native_length": 7,
+      "style": "single"
+    },
+    {
+      "raw": "^i^cA5D66ATavi6^I^r",
+      "visible": "Tavi6",
+      "native_length": 5,
+      "style": "italic"
+    },
+    {
+      "raw": "Runa13",
+      "visible": "Runa13",
+      "native_length": 6,
+      "style": "plain"
+    },
+    {
+      "raw": "^cFF6655Oris29^r",
+      "visible": "Oris29",
+      "native_length": 6,
+      "style": "single"
+    },
+    {
+      "raw": "^i^cCC88FFSable5^I^r",
+      "visible": "Sable5",
+      "native_length": 6,
+      "style": "italic"
+    },
+    {
+      "raw": "Kestrel73",
+      "visible": "Kestrel73",
+      "native_length": 9,
+      "style": "plain"
+    },
+    {
+      "raw": "Zora11",
+      "visible": "Zora11",
+      "native_length": 6,
+      "style": "plain"
+    },
+    {
+      "raw": "Nival64",
+      "visible": "Nival64",
+      "native_length": 7,
+      "style": "plain"
+    },
+    {
+      "raw": "^cCC88FFArlo27^r",
+      "visible": "Arlo27",
+      "native_length": 6,
+      "style": "single"
+    },
+    {
+      "raw": "^cFFCC66Edda19^r",
+      "visible": "Edda19",
+      "native_length": 6,
+      "style": "single"
+    },
+    {
+      "raw": "^b^cCC88FFTalon84^B^r",
+      "visible": "Talon84",
+      "native_length": 7,
+      "style": "bold"
+    },
+    {
+      "raw": "^b^cEEEEEEBriska8^B^r",
+      "visible": "Briska8",
+      "native_length": 7,
+      "style": "bold"
+    },
+    {
+      "raw": "Olin52",
+      "visible": "Olin52",
+      "native_length": 6,
+      "style": "plain"
+    },
+    {
+      "raw": "Liora16",
+      "visible": "Liora16",
+      "native_length": 7,
+      "style": "plain"
+    },
+    {
+      "raw": "Fenna37",
+      "visible": "Fenna37",
+      "native_length": 7,
+      "style": "plain"
+    },
+    {
+      "raw": "^i^c33DDCCMiro21^I^r",
+      "visible": "Miro21",
+      "native_length": 6,
+      "style": "italic"
+    },
+    {
+      "raw": "^i^c33DDCCVega95^I^r",
+      "visible": "Vega95",
+      "native_length": 6,
+      "style": "italic"
+    },
+    {
+      "raw": "Asta4",
+      "visible": "Asta4",
+      "native_length": 5,
+      "style": "plain"
+    },
+    {
+      "raw": "Rilo68",
+      "visible": "Rilo68",
+      "native_length": 6,
+      "style": "plain"
+    }
+  ]
+}

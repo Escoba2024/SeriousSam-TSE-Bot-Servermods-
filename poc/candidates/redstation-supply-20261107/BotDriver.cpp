@@ -1383,8 +1383,11 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         supply=BotSupplyTick(player,iLP,bs.bs_iTick,targetVisible?humanTargetDistance:1000,&navFollow);
         cecilUseControl=supply.useControl;cecilButtons=supply.buttons;
       }
+      // Keep a feasible visible fight unless an urgent item or traversal
+      // control owns movement. Distance alone must not turn an ordinary pickup
+      // into a reason to drop aim/fire. First ranged weapons remain urgent.
       if(ready&&(supply.active||supply.ownsMovement)&&player&&player->m_penWeapons&&
-         (supply.useControl||!targetVisible||(supply.itemGoal&&(supply.urgent||humanTargetDistance>10)))){
+         (supply.useControl||!targetVisible||(supply.itemGoal&&supply.urgent))){
         bs.bs_aHeading=player->m_aLastRotation(1)+(FLOAT)supply.yaw_delta;
         bs.bs_aPitch=player->m_aLastRotation(2)+(FLOAT)supply.pitch_delta;
         moveFactor=(FLOAT)supply.forward;humanStrafe=(FLOAT)supply.strafe;

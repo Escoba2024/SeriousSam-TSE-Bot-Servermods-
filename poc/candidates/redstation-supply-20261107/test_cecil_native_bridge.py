@@ -2043,6 +2043,98 @@ void importantPatrol48Fixture(bool entity){
  s.ClearGoal();s.goal=4;s.goalSince=7;s.anchor=0;s.scanTick=2;
  player.pl.pl_PositionVector=FLOAT3D();hopCheckpoint45Tick(1);
 }
+void itemTransit49Fixture(){
+ importantPatrol48Fixture(true);auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();
+ auto& item=addItem(991,g.points[4].x,g.points[4].z,botcore::CecilItemKind::Weapon);
+ item.item.weapon=4;item.pl.pl_PositionVector(2)=g.points[4].y;g.points[4].important_entity=991;
+ s.goalEntity=991;s.goalSince=0;s.goalDeadline=45;s.mappedWeaponGoal=true;
+}
+void itemTransit49(){
+ for(int rebase=0;rebase<2;++rebase){
+  itemTransit49Fixture();auto& s=BotSupplyState(0);if(!rebase)s.scanTick=99999;
+  int ended=-1;SCecilMove last;
+  for(int tick=2;tick<=350;++tick){
+   patrolAlternate46Pose(tick);last=hopCheckpoint45Tick(tick);
+   if(s.goalEntity!=991){ended=tick;break;}
+  }
+  check(ended>=202&&ended<=242&&s.ItemRejected(991,ended*.05)&&!s.patrolAlternate,
+   "extended item cycle ends within ten seconds of no new hop gain with or without checkpoint rebases");
+  check(last.forward==0&&last.strafe==0&&last.up==0&&s.goalSince==0&&!s.goalRelocationBudgeted,
+   "failed item transit emits neutral without extending original attempt or granting recovery movement");
+  if(ended<0)continue;
+  auto& alternate=addItem(992,0,-16,botcore::CecilItemKind::Weapon);alternate.item.weapon=7;
+  BotSupplyGraph().points[2].important_entity=992;BotSupplyGraph().points[0].links.push_back(2);
+  player.pl.pl_PositionVector=FLOAT3D();_botRayBudget=16;
+  BotSupplyTick(&player,0,ended+1,1000);
+  check(s.goalEntity==992&&!s.ItemRejected(992,ended*.05)&&s.goalSince==(ended+1)*.05,
+   "next normal typed item scan chooses a different eligible ranged weapon after bounded failed attempt");
+ }
+ itemTransit49Fixture();auto& s=BotSupplyState(0);s.scanTick=99999;
+ for(int tick=2;tick<=300;++tick){player.pl.pl_PositionVector=FLOAT3D(float((tick-2)*.02),0,0);hopCheckpoint45Tick(tick);}
+ check(s.goalEntity==991&&s.goalSince==0&&s.goalDeadline==45,
+  "new best hop distance gain retains a slow valid extended item approach without renewing its deadline");
+}
+void itemTransit49Guards(){
+ for(int guard=0;guard<17;++guard){
+  itemTransit49Fixture();auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();
+  player.pl.pl_PositionVector=FLOAT3D(5,0,0);bool accepted=true,current=true;
+  if(guard==0)g.points[1].flags=botcore::CECIL_JUMP;
+  if(guard==1)g.points[1].flags=botcore::CECIL_TELEPORT;
+  if(guard==2)g.points[1].flags=botcore::CECIL_UNREACHABLE;
+  if(guard==3)g.points[1].flags=botcore::CECIL_CROUCH;
+  if(guard==4)g.points[1].important_entity=991;
+  if(guard==5)g.points[1].lock_entity=777;
+  if(guard==6)s.blocked[1]=1;
+  if(guard==7)s.followEntity=777;
+  if(guard==8)s.interactionPoint=1;
+  if(guard==9)s.useReleaseTick=9999;
+  if(guard==10)accepted=false;
+  if(guard==11)current=false;
+  if(guard==12)player.m_pstState=PST_SWIM;
+  if(guard==13)s.mappedWeaponGoal=false;
+  if(guard==14){g.points[1].x=5;g.points[1].z=0;}
+  if(guard==15)player.health=0;
+  if(guard==16)player.pl.pl_PositionVector(1)=NAN;
+  bool failed=false;
+  for(int tick=2;tick<=300;++tick)failed|=BotCecilItemTransitFailed(&player,s,tick*.05,accepted,current);
+  check(!failed&&s.goalEntity==991&&!s.ItemRejected(991,15),
+   "passive item bound excludes special terminal locked liquid follow USE invalid and unowned contexts");
+ }
+ for(int change=0;change<11;++change){
+  itemTransit49Fixture();auto& s=BotSupplyState(0);player.pl.pl_PositionVector=FLOAT3D(5,0,0);
+  for(int tick=2;tick<180;++tick)BotCecilItemTransitFailed(&player,s,tick*.05,true,true);
+  CWorld other;bool accepted=true;
+  if(change==0)++s.generation;
+  if(change==1)++player.en_ulID;
+  if(change==2)++_botSupplyMapSerial;
+  if(change==3)player.worldOverride=&other;
+  if(change==4)++s.goalEntity;
+  if(change==5)s.goalSince=1;
+  if(change==6)s.goalDeadline=40;
+  if(change==7)player.en_vGravityDir=FLOAT3D(0,1,0);
+  if(change==8)accepted=false;
+  if(change==9)s.ClearGoal();
+  const double now=change==10?9.5:9;
+  BotCecilItemTransitFailed(&player,s,now,accepted,true);
+  bool failed=false;
+  for(int step=1;step<=40;++step)failed|=BotCecilItemTransitFailed(&player,s,now+step*.05,true,true);
+  check(!failed&&!s.ItemRejected(991,12),
+   "life entity map world goal attempt deadline gravity ownership reset and observation gaps erase item clock");
+ }
+ itemTransit49Fixture();auto& air=BotSupplyState(0);player.pl.pl_PositionVector=FLOAT3D(5,0,0);
+ for(int tick=2;tick<180;++tick)BotCecilItemTransitFailed(&player,air,tick*.05,true,true);
+ air.airMovementTime=9;double f=.3,st=0,up=0;
+ BotCecilSafeMotion(&player,air,9,f,st,up,0,1,true);
+ bool carried=false;
+ for(int tick=181;tick<=225;++tick)carried|=BotCecilItemTransitFailed(&player,air,tick*.05,true,true);
+ check(!carried&&!air.ItemRejected(991,12),"early air-safety return erases unrelated ground item progress history");
+ itemTransit49Fixture();auto& s=BotSupplyState(0);player.pl.pl_PositionVector=FLOAT3D(5,0,0);
+ for(int tick=2;tick<202;++tick)BotCecilItemTransitFailed(&player,s,tick*.05,true,true);
+ const int rays=rayCount,lookups=worldLookups;allocations=0;measuring=true;
+ const bool ended=BotCecilItemTransitFailed(&player,s,10.1,true,true);measuring=false;
+ check(ended&&rayCount==rays&&worldLookups==lookups&&allocations==0&&s.ItemRejected(991,40)&&!s.ItemRejected(991,40.1),
+  "bounded failure adds no geometry scans allocations or movement and uses exact existing thirty second backoff");
+}
 int importantPatrol48Enter(bool entity){
  importantPatrol48Fixture(entity);auto& s=BotSupplyState(0);
  for(int tick=2;tick<=300;++tick){patrolAlternate46Pose(tick);hopCheckpoint45Tick(tick);if(s.patrolAlternate)return tick;}
@@ -2153,6 +2245,7 @@ void liquidProjection48(){
 }
 
 int main(){
+ itemTransit49();itemTransit49Guards();
  liquidProjection48();
  importantTransit48();importantPatrol48();
  nativeContactRecovery();farHintTests();farHintGuards();

@@ -66,6 +66,13 @@ struct SSupplyState {
   int hopCheckpointGoal=-1,hopCheckpointSource=-1,hopCheckpointHop=-1;
   uint32_t hopCheckpointEntity=0,hopCheckpointGeneration=0;
   CWorld* hopCheckpointWorld=NULL;
+  // Passive extended-item attempt bound. Never authorizes movement or rebases NAV.
+  CWorld* itemTransitWorld=NULL;
+  long itemTransitMap=-1;
+  uint32_t itemTransitEntity=0,itemTransitGeneration=0,itemTransitItem=0;
+  int itemTransitGoal=-1,itemTransitSource=-1,itemTransitHop=-1;
+  double itemTransitLast=-1,itemTransitSince=-1,itemTransitBest=0,itemTransitGainBase=0;
+  double itemTransitAttempt=0,itemTransitDeadline=0,itemTransitGravity[3]={0,0,0};
   bool currentNavTravel=false; // Active edge, not arrival connector or intentional recovery.
   double currentNavTime=-1;
   int currentNavGoal=-1; // Fresh navigator context; an anchor/old hop alone is not a current point.
@@ -107,10 +114,12 @@ struct SSupplyState {
   void ClearReacquireScan(){std::fill(reacquireTried,reacquireTried+sizeof(reacquireTried),0);reacquireScanTime=-1;}
   void ClearAvoidance(){avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
   void ClearHopCheckpoint(){hopCheckpointLast=hopCheckpointSince=-1;hopCheckpointGoal=hopCheckpointSource=hopCheckpointHop=-1;hopCheckpointEntity=hopCheckpointGeneration=0;hopCheckpointWorld=NULL;}
+  void ClearItemTransit(){itemTransitWorld=NULL;itemTransitMap=-1;itemTransitEntity=itemTransitGeneration=itemTransitItem=0;
+    itemTransitGoal=itemTransitSource=itemTransitHop=-1;itemTransitLast=itemTransitSince=-1;}
   void ClearPatrolEpisode(){patrolWorld=NULL;patrolMap=-1;patrolEntity=patrolGeneration=0;patrolGoal=patrolSource=patrolHop=patrolHint=-1;
     patrolLast=patrolSince=patrolProposalTime=-1;patrolStrikes=0;patrolAlternate=false;patrolLocks=0;
     std::fill(patrolTried,patrolTried+sizeof(patrolTried),0);}
-  void ClearGoal(){acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
+  void ClearGoal(){acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearItemTransit();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ClearAirMovement(){airMovementTime=-1;airMovementEntity=airMovementGeneration=0;airMovementNode=-1;}
   void ClearGroundSweep(){groundEscapeTried=groundEscapeCursor=0;groundSweepReady=false;}
@@ -1244,12 +1253,66 @@ static bool BotCecilClearMotion(CPlayer* player,double forward,double strafe,dou
   if(ray.cr_penHit){BotCecilRejectedProbe(probe,SCecilProbe::reasonWallHit,player,&ray,&from,&to);return false;}
   return !requireFloor||BotCecilFloor(player,forward,strafe,up,yaw,probe,allowCurrentContact);
 }
+// Extended item attempts must not spend their full deadline circling one edge.
+// This passive bound only rejects the item; the existing selector chooses the
+// next typed/needed/allowed target and all subsequent movement keeps its guards.
+static bool BotCecilItemTransitFailed(CPlayer* player,SSupplyState& s,double now,bool accepted,bool currentPoint){
+  const auto& graph=BotSupplyGraph();
+  int source=s.navigator.SourceSlot(s.goal),hop=s.hop;
+  // A checkpoint only reapproaches the same original source. It must not give
+  // an unsuccessful item a fresh no-progress clock every five seconds.
+  const bool sourceApproach=source<0&&hop==s.itemTransitSource&&s.anchor==s.itemTransitSource;
+  if(sourceApproach){source=s.itemTransitSource;hop=s.itemTransitHop;}
+  bool eligible=accepted&&currentPoint&&s.playable&&s.goalEntity&&
+    (s.mappedWeaponGoal||s.goalRelocationBudgeted)&&!s.followEntity&&s.interactionPoint<0&&
+    (s.useReleaseTick<0||now>s.useReleaseTick*_pTimer->TickQuantum)&&
+    player->GetWorld()&&player->GetHealth()>0&&player->m_penWeapons&&!(player->GetFlags()&ENF_DELETED)&&
+    !BotCecilLiquid(player)&&(player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH||player->m_pstState==PST_FALL)&&
+    std::isfinite(now)&&std::isfinite(s.goalSince)&&std::isfinite(s.goalDeadline)&&now>=s.goalSince&&now<s.goalDeadline&&
+    source>=0&&hop>=0&&source!=hop&&(size_t)source<graph.points.size()&&(size_t)hop<graph.points.size()&&
+    s.blocked.size()==graph.points.size()&&!s.blocked[source]&&!s.blocked[hop];
+  double distance2=0,vertical=0,gravity2=0;
+  if(eligible){
+    const auto& a=graph.points[source];const auto& b=graph.points[hop];
+    eligible=!a.flags&&!b.flags&&a.important_entity<0&&b.important_entity<0&&a.lock_entity<0&&b.lock_entity<0&&
+      std::find(a.links.begin(),a.links.end(),hop)!=a.links.end();
+    for(int i=1;i<=3;++i){
+      const double d=(i==1?b.x:(i==2?b.y:b.z))-player->GetPlacement().pl_PositionVector(i),g=player->en_vGravityDir(i);
+      eligible=eligible&&std::isfinite(d)&&std::isfinite(g)&&std::isfinite(player->en_vCurrentTranslationAbsolute(i));
+      distance2+=d*d;vertical+=d*g;gravity2+=g*g;
+    }
+  }
+  // Intentional vertical waits and special/terminal item actions keep their
+  // existing policy. This watchdog only ends an ordinary intermediate attempt.
+  eligible=eligible&&std::isfinite(distance2)&&std::isfinite(vertical)&&std::fabs(gravity2-1)<1e-3&&
+    !(distance2-vertical*vertical<1&&std::fabs(vertical)>4);
+  if(!eligible){s.ClearItemTransit();return false;}
+  const double distance=std::sqrt(distance2);const long map=InterlockedCompareExchange(&_botSupplyMapSerial,0,0);
+  bool same=s.itemTransitLast>=0&&now>=s.itemTransitLast&&now-s.itemTransitLast<=.25&&
+    s.itemTransitWorld==player->GetWorld()&&s.itemTransitMap==map&&s.itemTransitEntity==player->en_ulID&&
+    s.itemTransitGeneration==s.generation&&s.itemTransitItem==s.goalEntity&&s.itemTransitGoal==s.goal&&
+    s.itemTransitSource==source&&s.itemTransitHop==hop&&s.itemTransitAttempt==s.goalSince&&s.itemTransitDeadline==s.goalDeadline;
+  for(int i=0;i<3;++i)same=same&&s.itemTransitGravity[i]==player->en_vGravityDir(i+1);
+  if(!same){
+    s.itemTransitWorld=player->GetWorld();s.itemTransitMap=map;s.itemTransitEntity=player->en_ulID;
+    s.itemTransitGeneration=s.generation;s.itemTransitItem=s.goalEntity;s.itemTransitGoal=s.goal;
+    s.itemTransitSource=source;s.itemTransitHop=hop;s.itemTransitAttempt=s.goalSince;s.itemTransitDeadline=s.goalDeadline;
+    s.itemTransitSince=now;s.itemTransitBest=s.itemTransitGainBase=distance;
+    for(int i=0;i<3;++i)s.itemTransitGravity[i]=player->en_vGravityDir(i+1);
+  }
+  s.itemTransitLast=now;s.itemTransitBest=std::fmin(s.itemTransitBest,distance);
+  if(s.itemTransitGainBase-s.itemTransitBest>=.75){s.itemTransitSince=now;s.itemTransitGainBase=s.itemTransitBest;}
+  if(now-s.itemTransitSince+1e-9<10)return false;
+  BotLog("[CecilItemTransitEnd] entity=%lu generation=%lu time=%.3f goal_entity=%lu goal=%d source=%d hop=%d since=%.3f best_distance=%.6f reason=no_hop_progress\n",
+    (unsigned long)player->en_ulID,(unsigned long)s.generation,now,(unsigned long)s.goalEntity,s.goal,source,hop,s.itemTransitSince,s.itemTransitBest);
+  s.RejectItem(s.goalEntity,now);s.ClearGoal();s.ClearEscape();s.searchAfter=now;s.scanTick=0;
+  return true;
+}
 // Original BotMovement.cpp129..224 reacquires its nearest point every five
-// seconds. Passive accepted ground observation measures best-distance gain
-// across reference flicker; it never authorizes a reset. Current static ground
-// and fresh nearest LOS remain required. World wiggle is not hop progress.
-// This adapter checkpoint adds no cast, arrival, relocation or item-attempt time.
+// seconds. Passive observation never authorizes movement: the checkpoint still
+// needs current static ground and fresh nearest LOS. World wiggle is not gain.
 static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,bool accepted,bool currentPoint){
+  if(BotCecilItemTransitFailed(player,s,now,accepted,currentPoint))return true;
   BotCecilPatrolObserve(player,s,now,accepted);
   const auto& graph=BotSupplyGraph();const int source=s.navigator.SourceSlot(s.goal),hop=s.hop;
   bool observeEligible=accepted&&currentPoint&&s.playable&&source>=0&&hop>=0&&source!=hop&&
@@ -1328,9 +1391,9 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
      !std::isfinite(forward)||!std::isfinite(strafe)||!std::isfinite(up)||!std::isfinite(finalBodyYaw)||
      std::fabs(forward)>1.000001||std::fabs(strafe)>1.000001||std::fabs(up)>1.000001){
     BotCecilRejectedProbe(&state.probe,SCecilProbe::reasonInvalid,player);
-    forward=strafe=up=0;state.ClearEscape();state.ClearAirMovement();state.ClearGroundProgress();state.ClearHopCheckpoint();state.ClearPatrolEpisode();state.acquiredAnchorTime=-1;state.acquiredAnchor=-1;return 0;
+    forward=strafe=up=0;state.ClearEscape();state.ClearAirMovement();state.ClearGroundProgress();state.ClearHopCheckpoint();state.ClearItemTransit();state.ClearPatrolEpisode();state.acquiredAnchorTime=-1;state.acquiredAnchor=-1;return 0;
   }
-  if(!useReacquire)state.ClearPatrolEpisode();
+  if(!useReacquire){state.ClearPatrolEpisode();state.ClearItemTransit();}
   if(state.patrolAlternate){
     BotCecilPatrolObserve(player,state,now,true);
     if(!state.patrolAlternate){forward=strafe=up=0;return 0;}
@@ -1369,7 +1432,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
       current=std::isfinite(point.radius)&&point.radius>0&&std::isfinite(d)&&d<=1024&&
         std::fabs(BotCecilHeight(player,delta))<=8;
     }
-    state.ClearGroundProgress();state.ClearEscape();state.ClearHopCheckpoint(); // Accepted air owns no legacy escape direction.
+    state.ClearGroundProgress();state.ClearEscape();state.ClearHopCheckpoint();state.ClearItemTransit(); // Accepted air owns no legacy escape direction.
     if(!current){forward=strafe=up=0;state.ClearAirMovement();return 0;}
     double f=std::fmax(-.3,std::fmin(.3,(double)forward)),st=BotCecilSettings().bStrafe?
       std::fmax(-std::fmin(.3,maxStrafe),std::fmin(std::fmin(.3,maxStrafe),(double)strafe)):0;

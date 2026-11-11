@@ -81,6 +81,8 @@ def main():
     flag=re.search(rb"^#define\s+PLF_ISZOOMING\s+\(1UL\s*<<\s*(\d+)\)",sdk,re.M)
     if not flag: raise ValueError("SDK zoom flag missing")
     bodies="\n".join(function(source,n) for n in ("BotCecilFinalBodyYaw","BotCecilActionFinite"))
+    native_source=(a.driver.parent/'BotSupplyNative.h').read_text()
+    bodies+="\n"+function(native_source,"BotCecilUrgentItem")
     if "static void BotCecilNeutralAction(" in source:
         bodies+="\n"+function(source,"BotCecilNeutralAction")
     guards=[]
@@ -117,9 +119,9 @@ def main():
     # must suppress no-target wandering while preserving visible combat policy.
     choice=re.search(r'if\((ready&&[\s\S]*?)\)\{\s*bs\.bs_aHeading=player->m_aLastRotation',source)
     if not choice:raise ValueError("native supply arbitration missing")
-    native_move=re.search(r'struct SCecilMove\s*\{[\s\S]*?\n\};',(a.driver.parent/'BotSupplyNative.h').read_text())
+    native_move=re.search(r'struct SCecilMove\s*\{[\s\S]*?\n\};',native_source)
     if not native_move:raise ValueError("native move structure missing")
-    ownership=native_move[0]+"\nstatic bool selected(bool ready,const SCecilMove& supply,CPlayer* player,bool targetVisible,double humanTargetDistance){return "+choice[1]+";}\n"+r'''
+    ownership=native_move[0]+"\nstatic bool selected(bool ready,const SCecilMove& supply,CPlayer* player,bool targetVisible,double humanTargetDistance){(void)humanTargetDistance;return "+choice[1]+";}\n"+r'''
 static void ownership_paths(){
  CPlayer player;CPlayerWeapons weapon;player.m_penWeapons=&weapon;SCecilMove s;
  s.ownsMovement=true;
@@ -130,10 +132,43 @@ static void ownership_paths(){
  assert(!selected(true,s,nullptr,false,1000));
  s.itemGoal=true;s.urgent=true;assert(selected(true,s,&player,true,5));
  s.urgent=false;assert(!selected(true,s,&player,true,5));
- assert(selected(true,s,&player,true,50));
+ // A reachable but nonurgent pickup must not cancel a valid ranged fight.
+ assert(!selected(true,s,&player,true,50));
+ // Urgent health/ammo/first ranged weapon still owns the route after respawn.
+ s.urgent=true;assert(selected(true,s,&player,true,50));
+ s.urgent=false;s.useControl=true;assert(selected(true,s,&player,true,50));
  s=SCecilMove();assert(!selected(true,s,&player,false,1000));
  s.active=true;assert(selected(true,s,&player,false,1000));
  player.m_penWeapons=nullptr;assert(!selected(true,s,&player,false,1000));
+}
+static void acquisition_combat_paths(){
+ using namespace botcore;
+ // Compose actual policy + actual typed urgency + actual Driver ownership.
+ // Route reachability itself remains the native-bridge suite's responsibility.
+ for(int tier=1;tier<=3;++tier)for(double distance:{10.,30.}){
+  BotProfile profile;assert(BuildRosterProfile(0,0,123,&profile,tier));
+  HumanBotPolicy policy;auto settings=CecilPreset(2);policy.Configure(&profile,&settings);
+  WorldView world;world.cecil=true;world.alive=true;world.health=100;
+  world.current_weapon=3;world.usable_weapons=CecilWeaponMask(1)|CecilWeaponMask(3);
+  SenseInput enemy;enemy.index=1;enemy.entity_id=1;enemy.alive=true;enemy.health=100;enemy.z=-distance;
+  bool los=true;BotCommand command;
+  for(int tick=0;tick<10;++tick){world.tick=tick;policy.BeginTick(world);command=policy.Step(world,&enemy,&los,1,.05);}
+  assert(command.target_visible==(distance<=18));
+  CPlayer player;CPlayerWeapons weapons;player.m_penWeapons=&weapons;
+  CecilItem item;item.kind=CecilItemKind::Weapon;item.weapon=6;
+  CecilItemInput input;input.enemy_distance=distance;input.owned=input.usable=world.usable_weapons;
+  SCecilMove supply;supply.active=true;supply.ownsMovement=true;supply.itemGoal=true;
+  supply.urgent=BotCecilUrgentItem(item,input);assert(supply.urgent);
+  assert(selected(true,supply,&player,command.target_visible,distance));
+  // Normal pickup: an owned, usable gun enables ranged combat, so an ordinary
+  // subsequent pickup no longer discards its aim/fire. No entity state writes.
+  input.owned=input.usable=world.usable_weapons|CecilWeaponMask(6);
+  world.usable_weapons=input.usable;world.current_weapon=6;
+  for(int tick=10;tick<20;++tick){world.tick=tick;policy.BeginTick(world);command=policy.Step(world,&enemy,&los,1,.05);}
+  assert(command.target_visible&&command.weapon==6);
+  supply.urgent=BotCecilUrgentItem(item,input);assert(!supply.urgent);
+  assert(!selected(true,supply,&player,command.target_visible,distance));
+ }
 }
 '''
     final_call=re.search(r'cecilFloorStatus\s*=\s*BotCecilSafeMotion\([^;]+;',source)
@@ -150,10 +185,10 @@ static void safety_owner_paths(){
  }
 }
 '''
-    test=TEST.replace("int main(){","int main(){rejection_paths();ownership_paths();safety_owner_paths();")
+    test=TEST.replace("int main(){","int main(){rejection_paths();ownership_paths();acquisition_combat_paths();safety_owner_paths();")
     with tempfile.TemporaryDirectory(prefix="cecil-action-contract-") as tmp:
         cpp=Path(tmp)/"test.cpp";exe=Path(tmp)/"test"
-        cpp.write_text('#include <initializer_list>\n#include "cecil_rules.h"\n#define SDK_ZOOM '+str(1<<int(flag[1]))+"\n"+STUB+bodies+rejection+ownership+safety+test)
+        cpp.write_text('#include <initializer_list>\n#include "bot_human.h"\n#define SDK_ZOOM '+str(1<<int(flag[1]))+"\n"+STUB+bodies+rejection+ownership+safety+test)
         subprocess.run(["g++","-std=c++17","-Wall","-Wextra","-Werror","-fsanitize=address,undefined","-I",str(a.driver.parent),str(cpp),"-o",str(exe)],check=True)
         subprocess.run([str(exe)],check=True)
     print("PASS actual Driver action guards; SDK SHA256",hashlib.sha256(sdk).hexdigest())

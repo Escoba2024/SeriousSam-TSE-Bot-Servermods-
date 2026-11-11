@@ -1,5 +1,5 @@
 {
-  "evidence_scope": "Historical native original-Engine call, not new20261111 runtime or rendering acceptance",
+  "evidence_scope": "Historical decoder reference plus new20261111 all250 original-Engine native parser run; visible rendering still open",
   "source_commit": "710b059d8441e4b949d5251d0b25d8d25eb47342",
   "source_report": "docs/reports/2026-10-25-bot-ai2-results.json",
   "source_report_sha256": "7186777a072fe79141384ad730b2a3b198683ed938ddf7853d040c1fc36a7c1d",
@@ -56,5 +56,16 @@
       "native_visible": "",
       "native_length": 0
     }
-  ]
+  ],
+  "new20261111": {
+    "source": "tools/probe_retail_namecodes.cpp",
+    "source_sha256": "f1d7e8f7966fb3c074f65ea500f903bf5f82db17d00b9f52de061d8cceadcc38",
+    "probe_exe_sha256": "3ec8798e75ce8dd456ba5b3c6208f1b2f90da17a84e47d9abb223ce1d0f7081b",
+    "results": "docs/reports/milestone-a-20261111/native-decoder-250.json",
+    "count": 250,
+    "exitcode": 0,
+    "all_visible_and_length_exact": true,
+    "rendering": "OPEN",
+    "query": "OPEN"
+  }
 }

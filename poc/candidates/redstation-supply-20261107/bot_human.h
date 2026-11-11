@@ -120,6 +120,7 @@ class HumanBotPolicy {
     perception_.Reset();
     aim_.Reset();
     weapons_.Reset();
+    ResetArenaTrigger();
     target_ = -1;
     target_since_tick_ = 0;
     cecil_target_after_ = 0;
@@ -155,6 +156,7 @@ class HumanBotPolicy {
       perception_.Reset();
       aim_.Reset();
       weapons_.Reset();
+      ResetArenaTrigger();
       target_ = -1;
     }
     was_alive_ = w.alive;
@@ -204,7 +206,7 @@ class HumanBotPolicy {
                   double dt) {
     BotCommand cmd;
     cmd.weapon = w.current_weapon > 0 ? w.current_weapon : 1;
-    if(!w.pose.Valid())return cmd;
+    if(!w.pose.Valid() || !std::isfinite(dt)) { ResetArenaTrigger();return cmd; }
     if (!(dt > 0.0)) dt = 1.0 / kProfileTickHz;
 
     if (sensed != nullptr) {
@@ -220,6 +222,7 @@ class HumanBotPolicy {
     }
 
     if (!w.alive || !w.deathmatch) {
+      ResetArenaTrigger();
       aim_.Step(w.pose, AimPoint(), dt);
       target_ = -1;
       cmd.target = -1;
@@ -229,6 +232,7 @@ class HumanBotPolicy {
     const bool cecil = w.cecil && cecil_enabled_;
     const int chosen = cecil ? ChooseCecilTarget(w) : ChooseTarget(w);
     if (chosen != target_) {
+      ResetArenaTrigger();
       if (target_ >= 0 || chosen >= 0) ++target_switches_;
       target_ = chosen;
       target_since_tick_ = w.tick;
@@ -236,6 +240,7 @@ class HumanBotPolicy {
     cmd.target = target_;
 
     if (target_ < 0) {
+      ResetArenaTrigger();
       // Nothing to fight: scan at the profile's search rate, stand still.
       aim_.Step(w.pose, AimPoint(), dt);
       cmd.yaw_delta_deg = profile_.skill.search_rate_deg_s * dt;
@@ -248,6 +253,7 @@ class HumanBotPolicy {
 
     const TrackState* tr = perception_.Track(target_);
     if (tr == nullptr) {
+      ResetArenaTrigger();
       target_ = -1;
       cmd.target = -1;
       return cmd;
@@ -294,6 +300,25 @@ class HumanBotPolicy {
     cmd.pitch_delta_deg = aim.pitch_delta_deg;
     cmd.aim_error_deg = aim.residual_error_deg;
     cmd.fire = aim.fire_allowed && visible && (!cecil || cecil_.bShooting);
+    if (profile_.arena) {
+      // Judge the action's final bounded rotation, not the pre-turn perceived
+      // error. Otherwise a steadily moving target can starve the trigger even
+      // while the crosshair tracks inside tolerance. Fresh LOS and consecutive
+      // aligned samples are required; a weapon switch restarts settling.
+      const bool aligned=visible && (!cecil || cecil_.bShooting) &&
+        w.current_weapon==cmd.weapon && ArenaWeaponRangeSafe(cmd.weapon,distance) &&
+        std::isfinite(aim_point.x) && std::isfinite(aim_point.y) && std::isfinite(aim_point.z) &&
+        std::isfinite(aim.residual_error_deg) && aim.residual_error_deg<=profile_.skill.fire_tol_deg;
+      cmd.fire=false;
+      if (!aligned) ResetArenaTrigger();
+      else {
+        if (arena_weapon_!=cmd.weapon || arena_tick_+1!=w.tick || arena_settled_s_<0)
+          arena_settled_s_=0;
+        else arena_settled_s_+=dt;
+        arena_weapon_=cmd.weapon;arena_tick_=w.tick;
+        cmd.fire=arena_settled_s_+1e-9>=profile_.skill.settle_s;
+      }
+    }
     if (cecil && !profile_.arena) {
       const auto local=w.pose.frame.ToLocal(aim_point.x-w.pose.x,aim_point.y-w.pose.y,aim_point.z-w.pose.z);
       const double ax=local.x,ay=local.y,az=local.z;
@@ -343,6 +368,10 @@ class HumanBotPolicy {
   }
 
  private:
+  void ResetArenaTrigger() {
+    arena_settled_s_=-1;arena_weapon_=0;arena_tick_=-1;
+  }
+
   double SortKey(const SenseInput& s) const {
     const double tracked_bonus = (perception_.Track(s.index) != nullptr) ? -1000.0 : 0.0;
     const double dx = s.x - self_x_;
@@ -496,6 +525,9 @@ class HumanBotPolicy {
   CecilSettings cecil_ = CecilPreset(2);
   bool cecil_enabled_ = false;
   double cecil_target_after_ = 0;
+  double arena_settled_s_ = -1;
+  int arena_weapon_ = 0;
+  int arena_tick_ = -1;
   Lcg prediction_rng_{1};
   Perception perception_;
   AimController aim_;
