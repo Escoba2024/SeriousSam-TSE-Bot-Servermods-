@@ -32,6 +32,6 @@ Default disabled; type 1/3/4/unknown retained; demos and clients do not mutate; 
 
 ### Task 3: Dev rollout if verification succeeds
 
-- [ ] Fresh all-six inventory and exclusive fleet/runtime locks; no external Dev player removal.
-- [ ] Preserve original server DLL/config in a new private rollback delta; stop only Dev normally; install tested server candidate and explicit toggle.
-- [ ] Verify eight original Cecil048 profiles/names, filtered census and limited live observation; production identity/pins unchanged. Save evidence and report exact limits.
+- [x] Fresh all-six inventory and exclusive fleet/runtime locks; no external Dev player removal.
+- [x] Preserve original server DLL/config in a new private rollback delta; stop only Dev normally; install tested server candidate and explicit toggle.
+- [x] Verify eight original Cecil048 profiles/names, filtered census and limited live observation; production identity/pins unchanged. Save evidence and report exact limits.

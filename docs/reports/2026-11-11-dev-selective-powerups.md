@@ -1,5 +1,7 @@
 # Selektive Power-up-Entfernung: isolierter Dev-Test vom 11.11.2026
 
+**Folgestand:** Die geprüfte Variante wurde nach zusätzlicher ausdrücklicher Neustartfreigabe inzwischen ausschließlich auf Dev installiert. [Live-Rollout vom 11.11.2026](../decisions/2026-11-11-development-powerups-live.md). Die folgenden isolierten Testergebnisse und Einschränkungen bleiben unverändert.
+
 ## Auftrag und Abgrenzung
 
 Explizit genehmigte Dev-Ausnahme: Serious Damage und Unsichtbarkeit vorübergehend serverseitig entfernen, Cecil048 und individuelle Farbnamen erhalten. Die fünf Produktionsserver und der gesicherte Rollout sind geschützt. Dieser Bericht qualifiziert keine neue Bot-DLL und keinen allgemeinen Produktionsrelease.
@@ -41,7 +43,7 @@ Geladene GameMP-Inodes und Datei-Hashes wurden pro eigenem Prozess geprüft. Die
 
 Native Ergebnisdatei-SHA256: `b7c661244fdf43e5474aed698f079acfc20bb4364cd25f65e55cd95af27a3e25`. Rohlogs, Bildschirmaufnahme, Profile, Binärdateien und Spieldaten bleiben privat. Ergebnis: `PASS_LIMITED_WINE_SERVERMOD_RETAIL_AND_CECIL048`, `qualified=false`. Keine native Windows-, WAN-, Stunden-, Rotations- oder 24/7-Abnahme. Die ursprünglichen Cecil048-Qualifikationspflichten bleiben unverändert.
 
-## Öffentlicher Stand und Sicherung
+## Historischer Stand vor der anschließenden Rollout-Freigabe
 
 Am 11.11.2026 um 18:18 UTC waren alle sechs öffentlichen Prozessidentitäten und geprüften Binär-/Konfigurationspins gegenüber dem Beginn unverändert. Dev enthält acht eigene Bots plus einen zusätzlichen menschlichen Spieler; deshalb wurde vor jeglichem Live-Prozessstopp angehalten. **Die beiden Power-ups bleiben live aktiv.** Es gibt keinen unbeaufsichtigten Rollout-Auftrag. Der vorbereitete Wechsel prüft erneut Belegung und exklusive Flotten-/Runtime-Locks.
 
