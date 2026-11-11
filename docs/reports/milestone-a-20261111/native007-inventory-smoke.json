@@ -1,0 +1,46 @@
+{
+  "scope": "LIMITED_ORIGINAL_RETAIL_WINE_READONLY_INVENTORY_SMOKE_NOT_GAMEPLAY_ACCEPTANCE",
+  "qualified": false,
+  "candidate_dll_sha256": "ce15842a36fee25d56fb1ffcb0f0a45878c254d9b0c5b95b129ce7708abf4b7f",
+  "source_commit": "297c1bce5182741ff3551448713fe77f398fdc52",
+  "observed_seconds": 15.596832824870944,
+  "inventory": {
+    "enabled": true,
+    "tool_sha256": "0e7e071f428617c6001e518c9b378bb73158549af590f3a8af001d489a0f2c6a",
+    "valid_samples": 426,
+    "discarded_changed": 9,
+    "sample_seconds_total": 1.6374584881123155,
+    "sample_seconds_max": 0.0065395040437579155,
+    "setup_seconds": 0.007308942964300513,
+    "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+  },
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "all_expected_roles_normally_closed": true,
+  "errors": [],
+  "result_sha256": "fcb7fbab5c0547a42b1bf6aa76cf3fe726df2ddb13393e72762257f26349c75e",
+  "limits": [
+    "Two equal reads are not atomic. Changed samples discarded.",
+    "Samples for role groups occur sequentially, not at one common instant.",
+    "Normal observer input blocks sampling briefly every twelve seconds.",
+    "Timing measures reader wall time; no uninstrumented paired overhead control.",
+    "Raw weapon fields alone do not establish readiness or full ABI equivalence.",
+    "Not a first-state damage, long stability or full acquisition gate."
+  ]
+}

@@ -137,6 +137,11 @@ static void ownership_paths(){
  // Urgent health/ammo/first ranged weapon still owns the route after respawn.
  s.urgent=true;assert(selected(true,s,&player,true,50));
  s.urgent=false;s.useControl=true;assert(selected(true,s,&player,true,50));
+ s=SCecilMove();s.active=s.ownsMovement=true;s.flightGoal=true;
+ assert(selected(true,s,&player,true,5)&&selected(true,s,&player,true,50));
+ assert(!s.itemGoal&&!s.urgent&&!s.useControl);
+ assert(!selected(false,s,&player,true,5));
+ s.active=s.ownsMovement=false;assert(!selected(true,s,&player,true,5));
  s=SCecilMove();assert(!selected(true,s,&player,false,1000));
  s.active=true;assert(selected(true,s,&player,false,1000));
  player.m_penWeapons=nullptr;assert(!selected(true,s,&player,false,1000));

@@ -15,6 +15,8 @@ import struct
 
 
 ENGINE_SHA256 = "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f"
+ENGINE_PREFERRED_BASE = 0x600C0000
+ENGINE_IMAGE_SIZE = 0x22E000
 TOGGLE_RVA = 0xDAB40
 TOGGLE_BYTES = bytes.fromhex("8b412033c98b90ac00000085d20f94c18988ac000000c3")
 IS_PAUSED_RVA = 0xDAB60
@@ -40,6 +42,29 @@ def _file_identity(stat):
 def _identity(proc):
     # Linux stat field22, after the possibly space-containing process name.
     return int((proc / "stat").read_text().rsplit(") ", 1)[1].split()[19])
+
+
+def _check_instructions(read, base):
+    # Original PE32 .reloc contains IMAGE_REL_BASED_HIGHLOW at RVA DAB65:
+    # the A1 absolute operand in IsPaused, and no relocation in the other
+    # three checked ranges. Preserve exact bytes, adjusting only that DWORD.
+    _require(type(base) is int and base >= 0x10000 and base % 0x1000 == 0
+             and base + ENGINE_IMAGE_SIZE <= 0x100000000,
+             "invalid Engine base: " + repr(base))
+    paused = bytearray(IS_PAUSED_BYTES)
+    operand = struct.unpack_from("<I", paused, 5)[0]
+    struct.pack_into("<I", paused, 5, operand + base - ENGINE_PREFERRED_BASE)
+    for name, rva, expected in (
+        ("TogglePause", TOGGLE_RVA, TOGGLE_BYTES),
+        ("IsPaused", IS_PAUSED_RVA, bytes(paused)),
+        ("Rnd", RND_RVA, RND_BYTES),
+        ("ResetRND", RESET_RND_RVA, RESET_RND_BYTES),
+    ):
+        observed = read(base + rva, len(expected))
+        _require(observed == expected,
+                 f"{name} instructions differ: base=0x{base:08x} "
+                 f"rva=0x{rva:08x} expected={expected.hex()} "
+                 f"observed={observed.hex()}")
 
 
 def read_pause(pid, root):
@@ -75,14 +100,7 @@ def read_pause(pid, root):
         def word(address):
             return struct.unpack("<I", read(address, 4))[0]
 
-        _require(read(base + TOGGLE_RVA, len(TOGGLE_BYTES)) == TOGGLE_BYTES,
-                 "TogglePause instructions differ")
-        _require(read(base + IS_PAUSED_RVA, len(IS_PAUSED_BYTES)) == IS_PAUSED_BYTES,
-                 "IsPaused instructions differ")
-        _require(read(base + RND_RVA, len(RND_BYTES)) == RND_BYTES,
-                 "Rnd instructions differ")
-        _require(read(base + RESET_RND_RVA, len(RESET_RND_BYTES)) == RESET_RND_BYTES,
-                 "ResetRND instructions differ")
+        _check_instructions(read, base)
         network = word(base + NETWORK_POINTER_RVA)
         _require(network > 0x10000, "network not initialized")
         session = word(network + 0x20)

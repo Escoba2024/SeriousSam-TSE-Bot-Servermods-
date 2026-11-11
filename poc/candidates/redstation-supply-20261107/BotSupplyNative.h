@@ -143,6 +143,7 @@ struct SSupplyState {
 };
 struct SCecilMove {
   bool active=false,ownsMovement=false,itemGoal=false,urgent=false,followGoal=false,useControl=false;
+  bool flightGoal=false; // Only a freshly validated, bounded orphaned physical edge.
   botcore::CecilItemKind itemKind=botcore::CecilItemKind::Weapon;
   double forward=0,strafe=0,up=0,yaw_delta=0,pitch_delta=0;uint32_t flags=0,buttons=0;
 };
@@ -301,7 +302,10 @@ static BOOL BotSupplyClear(CPlayer *player,const FLOAT3D &from,const FLOAT3D &to
   ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;
   if(!BotCecilPhysicalCast(ray,player->GetWorld()))return FALSE;
   if(validProbe)*validProbe=true;
-  const bool clear=ray.cr_penHit==NULL||ray.cr_penHit==item;
+  // Retail107's segment constructor permits length+0.1 native test distance.
+  // A floor beyond this requested connector endpoint is not an obstruction of
+  // the connector. Preserve every finite in-segment/endpoint hit and the mask.
+  const bool clear=ray.cr_penHit==NULL||ray.cr_penHit==item||ray.cr_fHitDistance>length;
   if(detail){
     detail->valid=true;detail->clear=clear;detail->length=length;detail->distance=ray.cr_fHitDistance;detail->point=ray.cr_vHit;
     if(ray.cr_penHit){detail->hit=(unsigned long)ray.cr_penHit->en_ulID;detail->render=(int)ray.cr_penHit->GetRenderType();detail->physics=(unsigned long)ray.cr_penHit->GetPhysicsFlags();}
@@ -1230,7 +1234,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     s.goalKind=item.kind;urgent=BotCecilUrgentItem(item,input);
   }
   result.followGoal=s.followEntity!=0;result.itemGoal=s.goalEntity!=0;result.urgent=result.itemGoal&&urgent;result.itemKind=s.goalKind;
-  if(enemyDistance<8&&!(result.urgent&&result.itemKind==botcore::CecilItemKind::Health)){
+  if(!s.flightFinishing&&enemyDistance<8&&!(result.urgent&&result.itemKind==botcore::CecilItemKind::Health)){
     // Keep the bounded attempt, but let visible-target combat own this action.
     // Inactive owned urgent-weapon output would otherwise suppress Human fire.
     result.ownsMovement=false;return result;
@@ -1309,6 +1313,9 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
       s.scanTick=0;s.navigator.Reset();
     }
   }
+  // Set only after fresh context, refreshed locks and unchanged committed edge
+  // passed this tick. This is traversal ownership, never a synthetic item need.
+  result.flightGoal=s.flightFinishing;
   result.active=move.active;result.forward=move.forward*BotCecilSettings().fSpeedMul;
   result.strafe=BotCecilSettings().bStrafe?move.strafe*BotCecilSettings().fSpeedMul:0;
   result.up=move.up;result.yaw_delta=move.yaw_delta;result.pitch_delta=move.pitch_delta;result.flags=move.flags;

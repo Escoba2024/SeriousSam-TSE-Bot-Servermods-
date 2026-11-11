@@ -1,0 +1,1790 @@
+{
+  "schema": 1,
+  "scope": "one completed Tier1 two-leg Red Station crossover; not full A or release qualification",
+  "ranged_inventory_mask": "0x3df8",
+  "candidate_sha256": "35c950832d8ce4c48e0363ab33ba1a517d4a87e95bb320ca5aa686c59f2bfc35",
+  "methods": {
+    "life": "CecilSpawn to CecilDeath or last logged window tick; generation and local slot; all lives retained",
+    "acquisition": "first observed owned & 0x3df8 != 0; inventory evidence, not measured ammo readiness",
+    "censoring": "no acquisition before observation ends; age is lower bound",
+    "starts": "same physical role/local slot; spawn log XYZ and first native positive HP plus positive spawn clock; initial owned from first CecilState",
+    "damage": "same server entity pointer and same positive spawned_tick, positive prior HP; sum observed decreases with negative HP clipped to zero; non-atomic sparse snapshots, no armor or attacker attribution, not complete damage accounting",
+    "frags": "last valid query minus first valid query by fixed private roster; query window shorter than full runtime",
+    "kill_messages": "original server text; no timestamps inferred; aggregate only",
+    "flight": "exact source/hop/deadline equality on begin/end; following sampled no-reacquire checks are not continuous trajectory proof"
+  },
+  "physical_start_comparison": [
+    {
+      "physical_role_local": "botA:0",
+      "server_slot": 0,
+      "swap0_policy": "old048",
+      "swap1_policy": "new005",
+      "dll_policy_exchanged": true,
+      "spawn_log_xyz_exact": true,
+      "first_valid_native_xyz_exact": true,
+      "first_state_owned_masks": [
+        3,
+        3
+      ],
+      "server_spawn_clocks": [
+        0.9500001668930054,
+        0.9000001549720764
+      ]
+    },
+    {
+      "physical_role_local": "botA:1",
+      "server_slot": 2,
+      "swap0_policy": "old048",
+      "swap1_policy": "new005",
+      "dll_policy_exchanged": true,
+      "spawn_log_xyz_exact": true,
+      "first_valid_native_xyz_exact": true,
+      "first_state_owned_masks": [
+        3,
+        3
+      ],
+      "server_spawn_clocks": [
+        0.9500001668930054,
+        0.9000001549720764
+      ]
+    },
+    {
+      "physical_role_local": "botA:2",
+      "server_slot": 3,
+      "swap0_policy": "old048",
+      "swap1_policy": "new005",
+      "dll_policy_exchanged": true,
+      "spawn_log_xyz_exact": true,
+      "first_valid_native_xyz_exact": true,
+      "first_state_owned_masks": [
+        3,
+        3
+      ],
+      "server_spawn_clocks": [
+        0.9500001668930054,
+        0.9000001549720764
+      ]
+    },
+    {
+      "physical_role_local": "botA:3",
+      "server_slot": 4,
+      "swap0_policy": "old048",
+      "swap1_policy": "new005",
+      "dll_policy_exchanged": true,
+      "spawn_log_xyz_exact": true,
+      "first_valid_native_xyz_exact": true,
+      "first_state_owned_masks": [
+        3,
+        3
+      ],
+      "server_spawn_clocks": [
+        0.9500001668930054,
+        0.9000001549720764
+      ]
+    },
+    {
+      "physical_role_local": "botB:0",
+      "server_slot": 5,
+      "swap0_policy": "new005",
+      "swap1_policy": "old048",
+      "dll_policy_exchanged": true,
+      "spawn_log_xyz_exact": true,
+      "first_valid_native_xyz_exact": true,
+      "first_state_owned_masks": [
+        3,
+        3
+      ],
+      "server_spawn_clocks": [
+        0.9500001668930054,
+        0.9000001549720764
+      ]
+    },
+    {
+      "physical_role_local": "botB:1",
+      "server_slot": 6,
+      "swap0_policy": "new005",
+      "swap1_policy": "old048",
+      "dll_policy_exchanged": true,
+      "spawn_log_xyz_exact": true,
+      "first_valid_native_xyz_exact": true,
+      "first_state_owned_masks": [
+        3,
+        3
+      ],
+      "server_spawn_clocks": [
+        0.9500001668930054,
+        0.9000001549720764
+      ]
+    },
+    {
+      "physical_role_local": "botB:2",
+      "server_slot": 7,
+      "swap0_policy": "new005",
+      "swap1_policy": "old048",
+      "dll_policy_exchanged": true,
+      "spawn_log_xyz_exact": true,
+      "first_valid_native_xyz_exact": true,
+      "first_state_owned_masks": [
+        3,
+        3
+      ],
+      "server_spawn_clocks": [
+        0.9500001668930054,
+        0.9000001549720764
+      ]
+    },
+    {
+      "physical_role_local": "botB:3",
+      "server_slot": 8,
+      "swap0_policy": "new005",
+      "swap1_policy": "old048",
+      "dll_policy_exchanged": true,
+      "spawn_log_xyz_exact": true,
+      "first_valid_native_xyz_exact": true,
+      "first_state_owned_masks": [
+        3,
+        3
+      ],
+      "server_spawn_clocks": [
+        0.9500001668930054,
+        0.9000001549720764
+      ]
+    }
+  ],
+  "legs": [
+    {
+      "leg": 0,
+      "private_evidence_label": "arena005-checked-swap0-trial-1-210634",
+      "seconds": 240.08931778604165,
+      "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+      "qualified": false,
+      "sync_checks": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "all_roles_closed": true,
+      "sources_sha256": {
+        "result.json": "6b60d467a281760e7bf0b1ba1bea384647c3178e93536a3d7ef780106bc6400c",
+        "botA.log": "0085380271ed68725ffeef4898ec0ee7aabe8b6c8c722e0e8d922b655961216d",
+        "botB.log": "0d2cefbdf0076ffd6df6df149ee312a4fa12ac9a070938888a00d6d99229de0b",
+        "server.log": "0182c94819b7084dd1fdf4e771bd40c7d7f8532127d6641b20fb6d65bfba7534",
+        "queries.json": "ef47a6535a97320244526008fe2fb22b39a65ffa853b5c575d708784636d5401",
+        "session-health.jsonl": "780f23a3a6ddc99070952565f9b99833cf708412d2a32c74bfe98024b9a888e4"
+      },
+      "roles": {
+        "botA": {
+          "policy": "old048",
+          "game_dll_sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530",
+          "life_count": 24,
+          "outcomes": {
+            "acquired": 11,
+            "died_without": 11,
+            "right_censored_without": 2
+          },
+          "acquired_only_median_seconds": 12.2,
+          "acquired_only_max_seconds": 22.2,
+          "lives": [
+            {
+              "local_slot": 0,
+              "generation": 5,
+              "spawn_tick": 187,
+              "first_ranged_tick": 251,
+              "first_ranged_owned_mask": 11,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 1920,
+              "end": "death",
+              "observed_until_tick": 1920,
+              "outcome": "acquired",
+              "seconds_to_outcome": 3.2,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 1,
+              "generation": 5,
+              "spawn_tick": 187,
+              "first_ranged_tick": 456,
+              "first_ranged_owned_mask": 259,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 1466,
+              "end": "death",
+              "observed_until_tick": 1466,
+              "outcome": "acquired",
+              "seconds_to_outcome": 13.45,
+              "physical_server_slot": 2
+            },
+            {
+              "local_slot": 2,
+              "generation": 5,
+              "spawn_tick": 187,
+              "first_ranged_tick": null,
+              "end_tick": 412,
+              "end": "death",
+              "observed_until_tick": 412,
+              "outcome": "died_without",
+              "seconds_to_outcome": 11.25,
+              "physical_server_slot": 3
+            },
+            {
+              "local_slot": 3,
+              "generation": 5,
+              "spawn_tick": 187,
+              "first_ranged_tick": 631,
+              "first_ranged_owned_mask": 2051,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2292,
+              "end": "death",
+              "observed_until_tick": 2292,
+              "outcome": "acquired",
+              "seconds_to_outcome": 22.2,
+              "physical_server_slot": 4
+            },
+            {
+              "local_slot": 2,
+              "generation": 6,
+              "spawn_tick": 446,
+              "first_ranged_tick": null,
+              "end_tick": 1039,
+              "end": "death",
+              "observed_until_tick": 1039,
+              "outcome": "died_without",
+              "seconds_to_outcome": 29.65,
+              "physical_server_slot": 3
+            },
+            {
+              "local_slot": 2,
+              "generation": 7,
+              "spawn_tick": 1070,
+              "first_ranged_tick": 1499,
+              "first_ranged_owned_mask": 263,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2514,
+              "end": "death",
+              "observed_until_tick": 2514,
+              "outcome": "acquired",
+              "seconds_to_outcome": 21.45,
+              "physical_server_slot": 3
+            },
+            {
+              "local_slot": 1,
+              "generation": 6,
+              "spawn_tick": 1502,
+              "first_ranged_tick": null,
+              "end_tick": 2401,
+              "end": "death",
+              "observed_until_tick": 2401,
+              "outcome": "died_without",
+              "seconds_to_outcome": 44.95,
+              "physical_server_slot": 2
+            },
+            {
+              "local_slot": 0,
+              "generation": 6,
+              "spawn_tick": 1950,
+              "first_ranged_tick": 2194,
+              "first_ranged_owned_mask": 4099,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3069,
+              "end": "death",
+              "observed_until_tick": 3069,
+              "outcome": "acquired",
+              "seconds_to_outcome": 12.2,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 3,
+              "generation": 6,
+              "spawn_tick": 2326,
+              "first_ranged_tick": null,
+              "end_tick": 2453,
+              "end": "death",
+              "observed_until_tick": 2453,
+              "outcome": "died_without",
+              "seconds_to_outcome": 6.35,
+              "physical_server_slot": 4
+            },
+            {
+              "local_slot": 1,
+              "generation": 7,
+              "spawn_tick": 2438,
+              "first_ranged_tick": null,
+              "end_tick": 2593,
+              "end": "death",
+              "observed_until_tick": 2593,
+              "outcome": "died_without",
+              "seconds_to_outcome": 7.75,
+              "physical_server_slot": 2
+            },
+            {
+              "local_slot": 3,
+              "generation": 7,
+              "spawn_tick": 2486,
+              "first_ranged_tick": 2682,
+              "first_ranged_owned_mask": 11,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4402,
+              "end": "death",
+              "observed_until_tick": 4402,
+              "outcome": "acquired",
+              "seconds_to_outcome": 9.8,
+              "physical_server_slot": 4
+            },
+            {
+              "local_slot": 2,
+              "generation": 8,
+              "spawn_tick": 2550,
+              "first_ranged_tick": 2828,
+              "first_ranged_owned_mask": 259,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3363,
+              "end": "death",
+              "observed_until_tick": 3363,
+              "outcome": "acquired",
+              "seconds_to_outcome": 13.9,
+              "physical_server_slot": 3
+            },
+            {
+              "local_slot": 1,
+              "generation": 8,
+              "spawn_tick": 2630,
+              "first_ranged_tick": 2664,
+              "first_ranged_owned_mask": 19,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3780,
+              "end": "death",
+              "observed_until_tick": 3780,
+              "outcome": "acquired",
+              "seconds_to_outcome": 1.7,
+              "physical_server_slot": 2
+            },
+            {
+              "local_slot": 0,
+              "generation": 7,
+              "spawn_tick": 3102,
+              "first_ranged_tick": null,
+              "end_tick": 3157,
+              "end": "death",
+              "observed_until_tick": 3157,
+              "outcome": "died_without",
+              "seconds_to_outcome": 2.75,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 0,
+              "generation": 8,
+              "spawn_tick": 3190,
+              "first_ranged_tick": null,
+              "end_tick": 3914,
+              "end": "death",
+              "observed_until_tick": 3914,
+              "outcome": "died_without",
+              "seconds_to_outcome": 36.2,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 2,
+              "generation": 9,
+              "spawn_tick": 3398,
+              "first_ranged_tick": 3559,
+              "first_ranged_owned_mask": 1027,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3960,
+              "end": "death",
+              "observed_until_tick": 3960,
+              "outcome": "acquired",
+              "seconds_to_outcome": 8.05,
+              "physical_server_slot": 3
+            },
+            {
+              "local_slot": 1,
+              "generation": 9,
+              "spawn_tick": 3814,
+              "first_ranged_tick": 3989,
+              "first_ranged_owned_mask": 19,
+              "acquisition_evidence": "CecilPickup",
+              "observed_until_tick": 4980,
+              "outcome": "acquired",
+              "seconds_to_outcome": 8.75,
+              "physical_server_slot": 2
+            },
+            {
+              "local_slot": 0,
+              "generation": 9,
+              "spawn_tick": 3950,
+              "first_ranged_tick": null,
+              "end_tick": 4051,
+              "end": "death",
+              "observed_until_tick": 4051,
+              "outcome": "died_without",
+              "seconds_to_outcome": 5.05,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 2,
+              "generation": 10,
+              "spawn_tick": 3990,
+              "first_ranged_tick": 4270,
+              "first_ranged_owned_mask": 1027,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4956,
+              "end": "death",
+              "observed_until_tick": 4956,
+              "outcome": "acquired",
+              "seconds_to_outcome": 14.0,
+              "physical_server_slot": 3
+            },
+            {
+              "local_slot": 0,
+              "generation": 10,
+              "spawn_tick": 4086,
+              "first_ranged_tick": null,
+              "end_tick": 4575,
+              "end": "death",
+              "observed_until_tick": 4575,
+              "outcome": "died_without",
+              "seconds_to_outcome": 24.45,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 3,
+              "generation": 8,
+              "spawn_tick": 4438,
+              "first_ranged_tick": null,
+              "end_tick": 4691,
+              "end": "death",
+              "observed_until_tick": 4691,
+              "outcome": "died_without",
+              "seconds_to_outcome": 12.65,
+              "physical_server_slot": 4
+            },
+            {
+              "local_slot": 0,
+              "generation": 11,
+              "spawn_tick": 4606,
+              "first_ranged_tick": null,
+              "end_tick": 4762,
+              "end": "death",
+              "observed_until_tick": 4762,
+              "outcome": "died_without",
+              "seconds_to_outcome": 7.8,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 3,
+              "generation": 9,
+              "spawn_tick": 4726,
+              "first_ranged_tick": null,
+              "observed_until_tick": 4980,
+              "outcome": "right_censored_without",
+              "seconds_to_outcome": 12.7,
+              "physical_server_slot": 4
+            },
+            {
+              "local_slot": 0,
+              "generation": 12,
+              "spawn_tick": 4798,
+              "first_ranged_tick": null,
+              "observed_until_tick": 4980,
+              "outcome": "right_censored_without",
+              "seconds_to_outcome": 9.1,
+              "physical_server_slot": 0
+            }
+          ],
+          "frags": {
+            "0": {
+              "first": 0,
+              "last": 3,
+              "delta": 3
+            },
+            "1": {
+              "first": 0,
+              "last": 3,
+              "delta": 3
+            },
+            "2": {
+              "first": 0,
+              "last": 2,
+              "delta": 2
+            },
+            "3": {
+              "first": 0,
+              "last": 1,
+              "delta": 1
+            }
+          },
+          "total_frag_delta": 9,
+          "observed_received_hp_decreases": {
+            "0": {
+              "observed_hp_decrease_sum_clipped_at_zero": 548.0,
+              "decrease_events": 15,
+              "first_life_first_observed_decrease_age_seconds": 58.04938566684723
+            },
+            "1": {
+              "observed_hp_decrease_sum_clipped_at_zero": 450.0,
+              "decrease_events": 11,
+              "first_life_first_observed_decrease_age_seconds": 39.44966948032379
+            },
+            "2": {
+              "observed_hp_decrease_sum_clipped_at_zero": 607.0,
+              "decrease_events": 13,
+              "first_life_first_observed_decrease_age_seconds": 10.350024819374084
+            },
+            "3": {
+              "observed_hp_decrease_sum_clipped_at_zero": 457.0,
+              "decrease_events": 14,
+              "first_life_first_observed_decrease_age_seconds": 32.44977629184723
+            }
+          }
+        },
+        "botB": {
+          "policy": "new005",
+          "game_dll_sha256": "35c950832d8ce4c48e0363ab33ba1a517d4a87e95bb320ca5aa686c59f2bfc35",
+          "life_count": 22,
+          "outcomes": {
+            "acquired": 17,
+            "died_without": 3,
+            "right_censored_without": 2
+          },
+          "acquired_only_median_seconds": 10.15,
+          "acquired_only_max_seconds": 63.0,
+          "lives": [
+            {
+              "local_slot": 0,
+              "generation": 6,
+              "spawn_tick": 35,
+              "first_ranged_tick": 104,
+              "first_ranged_owned_mask": 19,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3062,
+              "end": "death",
+              "observed_until_tick": 3062,
+              "outcome": "acquired",
+              "seconds_to_outcome": 3.45,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 1,
+              "generation": 6,
+              "spawn_tick": 35,
+              "first_ranged_tick": 1295,
+              "first_ranged_owned_mask": 19,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 1706,
+              "end": "death",
+              "observed_until_tick": 1706,
+              "outcome": "acquired",
+              "seconds_to_outcome": 63.0,
+              "physical_server_slot": 6
+            },
+            {
+              "local_slot": 2,
+              "generation": 6,
+              "spawn_tick": 35,
+              "first_ranged_tick": 271,
+              "first_ranged_owned_mask": 8195,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 911,
+              "end": "death",
+              "observed_until_tick": 911,
+              "outcome": "acquired",
+              "seconds_to_outcome": 11.8,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 3,
+              "generation": 6,
+              "spawn_tick": 35,
+              "first_ranged_tick": 239,
+              "first_ranged_owned_mask": 4099,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 789,
+              "end": "death",
+              "observed_until_tick": 789,
+              "outcome": "acquired",
+              "seconds_to_outcome": 10.2,
+              "physical_server_slot": 8
+            },
+            {
+              "local_slot": 3,
+              "generation": 7,
+              "spawn_tick": 822,
+              "first_ranged_tick": 1612,
+              "first_ranged_owned_mask": 1027,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2462,
+              "end": "death",
+              "observed_until_tick": 2462,
+              "outcome": "acquired",
+              "seconds_to_outcome": 39.5,
+              "physical_server_slot": 8
+            },
+            {
+              "local_slot": 2,
+              "generation": 7,
+              "spawn_tick": 942,
+              "first_ranged_tick": null,
+              "end_tick": 1252,
+              "end": "death",
+              "observed_until_tick": 1252,
+              "outcome": "died_without",
+              "seconds_to_outcome": 15.5,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 2,
+              "generation": 8,
+              "spawn_tick": 1286,
+              "first_ranged_tick": 1352,
+              "first_ranged_owned_mask": 2051,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2253,
+              "end": "death",
+              "observed_until_tick": 2253,
+              "outcome": "acquired",
+              "seconds_to_outcome": 3.3,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 1,
+              "generation": 7,
+              "spawn_tick": 1742,
+              "first_ranged_tick": 1790,
+              "first_ranged_owned_mask": 8195,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2506,
+              "end": "death",
+              "observed_until_tick": 2506,
+              "outcome": "acquired",
+              "seconds_to_outcome": 2.4,
+              "physical_server_slot": 6
+            },
+            {
+              "local_slot": 2,
+              "generation": 9,
+              "spawn_tick": 2286,
+              "first_ranged_tick": 2464,
+              "first_ranged_owned_mask": 1027,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2716,
+              "end": "death",
+              "observed_until_tick": 2716,
+              "outcome": "acquired",
+              "seconds_to_outcome": 8.9,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 3,
+              "generation": 8,
+              "spawn_tick": 2494,
+              "first_ranged_tick": null,
+              "end_tick": 3400,
+              "end": "death",
+              "observed_until_tick": 3400,
+              "outcome": "died_without",
+              "seconds_to_outcome": 45.3,
+              "physical_server_slot": 8
+            },
+            {
+              "local_slot": 1,
+              "generation": 8,
+              "spawn_tick": 2542,
+              "first_ranged_tick": 2783,
+              "first_ranged_owned_mask": 2051,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4454,
+              "end": "death",
+              "observed_until_tick": 4454,
+              "outcome": "acquired",
+              "seconds_to_outcome": 12.05,
+              "physical_server_slot": 6
+            },
+            {
+              "local_slot": 2,
+              "generation": 10,
+              "spawn_tick": 2750,
+              "first_ranged_tick": 3418,
+              "first_ranged_owned_mask": 8195,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3993,
+              "end": "death",
+              "observed_until_tick": 3993,
+              "outcome": "acquired",
+              "seconds_to_outcome": 33.4,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 0,
+              "generation": 7,
+              "spawn_tick": 3094,
+              "first_ranged_tick": 3188,
+              "first_ranged_owned_mask": 11,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3299,
+              "end": "death",
+              "observed_until_tick": 3299,
+              "outcome": "acquired",
+              "seconds_to_outcome": 4.7,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 0,
+              "generation": 8,
+              "spawn_tick": 3334,
+              "first_ranged_tick": 3537,
+              "first_ranged_owned_mask": 4099,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3819,
+              "end": "death",
+              "observed_until_tick": 3819,
+              "outcome": "acquired",
+              "seconds_to_outcome": 10.15,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 3,
+              "generation": 9,
+              "spawn_tick": 3430,
+              "first_ranged_tick": 3492,
+              "first_ranged_owned_mask": 2051,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3951,
+              "end": "death",
+              "observed_until_tick": 3951,
+              "outcome": "acquired",
+              "seconds_to_outcome": 3.1,
+              "physical_server_slot": 8
+            },
+            {
+              "local_slot": 0,
+              "generation": 9,
+              "spawn_tick": 3854,
+              "first_ranged_tick": 3964,
+              "first_ranged_owned_mask": 2051,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4460,
+              "end": "death",
+              "observed_until_tick": 4460,
+              "outcome": "acquired",
+              "seconds_to_outcome": 5.5,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 3,
+              "generation": 10,
+              "spawn_tick": 3982,
+              "first_ranged_tick": 4275,
+              "first_ranged_owned_mask": 2051,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4446,
+              "end": "death",
+              "observed_until_tick": 4446,
+              "outcome": "acquired",
+              "seconds_to_outcome": 14.65,
+              "physical_server_slot": 8
+            },
+            {
+              "local_slot": 2,
+              "generation": 11,
+              "spawn_tick": 4030,
+              "first_ranged_tick": 4412,
+              "first_ranged_owned_mask": 11,
+              "acquisition_evidence": "CecilPickup",
+              "observed_until_tick": 4820,
+              "outcome": "acquired",
+              "seconds_to_outcome": 19.1,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 3,
+              "generation": 11,
+              "spawn_tick": 4478,
+              "first_ranged_tick": 4548,
+              "first_ranged_owned_mask": 8195,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4639,
+              "end": "death",
+              "observed_until_tick": 4639,
+              "outcome": "acquired",
+              "seconds_to_outcome": 3.5,
+              "physical_server_slot": 8
+            },
+            {
+              "local_slot": 1,
+              "generation": 9,
+              "spawn_tick": 4486,
+              "first_ranged_tick": null,
+              "observed_until_tick": 4820,
+              "outcome": "right_censored_without",
+              "seconds_to_outcome": 16.7,
+              "physical_server_slot": 6
+            },
+            {
+              "local_slot": 0,
+              "generation": 10,
+              "spawn_tick": 4494,
+              "first_ranged_tick": null,
+              "end_tick": 4804,
+              "end": "death",
+              "observed_until_tick": 4804,
+              "outcome": "died_without",
+              "seconds_to_outcome": 15.5,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 3,
+              "generation": 12,
+              "spawn_tick": 4670,
+              "first_ranged_tick": null,
+              "observed_until_tick": 4820,
+              "outcome": "right_censored_without",
+              "seconds_to_outcome": 7.5,
+              "physical_server_slot": 8
+            }
+          ],
+          "frags": {
+            "0": {
+              "first": 0,
+              "last": 8,
+              "delta": 8
+            },
+            "1": {
+              "first": 0,
+              "last": 9,
+              "delta": 9
+            },
+            "2": {
+              "first": 0,
+              "last": 6,
+              "delta": 6
+            },
+            "3": {
+              "first": 0,
+              "last": 9,
+              "delta": 9
+            }
+          },
+          "total_frag_delta": 32,
+          "observed_received_hp_decreases": {
+            "0": {
+              "observed_hp_decrease_sum_clipped_at_zero": 548.0,
+              "decrease_events": 12,
+              "first_life_first_observed_decrease_age_seconds": 34.39974653720856
+            },
+            "1": {
+              "observed_hp_decrease_sum_clipped_at_zero": 379.0,
+              "decrease_events": 12,
+              "first_life_first_observed_decrease_age_seconds": 15.650032639503479
+            },
+            "2": {
+              "observed_hp_decrease_sum_clipped_at_zero": 380.0,
+              "decrease_events": 8,
+              "first_life_first_observed_decrease_age_seconds": 43.44960844516754
+            },
+            "3": {
+              "observed_hp_decrease_sum_clipped_at_zero": 384.0,
+              "decrease_events": 7,
+              "first_life_first_observed_decrease_age_seconds": null
+            }
+          }
+        }
+      },
+      "queries": {
+        "samples": 100,
+        "valid_nine_players": 100,
+        "first_elapsed": 7.552397437393665e-05,
+        "last_elapsed": 238.7524608480744
+      },
+      "flight_events": [
+        {
+          "role": "botB",
+          "local_slot": 1,
+          "generation": 6,
+          "begin_tick": 479,
+          "source": 51,
+          "hop": 50,
+          "deadline": 47.379,
+          "owned_at_begin": 3,
+          "end_tick": 482,
+          "end_reason": "context",
+          "seconds": 0.15,
+          "following_30s_available_alive_state_samples": 30,
+          "following_reacquire86_samples": 0,
+          "next_ranged_inventory_event_tick": 1295
+        },
+        {
+          "role": "botB",
+          "local_slot": 2,
+          "generation": 8,
+          "begin_tick": 1352,
+          "source": 86,
+          "hop": 176,
+          "deadline": 84.3,
+          "owned_at_begin": 2051,
+          "end_tick": 1355,
+          "end_reason": "arrived",
+          "seconds": 0.15,
+          "following_30s_available_alive_state_samples": 30,
+          "following_reacquire86_samples": 0,
+          "next_ranged_inventory_event_tick": 1352
+        },
+        {
+          "role": "botB",
+          "local_slot": 1,
+          "generation": 8,
+          "begin_tick": 2783,
+          "source": 86,
+          "hop": 176,
+          "deadline": 156.218,
+          "owned_at_begin": 2051,
+          "end_tick": 2784,
+          "end_reason": "context",
+          "seconds": 0.05,
+          "following_30s_available_alive_state_samples": 30,
+          "following_reacquire86_samples": 0,
+          "next_ranged_inventory_event_tick": 2783
+        },
+        {
+          "role": "botB",
+          "local_slot": 3,
+          "generation": 8,
+          "begin_tick": 2986,
+          "source": 51,
+          "hop": 50,
+          "deadline": 158.65,
+          "owned_at_begin": 3,
+          "end_tick": 2996,
+          "end_reason": "context",
+          "seconds": 0.5,
+          "following_30s_available_alive_state_samples": 20,
+          "following_reacquire86_samples": 0,
+          "next_ranged_inventory_event_tick": null
+        },
+        {
+          "role": "botB",
+          "local_slot": 3,
+          "generation": 9,
+          "begin_tick": 3492,
+          "source": 86,
+          "hop": 176,
+          "deadline": 191.5,
+          "owned_at_begin": 2051,
+          "end_tick": 3493,
+          "end_reason": "context",
+          "seconds": 0.05,
+          "following_30s_available_alive_state_samples": 23,
+          "following_reacquire86_samples": 0,
+          "next_ranged_inventory_event_tick": 3492
+        },
+        {
+          "role": "botB",
+          "local_slot": 3,
+          "generation": 10,
+          "begin_tick": 4074,
+          "source": 93,
+          "hop": 98,
+          "deadline": 234.933,
+          "owned_at_begin": 3,
+          "end_tick": 4077,
+          "end_reason": "context",
+          "seconds": 0.15,
+          "following_30s_available_alive_state_samples": 19,
+          "following_reacquire86_samples": 0,
+          "next_ranged_inventory_event_tick": 4275
+        },
+        {
+          "role": "botB",
+          "local_slot": 3,
+          "generation": 10,
+          "begin_tick": 4275,
+          "source": 86,
+          "hop": 176,
+          "deadline": 225.9,
+          "owned_at_begin": 2051,
+          "end_tick": 4276,
+          "end_reason": "context",
+          "seconds": 0.05,
+          "following_30s_available_alive_state_samples": 9,
+          "following_reacquire86_samples": 0,
+          "next_ranged_inventory_event_tick": 4275
+        },
+        {
+          "role": "botB",
+          "local_slot": 2,
+          "generation": 11,
+          "begin_tick": 4275,
+          "source": 86,
+          "hop": 176,
+          "deadline": 226.9,
+          "owned_at_begin": 3,
+          "end_tick": 4297,
+          "end_reason": "arrived",
+          "seconds": 1.1,
+          "following_30s_available_alive_state_samples": 27,
+          "following_reacquire86_samples": 0,
+          "next_ranged_inventory_event_tick": 4412
+        }
+      ],
+      "kill_message_counts": {
+        "botA": {
+          "kills": 10,
+          "same_cohort_kills": 2,
+          "observer_kills": 2,
+          "opposing_cohort_kills": 6,
+          "crush_death_messages": 1
+        },
+        "botB": {
+          "kills": 34,
+          "observer_kills": 5,
+          "opposing_cohort_kills": 18,
+          "other_nonplayer_death_messages": 1,
+          "same_cohort_kills": 11,
+          "self_kills": 1
+        }
+      },
+      "unclassified_kill_message_count": 0,
+      "barrier": {
+        "all_players_unspawned": true,
+        "server_tick": 0.7500001192092896,
+        "server_random_seed": 2306364401,
+        "first_valid_bot_spawn_clock_spread": 0.0
+      }
+    },
+    {
+      "leg": 1,
+      "private_evidence_label": "arena005-checked-swap1-trial-1-211315",
+      "seconds": 240.00752046704292,
+      "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+      "qualified": false,
+      "sync_checks": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "all_roles_closed": true,
+      "sources_sha256": {
+        "result.json": "8aa2a4827d5eb9cf712a5ed7024679057894b587010525db55af7ef953195f8a",
+        "botA.log": "862f22da52f5fd16cae4a3f5fd56ef764caf239d6f110015ffe64b5c743c34b0",
+        "botB.log": "b252171e32a892e88914855da7e9b99385b6462af7645e072344ec4d9171b50a",
+        "server.log": "e3046630fdc3b2c051f2f0fc2ece61e7de40fb7770daf0ab73189a1d72f0a985",
+        "queries.json": "36a72ad7cd84ec3a303fd9915938bf5aa851e6c1a2745af0142a7b4ed3a12291",
+        "session-health.jsonl": "230b5d9bec42bc3ae57a5ef1a8e064545dbfc2ef98752335e1d862aefa673ed5"
+      },
+      "roles": {
+        "botA": {
+          "policy": "new005",
+          "game_dll_sha256": "35c950832d8ce4c48e0363ab33ba1a517d4a87e95bb320ca5aa686c59f2bfc35",
+          "life_count": 17,
+          "outcomes": {
+            "died_without": 2,
+            "acquired": 12,
+            "right_censored_without": 3
+          },
+          "acquired_only_median_seconds": 13.05,
+          "acquired_only_max_seconds": 50.6,
+          "lives": [
+            {
+              "local_slot": 0,
+              "generation": 6,
+              "spawn_tick": 188,
+              "first_ranged_tick": null,
+              "end_tick": 277,
+              "end": "death",
+              "observed_until_tick": 277,
+              "outcome": "died_without",
+              "seconds_to_outcome": 4.45,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 1,
+              "generation": 6,
+              "spawn_tick": 188,
+              "first_ranged_tick": 426,
+              "first_ranged_owned_mask": 259,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2638,
+              "end": "death",
+              "observed_until_tick": 2638,
+              "outcome": "acquired",
+              "seconds_to_outcome": 11.9,
+              "physical_server_slot": 2
+            },
+            {
+              "local_slot": 2,
+              "generation": 6,
+              "spawn_tick": 188,
+              "first_ranged_tick": 245,
+              "first_ranged_owned_mask": 11,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3585,
+              "end": "death",
+              "observed_until_tick": 3585,
+              "outcome": "acquired",
+              "seconds_to_outcome": 2.85,
+              "physical_server_slot": 3
+            },
+            {
+              "local_slot": 3,
+              "generation": 6,
+              "spawn_tick": 188,
+              "first_ranged_tick": 609,
+              "first_ranged_owned_mask": 2055,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 751,
+              "end": "death",
+              "observed_until_tick": 751,
+              "outcome": "acquired",
+              "seconds_to_outcome": 21.05,
+              "physical_server_slot": 4
+            },
+            {
+              "local_slot": 0,
+              "generation": 7,
+              "spawn_tick": 310,
+              "first_ranged_tick": null,
+              "end_tick": 538,
+              "end": "death",
+              "observed_until_tick": 538,
+              "outcome": "died_without",
+              "seconds_to_outcome": 11.4,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 0,
+              "generation": 8,
+              "spawn_tick": 574,
+              "first_ranged_tick": 1025,
+              "first_ranged_owned_mask": 11,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3723,
+              "end": "death",
+              "observed_until_tick": 3723,
+              "outcome": "acquired",
+              "seconds_to_outcome": 22.55,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 3,
+              "generation": 7,
+              "spawn_tick": 782,
+              "first_ranged_tick": 913,
+              "first_ranged_owned_mask": 19,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 1045,
+              "end": "death",
+              "observed_until_tick": 1045,
+              "outcome": "acquired",
+              "seconds_to_outcome": 6.55,
+              "physical_server_slot": 4
+            },
+            {
+              "local_slot": 3,
+              "generation": 8,
+              "spawn_tick": 1078,
+              "first_ranged_tick": 1718,
+              "first_ranged_owned_mask": 2051,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2020,
+              "end": "death",
+              "observed_until_tick": 2020,
+              "outcome": "acquired",
+              "seconds_to_outcome": 32.0,
+              "physical_server_slot": 4
+            },
+            {
+              "local_slot": 3,
+              "generation": 9,
+              "spawn_tick": 2054,
+              "first_ranged_tick": 2394,
+              "first_ranged_owned_mask": 259,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4280,
+              "end": "death",
+              "observed_until_tick": 4280,
+              "outcome": "acquired",
+              "seconds_to_outcome": 17.0,
+              "physical_server_slot": 4
+            },
+            {
+              "local_slot": 1,
+              "generation": 7,
+              "spawn_tick": 2670,
+              "first_ranged_tick": 2806,
+              "first_ranged_owned_mask": 1027,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2983,
+              "end": "death",
+              "observed_until_tick": 2983,
+              "outcome": "acquired",
+              "seconds_to_outcome": 6.8,
+              "physical_server_slot": 2
+            },
+            {
+              "local_slot": 1,
+              "generation": 8,
+              "spawn_tick": 3014,
+              "first_ranged_tick": 3199,
+              "first_ranged_owned_mask": 131,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4099,
+              "end": "death",
+              "observed_until_tick": 4099,
+              "outcome": "acquired",
+              "seconds_to_outcome": 9.25,
+              "physical_server_slot": 2
+            },
+            {
+              "local_slot": 2,
+              "generation": 7,
+              "spawn_tick": 3622,
+              "first_ranged_tick": 4634,
+              "first_ranged_owned_mask": 2051,
+              "acquisition_evidence": "CecilPickup",
+              "observed_until_tick": 4980,
+              "outcome": "acquired",
+              "seconds_to_outcome": 50.6,
+              "physical_server_slot": 3
+            },
+            {
+              "local_slot": 0,
+              "generation": 9,
+              "spawn_tick": 3758,
+              "first_ranged_tick": 4042,
+              "first_ranged_owned_mask": 19,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4940,
+              "end": "death",
+              "observed_until_tick": 4940,
+              "outcome": "acquired",
+              "seconds_to_outcome": 14.2,
+              "physical_server_slot": 0
+            },
+            {
+              "local_slot": 1,
+              "generation": 9,
+              "spawn_tick": 4134,
+              "first_ranged_tick": 4348,
+              "first_ranged_owned_mask": 4099,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4758,
+              "end": "death",
+              "observed_until_tick": 4758,
+              "outcome": "acquired",
+              "seconds_to_outcome": 10.7,
+              "physical_server_slot": 2
+            },
+            {
+              "local_slot": 3,
+              "generation": 10,
+              "spawn_tick": 4310,
+              "first_ranged_tick": null,
+              "observed_until_tick": 4980,
+              "outcome": "right_censored_without",
+              "seconds_to_outcome": 33.5,
+              "physical_server_slot": 4
+            },
+            {
+              "local_slot": 1,
+              "generation": 10,
+              "spawn_tick": 4790,
+              "first_ranged_tick": null,
+              "observed_until_tick": 4980,
+              "outcome": "right_censored_without",
+              "seconds_to_outcome": 9.5,
+              "physical_server_slot": 2
+            },
+            {
+              "local_slot": 0,
+              "generation": 10,
+              "spawn_tick": 4974,
+              "first_ranged_tick": null,
+              "observed_until_tick": 4980,
+              "outcome": "right_censored_without",
+              "seconds_to_outcome": 0.3,
+              "physical_server_slot": 0
+            }
+          ],
+          "frags": {
+            "0": {
+              "first": 0,
+              "last": 6,
+              "delta": 6
+            },
+            "1": {
+              "first": 0,
+              "last": 2,
+              "delta": 2
+            },
+            "2": {
+              "first": 0,
+              "last": 9,
+              "delta": 9
+            },
+            "3": {
+              "first": 0,
+              "last": 5,
+              "delta": 5
+            }
+          },
+          "total_frag_delta": 22,
+          "observed_received_hp_decreases": {
+            "0": {
+              "observed_hp_decrease_sum_clipped_at_zero": 454.0,
+              "decrease_events": 11,
+              "first_life_first_observed_decrease_age_seconds": 4.500002324581146
+            },
+            "1": {
+              "observed_hp_decrease_sum_clipped_at_zero": 518.0,
+              "decrease_events": 12,
+              "first_life_first_observed_decrease_age_seconds": 35.34973281621933
+            },
+            "2": {
+              "observed_hp_decrease_sum_clipped_at_zero": 6.667,
+              "decrease_events": 1,
+              "first_life_first_observed_decrease_age_seconds": 168.1557096838951
+            },
+            "3": {
+              "observed_hp_decrease_sum_clipped_at_zero": 406.923,
+              "decrease_events": 10,
+              "first_life_first_observed_decrease_age_seconds": 27.49985259771347
+            }
+          }
+        },
+        "botB": {
+          "policy": "old048",
+          "game_dll_sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530",
+          "life_count": 19,
+          "outcomes": {
+            "acquired": 15,
+            "died_without": 4
+          },
+          "acquired_only_median_seconds": 10.15,
+          "acquired_only_max_seconds": 43.55,
+          "lives": [
+            {
+              "local_slot": 0,
+              "generation": 6,
+              "spawn_tick": 32,
+              "first_ranged_tick": 110,
+              "first_ranged_owned_mask": 19,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 756,
+              "end": "death",
+              "observed_until_tick": 756,
+              "outcome": "acquired",
+              "seconds_to_outcome": 3.9,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 1,
+              "generation": 6,
+              "spawn_tick": 32,
+              "first_ranged_tick": null,
+              "end_tick": 510,
+              "end": "death",
+              "observed_until_tick": 510,
+              "outcome": "died_without",
+              "seconds_to_outcome": 23.9,
+              "physical_server_slot": 6
+            },
+            {
+              "local_slot": 2,
+              "generation": 6,
+              "spawn_tick": 32,
+              "first_ranged_tick": 80,
+              "first_ranged_owned_mask": 8195,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 1688,
+              "end": "death",
+              "observed_until_tick": 1688,
+              "outcome": "acquired",
+              "seconds_to_outcome": 2.4,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 3,
+              "generation": 6,
+              "spawn_tick": 32,
+              "first_ranged_tick": 235,
+              "first_ranged_owned_mask": 4099,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 1071,
+              "end": "death",
+              "observed_until_tick": 1071,
+              "outcome": "acquired",
+              "seconds_to_outcome": 10.15,
+              "physical_server_slot": 8
+            },
+            {
+              "local_slot": 1,
+              "generation": 7,
+              "spawn_tick": 542,
+              "first_ranged_tick": 1293,
+              "first_ranged_owned_mask": 259,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 1381,
+              "end": "death",
+              "observed_until_tick": 1381,
+              "outcome": "acquired",
+              "seconds_to_outcome": 37.55,
+              "physical_server_slot": 6
+            },
+            {
+              "local_slot": 0,
+              "generation": 7,
+              "spawn_tick": 790,
+              "first_ranged_tick": 1000,
+              "first_ranged_owned_mask": 259,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 1688,
+              "end": "death",
+              "observed_until_tick": 1688,
+              "outcome": "acquired",
+              "seconds_to_outcome": 10.5,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 3,
+              "generation": 7,
+              "spawn_tick": 1102,
+              "first_ranged_tick": 1282,
+              "first_ranged_owned_mask": 131,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2678,
+              "end": "death",
+              "observed_until_tick": 2678,
+              "outcome": "acquired",
+              "seconds_to_outcome": 9.0,
+              "physical_server_slot": 8
+            },
+            {
+              "local_slot": 1,
+              "generation": 8,
+              "spawn_tick": 1414,
+              "first_ranged_tick": 1904,
+              "first_ranged_owned_mask": 8195,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2562,
+              "end": "death",
+              "observed_until_tick": 2562,
+              "outcome": "acquired",
+              "seconds_to_outcome": 24.5,
+              "physical_server_slot": 6
+            },
+            {
+              "local_slot": 0,
+              "generation": 8,
+              "spawn_tick": 1718,
+              "first_ranged_tick": 1768,
+              "first_ranged_owned_mask": 67,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2122,
+              "end": "death",
+              "observed_until_tick": 2122,
+              "outcome": "acquired",
+              "seconds_to_outcome": 2.5,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 2,
+              "generation": 7,
+              "spawn_tick": 1718,
+              "first_ranged_tick": null,
+              "end_tick": 2092,
+              "end": "death",
+              "observed_until_tick": 2092,
+              "outcome": "died_without",
+              "seconds_to_outcome": 18.7,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 2,
+              "generation": 8,
+              "spawn_tick": 2126,
+              "first_ranged_tick": null,
+              "end_tick": 2270,
+              "end": "death",
+              "observed_until_tick": 2270,
+              "outcome": "died_without",
+              "seconds_to_outcome": 7.2,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 0,
+              "generation": 9,
+              "spawn_tick": 2158,
+              "first_ranged_tick": 2556,
+              "first_ranged_owned_mask": 4099,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 3136,
+              "end": "death",
+              "observed_until_tick": 3136,
+              "outcome": "acquired",
+              "seconds_to_outcome": 19.9,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 2,
+              "generation": 9,
+              "spawn_tick": 2302,
+              "first_ranged_tick": 2466,
+              "first_ranged_owned_mask": 2051,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 2705,
+              "end": "death",
+              "observed_until_tick": 2705,
+              "outcome": "acquired",
+              "seconds_to_outcome": 8.2,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 1,
+              "generation": 9,
+              "spawn_tick": 2598,
+              "first_ranged_tick": 3469,
+              "first_ranged_owned_mask": 8195,
+              "acquisition_evidence": "CecilPickup",
+              "observed_until_tick": 4820,
+              "outcome": "acquired",
+              "seconds_to_outcome": 43.55,
+              "physical_server_slot": 6
+            },
+            {
+              "local_slot": 3,
+              "generation": 8,
+              "spawn_tick": 2710,
+              "first_ranged_tick": 3115,
+              "first_ranged_owned_mask": 259,
+              "acquisition_evidence": "CecilPickup",
+              "observed_until_tick": 4820,
+              "outcome": "acquired",
+              "seconds_to_outcome": 20.25,
+              "physical_server_slot": 8
+            },
+            {
+              "local_slot": 2,
+              "generation": 10,
+              "spawn_tick": 2742,
+              "first_ranged_tick": 2955,
+              "first_ranged_owned_mask": 259,
+              "acquisition_evidence": "CecilPickup",
+              "end_tick": 4648,
+              "end": "death",
+              "observed_until_tick": 4648,
+              "outcome": "acquired",
+              "seconds_to_outcome": 10.65,
+              "physical_server_slot": 7
+            },
+            {
+              "local_slot": 0,
+              "generation": 10,
+              "spawn_tick": 3166,
+              "first_ranged_tick": null,
+              "end_tick": 3401,
+              "end": "death",
+              "observed_until_tick": 3401,
+              "outcome": "died_without",
+              "seconds_to_outcome": 11.75,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 0,
+              "generation": 11,
+              "spawn_tick": 3438,
+              "first_ranged_tick": 3616,
+              "first_ranged_owned_mask": 2051,
+              "acquisition_evidence": "CecilPickup",
+              "observed_until_tick": 4820,
+              "outcome": "acquired",
+              "seconds_to_outcome": 8.9,
+              "physical_server_slot": 5
+            },
+            {
+              "local_slot": 2,
+              "generation": 11,
+              "spawn_tick": 4678,
+              "first_ranged_tick": 4754,
+              "first_ranged_owned_mask": 8195,
+              "acquisition_evidence": "CecilPickup",
+              "observed_until_tick": 4820,
+              "outcome": "acquired",
+              "seconds_to_outcome": 3.8,
+              "physical_server_slot": 7
+            }
+          ],
+          "frags": {
+            "0": {
+              "first": 0,
+              "last": 4,
+              "delta": 4
+            },
+            "1": {
+              "first": 0,
+              "last": -1,
+              "delta": -1
+            },
+            "2": {
+              "first": 0,
+              "last": 2,
+              "delta": 2
+            },
+            "3": {
+              "first": 0,
+              "last": 1,
+              "delta": 1
+            }
+          },
+          "total_frag_delta": 6,
+          "observed_received_hp_decreases": {
+            "0": {
+              "observed_hp_decrease_sum_clipped_at_zero": 540.0,
+              "decrease_events": 9,
+              "first_life_first_observed_decrease_age_seconds": 29.39982360601425
+            },
+            "1": {
+              "observed_hp_decrease_sum_clipped_at_zero": 404.027,
+              "decrease_events": 8,
+              "first_life_first_observed_decrease_age_seconds": 4.600002706050873
+            },
+            "2": {
+              "observed_hp_decrease_sum_clipped_at_zero": 465.046,
+              "decrease_events": 6,
+              "first_life_first_observed_decrease_age_seconds": 56.89940398931503
+            },
+            "3": {
+              "observed_hp_decrease_sum_clipped_at_zero": 226.667,
+              "decrease_events": 4,
+              "first_life_first_observed_decrease_age_seconds": 35.34973281621933
+            }
+          }
+        }
+      },
+      "queries": {
+        "samples": 100,
+        "valid_nine_players": 100,
+        "first_elapsed": 6.819306872785091e-05,
+        "last_elapsed": 238.99378365604207
+      },
+      "flight_events": [
+        {
+          "role": "botA",
+          "local_slot": 3,
+          "generation": 6,
+          "begin_tick": 609,
+          "source": 86,
+          "hop": 176,
+          "deadline": 45.15,
+          "owned_at_begin": 2055,
+          "end_tick": 610,
+          "end_reason": "context",
+          "seconds": 0.05,
+          "following_30s_available_alive_state_samples": 7,
+          "following_reacquire86_samples": 0,
+          "next_ranged_inventory_event_tick": 609
+        },
+        {
+          "role": "botA",
+          "local_slot": 2,
+          "generation": 7,
+          "begin_tick": 3772,
+          "source": 84,
+          "hop": 86,
+          "deadline": 204.955,
+          "owned_at_begin": 3,
+          "end_tick": 3774,
+          "end_reason": "context",
+          "seconds": 0.1,
+          "following_30s_available_alive_state_samples": 30,
+          "following_reacquire86_samples": 6,
+          "next_ranged_inventory_event_tick": 4634
+        }
+      ],
+      "kill_message_counts": {
+        "botA": {
+          "kills": 25,
+          "same_cohort_kills": 10,
+          "observer_kills": 5,
+          "opposing_cohort_kills": 10,
+          "self_kills": 2,
+          "unattributed_death_messages": 1
+        },
+        "botB": {
+          "kills": 7,
+          "same_cohort_kills": 4,
+          "observer_kills": 3,
+          "self_kills": 1
+        }
+      },
+      "unclassified_kill_message_count": 0,
+      "barrier": {
+        "all_players_unspawned": true,
+        "server_tick": 0.7000001072883606,
+        "server_random_seed": 2306364401,
+        "first_valid_bot_spawn_clock_spread": 0.0
+      }
+    }
+  ],
+  "gates": {
+    "matching_physical_start_xyz": true,
+    "matching_initial_owned3": true,
+    "both_within_leg_spawn_spread_zero": true,
+    "first_tick_damage": "OPEN",
+    "rapid_weapon_acquisition": "FAIL_OBSERVED_LONG_AND_FAILED_LIVES",
+    "three_final_candidate_comparisons": "OPEN_ONE_PAIR_ONLY",
+    "all_A": "OPEN"
+  },
+  "residual_route_failure": {
+    "leg": 1,
+    "role": "botA",
+    "local_slot": 2,
+    "generation": 7,
+    "spawn_tick": 3622,
+    "item_unavailable_tick": 3772,
+    "source": 84,
+    "hop": 86,
+    "source_flags": 10,
+    "hop_flags": 0,
+    "successor_176_flags": 0,
+    "begin_tick": 3772,
+    "end_tick": 3774,
+    "end_reason": "context",
+    "original_deadline": 204.955,
+    "fresh_visible_target_tick": 3773,
+    "target_transition": "none to a selected visible player",
+    "necessary_failed_guard_by_source_and_log_deduction": "SafeMotion at3773 has NAV ownership false, resets flightAccepted=-1, and cannot renew it; Fresh at3774 requires flightAccepted>=0",
+    "not_directly_observed": [
+      "physics state exactly at3774",
+      "final safe motion result exactly at3773",
+      "exact other false guards at3774"
+    ],
+    "following_node86_acquisition_samples": 6,
+    "first_ranged_pickup_tick": 4634,
+    "first_ranged_age_seconds": 50.6,
+    "interpretation": "bounded ending is observed, but repeated launch-node acquisition and delayed ownership remain; no general flight-recovery pass"
+  }
+}

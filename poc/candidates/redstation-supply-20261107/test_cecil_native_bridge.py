@@ -134,7 +134,7 @@ CEntity obstruction,floorEntity;CBrushPlane floorPlane;CBrushPolygon floorPolygo
 float floorHitDistance=1;CBrushPolygon* floorHitPolygon=&floorPolygon;
 int liquidAxisQueries=0;bool liquidAxisBlocked=false,liquidAxisInvalid=false;
 int floorMode=0,rayCount=0,blockedItems=0,floorPattern=0,wallMode=0,wallCount=0;FLOAT3D lastFrom,lastTo,wallFrom,wallTo;
-int nearFootMode=0,nearFootRays=0;float nearFootDistance=.26f;bool invalidateAfterFloor=false;
+int nearFootMode=0,nearFootRays=0;float nearFootDistance=.26f;bool invalidateAfterFloor=false;float physicalHitDistanceOverride=-1;
 int legacyCastCalls=0,sectorAdds=0,sectorTests=0,worldTests=0;unsigned wallPolygonFlags=0;
 int capturedWalls=0;bool captureWalls=false;double capturedWorld[4096][2];
 bool forcePassableHit=false;int rayConstructions=0,lastModels=-1;ULONG lastMask=0;
@@ -148,7 +148,7 @@ struct CCastRay {
  CBrushSector* cr_pbscBrushSector=nullptr;FLOAT3D cr_vOrigin,cr_vTarget,cr_vHit;
  CCastRay(CPlayer* p,const FLOAT3D& a,const FLOAT3D& b):from(a),to(b),owner(p),cr_penOrigin(p),cr_vOrigin(a),cr_vTarget(b),cr_vHit(b){++rayConstructions;cr_fHitDistance=(FLOAT)(b-a).Length();}
  void AddSectorsAroundEntity(CEntity*){++sectorAdds;}
- void TestThroughSectors(){++sectorTests;Query();if(invalidHitDistance)cr_fHitDistance=NAN;}
+ void TestThroughSectors(){++sectorTests;Query();if(cr_penHit&&physicalHitDistanceOverride>=0)cr_fHitDistance=physicalHitDistanceOverride;if(invalidHitDistance)cr_fHitDistance=NAN;}
  void TestWholeWorld(CWorld*){++worldTests;Query();if(invalidHitDistance)cr_fHitDistance=NAN;}
  void Cast(CWorld*){++legacyCastCalls;cr_penHit=nullptr;cr_pbpoBrushPolygon=nullptr;cr_pbscBrushSector=nullptr;
   // Retail033 measured Cast overwriting BOTH initial0 and initialPASSABLE.
@@ -202,7 +202,7 @@ void setup(int nodes=3){
  BotCecilSettings()=botcore::CecilPreset(2);BotCecilSettings().fItemSearchCD=0;
  // Existing support/recovery fixtures explicitly exercise opt-in, off-graph pit avoidance.
  BotCecilSettings().bAvoidPits=1;
- hopCheckpointEvents=0;lockApproachEvents=0;lockEvents=0;lastLocked=lastPresent=-1;goalEvents=endEvents=groundReplanEvents=0;lastEnd[0]=0;_botSupplyMapSerial=7;_botRayBudget=40;rayCount=0;blockedItems=0;floorMode=0;floorPattern=0;wallMode=wallCount=0;floorEntity.type=CEntity::RT_MODEL;
+ hopCheckpointEvents=0;lockApproachEvents=0;lockEvents=0;lastLocked=lastPresent=-1;goalEvents=endEvents=groundReplanEvents=0;lastEnd[0]=0;_botSupplyMapSerial=7;_botRayBudget=40;rayCount=0;blockedItems=0;floorMode=0;floorPattern=0;wallMode=wallCount=0;physicalHitDistanceOverride=-1;floorEntity.type=CEntity::RT_MODEL;
  worldLookups=0;floorPlane.bpl_plAbsolute.pl_distance=0;floorHitDistance=1;floorHitPolygon=&floorPolygon;floorPolygon.bpo_pbscSector=nullptr;floorEntity.en_pwoWorld=nullptr;floorEntity.entityPhysicsFlags=0;
  floorPlane.bpl_plAbsolute=FLOAT3D(0,1,0);floorPolygon.bpo_pbplPlane=&floorPlane;floorPolygon.bpo_ulFlags=0;
  nearFootMode=nearFootRays=0;nearFootDistance=.26f;floorEntity.flags=0;invalidateAfterFloor=false;
@@ -2322,6 +2322,26 @@ void supplyDiagnosticsRetentionAndTerminal(){
   starts[0]==starts[1]&&deadlines[0]==deadlines[1],"terminal telemetry leaves final safety commands rays and lifetime pins unchanged");
  bot_bDiagnostics=false;
 }
+void boundedSupplySegment(){
+ // Real006 Minigun connector: floor at1.309612, requested target at1.258371.
+ for(float distance:{.5f,1.258371f,1.309612f}){
+  setup();wallMode=2;physicalHitDistanceOverride=distance;_botRayBudget=16;
+  bool valid=false;SCecilSupplyCastDetail detail;const int before=rayCount;
+  const bool clear=BotSupplyClear(&player,FLOAT3D(0,0,0),FLOAT3D(0,0,-1.258371f),nullptr,&valid,&detail);
+  check(valid&&detail.valid&&rayCount-before==1&&_botRayBudget==15,
+    "bounded connector still uses exactly one valid original physical query");
+  check(clear==(distance>1.258371f)&&detail.clear==clear,
+    "physical blocker beyond connector endpoint cannot reject the segment, inside or endpoint hits still block");
+  check(detail.distance==distance&&detail.hit==obstruction.en_ulID,
+    "segment clipping preserves actual hit metadata including beyond-end floor evidence");
+ }
+ setup();wallMode=2;physicalHitDistanceOverride=1.309612f;invalidHitDistance=true;bool valid=false;
+ check(!BotSupplyClear(&player,FLOAT3D(),FLOAT3D(0,0,-1.258371f),nullptr,&valid)&&!valid,
+   "invalid physical distance cannot authorize connector clearance");
+ setup();wallMode=2;physicalHitDistanceOverride=1.309612f;_botRayBudget=2;valid=true;const int before=rayCount;
+ check(!BotSupplyClear(&player,FLOAT3D(),FLOAT3D(0,0,-1.258371f),nullptr,&valid)&&!valid&&rayCount==before,
+   "bounded segment never borrows the final reserved safety rays");
+}
 void supplyConnectorDiagnostics(){
  int rays[2],lookups[2];unsigned random[2];bool rejected[2];
  for(int mode=0;mode<2;++mode){
@@ -2371,7 +2391,7 @@ SCecilMove flightLossTick(int tick,bool accepted=true){
  flightSafetyResult=BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,m.yaw_delta,1,accepted);
  m.forward=f;m.strafe=st;m.up=u;return m;
 }
-void flightLossFixture(bool special=true,double deadline=20.4,bool escape=false){
+void flightLossFixture(bool special=true,double deadline=20.4,bool escape=false,bool advance=true){
  setup(3);auto& g=BotSupplyGraph();
  g.points[0].y=.5;g.points[0].z=12;g.points[0].radius=4;
  g.points[0].flags=special?(botcore::CECIL_JUMP|botcore::CECIL_OVERRIDE):0;
@@ -2383,6 +2403,7 @@ void flightLossFixture(bool special=true,double deadline=20.4,bool escape=false)
  s.goalSince=0;s.goalDeadline=deadline;s.scanTick=999;s.searchAfter=999;
  player.m_pstState=PST_FALL;player.en_penReference=nullptr;
  player.pl.pl_PositionVector=FLOAT3D(0,.5,12);flightLossTick(98);
+ if(!advance){check(s.navigator.SourceSlot(2)==0&&s.hop==1,"launch fixture commits original84 to86 before loss");return;}
  player.pl.pl_PositionVector=FLOAT3D(0,37,12);flightLossTick(99);
  player.pl.pl_PositionVector=FLOAT3D(.049,38.184,12.185);if(escape)wallMode=6;flightLossTick(100);
  if(escape)check(flightSafetyResult==2,"native004 tick100 uses an existing safety-approved alternative");
@@ -2469,7 +2490,7 @@ void flightLossGuards(){
   if(guard==10)BotSupplyGraph().points[2].links.clear(),BotSupplyGraph().points[1].links.clear();
   if(guard==11)BotSupplyGraph().points[2].lock_entity=777; // Fresh existing lock snapshot finds missing lock owner.
   const auto out=flightLossTick(tick);
-  check(!s.flightFinishing&&s.goal==-1&&out.forward==0&&out.strafe==0&&out.up==0,
+  check(!s.flightFinishing&&!out.flightGoal&&!bridgeDriverOwns(true,out,&player,true)&&s.goal==-1&&out.forward==0&&out.strafe==0&&out.up==0,
     "pending flight identity grounding stale edge topology and newly refreshed lock abort neutral");
  }
  flightLossFixture();items[0].item.weapon=1;player.pl.pl_PositionVector(2)=40;
@@ -2491,9 +2512,66 @@ void flightLossGuards(){
  check(rayCount==rays&&worldLookups==lookups&&s.rng==rng&&allocations==0&&near(s.goalDeadline,20.4),
   "flight observations add no casts entity lookups RNG allocations or deadline changes");
 }
+
+SCecilMove flightDriverTick(int tick,bool visible,double distance){
+ _botRayBudget=40;auto move=BotSupplyTick(&player,0,tick,visible?distance:1000);
+ const bool own=bridgeDriverOwns(true,move,&player,visible);
+ double f=own?move.forward:-.6,st=own?move.strafe:.2,u=own?move.up:0;
+ BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,move.yaw_delta,1,own);
+ return move;
+}
+void flightVisibleOwnership(){
+ for(bool launch:{false,true})for(double distance:{6.,15.}){
+  flightLossFixture(true,20.4,false,!launch);auto& s=BotSupplyState(0);
+  items[0].pickable=false;player.pl.pl_PositionVector=FLOAT3D(0,launch?20:40,12);
+  flightDriverTick(101,false,1000);
+  check(s.flightFinishing,"item disappearance starts actual bounded flight before visibility change");
+  const auto visible=flightDriverTick(102,true,distance);
+  check(visible.flightGoal&&bridgeDriverOwns(true,visible,&player,true)&&visible.active&&!visible.itemGoal&&!visible.urgent&&
+        near(s.flightAccepted,5.1),"actual Driver preserves orphan flight ownership against newly visible close or distant enemy");
+  const auto retained=flightDriverTick(103,true,distance);
+  check(s.flightFinishing&&s.goal==2&&s.navigator.SourceSlot(2)==(launch?0:1)&&s.hop==(launch?1:2)&&
+        near(s.goalDeadline,20.4)&&retained.active,"next tick preserves exact physical edge and original deadline after visible combat handoff");
+  player.pl.pl_PositionVector=launch?FLOAT3D(0,38,12):FLOAT3D(-4.5,37.25,12);
+  const auto ended=flightDriverTick(104,true,distance);
+  check(!s.flightFinishing&&!bridgeDriverOwns(true,ended,&player,true)&&s.goal==-1,
+    "arrival ends dedicated flight priority immediately and yields visible combat");
+ }
+
+ int rays[2],lookups[2];unsigned random[2];SCecilMove commands[2];
+ for(int visible=0;visible<2;++visible){
+  flightLossFixture(true,20.4,false,false);auto& s=BotSupplyState(0);
+  items[0].pickable=false;player.pl.pl_PositionVector=FLOAT3D(0,20,12);
+  rayCount=worldLookups=0;commands[visible]=flightDriverTick(101,visible!=0,6);
+  rays[visible]=rayCount;lookups[visible]=worldLookups;random[visible]=s.rng;
+  check(s.flightFinishing&&commands[visible].flightGoal,"visible-at-loss also owns validated original flight");
+  SCecilFollowGoal follow;follow.valid=true;follow.entity=999;follow.generation=9;follow.expiresAt=99;follow.x=40;follow.z=30;
+  auto& alternative=addItem(991,0,0,botcore::CecilItemKind::Weapon);alternative.pl.pl_PositionVector(2)=20;
+  s.scanTick=0;_botRayBudget=40;
+  const auto pending=BotSupplyTick(&player,0,102,6,&follow);
+  check(pending.flightGoal&&s.goal==2&&s.goalEntity==0&&s.followEntity==0&&near(s.goalDeadline,20.4),
+    "pending valid flight defers real fresh item and follow choices despite scheduled scan");
+ }
+ check(rays[0]==rays[1]&&lookups[0]==lookups[1]&&random[0]==random[1]&&
+   near(commands[0].forward,commands[1].forward)&&near(commands[0].strafe,commands[1].strafe)&&
+   near(commands[0].up,commands[1].up),"visible flight uses same existing NAV command rays lookups and RNG as unseen flight");
+ flightLossFixture(true,5.1);items[0].pickable=false;player.pl.pl_PositionVector(2)=40;
+ flightDriverTick(101,true,6);const auto expired=flightDriverTick(102,true,6);
+ check(!expired.flightGoal&&!bridgeDriverOwns(true,expired,&player,true)&&BotSupplyState(0).goal==-1,
+   "visible enemy never extends original flight deadline");
+ setup(3);auto& s=BotSupplyState(0);player.health=60;
+ auto& item=addItem(991,0,-20);s.goalEntity=991;s.goal=2;s.scanTick=999;s.searchAfter=999;
+ const auto health=BotSupplyTick(&player,0,1,6);
+ check(!bridgeDriverOwns(true,health,&player,true)&&s.goalEntity==item.en_ulID,
+   "ordinary visible nonurgent health retains bounded target but yields combat");
+ flightLossFixture(false);items[0].pickable=false;player.pl.pl_PositionVector(2)=40;
+ const auto ordinary=flightDriverTick(101,true,6);
+ check(!BotSupplyState(0).flightFinishing&&!bridgeDriverOwns(true,ordinary,&player,true),
+   "ordinary FALL loss does not gain dedicated special-flight arbitration");
+}
 int main(){
- flightLossRegression();flightLossGuards();
- supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
+ flightVisibleOwnership();flightLossRegression();flightLossGuards();
+ boundedSupplySegment(); supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
  itemTransit49();itemTransit49Guards();
  liquidProjection48();
  importantTransit48();importantPatrol48();
@@ -3671,12 +3749,16 @@ def main():
     end = source.index("static botcore::CecilFrame BotCecilBodyFrame(", start)
     source = source[:start] + source[end:]
     source = "\n".join(line for line in source.splitlines() if not line.startswith("#"))
+    driver=(here / "BotDriver.cpp").read_text()
+    choice=re.search(r'if\((ready&&[\s\S]*?)\)\{\s*bs\.bs_aHeading=player->m_aLastRotation',driver)
+    if not choice:raise ValueError("actual Driver supply arbitration missing")
+    ownership="\nstatic bool bridgeDriverOwns(bool ready,const SCecilMove& supply,CPlayer* player,bool targetVisible){return "+choice[1]+";}\n"
     with tempfile.TemporaryDirectory(prefix="cecil-bridge-") as temp:
         cpp, exe = Path(temp) / "bridge.cpp", Path(temp) / "bridge"
         items_source = (support / "BotCecilItems.h").read_text()
         helper_start = items_source.index("inline bool BotCecilIsClass(")
         helper_end = items_source.index("inline uint32_t BotCecilAmmoNeed", helper_start)
-        cpp.write_text("#define EXPECTED_NATIVE_USE "+str(use_mask)+"u\n"+STUBS + items_source[helper_start:helper_end] + source + TESTS)
+        cpp.write_text("#define EXPECTED_NATIVE_USE "+str(use_mask)+"u\n"+STUBS + items_source[helper_start:helper_end] + source + ownership + TESTS)
         cmd = ["g++", "-std=c++14", "-O1", "-g", "-Wall", "-Wextra", "-Wno-unused-function",
                "-I", str(here), "-I", str(support), str(cpp), "-o", str(exe)]
         if args.sanitize:

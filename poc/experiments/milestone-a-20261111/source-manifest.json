@@ -27,5 +27,11 @@
     "sha256": "668ac0a7daa054565face6482307e578fea51eb4cdd673de752d8b985a8bac1f",
     "runtime_source": "/srv/tse-milestone-a-evidence-20261111/run-arena004-checked-barrier.py",
     "scope": "success only after final expected-role cleanup gate; full frozen entity barrier and controller source capture"
+  },
+  {
+    "path": "arena007_inventory_probe.py",
+    "sha256": "963723bb83b89379f2426d3f845baa734a57ddea0eb74348a80b3cf771de73c0",
+    "runtime_source": "/srv/tse-milestone-a-evidence-20261111/run-arena007-checked-barrier.py",
+    "scope": "Own original-server namespace, final cleanup gate, optional passive inventory groups; pause reader SHA recorded per run. Current 240s window not yet accepted."
   }
 ]

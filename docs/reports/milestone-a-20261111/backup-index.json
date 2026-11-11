@@ -176,5 +176,17 @@
       "bytes": 3627,
       "roundtrip_verified": true
     }
+  },
+  "build006_matched_start_progress": {
+    "drive_url": "https://drive.google.com/file/d/12NnQBjaOvDLByprb250GbEn5iiC0oGuA/view",
+    "bytes": 14827716,
+    "sha256": "47da01c1a112b355f9992bc441748b5431e1b66d938d65e14e79a4909a4bcdc3",
+    "source_commit": "e1a6bcbd71e869485df406dc7e964be28a0b84ac",
+    "roundtrip_verified": true,
+    "regular_files_written_rehashed": 580,
+    "restored_bytes": 100423205,
+    "symlinks_indexed_not_materialized": 8,
+    "native_launch_from_restore": false,
+    "contains": "Build005/006 sources and artifacts, all closed checked/early005/006 windows and controllers/dependencies, original frozen harness, source bundle including local and connector Git histories, and complete separately deployed notice task source/build/rollout evidence. Progress only; no A release acceptance."
   }
 }

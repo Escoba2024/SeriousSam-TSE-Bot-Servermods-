@@ -1387,7 +1387,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
       // control owns movement. Distance alone must not turn an ordinary pickup
       // into a reason to drop aim/fire. First ranged weapons remain urgent.
       if(ready&&(supply.active||supply.ownsMovement)&&player&&player->m_penWeapons&&
-         (supply.useControl||!targetVisible||(supply.itemGoal&&supply.urgent))){
+         (supply.flightGoal||supply.useControl||!targetVisible||(supply.itemGoal&&supply.urgent))){
         bs.bs_aHeading=player->m_aLastRotation(1)+(FLOAT)supply.yaw_delta;
         bs.bs_aPitch=player->m_aLastRotation(2)+(FLOAT)supply.pitch_delta;
         moveFactor=(FLOAT)supply.forward;humanStrafe=(FLOAT)supply.strafe;

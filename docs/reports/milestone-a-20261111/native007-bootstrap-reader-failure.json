@@ -1,0 +1,16 @@
+{
+  "scope": "BOOTSTRAP_READER_GUARD_FAILURE_BEFORE_COMPARISON",
+  "candidate_dll_sha256": "ce15842a36fee25d56fb1ffcb0f0a45878c254d9b0c5b95b129ce7708abf4b7f",
+  "status": "FAIL",
+  "errors": [
+    "RuntimeError('IsPaused instructions differ')"
+  ],
+  "started_roles": [
+    "botA",
+    "server"
+  ],
+  "all_started_roles_normally_closed": true,
+  "comparison_observed": false,
+  "actual_mismatch_bytes_or_base_captured": false,
+  "cause": "Unknown for this specific closed process. Independent static review found an absolute relocated operand incorrectly compared against preferred-base bytes in the pause reader. A relocation-aware exact check is being tested; do not claim causal proof from that alone."
+}
