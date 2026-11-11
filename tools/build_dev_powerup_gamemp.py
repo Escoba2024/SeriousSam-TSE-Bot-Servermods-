@@ -29,6 +29,11 @@ def stage_server_overlay(target):
         if count<1 or (old!=patches[2][0] and count!=1):
             raise ValueError('server overlay anchor mismatch: '+repr(old))
         text=text.replace(old,new,1)
+    start=text.index(b'BOOL CGame::NewGame(')
+    end=text.index(b'BOOL CGame::JoinGame(',start)
+    call=text.index(b'DevFilterPowerups(dem_bPlay);')
+    if not start < call < end:
+        raise ValueError('server filter hook must occur inside NewGame')
     game.write_bytes(text)
     return target
 
