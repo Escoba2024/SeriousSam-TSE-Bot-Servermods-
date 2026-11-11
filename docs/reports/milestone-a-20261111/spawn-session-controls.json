@@ -1,0 +1,54 @@
+[
+  {
+    "spawn": 3,
+    "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+    "observed_seconds": 320.08107323898,
+    "samples": 1964,
+    "all_session156_equal": true,
+    "all_spawn_values_exact": true,
+    "sync_checks": {
+      "server": {
+        "bad": 0,
+        "disconnects": 0
+      },
+      "botA": {
+        "bad": 0,
+        "disconnects": 0
+      },
+      "vanilla": {
+        "bad": 0,
+        "disconnects": 0
+      }
+    },
+    "cleanup_ok": true,
+    "evidence_folder": "/srv/tse-milestone-a-evidence-20261111/isolated-spawn-3-192642",
+    "session_log_sha256": "0c8b2c14ca590ad91101f34e49b929a6c3cdad0e423bccb7352b6aa9ab359430",
+    "scope": "controlled local Wine session transfer/population; not first-postspawn-hit or WAN cause clearance"
+  },
+  {
+    "spawn": 0,
+    "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+    "observed_seconds": 320.00927336211316,
+    "samples": 2003,
+    "all_session156_equal": true,
+    "all_spawn_values_exact": true,
+    "sync_checks": {
+      "server": {
+        "bad": 0,
+        "disconnects": 0
+      },
+      "botA": {
+        "bad": 0,
+        "disconnects": 0
+      },
+      "vanilla": {
+        "bad": 0,
+        "disconnects": 0
+      }
+    },
+    "cleanup_ok": true,
+    "evidence_folder": "/srv/tse-milestone-a-evidence-20261111/isolated-spawn-0-193301",
+    "session_log_sha256": "7fd9e088076fa3eda386ad13cf6e0c79aae08b3214965d72c151bf8d64ee33af",
+    "scope": "controlled local Wine session transfer/population; not first-postspawn-hit or WAN cause clearance"
+  }
+]

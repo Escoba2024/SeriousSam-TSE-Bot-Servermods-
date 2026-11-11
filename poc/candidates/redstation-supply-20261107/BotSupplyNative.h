@@ -1029,7 +1029,10 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     CEntity* entity=player->GetWorld()->EntityFromID(s.goalEntity);botcore::CecilItem item;
     bool usable=entity&&BotCecilReadItem(player,entity,s.generation,owned,&item);
     if(usable){
-      if(s.mappedWeaponGoal)usable=input.enemy_distance>=8&&BotCecilMappedWeaponNeeded(item,input);
+      // Close combat pauses movement below; it does not make a live needed
+      // weapon unavailable. Keep the same attempt and fixed deadline through
+      // that interruption instead of repeatedly discarding its directed route.
+      if(s.mappedWeaponGoal)usable=BotCecilMappedWeaponNeeded(item,input);
       // Radius/visibility/ranking admit a new goal. A retained attempt uses its
       // live typed need and directed path. Ordinary attempts start at twelve
       // seconds; one reached-node relocation may grant a bounded fixed extension.

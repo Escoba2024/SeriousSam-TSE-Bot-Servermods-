@@ -1,0 +1,62 @@
+{
+  "status": "PASS_SCOPED_ORIGINAL_RETAIL_WINE_RENDER_AND_LOCAL_GAMESPY",
+  "engine_sha256": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+  "vanilla_gamemp_sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+  "observed_seconds": 180.10834266687743,
+  "query_count": 85,
+  "cases": [
+    {
+      "name_id": "nickname-0589a733b69d71dbf649f2f8",
+      "nickname": "Avaro",
+      "native_name": "Avaro",
+      "style": "plain"
+    },
+    {
+      "name_id": "nickname-07f7a764af0f865a8c8d71e6",
+      "nickname": "Ivara",
+      "native_name": "^cA5D66AIvara^r",
+      "style": "single"
+    },
+    {
+      "name_id": "nickname-3ab69804b338e958e14f37b1",
+      "nickname": "Orven",
+      "native_name": "^b^cA5D66AOrven^B^r",
+      "style": "bold"
+    },
+    {
+      "name_id": "nickname-fda5ac831877aa350caf951a",
+      "nickname": "Velko",
+      "native_name": "^i^cEEEEEEVelko^I^r",
+      "style": "italic"
+    },
+    {
+      "name_id": "nickname-5ce945375825aa5d330fd8c4",
+      "nickname": "Norex",
+      "native_name": "^b^i^cFF6655Norex^I^B^r",
+      "style": "bolditalic"
+    }
+  ],
+  "all_five_visible_names_checked_every_query": true,
+  "gui_review": "Original client screenshot visually inspected; Avaro plain defaultblue, Ivara lightgreen, Orven bold lightgreen, Velko italic white, Norex bolditalic red; no code fragments visible",
+  "image_sha256": "b1f46f4ae8bfbc6695a205ab19d313f0f5378c4dfcdb2bd78e78ab9323010db8",
+  "image_storage": "Private local evidence/Drive only, no licensed image in public source",
+  "guid_policy": "Stable IDs preserved; only own isolated PLC4 name bytes replaced",
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "cleanup": "NORMAL",
+  "limits": "Local Wine renderer and separate GameSpy query process inside isolated namespace; not WAN browser, physical Windows GPU or all250 visually rendered cases",
+  "controller_exit_code": 143,
+  "controller_exit_note": "Tool session reported143 after finished receipt; all4 owned units independently checked MainPID0/Resultsuccess/Inactive. Native window and normal process cleanup are separately evidenced."
+}

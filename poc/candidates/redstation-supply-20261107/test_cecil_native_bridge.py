@@ -2893,7 +2893,36 @@ int main(){
  _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
  check(BotSupplyState(0).goalEntity==995,"ordinary eye LOS rejection cannot poison a valid mapped node connector");
  _botRayBudget=16;BotSupplyTick(&player,0,2,4);
- check(BotSupplyState(0).goalEntity==0&&!BotSupplyState(0).mappedWeaponGoal,"close threat clears mapped route and provenance immediately");
+ check(BotSupplyState(0).goalEntity==995&&BotSupplyState(0).mappedWeaponGoal,"close threat pauses a still-needed mapped route instead of destroying its provenance");
+ for(int finish=0;finish<2;++finish){
+  setup(3);player.w.usable=3;addItem(998,0,-22,botcore::CecilItemKind::Weapon);
+  BotSupplyGraph().points[2].important_entity=998;
+  _botRayBudget=16;BotSupplyTick(&player,0,1,1000);auto& s=BotSupplyState(0);
+  const double since=s.goalSince,limit=s.goalDeadline;const int starts=goalEvents;
+  bool retained=true,yielded=true,resumed=true;
+  for(int tick=2;tick<=100;++tick){
+   const bool close=(tick%4)<2;_botRayBudget=16;
+   const auto motion=BotSupplyTick(&player,0,tick,close?7.9:8.1);
+   retained&=s.goalEntity==998&&s.mappedWeaponGoal&&s.goalSince==since&&s.goalDeadline==limit;
+   if(close)yielded&=!motion.active&&!motion.ownsMovement&&motion.buttons==0;
+   else resumed&=motion.active&&motion.itemGoal&&motion.urgent;
+  }
+  check(retained&&goalEvents==starts&&endEvents==0,
+   "repeated close-fight threshold crossings retain one mapped item attempt and its original deadline");
+  check(yielded&&resumed,"close combat owns its action while the same urgent mapped route resumes outside the threshold");
+  if(finish==0){
+   player.pl.pl_PositionVector=FLOAT3D(0,0,-22);
+   player.w.m_iAvailableWeapons=player.w.usable=3|botcore::CecilWeaponMask(4);_botRayBudget=16;
+   BotSupplyTick(&player,0,101,7.9);
+   check(s.pickups==1&&s.goalEntity==0&&!s.mappedWeaponGoal&&!s.ItemRejected(998,5.05),
+    "actual gained usable weapon ends retained mapped attempt normally even during a close fight");
+  }else{
+   const int expired=(int)std::ceil(limit/.05);_botRayBudget=16;
+   BotSupplyTick(&player,0,expired,7.9);
+   check(s.goalEntity==0&&s.ItemRejected(998,expired*.05)&&std::strcmp(lastEnd,"timeout")==0,
+    "close-fight pause never extends mapped attempt and original deadline still rejects a failed item");
+  }
+ }
  setup(3);player.w.usable=3;addItem(996,3,-22,botcore::CecilItemKind::Weapon);
  BotSupplyGraph().points[2].important_entity=996;blockedItems=3;
  _botRayBudget=16;BotSupplyTick(&player,0,1,1000);

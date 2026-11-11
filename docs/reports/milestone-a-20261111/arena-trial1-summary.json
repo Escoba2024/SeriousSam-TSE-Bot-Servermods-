@@ -1,0 +1,60 @@
+{
+  "trial": 1,
+  "candidate_tier": 1,
+  "duration": 240.08590283896774,
+  "query_count": 100,
+  "score_changes": {
+    "Dev-1": 4,
+    "CECIL-Retail-Check": 0,
+    "Dev-2": 1,
+    "Dev-3": 1,
+    "Dev-4": 1,
+    "Dev-5": 8,
+    "Dev-6": 2,
+    "Dev-7": 7,
+    "Dev-8": 8
+  },
+  "old_cohort_change": 7,
+  "candidate_cohort_change": 25,
+  "weapon_samples": {
+    "botA": {
+      "samples": 996,
+      "alive_samples": 959,
+      "ranged_current_samples": 373,
+      "sampled_fire_actions": 18,
+      "max_cumulative_shots_by_local": {
+        "0": 37,
+        "1": 50,
+        "2": 69,
+        "3": 45
+      },
+      "max_pickups_by_local": {
+        "0": 8,
+        "1": 8,
+        "2": 4,
+        "3": 7
+      },
+      "item_transit_end_count": 0
+    },
+    "botB": {
+      "samples": 963,
+      "alive_samples": 945,
+      "ranged_current_samples": 446,
+      "sampled_fire_actions": 46,
+      "max_cumulative_shots_by_local": {
+        "0": 138,
+        "1": 81,
+        "2": 322,
+        "3": 222
+      },
+      "max_pickups_by_local": {
+        "0": 7,
+        "1": 4,
+        "2": 6,
+        "3": 5
+      },
+      "item_transit_end_count": 0
+    }
+  },
+  "scope": "Single short mixed-cohort trial; no human difficulty inference; shots are logged actions, not independently attributed weapon hits."
+}

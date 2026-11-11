@@ -74,3 +74,8 @@ Goal remains all A then all B. Previous turn made concrete code/runtime/backup p
 - A4 RED/GREEN: retained old048 Hole44s/Skulls25s bounded same-hop cycles are FAIL evidence, not merely missing verdicts. Extended mapped/relocated item transit now ends after10s without0.75m best-distance gain, preserving fixed deadline and existing30s rejection expiry; fresh typed/needed/reachable selection follows. Independent code review found no material issue; native rerun still required.
 - Main replayed1372bridgechecks and183tools tests; build002 succeeded, qualifiedfalse. Two isolated native320s spawn3/0 field controls precede denser comparison. No goal narrowing to the completed subset and no B implementation.
 - Ruling: Windows RDC offline does not block all Retail functional work; use licensed unchanged original client under Wine with private namespace/normal input and explicit Wine evidence scope. No Windows/GPU/WAN acceptance inferred.
+
+
+### Native acquisition regression / Build003
+
+Ruling: do not finish three Build002 trials just to satisfy a count after its shared Supply regression is demonstrated. Trial2 completed diagnostically; finalcandidate must receive three actualmatched comparisons. Retention fix77d8339 preserves mapped route identity across temporary closecombat; all safety/deadline gates retained. Build0030ae31bb... now owns fresh native sequence; firstwindow livehandle33276. A2representativeGUI/localGameSpy passed180s with originalclient; keep WAN/physicalWindows scope separate. A1exactfirststate/human/restart/mapchange still open despite provenordinarycannonkill0.30s afteroldbotspawn.
