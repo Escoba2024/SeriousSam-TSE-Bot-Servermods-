@@ -65,6 +65,49 @@ class SnapshotTests(unittest.TestCase):
         self.assertEqual(result['players'][2]['weapons']['wanted'], 5)
         self.assertTrue(result['all_selected_present'])
 
+    def test_motion_fields_are_per_player_with_zero_support_preserved(self):
+        m, base = fixture()
+        for i in range(4):
+            player=0x30000+i*0x2000
+            m.put(player+4, 'II', 3+i, 0x200+i)
+            m.put(player+0x104, '3f', i+0.5, -2.0*i, 1.25)
+            m.put(player+0x11c, 'I', 0 if i==0 else 0x60000+i*4)
+        rows=r.snapshot(m,base,(1,3,6,9))['players']
+        self.assertEqual([x['current_translation_absolute'] for x in rows],
+                         [(0.5,0.0,1.25),(1.5,-2.0,1.25),(2.5,-4.0,1.25),(3.5,-6.0,1.25)])
+        self.assertEqual([x['support_pointer'] for x in rows],[0,0x60004,0x60008,0x6000c])
+        self.assertEqual([x['render_type'] for x in rows],[3,4,5,6])
+        self.assertEqual([x['physics_flags'] for x in rows],[0x200,0x201,0x202,0x203])
+
+    def test_support_is_opaque_and_motion_exists_without_weapon(self):
+        m,base=fixture()
+        m.put(0x3011c,'I',0xf0000000)  # outside fixture memory: never dereference
+        m.put(0x30384,'I',0)
+        row=r.snapshot(m,base,(1,3,6,9))['players'][0]
+        self.assertIsNone(row['weapons'])
+        self.assertEqual(row['support_pointer'],0xf0000000)
+        self.assertEqual(row['current_translation_absolute'],(0.0,0.0,0.0))
+
+    def test_nonfinite_velocity_and_invalid_support_are_rejected(self):
+        mutations=[(0x30104+4*i,'f',v) for i in range(3) for v in (float('nan'),float('inf'),float('-inf'))]
+        mutations += [(0x3011c,'I',v) for v in (1,4,0xfffc,0xffff,0x10001,0xffffffff)]
+        for address,fmt,value in mutations:
+            with self.subTest(address=hex(address),value=value):
+                m,base=fixture();m.put(address,fmt,value)
+                with self.assertRaises(r.EvidenceError):r.snapshot(m,base,(1,3,6,9))
+
+    def test_same_tick_motion_support_render_physics_changes_are_discarded(self):
+        mutations=[(0x30104+4*i,'f',1.0) for i in range(3)]
+        mutations += [(0x3011c,'I',0x60000),(0x30004,'I',5),(0x30008,'I',0x200)]
+        for address,fmt,value in mutations:
+            with self.subTest(address=hex(address)):
+                m,base=fixture();seen=set()
+                def changing(a,n):
+                    if (a,n) in seen:m.put(address,fmt,value)
+                    seen.add((a,n));return m(a,n)
+                with self.assertRaisesRegex(r.EvidenceError,'state changed during read'):
+                    r.snapshot(changing,base,(1,3,6,9))
+
     def test_missing_player_or_weapon_is_explicit_not_last_known_inventory(self):
         m, base = fixture()
         m.put(0x23000 + 3 * 136, 'I', 0)
@@ -198,7 +241,12 @@ class ReaderTests(unittest.TestCase):
             f.seek(0x600c0000 + 0x20d6a4)
             f.write(struct.pack('<I', 0x21000))
             # Independent short Retail instruction excerpts, no game assets.
-            for module, offset, value in [('Engine.dll', 0x17020, 'd981cc000000c3'),
+            for module, offset, value in [('Engine.dll', 0x15860f, '8d8e04010000'),
+                                         ('Engine.dll', 0x1586e2, '8b8e1c010000'),
+                                         ('Engine.dll', 0x15870e, '89be1c010000'),
+                                         ('EntitiesMP.dll', 0x4e87a,
+                                          '837f040375668b4708f6c402745e8b871c01000085c07454'),
+                                         ('Engine.dll', 0x17020, 'd981cc000000c3'),
                                          ('Engine.dll', 0x16e10, '8b818c000000c3'),
                                          ('Engine.dll', 0xdc8d0, '8b4120d9404cc3'),
                                          ('Engine.dll', 0x103037, '8b86e4000000'),

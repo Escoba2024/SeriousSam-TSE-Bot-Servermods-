@@ -1,0 +1,77 @@
+{
+  "scope": "static original Retail world and binary evidence; no process access or gameplay fix",
+  "world": {
+    "sha256": "66e1309ee6eeeda8c564574df65df87a8406f4079b78ad508e77c82d19971111",
+    "member": "Levels/LevelsMP/Deathmatch/RedStation.wld",
+    "entity_table_offset": "0x7956a",
+    "entity_count": 443,
+    "classes_count": 20,
+    "teleport_class_present": false,
+    "player_action_marker_class_present": false
+  },
+  "association": {
+    "nav_source": 12,
+    "nav_destination": 34,
+    "nav_source_flags": 42,
+    "nav_source_radius": 4,
+    "bouncer_entity": 234,
+    "bouncer_class_id": 105,
+    "bouncer_brush_index": 8,
+    "bouncer_entity_chunk_offset": "0xab4c9",
+    "horizontal_source_to_bouncer_origin_distance": 0,
+    "nav_source_above_bouncer_origin": 0.6875,
+    "nav_source_above_brush_top": 0.3125,
+    "destination_item_entity": 243,
+    "destination_floor_entity": 373,
+    "mechanism": "Bouncer contact launch; no Teleport target entity evidenced"
+  },
+  "brush": {
+    "offset": "0x4acf1",
+    "vertex_chunk_offset": "0x4ad29",
+    "vertices": 16,
+    "local_axis_bounds": [
+      [
+        -3.0,
+        3.0
+      ],
+      [
+        -0.1875,
+        0.375
+      ],
+      [
+        -3.0,
+        3.0
+      ]
+    ],
+    "bounds_note": "Geometry AABB is not a complete model-brush collision volume/ETouch proof"
+  },
+  "bouncer": {
+    "speed": 118.0,
+    "direction_degrees": [
+      317.5,
+      35.0,
+      0.0
+    ],
+    "control_seconds": 5.0,
+    "maximum_exit_speed": 200.0,
+    "normal_multiplier": 1.0,
+    "parallel_multiplier": 0.0
+  },
+  "original_binary": {
+    "engine_sha256": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+    "entities_sha256": "7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350",
+    "world_read_new": "0x60179730",
+    "entity_creation_id_restore": "0x60179ae6..0x60179b65",
+    "entity_brush_index_read": "0x601c18c4..0x601c18de",
+    "property_type_low_byte_id_shift8": "0x601c71f8..0x601c7217",
+    "sector_vertices_24_byte_copy": "0x601cd3bf..0x601cd3f1",
+    "jump_from_bouncer": "0x6035e870..0x6035e8ea",
+    "player_bouncer_call": "0x6040ad65..0x6040ad84"
+  },
+  "limitations": [
+    "No runtime ETouch or FakeJump observation",
+    "No proof that radius/pulsed jump caused the failure",
+    "No new Teleport handler justified",
+    "No memory-layout guesses or process reads used"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "scope": "PASS_LIMITED_OWN_ORIGINAL_RETAIL_WINE_BOUNCER_OBSERVATION",
+  "qualified": false,
+  "source_head": "bff6980",
+  "candidate_dll_sha256": "ce15842a36fee25d56fb1ffcb0f0a45878c254d9b0c5b95b129ce7708abf4b7f",
+  "window": "arena007hook-checked-swap0-trial-1-221254",
+  "started_utc": "2026-11-11T22:12:54.931021+00:00",
+  "finished_utc": "2026-11-11T22:14:55.261112+00:00",
+  "observed_seconds": 60.05069603398442,
+  "frida": {
+    "version": "17.26.2",
+    "hook_source_sha256": "fb8966f52ae6fb085945c4cefd769cde3adddf075d3716f8d1b9713316c9afbc",
+    "host_source_sha256": "db411bb6757abdc6e6b0ca124f948234fff656a71d8ec7659bb4322cbc18caa8",
+    "registry_sha256": "987da7611b14b38afadaa25cd0f04300282c600735c408e80bb5adc99f13d55c",
+    "records_received": 1,
+    "calls": 1,
+    "dropped": 0,
+    "faults": 0,
+    "game_state_writes": 0,
+    "world_crc32": "ff3776e0",
+    "cecil_path_hash": "5af1a276",
+    "ttl_ms": 60000,
+    "qualified": false,
+    "setup_seconds": 0.3215202400460839,
+    "armed": true,
+    "enabled": false,
+    "stop_reason": "host requested",
+    "trace_status": "COMPLETE_MATCHED_EVENTS",
+    "detached": true,
+    "original_body_restored": true
+  },
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "all_four_roles_closed": true,
+  "runtime_error_messages_observed": 0,
+  "matched_event": {
+    "owner": "own old048 botA local0; confirmed by CecilState entity565 and paused inventory slot0",
+    "global_slot": 0,
+    "bouncer_id": 234,
+    "before_velocity": [
+      -13.373310089111328,
+      -6.190357208251953,
+      -0.12204085290431976
+    ],
+    "after_velocity": [
+      59.78152847290039,
+      63.71126937866211,
+      -80.09534454345703
+    ],
+    "before_support_id": 234,
+    "after_support_null": true
+  },
+  "limits": [
+    "Single event belongs to old048 botA/local0, not the new007 cohort. Harness group labels are sampling bundles, not ownership.",
+    "Hook TTL begins at arm before gameplay release; less than the entire 60.0507s gameplay window is covered.",
+    "COMPLETE_MATCHED_EVENTS means all recorded matching calls were drained, not full window coverage or proof of all pad contacts.",
+    "Current controller records Frida message errors without automatic rejection; this saved run was explicitly checked and contains none. Next controller must fail closed.",
+    "No accepted bot traverse, acquisition, combat, map or fleet milestone is implied."
+  ]
+}

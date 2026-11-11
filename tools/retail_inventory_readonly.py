@@ -63,6 +63,11 @@ def snapshot(read, engine_base, slots):
         if not active or not entity:
             players.append({'slot': slot, 'present': False})
             continue
+        render, physics = unpack('II', take(entity + 4, 8))
+        velocity = tuple(finite(x) for x in unpack('3f', take(entity + 0x104, 12)))
+        support = u(entity + 0x11c)
+        require(support == 0 or (support >= 0x10000 and support % 4 == 0),
+                'invalid support pointer')
         header = take(entity + 0x10, 0x28)
         flags, entity_id = unpack('I', header)[0], unpack('I', header, 12)[0]
         require(not flags & 4, 'deleted player')
@@ -75,7 +80,9 @@ def snapshot(read, engine_base, slots):
         spawn = finite(unpack('f', take(entity + 0xc14, 4))[0])
         row = dict(slot=slot, present=True, entity_id=entity_id, entity_pointer=entity,
                    world_pointer=world, health=health, armor=armor, placement=placement,
-                   spawned_tick=spawn, last_buttons=buttons, weapons=None)
+                   spawned_tick=spawn, last_buttons=buttons, weapons=None,
+                   current_translation_absolute=velocity, support_pointer=support,
+                   render_type=render, physics_flags=physics)
         if weapon:
             weapon_header = take(weapon + 0x10, 16)
             wflags, wid = unpack('I', weapon_header)[0], unpack('I', weapon_header, 12)[0]
@@ -176,6 +183,11 @@ def readable_ranges(maps):
 
 # Relocation-free instructions in the two original, hash-pinned modules.
 FINGERPRINTS = (
+    ('Engine.dll', 0x15860f, '8d8e04010000'),             # FakeJump velocity +104
+    ('Engine.dll', 0x1586e2, '8b8e1c010000'),             # FakeJump support +11c
+    ('Engine.dll', 0x15870e, '89be1c010000'),             # FakeJump clears support
+    ('EntitiesMP.dll', 0x4e87a,                         # JumpFromBouncer gates
+     '837f040375668b4708f6c402745e8b871c01000085c07454'),
     ('Engine.dll', 0x17020, 'd981cc000000c3'),             # GetHealth +cc
     ('Engine.dll', 0x16e10, '8b818c000000c3'),             # GetWorld +8c
     ('Engine.dll', 0xdc8d0, '8b4120d9404cc3'),             # session +20, game tick +4c

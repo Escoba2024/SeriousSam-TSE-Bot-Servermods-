@@ -146,3 +146,21 @@ Folgeversuch `arena007-checked-swap0-trial-1-214311`, Session67708terminal1, ist
 
 
 Pause-readerfix f95dab3 integriert; Main214Tooltests erfolgreich. Nur exakterHIGHLOWOperand wird mit tatsächlicherMappingbase versetzt, keineMaskierung; weitereMismatchmeldungenenthaltenBasis/Expected/Observed. Neuer240s-Versuch007 läuft unterSession80658, Konsole `arena007-tier1-swap0-reloc-controller.log`, ControllerSHAwirdjeLaufkopiert; frühePause/Vanillajoinbereitsbestätigt, Finaleabwarten. Versionierte007Controllerkopie unterpoc/experiments/milestone-a-20261111/arena007_inventory_probe.py. Kein laufenderTest als bestandenmelden. Aktuelle21:46-Flotte6×8Bots/UNKNOWN0,18Logs0BAD/Disconnect,Disk23.61GiB/RAMavailable2.69GiBbeiLabpause.
+
+
+### Nächster maßgeblicher Stand nach007-Vollfenster
+
+Session80658 terminal0. `arena007-checked-swap0-trial-1-214804` istfinal240.097s,100Queries9,0BAD/Disconnect,4Rollen normalgeschlossen. Berichte integriertd47849b(Originalead7d83). Neuer00719Leben=13Aufnahmen/5Todeohne/1rechtszensiert83.405natives; alter04834=23/8/3. Clienttick*.05 stimmt nicht immer mit nativerServerzeit überein; neueInventarprobe bestätigt alle53Lebens-/Aufnahmeklassen. Neu+37Frags/Alt+12, neueerfolgreicheLatenzmax58.10natives; schnelleBeschaffungweiterFAIL.7exaktevorherigeBeyondEndFloorHitswerdennun korrektclear1;1FlightFinish86→176arrived mit neuer sichtbarerGegnerwahlbeimBegin. Kein generellerFlug-/Navigations-PASS.
+
+Originalwelt/Binäranalyse36c02e5 identifiziert12→34 als Bouncer234→Minigun243, kein belegterTeleport-Entitypfad. Navradius4/Padhalbbreite3 macht vorzeitigeAnkunftzurprüfbarenHypothese, aber1sSamplesbeweisenfehlendenLaunchnicht. Keine neue Gameplayänderung aufVermutung.
+
+Remote9a18cd737c063d35f0cc539bffc16902dbea6f13 wurde tatsächlich gefetcht und Baumd2daf639dafb31604989749b4b00f571808b77be exaktwie lokalesb22beeb bestätigt. Die danachintegrierten36c02e5/d47849b und neueToolentscheidung müssen nachpubliziertwerden. Build007/aktuelleKontrollen/Fridawerkzeuge sindnoch nichtimletzten006DriveDelta; nächsterNachtragoffen.
+
+FridaPython17.26.2 inseparatervenv neuinstalliert, keinFridaMCPToolvorhanden. EigenerdynamischerELF32Selftest bestanden:197Calls/0Bad/Detach/normalExit0 plusuninstrumentierterControl. StatischerfreestandingVorversuchistFAIL mitunvollständigerException, keinverbleibenderownprocess. NochkeinTSEGameHook. AktuellerMetadata-onlyWine-Smoke `run-arena007-frida-metadata.py 1 15 1 0 1`, Session54030, Konsole `arena007-frida-metadata-controller.log`, separaterunitsPrefixssam-arena007meta-checked-swap0-20261111 abergleicherR/port27850/display154/runtime.lock. PrüfevorjedemweiterenStarttatsächlichenStatus. Metadaten-Attachnurimpausiertenown9Player-Lab,0Gameinterceptors; ZielarchitekturbelegundnormalesEndeabwarten. Combatagent bereitetnurprivatenunarmedBouncerHook+Registryvalidator vor, keinRuntimeWriter. Entscheidungdocs/decisions/2026-11-11-isolated-frida-python-runtime-trace.md. GoalweiterVOLLA→Baktiv, keineProduktion mitneuerA-DLL.
+
+
+### 22:19 UTC — erster Bouncerhook abgeschlossen, kein Botlaunch-Beweis
+
+Metadata54030 und Gamehook12632 sind beendet. Aktuelles finales Fenster `arena007hook-checked-swap0-trial-1-221254`:60.0507s,0BAD/Disconnect,alle4normalgeschlossen,1Call/1Record/0Drop/0Fault,Detachtrue undOriginal123Bytesrestauriert. KorrigierteIdentität: Ereignis565istalt048BotA/local0/globalSlot0;VanillaistglobalSlot1/Entity563. group=observeristnurLesebündel,keineEigentumszuordnung! EchterSupport234→null undnormalerLaunch, daher nuralt048-BouncerPASS_LIMITED;keinneuer007Launchbelegt. TTLbegannvorSpielrelease, keinevolle60sCoverage. ReviewfandfehlendesautomatischesGatefürFridaerrorMessages; konkretegespeicherteMessagesleer,Rootnachgeprüft. Navagentbereitetneuenprivatenv2Hook mitTotal/OtherPad/UnmatchedCounters,Armed/ExpiresZeit undErrorguardtests vor; CombatagentordnetalleBotanflügeimFensterzu. KeineLaufzeitänderungdurchAgenten. RootalleinRuntimeWriter.
+
+FrischerFleetcheck22:19:53:6×8eigeneBots/UNKNOWN0,18aktuelleLogs0BAD0Disconnect,Disk23.23GiB/RAMavailable2.63GiB. NochkeineA-Kandidatenpromotion. Build007/FridabelegeundWheelmüsseninsnächsteprivateDriveDelta; jüngsteRemote9a18entsprichtnurB22Tree. VollauftragA→Bweiteraktiv, schnelleWaffenbeschaffung/A3undrestlicheGatesoffen.

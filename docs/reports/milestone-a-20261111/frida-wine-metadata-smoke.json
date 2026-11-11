@@ -1,0 +1,34 @@
+{
+  "scope": "METADATA_ONLY_ORIGINAL_RETAIL_WINE_ATTACH_DETACH_NOT_GAME_HOOK",
+  "version": "17.26.2",
+  "arch": "ia32",
+  "pointer_size": 4,
+  "platform": "linux",
+  "metadata_attach_elapsed_seconds": 0.3727085730060935,
+  "game_interceptors_installed": 0,
+  "detached": true,
+  "paused_fields_unchanged": true,
+  "observed_seconds_after_detach": 15.639770309906453,
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "all_four_roles_normally_closed": true,
+  "candidate_dll_sha256": "ce15842a36fee25d56fb1ffcb0f0a45878c254d9b0c5b95b129ce7708abf4b7f",
+  "result_sha256": "766273baceb8ba3824bf5b7ae84c8a24bfe414086684f8d01ecc0a0a59e45a81",
+  "qualified": false
+}
