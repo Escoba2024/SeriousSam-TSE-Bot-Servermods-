@@ -1,0 +1,11 @@
+# Cecil048 als ausdrücklich angeforderter Entwicklungstest auf Red Station
+
+Am 11.11.2026 wurde der letzte gebaute Cecil-Kandidat auf ausdrücklichen Nutzerauftrag ausschließlich auf dem öffentlichen Entwicklungsserver installiert: `91.99.75.33:25650`, Red Station, acht eigene Bots. Die fünf Produktionsinstanzen behalten ihre bisherigen DLLs, Konfigurationen und Prozesse.
+
+Installiert ist Quelle `4d04ab4ad190a0f6cd078d96f5416e0eea9e1da0`, Tree `127451e9b340af751cdd7fd6544d378b7425a429`, DLL-SHA256 `ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530`. Das tatsächliche Buildmanifest hat SHA256 `6df71192b0654667740effc7e80e93e8dc0b2775597d0911e0516ee3e56704cf` und umfasst 15 MSVC-Einheiten. Die beiden Botprozesse laden nachweislich diese DLL; Dateipfad, Device/Inode und aktuelle Prozessidentität wurden geprüft.
+
+Vorheriger Dev-Stand: Kandidat013 auf Hole mit acht Bots und ohne zusätzliche Teilnehmer. DLLs und Karten-/Readiness-Konfiguration wurden vor dem Eingriff gesichert. Die beiden Botprozesse wurden über ihre PID-gebundenen Fenster regulär beendet, der eigene Dedicated über SIGINT; erst nach vollständiger Prozess-/Cgroup-Leerprüfung wurden beide DLLs gemeinsam ersetzt und die Karte auf Red Station gesetzt. NAV-Daten, Botprofile, Integrated-Einstellungen sowie originale Dedicated-/Engine-/Entities-Komponenten bleiben erhalten. Der Start erfolgte nacheinander bis vier beziehungsweise acht bestätigte Bots.
+
+Die anschließende begrenzte Live-Beobachtung dauerte 120,001844 s mit 119 gültigen Abfragen, vollständiger Fensterabdeckung und acht Bots. Keine gemeldeten Join-, SYNCBAD-, CRC-, Access-Violation-, Fatal- oder Invalid-Action-Fehler; maximal 1,013369 s unbegründeter Stillstand im beobachteten Fenster. Der aktuelle Zustand wurde anschließend erneut samt geladener DLL und unveränderten fünf Produktionsinstanzen geprüft. Hash des privaten Verifikationsbelegs: `06c87570a0bd0ea9039940d9fb459c652c64af6c04e7c346415751a26980cca7`.
+
+Dies ist ein ausdrücklich angeforderter Dev-Test mit `qualified=false`. Er ersetzt keine der unveränderten Produktionsabnahmen, insbesondere keine vollständigen Karten-/Waffen-/Retail-, Ressourcen-, Rotations-, Wiederanlauf- oder 3600/3600/7200-s-Gates und keinen späteren All6-Rollout. Private Rohlogs, Profile, NAV-/Retail-Dateien und Binärdateien werden nicht veröffentlicht.
