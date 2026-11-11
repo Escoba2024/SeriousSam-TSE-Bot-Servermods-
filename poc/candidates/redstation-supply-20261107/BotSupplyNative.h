@@ -196,6 +196,31 @@ static void BotCecilApproachFinal(CPlayer* player,SSupplyState& s,int slot,int t
 }
 static void BotSupplyReset(INDEX slot){BotSupplyState(slot).Reset();}
 static unsigned BotCecilRandom(SSupplyState &s){s.rng^=s.rng<<13;s.rng^=s.rng>>17;s.rng^=s.rng<<5;return s.rng;}
+// One observed map/edge exception; never a generic Bouncer classifier. Published
+// only by the loader under the hooks lock after its existing content checks.
+static long& BotCecilBouncerBindingSerial(){static long serial=-1;return serial;}
+static bool BotCecilBouncerMetadata(){
+  const auto& g=BotSupplyGraph();if(g.points.size()!=193)return false;
+  const auto& a=g.points[8];const auto& b=g.points[12];
+  static const int links8[]={7,13,12,187,83,94};
+  return a.id==8&&a.x==-37.78368377685547f&&a.y==24.503324508666992f&&a.z==63.12769317626953f&&
+    a.radius==2&&a.flags==0&&a.important_entity==-1&&a.next_slot==-1&&a.lock_entity==-1&&
+    a.links.size()==6&&std::equal(a.links.begin(),a.links.end(),links8)&&
+    b.id==12&&b.x==-51&&b.y==24.5&&b.z==63&&b.radius==4&&b.flags==42&&
+    b.important_entity==-1&&b.next_slot==-1&&b.lock_entity==-1&&b.links.size()==1&&b.links[0]==34;
+}
+static void BotCecilBouncerPublish(bool verified,const char* world,unsigned mapCRC,unsigned navCRC,long serial){
+  BotCecilBouncerBindingSerial()=-1;
+  if(verified&&world&&std::strcmp(world,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld")==0&&
+     mapCRC==0xff3776e0u&&navCRC==0xe4571656u&&serial>=0&&BotCecilBouncerMetadata())
+    BotCecilBouncerBindingSerial()=serial;
+}
+static bool BotCecilBouncerBindingValid(){
+  // StopGame immediately clears Ready/increments Serial without touching this
+  // loader-owned record from another thread. Either change revokes the binding.
+  return bot_bEnabled&&bot_bSupplyNavigation&&_botSupplyMapReady&&
+    BotCecilBouncerBindingSerial()>=0&&BotCecilBouncerBindingSerial()==_botSupplyMapSerial;
+}
 static void BotSupplyUpdateNavigation(CGame *game){
   static CTString previousWorld="";static BOOL previousEnabled=FALSE;static LONG previousSerial=-1;
   const BOOL enabled=bot_bEnabled&&bot_bSupplyNavigation&&game!=NULL&&game->gm_bGameOn;
@@ -203,6 +228,7 @@ static void BotSupplyUpdateNavigation(CGame *game){
   const LONG serial=InterlockedCompareExchange(&_botSupplyMapSerial,0,0);
   if(enabled==previousEnabled&&world==previousWorld&&serial==previousSerial)return;
   previousSerial=serial;previousEnabled=enabled;previousWorld=world;
+  {CTSingleLock hooks(&_pTimer->tm_csHooks,TRUE);BotCecilBouncerPublish(false,NULL,0,0,serial);}
   botcore::CecilNavGraph loaded;botcore::CecilSettings settings=botcore::CecilPreset(2);
   bool valid=false;unsigned mapCRC=0,navCRC=0;char navPath[256]={0};
   if(enabled){
@@ -249,6 +275,7 @@ static void BotSupplyUpdateNavigation(CGame *game){
   CTSingleLock hooks(&_pTimer->tm_csHooks,TRUE);
   if(serial!=InterlockedCompareExchange(&_botSupplyMapSerial,0,0))return;
   BotSupplyGraph()=std::move(loaded);BotCecilSettings()=settings;
+  BotCecilBouncerPublish(enabled&&valid,(const char*)world,mapCRC,navCRC,serial);
   for(int i=0;i<4;++i){BotSupplyState(i)=std::move(prepared[i]);BotHumanAttach(i);}
   InterlockedExchange(&_botSupplyMapReady,enabled&&valid);
   BotLog("[CecilLoad] policy=cecil-human-v1 schema=1 world=%s ready=%d nodes=%d map_crc=%08x nav_crc=%08x\n",
@@ -1031,6 +1058,22 @@ static bool BotCecilPatrolStatic(CPlayer* player){
     ref&&!(ref->GetFlags()&ENF_DELETED)&&ref->GetRenderType()==CEntity::RT_BRUSH&&
     !(ref->GetPhysicsFlags()&EPF_MOVABLE)&&ref->en_pwoWorld==player->GetWorld()&&BotCecilIsClass(ref,"WorldBase","World Base");
 }
+static void BotCecilBouncerApproach(CPlayer* player,const SSupplyState& s,botcore::CecilMotion& move){
+  if(!BotCecilBouncerBindingValid()||!BotCecilBouncerMetadata()||!move.active||move.arrived||move.stuck||move.relocated||
+     !std::isfinite(move.up)||move.up<=0||move.up>1||move.flags!=42||move.hop!=12||s.hop!=12||
+     s.navigator.SourceSlot(s.goal)!=8||s.blocked.size()!=193||s.blocked[8]||s.blocked[12]||
+     !s.playable||!BotCecilFrameReady(player)||!player->GetWorld()||!std::isfinite(player->GetHealth())||player->GetHealth()<=0||!player->m_penWeapons||
+     (player->GetFlags()&ENF_DELETED)||player->en_ulID!=s.entity||
+     (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH)||
+     player->en_vGravityDir(1)!=0||player->en_vGravityDir(2)!=-1||player->en_vGravityDir(3)!=0)return;
+  CEntity* ref=player->en_penReference;
+  if(!ref||(ref->GetFlags()&ENF_DELETED)||ref->en_pwoWorld!=player->GetWorld()||
+     ref->GetRenderType()!=CEntity::RT_BRUSH||(ref->GetPhysicsFlags()&EPF_MOVABLE))return;
+  for(int axis=1;axis<=3;++axis)if(!std::isfinite(player->en_vCurrentTranslationAbsolute(axis)))return;
+  // Keep the supported same-height approach grounded; no arrival/contact is
+  // synthesized. Flags, radius, navigator jump clock and later flight stay intact.
+  move.up=0;
+}
 static bool BotCecilAtNode(CPlayer* player,int node){
   if(node<0||(size_t)node>=BotSupplyGraph().points.size())return false;
   const auto& point=BotSupplyGraph().points[node];const auto& p=player->GetPlacement().pl_PositionVector;
@@ -1299,6 +1342,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   const bool reachedHop=BotCecilAtNode(player,previousHop);
   auto move=s.navigator.Update(BotSupplyGraph(),s.blocked.data(),s.blocked.size(),in);s.hop=move.hop;
   BotCecilApproachCapture(s,tick,now,previousSource,previousHop,reachedHop,move);
+  BotCecilBouncerApproach(player,s,move);
   if(s.flightFinishing){
     if(!flightCarried||!move.active||move.arrived||move.stuck||move.relocated||!BotCecilFlightEdge(s)){
       BotCecilFlightEnd(s,slot,tick,now,"edge_changed");return result;

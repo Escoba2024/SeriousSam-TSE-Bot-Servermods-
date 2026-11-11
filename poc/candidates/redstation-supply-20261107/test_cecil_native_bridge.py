@@ -87,7 +87,7 @@ struct Network {CSessionProperties session;const void* GetSessionProperties(){re
 struct Timer {double TickQuantum=.05;} timer,*_pTimer=&timer;
 int _botRayBudget=20,bot_iRosterOffset=0;
 bool bot_bDiagnostics=false;int supplyDiagLines=0;std::string supplyDiagText;
-long _botSupplyMapSerial=7;
+long _botSupplyMapSerial=7,_botSupplyMapReady=1;bool bot_bEnabled=true,bot_bSupplyNavigation=true;
 long InterlockedCompareExchange(long* p,long,long){return *p;}
 int hopCheckpointEvents=0;
 int lockApproachEvents=0,lastApproachNode=-1,lastApproachHop=-1;unsigned long lastApproachRef=0;int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0,groundReplanEvents=0;char lastEnd[32]={0};
@@ -2380,6 +2380,119 @@ void approachArrivalGeometry(){
  // This is current mathematical behavior, not a native proof of which action
  // caused the miss or authorization to change the authored flags/radius.
 }
+void bouncer009Fixture(int run=0){
+ setup(193);auto& g=BotSupplyGraph();for(auto& p:g.points)p.links.clear();
+ g.points[7].x=2.802741289138794f;g.points[7].y=18.485923767089844f;g.points[7].z=63.08060073852539f;g.points[7].radius=2;g.points[7].links={8};
+ g.points[8].x=-37.78368377685547f;g.points[8].y=24.503324508666992f;g.points[8].z=63.12769317626953f;g.points[8].radius=2;g.points[8].links={7,13,12,187,83,94};
+ g.points[11].x=-50.95821762084961f;g.points[11].y=24.501291275024414f;g.points[11].z=55.24614334106445f;g.points[11].radius=2;g.points[11].links={12};
+ g.points[12].x=-51;g.points[12].y=24.5;g.points[12].z=63;g.points[12].radius=4;g.points[12].flags=42;g.points[12].links={34};
+ g.points[34].x=63.094364166259766f;g.points[34].y=49.25468063354492f;g.points[34].z=-63.05478286743164f;g.points[34].radius=2;g.points[34].important_entity=243;
+ auto& item=addItem(243,g.points[34].x,g.points[34].z,botcore::CecilItemKind::Weapon);item.pl.pl_PositionVector(2)=g.points[34].y;
+ player.en_ulID=567;player.w.usable=3;
+ auto& s=BotSupplyState(0);s.entity=567;s.goal=34;s.goalEntity=243;s.goalSince=0;s.goalDeadline=999;s.scanTick=99999;s.anchor=7;s.hop=8;
+ botcore::CecilMotionInput in;in.alive=true;in.anchor=7;in.goal=34;in.x=g.points[7].x;in.y=g.points[7].y;in.z=g.points[7].z;s.navigator.Update(g,nullptr,0,in);
+ player.pl.pl_PositionVector=run?FLOAT3D(-36.412056f,23.959534f,63.125698f):FLOAT3D(-35.983700f,23.894304f,63.126614f);
+ player.en_vCurrentTranslationAbsolute=FLOAT3D(-17.15173f,2.613636f,.01f);
+ floorEntity.en_ulID=54;floorEntity.flags=0;floorEntity.entityPhysicsFlags=0;floorEntity.type=CEntity::RT_BRUSH;floorEntity.en_pwoWorld=player.GetWorld();player.en_penReference=&floorEntity;
+ bot_bEnabled=bot_bSupplyNavigation=true;_botSupplyMapReady=1;
+ BotCecilBouncerPublish(true,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld",0xff3776e0u,0xe4571656u,7);
+}
+void bouncer009Transitions(){
+ for(int run=0;run<2;++run){
+  bouncer009Fixture(run);bot_bDiagnostics=true;supplyDiagText.clear();const auto before=BotSupplyState(0).rng;
+  const auto m=BotSupplyTick(&player,0,1,1000);auto& s=BotSupplyState(0);
+  check(m.active&&m.up==0&&m.flags==42&&s.navigator.SourceSlot(34)==8&&s.hop==12,
+    "009 both native first approach transitions remove only ordinary up on the actual8-to12 edge");
+  check(s.approach.move.up==1&&s.goalEntity==243&&s.goalDeadline==999&&s.rng==before&&BotSupplyGraph().points[12].radius==4,
+    "009 raw requested jump flags radius target deadline and RNG remain original");
+ }
+ bot_bDiagnostics=false;
+ for(int bad=0;bad<25;++bad){
+  bouncer009Fixture();auto& s=BotSupplyState(0);
+  if(bad==0)player.en_penReference=nullptr;
+  if(bad==1)floorEntity.flags=ENF_DELETED;
+  if(bad==2)floorEntity.entityPhysicsFlags=EPF_MOVABLE;
+  if(bad==3)floorEntity.en_pwoWorld=nullptr;
+  if(bad==4)floorEntity.type=CEntity::RT_MODEL;
+  if(bad==5)player.m_pstState=PST_FALL;
+  if(bad==6)player.m_pstState=PST_SWIM;
+  if(bad==7)player.health=0;
+  if(bad==8)player.flags=ENF_DELETED;
+  if(bad==9)player.en_vCurrentTranslationAbsolute(1)=NAN;
+  if(bad==10)++_botSupplyMapSerial;
+  if(bad==11)_botSupplyMapReady=0;
+  if(bad==12)bot_bEnabled=false;
+  if(bad==13)bot_bSupplyNavigation=false;
+  if(bad==14)player.m_penWeapons=nullptr;
+  if(bad==15)player.body.m[0][0]=2;
+  if(bad==16)BotSupplyGraph().points[12].radius=3;
+  if(bad==17)BotSupplyGraph().points[8].links.pop_back();
+  if(bad==18)s.entity++;
+  if(bad==19)s.playable=false;
+  if(bad==20)player.health=NAN;
+  if(bad==21)player.health=INFINITY;
+  if(bad==22)s.blocked[8]=1;
+  if(bad==23)s.blocked[12]=1;
+  if(bad==24)s.blocked.resize(12);
+  botcore::CecilMotionInput in;in.alive=true;in.anchor=8;in.goal=34;in.x=player.pl.pl_PositionVector(1);in.y=player.pl.pl_PositionVector(2);in.z=player.pl.pl_PositionVector(3);in.now=.05;
+  auto move=s.navigator.Update(BotSupplyGraph(),nullptr,0,in);s.hop=move.hop;const auto original=move;
+  check(original.up==1,"009 rejection fixture has a real ordinary jump to preserve");
+  const int rays=rayCount,lookups=worldLookups;BotCecilBouncerApproach(&player,s,move);
+  check(move.up==original.up&&move.flags==original.flags&&move.forward==original.forward&&rayCount==rays&&worldLookups==lookups,
+    "009 invalid context cannot modify ordinary jump or add rays/lookups");
+ }
+ for(int bad=0;bad<8;++bad){
+  bouncer009Fixture();
+  if(bad==0)BotCecilBouncerPublish(false,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld",0xff3776e0u,0xe4571656u,7);
+  if(bad==1)BotCecilBouncerPublish(true,"Levels\\LevelsMP\\Deathmatch\\Other.wld",0xff3776e0u,0xe4571656u,7);
+  if(bad==2)BotCecilBouncerPublish(true,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld",0,0xe4571656u,7);
+  if(bad==3)BotCecilBouncerPublish(true,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld",0xff3776e0u,0,7);
+  if(bad==4)BotCecilBouncerPublish(true,nullptr,0xff3776e0u,0xe4571656u,7);
+  if(bad==5){BotSupplyGraph().points.resize(12);BotCecilBouncerPublish(true,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld",0xff3776e0u,0xe4571656u,7);}
+  if(bad==6){BotSupplyGraph().points[8].x+=1;BotCecilBouncerPublish(true,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld",0xff3776e0u,0xe4571656u,7);}
+  if(bad==7)BotCecilBouncerPublish(true,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld",0xff3776e0u,0xe4571656u,6);
+  check(!BotCecilBouncerBindingValid(),"009 failed loading/path/CRC/metadata/serial clears or revokes binding");
+ }
+ for(int source:{11,12}){
+  bouncer009Fixture();auto& s=BotSupplyState(0);s.navigator.Reset();
+  const auto& p=BotSupplyGraph().points[source];botcore::CecilMotionInput in;
+  in.alive=true;in.anchor=source;in.goal=34;in.x=p.x;in.y=p.y;in.z=p.z;
+  auto m=s.navigator.Update(BotSupplyGraph(),nullptr,0,in);s.hop=m.hop;const auto before=m;
+  BotCecilBouncerApproach(&player,s,m);
+  check(m.up==1&&m.up==before.up&&m.flags==before.flags&&s.navigator.SourceSlot(34)==source,
+    "009 successful11-to12 approach and12-to34 flight retain original jump request");
+ }
+ bouncer009Fixture();auto& s=BotSupplyState(0);botcore::CecilMotionInput in;
+ in.alive=true;in.anchor=8;in.goal=34;in.x=player.pl.pl_PositionVector(1);in.y=player.pl.pl_PositionVector(2);in.z=player.pl.pl_PositionVector(3);in.now=.05;
+ auto original=s.navigator.Update(BotSupplyGraph(),nullptr,0,in);s.hop=original.hop;
+ auto baseline=s.navigator;auto changed=original;BotCecilBouncerApproach(&player,s,changed);
+ check(changed.up==0&&original.up==1&&changed.forward==original.forward&&changed.strafe==original.strafe&&
+   changed.yaw_delta==original.yaw_delta&&changed.flags==original.flags&&changed.hop==original.hop,
+   "009 changes only copied positive up and no other motion component");
+ for(int i=2;i<9;++i){in.now=i*.05;const auto a=s.navigator.Update(BotSupplyGraph(),nullptr,0,in),b=baseline.Update(BotSupplyGraph(),nullptr,0,in);
+  check(a.up==b.up&&a.hop==b.hop&&a.flags==b.flags,"009 output suppression leaves original navigator jump cooldown bit-for-bit unchanged");}
+ for(int mode=0;mode<2;++mode){
+  bouncer009Fixture();bot_bDiagnostics=mode;const auto& s=BotSupplyState(0);
+  const auto move=BotSupplyTick(&player,0,1,1000);
+  check(move.up==0&&move.flags==42&&s.goalDeadline==999,"009 diagnostics toggle cannot change supported approach policy");
+ }
+ for(int which=0;which<7;++which){
+  bouncer009Fixture();auto& s=BotSupplyState(0);botcore::CecilMotionInput in;
+  in.alive=true;in.anchor=8;in.goal=34;in.x=player.pl.pl_PositionVector(1);in.y=player.pl.pl_PositionVector(2);in.z=player.pl.pl_PositionVector(3);in.now=.05;
+  auto move=s.navigator.Update(BotSupplyGraph(),nullptr,0,in);s.hop=move.hop;
+  if(which==0)move.active=false;
+  if(which==1)move.stuck=true;
+  if(which==2)move.relocated=true;
+  if(which==3)move.arrived=true;
+  if(which==4)move.up=0;
+  if(which==5)move.up=-1;
+  if(which==6)move.flags=2;
+  const auto before=move;BotCecilBouncerApproach(&player,s,move);
+  check(move.up==before.up&&move.flags==before.flags,"009 nontravel/negative/ordinary-unrelated jump outputs stay unchanged");
+ }
+ bouncer009Fixture();BotCecilBouncerPublish(false,"",0,0,7);check(!BotCecilBouncerBindingValid(),"009 disable publication clears previous map binding");
+ bot_bDiagnostics=false;
+}
 void approach008Transitions(){
  // Actual Build008 per-action positions translated by node12's origin. This
  // replays navigation mathematics only, never engine dynamics or a proposed fix.
@@ -2680,7 +2793,7 @@ void flightVisibleOwnership(){
 }
 int main(){
  flightVisibleOwnership();flightLossRegression();flightLossGuards();
- boundedSupplySegment(); approachArrivalGeometry();approach008Transitions();approachDiagnostics();approachDeathRespawnDiagnostics();supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
+ boundedSupplySegment(); approachArrivalGeometry();approach008Transitions();bouncer009Transitions();approachDiagnostics();approachDeathRespawnDiagnostics();supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
  itemTransit49();itemTransit49Guards();
  liquidProjection48();
  importantTransit48();importantPatrol48();
