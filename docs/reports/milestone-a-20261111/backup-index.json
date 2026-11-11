@@ -218,5 +218,20 @@
     "scope": "PROGRESS_NOT_RELEASE_ACCEPTANCE",
     "covers": "Build008; closed Hook2/008 action diagnostic, first failed legacy console and successful exact-rebased console; frozen v2 hook/controller/errorguard and console helpers/tests; source bundle through d2d6200. Requires earlier baseline/fixture/005006/007 deltas.",
     "drive_url": "https://drive.google.com/file/d/1iXjZ2aUy3-nq0_3Ee1ghy8nwNrA0uPyh/view"
+  },
+  "build009_bouncer_public_progress": {
+    "bytes": 15215101,
+    "sha256": "b0460eeb2cd0dade911a351f882b0dd324461f68db6752923291c752aaacd735",
+    "repo_head": "3afde4f76ba13a6ed6b45dba686f0e12bcee2a20",
+    "regular_files_written_rehashed": 233,
+    "restored_bytes": 127551099,
+    "symlinks_indexed_not_materialized": 2,
+    "native_launch_from_restore": false,
+    "drive_id": "1wdJTpKufnbx9euMRJhr1vJW4Atgr7xn3",
+    "roundtrip_bytes": 15215101,
+    "roundtrip_sha256": "b0460eeb2cd0dade911a351f882b0dd324461f68db6752923291c752aaacd735",
+    "scope": "PROGRESS_NOT_RELEASE_ACCEPTANCE",
+    "covers": "Build009 unqualified and closed failed-functional approach diagnostic; actual Public008 comparison; privately preserved Dev sync failure, static A1 export/disassembly, source bundle through3afde4f and publication010 receipt. Requires earlier original baseline, fixture and005006/007/008 deltas. Future010 fix and PublicController draft not included.",
+    "drive_url": "https://drive.google.com/file/d/1wdJTpKufnbx9euMRJhr1vJW4Atgr7xn3/view"
   }
 }

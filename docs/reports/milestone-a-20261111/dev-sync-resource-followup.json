@@ -1,0 +1,54 @@
+{
+  "scope": "READONLY_EXISTING_DEV_NO_MUTATION_SHORT_SAMPLE_NOT_STABILITY_GATE",
+  "first_utc": "2026-11-11T23:19:24.277750+00:00",
+  "last_utc": "2026-11-11T23:19:55.024276+00:00",
+  "samples": 7,
+  "own": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "additional_unknown": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "current_log_bad": [
+    11,
+    11,
+    11,
+    11,
+    11,
+    11,
+    11
+  ],
+  "current_log_disconnects": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "host_cpu_percent": [
+    41.71747967479674,
+    56.81362725450902,
+    37.2281234193222,
+    38.48884381338742,
+    38.55482566953007,
+    38.93401015228426
+  ],
+  "min_memory_available_gib": 2.553112030029297,
+  "min_disk_free_gib": 22.521289825439453,
+  "new_runtime_deployment": false,
+  "native_stability_acceptance": false
+}

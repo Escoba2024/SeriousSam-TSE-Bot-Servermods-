@@ -132,3 +132,32 @@ Build009 aus 8664767e3e22179d49304700052c04d9bc17e07c hat DLL-SHA256 0146cfeef95
 Der vorige Public008-Vergleich ist vollständig geschlossen: 120.1141s, alle vier Rollen normal beendet, null Sync-/Disconnectereignisse. Alle neun initialen Spawnclocks0.7500001192 und Startinventare gleich, per-Slot-Positionen in vier Prozessansichten bestätigt. Tatsächliche Public7fc mit HumanAI0/AutoCombat1: 21 Leben=3 Erwerbe/15 Tode ohne Erwerb/3 zensiert. Kandidat008: 13=10/2/1. Vollständige Nenner in 2026-11-11-public-baseline008-native-lives.md/json; keine finale Drei-Tier-Abnahme.
 
 Letzte Flottenmessung22:59: sechs Instanzen mit jeweils acht eigenen Bots, UNKNOWN0, 18 aktuelle Logs ohne BAD/Disconnect, effektiver Spawnwert überall0. Keine A-DLL produktiv ausgerollt. Remote ba530393f80d0ad7d39cbb395d778bb5675f9a99 entspricht exakt dem lokalen a35bd22-Baum; neue009-Änderungen noch nachzusichern. 008-Drivebackup rückgeladen und 257 Dateien separat wiederhergestellt, neue009-Daten noch nicht enthalten. A bleibt unvollständig; B unbegonnen.
+
+
+### 23:12 UTC —009 Diagnose abgeschlossen, Gameplayproblem bleibt offen
+
+Session37776 terminal0, Fenster arena009hook2-checked-swap1-trial-1-230743: 120.0395s, alle vier Rollen normal geschlossen, errors[], null BAD/Disconnect. 360 Actionzeilen, 46 originale Bouncer-Aufrufe an anderen Pads, kein Aufruf an234, null unbekannte Spieler/Drop/Fault, volle Listenerabdeckung, Detach und Originalkörperrestaurierung geprüft. Sanitisiert native009-action-diagnostic.json.
+
+Local2/gen5 tick1368 belegt die beabsichtigte Unterdrückung: rawup1/finalup0 bei Support54. Später tick1373 rawup1/finalup11 ohne Support, tick1374 Kontakt193, tick1375 wieder ohne Support mit vertikaler Geschwindigkeit14.3; tick1381 Weiterleitung12→34 noch in der Luft. Exaktes Action-/Physiktiming wird gegen Originalsteuerung geprüft. Das reine Ground-Gate ist für diesen Verlauf unzureichend; keine Bouncer-/Waffenbeschaffungsfreigabe aus diesem Lauf. Kein weiterer nativer Versuch läuft, eigenes Display entfernt.
+
+Root hat den neuen Quellstand f819c8c über die GitHub-API veröffentlicht und tatsächlich erneut gefetcht: Remote539a54943dbf8b034b8e522b888d7a463b447387 mit exakt identischem Baum9281b25272c6ce8db7d75f5531f845f01b68146a. Publication010.json enthält den privaten Nachweis. Kein gleicher Commit-Hash behauptet. Nächster privater Fortschrittsbackup muss009 und Public008 samt vollständigen Rohbelegen aufnehmen. Der eigene A1-Damage-Hook ist nur als statischer Entwurf gesichert; erster Respawnzustand weiterhin offen. A unvollständig, B unbegonnen.
+
+
+### 23:14 UTC — neuer Dev-Syncbefund und korrigierte Live-Identität
+
+Frische23:11:40-Flottenprüfung: alle6×8 eigene Bots, Dev zusätzlich1UNKNOWN. Dev aktuellerServerlog10BAD/1SyncDisconnect; fünf Publics0/0. Dev-Belege unverändert privat unter dev-sync-observation-2313 gespeichert (Logs mit SHA, Snapshot/PID/start/CWD, tatsächliche Mapping-Inodes/DLLs). Keine instrumentierte oder mutierende Maßnahme am externen Spieler. Weder Spawn0 noch Powerupserver noch neue009-Ursache daraus bewiesen. BestehenderDevserverfe4a77, beideBots048; kein009 produktiv.
+
+Korrektur: die tatsächlich gehashten aktuellen BotA-DLLs sind öffentlich7fc undDev048, genau wie in den maschinenlesbaren22:38/22:59-Snapshots. Frühere Prosa mit Notice407fc/58017 als zu diesen späteren Zeitpunkten aktiv war widersprüchlich und ist zurückgenommen. Der separate21:02–21:12-Notice-Rollout ist ein historischerBeleg, sein späterer Zustand/Wechselverursacher unbekannt. Noticequellarbeit/Backups bleiben erhalten, keine eigenmächtige Wiederaktivierung. HauptberichtheaderundTabelle korrigiert; neueDeploys nur nach frischerIst-Prüfung und exklusivemZugriff.
+
+
+### 23:29 UTC — Build010 prüft die verbleibenden Anflüge
+
+Root integrierte den engen Verhaltensfix02acaea als4d186a2 und die separat geprüfte Diagnose6e375a7 alsb2f46e1. Beide unabhängig ohne wichtige/kritische Befunde geprüft. Root hat danach tatsächlich1806 SDK107-Bridgechecks mit ASan/UBSan und den Driver-Actiontest bestanden. Die positive UP-Ausgabe auf der exakt gebundenen8→12-Kante wird nun auch ohne Referenz in STAND/CROUCH unterdrückt; vorhandene Referenzen bleiben streng geprüft. Die zusätzliche11→12-Aufzeichnung ist rein passiv; dort bleibt die Steuerung unverändert.
+
+Build010 aus b2f46e1725be49151ac062a565723afff2248c6a, DLL6e1e244495b43182eff60f1acb8ca61aba178f0638680298255673f5dcf60ef1, build_oktrue/qualifiedfalse. Aktiver eigener120s-Diagnoselauf Session93072, run-arena010-bouncer-action-diagnostic.py, SHA b0a8bfebc5b35556f6534b08b1267a439cc90894738774eb01e7716d5040baf5. Konsole arena010-action-diagnostic-controller.log; bekannte isolierteR/Port27850/Display154/runtime.lock. Erst nach Vierrollen-Cleanup und echter Auswertung als abgeschlossen behandeln. Kein Produktionsrollout.
+
+Root-gefrorener Public010-Vergleichscontroller ist vorbereitet, aber noch nicht ausgeführt: privates public010-controller-frozen/run-public010.py SHA7564841eb06ef8d90815bca998d44e4ac7354e5f7701d7775b1c412c4b3e54ed, Policy592279dc080b4cf562342a9a58eecc250929a6c93ca4f7a485f88a51b3789055. Root15 Offline-Tests bestanden. Archivierte Public7fc-/Kandidatenkonfigurationen und tatsächliche physische Roster0/4 werden getrennt abgeleitet; keine Einstellungen aus dem zuletzt getesteten R-Verzeichnis übernommen. Frühe doppelt gelesene Erstspawns werden streng auf gleiche Uhr/Inventare/Referenzpositionen geprüft, ohne ersten Simulationszustand zu behaupten.
+
+Private009-Sicherung abgeschlossen:15,215,101Bytes/SHA b0460eeb2cd0dade911a351f882b0dd324461f68db6752923291c752aaacd735, Drive1wdJTpKufnbx9euMRJhr1vJW4Atgr7xn3. Tatsächlicher Rückdownload identisch,233 Dateien separat geschrieben und erneut gehasht (127,551,099Bytes),2Links nur indexiert, kein Native-Restorestart. Enthält Quelle3afde4f/Build009, Public008/009-Rohbelege und Dev-Sync-Snapshot; neuere010-Arbeit braucht nächsten Nachtrag.
+
+Die zusätzliche30s-Dev-Bestandsmessung23:19 ergab8 eigene Bots+1UNKNOWN, elf kumulative BAD und einen Disconnect ohne weitere Zunahme im Messfenster. HostCPU37.23–56.81%, mindestens2.553GiB verfügbarerRAM; keine Stabilitätsfreigabe. Beleg dev-sync-resource-followup.json. A bleibt offen; B unbegonnen.

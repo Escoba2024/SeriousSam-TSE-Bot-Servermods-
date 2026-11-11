@@ -1,0 +1,672 @@
+{
+  "scope": "NATIVE009_OBSERVATION_AND_PORTABLE010_REPLAY_NOT_NATIVE010_ACCEPTANCE",
+  "raw_evidence_directory": "arena009hook2-checked-swap1-trial-1-230743",
+  "qualified": false,
+  "candidate009_sha256": "0146cfeef95b532d7050672963d58d4542ac21ad2a8a957c5810db46970d74eb",
+  "observed_seconds": 120.03952344716527,
+  "diagnostics_enabled": true,
+  "errors": [],
+  "sync": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "all_four_closed": true,
+  "hook": {
+    "records_received": 0,
+    "calls": 0,
+    "total_calls": 46,
+    "other_pad_calls": 46,
+    "unmatched_player_calls": 0,
+    "faults": 0,
+    "dropped": 0,
+    "trace_status": "INSTALLED_NO_MATCHING_CALLS",
+    "detached": true,
+    "coverage": {
+      "armed_ms": 1794438509045,
+      "expires_ms": 1794438634045,
+      "stopped_ms": 1794438630544,
+      "last_observed_ms": 1794438630544,
+      "gameplay_window_start_ms": 1794438510412.3674,
+      "gameplay_window_end_ms": 1794438630449.881,
+      "observed_overlap_ms": 120037.513671875,
+      "entire_gameplay_window_covered": true,
+      "meaning": "observed listener lifetime overlap; not complete gameplay/event proof"
+    },
+    "original_body_restored": true
+  },
+  "raw_sha256": {
+    "result.json": "88f1f24d829f3fa089b61b79057b1cc9afdd457bd5cd7064d8ad20dd8e0926e8",
+    "botA.log": "4ca7847d88bb1c6239d8d72b3f72d60469a6dc95adba50ec304c7b908dd91eee",
+    "frida-bouncer.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "local": 2,
+  "generation": 5,
+  "action_rows": [
+    {
+      "source_line": 1494,
+      "tick": 1368,
+      "generation": 5,
+      "time": 68.400002,
+      "prev_source": 7,
+      "prev_hop": 8,
+      "reached": 1,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 54,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        0.999955,
+        0.009471,
+        1.0
+      ],
+      "action": [
+        0.047357,
+        0.0,
+        -9.999551
+      ],
+      "pos": [
+        -36.14893,
+        23.919989,
+        63.126144
+      ],
+      "velocity": [
+        -17.151726,
+        2.61364,
+        0.017174
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1495,
+      "tick": 1369,
+      "generation": 5,
+      "time": 68.450005,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 54,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        0.99995,
+        0.010041,
+        0.0
+      ],
+      "action": [
+        0.050206,
+        0.0,
+        -9.999496
+      ],
+      "pos": [
+        -37.006516,
+        24.050671,
+        63.126995
+      ],
+      "velocity": [
+        -17.151726,
+        2.61364,
+        0.016988
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1497,
+      "tick": 1370,
+      "generation": 5,
+      "time": 68.5,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        1.0,
+        0.000922,
+        0.0
+      ],
+      "action": [
+        0.004612,
+        0.0,
+        -9.999996
+      ],
+      "pos": [
+        -37.864067,
+        24.181347,
+        63.123688
+      ],
+      "velocity": [
+        -17.151031,
+        2.613535,
+        -0.066152
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1498,
+      "tick": 1371,
+      "generation": 5,
+      "time": 68.550003,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        1.0,
+        0.000729,
+        0.0
+      ],
+      "action": [
+        0.003645,
+        0.0,
+        -9.999998
+      ],
+      "pos": [
+        -38.721619,
+        24.237024,
+        63.12038
+      ],
+      "velocity": [
+        -17.151031,
+        1.113535,
+        -0.066152
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1499,
+      "tick": 1372,
+      "generation": 5,
+      "time": 68.599998,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        1.0,
+        0.000835,
+        0.0
+      ],
+      "action": [
+        0.004174,
+        0.0,
+        -9.999996
+      ],
+      "pos": [
+        -39.57917,
+        24.217701,
+        63.117073
+      ],
+      "velocity": [
+        -17.151031,
+        -0.386465,
+        -0.066152
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1500,
+      "tick": 1373,
+      "generation": 5,
+      "time": 68.650002,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        1.0,
+        0.000966,
+        1.0
+      ],
+      "action": [
+        0.004829,
+        11.0,
+        -9.999995
+      ],
+      "pos": [
+        -40.436722,
+        24.123377,
+        63.113766
+      ],
+      "velocity": [
+        -17.151031,
+        -1.886465,
+        -0.066152
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1501,
+      "tick": 1374,
+      "generation": 5,
+      "time": 68.700005,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 193,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        0.999999,
+        0.001121,
+        0.0
+      ],
+      "action": [
+        0.005603,
+        0.0,
+        -9.999993
+      ],
+      "pos": [
+        -41.281776,
+        24.007467,
+        63.110508
+      ],
+      "velocity": [
+        -16.901091,
+        -2.318191,
+        -0.065188
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1502,
+      "tick": 1375,
+      "generation": 5,
+      "time": 68.75,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        1.0,
+        0.000665,
+        0.0
+      ],
+      "action": [
+        0.003324,
+        0.0,
+        -9.999998
+      ],
+      "pos": [
+        -42.159225,
+        24.722467,
+        63.101089
+      ],
+      "velocity": [
+        -17.548983,
+        14.299999,
+        -0.188361
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1503,
+      "tick": 1376,
+      "generation": 5,
+      "time": 68.800003,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        1.0,
+        7.5e-05,
+        0.0
+      ],
+      "action": [
+        0.000375,
+        0.0,
+        -10.0
+      ],
+      "pos": [
+        -43.036667,
+        25.362467,
+        63.091148
+      ],
+      "velocity": [
+        -17.548862,
+        12.799999,
+        -0.198826
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1504,
+      "tick": 1377,
+      "generation": 5,
+      "time": 68.849998,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        1.0,
+        -2e-05,
+        0.0
+      ],
+      "action": [
+        -0.0001,
+        0.0,
+        -10.0
+      ],
+      "pos": [
+        -43.914108,
+        25.927467,
+        63.080879
+      ],
+      "velocity": [
+        -17.548796,
+        11.3,
+        -0.205382
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1505,
+      "tick": 1378,
+      "generation": 5,
+      "time": 68.900002,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        1.0,
+        -4e-05,
+        1.0
+      ],
+      "action": [
+        -0.0002,
+        11.0,
+        -10.0
+      ],
+      "pos": [
+        -44.79155,
+        26.417467,
+        63.070812
+      ],
+      "velocity": [
+        -17.548845,
+        9.8,
+        -0.201315
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1506,
+      "tick": 1379,
+      "generation": 5,
+      "time": 68.950005,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        1.0,
+        -1.3e-05,
+        0.0
+      ],
+      "action": [
+        -6.5e-05,
+        0.0,
+        -10.0
+      ],
+      "pos": [
+        -45.668991,
+        26.832468,
+        63.06078
+      ],
+      "velocity": [
+        -17.548853,
+        8.3,
+        -0.200686
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1509,
+      "tick": 1380,
+      "generation": 5,
+      "time": 69.0,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 0,
+      "out_hop": 12,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        1.0,
+        -3e-06,
+        0.0
+      ],
+      "action": [
+        -1.7e-05,
+        0.0,
+        -10.0
+      ],
+      "pos": [
+        -46.546432,
+        27.172468,
+        63.050781
+      ],
+      "velocity": [
+        -17.548862,
+        6.800001,
+        -0.199954
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1513,
+      "tick": 1381,
+      "generation": 5,
+      "time": 69.050003,
+      "prev_source": 8,
+      "prev_hop": 12,
+      "reached": 1,
+      "out_hop": 34,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        -0.650512,
+        0.759496,
+        0.0
+      ],
+      "action": [
+        3.79748,
+        0.0,
+        6.50512
+      ],
+      "pos": [
+        -47.423874,
+        27.437468,
+        63.040779
+      ],
+      "velocity": [
+        -17.548862,
+        5.300001,
+        -0.200043
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    },
+    {
+      "source_line": 1514,
+      "tick": 1382,
+      "generation": 5,
+      "time": 69.099998,
+      "prev_source": 12,
+      "prev_hop": 34,
+      "reached": 0,
+      "out_hop": 34,
+      "flags": 42,
+      "support": 0,
+      "state": 0,
+      "nav": 1,
+      "safety": 1,
+      "requested": [
+        -0.653514,
+        0.756914,
+        0.0
+      ],
+      "action": [
+        3.784571,
+        0.0,
+        6.535143
+      ],
+      "pos": [
+        -48.301315,
+        27.627468,
+        63.030777
+      ],
+      "velocity": [
+        -17.548861,
+        3.800001,
+        -0.200042
+      ],
+      "gravity": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    }
+  ],
+  "binary_evidence": {
+    "Engine_sha256": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+    "EntitiesMP_sha256": "7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350",
+    "missing_reference_fall_timer_and_jump_rearm": "603ffbf9..603ffc37",
+    "jumpallowed_filter_then_SetDesiredTranslation": "6040031b..60400347",
+    "SetDesiredTranslation_XYZ_copy_without_reference_test": "60217f60..60217fa6"
+  },
+  "open": [
+    "Native010 pad contact and weapon acquisition",
+    "Unchanged radius may still produce early turn",
+    "No first-state damage acceptance or milestone A pass"
+  ]
+}

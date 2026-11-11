@@ -1,5 +1,5 @@
 {
-  "utc": "2026-11-11T22:59:10.794843+00:00",
+  "utc": "2026-11-11T23:11:40.749853+00:00",
   "scope": "FRESH_QUERY_AND_CURRENT_LOGS_NOT_LONGTERM_SYNC_OR_HUMAN_CLASSIFICATION",
   "fleet": [
     {
@@ -132,7 +132,7 @@
       "port": 25650,
       "map": "Red Station",
       "own_bots": 8,
-      "additional_unknown": 0,
+      "additional_unknown": 1,
       "live_dlls": [
         {
           "role": "server",
@@ -147,12 +147,12 @@
           "sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530"
         }
       ],
-      "current_log_bad": 0,
-      "current_log_disconnects": 0,
+      "current_log_bad": 10,
+      "current_log_disconnects": 1,
       "config_spawn_zero": true,
       "live_session_spawn": 0.0
     }
   ],
-  "disk_free_gib": 22.8,
-  "mem_available_gib": 2.57
+  "disk_free_gib": 22.74,
+  "mem_available_gib": 2.56
 }

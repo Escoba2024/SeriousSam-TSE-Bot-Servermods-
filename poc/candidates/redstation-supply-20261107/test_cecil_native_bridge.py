@@ -2397,6 +2397,77 @@ void bouncer009Fixture(int run=0){
  bot_bEnabled=bot_bSupplyNavigation=true;_botSupplyMapReady=1;
  BotCecilBouncerPublish(true,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld",0xff3776e0u,0xe4571656u,7);
 }
+
+void bouncer010Native009Replay(){
+ // Actual completed009 local2/gen5 samples, ticks1368..1382. Recorded states
+ // are inputs, not a portable simulation or a predicted native010 trajectory.
+ const float rows[][7]={
+ {-36.148930f,23.919989f,63.126144f,-17.151726f,2.613640f,.017174f,54},
+ {-37.006516f,24.050671f,63.126995f,-17.151726f,2.613640f,.016988f,54},
+ {-37.864067f,24.181347f,63.123688f,-17.151031f,2.613535f,-.066152f,0},
+ {-38.721619f,24.237024f,63.120380f,-17.151031f,1.113535f,-.066152f,0},
+ {-39.579170f,24.217701f,63.117073f,-17.151031f,-.386465f,-.066152f,0},
+ {-40.436722f,24.123377f,63.113766f,-17.151031f,-1.886465f,-.066152f,0},
+ {-41.281776f,24.007467f,63.110508f,-16.901091f,-2.318191f,-.065188f,193},
+ {-42.159225f,24.722467f,63.101089f,-17.548983f,14.299999f,-.188361f,0},
+ {-43.036667f,25.362467f,63.091148f,-17.548862f,12.799999f,-.198826f,0},
+ {-43.914108f,25.927467f,63.080879f,-17.548796f,11.300000f,-.205382f,0},
+ {-44.791550f,26.417467f,63.070812f,-17.548845f,9.800000f,-.201315f,0},
+ {-45.668991f,26.832468f,63.060780f,-17.548853f,8.300000f,-.200686f,0},
+ {-46.546432f,27.172468f,63.050781f,-17.548862f,6.800001f,-.199954f,0},
+ {-47.423874f,27.437468f,63.040779f,-17.548862f,5.300001f,-.200043f,0},
+ {-48.301315f,27.627468f,63.030777f,-17.548861f,3.800001f,-.200042f,0}};
+ for(int diagnostics=0;diagnostics<2;++diagnostics){
+  bouncer009Fixture();bot_bDiagnostics=diagnostics;auto& s=BotSupplyState(0);
+  const auto rng=s.rng;auto originalNavigator=s.navigator;
+  for(int i=0;i<15;++i){
+   player.pl.pl_PositionVector=FLOAT3D(rows[i][0],rows[i][1],rows[i][2]);
+   player.en_vCurrentTranslationAbsolute=FLOAT3D(rows[i][3],rows[i][4],rows[i][5]);
+   player.en_penReference=rows[i][6]?&floorEntity:nullptr;floorEntity.en_ulID=(int)rows[i][6];
+   botcore::CecilMotionInput in;in.alive=true;in.anchor=7;in.goal=34;
+   in.x=rows[i][0];in.y=rows[i][1];in.z=rows[i][2];in.now=static_cast<float>((1368+i)*.05f); // Retail TickQuantum and multiplication are FLOAT.
+   const auto original=originalNavigator.Update(BotSupplyGraph(),nullptr,0,in);
+   const int previousSource=s.navigator.SourceSlot(s.goal),previousHop=s.hop;
+   const bool reached=BotCecilAtNode(&player,previousHop);
+   auto actual=s.navigator.Update(BotSupplyGraph(),s.blocked.data(),s.blocked.size(),in);s.hop=actual.hop;
+   BotCecilApproachCapture(s,1368+i,in.now,previousSource,previousHop,reached,actual);
+   BotCecilBouncerApproach(&player,s,actual);
+   check(actual.active&&s.goalEntity==243&&s.goalDeadline==999&&s.rng==rng,
+     "010 actual009 multistep replay retains goal deadline life and RNG");
+   check(s.hop==original.hop&&actual.flags==original.flags&&s.navigator.SourceSlot(34)==originalNavigator.SourceSlot(34),
+     "010 actual009 multistep replay preserves graph transition and flags");
+   if(i==0||i==5||i==10){
+    check(original.up==1&&actual.up==0,
+      "010 actual009 grounded and unsupported repeat pulses are suppressed on source8 hop12");
+    if(diagnostics)check(s.approach.move.up==1,"010 raw diagnostics retain unsupported requested up before suppression");
+   }else check(actual.up==original.up,"010 zero and other-edge up remain unchanged");
+  }
+  check(s.navigator.SourceSlot(34)==12&&s.hop==34,
+    "010 replay does not alter original high radius arrival or later flight");
+ }
+ bot_bDiagnostics=false;
+ // Non-STAND airborne state is still excluded even without support. This rule
+ // does not promote FALL, SWIM or DIVE to standing/contact authority.
+ for(int state=0;state<3;++state){
+  bouncer009Fixture();auto& s=BotSupplyState(0);player.en_penReference=nullptr;
+  player.m_pstState=state==0?PST_FALL:(state==1?PST_SWIM:PST_DIVE);
+  botcore::CecilMotionInput in;in.alive=true;in.anchor=8;in.goal=34;
+  in.x=player.pl.pl_PositionVector(1);in.y=player.pl.pl_PositionVector(2);in.z=player.pl.pl_PositionVector(3);in.now=.05;
+  auto move=s.navigator.Update(BotSupplyGraph(),nullptr,0,in);s.hop=move.hop;
+  check(move.up==1,"010 state counterexample starts with real jump pulse");
+  BotCecilBouncerApproach(&player,s,move);check(move.up==1,"010 unsupported FALL/liquid state retains original jump");
+ }
+ bouncer009Fixture();auto& s=BotSupplyState(0);s.navigator.Reset();player.en_penReference=nullptr;
+ botcore::CecilMotionInput in;in.alive=true;in.anchor=8;in.goal=34;in.x=player.pl.pl_PositionVector(1);in.y=player.pl.pl_PositionVector(2);in.z=player.pl.pl_PositionVector(3);in.now=.05;
+ auto move=s.navigator.Update(BotSupplyGraph(),nullptr,0,in);s.hop=move.hop;
+ check(move.up==1&&s.navigator.SourceSlot(34)==8,"010 passive output fixture has the real bound edge and positive pulse");
+ const auto original=move;const auto rng=s.rng;const int rays=rayCount,lookups=worldLookups;
+ BotCecilBouncerApproach(&player,s,move);
+ check(original.up==1&&move.up==0&&move.forward==original.forward&&move.strafe==original.strafe&&move.yaw_delta==original.yaw_delta&&
+   rays==rayCount&&lookups==worldLookups&&rng==s.rng&&player.en_penReference==nullptr,
+   "010 unsupported policy only removes positive up without support mutation casts lookups or RNG");
+}
+
 void bouncer009Transitions(){
  for(int run=0;run<2;++run){
   bouncer009Fixture(run);bot_bDiagnostics=true;supplyDiagText.clear();const auto before=BotSupplyState(0).rng;
@@ -2409,7 +2480,7 @@ void bouncer009Transitions(){
  bot_bDiagnostics=false;
  for(int bad=0;bad<25;++bad){
   bouncer009Fixture();auto& s=BotSupplyState(0);
-  if(bad==0)player.en_penReference=nullptr;
+  if(bad==0)player.en_vGravityDir=FLOAT3D(0,1,0);
   if(bad==1)floorEntity.flags=ENF_DELETED;
   if(bad==2)floorEntity.entityPhysicsFlags=EPF_MOVABLE;
   if(bad==3)floorEntity.en_pwoWorld=nullptr;
@@ -2523,6 +2594,65 @@ void approach008Transitions(){
     "008 both airborne arrivals require shifted sphere; neither is within original centered radius");
  }
 }
+void approachElevenDiagnostics(){
+ for(int mode=0;mode<2;++mode){
+  bouncer009Fixture();bot_bDiagnostics=mode;supplyDiagText.clear();supplyDiagLines=0;
+  auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();s.navigator.Reset();s.approach=SCecilApproachDiagnostic();
+  g.points[10].x=g.points[11].x;g.points[10].y=g.points[11].y;g.points[10].z=40;g.points[10].links={11};
+  botcore::CecilMotionInput in;in.alive=true;in.anchor=10;in.goal=34;in.x=g.points[10].x;in.y=g.points[10].y;in.z=g.points[10].z;
+  auto first=s.navigator.Update(g,nullptr,0,in);s.hop=first.hop;
+  check(first.hop==11&&s.navigator.SourceSlot(34)==10,"11 diagnostic fixture actually approaches distant11 from10");
+  BotCecilApproachCapture(s,0,0,-1,10,false,first);
+  in.now=.05;auto far=s.navigator.Update(g,nullptr,0,in);
+  BotCecilApproachCapture(s,1,.05,10,11,false,far);
+  check(s.approach.start<0,"distant selected hop11 cannot arm11-to12 diagnostic");
+  in.now=.1;in.x=g.points[11].x;in.y=g.points[11].y;in.z=g.points[11].z;
+  auto move=s.navigator.Update(g,nullptr,0,in);s.hop=move.hop;
+  check(move.hop==12&&move.up==1&&s.navigator.SourceSlot(34)==11,"actual arrival11 produces first ordinary UP on11-to12");
+  const auto original=move;const auto rng=s.rng;const int rays=rayCount,lookups=worldLookups;
+  BotCecilApproachCapture(s,2,.1,10,11,true,move);
+  BotCecilBouncerApproach(&player,s,move);
+  BotCecilApproachFinal(&player,s,0,2,.1,true,1,false,FLOAT3D(0,11,0),FLOAT3D(),0);
+  check(move.up==1&&move.up==original.up&&move.flags==original.flags&&move.forward==original.forward,
+    "11 diagnostic does not extend8-to12 gameplay suppression to11-to12");
+  check(s.rng==rng&&rayCount==rays&&worldLookups==lookups&&s.goal==34&&s.goalEntity==243&&s.goalDeadline==999,
+    "11 diagnostic adds no casts lookups RNG or gameplay goal/deadline writes");
+  if(mode)check(s.approach.start==.1&&supplyDiagLines==1&&supplyDiagText.find("prev_source=10 prev_hop=11 reached=1 update=1")!=std::string::npos&&
+      supplyDiagText.find("requested=(")!=std::string::npos&&supplyDiagText.find("action=(0.000000,11.000000,0.000000)")!=std::string::npos,
+      "11 actual arrival captures first raw UP and final action within same bounded episode");
+  else check(s.approach.start<0&&supplyDiagLines==0,"11 trigger remains default off");
+  // Start an observer at an already committed11-to12 edge, independent of the
+  // first-arrival trigger. Navigator and gameplay state remain untouched.
+  s.approach=SCecilApproachDiagnostic();supplyDiagLines=0;
+  in.now=.15;in.z=g.points[11].z+.2;auto ongoing=s.navigator.Update(g,nullptr,0,in);
+  BotCecilApproachCapture(s,3,.15,11,12,false,ongoing);
+  check(mode?s.approach.start==.15:s.approach.start<0,"11 committed ongoing edge can arm only when diagnostics enabled");
+  for(int i=3;i<150;++i)BotCecilApproachFinal(&player,s,0,i,.15+(i-3)*.01,true,1,false,FLOAT3D(),FLOAT3D(),0);
+  check(supplyDiagLines==(mode?120:0),"11 diagnostic keeps existing120-row cap");
+  s.approach=SCecilApproachDiagnostic();supplyDiagLines=0;
+  BotCecilApproachCapture(s,3,.15,11,12,false,ongoing);
+  BotCecilApproachFinal(&player,s,0,130,6.15,true,1,false,FLOAT3D(),FLOAT3D(),0);
+  check(supplyDiagLines==0,"11 diagnostic keeps existing exclusive6-second cap");
+  s.Reset();check(s.approach.start<0&&s.approach.rows==0,"11 life/map reset clears diagnostic bounds");
+ }
+ for(int bad=0;bad<7;++bad){
+  bouncer009Fixture();bot_bDiagnostics=true;auto& s=BotSupplyState(0);s.navigator.Reset();
+  auto& g=BotSupplyGraph();botcore::CecilMotionInput in;in.alive=true;in.anchor=11;in.goal=34;
+  in.x=g.points[11].x;in.y=g.points[11].y;in.z=g.points[11].z;
+  auto move=s.navigator.Update(g,nullptr,0,in);s.hop=move.hop;
+  if(bad==0)move.hop=11;
+  if(bad==1)move.active=false;
+  if(bad==2)move.arrived=true;
+  if(bad==3)move.relocated=true;
+  if(bad==4)move.stuck=true;
+  if(bad==5)s.navigator.Reset();
+  if(bad==6)g.points[12].radius=3;
+  BotCecilApproachCapture(s,1,.05,10,11,true,move);
+  check(s.approach.start<0,"11 unrelated inactive relocated stale or invalid geometry cannot arm new trigger");
+ }
+ bot_bDiagnostics=false;
+}
+
 void approachDiagnostics(){
  for(int mode=0;mode<2;++mode){
   setup(35);bot_bDiagnostics=mode;supplyDiagText.clear();supplyDiagLines=0;
@@ -2793,7 +2923,7 @@ void flightVisibleOwnership(){
 }
 int main(){
  flightVisibleOwnership();flightLossRegression();flightLossGuards();
- boundedSupplySegment(); approachArrivalGeometry();approach008Transitions();bouncer009Transitions();approachDiagnostics();approachDeathRespawnDiagnostics();supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
+ boundedSupplySegment(); approachArrivalGeometry();approach008Transitions();bouncer009Transitions();bouncer010Native009Replay();approachElevenDiagnostics();approachDiagnostics();approachDeathRespawnDiagnostics();supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
  itemTransit49();itemTransit49Guards();
  liquidProjection48();
  importantTransit48();importantPatrol48();

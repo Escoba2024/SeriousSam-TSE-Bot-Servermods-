@@ -165,7 +165,12 @@ static void BotCecilApproachCapture(SSupplyState& s,int tick,double now,int sour
   auto& d=s.approach;
   if(d.start<0){
     const auto& g=BotSupplyGraph();
-    if(g.points.size()<=34||!((hop==8&&move.hop==12)||(source==8&&hop==12)||(source==12&&hop==34)))return;
+    // Observe the newly selected11-to12 edge, not a distant approach to11.
+    // This diagnostic predicate never changes gameplay or permits movement.
+    const bool eleven=move.active&&!move.arrived&&!move.stuck&&!move.relocated&&
+      move.hop==12&&s.navigator.SourceSlot(s.goal)==11&&
+      ((hop==11&&reached)||(source==11&&hop==12));
+    if(g.points.size()<=34||!((hop==8&&move.hop==12)||(source==8&&hop==12)||(source==12&&hop==34)||eleven))return;
     const auto& p=g.points[12];
     if(p.x!=-51||p.y!=24.5||p.z!=63||p.radius!=4||p.flags!=42)return;
     d.start=now;
@@ -1067,11 +1072,13 @@ static void BotCecilBouncerApproach(CPlayer* player,const SSupplyState& s,botcor
      (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH)||
      player->en_vGravityDir(1)!=0||player->en_vGravityDir(2)!=-1||player->en_vGravityDir(3)!=0)return;
   CEntity* ref=player->en_penReference;
-  if(!ref||(ref->GetFlags()&ENF_DELETED)||ref->en_pwoWorld!=player->GetWorld()||
-     ref->GetRenderType()!=CEntity::RT_BRUSH||(ref->GetPhysicsFlags()&EPF_MOVABLE))return;
+  if(ref&&((ref->GetFlags()&ENF_DELETED)||ref->en_pwoWorld!=player->GetWorld()||
+     ref->GetRenderType()!=CEntity::RT_BRUSH||(ref->GetPhysicsFlags()&EPF_MOVABLE)))return;
   for(int axis=1;axis<=3;++axis)if(!std::isfinite(player->en_vCurrentTranslationAbsolute(axis)))return;
-  // Keep the supported same-height approach grounded; no arrival/contact is
-  // synthesized. Flags, radius, navigator jump clock and later flight stay intact.
+  // A brief missing reference during STAND/CROUCH does not prevent a queued
+  // ordinary up action from jumping at later contact (native009). Remove only
+  // that request on this bound approach; no support/arrival/air authority is
+  // synthesized. Flags, radius, navigator jump clock and later edges stay intact.
   move.up=0;
 }
 static bool BotCecilAtNode(CPlayer* player,int node){

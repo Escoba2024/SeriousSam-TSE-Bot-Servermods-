@@ -1,0 +1,57 @@
+{
+  "scope": "PASS_LIMITED_NATIVE_DIAGNOSTIC_GAMEPLAY_FIX_INSUFFICIENT",
+  "qualified": false,
+  "window": "arena009hook2-checked-swap1-trial-1-230743",
+  "observed_seconds": 120.03952344716527,
+  "candidate_source": "8664767e3e22179d49304700052c04d9bc17e07c",
+  "candidate_dll_sha256": "0146cfeef95b532d7050672963d58d4542ac21ad2a8a957c5810db46970d74eb",
+  "controller_sha256": "40c77a3a0bfd8acf0db8c59291c287d930eea2eeba2b7d5e7ac66875e2fc8f7e",
+  "hook": {
+    "calls": 0,
+    "total_calls": 46,
+    "other_pad_calls": 46,
+    "unmatched_player_calls": 0,
+    "records_received": 0,
+    "faults": 0,
+    "dropped": 0,
+    "detached": true,
+    "original_body_restored": true,
+    "coverage": {
+      "armed_ms": 1794438509045,
+      "expires_ms": 1794438634045,
+      "stopped_ms": 1794438630544,
+      "last_observed_ms": 1794438630544,
+      "gameplay_window_start_ms": 1794438510412.3674,
+      "gameplay_window_end_ms": 1794438630449.881,
+      "observed_overlap_ms": 120037.513671875,
+      "entire_gameplay_window_covered": true,
+      "meaning": "observed listener lifetime overlap; not complete gameplay/event proof"
+    }
+  },
+  "observer_input_schedule": "one normal mouse pulse before observation; no periodic input during bounded action diagnostic",
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "all_four_roles_closed": true,
+  "action_rows": 360,
+  "limits": [
+    "Ground-supported up suppression observed in actual tick1368, raw requested up1 and final up0.",
+    "A later airborne positive up output precedes ordinary upward departure after support193 contact. Exact network/action timing remains to be cross-checked; no pad234 call in this window.",
+    "No native Bouncer approach or general acquisition acceptance; no production deployment or final comparison."
+  ]
+}

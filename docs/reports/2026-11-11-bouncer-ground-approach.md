@@ -1,5 +1,7 @@
 # Bound the observed Red Station8→12 ordinary jump
 
+Historical009 implementation report. The completed009 observation and narrowly extended010 condition are documented in [the repeat-UP follow-up](2026-11-11-native009-bouncer-repeat-up.md).
+
 Native008 recorded two actual grounded8→12 actions with requested up1 and composed up11, followed immediately by loss of support and upward translation17.238. Both later advanced through the shifted-radius arrival high above Bouncer234 and missed its contact. The exact evidence and portable transition replay are in [the008 report](2026-11-11-native008-bouncer-actions.md).
 
 This change suppresses only positive ordinary `move.up` on the actual navigator-selected source8/hop12. Raw diagnostics are captured first. The target flags42, radius4, directed topology, navigator state and jump cooldown remain untouched. No synthetic arrival, launch, velocity, support, entity write, selector, ray, lookup or simulation RNG is introduced. Existing Driver ownership and final movement safety checks remain in place.

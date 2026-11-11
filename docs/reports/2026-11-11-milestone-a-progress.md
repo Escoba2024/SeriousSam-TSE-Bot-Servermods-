@@ -1,8 +1,10 @@
 # Meilenstein A: implementierter Zwischenstand, keine Gesamtfreigabe
 
-Aktueller Betriebsstand: **11.11.2026, 22:59:10 UTC**. Der Auftrag bleibt aktiv. **A ist nicht abgenommen; B wurde nicht begonnen.** Keine neue A-Kampf-DLL und keine neuen Namen sind produktiv aktiviert. Die frische Prüfung bestätigt auf allen sechs Servern je acht zugeordnete eigene Bots, keine weiteren UNKNOWN und aktuell keine SYNCBAD-/Disconnectmeldungen in den 18 laufenden Logs. Effektiver, aus der Originalengine gelesener Sessionwert für Spawn-Unverwundbarkeit: überall0.0. Das ist keine erste-Tick-Damage- oder Langzeitfreigabe.
+Aktueller Betriebsstand: **11.11.2026, 23:11:40 UTC**. Der Auftrag bleibt aktiv. **A ist nicht abgenommen; B wurde nicht begonnen.** Keine neue A-Kampf-DLL und keine neuen Namen sind produktiv aktiviert. Alle sechs Instanzen haben acht verifizierte eigene Bots. Dev hat zusätzlich einen nicht zugeordneten Spieler und im aktuellen Serverlog zehn SYNCBAD-Ereignisse mit einem Sync-Disconnect; die fünf öffentlichen Instanzen haben aktuell keine solchen Ereignisse. Die Dev-Rohlogs und tatsächlichen Prozess-/Modulidentitäten wurden separat privat gesichert. Keine Ursache aus Spawn0 oder der unbeteiligten isolierten009-Diagnose abgeleitet. Effektiver nativer Sessionwert für Spawn-Unverwundbarkeit ist überall0.0; erste-Tick-Abnahme bleibt offen.
 
-Eine separate Community-Notice-Aufgabe hat inzwischen alle BotA-DLLs ausgerollt. Diese fremde Änderung wird erhalten; BotB verbleibt auf Legacy7fc beziehungsweise Dev048. Die früheren eigenen Rücksetzungen von Dev(19:11) und Hole(20:20) auf Spawn3 sind historische Belege. Wann und durch wen sie erneut auf0 gestellt wurden, ist nicht belegt; die Notice-Vorherbackups enthielten bereits0. Siehe `2026-11-11-preserve-community-notice.md` und frischen Snapshot `milestone-a-20261111/fleet-after-hole-rollback.json`. Die nachfolgenden älteren Abschnitte dokumentieren frühere Prüfzeitpunkte und sind kein aktuelles Laufzeitinventar.
+Korrektur der bisherigen Betriebsbeschreibung: Der frische, tatsächliche DLL-/Inode-Nachweis liefert auf beiden öffentlichen Botprozessen Legacy7fc und auf beiden Dev-Botprozessen Cecil048. Auch die versionierten maschinenlesbaren Snapshots von22:38 und22:59 enthalten diese Werte. Die vorherige Prosa, die Notice-DLLs zu diesen Zeitpunkten als aktiv bezeichnete, widersprach diesen Snapshots und ist damit zurückgenommen. Das private separate Notice-Rolloutprotokoll21:02–21:12 und die übernommene, standardmäßig deaktivierte Notice-Quelldatei bleiben erhalten; deren spätere Laufzeitpräsenz wird nicht behauptet. Der genaue Wechselzeitpunkt und Verursacher sind nicht belegt. Vor jedem späteren Rollout werden Konfiguration, aktive Module und Eigentum neu geprüft.
+
+Siehe aktuellen Snapshot `milestone-a-20261111/fleet-after-hole-rollback.json`. Die nachfolgenden älteren Abschnitte dokumentieren frühere Prüfzeitpunkte und sind kein aktuelles Laufzeitinventar.
 
 ## 1. Tatsächliche Änderungen und Betrieb
 
@@ -17,13 +19,11 @@ Eine separate Community-Notice-Aufgabe hat inzwischen alle BotA-DLLs ausgerollt.
 
 Ausgangsbasis `4d04ab4ad190a0f6cd078d96f5416e0eea9e1da0`. Lokale Implementierungscommits: `c261a540f258a271f559d0db790b9cee1352e8fd` (Kampf), `41b2369` (Namen), `904bf8a` (Retail-FLOAT-Vorlagen). Build `tse-milestone-a-build-001-20261111`, MSVC Win32 unter Wine, `build_ok=true`, **qualified=false**, DLL-SHA256 `def7c044ba64a65b742c63d76c775c955b892655e626bf96a1380d778d35719a`. Manifest enthält SDK-/Include-Commits, Quell-/Overlay-Hashes und Compilerflags. Der Build ist **nicht deployed**.
 
-| Rolle | Aktive GameMP-SHA256, geprüft22:59 UTC |
+| Rolle | Aktive GameMP-SHA256, geprüft23:11 UTC |
 |---|---|
-| Öffentliche BotA, bestehende Notice-Erweiterung | `407fc5d6aa53e339c36ebd70bd68df19f9ffc8e43fe01b8e17bbed1b7357b33f` |
-| Öffentliche BotB, Legacy | `7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835` |
+| Öffentliche BotA und BotB | `7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835` |
 | Öffentliche Dedicated | `1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208` |
-| Dev BotA, bestehende Notice-Erweiterung | `58017fbe46f7682d008394c32262a1685e89615083464a46280f57c73c6818a8` |
-| Dev BotB, Cecil048 | `ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530` |
+| Dev BotA und BotB | `ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530` |
 | Dev Dedicated, selektive Powerups | `fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0` |
 
 Versionierte A1-Configpfade und Vorher/Nachher-SHA stehen in `poc/runtime/milestone-a-20261111/manifest.json`. Navbindung Dev unverändert: maps.txt SHA256 `a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78`. Die Sanitized-Manifeste unter `milestone-a-20261111/` unterscheiden Beobachtungszeitpunkte. Runtime-Identitäten werden nach jedem abschließenden Neustart frisch zugeordnet.
@@ -167,3 +167,25 @@ Build009 aus 8664767e3e22179d49304700052c04d9bc17e07c hat DLL-SHA256 0146cfeef95
 Der vorige Public008-Vergleich ist vollständig geschlossen: 120.1141s, alle vier Rollen normal beendet, null Sync-/Disconnectereignisse. Alle neun initialen Spawnclocks0.7500001192 und Startinventare gleich, per-Slot-Positionen in vier Prozessansichten bestätigt. Tatsächliche Public7fc mit HumanAI0/AutoCombat1: 21 Leben=3 Erwerbe/15 Tode ohne Erwerb/3 zensiert. Kandidat008: 13=10/2/1. Vollständige Nenner in 2026-11-11-public-baseline008-native-lives.md/json; keine finale Drei-Tier-Abnahme.
 
 Letzte Flottenmessung22:59: sechs Instanzen mit jeweils acht eigenen Bots, UNKNOWN0, 18 aktuelle Logs ohne BAD/Disconnect, effektiver Spawnwert überall0. Keine A-DLL produktiv ausgerollt. Remote ba530393f80d0ad7d39cbb395d778bb5675f9a99 entspricht exakt dem lokalen a35bd22-Baum; neue009-Änderungen noch nachzusichern. 008-Drivebackup rückgeladen und 257 Dateien separat wiederhergestellt, neue009-Daten noch nicht enthalten. A bleibt unvollständig; B unbegonnen.
+
+
+### 23:12 UTC —009 Diagnose abgeschlossen, Gameplayproblem bleibt offen
+
+Session37776 terminal0, Fenster arena009hook2-checked-swap1-trial-1-230743: 120.0395s, alle vier Rollen normal geschlossen, errors[], null BAD/Disconnect. 360 Actionzeilen, 46 originale Bouncer-Aufrufe an anderen Pads, kein Aufruf an234, null unbekannte Spieler/Drop/Fault, volle Listenerabdeckung, Detach und Originalkörperrestaurierung geprüft. Sanitisiert native009-action-diagnostic.json.
+
+Local2/gen5 tick1368 belegt die beabsichtigte Unterdrückung: rawup1/finalup0 bei Support54. Später tick1373 rawup1/finalup11 ohne Support, tick1374 Kontakt193, tick1375 wieder ohne Support mit vertikaler Geschwindigkeit14.3; tick1381 Weiterleitung12→34 noch in der Luft. Exaktes Action-/Physiktiming wird gegen Originalsteuerung geprüft. Das reine Ground-Gate ist für diesen Verlauf unzureichend; keine Bouncer-/Waffenbeschaffungsfreigabe aus diesem Lauf. Kein weiterer nativer Versuch läuft, eigenes Display entfernt.
+
+Root hat den neuen Quellstand f819c8c über die GitHub-API veröffentlicht und tatsächlich erneut gefetcht: Remote539a54943dbf8b034b8e522b888d7a463b447387 mit exakt identischem Baum9281b25272c6ce8db7d75f5531f845f01b68146a. Publication010.json enthält den privaten Nachweis. Kein gleicher Commit-Hash behauptet. Nächster privater Fortschrittsbackup muss009 und Public008 samt vollständigen Rohbelegen aufnehmen. Der eigene A1-Damage-Hook ist nur als statischer Entwurf gesichert; erster Respawnzustand weiterhin offen. A unvollständig, B unbegonnen.
+
+
+### 23:29 UTC — Build010 prüft die verbleibenden Anflüge
+
+Root integrierte den engen Verhaltensfix02acaea als4d186a2 und die separat geprüfte Diagnose6e375a7 alsb2f46e1. Beide unabhängig ohne wichtige/kritische Befunde geprüft. Root hat danach tatsächlich1806 SDK107-Bridgechecks mit ASan/UBSan und den Driver-Actiontest bestanden. Die positive UP-Ausgabe auf der exakt gebundenen8→12-Kante wird nun auch ohne Referenz in STAND/CROUCH unterdrückt; vorhandene Referenzen bleiben streng geprüft. Die zusätzliche11→12-Aufzeichnung ist rein passiv; dort bleibt die Steuerung unverändert.
+
+Build010 aus b2f46e1725be49151ac062a565723afff2248c6a, DLL6e1e244495b43182eff60f1acb8ca61aba178f0638680298255673f5dcf60ef1, build_oktrue/qualifiedfalse. Aktiver eigener120s-Diagnoselauf Session93072, run-arena010-bouncer-action-diagnostic.py, SHA b0a8bfebc5b35556f6534b08b1267a439cc90894738774eb01e7716d5040baf5. Konsole arena010-action-diagnostic-controller.log; bekannte isolierteR/Port27850/Display154/runtime.lock. Erst nach Vierrollen-Cleanup und echter Auswertung als abgeschlossen behandeln. Kein Produktionsrollout.
+
+Root-gefrorener Public010-Vergleichscontroller ist vorbereitet, aber noch nicht ausgeführt: privates public010-controller-frozen/run-public010.py SHA7564841eb06ef8d90815bca998d44e4ac7354e5f7701d7775b1c412c4b3e54ed, Policy592279dc080b4cf562342a9a58eecc250929a6c93ca4f7a485f88a51b3789055. Root15 Offline-Tests bestanden. Archivierte Public7fc-/Kandidatenkonfigurationen und tatsächliche physische Roster0/4 werden getrennt abgeleitet; keine Einstellungen aus dem zuletzt getesteten R-Verzeichnis übernommen. Frühe doppelt gelesene Erstspawns werden streng auf gleiche Uhr/Inventare/Referenzpositionen geprüft, ohne ersten Simulationszustand zu behaupten.
+
+Private009-Sicherung abgeschlossen:15,215,101Bytes/SHA b0460eeb2cd0dade911a351f882b0dd324461f68db6752923291c752aaacd735, Drive1wdJTpKufnbx9euMRJhr1vJW4Atgr7xn3. Tatsächlicher Rückdownload identisch,233 Dateien separat geschrieben und erneut gehasht (127,551,099Bytes),2Links nur indexiert, kein Native-Restorestart. Enthält Quelle3afde4f/Build009, Public008/009-Rohbelege und Dev-Sync-Snapshot; neuere010-Arbeit braucht nächsten Nachtrag.
+
+Die zusätzliche30s-Dev-Bestandsmessung23:19 ergab8 eigene Bots+1UNKNOWN, elf kumulative BAD und einen Disconnect ohne weitere Zunahme im Messfenster. HostCPU37.23–56.81%, mindestens2.553GiB verfügbarerRAM; keine Stabilitätsfreigabe. Beleg dev-sync-resource-followup.json. A bleibt offen; B unbegonnen.
