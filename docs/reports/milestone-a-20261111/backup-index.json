@@ -110,5 +110,25 @@
       "native_launch": false,
       "links_materialized": false
     }
+  },
+  "build004_progress": {
+    "bytes": 4554807,
+    "sha256": "62b2b0350656e0b14a0529bcd6cd934eeb543bbd0c6ac5cb32aa2ad86a65cc1f",
+    "regular_files": 163,
+    "expanded_bytes": 31288902,
+    "qualified": false,
+    "includes_completed004_controls": true,
+    "ongoing_barrier_result_included": false,
+    "local_commit": "e84a89a488274064d501c3756cbb980275597c9a",
+    "remote_commit": "d6a80b4ac86113b05dbe1b3643b5ee8c4996379a",
+    "roundtrip_verified": true,
+    "separate_restore": {
+      "status": "PASS_SEPARATE_FILE_RESTORE",
+      "regular_files": 163,
+      "indexed_links": 2,
+      "native_launch": false,
+      "links_materialized": false
+    },
+    "url": "https://drive.google.com/file/d/1NGO0iT378L21R_cHdwHKpy_Ya9maHL5_/view"
   }
 }

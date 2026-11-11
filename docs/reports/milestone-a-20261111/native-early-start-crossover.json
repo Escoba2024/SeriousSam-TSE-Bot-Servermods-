@@ -1,0 +1,104 @@
+{
+  "scope": "EARLY_PAUSE_ACTUAL_START_CROSSOVER_MECHANISM_ONLY",
+  "legs": [
+    {
+      "swap": 0,
+      "seconds": 15.6365763139911,
+      "rng": 2306364401,
+      "all_nine_unspawned_before_release": true,
+      "spawn_clock_spread_s": 0.0,
+      "first_alive_owned": {
+        "botA:0": 3,
+        "botA:1": 3,
+        "botA:2": 3,
+        "botA:3": 3,
+        "botB:0": 3,
+        "botB:1": 3,
+        "botB:2": 3,
+        "botB:3": 3
+      },
+      "sync_checks": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "normal_cleanup": true,
+      "errors": [],
+      "input_hashes": {
+        "result.json": "d005cf2eff355954aeecfbe7135c026481c91e20bbabc513ca219ecca94766a5",
+        "botA.log": "1915d77594d333d76b39a9f65b876d9910728f4fca17acd9d3dbc9d7eadccca7",
+        "botB.log": "e9d0410c753191a6e3897ef05b6813fc98d5a126ba5bf505e63f6de017f4bcf0",
+        "session-health.jsonl": "c448f95e39899e21a80a5c005320681db8230505b35663065b3e678c3a3a15f6"
+      }
+    },
+    {
+      "swap": 1,
+      "seconds": 15.622247104998678,
+      "rng": 2306364401,
+      "all_nine_unspawned_before_release": true,
+      "spawn_clock_spread_s": 0.0,
+      "first_alive_owned": {
+        "botA:0": 3,
+        "botA:1": 3,
+        "botA:2": 3,
+        "botA:3": 3,
+        "botB:0": 3,
+        "botB:1": 3,
+        "botB:2": 3,
+        "botB:3": 3
+      },
+      "sync_checks": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "normal_cleanup": true,
+      "errors": [],
+      "input_hashes": {
+        "result.json": "1dc577835d600a8d5ffd6f3eba484144ccc4c2ab53950ef0d7c5419e01b1e03d",
+        "botA.log": "5048b405c23fb917a988293f3c1aff21ab76f828055802bf18254cff00f89dcb",
+        "botB.log": "f62a0540f99bcd724c1e1cd88c5f44472685eca826e58e1b8ccb27a407a1c90b",
+        "session-health.jsonl": "f03a44a45eb372c99c02bd971947bed79fe9c5ce3c6e3216533b4319c75b79cd"
+      }
+    }
+  ],
+  "matched_physical_slots": {
+    "botA:0": 0.0,
+    "botA:1": 0.0,
+    "botA:2": 0.0,
+    "botA:3": 0.0,
+    "botB:0": 0.0,
+    "botB:1": 0.0,
+    "botB:2": 0.0,
+    "botB:3": 0.0
+  },
+  "all_eight_positions_identical": true,
+  "first_alive_masks_match": true,
+  "combat_acceptance": false
+}

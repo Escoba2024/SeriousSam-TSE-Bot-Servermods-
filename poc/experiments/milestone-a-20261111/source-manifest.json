@@ -1,0 +1,31 @@
+[
+  {
+    "path": "arena004_start_probe.py",
+    "sha256": "f7dd12c8f8b425c56e58471fb87ae0aad7a5a579aa84cc7942d07988e472ab6e",
+    "runtime_source": "/srv/tse-milestone-a-evidence-20261111/run-arena004-early-barrier.py"
+  },
+  {
+    "path": "retail_normal_input.py",
+    "sha256": "5102ef0a5cc51bfcfba3a68657f55ea1d939f4cc9f7c2879a4ff9f495ee42adc",
+    "runtime_source": "/srv/tse-milestone-a-evidence-20261111/control-pause.py"
+  },
+  {
+    "path": "session_readonly.py",
+    "sha256": "127e3393a0c9fab6513470a131b6d4cf15b864fc64ab265ac6d143c538b30dbb",
+    "runtime_source": "/srv/tse-milestone-a-evidence-20261111/session-readonly.py"
+  },
+  {
+    "private_fixture_dependency": "/srv/tse-cecil-gate8-20261109/native048_safe.py",
+    "sha256": "3214bcb1f644a6a7f17635a653cca477397ec4ac2451b0aec2dc3c9644374a7d"
+  },
+  {
+    "private_fixture_dependency": "/srv/tse-cecil-rules-20261107/.codex/evidence/cecil_close_window.py",
+    "sha256": "68edd45db16eae91c32be99662d530c51222f68e0eaaa071ccb40ff355483011"
+  },
+  {
+    "path": "arena004_checked_probe.py",
+    "sha256": "668ac0a7daa054565face6482307e578fea51eb4cdd673de752d8b985a8bac1f",
+    "runtime_source": "/srv/tse-milestone-a-evidence-20261111/run-arena004-checked-barrier.py",
+    "scope": "success only after final expected-role cleanup gate; full frozen entity barrier and controller source capture"
+  }
+]

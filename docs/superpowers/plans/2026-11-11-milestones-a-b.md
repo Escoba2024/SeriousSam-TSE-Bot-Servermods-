@@ -79,3 +79,14 @@ Goal remains all A then all B. Previous turn made concrete code/runtime/backup p
 ### Native acquisition regression / Build003
 
 Ruling: do not finish three Build002 trials just to satisfy a count after its shared Supply regression is demonstrated. Trial2 completed diagnostically; finalcandidate must receive three actualmatched comparisons. Retention fix77d8339 preserves mapped route identity across temporary closecombat; all safety/deadline gates retained. Build0030ae31bb... now owns fresh native sequence; firstwindow livehandle33276. A2representativeGUI/localGameSpy passed180s with originalclient; keep WAN/physicalWindows scope separate. A1exactfirststate/human/restart/mapchange still open despite provenordinarycannonkill0.30s afteroldbotspawn.
+
+
+### Continuation20:46UTC
+
+Hole configuration rolledback after9BAD/max8/noDisconnect; Devremains3. Fourpublicconfigs0, Hole/Dev3, alloldDLLs. Fresh20:39queries6×8ownbots/noextras/current18logs0BAD/0disconnect;27.36GiBdisk/2.40GiBavailableRAM. No newreleasepromotion.
+
+Build004 diagnostic-only43908fa08d7cb40c058fd03d455797feae8b40c9be4cf94667aa9ee179b14310, source7e96f03,1406SDK107sanitizedbridgechecks plus183tooltests.120soff/on controlsclosednormally/noSync. Realmetadata explains globalweaponrespawn/render5 andinvertedrawGameSpyweaponsstay value; no filterremoval. A separate26sjump-padloop aftercommittednavigationcancellation is nowreproduced inlogs; boundedTDDfixassignednavagent, independentreviewcombatagent.
+
+NormalPausefromownbootstrapwindow frozeoriginalserver whilecohortsjoin. Twoearly15.6sswappedDLLprobesmatchall8actualpositions/owned3 andseed; each8spawnclockspread0. Testmechanicsproven, nofullcomparisonacceptanceyet. Versionedsourcesnapshots/hashes underpoc/experiments/milestone-a-20261111, privateevidencearchived. Nextreusableharnessmustfinalizeaftercleanup; helperTDDassignedcombatagent. FullA1firststate/restart/mapchange, final3tiercomparisons, mappedfunctional/hourgates, Dev+fleetrolloutstillopen. Bnotstarted.
+
+Build004 privatearchive uploaded/rereadSHA62b2b0350656e0b14a0529bcd6cd934eeb543bbd0c6ac5cb32aa2ad86a65cc1f,4554807bytes,163regularfilesseparatelyrestored,2linksindexed. EarlyPauseprobeswerecompletedlater andnotinthatarchive; nextsnapshotmustincludethem. Remote d6a80b4 tree equalslocal7236b7b; newerlocaldiagnostic/probesourcesneednextpublication.

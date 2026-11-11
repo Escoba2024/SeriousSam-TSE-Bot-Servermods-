@@ -1,0 +1,120 @@
+{
+  "scope": "SAME_BINARY_LIMITED_OFF_ON_OBSERVATION_NOT_DETERMINISTIC_REPLAY",
+  "limits": "120s independent windows; game actions and starts differ; CPU difference is not a causal overhead bound; process CPU excludes helper processes",
+  "records": [
+    {
+      "diagnostics_enabled": false,
+      "seconds": 120.10081371618435,
+      "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+      "candidate_dll_sha256": "43908fa08d7cb40c058fd03d455797feae8b40c9be4cf94667aa9ee179b14310",
+      "sync_checks": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "all_normal_closed": true,
+      "errors": [],
+      "diagnostic_rows": 0,
+      "candidate_log_bytes": 587323,
+      "unavailable_reasons": {},
+      "global_indices": [],
+      "session_weapons_stay": [],
+      "render_types": [],
+      "cpu_percent_one_core": {
+        "server": 3.439,
+        "botA": 3.564,
+        "vanilla": 74.138,
+        "botB": 3.405
+      },
+      "rss_mib": {
+        "server": 49.07,
+        "botA": 181.47,
+        "vanilla": 203.34,
+        "botB": 181.55
+      },
+      "raw_inputs_sha256": {
+        "result.json": "1291930be57c5a1699446999b65899e0b8460d5ca6038aa7f3d7b23b490ad6d1",
+        "botB.log": "570605f428bfb7677868096f3a924332f839606cffed441020fb72aefe99e83b"
+      }
+    },
+    {
+      "diagnostics_enabled": true,
+      "seconds": 120.03039976209402,
+      "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+      "candidate_dll_sha256": "43908fa08d7cb40c058fd03d455797feae8b40c9be4cf94667aa9ee179b14310",
+      "sync_checks": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "all_normal_closed": true,
+      "errors": [],
+      "diagnostic_rows": 138,
+      "candidate_log_bytes": 713918,
+      "unavailable_reasons": {
+        "render_type": 25
+      },
+      "global_indices": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "session_weapons_stay": [
+        0
+      ],
+      "render_types": [
+        5
+      ],
+      "cpu_percent_one_core": {
+        "server": 3.474,
+        "botA": 3.649,
+        "vanilla": 53.262,
+        "botB": 3.682
+      },
+      "rss_mib": {
+        "server": 48.97,
+        "botA": 180.96,
+        "vanilla": 200.57,
+        "botB": 181.53
+      },
+      "raw_inputs_sha256": {
+        "result.json": "f57fe560ab0a7e88eb69e5efaa19d98530c7c480cb9bdee7802ea24afbd57c71",
+        "botB.log": "fed08e3cf832c5fe4f294b8b5a5d6cfc08e7a5f855026c2e9a11ab4fccdd2a66"
+      },
+      "unavailable_metadata_counts": {
+        "confirmed_weapon": 17,
+        "nonweapon_or_absent": 8,
+        "all_render_5": 25,
+        "confirmed_weapon_respawn_1": 17,
+        "confirmed_weapon_picked_mask_0": 17
+      }
+    }
+  ]
+}

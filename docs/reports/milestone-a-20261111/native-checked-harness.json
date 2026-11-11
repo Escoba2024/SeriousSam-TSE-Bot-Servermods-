@@ -1,0 +1,30 @@
+{
+  "scope": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+  "seconds": 15.572719441959634,
+  "controller_sha256": "668ac0a7daa054565face6482307e578fea51eb4cdd673de752d8b985a8bac1f",
+  "all_nine_unspawned_in_all_paused_peers": true,
+  "all_156_session_bytes_identical": true,
+  "final_evidence_reasons": [],
+  "errors": [],
+  "all_expected_roles_normally_closed": true,
+  "qualified": false,
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "input_sha256": "d8125426ee2ab05630a33d37177404970b8155e4353f94ab54ffeeb911dceb68"
+}

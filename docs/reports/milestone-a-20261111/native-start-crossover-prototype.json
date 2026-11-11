@@ -1,0 +1,144 @@
+{
+  "scope": "PASS_START_BARRIER_AND_ACTUAL_POSITION_CROSSOVER_PROTOTYPE_NOT_COMBAT_ACCEPTANCE",
+  "qualifications_open": true,
+  "legs": [
+    {
+      "swap_cohorts": false,
+      "seconds": 30.099050733959302,
+      "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+      "initial_spawn_count": 8,
+      "spawn_clock_spread_s": 0.0,
+      "pre_release_rng": 2484027633,
+      "cohorts": {
+        "botA": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530",
+        "botB": "43908fa08d7cb40c058fd03d455797feae8b40c9be4cf94667aa9ee179b14310"
+      },
+      "normal_cleanup": true,
+      "sync_checks": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "input_sha256": {
+        "result.json": "cb1872b340aa2c0dcafdd20907c07d70b966ed43418bf10228722a6495bfa7e7",
+        "botA.log": "0a7da8451319db331c63e2776f014674992ea8ad6d2c3f85ac3b4fef2174e746",
+        "botB.log": "3aa166790d0a8f281d11db37f38ee14604c74663105a949c120fe0554999de97",
+        "session-health.jsonl": "43f08651b4119b570be37cc988f21c704672c7012bd10359d3654bd15b76da7c"
+      },
+      "first_alive_sample_owned_masks": {
+        "botA:0": 3,
+        "botA:1": 7,
+        "botA:2": 3,
+        "botA:3": 3,
+        "botB:0": 3,
+        "botB:1": 3,
+        "botB:2": 3,
+        "botB:3": 3
+      }
+    },
+    {
+      "swap_cohorts": true,
+      "seconds": 30.076628335984424,
+      "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+      "initial_spawn_count": 8,
+      "spawn_clock_spread_s": 0.0,
+      "pre_release_rng": 2729863931,
+      "cohorts": {
+        "botA": "43908fa08d7cb40c058fd03d455797feae8b40c9be4cf94667aa9ee179b14310",
+        "botB": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530"
+      },
+      "normal_cleanup": true,
+      "sync_checks": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "input_sha256": {
+        "result.json": "77eeb5db61a36b250b5f47a4f34264dab7f6c8cd1ecdff1befb3637138e00f21",
+        "botA.log": "d56b8ab0966a3a94927764d1166b7d4f038a3939d9e976560b02eb52cb9c67fc",
+        "botB.log": "4388c6bba1a687466888b3337287b7324a9d83094bf95b93976a2ef42f88b241",
+        "session-health.jsonl": "a41892f991851a51baef0885860491d91c266d620c772d5424502a281c4de5f3"
+      },
+      "first_alive_sample_owned_masks": {
+        "botA:0": 3,
+        "botA:1": 7,
+        "botA:2": 3,
+        "botA:3": 3,
+        "botB:0": 3,
+        "botB:1": 3,
+        "botB:2": 3,
+        "botB:3": 3
+      }
+    }
+  ],
+  "position_pairs": [
+    {
+      "physical_slot": "botA:0",
+      "distance_between_legs": 0.0,
+      "xyz_sha256": "421de853fd2fb96def68f5c4b2b6a0af95af931f986039b3062880cb5d8090f7"
+    },
+    {
+      "physical_slot": "botA:1",
+      "distance_between_legs": 0.0,
+      "xyz_sha256": "f4a84637d99a90b1105896955dfdd690279bc476c88ea1318a040ab129cd7cc9"
+    },
+    {
+      "physical_slot": "botA:2",
+      "distance_between_legs": 0.0,
+      "xyz_sha256": "66c089c37b6fa14cc7fee41108a113c7904248190ddcf9691bd8ae38a3433edb"
+    },
+    {
+      "physical_slot": "botA:3",
+      "distance_between_legs": 0.0,
+      "xyz_sha256": "3a8349084bb86000e8bca2391902e49e2b04cbe099a3bf461d4ed1b2de158a32"
+    },
+    {
+      "physical_slot": "botB:0",
+      "distance_between_legs": 0.0,
+      "xyz_sha256": "b486f27bb66294fbd2e435a521638c744093e7f79ea5d424a3efcec0cd2bc3f0"
+    },
+    {
+      "physical_slot": "botB:1",
+      "distance_between_legs": 0.0,
+      "xyz_sha256": "5495331e17bfd7c592e22f08dd8e2837a7e5b58d6579a5a2c70cf97e16e6fbfe"
+    },
+    {
+      "physical_slot": "botB:2",
+      "distance_between_legs": 0.0,
+      "xyz_sha256": "28cb4020f1c3dcf999ad1f398e07d7533131256bc40a271fdafa651f6bba6e55"
+    },
+    {
+      "physical_slot": "botB:3",
+      "distance_between_legs": 0.0,
+      "xyz_sha256": "66fde9e3f06c1236c6a067bc14aa20cf84faa4a1c18ba6a87ed171f1fc973d44"
+    }
+  ],
+  "all_eight_positions_identical": true,
+  "seed_difference_note": "Raw pre-release PRNG differs by one call. Actual eight physical initial positions match exactly; no RNG write or invocation was made. Do not claim full deterministic simulation replay."
+}

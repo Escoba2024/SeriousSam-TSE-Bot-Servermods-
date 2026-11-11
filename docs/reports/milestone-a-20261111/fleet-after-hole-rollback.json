@@ -1,0 +1,152 @@
+{
+  "utc": "2026-11-11T20:39:09.715949+00:00",
+  "scope": "FRESH_QUERY_AND_CURRENT_LOGS_NOT_LONGTERM_SYNC_OR_HUMAN_CLASSIFICATION",
+  "fleet": [
+    {
+      "instance": "redstation",
+      "port": 25600,
+      "map": "Red Station",
+      "own_bots": 8,
+      "additional_unknown": 0,
+      "live_dlls": [
+        {
+          "role": "server",
+          "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        {
+          "role": "botA",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+        },
+        {
+          "role": "botB",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+        }
+      ],
+      "current_log_bad": 0,
+      "current_log_disconnects": 0,
+      "config_spawn_zero": true
+    },
+    {
+      "instance": "yodeller",
+      "port": 25610,
+      "map": "Yodeller",
+      "own_bots": 8,
+      "additional_unknown": 0,
+      "live_dlls": [
+        {
+          "role": "server",
+          "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        {
+          "role": "botA",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+        },
+        {
+          "role": "botB",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+        }
+      ],
+      "current_log_bad": 0,
+      "current_log_disconnects": 0,
+      "config_spawn_zero": true
+    },
+    {
+      "instance": "skulls",
+      "port": 25620,
+      "map": "We Got Skulls'n'Bones Too",
+      "own_bots": 8,
+      "additional_unknown": 0,
+      "live_dlls": [
+        {
+          "role": "server",
+          "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        {
+          "role": "botA",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+        },
+        {
+          "role": "botB",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+        }
+      ],
+      "current_log_bad": 0,
+      "current_log_disconnects": 0,
+      "config_spawn_zero": true
+    },
+    {
+      "instance": "trouble",
+      "port": 25630,
+      "map": "Little Trouble",
+      "own_bots": 8,
+      "additional_unknown": 0,
+      "live_dlls": [
+        {
+          "role": "server",
+          "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        {
+          "role": "botA",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+        },
+        {
+          "role": "botB",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+        }
+      ],
+      "current_log_bad": 0,
+      "current_log_disconnects": 0,
+      "config_spawn_zero": true
+    },
+    {
+      "instance": "hole",
+      "port": 25640,
+      "map": "Hole",
+      "own_bots": 8,
+      "additional_unknown": 0,
+      "live_dlls": [
+        {
+          "role": "server",
+          "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+        },
+        {
+          "role": "botA",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+        },
+        {
+          "role": "botB",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+        }
+      ],
+      "current_log_bad": 0,
+      "current_log_disconnects": 0,
+      "config_spawn_zero": false
+    },
+    {
+      "instance": "development",
+      "port": 25650,
+      "map": "Red Station",
+      "own_bots": 8,
+      "additional_unknown": 0,
+      "live_dlls": [
+        {
+          "role": "server",
+          "sha256": "fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0"
+        },
+        {
+          "role": "botA",
+          "sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530"
+        },
+        {
+          "role": "botB",
+          "sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530"
+        }
+      ],
+      "current_log_bad": 0,
+      "current_log_disconnects": 0,
+      "config_spawn_zero": false
+    }
+  ],
+  "disk_free_gib": 27.36,
+  "mem_available_gib": 2.4
+}
