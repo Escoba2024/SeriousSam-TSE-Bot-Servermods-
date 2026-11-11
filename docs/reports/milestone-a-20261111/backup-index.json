@@ -130,5 +130,51 @@
       "links_materialized": false
     },
     "url": "https://drive.google.com/file/d/1NGO0iT378L21R_cHdwHKpy_Ya9maHL5_/view"
+  },
+  "isolated_arena_fixture": {
+    "sha256": "3e39ff6c4aa8b185a093c910c0b2b9ecff54735e61fa94d41e77141270027c50",
+    "bytes": 276969100,
+    "regular_files": 6542,
+    "unique_objects": 1680,
+    "expanded_bytes": 2888444205,
+    "licensed_assets_already_verified_in_baseline": 8,
+    "separate_restore": {
+      "status": "PASS_SEPARATE_REGULAR_FILE_RESTORE",
+      "regular_files": 6542,
+      "expanded_bytes": 2888444205,
+      "symlinks_indexed": 180,
+      "links_materialized": false,
+      "native_launch": false
+    },
+    "parts_roundtrip_verified": true,
+    "parts": [
+      {
+        "name": "arena-fixture-dedup-20261111.tar.gz.part-00",
+        "bytes": 100663296,
+        "sha256": "1356d7e4a2e9f33daf075bfb222ae1714805e34f89b2880e9418d0bd1dc1d70c",
+        "url": "https://drive.google.com/file/d/1CLTn3OCT0JyIIXzltvxarYF-m9_Tv8e5/view",
+        "roundtrip_verified": true
+      },
+      {
+        "name": "arena-fixture-dedup-20261111.tar.gz.part-01",
+        "bytes": 100663296,
+        "sha256": "d186afb69e6e45a2c55bb63bd8d3b099e5b2639fb28b6f8f7de4945c6f0617d2",
+        "url": "https://drive.google.com/file/d/1A-YC0ctzwn-ooyp1aauU95NRhG1Wsvcd/view",
+        "roundtrip_verified": true
+      },
+      {
+        "name": "arena-fixture-dedup-20261111.tar.gz.part-02",
+        "bytes": 75642508,
+        "sha256": "ede81e715acf167731a2230a41d03449349b50947baf405dea9daaf99072b10c",
+        "url": "https://drive.google.com/file/d/1VoVA17jWQctDmfzXIQgp6eI3NVAwMUQC/view",
+        "roundtrip_verified": true
+      }
+    ],
+    "companion": {
+      "url": "https://drive.google.com/file/d/1iC3oErH-CYAuWcY-Alic-U1Qe11bOmaD/view",
+      "sha256": "4cc81ce1716e67afaed69bbc1348ee5e97e6a6b1ea5743df5e5ec63f6a93fc52",
+      "bytes": 3627,
+      "roundtrip_verified": true
+    }
   }
 }

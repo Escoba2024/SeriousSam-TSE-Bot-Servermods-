@@ -75,6 +75,12 @@ struct SSupplyState {
   int itemTransitGoal=-1,itemTransitSource=-1,itemTransitHop=-1;
   double itemTransitLast=-1,itemTransitSince=-1,itemTransitBest=0,itemTransitGainBase=0;
   double itemTransitAttempt=0,itemTransitDeadline=0,itemTransitGravity[3]={0,0,0};
+  // Passive provenance of accepted special flight; never grants movement safety.
+  CWorld* flightWorld=NULL;long flightMap=-1;
+  uint32_t flightEntity=0,flightGeneration=0,flightItem=0;
+  int flightGoal=-1,flightSource=-1,flightHop=-1;
+  double flightAccepted=-1,flightPlanned=-1,flightAttempt=0,flightDeadline=0,flightGravity[3]={0,0,0};
+  bool flightFinishing=false;
   bool currentNavTravel=false; // Active edge, not arrival connector or intentional recovery.
   double currentNavTime=-1;
   int currentNavGoal=-1; // Fresh navigator context; an anchor/old hop alone is not a current point.
@@ -121,7 +127,8 @@ struct SSupplyState {
   void ClearPatrolEpisode(){patrolWorld=NULL;patrolMap=-1;patrolEntity=patrolGeneration=0;patrolGoal=patrolSource=patrolHop=patrolHint=-1;
     patrolLast=patrolSince=patrolProposalTime=-1;patrolStrikes=0;patrolAlternate=false;patrolLocks=0;
     std::fill(patrolTried,patrolTried+sizeof(patrolTried),0);}
-  void ClearGoal(){acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearItemTransit();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
+  void ClearFlight(){flightWorld=NULL;flightGoal=flightSource=flightHop=-1;flightAccepted=flightPlanned=-1;flightFinishing=false;}
+  void ClearGoal(){ClearFlight();acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearItemTransit();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ClearAirMovement(){airMovementTime=-1;airMovementEntity=airMovementGeneration=0;airMovementNode=-1;}
   void ClearGroundSweep(){groundEscapeTried=groundEscapeCursor=0;groundSweepReady=false;}
@@ -275,19 +282,32 @@ static bool BotCecilPhysicalCast(CCastRay& ray,CWorld* world){
   ray.cr_vHit=ray.cr_vOrigin+(ray.cr_vTarget-ray.cr_vOrigin).Normalize()*ray.cr_fHitDistance;
   return true;
 }
-static BOOL BotSupplyClear(CPlayer *player,const FLOAT3D &from,const FLOAT3D &to,CEntity *item=NULL,bool* validProbe=NULL){
+// Optional passive copy of the already-budgeted physical item-connector cast.
+// No pointer escapes the cast and no second ray or entity lookup is performed.
+struct SCecilSupplyCastDetail {
+  bool valid=false,clear=false;unsigned long hit=0,physics=0,polygon=0;
+  int render=-1;double length=0,distance=0;FLOAT3D point=FLOAT3D(0,0,0);
+};
+static BOOL BotSupplyClear(CPlayer *player,const FLOAT3D &from,const FLOAT3D &to,CEntity *item=NULL,bool* validProbe=NULL,SCecilSupplyCastDetail* detail=NULL){
+  if(detail)*detail=SCecilSupplyCastDetail();
   if(validProbe)*validProbe=false;
   double length=0;
   if(!player||!player->GetWorld()||!BotCecilRayLength(from,to,length))return FALSE;
   // Reserve the final wall and floor probes for each action.
   if(_botRayBudget<=2)return FALSE;
   --_botRayBudget;
-  if(length==0){if(validProbe)*validProbe=true;return TRUE;}
+  if(length==0){if(validProbe)*validProbe=true;if(detail){detail->valid=detail->clear=true;detail->point=from;}return TRUE;}
   CCastRay ray(player,from,to);ray.cr_bAllowOverHit=FALSE;ray.cr_bPhysical=TRUE;
   ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;
   if(!BotCecilPhysicalCast(ray,player->GetWorld()))return FALSE;
   if(validProbe)*validProbe=true;
-  return ray.cr_penHit==NULL||ray.cr_penHit==item;
+  const bool clear=ray.cr_penHit==NULL||ray.cr_penHit==item;
+  if(detail){
+    detail->valid=true;detail->clear=clear;detail->length=length;detail->distance=ray.cr_fHitDistance;detail->point=ray.cr_vHit;
+    if(ray.cr_penHit){detail->hit=(unsigned long)ray.cr_penHit->en_ulID;detail->render=(int)ray.cr_penHit->GetRenderType();detail->physics=(unsigned long)ray.cr_penHit->GetPhysicsFlags();}
+    if(ray.cr_pbpoBrushPolygon)detail->polygon=(unsigned long)ray.cr_pbpoBrushPolygon->bpo_ulFlags;
+  }
+  return clear;
 }
 static int BotSupplyNearest(CPlayer *player,const FLOAT3D &position,BOOL fromPlayer,CEntity *item=NULL){
   if(!BotCecilFrameReady(player)||!std::isfinite(position(1))||!std::isfinite(position(2))||!std::isfinite(position(3)))return -1;
@@ -475,10 +495,13 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
     if(best<0)return;
     CEntity* entity=player->GetWorld()->EntityFromID(chosen.id);const auto& point=graph.points[best];
     const FLOAT3D lift=player->en_vGravityDir*-.8f;
-    if(!BotSupplyClear(player,FLOAT3D(point.x,point.y,point.z)+lift,
-         FLOAT3D((FLOAT)chosen.x,(FLOAT)chosen.y,(FLOAT)chosen.z)+lift,entity)){
-      s.RejectItem(chosen.id,now);continue;
-    }
+    const FLOAT3D from=FLOAT3D(point.x,point.y,point.z)+lift,to=FLOAT3D((FLOAT)chosen.x,(FLOAT)chosen.y,(FLOAT)chosen.z)+lift;
+    SCecilSupplyCastDetail detail;
+    const bool clear=BotSupplyClear(player,from,to,entity,NULL,diagnostics?&detail:NULL)!=FALSE;
+    if(diagnostics)BotLog("[CecilSupplyDiagConnector] local=%d tick=%d attempt=%d entity=%lu anchor=%d valid=%d clear=%d hit=%lu render=%d physics=%lu polygon=%lu length=%.6f distance=%.6f from=(%.6f,%.6f,%.6f) to=(%.6f,%.6f,%.6f) hit_point=(%.6f,%.6f,%.6f)\n",
+      slot,tick,attempt,(unsigned long)chosen.id,best,(int)detail.valid,(int)detail.clear,detail.hit,detail.render,detail.physics,detail.polygon,detail.length,detail.distance,
+      (double)from(1),(double)from(2),(double)from(3),(double)to(1),(double)to(2),(double)to(3),(double)detail.point(1),(double)detail.point(2),(double)detail.point(3));
+    if(!clear){s.RejectItem(chosen.id,now);continue;}
     s.ClearGoal();s.goal=best;s.goalEntity=chosen.id;s.goalKind=chosen.kind;s.goalSince=now;
     s.mappedWeaponGoal=true;s.goalDeadline=now+std::fmin(45.0,std::fmax(20.0,bestCost/6.0+5.0));
     s.searchAfter=now+input.settings.fItemSearchCD;
@@ -960,14 +983,16 @@ static bool BotCecilPatrolStatic(CPlayer* player){
     ref&&!(ref->GetFlags()&ENF_DELETED)&&ref->GetRenderType()==CEntity::RT_BRUSH&&
     !(ref->GetPhysicsFlags()&EPF_MOVABLE)&&ref->en_pwoWorld==player->GetWorld()&&BotCecilIsClass(ref,"WorldBase","World Base");
 }
-static bool BotCecilPatrolAtHop(CPlayer* player,const SSupplyState& s){
-  const auto& point=BotSupplyGraph().points[s.patrolHop];const auto& p=player->GetPlacement().pl_PositionVector;
+static bool BotCecilAtNode(CPlayer* player,int node){
+  if(node<0||(size_t)node>=BotSupplyGraph().points.size())return false;
+  const auto& point=BotSupplyGraph().points[node];const auto& p=player->GetPlacement().pl_PositionVector;
   const double radius=point.radius;if(!std::isfinite(radius)||radius<=0)return false;
   double first=0,second=0;
   for(int i=1;i<=3;++i){const double d=(i==1?point.x:(i==2?point.y:point.z))-p(i);
     first+=d*d;const double shifted=d-player->en_vGravityDir(i)*radius*.5;second+=shifted*shifted;}
   return first<radius*radius||second<radius*radius; // Unchanged CecilNavigator::Reached geometry.
 }
+static bool BotCecilPatrolAtHop(CPlayer* player,const SSupplyState& s){return BotCecilAtNode(player,s.patrolHop);}
 static void BotCecilPatrolObserve(CPlayer* player,SSupplyState& s,double now,bool accepted){
   if(s.patrolSource<0)return;
   const int source=s.navigator.SourceSlot(s.goal);
@@ -1064,6 +1089,55 @@ static void BotCecilPatrolPlan(CPlayer* player,SSupplyState& s,double now,SCecil
     out.active=true;s.patrolProposalTime=now;return;
   }
 }
+// A fresh accepted jump/teleport edge may carry its provenance through an
+// actually reached successor. FALL alone, an anchor, or a new path is not proof.
+static double BotCecilAttemptDeadline(const SSupplyState& s){
+  return (s.mappedWeaponGoal||s.goalRelocationBudgeted)?s.goalDeadline:s.goalSince+12;
+}
+static bool BotCecilFlightFresh(CPlayer* player,const SSupplyState& s,double now){
+  if(!BotCecilFrameReady(player)||player->GetHealth()<=0||!player->m_penWeapons||player->m_pstState!=PST_FALL||
+     s.flightWorld!=player->GetWorld()||s.flightMap!=InterlockedCompareExchange(&_botSupplyMapSerial,0,0)||
+     s.flightEntity!=player->en_ulID||s.flightGeneration!=s.generation||s.flightGoal!=s.goal||
+     (!s.flightFinishing&&s.flightItem!=s.goalEntity)||s.flightAttempt!=s.goalSince||
+     s.flightDeadline!=BotCecilAttemptDeadline(s)||!std::isfinite(now)||now<s.flightAttempt||now>=s.flightDeadline||
+     s.flightAccepted<0||now<s.flightAccepted||now-s.flightAccepted>.250001||
+     s.followEntity||s.interactionPoint>=0||s.importantGoal)return false;
+  for(int i=0;i<3;++i)if(s.flightGravity[i]!=player->en_vGravityDir(i+1))return false;
+  return true;
+}
+static bool BotCecilFlightEdge(const SSupplyState& s){
+  const auto& g=BotSupplyGraph();const int source=s.navigator.SourceSlot(s.goal),hop=s.hop;
+  return source>=0&&hop>=0&&(size_t)source<g.points.size()&&(size_t)hop<g.points.size()&&
+    s.blocked.size()==g.points.size()&&!s.blocked[source]&&!s.blocked[hop]&&
+    source==s.flightSource&&hop==s.flightHop&&
+    std::find(g.points[source].links.begin(),g.points[source].links.end(),hop)!=g.points[source].links.end();
+}
+static void BotCecilFlightPlan(CPlayer* player,SSupplyState& s,double now,const botcore::CecilMotion& move,
+    bool carried,int previousSource,int previousHop,bool reachedHop){
+  const int source=s.navigator.SourceSlot(s.goal);const auto& g=BotSupplyGraph();
+  const bool valid=move.active&&!move.arrived&&!move.stuck&&!move.relocated&&source>=0&&s.hop>=0&&
+    (size_t)source<g.points.size()&&(size_t)s.hop<g.points.size()&&s.blocked.size()==g.points.size()&&
+    !s.blocked[source]&&!s.blocked[s.hop]&&player->m_pstState==PST_FALL&&
+    !s.followEntity&&!s.importantGoal&&s.interactionPoint<0&&std::isfinite(now)&&
+    now>=s.goalSince&&now<BotCecilAttemptDeadline(s);
+  const bool same=source==previousSource&&s.hop==previousHop;
+  const bool advanced=reachedHop&&source==previousHop;
+  const bool special=valid&&(move.flags&(botcore::CECIL_JUMP|botcore::CECIL_TELEPORT));
+  if(!valid||(!special&&!(carried&&(same||advanced)))){s.ClearFlight();return;}
+  s.flightWorld=player->GetWorld();s.flightMap=InterlockedCompareExchange(&_botSupplyMapSerial,0,0);
+  s.flightEntity=player->en_ulID;s.flightGeneration=s.generation;s.flightItem=s.goalEntity;
+  s.flightGoal=s.goal;s.flightSource=source;s.flightHop=s.hop;s.flightAttempt=s.goalSince;
+  s.flightDeadline=BotCecilAttemptDeadline(s);s.flightPlanned=now;
+  for(int i=0;i<3;++i)s.flightGravity[i]=player->en_vGravityDir(i+1);
+}
+static void BotCecilFlightAccepted(SSupplyState& s,double now,bool accepted){
+  if(accepted&&std::fabs(s.flightPlanned-now)<=1e-6)s.flightAccepted=now;
+}
+static void BotCecilFlightEnd(SSupplyState& s,INDEX slot,INDEX tick,double now,const char* reason){
+  BotLog("[CecilFlightFinish] local=%d tick=%d action=end reason=%s source=%d hop=%d deadline=%.3f\n",
+    slot,tick,reason,s.flightSource,s.flightHop,s.flightDeadline);
+  s.ClearGoal();s.searchAfter=now;s.scanTick=0;
+}
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
   SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;result.useControl=tick<=s.useReleaseTick;
   s.patrolProposalTime=-1;
@@ -1091,6 +1165,11 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   }
   s.owned=owned;
   const auto input=BotCecilItemInput(player,s,enemyDistance);
+  if(s.flightFinishing){
+    const bool fresh=BotCecilFlightFresh(player,s,now)&&BotCecilFlightEdge(s);
+    const bool arrived=BotCecilAtNode(player,s.flightHop);
+    if(!fresh||arrived){BotCecilFlightEnd(s,slot,tick,now,fresh&&arrived?"arrived":"context");return result;}
+  }
   const bool followValid=BotCecilFollowValid(follow,now)&&
     !(s.avoidFollowEntity==follow->entity&&now<s.avoidUntil);
   if(s.followEntity&&(!followValid||s.followEntity!=follow->entity||s.followGeneration!=follow->generation)){
@@ -1101,6 +1180,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     CEntity* entity=player->GetWorld()->EntityFromID(s.goalEntity);botcore::CecilItem item;
     const char* readReason="missing_entity";
     bool usable=entity&&BotCecilReadItem(player,entity,s.generation,owned,&item,bot_bDiagnostics?&readReason:nullptr);
+    const bool readable=usable;
     if(usable){
       // Close combat pauses movement below; it does not make a live needed
       // weapon unavailable. Keep the same attempt and fixed deadline through
@@ -1116,11 +1196,16 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
       if(!usable)BotCecilSupplyDiagUnavailable(player,s,entity,slot,tick,now,readReason,input);
       BotCecilGoalEnd(slot,tick,s,usable?"timeout":"unavailable");
       if(usable)s.RejectItem(s.goalEntity,now);
-      s.ClearGoal();s.searchAfter=now;s.scanTick=0;
+      if(!readable&&BotCecilFlightFresh(player,s,now)&&BotCecilFlightEdge(s)&&!BotCecilAtNode(player,s.flightHop)){
+        // Item ownership ends now. Only the current physical edge may finish;
+        // no new target, important interaction, follow, or deadline is admitted.
+        s.flightFinishing=true;s.goalEntity=0;s.ClearItemTransit();s.ClearHopCheckpoint();
+        BotLog("[CecilFlightFinish] local=%d tick=%d action=begin source=%d hop=%d deadline=%.3f\n",slot,tick,s.flightSource,s.flightHop,s.flightDeadline);
+      }else{s.ClearGoal();s.searchAfter=now;s.scanTick=0;}
     }else{s.goalKind=item.kind;urgent=BotCecilUrgentItem(item,input);}
   }
-  if(tick>=s.scanTick){BotCecilChooseGoal(player,slot,tick,enemyDistance,!followValid);s.scanTick=tick+20;}
-  if(followValid)BotCecilFollow(player,s,*follow,now);
+  if(!s.flightFinishing&&tick>=s.scanTick){BotCecilChooseGoal(player,slot,tick,enemyDistance,!followValid);s.scanTick=tick+20;}
+  if(!s.flightFinishing&&followValid)BotCecilFollow(player,s,*follow,now);
   if(s.patrolAlternate){
     if(!BotCecilPatrolContext(player,s,now)){s.ClearPatrolEpisode();return result;}
     else if(s.acquiredAnchor>=0&&s.acquiredAnchor!=s.patrolSource&&std::fabs(now-s.acquiredAnchorTime)<=1e-6){
@@ -1151,6 +1236,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     result.ownsMovement=false;return result;
   }
   BotCecilLocks(player,s,now);
+  if(s.flightFinishing&&!BotCecilFlightEdge(s)){BotCecilFlightEnd(s,slot,tick,now,"locked");return result;}
   const FLOAT3D p=player->GetPlacement().pl_PositionVector;
   botcore::CecilMotionInput in;in.x=p(1);in.y=p(2);in.z=p(3);in.yaw=player->en_plViewpoint.pl_OrientationAngle(1);in.frame=BotCecilBodyFrame(player);
   for(int j=0;j<3;++j)in.gravity[j]=player->en_vGravityDir(j+1);
@@ -1158,9 +1244,19 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   in.supported_lock_node=BotCecilSupportedLockNode(player,s);
   in.alive=true;in.allow_jump=BotCecilSettings().bJump!=0;
   const auto& point=BotSupplyGraph().points[s.goal];
-  if(!s.goalEntity&&!s.followEntity&&(point.important_entity>=0||(point.flags&botcore::CECIL_IMPORTANT)))s.importantGoal=true;
+  if(!s.flightFinishing&&!s.goalEntity&&!s.followEntity&&(point.important_entity>=0||(point.flags&botcore::CECIL_IMPORTANT)))s.importantGoal=true;
   in.important_goal=s.importantGoal;
+  const bool flightCarried=BotCecilFlightFresh(player,s,now)&&BotCecilFlightEdge(s);
+  const int previousSource=s.navigator.SourceSlot(s.goal),previousHop=s.hop;
+  const bool reachedHop=BotCecilAtNode(player,previousHop);
   auto move=s.navigator.Update(BotSupplyGraph(),s.blocked.data(),s.blocked.size(),in);s.hop=move.hop;
+  if(s.flightFinishing){
+    if(!flightCarried||!move.active||move.arrived||move.stuck||move.relocated||!BotCecilFlightEdge(s)){
+      BotCecilFlightEnd(s,slot,tick,now,"edge_changed");return result;
+    }
+    s.flightPlanned=now;
+  }else if(s.goalEntity)BotCecilFlightPlan(player,s,now,move,flightCarried,previousSource,previousHop,reachedHop);
+  else s.ClearFlight();
   if(move.supported_lock_started){
     const auto& held=BotSupplyGraph().points[move.hop];
     const FLOAT3D delta=FLOAT3D(held.x,held.y,held.z)-p;
@@ -1464,6 +1560,7 @@ static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,boo
 template<class T>
 static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& forward,T& strafe,T& up,
                              double finalBodyYaw,double maxStrafe,bool useReacquire=true){
+  state.flightAccepted=-1;
   state.probe=SCecilProbe();state.probe.inputForward=forward;state.probe.inputStrafe=strafe;
   state.probe.inputUp=up;state.probe.finalYaw=finalBodyYaw;
   if(!BotCecilFrameReady(player)||!std::isfinite(now)||now<0||!std::isfinite(maxStrafe)||maxStrafe<0||maxStrafe>1||
@@ -1587,7 +1684,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   forward=(T)requestedForward;strafe=(T)requestedStrafe;
   const bool neutralRequest=std::fabs(forward)+std::fabs(strafe)+std::fabs(up)<.05;
   if(neutralRequest&&!stalled&&!(recoveryEligible&&state.groundEscapeActive&&now<state.escapeUntil)){
-    state.escapeUntil=0;forward=strafe=up=0;return 1;
+    state.escapeUntil=0;forward=strafe=up=0;BotCecilFlightAccepted(state,now,useReacquire);return 1;
   }
   const auto frame=BotCecilBodyFrame(player);
   const FLOAT3D position=player->GetPlacement().pl_PositionVector;
@@ -1658,7 +1755,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
       const bool held=state.groundEscapeActive?groundLocal(state.escapeWorld[0],state.escapeWorld[1],state.escapeWorld[2],f,st):
         (capMotion(f,st),std::fabs(f)+std::fabs(st)>.05);
       if(held&&BotCecilClearMotion(player,f,st,0,finalBodyYaw,&state.probe,requireFloor,allowCurrentContact)){
-        forward=(T)f;strafe=(T)st;up=0;return 2;
+        forward=(T)f;strafe=(T)st;up=0;BotCecilFlightAccepted(state,now,useReacquire&&currentPoint&&BotCecilFlightEdge(state));return 2;
       }
       state.escapeUntil=0;state.escapeAfter=now+.3;
       forward=strafe=up=0;return 0;
@@ -1669,7 +1766,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     if(distance<.0225){state.escapeAfter=now+1;state.escapeSide=-state.escapeSide;}
   }
   const bool originalClear=!neutralRequest&&BotCecilClearMotion(player,forward,strafe,up,finalBodyYaw,&state.probe,requireFloor,allowCurrentContact);
-  if(originalClear&&!stalled)return 1;
+  if(originalClear&&!stalled){BotCecilFlightAccepted(state,now,useReacquire);return 1;}
   const bool originalNoFloor=!neutralRequest&&!originalClear&&state.probe.primaryReason==SCecilProbe::reasonNoFloor;
   if(stalled&&now+1e-9<state.groundEscapeAfter){forward=strafe=up=0;return 0;}
   if(now<state.escapeAfter){forward=strafe=up=0;return 0;}
@@ -1753,7 +1850,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
         state.escapeUntil=now+.6;forward=(T)f;strafe=(T)st;up=0;
         BotLog("[CecilGroundRecovery] entity=%lu generation=%lu time=%.3f action=escape eligible=1 support_authorized=%d pit_avoidance=%d floor_required=%d reason=no_position_progress dir=%u forward=%.3f strafe=%.3f stationary=%.3f displacement=%.4f\n",
           (unsigned long)player->en_ulID,(unsigned long)state.generation,now,groundEligible,BotCecilSettings().bAvoidPits,requireFloor,i,f,st,state.groundProgress.StationarySeconds(),state.groundProgress.Displacement());
-        return 2;
+        BotCecilFlightAccepted(state,now,useReacquire&&currentPoint&&BotCecilFlightEdge(state));return 2;
       }
     }
     if(state.groundEscapeCursor>=count)state.groundEscapeAfter=now+1.6;
@@ -1791,7 +1888,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
       const auto world=frame.ToWorld(-si*f+co*st,0,-co*f-si*st);
       state.escapeWorld[0]=world.x;state.escapeWorld[1]=world.y;state.escapeWorld[2]=world.z;
       for(int j=0;j<3;++j)state.escapeOrigin[j]=position(j+1);
-      state.escapeUntil=now+.6;forward=(T)f;strafe=(T)st;up=0;return 2;
+      state.escapeUntil=now+.6;forward=(T)f;strafe=(T)st;up=0;BotCecilFlightAccepted(state,now,useReacquire&&currentPoint&&BotCecilFlightEdge(state));return 2;
     }
   }
   state.escapeAfter=now+.3;return rejectOriginal();

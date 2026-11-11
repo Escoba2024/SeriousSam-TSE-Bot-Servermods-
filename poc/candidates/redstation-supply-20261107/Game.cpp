@@ -132,6 +132,7 @@ extern INDEX gam_bUseExtraEnemies = TRUE;
 
 // P0 candidate: opt-in null renderer for non-visual bot clients (default off).
 static INDEX bot_bNullRender = FALSE;
+static INDEX bot_bCommunityNotice = FALSE;
 static INDEX bot_iNullRenderFps = 0;   // >0 = pace the skipped frames (opt-in)
 
 static INDEX hud_iEnableStats = 1;
@@ -1019,6 +1020,7 @@ void CGame::InitInternal( void)
   CAM_Init();
   BotDriver_Init();
   _pShell->DeclareSymbol("user INDEX bot_bNullRender;", &bot_bNullRender);
+  _pShell->DeclareSymbol("user INDEX bot_bCommunityNotice;", &bot_bCommunityNotice);
   _pShell->DeclareSymbol("user INDEX bot_iNullRenderFps;", &bot_iNullRenderFps);
 
   // load persistent symbols
@@ -2652,6 +2654,19 @@ CTFileName CGame::GetQuickSaveName(BOOL bSave)
 
 void CGame::GameMainLoop(void)
 {
+  // One configured bot client sends a community message through ordinary chat.
+  static DOUBLE nextCommunityNotice = 0;
+  if (!bot_bCommunityNotice || !gm_bGameOn || _pNetwork->IsServer() || _pNetwork->IsDisconnected()) {
+    nextCommunityNotice = 0;
+  } else if (_pNetwork->IsConnectionStable()) {
+    const DOUBLE now = _pTimer->GetHighPrecisionTimer().GetSeconds();
+    if (nextCommunityNotice == 0) {
+      nextCommunityNotice = now + 20.0;
+    } else if (now >= nextCommunityNotice) {
+      _pNetwork->SendChat(0, -1, CTString("[SSAM.AI] Discord: is.gd/ssamai | Matches & feedback"));
+      nextCommunityNotice = now + 300.0;
+    }
+  }
   BotTelemetry_Frame();
   BotTelemetry_Config(bot_bNullRender, bot_iNullRenderFps, _bDedicatedServer);
   if (gam_bQuickSave && GetSP()->sp_gmGameMode!=CSessionProperties::GM_FLYOVER) {

@@ -1,6 +1,8 @@
 # Meilenstein A: implementierter Zwischenstand, keine Gesamtfreigabe
 
-Stand 11.11.2026 UTC. Auftrag wird auf dem vorhandenen Hetzner ausgeführt. **A ist nicht abgenommen; B wurde nicht begonnen.** Drei bestätigte externe Sync-Abbrüche im Dev-Test verhindern die Freigabe. Neue Kampf-DLL und Namen wurden nicht produktiv aktiviert. Alle Instanzen behalten ihre bisherigen DLLs/Maps. Vier öffentliche Instanzen haben die neue Spawn-Konfiguration geladen; Dev wurde um19:11 UTC und Hole um20:20 UTC vorsorglich auf den gesicherten Ausgangsstand zurückgesetzt. Hole hatte neun SYNCBAD ohne Disconnect, Dev zuvor drei bestätigte Disconnects; die Ursache ist offen. Aktueller Hole-Beleg: `milestone-a-20261111/hole-precautionary-rollback.json`.
+Aktueller Betriebsstand: **11.11.2026, 21:24:29 UTC**. Der Auftrag bleibt aktiv. **A ist nicht abgenommen; B wurde nicht begonnen.** Keine neue A-Kampf-DLL und keine neuen Namen sind produktiv aktiviert. Die frische Prüfung bestätigt auf allen sechs Servern je acht zugeordnete eigene Bots, keine weiteren UNKNOWN und aktuell keine SYNCBAD-/Disconnectmeldungen in den 18 laufenden Logs. Effektiver, aus der Originalengine gelesener Sessionwert für Spawn-Unverwundbarkeit: überall0.0. Das ist keine erste-Tick-Damage- oder Langzeitfreigabe.
+
+Eine separate Community-Notice-Aufgabe hat inzwischen alle BotA-DLLs ausgerollt. Diese fremde Änderung wird erhalten; BotB verbleibt auf Legacy7fc beziehungsweise Dev048. Die früheren eigenen Rücksetzungen von Dev(19:11) und Hole(20:20) auf Spawn3 sind historische Belege. Wann und durch wen sie erneut auf0 gestellt wurden, ist nicht belegt; die Notice-Vorherbackups enthielten bereits0. Siehe `2026-11-11-preserve-community-notice.md` und frischen Snapshot `milestone-a-20261111/fleet-after-hole-rollback.json`. Die nachfolgenden älteren Abschnitte dokumentieren frühere Prüfzeitpunkte und sind kein aktuelles Laufzeitinventar.
 
 ## 1. Tatsächliche Änderungen und Betrieb
 
@@ -15,11 +17,13 @@ Stand 11.11.2026 UTC. Auftrag wird auf dem vorhandenen Hetzner ausgeführt. **A 
 
 Ausgangsbasis `4d04ab4ad190a0f6cd078d96f5416e0eea9e1da0`. Lokale Implementierungscommits: `c261a540f258a271f559d0db790b9cee1352e8fd` (Kampf), `41b2369` (Namen), `904bf8a` (Retail-FLOAT-Vorlagen). Build `tse-milestone-a-build-001-20261111`, MSVC Win32 unter Wine, `build_ok=true`, **qualified=false**, DLL-SHA256 `def7c044ba64a65b742c63d76c775c955b892655e626bf96a1380d778d35719a`. Manifest enthält SDK-/Include-Commits, Quell-/Overlay-Hashes und Compilerflags. Der Build ist **nicht deployed**.
 
-| Rolle | Vorher und weiterhin aktive GameMP-SHA256 |
+| Rolle | Aktive GameMP-SHA256, geprüft21:24 UTC |
 |---|---|
-| Öffentliche Botclients | `7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835` |
+| Öffentliche BotA, bestehende Notice-Erweiterung | `407fc5d6aa53e339c36ebd70bd68df19f9ffc8e43fe01b8e17bbed1b7357b33f` |
+| Öffentliche BotB, Legacy | `7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835` |
 | Öffentliche Dedicated | `1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208` |
-| Dev Botclients, Cecil048 | `ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530` |
+| Dev BotA, bestehende Notice-Erweiterung | `58017fbe46f7682d008394c32262a1685e89615083464a46280f57c73c6818a8` |
+| Dev BotB, Cecil048 | `ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530` |
 | Dev Dedicated, selektive Powerups | `fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0` |
 
 Versionierte A1-Configpfade und Vorher/Nachher-SHA stehen in `poc/runtime/milestone-a-20261111/manifest.json`. Navbindung Dev unverändert: maps.txt SHA256 `a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78`. Die Sanitized-Manifeste unter `milestone-a-20261111/` unterscheiden Beobachtungszeitpunkte. Runtime-Identitäten werden nach jedem abschließenden Neustart frisch zugeordnet.
@@ -85,8 +89,8 @@ Git-Ausgangsbundle SHA256 `754cafccfc8fb2222e796904ba1d8604b4b150118dfc19e86af49
 
 | Bereich | Status |
 |---|---|
-| A1 | Öffentliche Config aktiv; Dev wegen Sync-Abbrüchen zurückgesetzt; Gameplay-Gate offen |
-| A2 | Implementiert und portabel validiert; native Formatprüfung/Live-Ausrollung offen |
+| A1 | Alle sechs aktuellen Sessionwerte0; frühere Rückwege gesichert, erstes serverseitiges Damage-/Reset-Gate offen |
+| A2 | 250 neue Namen, Originalparser alle250 und fünf native Render-/Query-Formatfälle bestanden; flotteweite Live-Zuweisung offen |
 | A3 | Teilweise implementiert, gebaut und portabel getestet; nativer Vergleich/Verbesserungsnachweis offen |
 | A4 | Neun Karten auditiert; keine vollständige Kandidaten-Whitelist |
 | A5 / Gesamt-A | **NICHT ABGENOMMEN**, keine neue Release-DLL produktiv |
@@ -127,3 +131,13 @@ Die öffentliche Flotte hat weiterhin ihre alten DLLs; Dev weiterhin Spawn3 nach
 Hole wurde nach neun SYNCBAD eines externen Clients, maximaler Zähler8, ohne beobachteten Disconnect vorsorglich normal neu gestartet und auf seine bytegenaue ursprüngliche Mapstartdatei zurückgesetzt. Baseline vorA1:0BAD/0Disconnect; gesicherter Spawn0-Lauf:9BAD/0Disconnect. Keine kausale Aussage. Frische Query und Prozess-/Inode-/Hashzuordnung bestätigen wieder acht eigene Bots und keine weiteren Spieler; tatsächlich gelesener Originalengine-Sessionwert3,0. Die bisherigen DLLs blieben erhalten, keine neue Kandidaten-DLL produktiv. Sechs Runtime-Identitätsdateien aktualisiert. Vier öffentliche Instanzen verbleiben auf Config0, Hole undDev auf3; A bleibt offen.
 
 Diagnosecommit7e96f03 enthält ausschließlich standardmäßig abgeschaltete Itementscheidungsausgaben, unabhängig geprüft. Fehlende Waffenmetadaten werden ausdrücklich unbekannt statt als false markiert. Main bestätigte1406Bridgechecks mit SDK107 und ASan/UBSan. Build004 Quelle7e96f03, DLL SHA256 `43908fa08d7cb40c058fd03d455797feae8b40c9be4cf94667aa9ee179b14310`, build_oktrue/qualifiedfalse. Nur eigener isolierter Retail/Wine-Versuch, gleiche DLL mit Diagnostik aus/an; noch kein neuer Verhaltensfix, keine Freigabe aus Logs.
+
+## Aktuelle Fortsetzung: geprüfte Startbedingungen und Kandidaten005/006
+
+Zwei240-Sekunden-Fenster005 gegen bisherige Dev048 sind vollständig geschlossen, jeweils0BAD/0Disconnect. Tatsächliche DLL-Rollen wurden vertauscht. Alle acht physischen Erstpositionen und Anfangsinventare stimmen zwischen den Fenstern überein; gleiche PRNG vor Freigabe, je Fenster kein Spawnzeitversatz. Absolute Sessionuhren unterscheiden sich; kein identischer kompletter Replay. Neuer MITTEL-Kandidat erzielt32:9 und22:6 Frags. Das ist ein begrenzter Botvergleich auf RedStation gegen Dev048, kein Vergleich gegen den öffentlichen7fc-Pfad und kein menschliches Schwierigkeitsurteil.
+
+Die Waffenbeschaffung besteht noch nicht:005 hat im ersten Fenster22 Leben(17Aufnahmen,3Tode ohne Aufnahme,2zensiert ohne Aufnahme), im zweiten17(12/2/3). Erfolgreiche Aufnahmen benötigen maximal63.0 beziehungsweise50.6 Sekunden. Fehlende Aufnahmen werden nicht aus dem Nenner entfernt. Der begrenzte Flugabschluss verhindert einen konkret reproduzierten Itemverlustfehler, aber die zweite Gegenprobe zeigt eine andere Unterbrechung mit erneutem Sprungpad-Anflug. Kein Gesamt-PASS aus höheren Frags.
+
+Kandidat006 erhält die separat vorhandene Community-Notice und ergänzt ausschließlich die Beobachtung der bereits ausgeführten Waffen-Connector-Kollisionsprüfung. Quelle `d0b2f05bbc7cf098e2551ec61efe8ec7a95af01f`, DLL `9690b088719ccd21e7a54e06063331a1391d4bfc904dc93fb20fadfe7dfeec7d`, gebaut und ausdrücklich **qualified=false**, nur eigene isolierte Kopie.1520 SDK107 ASan/UBSan-Bridgechecks und192 Tooltests bestanden. Der neue Connector-Logtest fiel vor Implementierung erwartungsgemäß durch. Keine Kollisionsfilter, Wegkosten oder Entscheidungen geändert. Aktuelle Kontrollen und nächste Ursachenprüfung werden im Handoff geführt.
+
+A1-Wiederholungen für erstes Schadensereignis/Vanilla/Mapwechsel/Neustart, endgültige drei Kampfvergleiche mit besseren Stufen, funktionale Map- und vorgeschriebene Stabilitätsgates, Dev-Abnahme und gestaffelter A-Flottenrollout bleiben offen. B bleibt davon abhängig.

@@ -1,5 +1,5 @@
 {
-  "utc": "2026-11-11T20:39:09.715949+00:00",
+  "utc": "2026-11-11T21:24:29.493583+00:00",
   "scope": "FRESH_QUERY_AND_CURRENT_LOGS_NOT_LONGTERM_SYNC_OR_HUMAN_CLASSIFICATION",
   "fleet": [
     {
@@ -24,7 +24,8 @@
       ],
       "current_log_bad": 0,
       "current_log_disconnects": 0,
-      "config_spawn_zero": true
+      "config_spawn_zero": true,
+      "live_session_spawn": 0.0
     },
     {
       "instance": "yodeller",
@@ -48,7 +49,8 @@
       ],
       "current_log_bad": 0,
       "current_log_disconnects": 0,
-      "config_spawn_zero": true
+      "config_spawn_zero": true,
+      "live_session_spawn": 0.0
     },
     {
       "instance": "skulls",
@@ -72,7 +74,8 @@
       ],
       "current_log_bad": 0,
       "current_log_disconnects": 0,
-      "config_spawn_zero": true
+      "config_spawn_zero": true,
+      "live_session_spawn": 0.0
     },
     {
       "instance": "trouble",
@@ -96,7 +99,8 @@
       ],
       "current_log_bad": 0,
       "current_log_disconnects": 0,
-      "config_spawn_zero": true
+      "config_spawn_zero": true,
+      "live_session_spawn": 0.0
     },
     {
       "instance": "hole",
@@ -120,7 +124,8 @@
       ],
       "current_log_bad": 0,
       "current_log_disconnects": 0,
-      "config_spawn_zero": false
+      "config_spawn_zero": true,
+      "live_session_spawn": 0.0
     },
     {
       "instance": "development",
@@ -144,9 +149,10 @@
       ],
       "current_log_bad": 0,
       "current_log_disconnects": 0,
-      "config_spawn_zero": false
+      "config_spawn_zero": true,
+      "live_session_spawn": 0.0
     }
   ],
-  "disk_free_gib": 27.36,
-  "mem_available_gib": 2.4
+  "disk_free_gib": 23.8,
+  "mem_available_gib": 2.72
 }

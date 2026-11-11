@@ -178,6 +178,7 @@ struct CCastRay {
    if(liquidAxis){++liquidAxisQueries;if(liquidAxisInvalid){cr_fHitDistance=NAN;return;}if(liquidAxisBlocked){cr_penHit=&obstruction;return;}}
    if(captureWalls&&capturedWalls<4096){capturedWorld[capturedWalls][0]=to(1)-from(1);capturedWorld[capturedWalls++][1]=to(3)-from(3);}
    if(!Passes(wallPolygonFlags)&&(wallMode==2||(wallMode==1&&to(3)<from(3))||
+      (wallMode==6&&to(1)<from(1))||
       (wallMode==3&&(std::fabs(to(1)-from(1))<1e-5||std::fabs(to(3)-from(3))<1e-5))||
       (wallMode==4&&!(std::fabs(to(1)-from(1))<1e-5&&to(3)<from(3)))||
       (wallMode==5&&std::fabs(to(2)-from(2))>1e-5&&std::hypot(to(1)-from(1),to(3)-from(3))>1e-5)||
@@ -2255,12 +2256,12 @@ void supplyDiagnosticsBoundsAndReasons(){
  auto& s=BotSupplyState(0);s.goals.Run(BotSupplyGraph(),0,s.blocked.data(),s.blocked.size());
  auto input=BotCecilItemInput(&player,s,1000);_botRayBudget=16;
  BotCecilChooseMappedWeapon(&player,s,input,0,1,.05);
- check(supplyDiagLines==17&&supplyDiagText.find("eligible=24 emitted=16")!=std::string::npos,
-   "selection bounds candidate rows at sixteen and reports omitted eligible candidates");
+ check(supplyDiagLines==18&&supplyDiagText.find("eligible=24 emitted=16")!=std::string::npos,
+   "selection bounds sixteen candidates plus one selection and its existing connector cast");
  const int lines=supplyDiagLines;s.ClearGoal();_botRayBudget=16;BotCecilChooseMappedWeapon(&player,s,input,0,2,.10);
  check(supplyDiagLines==lines,"selection cooldown survives ClearGoal and cannot spam repeated decisions");
  s.ClearGoal();_botRayBudget=16;BotCecilChooseMappedWeapon(&player,s,input,0,21,1.05);
- check(supplyDiagLines==lines+17,"selection diagnostic resumes at one second without changing admission");
+ check(supplyDiagLines==lines+18,"selection diagnostic resumes at one second without changing admission");
  check(s.goals.Parent(-1)==-1&&s.goals.Parent(25)==-1&&s.goals.Parent(0)==-1&&s.goals.Parent(24)==23,
    "diagnostic parent accessor handles absent root out-of-range and actual selected parent");
  BotSupplyGraph().points[5].flags=botcore::CECIL_TELEPORT;
@@ -2321,6 +2322,29 @@ void supplyDiagnosticsRetentionAndTerminal(){
   starts[0]==starts[1]&&deadlines[0]==deadlines[1],"terminal telemetry leaves final safety commands rays and lifetime pins unchanged");
  bot_bDiagnostics=false;
 }
+void supplyConnectorDiagnostics(){
+ int rays[2],lookups[2];unsigned random[2];bool rejected[2];
+ for(int mode=0;mode<2;++mode){
+  setup(3);bot_bDiagnostics=mode;supplyDiagLines=0;supplyDiagText.clear();
+  addItem(991,0,-22,botcore::CecilItemKind::Weapon);BotSupplyGraph().points[2].important_entity=991;
+  auto& s=BotSupplyState(0);s.goals.Run(BotSupplyGraph(),0,s.blocked.data(),s.blocked.size());
+  wallMode=2;obstruction.en_ulID=77;obstruction.type=CEntity::RT_BRUSH;obstruction.entityPhysicsFlags=512;
+  const auto input=BotCecilItemInput(&player,s,1000);_botRayBudget=16;worldLookups=0;
+  BotCecilChooseMappedWeapon(&player,s,input,0,1,.05);
+  rays[mode]=rayCount;lookups[mode]=worldLookups;random[mode]=s.rng;rejected[mode]=s.ItemRejected(991,.05,false);
+  check(s.goalEntity==0&&rejected[mode],"blocked mapped weapon remains rejected with diagnostics on or off");
+  if(mode)check(supplyDiagText.find("[CecilSupplyDiagConnector]")!=std::string::npos&&
+    supplyDiagText.find("entity=991 anchor=2 valid=1 clear=0 hit=77 render=4 physics=512")!=std::string::npos,
+    "mapped rejection identifies the actual existing physical cast blocker rather than inferring LOS failure");
+  else check(supplyDiagLines==0,"disabled connector diagnostics produce no lines");
+  const int lines=supplyDiagLines;s.ClearRejections();_botRayBudget=16;
+  BotCecilChooseMappedWeapon(&player,s,input,0,2,.10);
+  check(supplyDiagLines==lines,"connector rows share the one-second bounded selection batch");
+ }
+ check(rays[0]==1&&rays[0]==rays[1]&&lookups[0]==lookups[1]&&random[0]==random[1]&&rejected[0]==rejected[1],
+   "connector observation changes no ray lookup RNG or rejection decision");
+ bot_bDiagnostics=false;
+}
 void supplyDiagnosticsParity(){
  SCecilMove outputs[2];int goals[2],rays[2],lookups[2];unsigned random[2];double deadlines[2];
  for(int mode=0;mode<2;++mode){
@@ -2340,8 +2364,136 @@ void supplyDiagnosticsParity(){
  "diagnostics change neither command nor goal deadline RNG casts or world lookup count");
  bot_bDiagnostics=false;
 }
+
+int flightSafetyResult=0;
+SCecilMove flightLossTick(int tick,bool accepted=true){
+ _botRayBudget=40;auto m=BotSupplyTick(&player,0,tick,100);double f=m.forward,st=m.strafe,u=m.up;
+ flightSafetyResult=BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,m.yaw_delta,1,accepted);
+ m.forward=f;m.strafe=st;m.up=u;return m;
+}
+void flightLossFixture(bool special=true,double deadline=20.4,bool escape=false){
+ setup(3);auto& g=BotSupplyGraph();
+ g.points[0].y=.5;g.points[0].z=12;g.points[0].radius=4;
+ g.points[0].flags=special?(botcore::CECIL_JUMP|botcore::CECIL_OVERRIDE):0;
+ g.points[1].y=38;g.points[1].z=12;
+ g.points[2].x=-4.5;g.points[2].y=37.25;g.points[2].z=12;
+ auto& item=addItem(267,-4.5,12,botcore::CecilItemKind::Weapon);item.pl.pl_PositionVector(2)=37.25;
+ g.points[2].important_entity=267;
+ auto& s=BotSupplyState(0);s.goal=2;s.goalEntity=267;s.mappedWeaponGoal=true;
+ s.goalSince=0;s.goalDeadline=deadline;s.scanTick=999;s.searchAfter=999;
+ player.m_pstState=PST_FALL;player.en_penReference=nullptr;
+ player.pl.pl_PositionVector=FLOAT3D(0,.5,12);flightLossTick(98);
+ player.pl.pl_PositionVector=FLOAT3D(0,37,12);flightLossTick(99);
+ player.pl.pl_PositionVector=FLOAT3D(.049,38.184,12.185);if(escape)wallMode=6;flightLossTick(100);
+ if(escape)check(flightSafetyResult==2,"native004 tick100 uses an existing safety-approved alternative");
+ wallMode=0;
+ check(s.navigator.SourceSlot(2)==1&&s.hop==2,"native004 fixture reaches ordinary successor of jump edge before item loss");
+}
+void flightLossRegression(){
+ flightLossFixture();auto& s=BotSupplyState(0);items[0].pickable=false;player.pl.pl_PositionVector(2)=40.0;
+ const auto m=flightLossTick(101);
+ check(s.goal==2&&s.navigator.SourceSlot(2)==1&&s.hop==2&&s.goalEntity==0,
+  "unavailable item retains only already committed airborne special-route successor");
+ check(s.goalSince==0&&near(s.goalDeadline,20.4)&&!m.itemGoal&&endEvents==1,
+  "flight finish ends item ownership once without changing original bounded deadline");
+ player.pl.pl_PositionVector=FLOAT3D(-4.5,37.25,12);const auto arrived=flightLossTick(102);
+ check(s.goal==-1&&arrived.forward==0&&arrived.strafe==0&&arrived.up==0,
+  "flight finish ends neutral at original radius without important interaction or new edge");
+ flightLossFixture(false);items[0].pickable=false;player.pl.pl_PositionVector(2)=40.0;flightLossTick(101);
+ check(BotSupplyState(0).goalEntity==0&&BotSupplyState(0).navigator.SourceSlot(2)==-1,
+  "ordinary airborne item disappearance retains original clear-goal behavior");
+}
+
+void flightLossGuards(){
+ for(bool held:{false,true}){
+  flightLossFixture(true,20.4,true);auto& s=BotSupplyState(0);
+  int lossTick=101;
+  if(held){flightLossTick(101);check(flightSafetyResult==2,"existing accepted escape hold renews only real route provenance");lossTick=102;}
+  items[0].pickable=false;player.pl.pl_PositionVector(2)=40;flightLossTick(lossTick);
+  check(s.flightFinishing&&s.navigator.SourceSlot(2)==1&&s.hop==2&&near(s.goalDeadline,20.4),
+    "actual return2 alternative immediately before loss retains bounded original committed flight");
+ }
+ for(int guard=0;guard<19;++guard){
+  flightLossFixture();auto& s=BotSupplyState(0);items[0].pickable=false;
+  player.pl.pl_PositionVector(2)=40;int tick=101;CWorld other;
+  if(guard==0)++s.generation;
+  if(guard==1)++player.en_ulID;
+  if(guard==2)++_botSupplyMapSerial;
+  if(guard==3)player.worldOverride=&other;
+  if(guard==4)player.en_vGravityDir=FLOAT3D(0,1,0);
+  if(guard==5)s.goalSince=1;
+  if(guard==6)s.goalDeadline=30;
+  if(guard==7)tick=106;
+  if(guard==8)tick=99;
+  if(guard==9)player.m_pstState=PST_STAND;
+  if(guard==10)player.health=0;
+  if(guard==11)s.navigator.Reset();
+  if(guard==12)s.blocked[2]=1;
+  if(guard==13)s.blocked[1]=1;
+  if(guard==14){double f=0,st=0,u=0;BotCecilSafeMotion(&player,s,5,f,st,u,0,1,false);}
+  if(guard==15)s.ClearGoal();
+  if(guard==16)++s.goalEntity;
+  if(guard==17)s.goal=1;
+  if(guard==18)s.importantGoal=true;
+  flightLossTick(tick);
+  check(!s.flightFinishing,"map world entity generation gravity attempt deadline stale rewind ground death edge lock ownership reset deny flight continuation");
+ }
+ for(int denial=0;denial<3;++denial){
+  flightLossFixture(true,20.4,true);auto& s=BotSupplyState(0);
+  if(denial==0)flightLossTick(101,false);
+  else{
+    auto m=BotSupplyTick(&player,0,101,100);double f=m.forward,st=m.strafe,u=m.up;
+    if(denial==1)wallMode=2;else _botRayBudget=0;
+    check(BotCecilSafeMotion(&player,s,5.05,f,st,u,m.yaw_delta,1,true)==0,
+      "failed or budget-deferred held escape is not accepted flight evidence");
+  }
+  items[0].pickable=false;player.pl.pl_PositionVector(2)=40;wallMode=0;flightLossTick(102);
+  check(!s.flightFinishing,"lost NAV ownership failed held escape and exhausted cast budget erase flight acceptance");
+ }
+ // Pending flight has a fixed physical destination and survives no stale identity.
+ for(int guard=0;guard<12;++guard){
+  flightLossFixture();auto& s=BotSupplyState(0);items[0].pickable=false;
+  player.pl.pl_PositionVector(2)=40;flightLossTick(101);
+  check(s.flightFinishing,"guard starts a real retained flight after item disappearance");
+  int tick=102;CWorld other;
+  if(guard==0)++s.generation;
+  if(guard==1)++_botSupplyMapSerial;
+  if(guard==2)player.worldOverride=&other;
+  if(guard==3)++player.en_ulID;
+  if(guard==4)player.en_vGravityDir=FLOAT3D(0,1,0);
+  if(guard==5)player.m_pstState=PST_STAND;
+  if(guard==6)player.health=0;
+  if(guard==7)tick=107;
+  if(guard==8)tick=100;
+  if(guard==9)s.navigator.Reset();
+  if(guard==10)BotSupplyGraph().points[2].links.clear(),BotSupplyGraph().points[1].links.clear();
+  if(guard==11)BotSupplyGraph().points[2].lock_entity=777; // Fresh existing lock snapshot finds missing lock owner.
+  const auto out=flightLossTick(tick);
+  check(!s.flightFinishing&&s.goal==-1&&out.forward==0&&out.strafe==0&&out.up==0,
+    "pending flight identity grounding stale edge topology and newly refreshed lock abort neutral");
+ }
+ flightLossFixture();items[0].item.weapon=1;player.pl.pl_PositionVector(2)=40;
+ flightLossTick(101);
+ check(!BotSupplyState(0).flightFinishing,"live item rejected by typed need does not become a disappeared-item flight");
+ flightLossFixture(true,5.1);auto& expiry=BotSupplyState(0);items[0].pickable=false;
+ player.pl.pl_PositionVector(2)=40;flightLossTick(101);check(expiry.flightFinishing,"flight may start before original expiry");
+ const auto ended=flightLossTick(102);
+ check(!expiry.flightFinishing&&expiry.goal==-1&&ended.forward==0&&ended.strafe==0,
+  "original item deadline expires pending flight exactly without extension");
+ flightLossFixture();auto& s=BotSupplyState(0);items[0].pickable=false;player.pl.pl_PositionVector(2)=40;
+ wallMode=2;flightLossTick(101);const auto denied=flightLossTick(102);
+ check(!s.flightFinishing&&s.goal==-1&&denied.forward==0&&denied.strafe==0,
+  "failed original final motion cannot authorize another pending flight tick");
+ flightLossFixture();const int rays=rayCount,lookups=worldLookups;const uint32_t rng=s.rng;
+ allocations=0;measuring=true;
+ for(int n=0;n<100;++n){BotCecilFlightFresh(&player,s,5.05);BotCecilFlightEdge(s);BotCecilAtNode(&player,2);}
+ measuring=false;
+ check(rayCount==rays&&worldLookups==lookups&&s.rng==rng&&allocations==0&&near(s.goalDeadline,20.4),
+  "flight observations add no casts entity lookups RNG allocations or deadline changes");
+}
 int main(){
- supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
+ flightLossRegression();flightLossGuards();
+ supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
  itemTransit49();itemTransit49Guards();
  liquidProjection48();
  importantTransit48();importantPatrol48();
