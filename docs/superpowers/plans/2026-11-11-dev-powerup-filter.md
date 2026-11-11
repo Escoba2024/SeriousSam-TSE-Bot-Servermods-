@@ -20,15 +20,15 @@ Default disabled; type 1/3/4/unknown retained; demos and clients do not mutate; 
 
 ### Task 1: Server candidate
 
-- [ ] Add a portable policy regression for disabled/server/client/demo/all known and unknown types; observe RED.
-- [ ] Add policy header and guarded NewGame hook with before/after census. Destroy one entity after releasing the container iterator, then rescan.
-- [ ] Run policy and existing portable suites, commit source, build into a new private directory with actual source hashes; inspect imports against original Entities.
+- [x] Add a portable policy regression for disabled/server/client/demo/all known and unknown types; observe RED.
+- [x] Add policy header and guarded NewGame hook with before/after census. Destroy one entity after releasing the container iterator, then rescan.
+- [x] Run policy and existing portable suites, commit source, build into a new private directory with actual source hashes; inspect imports against original Entities.
 
 ### Task 2: Isolated Retail verification
 
-- [ ] Copy private runtimes/prefixes to a new root, preflight identities/files/resources/ports, namespace isolation and lock.
-- [ ] Observe default-off census, then enabled census (0/2 absent, other types preserved).
-- [ ] Join unchanged Cecil048 and original Retail, verify queries, actual modules and logs with active bot combat; normal client/server cleanup.
+- [x] Copy private runtimes/prefixes to a new root, preflight identities/files/resources/ports, namespace isolation and lock.
+- [x] Observe default-off census, then enabled census (0/2 absent, other types preserved).
+- [x] Join unchanged Cecil048 and original Retail, verify queries, actual modules and logs with active bot combat; normal client/server cleanup.
 
 ### Task 3: Dev rollout if verification succeeds
 
