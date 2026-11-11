@@ -86,6 +86,7 @@ static void BotSupplyReset(INDEX slot);
 static botcore::CecilSettings &BotCecilSettings();
 static int _botRayBudget=16;
 static INDEX bot_bHumanAI      = FALSE; // profile-driven perception/aim/loadout (new path)
+static INDEX bot_iArenaTier = 0; // 0 = migrate roster; 1 MITTEL, 2 STARK, 3 DEMON
 static INDEX bot_iRosterOffset = 0;     // 0 or 4: which half of the 8-bot roster this client uses
 static INDEX bot_iProfile0     = -1;    // explicit roster index per local slot (-1 = offset+iLP)
 static INDEX bot_iProfile1     = -1;
@@ -549,6 +550,7 @@ void BotDriver_Init(void)
   BotTelemetry_Start();
   _pShell->DeclareSymbol("user INDEX bot_bSupplyNavigation;", &bot_bSupplyNavigation);
   _pShell->DeclareSymbol("user INDEX bot_bHumanAI;",      &bot_bHumanAI);
+  _pShell->DeclareSymbol("user INDEX bot_iArenaTier;", &bot_iArenaTier);
   _pShell->DeclareSymbol("user INDEX bot_iRosterOffset;", &bot_iRosterOffset);
   _pShell->DeclareSymbol("user INDEX bot_iProfile0;",     &bot_iProfile0);
   _pShell->DeclareSymbol("user INDEX bot_iProfile1;",     &bot_iProfile1);
@@ -790,15 +792,15 @@ static void BotHumanAttach(INDEX iLP)
   if (profile_index<0) profile_index=bot_iRosterOffset+iLP;
   botcore::BotProfile &profile=BotHumanProfile(iLP);
   profile=botcore::BotProfile();
-  if (!botcore::BuildRosterProfile(profile_index,iLP,(uint32_t)bot_iProfileSeed,&profile)) {
-    botcore::BuildProfile(3,0,(uint32_t)bot_iProfileSeed,"BOT-Fallback",&profile);
-    BotLog("[BotHuman] local=%d roster index %d rejected, average fallback\n",iLP,profile_index);
+  if (!botcore::BuildRosterProfile(profile_index,iLP,(uint32_t)bot_iProfileSeed,&profile,bot_iArenaTier)) {
+    botcore::BuildRosterProfile(profile_index,iLP,(uint32_t)bot_iProfileSeed,&profile,1);
+    BotLog("[BotHuman] local=%d arena tier %d rejected, MITTEL fallback\n",iLP,(int)bot_iArenaTier);
   }
   BotHumanPolicy(iLP).Configure(&profile,bot_bSupplyNavigation?&BotCecilSettings():NULL);
   _absBots[iLP].bs_cecilFire.Reset();
   _absBots[iLP].bs_lastSeen=-1000;
   _absBots[iLP].bs_lastHealth=0.0f;
-  BotLog("[BotHuman] local=%d profile=%s tier=%d persona=%s seed=%lu\n",
+  BotLog("[BotHuman] local=%d profile=%s tier=%d persona=%s seed=%lu model=arena-v1\n",
     iLP,profile.name,profile.tier,botcore::PersonalityName(profile.persona),
     (unsigned long)profile.seed);
 }

@@ -111,10 +111,11 @@ struct PersonalityParams {
 /* ------------------------------------------------------------------------ */
 
 struct BotProfile {
+  bool arena = false; // three release tiers; legacy BuildProfile remains available for controls
   SkillParams skill;
   PersonalityParams personality;
   uint32_t seed;      // per-bot deterministic RNG seed, never shared
-  int tier;           // 1..5, retained for logging/telemetry
+  int tier;           // arena: 1..3; legacy controls: 1..5; logging/telemetry
   int persona;        // 0..5, retained for logging/telemetry
   char name[24];      // administrative bot label, never a human identity
   char label[32];     // "<name> t<tier> p<persona>"
@@ -341,6 +342,7 @@ inline bool BuildProfile(int tier, int persona, uint32_t seed, const char* name,
   if (out == nullptr) return false;
   if (tier < 1 || tier > kSkillTierCount) return false;
   if (persona < 0 || persona >= kPersonalityCount) return false;
+  out->arena = false;
   out->skill = SkillFor(tier);
   out->personality = PersonalityFor(persona);
   out->tier = tier;
@@ -390,12 +392,8 @@ struct RosterEntry {
   const char* name;
 };
 
-// Start distribution for a mixed eight-bot server: 2 beginners, 2 casual,
-// 2 average, 1 advanced, 1 expert. Personalities are spread so that no tier
-// is represented by only one play style, and so that the beginner tier also
-// contains an aggressive bot (a beginner may push; a good player may hold).
-// This table is the default; the integration reads the same values from
-// configuration, so an operator can change it without a rebuild.
+// Historical eight-slot metadata. Retained for deterministic seed and tier
+// migration only; BuildRosterProfile produces the three arena release tiers.
 inline const RosterEntry* DefaultRoster(int* count) {
   static const RosterEntry kRoster[8] = {
       {1, 0, "BOT-Rookie-Rush"},     // beginner  + aggressor
@@ -411,10 +409,34 @@ inline const RosterEntry* DefaultRoster(int* count) {
   return kRoster;
 }
 
+// The arena release exposes three tiers with one common tactical policy.
+// Legacy roster tiers 1/2/3 -> MITTEL, 4 -> STARK, 5 -> DEMON.
+// Seed derivation retains the legacy entry so migration preserves slot identity.
+inline int ArenaTierFromLegacy(int tier) { return tier >= 5 ? 3 : (tier == 4 ? 2 : 1); }
+inline const char* ArenaTierName(int tier) {
+  return tier == 3 ? "DEMON" : (tier == 2 ? "STARK" : "MITTEL");
+}
+inline SkillParams ArenaSkill(int tier) {
+  SkillParams s=SkillFor(5);
+  // Shared perception, weapon and movement capabilities; mechanical differences
+  // are calibration hypotheses until matched native comparisons are complete.
+  s.fov_half_deg=90;s.sight_range_m=100;s.max_los_per_tick=8;
+  s.weapon_dwell_s=.6;s.switch_margin=1.15;s.preferred_range_m=16;
+  s.aim_corr_s=.2;s.fire_tol_deg=1.5;s.overshoot=.08;
+  s.reaction_s=tier==3?.05:(tier==2?.10:.20);
+  s.aim_sigma_deg=tier==3?.15:(tier==2?.45:.9);
+  s.turn_rate_deg_s=tier==3?540:(tier==2?420:300);
+  s.turn_accel_deg_s2=tier==3?2400:(tier==2?1600:1000);
+  s.settle_s=tier==3?0:(tier==2?.05:.10);
+  s.prediction_gain=tier==3?1:(tier==2?.9:.75);
+  return s;
+}
+
 // Build the nth roster bot for a given client process. Two processes with four
 // local players each use slot 0..3 and index 0..3 / 4..7.
 inline bool BuildRosterProfile(int roster_index, int local_slot, uint32_t base_seed,
-                               BotProfile* out) {
+                               BotProfile* out, int arena_tier = 0) {
+  if (arena_tier < 0 || arena_tier > 3) return false;
   int count = 0;
   const RosterEntry* roster = DefaultRoster(&count);
   if (roster_index < 0) roster_index = 0;
@@ -422,7 +444,11 @@ inline bool BuildRosterProfile(int roster_index, int local_slot, uint32_t base_s
   if (local_slot < 0) local_slot = 0;
   const RosterEntry& e = roster[roster_index];
   const uint32_t seed = DeriveSeed(base_seed, local_slot, e.tier, e.persona);
-  return BuildProfile(e.tier, e.persona, seed, e.name, out);
+  const int tier=arena_tier ? arena_tier : ArenaTierFromLegacy(e.tier);
+  if(!BuildProfile(tier,2,seed,ArenaTierName(tier),out))return false;
+  out->arena=true;
+  out->skill=ArenaSkill(tier);
+  return ValidateProfile(*out)==ProfileError::kOk;
 }
 
 }  // namespace botcore

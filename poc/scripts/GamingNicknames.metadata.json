@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "version": "milestone-a-names-20261111",
+  "seed": 20261111,
+  "algorithm": "sha256(seed:alias) style-v1; curated aliases are fixed input",
+  "baseline_count": 208,
+  "additional_count": 250,
+  "total_count": 458,
+  "baseline_sha256": "cdd04932790ed8ba0d06cffd524c9cd11fadd4b370de11cb02d95303caa13b26",
+  "source_sha256": "c14593c82097368d966524b8f4896214a67f2a994c7c49dc286b3bf83bec9ae8",
+  "pool_sha256": "005cd7bbee01d2b24367f46401d2cf8bf4dae45db311f3cdfa35c789ca8d0dc2",
+  "additions_sha256": "f6ca77057e8a695878440d4b384a2993026196a2da54e03eeacf5a6a4b938863",
+  "encoding": "ASCII",
+  "visible_cap": 22,
+  "raw_byte_cap": 32,
+  "style_counts": {
+    "bold": 26,
+    "bolditalic": 7,
+    "italic": 25,
+    "plain": 147,
+    "single": 45
+  },
+  "flash_count": 0,
+  "flash_fallback": "plain (original Retail decoder loses a name byte)",
+  "max_visible": 15,
+  "max_raw_bytes": 30,
+  "bot_id_policy": "External stable fleet ID; nickname IDs are not player GUIDs or bot IDs.",
+  "acceptance": {
+    "portable": "VALIDATED",
+    "native_rendering": "OPEN",
+    "external_query": "OPEN",
+    "runtime_deployed": false
+  }
+}

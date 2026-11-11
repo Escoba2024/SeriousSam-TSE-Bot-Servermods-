@@ -1,0 +1,1502 @@
+[
+  {
+    "name_id": "nickname-0589a733b69d71dbf649f2f8",
+    "nickname": "Avaro",
+    "native_name": "Avaro",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-d3d76590079b05bf1df19fe8",
+    "nickname": "Nixlen",
+    "native_name": "Nixlen",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-bb1c8720088c340d32bf7008",
+    "nickname": "Sorenix",
+    "native_name": "Sorenix",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-fda5ac831877aa350caf951a",
+    "nickname": "Velko",
+    "native_name": "^i^cEEEEEEVelko^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-07f7a764af0f865a8c8d71e6",
+    "nickname": "Ivara",
+    "native_name": "^cA5D66AIvara^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-3ab69804b338e958e14f37b1",
+    "nickname": "Orven",
+    "native_name": "^b^cA5D66AOrven^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-5276c804e6615acf09178ba9",
+    "nickname": "Zayle",
+    "native_name": "Zayle",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-66c119f86dfa48bfa1eb9d87",
+    "nickname": "Fenrik",
+    "native_name": "Fenrik",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-ac3f48c8afbe2cf84660b270",
+    "nickname": "Kelvo",
+    "native_name": "^cEEEEEEKelvo^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-129c3d3a72dcf02f76e8cd9a",
+    "nickname": "Oryxen",
+    "native_name": "Oryxen",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-311ff435ee049df6d3b42033",
+    "nickname": "Talvi",
+    "native_name": "Talvi",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-504d25546c62b5623e4b2bd0",
+    "nickname": "Briska",
+    "native_name": "Briska",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-5ce945375825aa5d330fd8c4",
+    "nickname": "Norex",
+    "native_name": "^b^i^cFF6655Norex^I^B^r",
+    "style": "bolditalic"
+  },
+  {
+    "name_id": "nickname-84d1ee8068b5eb0fb4316129",
+    "nickname": "Jasko",
+    "native_name": "^cFF6655Jasko^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-9b27e3e0e1f18dbac044b5ef",
+    "nickname": "Virel",
+    "native_name": "Virel",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-57c18da105b2044f23fe92b3",
+    "nickname": "Caldra",
+    "native_name": "^b^cFF6655Caldra^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-2bb49f973e0ac75d6073c428",
+    "nickname": "Evrenix",
+    "native_name": "Evrenix",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-4fb6f6af977490a77bdb928b",
+    "nickname": "Lunek",
+    "native_name": "^i^cCC88FFLunek^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-254379edf710548da69a3b1f",
+    "nickname": "Krysa",
+    "native_name": "^cA5D66AKrysa^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-4b30814414ca497e8715453f",
+    "nickname": "Ruvik",
+    "native_name": "Ruvik",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-f9e166894968e7b901605a6f",
+    "nickname": "Sylaro",
+    "native_name": "Sylaro",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-20608262ea6ac517c96b18f8",
+    "nickname": "Erynd",
+    "native_name": "Erynd",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-f055381011f6c552d3c7d006",
+    "nickname": "Vasko",
+    "native_name": "Vasko",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-a02c3101e3a819eb3cf0ea73",
+    "nickname": "Zelrin",
+    "native_name": "^cCC88FFZelrin^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-7a4b505d679b84ade34672a5",
+    "nickname": "Mirvo",
+    "native_name": "Mirvo",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-73f8b61c807a1a0958e9fe73",
+    "nickname": "TundraQuill",
+    "native_name": "^b^c66CCFFTundraQuill^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-ee771a430001c65d72cab06a",
+    "nickname": "CopperOtter",
+    "native_name": "^i^cA5D66ACopperOtter^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-ec36935e41669a3d59f57698",
+    "nickname": "AmberRook",
+    "native_name": "AmberRook",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-f0f9f2f3e8c1d897eb661887",
+    "nickname": "FrostTern",
+    "native_name": "FrostTern",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-4d02a374d4a301f6152b89cd",
+    "nickname": "SlateWarden",
+    "native_name": "^i^cFFCC66SlateWarden^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-10f17057c50674c8cbd9c7aa",
+    "nickname": "BirchRacer",
+    "native_name": "^b^cEEEEEEBirchRacer^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-9721e89132f130a70a8b7203",
+    "nickname": "MossCavalier",
+    "native_name": "MossCavalier",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-9b1d1f5039e9fe9fea9f0ea5",
+    "nickname": "DuneFencer",
+    "native_name": "DuneFencer",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-5be8026264dae9c738939206",
+    "nickname": "FlintHeron",
+    "native_name": "FlintHeron",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-9007c5a66cd96f09b334117e",
+    "nickname": "HazelDrift",
+    "native_name": "^b^i^c66CCFFHazelDrift^I^B^r",
+    "style": "bolditalic"
+  },
+  {
+    "name_id": "nickname-290580dff018dd93ac1b5bb0",
+    "nickname": "FennelFury",
+    "native_name": "^i^cFF6655FennelFury^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-c13ed2e8109c9f15a4a000fa",
+    "nickname": "WickerFalcon",
+    "native_name": "WickerFalcon",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-8d631270787dd1f538a8b3a5",
+    "nickname": "CedarComet",
+    "native_name": "CedarComet",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-aa027104f7c2df28a8f33500",
+    "nickname": "SilverBadger",
+    "native_name": "^cA5D66ASilverBadger^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-066d0909000fab7735f29012",
+    "nickname": "IronIbis",
+    "native_name": "IronIbis",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-3be03c03ecac471cbe2f0e83",
+    "nickname": "MeadowGhost",
+    "native_name": "MeadowGhost",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-3d1ec09a38ff97a88bbd483f",
+    "nickname": "TawnyVector",
+    "native_name": "TawnyVector",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-f2aa85eac231675b49ed235b",
+    "nickname": "PebbleCorsair",
+    "native_name": "^b^c33DDCCPebbleCorsair^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-ccf78d3ca79791e24ee31c02",
+    "nickname": "OnyxDart",
+    "native_name": "OnyxDart",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-8e9f8bf36827b9407074bc0e",
+    "nickname": "GraniteOwl",
+    "native_name": "GraniteOwl",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-bc1e0ef3fc4e11f8eefa94fc",
+    "nickname": "AlpineStoat",
+    "native_name": "AlpineStoat",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-dbef9e2c7eaabbe7a438de5e",
+    "nickname": "PineSpecter",
+    "native_name": "PineSpecter",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-1824f1190dc56f56eea2fcca",
+    "nickname": "RiverRascal",
+    "native_name": "RiverRascal",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-4936e17a53570e2c9907db3a",
+    "nickname": "StormPlover",
+    "native_name": "StormPlover",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-c56096a6727675898b19b4d4",
+    "nickname": "MossMariner",
+    "native_name": "MossMariner",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-c9a228e484a78f7f4d6a989c",
+    "nickname": "CircuitSage",
+    "native_name": "CircuitSage",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-033af9340ee9b473437ae31e",
+    "nickname": "PixelDrifter",
+    "native_name": "^b^cFFCC66PixelDrifter^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-9ac34320f50e68eb35b9312b",
+    "nickname": "CacheCobra",
+    "native_name": "^b^cCC88FFCacheCobra^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-417aac4c414c0952bfd85668",
+    "nickname": "TurboAcorn",
+    "native_name": "^cCC88FFTurboAcorn^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-be7aed82f2ff9d1f35aedb70",
+    "nickname": "ByteBard",
+    "native_name": "^b^c66CCFFByteBard^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-76d87c932923a0c9076ee696",
+    "nickname": "KernelKite",
+    "native_name": "KernelKite",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-bb387f8b8d213225dfccc87b",
+    "nickname": "RasterRider",
+    "native_name": "RasterRider",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-26e6021ea234b0f5e15d6232",
+    "nickname": "DuplexDrake",
+    "native_name": "^i^c33DDCCDuplexDrake^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-86458290e6297603024a1fe8",
+    "nickname": "SocketSprite",
+    "native_name": "^cCC88FFSocketSprite^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-a76674bda667f83bbdfff8d7",
+    "nickname": "BitBanshee",
+    "native_name": "^i^cFFCC66BitBanshee^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-17ed6dc274af5121231f13b8",
+    "nickname": "ProxyPirate",
+    "native_name": "ProxyPirate",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-5a6bb85b99a64f94c3d024f2",
+    "nickname": "VectorVixen",
+    "native_name": "^b^c33DDCCVectorVixen^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-73204d61d80c5ea5666dba33",
+    "nickname": "GlitchGrouse",
+    "native_name": "^c33DDCCGlitchGrouse^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-89db11109fa198c8e35eb4f3",
+    "nickname": "NeonNettle",
+    "native_name": "^cFFCC66NeonNettle^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-73f7a0d86405c238ab113924",
+    "nickname": "FrameFox",
+    "native_name": "FrameFox",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-e9da25ed9661b3c8cd3595b2",
+    "nickname": "OpcodeOtter",
+    "native_name": "OpcodeOtter",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-e22512740018813afbbdd95d",
+    "nickname": "BinaryBasilisk",
+    "native_name": "^i^cFFCC66BinaryBasilisk^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-225c5834124c92015b80a3dd",
+    "nickname": "ChipChimera",
+    "native_name": "ChipChimera",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-6f29749cd73c90dcad539bf5",
+    "nickname": "RenderRook",
+    "native_name": "^b^c66CCFFRenderRook^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-1c19cffc110bedc0e35efbe1",
+    "nickname": "PortPanther",
+    "native_name": "PortPanther",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-5198f3a8abf5cf633a80ce36",
+    "nickname": "CyberJuniper",
+    "native_name": "CyberJuniper",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-74729783686eafc5acb89264",
+    "nickname": "MatrixMink",
+    "native_name": "MatrixMink",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-0a7bce205ca794d91dc99d15",
+    "nickname": "DataDervish",
+    "native_name": "^b^c66CCFFDataDervish^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-cefb3235528a30dae9b06038",
+    "nickname": "FibreFalcon",
+    "native_name": "FibreFalcon",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-062e44a25c5db29a94bd26b3",
+    "nickname": "SiliconStoat",
+    "native_name": "^cFF6655SiliconStoat^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-a30642fd4dccbfbd5266907c",
+    "nickname": "AstraLancer",
+    "native_name": "^cFFCC66AstraLancer^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-483524ec05042cc293d20167",
+    "nickname": "LunarLynx",
+    "native_name": "^i^cFFCC66LunarLynx^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-c4b652daad6c30fafabcb2bb",
+    "nickname": "SolarSickle",
+    "native_name": "SolarSickle",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-cf4a87ffc9d383b89164a9f9",
+    "nickname": "CometCavalier",
+    "native_name": "CometCavalier",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-19ec6636de82c0c85aa43056",
+    "nickname": "OrbitHawk",
+    "native_name": "OrbitHawk",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-897f1848430c994ac30e8f99",
+    "nickname": "NebulaNomad",
+    "native_name": "^cFFCC66NebulaNomad^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-5443f032bf58158bb60cae34",
+    "nickname": "PulsarPike",
+    "native_name": "^cCC88FFPulsarPike^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-601211481c9bcab3ebe19d15",
+    "nickname": "VenusVandal",
+    "native_name": "VenusVandal",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-96b206f6de749d26bb377f8b",
+    "nickname": "MeteorMarten",
+    "native_name": "MeteorMarten",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-4ddf73222c0d8caedec733ff",
+    "nickname": "CosmoCinder",
+    "native_name": "CosmoCinder",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-a26bf01225f8f940ab5bb42c",
+    "nickname": "StarlitShiv",
+    "native_name": "StarlitShiv",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-392a41e5496c1d290ff50cce",
+    "nickname": "ZenithZebra",
+    "native_name": "ZenithZebra",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-e31a3a92e7e5d5d20889cf11",
+    "nickname": "EclipseEel",
+    "native_name": "^b^i^cA5D66AEclipseEel^I^B^r",
+    "style": "bolditalic"
+  },
+  {
+    "name_id": "nickname-97605f15fc8b23e0195b4435",
+    "nickname": "AuroraArcher",
+    "native_name": "AuroraArcher",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-86a99deae7ebcfbe97d00a90",
+    "nickname": "SaturnSable",
+    "native_name": "SaturnSable",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-6b816d30167ca9a4b7682ec3",
+    "nickname": "QuasarQuail",
+    "native_name": "QuasarQuail",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-cb51c9ce244069ecad2a8fd9",
+    "nickname": "AndroAsh",
+    "native_name": "AndroAsh",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-c44f48625ad209423db6a484",
+    "nickname": "HelioHarrier",
+    "native_name": "HelioHarrier",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-a49abba4961dfcc0edd5d134",
+    "nickname": "AstralAxe",
+    "native_name": "^b^cEEEEEEAstralAxe^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-f920e9e8790d59c597c1ece9",
+    "nickname": "IonIvy",
+    "native_name": "^cCC88FFIonIvy^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-f697c18d17835f190f37f9a3",
+    "nickname": "LunarLagoon",
+    "native_name": "LunarLagoon",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-f30ef90755cb85ad9ce41f33",
+    "nickname": "PhotonPlover",
+    "native_name": "^cA5D66APhotonPlover^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-c863175c2d47a901faff57bc",
+    "nickname": "CosmicCairn",
+    "native_name": "CosmicCairn",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-36a0b1515f6d2f31fa3c9726",
+    "nickname": "CelestialCub",
+    "native_name": "CelestialCub",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-e57ea0d6329a5576bd3ae7d6",
+    "nickname": "GravityGull",
+    "native_name": "^cFFCC66GravityGull^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-d8e248a981c9e0eb405e3427",
+    "nickname": "[EU] Taro",
+    "native_name": "[EU] Taro",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-78ecb69b409f0f63bb73267c",
+    "nickname": "[NOVA] Ilex",
+    "native_name": "[NOVA] Ilex",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-0278be6f79883fdac773d1c5",
+    "nickname": "[RUNE] Elko",
+    "native_name": "^b^cFFCC66[RUNE] Elko^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-76cbbef24d80f3da9ba92204",
+    "nickname": "[GG] Ferra",
+    "native_name": "[GG] Ferra",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-1af0b7874b79c4cd16eb3c58",
+    "nickname": "[NXT] Osku",
+    "native_name": "[NXT] Osku",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-cfc973d93c1ce0d4a4fcdd8a",
+    "nickname": "[VLT] Neris",
+    "native_name": "[VLT] Neris",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-6177287954318947dea59481",
+    "nickname": "[OWL] Talon",
+    "native_name": "^b^cEEEEEE[OWL] Talon^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-2f05129cb8234b39931c60f3",
+    "nickname": "[BYTE] Edda",
+    "native_name": "[BYTE] Edda",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-cad26b91e9bba279386122b3",
+    "nickname": "[FOX] Rilo",
+    "native_name": "^i^cA5D66A[FOX] Rilo^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-36f8eb91cec6f4e5fcf4e2e0",
+    "nickname": "[NORD] Lumi",
+    "native_name": "^i^cEEEEEE[NORD] Lumi^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-be4ffad39b5efbf1a18a8f76",
+    "nickname": "[ARC] Sivo",
+    "native_name": "[ARC] Sivo",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-dd758ff6ec96e64f3ad5bd3a",
+    "nickname": "[ZEN] Kiro",
+    "native_name": "[ZEN] Kiro",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-e99954eabb142365ddcebfc8",
+    "nickname": "[ECHO] Asta",
+    "native_name": "[ECHO] Asta",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-b3620364e6944c5ac7245e49",
+    "nickname": "[RAY] Fenna",
+    "native_name": "[RAY] Fenna",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-748c31dc13e09894c646f895",
+    "nickname": "[ICE] Runa",
+    "native_name": "^b^c33DDCC[ICE] Runa^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-5ef2e11d864faa4069bd13e7",
+    "nickname": "[FLUX] Tavi",
+    "native_name": "[FLUX] Tavi",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-a100629d2eb5d42677035d92",
+    "nickname": "[HEX] Brano",
+    "native_name": "^b^i^cFF6655[HEX] Brano^I^B^r",
+    "style": "bolditalic"
+  },
+  {
+    "name_id": "nickname-c9ce6470eada006548557d36",
+    "nickname": "[DUNE] Yari",
+    "native_name": "[DUNE] Yari",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-be50741f32f41b6715149790",
+    "nickname": "[ALT] Vega",
+    "native_name": "^b^i^cFF6655[ALT] Vega^I^B^r",
+    "style": "bolditalic"
+  },
+  {
+    "name_id": "nickname-2906862aa592af791ee3c660",
+    "nickname": "[WAVE] Olin",
+    "native_name": "^i^cCC88FF[WAVE] Olin^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-42601b22f948489a7374b5bf",
+    "nickname": "[LOOP] Kora",
+    "native_name": "^b^cFFCC66[LOOP] Kora^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-53697fbab5a742e64ad63f02",
+    "nickname": "[ASH] Pavo",
+    "native_name": "[ASH] Pavo",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-f769d0a36241c9d87c1527fa",
+    "nickname": "[DASH] Enzo",
+    "native_name": "^b^c33DDCC[DASH] Enzo^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-604c34a83fb376d1cc0b90ce",
+    "nickname": "[MINT] Alva",
+    "native_name": "[MINT] Alva",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-77a059250eb52a6a29945726",
+    "nickname": "[RIFT] Tilda",
+    "native_name": "[RIFT] Tilda",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-ab0d1b5cfa6c0a069293f604",
+    "nickname": "Str4feLynx",
+    "native_name": "Str4feLynx",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-69d49a023f98c5f72bc3e81f",
+    "nickname": "Pr1smFox",
+    "native_name": "Pr1smFox",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-d296a35b38fc03bd2fe2b6cc",
+    "nickname": "N3onMantis",
+    "native_name": "N3onMantis",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-a5db83717c6ce1e4e984a533",
+    "nickname": "R0cketWren",
+    "native_name": "R0cketWren",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-5f8347dad27bd7730f2b65c5",
+    "nickname": "C0smicJolt",
+    "native_name": "C0smicJolt",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-4008b260c6867083b0471d78",
+    "nickname": "Fr0stJavelin",
+    "native_name": "Fr0stJavelin",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-d386eb05e55c0364dec8a666",
+    "nickname": "C1nderDart",
+    "native_name": "C1nderDart",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-e1a099a2202864c4dd60c4e1",
+    "nickname": "V3ctorWisp",
+    "native_name": "^cCC88FFV3ctorWisp^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-891d167ec32e60ba6b52f268",
+    "nickname": "Ph4ntomPike",
+    "native_name": "Ph4ntomPike",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-db66a580012027f2613cf0e0",
+    "nickname": "R4venCircuit",
+    "native_name": "^i^c66CCFFR4venCircuit^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-c36a52028aa7582193fcde35",
+    "nickname": "Gl1tchFable",
+    "native_name": "Gl1tchFable",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-3cdfd6d79b693c4c896c92e9",
+    "nickname": "Ech0Ranger",
+    "native_name": "Ech0Ranger",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-5294d10a0e56e5bc82616ca7",
+    "nickname": "N1mbusRail",
+    "native_name": "N1mbusRail",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-672f351733d6b400a3ce5ed9",
+    "nickname": "Cr0maViper",
+    "native_name": "Cr0maViper",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-003e0907b0bc50eadc511128",
+    "nickname": "J4deVortex",
+    "native_name": "J4deVortex",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-e8fcc23ff5529ef53ae99e77",
+    "nickname": "Br4ssBishop",
+    "native_name": "Br4ssBishop",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-602aec4afa602624b4cede2f",
+    "nickname": "T1dalArrow",
+    "native_name": "^b^cFF6655T1dalArrow^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-024fb8a1b2b86795e0071645",
+    "nickname": "0rbitWarden",
+    "native_name": "0rbitWarden",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-a732cce4e0bcc0ad5c46986b",
+    "nickname": "Sc0peSparrow",
+    "native_name": "^cFFCC66Sc0peSparrow^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-642c7e0347a82862c41c15c0",
+    "nickname": "H3lixHawk",
+    "native_name": "H3lixHawk",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-30c84e9c1b1e2cf0acca2d0b",
+    "nickname": "L4serLichen",
+    "native_name": "L4serLichen",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-351a7c57f280b4d7c6c13d6a",
+    "nickname": "W1nterQuill",
+    "native_name": "W1nterQuill",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-25f2a5f7abc4f0e04e9364ab",
+    "nickname": "F1reWillow",
+    "native_name": "F1reWillow",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-164d08a043bcdc69945d3fd0",
+    "nickname": "Qu4sarFennel",
+    "native_name": "^cCC88FFQu4sarFennel^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-7bade79827fd8390ea23a599",
+    "nickname": "P1xelBreeze",
+    "native_name": "^b^i^cFF6655P1xelBreeze^I^B^r",
+    "style": "bolditalic"
+  },
+  {
+    "name_id": "nickname-7e0e822be82cc52089a718f9",
+    "nickname": "CoffeeCrossbow",
+    "native_name": "^b^cFFCC66CoffeeCrossbow^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-06b817aa3d50c322b75c273e",
+    "nickname": "ToastTornado",
+    "native_name": "^c66CCFFToastTornado^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-82936854cb9de745c2ab61d0",
+    "nickname": "WaffleWarlock",
+    "native_name": "^cEEEEEEWaffleWarlock^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-6dd3bceae9ffea693ada906d",
+    "nickname": "PicklePaladin",
+    "native_name": "^cEEEEEEPicklePaladin^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-c9ef543d05c1442f85e0ead1",
+    "nickname": "DumplingDash",
+    "native_name": "DumplingDash",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-45a4f5d54f4af4f02bf5bb61",
+    "nickname": "PretzelPhantom",
+    "native_name": "^cFFCC66PretzelPhantom^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-1040b07976bcb4b49b7150ec",
+    "nickname": "BiscuitBandit",
+    "native_name": "^i^cCC88FFBiscuitBandit^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-06e5812ed203fb387c47d067",
+    "nickname": "CocoaCorsair",
+    "native_name": "CocoaCorsair",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-743280e43b915ee493a60098",
+    "nickname": "NoodleNimbus",
+    "native_name": "NoodleNimbus",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-01330c21addc1d97a5f5793f",
+    "nickname": "MustardMage",
+    "native_name": "MustardMage",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-ad7f5df2933d3041db93e392",
+    "nickname": "PancakeProwler",
+    "native_name": "PancakeProwler",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-5f0d84dfaaf813c29f93b8e4",
+    "nickname": "EspressoEcho",
+    "native_name": "EspressoEcho",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-85185ae0bba96a2267846e54",
+    "nickname": "RavioliRanger",
+    "native_name": "^cEEEEEERavioliRanger^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-db4f8ad72e51cefac5fda861",
+    "nickname": "MuesliMarauder",
+    "native_name": "MuesliMarauder",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-4011402b6569bc8f58b82974",
+    "nickname": "CrumpetComet",
+    "native_name": "^cA5D66ACrumpetComet^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-f3eaa567c4d529a833ab4e16",
+    "nickname": "BagelBarrage",
+    "native_name": "BagelBarrage",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-34a587906c05c3c76c619a8b",
+    "nickname": "GarlicGunner",
+    "native_name": "^i^cA5D66AGarlicGunner^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-dc8f858fc5d765991fc72d4a",
+    "nickname": "HazelnutHavoc",
+    "native_name": "^cFF6655HazelnutHavoc^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-3020d43b5100890c6211c5be",
+    "nickname": "PuddingParry",
+    "native_name": "PuddingParry",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-b423b8fdee269124de28da11",
+    "nickname": "SorbetSniper",
+    "native_name": "SorbetSniper",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-d2e78a544dbdfee3090a5191",
+    "nickname": "FalafelFencer",
+    "native_name": "FalafelFencer",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-dbffcf7e8dbe8ac6fe1d19c4",
+    "nickname": "CroissantCrush",
+    "native_name": "CroissantCrush",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-7cb8106c25d018c256d8bb30",
+    "nickname": "GoulashGhost",
+    "native_name": "^b^i^cFF6655GoulashGhost^I^B^r",
+    "style": "bolditalic"
+  },
+  {
+    "name_id": "nickname-d49d4e97e8411b4195a53cd1",
+    "nickname": "WontonWraith",
+    "native_name": "WontonWraith",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-8eab394d0db3fdf9e0671c23",
+    "nickname": "MuffinMeteor",
+    "native_name": "MuffinMeteor",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-499dc88d50cc3018f7dc994d",
+    "nickname": "SideStepSage",
+    "native_name": "^i^cFFCC66SideStepSage^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-98d05340ea530cfe1b125f70",
+    "nickname": "BackflipBirch",
+    "native_name": "BackflipBirch",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-84b9a31b91a4b7caa9f8d276",
+    "nickname": "WallrunWisp",
+    "native_name": "WallrunWisp",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-2da754f87e6a9699ae9f47c2",
+    "nickname": "HopscotchHawk",
+    "native_name": "^i^cEEEEEEHopscotchHawk^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-1dcd2fe36e4db23cd8cc0948",
+    "nickname": "ZigzagZephyr",
+    "native_name": "ZigzagZephyr",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-3d771bd182948efc05a57002",
+    "nickname": "SlidekickSlate",
+    "native_name": "SlidekickSlate",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-1b4cdb0edb264d4f79aa08ff",
+    "nickname": "QuickstepQuill",
+    "native_name": "QuickstepQuill",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-d5beab20c2faf93dc80d6d4c",
+    "nickname": "DriftDancer",
+    "native_name": "DriftDancer",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-959184fa4ffb000630f09b58",
+    "nickname": "PivotPike",
+    "native_name": "^cA5D66APivotPike^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-2a5e35f63f74a4acdb846c06",
+    "nickname": "SwerveSable",
+    "native_name": "^cFFCC66SwerveSable^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-519f17517637e1151b19a698",
+    "nickname": "VaultVesper",
+    "native_name": "^c33DDCCVaultVesper^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-bb2e2b42e17ac02a34256338",
+    "nickname": "DodgeDruid",
+    "native_name": "DodgeDruid",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-caa3ff7c328a51be664def5f",
+    "nickname": "TempoTalon",
+    "native_name": "^i^cCC88FFTempoTalon^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-89905089d290cbf3f093bb99",
+    "nickname": "JukeJuniper",
+    "native_name": "JukeJuniper",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-87216b86d9598439256bb8d5",
+    "nickname": "SprintSphinx",
+    "native_name": "SprintSphinx",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-a6131ce0e6045a4d801af004",
+    "nickname": "StutterStrafe",
+    "native_name": "StutterStrafe",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-601967bc4784dc23b8e23567",
+    "nickname": "CrossstepCairn",
+    "native_name": "^b^cCC88FFCrossstepCairn^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-6616039de96a55657bf6d164",
+    "nickname": "DashDervish",
+    "native_name": "DashDervish",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-f0d062e80b70aea519fea3d7",
+    "nickname": "ParryPlover",
+    "native_name": "ParryPlover",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-4796c5e1a56c311591e1ed00",
+    "nickname": "ReboundRook",
+    "native_name": "^cA5D66AReboundRook^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-829d607fe1f5c01f6ed5fd23",
+    "nickname": "GlideGambit",
+    "native_name": "^b^cFFCC66GlideGambit^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-ce932e8e80dee71d0e10842c",
+    "nickname": "SwingstepSwift",
+    "native_name": "SwingstepSwift",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-008a2f1f54b6b8417844c95d",
+    "nickname": "OverstepOwl",
+    "native_name": "^i^cEEEEEEOverstepOwl^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-2da5e30f5777b33de1818dc9",
+    "nickname": "AirwalkAster",
+    "native_name": "^c66CCFFAirwalkAster^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-6482c0f12b390e85ff2716c4",
+    "nickname": "BoundBramble",
+    "native_name": "^cFFCC66BoundBramble^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-41f82d966de5a8a69ab40315",
+    "nickname": "vElVeT.vaNe",
+    "native_name": "vElVeT.vaNe",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-3c08b985b2ce10dc7bd370b7",
+    "nickname": "lowkey.Lynx",
+    "native_name": "^cCC88FFlowkey.Lynx^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-4e6b88de9e1caffd0c7238af",
+    "nickname": "m0ss.Mage",
+    "native_name": "m0ss.Mage",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-274808584e668fd878f82ca0",
+    "nickname": "aStral.noise",
+    "native_name": "^cFFCC66aStral.noise^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-2d003f785d510b3c1e51e9c0",
+    "nickname": "quiet.Quill",
+    "native_name": "^cA5D66Aquiet.Quill^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-2bd91bcd2a44a4b3dc7fc466",
+    "nickname": "tWiSted.twig",
+    "native_name": "tWiSted.twig",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-71f21b19808aa99faf8c9279",
+    "nickname": "p0lar.Pulse",
+    "native_name": "p0lar.Pulse",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-ebe56e1f74def1b10614df58",
+    "nickname": "dusk.drifter",
+    "native_name": "dusk.drifter",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-b45d2cd3bff374c9ae932f96",
+    "nickname": "miDnight.Mint",
+    "native_name": "miDnight.Mint",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-71c31d2a82197d25b011f42b",
+    "nickname": "n0va.Nest",
+    "native_name": "n0va.Nest",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-edb8f47ce005d2cda4401756",
+    "nickname": "br1sk.Breeze",
+    "native_name": "br1sk.Breeze",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-33d1e40e9fd11deabd1afd5c",
+    "nickname": "teaTime.Talon",
+    "native_name": "^c33DDCCteaTime.Talon^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-9232d78f52e1b3abdc33b253",
+    "nickname": "h0llow.Hawk",
+    "native_name": "^b^cCC88FFh0llow.Hawk^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-f5adecfe5a805c541abfc320",
+    "nickname": "echo.Errant",
+    "native_name": "echo.Errant",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-e824dbbc9bb1e80d1ff8e6b1",
+    "nickname": "oddOrbit",
+    "native_name": "^i^cA5D66AoddOrbit^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-ea4ea62a37ba6b0ad3dc2961",
+    "nickname": "offAxis",
+    "native_name": "offAxis",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-cc4f6cb06bdae55e3371a9a8",
+    "nickname": "starboard.Sable",
+    "native_name": "^b^c66CCFFstarboard.Sable^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-fe093e0461b16a35c417012d",
+    "nickname": "lunar.lilt",
+    "native_name": "lunar.lilt",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-7aba11bfb9f6750d8d3cb4dd",
+    "nickname": "p1ne.Pirate",
+    "native_name": "^b^c33DDCCp1ne.Pirate^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-a09d901a22a570f78c12b30f",
+    "nickname": "cobalt.Cricket",
+    "native_name": "cobalt.Cricket",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-f6a6cc6c25627d8bd7ab93a4",
+    "nickname": "aMber.Arc",
+    "native_name": "^c66CCFFaMber.Arc^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-1017d87169ec5708cb596d84",
+    "nickname": "notQuiteNinja",
+    "native_name": "^c66CCFFnotQuiteNinja^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-3a970e36584409ac7f2d339b",
+    "nickname": "sleepy.Saturn",
+    "native_name": "sleepy.Saturn",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-6aea7f6d22183947963fcd13",
+    "nickname": "kinetic.Kiwi",
+    "native_name": "kinetic.Kiwi",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-24124f4ef6b1ea59f4fcbc03",
+    "nickname": "dusty.Delta",
+    "native_name": "dusty.Delta",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-6f0da884a881c0fdd752e988",
+    "nickname": "Varda17",
+    "native_name": "^cFF6655Varda17^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-0dd76676636c50ba7c95813b",
+    "nickname": "Kairo9",
+    "native_name": "Kairo9",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-5b8ae7bdb301f8a252e62796",
+    "nickname": "Neris42",
+    "native_name": "Neris42",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-f55357b1c17c02e8dcae954d",
+    "nickname": "Pavo23",
+    "native_name": "^i^cFF6655Pavo23^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-aed8c3ed2c7f42a0767e9f42",
+    "nickname": "Elian7",
+    "native_name": "^cA5D66AElian7^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-f6e3c0f61ee53a618959cd07",
+    "nickname": "Juno31",
+    "native_name": "Juno31",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-6178f180a8c20ff311567cc3",
+    "nickname": "Lumen88",
+    "native_name": "^cFF6655Lumen88^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-372269d49f4ed017321180f0",
+    "nickname": "Tavi6",
+    "native_name": "^i^cA5D66ATavi6^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-e0ac622bca551b5374098071",
+    "nickname": "Runa13",
+    "native_name": "Runa13",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-12e591d2b19dcb8d898ff51a",
+    "nickname": "Oris29",
+    "native_name": "^cFF6655Oris29^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-cde52bf6b5d0a5e93d2093d6",
+    "nickname": "Sable5",
+    "native_name": "^i^cCC88FFSable5^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-80410d1465ebdcb688738552",
+    "nickname": "Kestrel73",
+    "native_name": "Kestrel73",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-41d65c36dc6625f345b09ad6",
+    "nickname": "Zora11",
+    "native_name": "Zora11",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-f47f94cf4f4fd98c20195a81",
+    "nickname": "Nival64",
+    "native_name": "Nival64",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-a3947b0064f72f7dfe7005e5",
+    "nickname": "Arlo27",
+    "native_name": "^cCC88FFArlo27^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-4e14b5322b372bbe05330e12",
+    "nickname": "Edda19",
+    "native_name": "^cFFCC66Edda19^r",
+    "style": "single"
+  },
+  {
+    "name_id": "nickname-b2cb68f15a7926df8d098ed4",
+    "nickname": "Talon84",
+    "native_name": "^b^cCC88FFTalon84^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-aff7030a2883fe1c56113538",
+    "nickname": "Briska8",
+    "native_name": "^b^cEEEEEEBriska8^B^r",
+    "style": "bold"
+  },
+  {
+    "name_id": "nickname-e94d9e5e0a3dac713138c9b4",
+    "nickname": "Olin52",
+    "native_name": "Olin52",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-dcdffc51cc346b88e2f33589",
+    "nickname": "Liora16",
+    "native_name": "Liora16",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-edc299cb53204e331e5897b9",
+    "nickname": "Fenna37",
+    "native_name": "Fenna37",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-a5d4fd76cbfe801fa0ef7a52",
+    "nickname": "Miro21",
+    "native_name": "^i^c33DDCCMiro21^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-6f482f2b48899d242c00579d",
+    "nickname": "Vega95",
+    "native_name": "^i^c33DDCCVega95^I^r",
+    "style": "italic"
+  },
+  {
+    "name_id": "nickname-5c62c81eba1456d621bf73b6",
+    "nickname": "Asta4",
+    "native_name": "Asta4",
+    "style": "plain"
+  },
+  {
+    "name_id": "nickname-3547a4551c7066d9453f8955",
+    "nickname": "Rilo68",
+    "native_name": "Rilo68",
+    "style": "plain"
+  }
+]

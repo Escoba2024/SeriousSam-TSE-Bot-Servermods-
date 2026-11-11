@@ -131,7 +131,13 @@ inline int BestWeapon(uint32_t usable_mask, double distance_m, double range_pref
 /* Hysteresis                                                                */
 /* ------------------------------------------------------------------------ */
 
+// Arena engagement limit, separate from the unchanged Cecil source ratings.
+inline bool ArenaWeaponRangeSafe(int weapon,double distance) {
+  return std::isfinite(distance)&&distance>=0&&
+    ((weapon!=2&&weapon!=3)||distance<=18.0)&&CecilFireRangeSafe(weapon,distance);
+}
 struct LoadoutInput {
+  bool arena = false;
   bool cecil = false;
   uint32_t usable_mask = 0;       // after ammo filtering (CombatUsableWeapons)
   double distance_m = 0.0;        // to the current target, 0 if unknown
@@ -170,13 +176,14 @@ class WeaponSelector {
     }
 
     uint32_t candidates=in.usable_mask;
-    if(in.cecil) {
+    const bool cecil_scoring=in.cecil||in.arena;
+    if(cecil_scoring) {
       for(int weapon=1;weapon<=14;++weapon)
-        if(!CecilFireRangeSafe(weapon,in.distance_m))candidates&=~CecilWeaponMask(weapon);
+        if(!(in.arena?ArenaWeaponRangeSafe(weapon,in.distance_m):CecilFireRangeSafe(weapon,in.distance_m)))candidates&=~CecilWeaponMask(weapon);
       // Double Colt replaces single Colt capability; preserve original rating table.
       if(candidates&CecilWeaponMask(3))candidates&=~CecilWeaponMask(2);
     }
-    const int best = in.cecil ? CecilBestWeapon(candidates,in.distance_m)
+    const int best = cecil_scoring ? CecilBestWeapon(candidates,in.distance_m)
       : BestWeapon(candidates, in.distance_m, in.range_preference);
     if (best <= 0) return Fallback(in.usable_mask);
     if (current_ == 0 || !WeaponUsable(candidates, current_)) {
@@ -190,11 +197,11 @@ class WeaponSelector {
     // Keep the current weapon unless the alternative is clearly better AND
     // the minimum hold time has passed. This is what stops the target/weapon
     // ping-pong near a range boundary.
-    const double s_now = in.cecil ? (CecilFireRangeSafe(current_,in.distance_m)?CecilWeaponScore(current_,in.distance_m):0)
+    const double s_now = cecil_scoring ? (CecilFireRangeSafe(current_,in.distance_m)?CecilWeaponScore(current_,in.distance_m):0)
       : ScoreWeapon(current_, in.distance_m, in.range_preference);
-    const double s_best = in.cecil ? CecilWeaponScore(best,in.distance_m)
+    const double s_best = cecil_scoring ? CecilWeaponScore(best,in.distance_m)
       : ScoreWeapon(best, in.distance_m, in.range_preference);
-    if(in.cecil && s_now<=0){current_=best;switch_tick_=tick;return current_;}
+    if(cecil_scoring && s_now<=0){current_=best;switch_tick_=tick;return current_;}
     if (!DwellElapsed(tick)) return current_;
     if (s_best > s_now * skill_.switch_margin) {
       current_ = best;

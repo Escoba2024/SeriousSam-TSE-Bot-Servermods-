@@ -1,0 +1,164 @@
+[
+  {
+    "pid": 914337,
+    "cwd": "/srv/tse-development-live-20261107/server",
+    "log_sha256": "23749b8ae011b52c1689d49b6f862684b00b0dd5d4e5e7f20ad6535acfca7b96",
+    "error_markers": 39,
+    "spawn_zero_marker": true,
+    "cecil_spawn_events": 0,
+    "combat_events": 0
+  },
+  {
+    "pid": 914411,
+    "cwd": "/srv/tse-development-live-20261107/botA",
+    "log_sha256": "f280f9c170a0420d65d15e3e2b19939d06b3889df39e83e692c58842b441e08c",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 62,
+    "combat_events": 1488
+  },
+  {
+    "pid": 914576,
+    "cwd": "/srv/tse-development-live-20261107/botB",
+    "log_sha256": "93666f3b9cdf5cf6ec495c2cb2f2be3e1e538948cb14ee8cc933c5c5da2eee43",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 59,
+    "combat_events": 1330
+  },
+  {
+    "pid": 915604,
+    "cwd": "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server",
+    "log_sha256": "b4521a8dd029e8a5ad0192e7d3db4594ed0959a1486d2af9d3da12d5eff69dcd",
+    "error_markers": 0,
+    "spawn_zero_marker": true,
+    "cecil_spawn_events": 0,
+    "combat_events": 0
+  },
+  {
+    "pid": 915810,
+    "cwd": "/srv/tse-redstation-live-20261101/botA",
+    "log_sha256": "6c8e69bb27343a2ff94b1c223ae2dc51eb07a3e4fa4c492c87bf07c1216f7e7b",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 0,
+    "combat_events": 1091
+  },
+  {
+    "pid": 915991,
+    "cwd": "/srv/tse-redstation-live-20261101/botB",
+    "log_sha256": "d0cd89622d128560bf43d53daa60d9c92533ae454d2c71e674f03d102f093f6a",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 0,
+    "combat_events": 1036
+  },
+  {
+    "pid": 917039,
+    "cwd": "/srv/tse-yodeller-live-20261107/server",
+    "log_sha256": "7b8879cf6aa0444f07c7480dc5f94ca19775200d1431e44a9d3104129227a294",
+    "error_markers": 0,
+    "spawn_zero_marker": true,
+    "cecil_spawn_events": 0,
+    "combat_events": 0
+  },
+  {
+    "pid": 917109,
+    "cwd": "/srv/tse-yodeller-live-20261107/botA",
+    "log_sha256": "416fa0494886530f41a759f17bc655309d2bc8111de563bb7342ddc3836775d0",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 0,
+    "combat_events": 850
+  },
+  {
+    "pid": 917222,
+    "cwd": "/srv/tse-yodeller-live-20261107/botB",
+    "log_sha256": "1ecdd3b7a060164962e9337a15d27e05362dc3ab38b897974ccdf98fd3a42a2e",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 0,
+    "combat_events": 846
+  },
+  {
+    "pid": 918250,
+    "cwd": "/srv/tse-skulls-live-20261107/server",
+    "log_sha256": "f83f4b8bb4ce6c797a1fa53c534965b97f30d83ed3e04cc210a400abc3fe4731",
+    "error_markers": 0,
+    "spawn_zero_marker": true,
+    "cecil_spawn_events": 0,
+    "combat_events": 0
+  },
+  {
+    "pid": 918321,
+    "cwd": "/srv/tse-skulls-live-20261107/botA",
+    "log_sha256": "63c1b0cb19eadb4975a98254b0426293e2b0ead1c5f93befcc803074365944c9",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 0,
+    "combat_events": 539
+  },
+  {
+    "pid": 918465,
+    "cwd": "/srv/tse-skulls-live-20261107/botB",
+    "log_sha256": "038b620805b8ba57f6c09243d26c5c7cee9a991e88c6492cfd539551ce68e1c6",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 0,
+    "combat_events": 435
+  },
+  {
+    "pid": 919467,
+    "cwd": "/srv/tse-trouble-live-20261107/server",
+    "log_sha256": "1776167bf8ae42c1768101a59bf82effa1fc6dcaa37669f854c75a1aacb3e49c",
+    "error_markers": 0,
+    "spawn_zero_marker": true,
+    "cecil_spawn_events": 0,
+    "combat_events": 0
+  },
+  {
+    "pid": 919534,
+    "cwd": "/srv/tse-trouble-live-20261107/botA",
+    "log_sha256": "f68d928d0886d6054675339f6a8bb7e97272dbe82131901cc28941c65aff4d16",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 0,
+    "combat_events": 311
+  },
+  {
+    "pid": 919679,
+    "cwd": "/srv/tse-trouble-live-20261107/botB",
+    "log_sha256": "d2e21c0fad5858f75e5d210416a32c836f2741f47cd5b7bc27be12cd8662d089",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 0,
+    "combat_events": 411
+  },
+  {
+    "pid": 920722,
+    "cwd": "/srv/tse-hole-live-20261107/server",
+    "log_sha256": "d1bd3ff1a9600b1640e69d1bd7477981baa1170b5d95783bf793d1577bc5c500",
+    "error_markers": 0,
+    "spawn_zero_marker": true,
+    "cecil_spawn_events": 0,
+    "combat_events": 0
+  },
+  {
+    "pid": 920791,
+    "cwd": "/srv/tse-hole-live-20261107/botA",
+    "log_sha256": "99833b273cf4401e750e1d27c224035cd4075ae37c1a7ad97d61c259f3e8998f",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 0,
+    "combat_events": 232
+  },
+  {
+    "pid": 920933,
+    "cwd": "/srv/tse-hole-live-20261107/botB",
+    "log_sha256": "f3eab7802aedd6a564e0d84ad79429ed2ef26c70105e22e7d61b4b95d50c8c4e",
+    "error_markers": 0,
+    "spawn_zero_marker": false,
+    "cecil_spawn_events": 0,
+    "combat_events": 197
+  }
+]

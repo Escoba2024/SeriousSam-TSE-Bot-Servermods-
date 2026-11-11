@@ -1,0 +1,60 @@
+{
+  "evidence_scope": "Historical native original-Engine call, not new20261111 runtime or rendering acceptance",
+  "source_commit": "710b059d8441e4b949d5251d0b25d8d25eb47342",
+  "source_report": "docs/reports/2026-10-25-bot-ai2-results.json",
+  "source_report_sha256": "7186777a072fe79141384ad730b2a3b198683ed938ddf7853d040c1fc36a7c1d",
+  "exports": {
+    "CTString::Undecorated": "RVA0x7120",
+    "CTString::LengthNaked": "RVA0x70e0"
+  },
+  "image_base": "0x600c0000",
+  "exitcode": 0,
+  "engine_sha256": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f",
+  "cases": [
+    {
+      "raw": "PlainName",
+      "native_visible": "PlainName",
+      "native_length": 9
+    },
+    {
+      "raw": "^cFF0000ReaPer^r",
+      "native_visible": "ReaPer",
+      "native_length": 6
+    },
+    {
+      "raw": "^bRaven^B^r",
+      "native_visible": "Raven",
+      "native_length": 5
+    },
+    {
+      "raw": "^iRaven^I^r",
+      "native_visible": "Raven",
+      "native_length": 5
+    },
+    {
+      "raw": "^b^iNeCrO^I^B^r",
+      "native_visible": "NeCrO",
+      "native_length": 5
+    },
+    {
+      "raw": "^f3NIGHT^F^r",
+      "native_visible": "IGHT",
+      "native_length": 4
+    },
+    {
+      "raw": "^f3^c00FF00NIGHT^F^r",
+      "native_visible": "c00FF00NIGHT",
+      "native_length": 12
+    },
+    {
+      "raw": "^cFFFFFFxX_^cFF0000RaVeN^r",
+      "native_visible": "xX_RaVeN",
+      "native_length": 8
+    },
+    {
+      "raw": "^f0X^F^r",
+      "native_visible": "",
+      "native_length": 0
+    }
+  ]
+}

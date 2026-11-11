@@ -1,0 +1,283 @@
+{
+  "utc": "2026-11-11T18:42:31.644863+00:00",
+  "processes": [
+    {
+      "pid": 877795,
+      "comm": "DedicatedServer",
+      "cwd": "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server",
+      "start_ticks": "104062594",
+      "dlls": [
+        {
+          "path": "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server/Bin/GameMP.dll",
+          "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+          "inode": 1559829
+        }
+      ]
+    },
+    {
+      "pid": 878055,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-redstation-live-20261101/botB",
+      "start_ticks": "104069368",
+      "dlls": [
+        {
+          "path": "/srv/tse-redstation-live-20261101/botB/Bin/GameMP.dll",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "inode": 2488620
+        }
+      ]
+    },
+    {
+      "pid": 878938,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-redstation-live-20261101/botA",
+      "start_ticks": "104087293",
+      "dlls": [
+        {
+          "path": "/srv/tse-redstation-live-20261101/botA/Bin/GameMP.dll",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "inode": 2491314
+        }
+      ]
+    },
+    {
+      "pid": 879929,
+      "comm": "DedicatedServer",
+      "cwd": "/srv/tse-yodeller-live-20261107/server",
+      "start_ticks": "104090458",
+      "dlls": [
+        {
+          "path": "/srv/tse-yodeller-live-20261107/server/Bin/GameMP.dll",
+          "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+          "inode": 3115609
+        }
+      ]
+    },
+    {
+      "pid": 879998,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-yodeller-live-20261107/botA",
+      "start_ticks": "104090819",
+      "dlls": [
+        {
+          "path": "/srv/tse-yodeller-live-20261107/botA/Bin/GameMP.dll",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "inode": 3117428
+        }
+      ]
+    },
+    {
+      "pid": 880095,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-yodeller-live-20261107/botB",
+      "start_ticks": "104092291",
+      "dlls": [
+        {
+          "path": "/srv/tse-yodeller-live-20261107/botB/Bin/GameMP.dll",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "inode": 3245207
+        }
+      ]
+    },
+    {
+      "pid": 881068,
+      "comm": "DedicatedServer",
+      "cwd": "/srv/tse-skulls-live-20261107/server",
+      "start_ticks": "104095473",
+      "dlls": [
+        {
+          "path": "/srv/tse-skulls-live-20261107/server/Bin/GameMP.dll",
+          "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+          "inode": 3375130
+        }
+      ]
+    },
+    {
+      "pid": 881136,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-skulls-live-20261107/botA",
+      "start_ticks": "104096008",
+      "dlls": [
+        {
+          "path": "/srv/tse-skulls-live-20261107/botA/Bin/GameMP.dll",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "inode": 3376949
+        }
+      ]
+    },
+    {
+      "pid": 881235,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-skulls-live-20261107/botB",
+      "start_ticks": "104097784",
+      "dlls": [
+        {
+          "path": "/srv/tse-skulls-live-20261107/botB/Bin/GameMP.dll",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "inode": 3504830
+        }
+      ]
+    },
+    {
+      "pid": 882235,
+      "comm": "DedicatedServer",
+      "cwd": "/srv/tse-trouble-live-20261107/server",
+      "start_ticks": "104101239",
+      "dlls": [
+        {
+          "path": "/srv/tse-trouble-live-20261107/server/Bin/GameMP.dll",
+          "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+          "inode": 3506694
+        }
+      ]
+    },
+    {
+      "pid": 882304,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-trouble-live-20261107/botA",
+      "start_ticks": "104101598",
+      "dlls": [
+        {
+          "path": "/srv/tse-trouble-live-20261107/botA/Bin/GameMP.dll",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "inode": 3634706
+        }
+      ]
+    },
+    {
+      "pid": 882378,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-trouble-live-20261107/botB",
+      "start_ticks": "104102979",
+      "dlls": [
+        {
+          "path": "/srv/tse-trouble-live-20261107/botB/Bin/GameMP.dll",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "inode": 3636452
+        }
+      ]
+    },
+    {
+      "pid": 883349,
+      "comm": "DedicatedServer",
+      "cwd": "/srv/tse-hole-live-20261107/server",
+      "start_ticks": "104106093",
+      "dlls": [
+        {
+          "path": "/srv/tse-hole-live-20261107/server/Bin/GameMP.dll",
+          "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+          "inode": 3765649
+        }
+      ]
+    },
+    {
+      "pid": 883419,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-hole-live-20261107/botA",
+      "start_ticks": "104106630",
+      "dlls": [
+        {
+          "path": "/srv/tse-hole-live-20261107/botA/Bin/GameMP.dll",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "inode": 3767468
+        }
+      ]
+    },
+    {
+      "pid": 883545,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-hole-live-20261107/botB",
+      "start_ticks": "104110104",
+      "dlls": [
+        {
+          "path": "/srv/tse-hole-live-20261107/botB/Bin/GameMP.dll",
+          "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+          "inode": 3895378
+        }
+      ]
+    },
+    {
+      "pid": 903117,
+      "comm": "DedicatedServer",
+      "cwd": "/srv/tse-development-live-20261107/server",
+      "start_ticks": "104785632",
+      "dlls": [
+        {
+          "path": "/srv/tse-development-live-20261107/server/Bin/GameMP.dll",
+          "sha256": "fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0",
+          "inode": 4024224
+        }
+      ]
+    },
+    {
+      "pid": 903214,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-development-live-20261107/botA",
+      "start_ticks": "104785991",
+      "dlls": [
+        {
+          "path": "/srv/tse-development-live-20261107/botA/Bin/GameMP.dll",
+          "sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530",
+          "inode": 4024211
+        }
+      ]
+    },
+    {
+      "pid": 903329,
+      "comm": "SeriousSam.exe",
+      "cwd": "/srv/tse-development-live-20261107/botB",
+      "start_ticks": "104788753",
+      "dlls": [
+        {
+          "path": "/srv/tse-development-live-20261107/botB/Bin/GameMP.dll",
+          "sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530",
+          "inode": 4024213
+        }
+      ]
+    }
+  ],
+  "servers": [
+    {
+      "port": 25600,
+      "query_port": 25601,
+      "map": "Red Station",
+      "players": "8",
+      "gamever": "1.07"
+    },
+    {
+      "port": 25610,
+      "query_port": 25611,
+      "map": "Yodeller",
+      "players": "8",
+      "gamever": "1.07"
+    },
+    {
+      "port": 25620,
+      "query_port": 25621,
+      "map": "We Got Skulls'n'Bones Too",
+      "players": "8",
+      "gamever": "1.07"
+    },
+    {
+      "port": 25630,
+      "query_port": 25631,
+      "map": "Little Trouble",
+      "players": "8",
+      "gamever": "1.07"
+    },
+    {
+      "port": 25640,
+      "query_port": 25641,
+      "map": "Hole",
+      "players": "8",
+      "gamever": "1.07"
+    },
+    {
+      "port": 25650,
+      "query_port": 25651,
+      "map": "Red Station",
+      "players": "10",
+      "gamever": "1.07"
+    }
+  ]
+}

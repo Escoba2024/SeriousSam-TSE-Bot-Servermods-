@@ -1,0 +1,58 @@
+{
+  "private_drive_folder": "https://drive.google.com/drive/folders/14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2",
+  "runtime_archive_sha256": "862af28e291c9425f71a9eb2ec7290488a7d20513e3e4a088990a9b3e8afe689",
+  "runtime_archive_bytes": 726796930,
+  "runtime_parts_roundtrip_verified": 8,
+  "source_before": {
+    "url": "https://drive.google.com/file/d/1oTTgKPOaUPcbqWGFUXEWh6EuiPTNP91F/view",
+    "sha256": "754cafccfc8fb2222e796904ba1d8604b4b150118dfc19e86af496db0f9b53af"
+  },
+  "companion": {
+    "url": "https://drive.google.com/file/d/11EpEq1YqP7FDWiPLlb63eCGdHeYlMpeb/view",
+    "sha256": "cc71d0cff6e8787d72001fc5174d06938fc885aab0fd5a6484c9171eadd9fd49",
+    "bytes": 12023426,
+    "roundtrip_verified": true
+  },
+  "parts": [
+    {
+      "part": 0,
+      "url": "https://drive.google.com/file/d/1y1lkjZpw0Cho1QTlbrkmvm3Ro9FduAog/view",
+      "sha256": "fc84f6359c835216f1ccf243f76bb177a4fedfebf270ec519fd0662e5f82a9db"
+    },
+    {
+      "part": 1,
+      "url": "https://drive.google.com/file/d/1mwP68AaBjR0SUi9tn2dfouYM4FHWHLly/view",
+      "sha256": "29734cd75998960c9d9caf61cc45ac5cc45c2b9f57bd48064fd9c04d16c69f40"
+    },
+    {
+      "part": 2,
+      "url": "https://drive.google.com/file/d/1HvYOhl6azLH3kaGcBAgmkvxolPSQQqOn/view",
+      "sha256": "bd92000306e652e3979fa4964e156c8bcc292ea192533998d0fd8cdca66fbc20"
+    },
+    {
+      "part": 3,
+      "url": "https://drive.google.com/file/d/1YSgwLfY0wXmx-8QmaxsOdC8c3PWEBmze/view",
+      "sha256": "9972ace2fe81007b36abe13daa47670eaee1b7ada2bb08fa616659b2db164cb6"
+    },
+    {
+      "part": 4,
+      "url": "https://drive.google.com/file/d/1COBew3iKkdxtqhPJwdtm869KPdohsMLt/view",
+      "sha256": "e98899305e567aa1710ee2cf21286c32e6701e3608feb4fcbeaaf6af17566b43"
+    },
+    {
+      "part": 5,
+      "url": "https://drive.google.com/file/d/1jCera1bcVbpKODrlIV7CfaM4pBdCouPK/view",
+      "sha256": "bd5049086cdb6259d09b5d15e355bd066f9df3572a0c58371d0b75a5c0feab4a"
+    },
+    {
+      "part": 6,
+      "url": "https://drive.google.com/file/d/1X8m-EYoHpE3sRvoi8Ont4zpnx-pSlNsP/view",
+      "sha256": "8a373939ccf85bdc5cf8aa20b3d75040dcddfbb98e2563330a3154df773c4629"
+    },
+    {
+      "part": 7,
+      "url": "https://drive.google.com/file/d/19cOKnuAcrWg3xuPC6kLGdNASurDCcJhE/view",
+      "sha256": "4e73ad15ed4809a5ec615c95dc8df0aff8c61cdc725e0366b8ac86aa310dd78e"
+    }
+  ]
+}

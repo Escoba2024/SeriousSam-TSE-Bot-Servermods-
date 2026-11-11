@@ -91,7 +91,7 @@ class HumanBotPolicy {
     profile_ = *profile;
     cecil_enabled_ = cecil != nullptr && cecil->schema_version == 1;
     cecil_ = cecil_enabled_ ? *cecil : CecilPreset(2);
-    if (cecil_enabled_) {
+    if (cecil_enabled_ && !profile_.arena) {
       profile_.skill.weapon_dwell_s = cecil_.fWeaponCD;
       // Original uniform [-angle/2,+angle/2] component has sigma angle/sqrt(12).
       // Keep Human correlated drift, target offset, settling and acceleration;
@@ -227,7 +227,7 @@ class HumanBotPolicy {
     }
 
     const bool cecil = w.cecil && cecil_enabled_;
-    const int chosen = cecil ? ChooseCecilTarget(w.tick) : ChooseTarget(w.tick);
+    const int chosen = cecil ? ChooseCecilTarget(w) : ChooseTarget(w);
     if (chosen != target_) {
       if (target_ >= 0 || chosen >= 0) ++target_switches_;
       target_ = chosen;
@@ -275,7 +275,7 @@ class HumanBotPolicy {
     if (visible) {
       const WeaponProfile& wp = WeaponAt(cmd.weapon);
       double lead_time = wp.proj_speed > 0 ? distance / wp.proj_speed * profile_.skill.prediction_gain : 0;
-      if (cecil) {
+      if (cecil && !profile_.arena) {
         const CecilWeapon* rating = CecilWeaponAt(cmd.weapon);
         const double random = (prediction_rng_.Next() >> 8) / 16777216.0;
         const double original = rating ? (cecil_.fPrediction + random * cecil_.fPredictRnd) * (1-rating->accuracy) : 0;
@@ -294,7 +294,7 @@ class HumanBotPolicy {
     cmd.pitch_delta_deg = aim.pitch_delta_deg;
     cmd.aim_error_deg = aim.residual_error_deg;
     cmd.fire = aim.fire_allowed && visible && (!cecil || cecil_.bShooting);
-    if (cecil) {
+    if (cecil && !profile_.arena) {
       const auto local=w.pose.frame.ToLocal(aim_point.x-w.pose.x,aim_point.y-w.pose.y,aim_point.z-w.pose.z);
       const double ax=local.x,ay=local.y,az=local.z;
       const double yaw=std::atan2(-ax,-az)*kRadToDeg;
@@ -355,6 +355,7 @@ class HumanBotPolicy {
                             double distance = 0.0) const {
     LoadoutInput li;
     li.cecil=w.cecil;
+    li.arena=profile_.arena;
     li.usable_mask = w.usable_weapons;
     if (w.cecil && cecil_enabled_ && cecil_.iAllowedWeapons != -1)
       li.usable_mask &= static_cast<uint32_t>(cecil_.iAllowedWeapons);
@@ -365,20 +366,33 @@ class HumanBotPolicy {
     return li;
   }
 
-  int ChooseCecilTarget(int tick) {
+  bool CanEngage(const WorldView& w,const TrackState* target) const {
+    if(!target)return false;
+    if(!profile_.arena)return true;
+    uint32_t usable=w.usable_weapons;
+    if(w.cecil&&cecil_enabled_&&cecil_.iAllowedWeapons!=-1)
+      usable &= static_cast<uint32_t>(cecil_.iAllowedWeapons);
+    const double distance=DistanceTo(target->x,target->y,target->z);
+    for(int weapon=1;weapon<=14;++weapon)
+      if(WeaponUsable(usable,weapon)&&ArenaWeaponRangeSafe(weapon,distance))return true;
+    return false;
+  }
+
+  int ChooseCecilTarget(const WorldView& w) {
+    const int tick=w.tick;
     if (!cecil_.bTargetSearch || cecil_.iTargetType == 1) return -1;
     const double now = tick / kProfileTickHz;
     const TrackState* current = perception_.Track(target_);
     // Dead/replaced/expired targets bypass the lock. A visible reacted target
     // may also displace a remembered target; memory never wins by stale health.
-    if (current && perception_.Selectable(target_) && now < cecil_target_after_)
+    if (current && CanEngage(w,current) && perception_.Selectable(target_) && now < cecil_target_after_)
       return target_;
     int best = -1, last_priority = 0;
     double last_health = 1000, last_distance = -1;
     for (int slot = 0; slot < kMaxPlayers; ++slot) {
       if (!perception_.Selectable(slot)) continue;
       const TrackState* t = perception_.Track(slot);
-      if (!t || !std::isfinite(t->health) || t->health <= 0) continue;
+      if (!CanEngage(w,t) || !std::isfinite(t->health) || t->health <= 0) continue;
       const double distance = DistanceTo(t->x, t->y, t->z);
       // Cecil BotFunctions.cpp ClosestEnemy: visibility + lower HP + nearer.
       // Deliberate client adaptation: stable player-slot order, only reacted
@@ -394,17 +408,18 @@ class HumanBotPolicy {
       cecil_target_after_ = now + (cecil_.fTargetCD > 0 ? cecil_.fTargetCD : 0);
       return best;
     }
-    if (current && !current->visible_now && current->confidence > .5) return target_;
+    if (CanEngage(w,current) && !current->visible_now && current->confidence > .5) return target_;
     return -1;
   }
 
-  int ChooseTarget(int tick) {
+  int ChooseTarget(const WorldView& w) {
+    const int tick=w.tick;
     int best = -1;
     double best_score = -1.0;
     for (int slot = 0; slot < kMaxPlayers; ++slot) {
       if (!perception_.Selectable(slot)) continue;
       const TrackState* t = perception_.Track(slot);
-      if (t == nullptr) continue;
+      if (!CanEngage(w,t)) continue;
       const double dist = DistanceTo(t->x, t->y, t->z);
       double score = 1.0 / (dist + 1.0);
       if (slot == target_) score *= 1.35;  // stickiness
@@ -414,7 +429,7 @@ class HumanBotPolicy {
       }
     }
 
-    if (target_ >= 0 && perception_.Selectable(target_)) {
+    if (target_ >= 0 && CanEngage(w,perception_.Track(target_)) && perception_.Selectable(target_)) {
       const TrackState* cur = perception_.Track(target_);
       if (cur == nullptr) return best;
       // Hard lock right after a switch prevents ping-pong between two equally
@@ -435,7 +450,7 @@ class HumanBotPolicy {
     // briefly. No shot is possible without fresh line of sight anyway.
     if (target_ >= 0) {
       const TrackState* t = perception_.Track(target_);
-      if (t != nullptr && !t->visible_now && t->confidence > 0.5) return target_;
+      if (CanEngage(w,t) && !t->visible_now && t->confidence > 0.5) return target_;
     }
     return -1;
   }

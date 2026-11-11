@@ -1,0 +1,56 @@
+[
+  {
+    "port": 25600,
+    "source_path": "/srv/tse-wine-runtime-20261020/public-eight-20261020-2140/server/Scripts/Dedicated/BotTest/1_begin.ini",
+    "source_sha256": "bc7bbf70054cbc642fb6346e038d3bf921af1941e63d8fad6d980133fb0bf427",
+    "staged_path": "poc/runtime/milestone-a-20261111/25600/1_begin.ini",
+    "staged_sha256": "6dd9f335d41cabd25b53849043c44383aa84f6ba6799b6da7ffcf69f6a8d16d9",
+    "runtime_applied": false,
+    "native_respawn_damage_test": "NOT_RUN"
+  },
+  {
+    "port": 25610,
+    "source_path": "/srv/tse-yodeller-live-20261107/server/Scripts/Dedicated/BotTest/1_begin.ini",
+    "source_sha256": "5aa777202f428bad0bde28a321e18d973f43fb2760aaf5008b8767082956fac2",
+    "staged_path": "poc/runtime/milestone-a-20261111/25610/1_begin.ini",
+    "staged_sha256": "8fae202d63112aacff7a007f8cea4c5a5a8da19f91a08527eb9c58e87e0d45aa",
+    "runtime_applied": false,
+    "native_respawn_damage_test": "NOT_RUN"
+  },
+  {
+    "port": 25620,
+    "source_path": "/srv/tse-skulls-live-20261107/server/Scripts/Dedicated/BotTest/1_begin.ini",
+    "source_sha256": "ae95a18eda4f725eb3a9b57124d6019344751219756c7e394e9648f489f97690",
+    "staged_path": "poc/runtime/milestone-a-20261111/25620/1_begin.ini",
+    "staged_sha256": "97dd549f87de1bf254a00907008702718c37a9cfa9ae362ce17056d196493192",
+    "runtime_applied": false,
+    "native_respawn_damage_test": "NOT_RUN"
+  },
+  {
+    "port": 25630,
+    "source_path": "/srv/tse-trouble-live-20261107/server/Scripts/Dedicated/BotTest/1_begin.ini",
+    "source_sha256": "cb419d25ba673c9cb27fed0b03f548e8f6bc42f4032a61f93ae13aef00aef713",
+    "staged_path": "poc/runtime/milestone-a-20261111/25630/1_begin.ini",
+    "staged_sha256": "0564d83bb3b554e3a05bf45912afe907ff01681bc050c62de6b70c9cd02f75a0",
+    "runtime_applied": false,
+    "native_respawn_damage_test": "NOT_RUN"
+  },
+  {
+    "port": 25640,
+    "source_path": "/srv/tse-hole-live-20261107/server/Scripts/Dedicated/BotTest/1_begin.ini",
+    "source_sha256": "9f8da79a99494b0cc928d0cb29f704e23da92fb7046cbe5308313544aa9765de",
+    "staged_path": "poc/runtime/milestone-a-20261111/25640/1_begin.ini",
+    "staged_sha256": "afcaa4b868d50c28e77fd7e4eb5c39068ce887a49ec03609260a3575bf08d6d4",
+    "runtime_applied": false,
+    "native_respawn_damage_test": "NOT_RUN"
+  },
+  {
+    "port": 25650,
+    "source_path": "/srv/tse-development-live-20261107/server/Scripts/Dedicated/BotTest/1_begin.ini",
+    "source_sha256": "d377e904cc98017c3285031df518b80cde6a807a01c46e4df968d8cf9bdff665",
+    "staged_path": "poc/runtime/milestone-a-20261111/25650/1_begin.ini",
+    "staged_sha256": "68dbf4afce3ddbd0399df0bd28d0d3b8617c4ce6cb3fcb82363e8968f4bd9007",
+    "runtime_applied": false,
+    "native_respawn_damage_test": "NOT_RUN"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-11T19:11:37.507160+00:00",
+  "status": "ORIGINAL_DEV_CONFIG_RESTORED",
+  "reason": "3 sync disconnects after A1; cause open",
+  "receipt": "/srv/tse-cecil-full-20261107/.codex/evidence/restart-fleet-20261111-a1-sync-rollback/development/rollback.json",
+  "public_five": "A1 zero remains; no sync markers observed"
+}
