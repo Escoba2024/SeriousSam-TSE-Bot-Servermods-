@@ -1,3 +1,11 @@
+# Latest continuation checkpoint — 2026-11-12T10:12:31.570577+00:00
+
+A2 names rollout is complete on all six instances. The final actual 48-identity check passed after sequential Dev-first client restarts; all 51 after-files were independently rehashed. See docs/reports/2026-11-12-names-sequential-live-completion.md and the latest continuation-plan checkpoint. Historical entries below remain unchanged.
+
+A1 route preparation awaits correction of a proven final-emission timing gap. A4 rotation-epoch source regression is GREEN18/18 after RED8/18, but integration/build/native evidence remain pending. Build015 is still unqualified. A remains incomplete, B unstarted. Ubuntu/GitHub accessible; local execution environment unavailable, so the new Drive upload path is externally blocked. Last verified Drive backup: delta019.
+
+---
+
 # Continuation checkpoint —2026-11-12 08:01UTC
 
 Root completion branch `codex/20261112-milestone-a-completion` continues original9c6d5c2 without modifying the original worktree. Latest full status: docs/reports/2026-11-12-build015-mittel-progress.md and docs/superpowers/plans/2026-11-12-milestone-a-continuation.md. Private continuation evidence `/srv/tse-milestone-a-continuation-evidence-20261112`; Build015 sourceb6b776d/DLL10015f213c... remains unqualified and not live. Publics retain7fc, Dev048.
@@ -414,3 +422,12 @@ Die zusätzliche30s-Dev-Bestandsmessung23:19 ergab8 eigene Bots+1UNKNOWN, elf ku
 - Private delta019 backup is complete, restored and fully downloaded back from Drive with matching 45078384 bytes and SHA256 `0342390c65ae7759d0e6838d6696b4f28eadb3a27364d44d71a4f14b4309ba3b`. Separate restore verified 11858 regular files and 297185813 bytes. Drive object `1MAHfGkschhrtPJivuJxvlza3l83CsTvP` in the existing project folder. It captures source through 5a44b29 and evidence through the 08:27 A4 attempt; later work requires delta020.
 - GitHub branch last published API commit `b02b056856243fb6fabcc0c6a470ca108fc333e0` has the exact tree of local 5a44b29. Later commits are local, pending publication.
 - A acceptance and existing 1/4/8-bot duration gates remain open; B is unstarted. Root alone owns native execution; at most two workers remain active.
+
+
+## Continuation checkpoint 2026-11-12T09:47:46.469772+00:00
+
+- Build015 STARK exact single predeclared retry `093722` passed the original strict initial guard, completed120.124s and passed strict damage/lifecycle post-analysis: candidate35 vs public15 query frags; capped foreign HP loss3196.795 vs2156.333; useful weapon possession13/17 vs3/40 observed lives, with failed/censored denominators retained. All4normalclose and640-file restore. Opposite starts/DEMON/fullA3 remain open.
+- A4 readable native `092421` now confirms actual1/2/3 execution and time limits1/1/0. FAIL remains for per-bot activity gaps; all4normalclose/648-file restore. Early inventory blind intervals and a pitch anomaly are under separate investigation; no gate was relaxed. See the dedicated report.
+- Sequential names source integrated at local0e7deda; API20997ae526bde5c361585a93dea04a206c6d2090 was fetched and exact treea5af7fb07ab591d4b97aab19a2fb61b372f6611e matched. Independent root review READY;123/123 tests and all9/11/2063 closure pins verified.
+- Names apply is IN PROGRESS under root PID1161582, private evidence `restart-fleet-20261111-names-20261112-094338-f5180ed1aec8`. Development has been accepted with8 verified new names; next instances proceed only after their own fresh verification. Root frozen manifest69dd3facdd2973a7a33942c0578162d804867b584ac64e8aad706ee83c7ba7a9. This is names only, not DLL/server/nav promotion or milestoneA completion.
+- A1 normal route/control-fire preparation is being implemented in an isolated worker branch after the complete V3 calibration. A4 phase-activity investigation owns a separate worktree. No worker performs native operations. Root must wait for the active names transaction and verify its final/partial state before another native lab window.

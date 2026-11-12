@@ -46,10 +46,10 @@
 
 Files: tools/gaming_names.py; existing source name pools; preserve and review private names_staging.py, fleet_names_apply_policy.py, run_names.py draft.
 
-- [ ] Review and finish the existing transaction, including interrupted-start recovery and rollback.
-- [ ] Run meaningful filesystem/identity/negative-path tests; independent review before root runtime execution.
-- [ ] Root stage and apply 250-name-expanded pool and48 unique identities under fleet locks, keeping current DLLs/config/server processes.
-- [ ] Verify all48 profiles/actual slots/query names, current activity, rollback records and documentation.
+- [x] Review and finish the existing transaction, including interrupted-start recovery and rollback.
+- [x] Run meaningful filesystem/identity/negative-path tests; independent review before root runtime execution.
+- [x] Root stage and apply 250-name-expanded pool and48 unique identities under fleet locks, keeping current DLLs/config/server processes.
+- [x] Verify all48 profiles/actual slots/query names, current activity, rollback records and documentation.
 
 ## Task 3 — finish candidate combat/navigation blockers
 
@@ -87,3 +87,21 @@ Files: poc/candidates/redstation-supply-20261107/{BotDriver.cpp,bot_human.h,bot_
 - Private delta019 backup is complete, restored and fully downloaded back from Drive with matching 45078384 bytes and SHA256 `0342390c65ae7759d0e6838d6696b4f28eadb3a27364d44d71a4f14b4309ba3b`. Separate restore verified 11858 regular files and 297185813 bytes. Drive object `1MAHfGkschhrtPJivuJxvlza3l83CsTvP` in the existing project folder. It captures source through 5a44b29 and evidence through the 08:27 A4 attempt; later work requires delta020.
 - GitHub branch last published API commit `b02b056856243fb6fabcc0c6a470ca108fc333e0` has the exact tree of local 5a44b29. Later commits are local, pending publication.
 - A acceptance and existing 1/4/8-bot duration gates remain open; B is unstarted. Root alone owns native execution; at most two workers remain active.
+
+
+## Continuation checkpoint 2026-11-12T09:47:46.469772+00:00
+
+- Build015 STARK exact single predeclared retry `093722` passed the original strict initial guard, completed120.124s and passed strict damage/lifecycle post-analysis: candidate35 vs public15 query frags; capped foreign HP loss3196.795 vs2156.333; useful weapon possession13/17 vs3/40 observed lives, with failed/censored denominators retained. All4normalclose and640-file restore. Opposite starts/DEMON/fullA3 remain open.
+- A4 readable native `092421` now confirms actual1/2/3 execution and time limits1/1/0. FAIL remains for per-bot activity gaps; all4normalclose/648-file restore. Early inventory blind intervals and a pitch anomaly are under separate investigation; no gate was relaxed. See the dedicated report.
+- Sequential names source integrated at local0e7deda; API20997ae526bde5c361585a93dea04a206c6d2090 was fetched and exact treea5af7fb07ab591d4b97aab19a2fb61b372f6611e matched. Independent root review READY;123/123 tests and all9/11/2063 closure pins verified.
+- Names apply is IN PROGRESS under root PID1161582, private evidence `restart-fleet-20261111-names-20261112-094338-f5180ed1aec8`. Development has been accepted with8 verified new names; next instances proceed only after their own fresh verification. Root frozen manifest69dd3facdd2973a7a33942c0578162d804867b584ac64e8aad706ee83c7ba7a9. This is names only, not DLL/server/nav promotion or milestoneA completion.
+- A1 normal route/control-fire preparation is being implemented in an isolated worker branch after the complete V3 calibration. A4 phase-activity investigation owns a separate worktree. No worker performs native operations. Root must wait for the active names transaction and verify its final/partial state before another native lab window.
+
+
+## Continuation checkpoint 2026-11-12T10:12:31.570577+00:00
+
+- A2 names-only rollout COMPLETE: all six instances accepted in Dev-first order; 48 verified unique visible names, 12 normally restarted owned clients, 51 final after-hashes independently reread. GUIDs/server generations/DLLs/maps/nav preserved. See names-sequential-live-completion report. The earlier IN PROGRESS entry is superseded, not deleted.
+- Root actual Driver rotation-epoch regression: unchanged 18 behavior checks reproduced 8 failures before the bounded source correction, then 18/18 passed. Worker source review/regressions and new build/native map verification are pending; no native fix claim yet.
+- A1 next route package is BLOCKED by independent pure-memory reproduction: final endpoint guards can make an input stale or late after the last budget callback. No native route was run; author correction and re-review are required.
+- Drive delta019 remains the last verified remote private backup. The local execution environment is unavailable, blocking new local-file upload transport; Ubuntu and GitHub continue to work. Prepare delta020 with separate restoration and report the unresolved remote-upload step accurately.
+- A1/A3/A4/full stability/A5 remain open. B unstarted. Root alone owns integration/native/live operations, with at most two active workers.

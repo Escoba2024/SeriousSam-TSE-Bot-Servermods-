@@ -1,0 +1,78 @@
+{
+  "schema": "a4-rotation-epoch-source-review-v1",
+  "date_utc": "2026-11-12",
+  "scope": "own requested-rotation baseline at map/local-entity boundary; offline verification only",
+  "base_commit": "0e7deda04b06571a83da1342b7f13d10347eda74",
+  "source_branch": "codex/20261112-a4-phase-activity",
+  "native_performed": false,
+  "dll_built": false,
+  "runtime_reviewed": false,
+  "functional_pass": false,
+  "qualified": false,
+  "files": {
+    "poc/candidates/redstation-supply-20261107/BotDriver.cpp": "b377dbcf222e6f35d09d2c570b8a768e3977d277cf4e830878c6f0ac2c2d4265",
+    "poc/candidates/redstation-supply-20261107/test_rotation_epoch_native.py": "f94c49d3ce99dc0a8c44605d6b56ffe8e4313edb11cdbad039d4d06ab5fb5e3f"
+  },
+  "prior_driver_sha256": "cf021bb098088bbeb63a2488012a6262be1a5fb2d630994b23860d8f990c7fff",
+  "build015": {
+    "source_commit": "b6b776ddbc761ee96049e6626edd5af4895cb3af",
+    "dll_sha256": "10015f213c05b2faefc312e11a310dae63d64eda1c7173601c6ffd4386a70313",
+    "build_manifest_sha256": "a90685f99bd40deb48fc39db57e77a65902df6c5c16077b623a3f069fbd88323",
+    "current_root_driver_equals_build015_overlay_before_change": true
+  },
+  "verification": {
+    "executor": "Root; direct permitted offline commands",
+    "red": {
+      "receipt": "/srv/tse-milestone-a-continuation-evidence-20261112/a4-rotation-epoch-red.log",
+      "compiled": true,
+      "checks": 18,
+      "failures": 8,
+      "exit_code": 1,
+      "seconds": 0.47
+    },
+    "initial_green": {
+      "checks": 18,
+      "failures": 0
+    },
+    "expanded_green": {
+      "command": [
+        "python3",
+        "poc/candidates/redstation-supply-20261107/test_rotation_epoch_native.py",
+        "--sanitize"
+      ],
+      "checks": 47,
+      "failures": 0,
+      "sanitizers": [
+        "address",
+        "undefined"
+      ],
+      "exit_code": 0,
+      "seconds": 0.84
+    },
+    "existing_action_guard": {
+      "command": [
+        "python3",
+        "poc/candidates/redstation-supply-20261107/test_cecil_action_native.py",
+        "--sdk-player",
+        "/srv/tse-sdk-20261021/Sources/EntitiesMP/Player.es"
+      ],
+      "sdk_player_sha256": "85c92933fa5b0cc726be7b42a3bc82d4c95b255507ec8b1fffe2666fcf3888af",
+      "sanitizers": [
+        "address",
+        "undefined"
+      ],
+      "exit_code": 0,
+      "seconds": 1.05
+    },
+    "root_green_receipt": "/srv/tse-milestone-a-continuation-evidence-20261112/a4-rotation-epoch-root-offline-green.json"
+  },
+  "preserved_failed_trial": "a4-reset015-lowrender-readable-20261112-092421",
+  "limits": [
+    "No direct writes to native View/LocalRotation/LastRotation",
+    "No gain, FOV, combat policy, runtime controller or acceptance-gate change",
+    "Same-entity ordinary respawn retains native cumulative basis",
+    "Native efficacy, initial action-queue ordering and full per-phase eight-bot activity remain unproven",
+    "Separate disabled early-inventory controller preparation follows source review"
+  ],
+  "report": "docs/reports/2026-11-12-a4-rotation-epoch-and-observation.md"
+}

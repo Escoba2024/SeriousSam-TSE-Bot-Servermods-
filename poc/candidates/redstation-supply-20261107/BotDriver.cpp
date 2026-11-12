@@ -760,11 +760,42 @@ struct SBotState {
   botcore::CecilFireState bs_cecilFire;
   double bs_deadSince=-1,bs_lastSeen=-1000;
   ULONG  bs_ulCombatFireActions; // cumulative emitted combat input, not respawn
+  bool bs_rotationRebase=true;
+  CPlayer* bs_rotationInput=NULL; // original local entity, not a transient predictor
+  ULONG bs_rotationInputId=0;
+  LONG bs_rotationMapSerial=-1;
 };
 
 static SBotState _absBots[4] = {
   {NULL, 0.0f, 0}, {NULL, 0.0f, 0}, {NULL, 0.0f, 0}, {NULL, 0.0f, 0},
 };
+
+// Adopt only our requested-angle baseline at an actual local/map boundary.
+// Native cumulative input and last-received angles remain Engine-owned. In
+// particular, an ordinary respawn may retain a nonzero cumulative baseline.
+static bool BotAdoptRotationBaseline(SBotState& bs,CPlayer* player,CPlayer* localInput,INDEX slot) {
+  const LONG serial=InterlockedCompareExchange(&_botSupplyMapSerial,0,0);
+  if(!player||!localInput)return false;
+  const bool changed=bs.bs_rotationRebase||bs.bs_rotationMapSerial!=serial||
+    bs.bs_rotationInput!=localInput||bs.bs_rotationInputId!=localInput->en_ulID;
+  if(!changed)return true;
+  if(!player->en_ulID||player->en_ulID!=localInput->en_ulID||!player->GetWorld()||
+     player->GetWorld()!=localInput->GetWorld())return false;
+  const FLOAT heading=player->m_aLastRotation(1),pitch=player->m_aLastRotation(2);
+  if(!std::isfinite(heading)||!std::isfinite(pitch))return false;
+  if(bot_bDiagnostics) {
+    BotLog("[BotRotationBaseline] local=%d tick=%d map_serial=%ld entity=%lu input_entity=%lu world=%p attach=%d prior_input=%p prior_entity=%lu prior_map=%ld requested_before=(%.9g,%.9g) native_last=(%.9g,%.9g) local_before=(%.9g,%.9g) view=(%.9g,%.9g) spawn_clock=%.9g\n",
+      slot,bs.bs_iTick,(long)serial,(unsigned long)player->en_ulID,(unsigned long)localInput->en_ulID,
+      (void*)player->GetWorld(),(int)bs.bs_rotationRebase,(void*)bs.bs_rotationInput,
+      (unsigned long)bs.bs_rotationInputId,(long)bs.bs_rotationMapSerial,
+      bs.bs_aHeading,bs.bs_aPitch,heading,pitch,localInput->m_aLocalRotation(1),localInput->m_aLocalRotation(2),
+      player->en_plViewpoint.pl_OrientationAngle(1),player->en_plViewpoint.pl_OrientationAngle(2),player->m_tmSpawned);
+  }
+  bs.bs_aHeading=heading;bs.bs_aPitch=pitch;
+  bs.bs_rotationInput=localInput;bs.bs_rotationInputId=localInput->en_ulID;
+  bs.bs_rotationMapSerial=serial;bs.bs_rotationRebase=false;
+  return true;
+}
 
 // Per-slot human-AI state. Function-local statics keep construction lazy, so
 // no engine-side global constructor ordering is involved.
@@ -800,6 +831,9 @@ static void BotHumanAttach(INDEX iLP)
   _absBots[iLP].bs_cecilFire.Reset();
   _absBots[iLP].bs_lastSeen=-1000;
   _absBots[iLP].bs_lastHealth=0.0f;
+  // Map publication may retain the same source, entity ID and allocation.
+  // The timer reads the fresh native baseline later under the world lock.
+  _absBots[iLP].bs_rotationRebase=true;
   BotLog("[BotHuman] local=%d profile=%s tier=%d persona=%s seed=%lu model=arena-v1\n",
     iLP,profile.name,profile.tier,botcore::PersonalityName(profile.persona),
     (unsigned long)profile.seed);
@@ -1121,9 +1155,18 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     CPlayer *player = (CPlayer *)_pNetwork->GetLocalPlayerEntity(ppls);
     const ULONG entityId=player?player->en_ulID:0;
     if(bs.bs_supplyEntity!=entityId){
-      bs.bs_gravityKnown=false;
+      bs.bs_gravityKnown=false;bs.bs_rotationRebase=true;
       BotSupplyReset(iLP);bs.bs_supplyEntity=entityId;BotHumanPolicy(iLP).Reset();bs.bs_deadSince=-1;bs.bs_lastSeen=-1000;
       bs.bs_weaponInput.Reset();bs.bs_cecilFire.Reset();
+    }
+    if(player==NULL){
+      bs.bs_rotationRebase=true;BotCecilNeutralAction(ppls);bActed=TRUE;
+      continue;
+    }
+    if(!BotAdoptRotationBaseline(bs,player,localInput,iLP)){
+      BotLog("[CecilInvalidAction] local=%d tick=%d rejected=rotation_baseline\n",iLP,bs.bs_iTick);
+      BotCecilNeutralAction(ppls);bActed=TRUE;
+      continue;
     }
     // ponytail: fixed-target action test; walls still need a suitable test arena.
     CPlayer *target = bot_iTestTarget>=0 && bot_iTestTarget<16
