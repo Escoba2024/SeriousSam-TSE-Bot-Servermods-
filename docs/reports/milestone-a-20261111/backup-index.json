@@ -326,5 +326,21 @@
     "roundtrip_verified": true,
     "verified_utc": "2026-11-12T03:14:12.168095+00:00",
     "covers": "Unqualified013 source/build and source bundle d716906. All closed013 A4/V3/A3 windows through STARK013 instrumented swap0+1, including historical failures and failed first mapreset; frozen normalized damage/capture controllers and prepared private48-name staging. New live query-capture attempt started only after archive and is excluded. Earlier baseline/fixtures/toolchains remain prerequisites. No native restore launch, qualification, deployment or first-state acceptance."
+  },
+  "runtime_evidence_delta017_for_build013": {
+    "scope": "RUNTIME_EVIDENCE_DELTA017_FOR_BUILD013_NOT_RELEASE",
+    "bytes": 87326349,
+    "sha256": "3d09b1a5e579c77040a2e5fb0c6734667725d53579c4f3d59edaacbca7988a49",
+    "repo_head": "3df3bd0a87bff654c7449b0f882da661afb1d82b",
+    "regular_files_written_rehashed": 16033,
+    "restored_bytes": 829090778,
+    "symlinks_indexed_not_materialized": 2,
+    "native_launch_from_restore": false,
+    "drive_uploaded": true,
+    "drive_id": "19146l7qHLO6CXzSUAtqe2tKbxGoVPJWQ",
+    "drive_url": "https://drive.google.com/file/d/19146l7qHLO6CXzSUAtqe2tKbxGoVPJWQ/view",
+    "roundtrip_verified": true,
+    "verified_utc": "2026-11-12T04:01:36.671322+00:00",
+    "covers": "Unqualified013 build and source bundle3df3bd0, six completed MITTEL/STARK/DEMON comparison windows plus preserved initial-phase failures; four closed normal-mapreset failure windows, private passivePCAP/socket evidence, existingDev37/3 logs, frozen sample-first and prepared original-dual/observer/dense drafts. Later first dual prestart failure, corrected V2 and actual dense30s excluded. Earlier baseline/fixture/toolchain backups remain prerequisites. No native restore launch/qualification/deployment."
   }
 }
