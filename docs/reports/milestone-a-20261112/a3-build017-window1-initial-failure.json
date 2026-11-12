@@ -1,0 +1,66 @@
+{
+  "utc": "2026-11-12T17:20:09.506256+00:00",
+  "status": "FAIL",
+  "result_sha256": "dc7625a958be3b2e7c5bc031aaed5607f0cf9fe748a674517741692be5005463",
+  "host_resources_sha256": "cf537c1162e5a27d06c2a512fcf1171ecafefd747671b7242f6ece0fdab2a52c",
+  "errors": [
+    "ValueError('pending phase invalid: 4,5,6,7,8')",
+    "damage trace: complete observed coverage missing"
+  ],
+  "final_evidence_reasons": [
+    "window_not_passed",
+    "recorded_errors"
+  ],
+  "all_four_lab_roots_quiescent": true,
+  "both_displays_absent": true,
+  "normal_roles_closed": [
+    "botA",
+    "botB",
+    "server",
+    "vanilla"
+  ],
+  "closed_logs_accepted": true,
+  "closed_logs_independently_rehashed": 4,
+  "restored_regular_files_independently_hashed": 640,
+  "restored_absent_paths_independently_checked": 0,
+  "restoration_pass": true,
+  "observed_seconds": null,
+  "phases_count": 0,
+  "active_evidence_missing": null,
+  "host_budget": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 5,
+    "cpu_busy_max_measured_percent": 61.152882205513784,
+    "mem_available_min_bytes": 1869320192,
+    "disk_free_min_bytes": 14794100736,
+    "max_sample_gap_seconds": 46.91312800697051,
+    "budget_pass_claim": false,
+    "gameplay_max_sample_gap_seconds": 1.7208587299101055
+  },
+  "qualified": false,
+  "automatic_retry": false,
+  "schedule_index": 1,
+  "instrumentation_requested": true,
+  "initial_observed_state_matches_reference": null,
+  "window_label": "arena017public-damage-checked-swap0-trial-1-171827",
+  "trace_summary": {
+    "original_getter_restored": true,
+    "original_damage_restored": true,
+    "pre_arm_original_bodies_verified": true,
+    "total_calls": 1,
+    "records_received": 1,
+    "dropped": 0,
+    "faults": 0,
+    "game_state_writes": 0,
+    "armed": true,
+    "complete_observed_coverage": null
+  },
+  "scope": "REJECTED_INITIAL_CAPTURE_NO_COMBAT_COMPARISON",
+  "remaining_schedule_paused_for_analysis": true
+}

@@ -224,3 +224,13 @@ Lokale Ausführung wieder tatsächlich verfügbar. Delta020 bleibt vollständig 
 ## Colt-Abbruch und aktueller Vergleich — 2026-11-12T17:19:31.448044+00:00
 
 Colt171044 ist tatsächlich FAIL vor Fire: die Pitch-Gegenkalibrierung misst −0,25 und −0,5Grad/Pixel. Root bestätigte drei normale Closes, vier ruhende Labroots, drei geschlossene Loghashes und exakte664Dateien/9Abwesenheiten. Keine künstliche Toleranzaufweitung oder Wiederholung. Root führt nach frischem Preflight genau A3Index1 aus; Ergebnis und Restore offen. Die zwei bestehenden Worker bleiben bei A4-Lebensauswertung und Original-First-State-Vertrag, ohne Native-/Lab-/Quellmutationen. Alle globalen Abnahmen bleiben bestehen.
+
+
+## Instrumentierter Anfangszustand verworfen — 2026-11-12T17:22:28.123633+00:00
+
+A3Index1/171827 FAIL bei pending phase4–8; kein auswertbarer Kampfvergleich. Beide Original-Hookkörper restauriert, alle4Rollen normalgeschlossen,4ClosedLogs und640Dateien vonRoot unabhängig geprüft. Indizes2–6 bleiben unbegonnen, bis die Erfassungsursache geklärt ist. Es läuft kein Nativeprozess. Root sichert den ruhenden Stand inDelta021; Worker beenden zunächst ihre getrennten statischen Berichte. Keine Änderung an Quelle, Gates oder historischenFAILs.
+
+
+## Vollständige Analyse und Sicherung — 2026-11-12T17:39:09.732389+00:00
+
+Delta021 hat tatsächlichen Archiv-/Manifest-Drive-Rückdownload und separatenDatei-/Metadaten-Restore bestanden; Quelle0e807f7,10.818Dateien,7Fenster. NeuereAnalysen ausdrücklich nichtin021. A4vollständig178Lebenmit57Besitzfällen,63,454s-Langfallund7Nordkanten-Erfolgen. A1OriginalvertragmitvieroffenenProvenienzbausteinen abgeschlossen. identify_latest_codex besitztA3InitialCapture; review_names_transaction besitztColtPitch; finish_names_transaction idle. Root untersucht offline den konkreten Flug-/Nahkampfübergang: zuerst tatsächlichen Bridgecode mit weiterhin vorhandenemItem und frischem akzeptiertemSpezialflug reproduzieren; kein pauschalerFALL-Vorrang, keine neueRadius-/Deadline-/RNG-/Weltregel. Nur bei echterRED gezielt korrigieren, Gegenfälle und unabhängigesReview, danach neuerBuild/eigeneNativeabnahme. Alle anderenGates unverändert.

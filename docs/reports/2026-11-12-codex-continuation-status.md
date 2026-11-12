@@ -1,6 +1,6 @@
 # Codex-Fortsetzung: Umsetzung, Betrieb und offene Abnahme
 
-Stand: 12.11.2026 18:19:31 MEZ.
+Stand: 12.11.2026 18:39:09 MEZ.
 
 ## Aktueller Fortschritt
 
@@ -10,19 +10,19 @@ Stand: 12.11.2026 18:19:31 MEZ.
 | --- | --- | --- |
 | A1 | Spawnparameter und Vorlagen effektiv null; Colt-Vorbereitung tatsächlich versucht und exakt restauriert | Pitchkalibrierung fehlgeschlagen; Kontrolltreffer und wiederholter erster gültiger Respawnzustand mit Fremdschaden, Bot/Vanilla, Mapwechsel und Neustart |
 | A2 | 458 Namen, 208 erhalten plus 250 neu; sechs Instanzen und 48 eindeutige eigene Botidentitäten geprüft | abgeschlossen |
-| A3 | gezielte Aimkorrektur, frühere begrenzte Vergleiche; aktueller Build017-Vergleich separat eingefroren | laufende aktuelle Kontroll-/Kreuzvergleiche und Bewertung aller Leben für MITTEL/STARK/DEMON |
-| A4 | neuer fester längerer Red-Test mit 24/24 Slotphasen, beiden Neustarts, 423,836 s und exakt geprüftem Restore | Waffenqualität, vollständige Navigation/Gefahren, andere Karten und gültige Produktions-Whitelist |
-| A5 | Build017 gebaut; GitHub-Checkpoint und Delta020-Drive-Rückdownload verifiziert | Delta021, 1/4/8-Bot-Gates mit 3600/3600/7200 s, qualifizierter Dev-zuerst-Rollout |
+| A3 | aktueller uninstrumentierter Kontrolllauf120,110s bestanden; instrumentierter Erstlauf verworfen und restauriert | Erfassung der neutralen Anfangsphase korrigieren, dann Kreuzvergleiche aller drei Tiers und aller Leben |
+| A4 | 24/24 Slotphasen nach zwei Red-Reloads;178Leben vollständig ausgewertet, sieben echte Nordkanten-Erfolge | nur57Leben mit nützlichem Besitz; ein Leben mindestens63,454s ohne; Kampf-/Flugarbitration, übrige Navigation/Gefahren und Rotation offen |
+| A5 | Build017 gebaut; GitHub-Checkpoint sowie Delta020 undDelta021 aufDrive vollständig zurückgeprüft | neuere Änderungen separat sichern; 1/4/8-Bot-Gates3600/3600/7200s und qualifizierter Dev-zuerst-Rollout |
 
 **Neuester abgeschlossener A4-Test:** `165124` ist `PASS_LIMITED_BOT_RESET_FRESH_OBSERVER_REVIEW_REQUIRED`. Alle 178 Botleben bleiben im Nenner. Die längere Beobachtung beweist keine Gameplayverbesserung; die früheren FAILs bleiben erhalten. [Ergebnis und Grenzen](2026-11-12-a4-build017-extended-reset.md).
 
-**Aktueller nativer Stand:** Der uninstrumentierte Build017-Kontrolllauf 170346 ist nach 120,109788 s begrenzt bestanden; erste neutrale Anfangszustände und alle vier normalen Closes sind bestätigt, 640 Dateien unabhängig wiederhergestellt. Die Colt-Vorbereitung 171044 endete mit FAIL vor jedem Fire: +12 Pixel ergaben −3°, −12 Pixel ergaben +6°. Der unveränderte Gegenprobenwächter brach ab. Alle drei Rollen wurden normal geschlossen; 664 Dateien und neun Abwesenheiten sind unabhängig wiederhergestellt. Der erste instrumentierte Build017-Kreuzvergleich (Index1, Tier1, Swap0) läuft unter Root; sein Ergebnis ist noch offen. [Colt-Beleg](milestone-a-20261112/a1-colt-preparation-failed.json). [Kontrollbeleg](milestone-a-20261112/a3-build017-control.json).
+**Aktueller nativer Stand:** Der uninstrumentierte Build017-Kontrolllauf 170346 ist nach 120,109788 s begrenzt bestanden; erste neutrale Anfangszustände und alle vier normalen Closes sind bestätigt, 640 Dateien unabhängig wiederhergestellt. Die Colt-Vorbereitung 171044 endete mit FAIL vor jedem Fire: +12 Pixel ergaben −3°, −12 Pixel ergaben +6°. Der unveränderte Gegenprobenwächter brach ab. Alle drei Rollen wurden normal geschlossen; 664 Dateien und neun Abwesenheiten sind unabhängig wiederhergestellt. Der erste instrumentierte Build017-Kreuzvergleich (Index1, Tier1, Swap0; 171827) wurde wegen ungültiger Zwischenzustände vor der neutralen Anfangserfassung für Slots4–8 verworfen. Beide Original-Hookkörper wurden wiederhergestellt, alle vier Rollen normal geschlossen und640Dateien unabhängig restauriert. Indizes2–6 sind bis zur Ursachenanalyse unbegonnen; kein Kampfleistungsurteil aus diesem Fenster. [Abbruchbeleg](milestone-a-20261112/a3-build017-window1-initial-failure.json). [Colt-Beleg](milestone-a-20261112/a1-colt-preparation-failed.json). [Kontrollbeleg](milestone-a-20261112/a3-build017-control.json).
 
 **Flottenstand:** letzte eigene vollständige Prüfung am 12.11.2026, 16:56:33 MEZ: sechs Instanzen mit jeweils acht eigenen Bots, zusätzlich ein UNKNOWN auf Hole ohne Identitätsannahme. Der bisherige Public-/Dev-DLL-Stand ist unverändert; kein Build017-Rollout. Dieses Bestandsbild ist keine neue Aktivitäts- oder Langzeitabnahme.
 
-**Persistenz:** zuletzt tatsächlich gefetchter GitHub-Checkpoint 973141bd564f3b12d130f7f9c824c930c5f411bd mit exakt dem lokalen Baum von 4a485bf5c1515e9e794c5c9f5a50b129758ba1b0. Neuere Dokumentation benötigt noch Veröffentlichung. Delta020 ist vollständig hochgeladen und zurückgeprüft; Delta021 ist noch nicht ausgeführt. Die lokale ChatGPT-Ausführung ist seit tatsächlich erfolgreicher Prüfung wieder verfügbar. Neue Übertragung/Upload/Rückdownload werden erst nach erfolgreicher Ausführung bestätigt.
+**Persistenz:** zuletzt tatsächlich gefetchter GitHub-Checkpoint 655106778be04d8413a44419907e837358917fe9 mit exakt dem lokalen Baum von 64096516d959e72e3678880be9b086ac068d9bbe. Neuere Dokumentation benötigt noch Veröffentlichung. Delta021 ist seit17:34:22UTC vollständig hochgeladen und tatsächlich zurückgeprüft:45.026.802Bytes, SHA25623d0b0d94c229bb48f75c15cc36a38fcb3f5442d02ba8dffd40d09c518856f06; separate Wiederherstellung von10.818Dateien/266.778.344Bytes einschließlich Metadaten. Quelle0e807f7; die damals aktiven Analyseordner und spätere Änderungen liegen ausdrücklich außerhalb dieses Checkpoints. [Sicherungsbeleg](milestone-a-20261112/delta021-verified.json). Die lokale ChatGPT-Ausführung ist seit tatsächlich erfolgreicher Prüfung wieder verfügbar. Neue Übertragung/Upload/Rückdownload werden erst nach erfolgreicher Ausführung bestätigt.
 
-Die zwei Worker werten das geschlossene A4-Fenster aus und klären den Originalvertrag für den ersten gültigen Respawnzustand. A3-Vergleiche, Colt-Versuch, danach weitere belegte Korrekturen und Abnahmen folgen ohne Routinefreigaben.
+Die [A4-Lebensauswertung](2026-11-12-a4-build017-all-lives.md) und der [Original-First-State-Vertrag](2026-11-12-a1-original-first-state-contract.md) sind abgeschlossen. Zwei Worker bearbeiten getrennt die A3-Anfangserfassung und die Colt-Pitchfolge. Root prüft zusätzlich die konkrete Kampfunterbrechung einer laufenden Flugroute zunächst offline am tatsächlichen Native-Bridge-Code. Noch keine Gameplaykorrektur oder neue Nativefreigabe daraus.
 
 ---
 

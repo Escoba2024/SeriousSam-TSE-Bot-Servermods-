@@ -1,0 +1,19 @@
+{
+  "utc": "2026-11-12T17:34:22.424976+00:00",
+  "status": "COMPLETE_VERIFIED_PROGRESS_DELTA021",
+  "archive_name": "runtime-evidence-delta021-build017-172346.tar.gz",
+  "archive_bytes": 45026802,
+  "archive_sha256": "23d0b0d94c229bb48f75c15cc36a38fcb3f5442d02ba8dffd40d09c518856f06",
+  "restore_manifest_bytes": 43650,
+  "restore_manifest_sha256": "9f3bf6dd01f2db68400fb898f4b2882f45741652ed0f0bc843847623149dab91",
+  "archive_and_manifest_actual_download_verified": true,
+  "repo_head": "0e807f7411d169197630d2c1917dd1d4b59c7143",
+  "separate_restore_files": 10818,
+  "separate_restore_bytes": 266778344,
+  "separate_restore_metadata_verified": true,
+  "closed_native_windows": 7,
+  "prior_restore_chain_sha256": "73274dc4fcaf46b711cd4a812882143e715013943642625f6abf15244f911221",
+  "native_boot_from_restore": false,
+  "release_qualified": false,
+  "active_analysis_outputs_excluded_by_fixed_scope": true
+}
