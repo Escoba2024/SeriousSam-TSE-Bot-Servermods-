@@ -1,0 +1,25 @@
+{
+  "utc": "2026-11-12T14:53:38.246901+00:00",
+  "returncode": 0,
+  "log": "/srv/tse-milestone-a-continuation-evidence-20261112/build-017.log",
+  "source": "b35397f024b8a8722a01178a08c06d3d40802f65",
+  "disk_free_bytes": 15259381760,
+  "native_started": false,
+  "qualified": false,
+  "dll_sha256": "a5a379aadfd0cc376ad15a8368dd6814518e3f2da1fde22fdde9bd86f02abc5d",
+  "dll_bytes": 428032,
+  "manifest_sha256": "b4905cf1c279c6461ea892f159c16d3e92196901c6aa8d255bf62311a8e0e32f",
+  "source_review": {
+    "status": "READY_SOURCE_ONLY",
+    "critical": 0,
+    "important": 0,
+    "review_sha256": "96c097c06ef5938fa2f6d4d884874197cd986d32f2bb41f1800608b853494064"
+  },
+  "github": {
+    "api_commit": "6687e2abb5b46d7a1be0f95ab24f26a4222f4644",
+    "exact_tree": "ce74a529a1c55dd3317476d44137f1bd2327d9c0",
+    "actual_fetch_verified": true
+  },
+  "native_controller_approved": false,
+  "new_drive_delta_uploaded": false
+}

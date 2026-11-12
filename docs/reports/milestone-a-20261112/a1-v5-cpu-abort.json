@@ -1,0 +1,48 @@
+{
+  "utc": "2026-11-12T15:16:11.304956+00:00",
+  "window": "/srv/tse-milestone-a-evidence-20261111/a1-flight-transition-v5-20261112-151250",
+  "status": "FAIL",
+  "result_sha256": "0ccbe6089f2fdcc35e68fc3cc7215ab3d7c2898f0d787e7b187ea2466d20e391",
+  "errors": [
+    "RuntimeError(\"ValueError('host CPU delta exceeds75%')\")"
+  ],
+  "all_four_lab_roots_quiescent": true,
+  "both_displays_absent": true,
+  "restored_regular_files_independently_hashed": 664,
+  "restored_absent_paths_independently_checked": 9,
+  "restoration_pass": true,
+  "input_receipts": 1,
+  "preparation_stage": "calibration",
+  "qualified": false,
+  "automatic_retry": false,
+  "normal_roles_closed": [
+    "server",
+    "vanilla",
+    "botA"
+  ],
+  "host_summary": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 4,
+    "cpu_busy_max_measured_percent": 82.28571428571429,
+    "mem_available_min_bytes": 2320015360,
+    "disk_free_min_bytes": 15218565120,
+    "max_sample_gap_seconds": 25.41360481805168,
+    "budget_pass_claim": false
+  },
+  "failed_host_sample": {
+    "monotonic": 1122796.478118107,
+    "cpu_busy_percent": 82.28571428571429,
+    "sample_gap_seconds": 1.337170397862792,
+    "mem_available_bytes": 2320015360,
+    "disk_free_bytes": 15218565120,
+    "violations": [
+      "host CPU delta exceeds75%"
+    ]
+  }
+}

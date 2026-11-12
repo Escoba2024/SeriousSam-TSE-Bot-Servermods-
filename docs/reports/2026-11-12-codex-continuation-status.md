@@ -1,6 +1,6 @@
 # Codex-Fortsetzung: Umsetzung, Betrieb und offene Abnahme
 
-Stand: 12.11.2026 14:43:28 CET
+Stand: 12.11.2026 15:59:33 MEZ
 
 **Die Namensaufgabe A2 ist abgeschlossen und auf allen sechs Instanzen wirksam. Meilenstein A ist insgesamt weiterhin nicht abgenommen; B wurde entsprechend der vorgegebenen Reihenfolge nicht begonnen.** Neue Kampf-/Navigationskorrekturen sind gebaut und teilweise nativ nachgewiesen. Offene Funktions- und Stabilitätsgates verhindern weiterhin die Releasefreigabe. Der zuvor blockierte Sicherungsnachtrag Delta020 wurde inzwischen vollständig auf Drive hochgeladen und zurückgeprüft.
 
@@ -8,7 +8,7 @@ Stand: 12.11.2026 14:43:28 CET
 
 Der Pool enthält jetzt **458 Einträge: alle 208 bisherigen Namen in unveränderter Reihenfolge plus exakt 250 neue sichtbare Namen**. Gleichzeitig verbundene 48 Bots tragen flottenweit eindeutige Namen. Der Rollout erfolgte zuerst auf Dev und danach einzeln auf Red Station, Yodeller, Skulls, Little Trouble und Hole. Zwölf eigene Botclients wurden regulär neu gestartet; alle 51 vorgesehenen Payloaddateien wurden gegen den tatsächlichen Nachzustand geprüft. Stabile GUIDs blieben erhalten. Sechs aktuelle Runtime-Identitätsdateien wurden mit den tatsächlichen Prozessgenerationen und Profil-/Modulhashes erneuert; die historischen Zuordnungen bleiben als Historie erhalten.
 
-Die öffentliche Bot-DLL ist weiterhin der bisherige 7fc-Stand. Dev verwendet weiterhin Botbuild 048/ec820d und seinen bereits freigegebenen fe4-Server. **Build016 wurde nicht produktiv verteilt.** Bestehende Maps, Navdaten, Unlimited Ammo, Blut-/No-Gibs-Regeln, Powerupregeln und Serverhinweise wurden durch die Namenstransaktion nicht ersetzt.
+Die öffentliche Bot-DLL ist weiterhin der bisherige 7fc-Stand. Dev verwendet weiterhin Botbuild 048/ec820d und seinen bereits freigegebenen fe4-Server. **Build016 und der neue Diagnosebuild017 wurden nicht produktiv verteilt.** Bestehende Maps, Navdaten, Unlimited Ammo, Blut-/No-Gibs-Regeln, Powerupregeln und Serverhinweise wurden durch die Namenstransaktion nicht ersetzt.
 
 ## 2. Quell-, Build- und Datenstände
 
@@ -18,6 +18,7 @@ Die öffentliche Bot-DLL ist weiterhin der bisherige 7fc-Stand. Dev verwendet we
 | Build015-Kampfkorrektur | Quelle `b6b776ddbc761ee96049e6626edd5af4895cb3af`, DLL `10015f213c05b2faefc312e11a310dae63d64eda1c7173601c6ffd4386a70313` |
 | Build016-Rotationskorrektur | Quelle `58e8559903d999772218a6b5fd1d042b1759b547`, DLL `e5a80634b5247c900ae25b5b18869c433c30dcfb49b890338fb231da63b04825` |
 | Build016-Manifest | SHA256 `4cd6b5a8d853afe2dbe492fb12fff0aed22a06c77b5de7fc4e732795d2676603`, Build erfolgreich, `qualified=false` |
+| Build017-Diagnose | Quelle b35397f024b8a8722a01178a08c06d3d40802f65, DLL a5a379aadfd0cc376ad15a8368dd6814518e3f2da1fde22fdde9bd86f02abc5d; erfolgreich gebaut, qualified=false |
 | Aktive öffentliche Bot-DLL | `7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835` |
 | Aktive Dev-Bot-DLL | `ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530` |
 | Aktive öffentliche Dedicated-DLL | `1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208` |
@@ -55,6 +56,8 @@ Die Normalinput-Vorbereitung wurde weiter repariert und geprüft: V2 schloss ein
 
 Der einzige neue native V3-Lauf 111716 absolvierte die vollständige Kalibrierung mit bestätigten Gains −0,25 / −0,25 und 0,000106812° Rückkehrfehler. Der zuvor problematische Grenzfall −0,5 wurde in diesem neuen Lauf nicht erneut erzeugt; dafür liegt der unveränderte tatsächliche 104429-Replay vor. Anschließend blieb die Route im bestehenden Approach-/Flugübergang hängen. Die 17. versuchte Aktion wurde vor dem Request abgewiesen; 16 Inputquittungen liegen vor. Pickup und normales Feuer wurden nicht erreicht. **Gesamtergebnis FAIL.** Alle drei Rollen wurden normal geschlossen, beide Displays entfernt und 673 Restorepfade unabhängig geprüft. Kein Once-, Schuss-, Treffer- oder FirstState-PASS. Quelle: [A1-V3-Ursachenanalyse](2026-11-12-a1-route-v3-native-result.md), [kompakter Nativebeleg](milestone-a-20261112/a1-route-v3-native.json), [V3-Korrektur](2026-11-12-a1-route-ack-body-v3.md).
 
+V4 blieb vor einem neuen Spielstart durch den unabhängigen Review blockiert: Eine neuere After-Input-Probe konnte zugunsten eines älteren Ankers übergangen werden. Der separate V5-Entwurf schließt zusätzlich den belegten periodischen Lesepfad und besteht187Tests sowie den strikten Originalreplay; die unabhängige Prüfung läuft. Beide Ausführungsgates bleibenfalse. Siehe [V4-Blocker](2026-11-12-a1-flight-v4-independent-review.md) und [V5](2026-11-12-a1-flight-transition-v5.md).
+
 ### A2: Abgeschlossen
 
 250 neue normalisiert eindeutige Namen, keine Kollision gegenüber dem Altbestand. Aufteilung: 147 schlicht, 45 Farbe, 26 Bold, 25 Italic, 7 kombiniert; keine neuen Flashnamen. Maximal 15 sichtbare Zeichen und 30 ASCII-Bytes; festgeschriebener Seed 20261111. Alle Ergänzungen wurden am echten Retailparser geprüft. Repräsentative Fälle aller fünf verwendeten Stilklassen wurden im Original 1.07-Client unter Wine und per GameSpy-Abfrage geprüft; ein physischer Windows-/WAN-Test wird daraus nicht abgeleitet. Die Live-Zuweisung und die GUID-Erhaltung sind separat nachgewiesen. 123 Tests der Namens-/Rollouttransaktion bestanden.
@@ -70,6 +73,8 @@ Das native MITTEL-Kreuzpaar zeigt gemischte Ergebnisse: 35:21 Queryfrags, aber 2
 Build016 behebt die Übernahme alter eigener kumulativer Sollwinkel in eine neue Kartenepoche. Der echte Driver-Test reproduzierte vorher 8 Fehler in 18 Prüfungen; die erweiterte korrigierte Fassung bestand 47 Prüfungen unter ASan/UBSan sowie die bestehenden Aktionsguards. Native Folge: **Red Station→Red Station→Red Station**, keine andere Welt. Alle 16 Slot-/Reloadübergänge zeigen frische native Basis und erste lebend beobachtete View/Input/Last-Winkel 0. Normale Respawns wurden separat betrachtet; 49/49 behalten ihre Entity, 48/49 ihren exakt gleichen kumulativen Pitch in der ersten Folgeprobe, ein Sample enthält bereits neue Zielkorrektur.
 
 Die neue frühe Inventarerfassung liefert 259 zusätzliche akzeptierte Gruppenproben vor der späteren Registry. Trotzdem erfüllen nur 16/24 Slot-/Phasenfälle alle bisherigen Aktivitätsfelder. Vier fehlende Feuerzeilen sind als Abtastlücken unabhängig belegt, ein früher Cannon-Pickup bleibt ohne nativen Vorher-/Nachhernachweis. Bei einem Bot fehlen über vier beobachtete Leben sowohl nützliche Waffenaufnahme als auch Feuer. **A4 bleibt FAIL; die vorhandenen Bedingungen wurden nicht gelockert.** Alle vier Rollen des Versuchs sind geschlossen und 648 Restorepfade unabhängig geprüft. Siehe [Nativeauswertung](2026-11-12-build016-native-reset-analysis.md).
+
+Build017 ergänzt ausschließlich eine unabhängig geprüfte, standardmäßig ausgeschaltete Diagnose für zwei konkrete Versorgungsannäherungen.68Beobachterchecks,2687Bridgechecks und Driver-Guards bestanden; der native Diagnoseablauf wird separat vorbereitet. Die Ursache ist noch nicht repariert und keine Kartenfreigabe hinzugekommen. Siehe [Build017-Fortschritt](2026-11-12-build017-observer-progress.md).
 
 Die Original-Navdateien wurden gegen Cecil-Commit `953b477e53fdc5a5d84c8ae8d759c84fdf6c973c` auditiert. Der Suffix ist der Weltpfad-Hash; Welt-/Nav-CRC sind separate Integritätswerte. Die folgende Tabelle beschreibt den belegten Stand der Portierung und ihre offenen Grenzen, keine neue Produktionsfreigabe.
 

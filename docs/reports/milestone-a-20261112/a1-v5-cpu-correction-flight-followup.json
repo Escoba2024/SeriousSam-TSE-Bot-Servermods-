@@ -1,0 +1,65 @@
+{
+  "recorded_utc": "2026-11-12T15:40:30.541733+00:00",
+  "scope": "Verified removal of unrelated stuck RDC search, followed by one separately declared unchanged A1 V5 trial",
+  "original_cpu_abort_retained": true,
+  "cpu_limit_percent": 75,
+  "before_current_cpu_percent": 57.52973930650468,
+  "after_current_cpu_percent": 37.03897462725608,
+  "before_peak_interval_percent": 60.81424936386768,
+  "after_peak_interval_percent": 39.84375,
+  "before_seconds": 10.000104987062514,
+  "after_seconds": 10.000131902983412,
+  "historical_failure_cpu_by_process_proven": false,
+  "game_render_or_guard_changes": false,
+  "followup": {
+    "utc": "2026-11-12T15:37:24.310905+00:00",
+    "status": "FAIL",
+    "result_sha256": "814ea8b5ff9536cc1b5c63b0b999be3d018de1eda82c853b8be2a0a3ad5c28e7",
+    "host_resources_sha256": "fb0195e2de59a3cfa05a7314bb29d5534e12c58f96a24b3f3e04e955d9124169",
+    "errors": [
+      "ValueError('flight deadline exceeded')"
+    ],
+    "all_four_lab_roots_quiescent": true,
+    "both_displays_absent": true,
+    "normal_roles_closed": [
+      "server",
+      "vanilla",
+      "botA"
+    ],
+    "restored_regular_files_independently_hashed": 664,
+    "restored_absent_paths_independently_checked": 9,
+    "restoration_pass": true,
+    "input_receipts": 16,
+    "preparation_scalars": {
+      "status": "FAIL",
+      "qualified": false,
+      "input_once_proven": false,
+      "actual_shot_proven": false,
+      "foreign_hit_proven": false,
+      "first_processed_state_proven": false,
+      "pickup_observed": false,
+      "normal_fire_control_completed": false,
+      "actions_attempted": 17,
+      "stage": "route",
+      "successful_read_sequence_required": true,
+      "error": "ValueError('flight deadline exceeded')",
+      "elapsed_seconds": 25.202681496972218,
+      "role_observations_count": 178
+    },
+    "host_budget_scalars": {
+      "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+      "samples": 26,
+      "cpu_busy_max_measured_percent": 68.75,
+      "mem_available_min_bytes": 2274021376,
+      "disk_free_min_bytes": 15161790464,
+      "max_sample_gap_seconds": 24.65107762417756,
+      "budget_pass_claim": false
+    },
+    "qualified": false,
+    "automatic_retry": false
+  },
+  "private_root_postflight_sha256": "084e8413aa4ec572fa9cd8e307c70fc6a71a110b7caa9b2d0241a6d0c5c0ffb0",
+  "root_decision_sha256": "252312880badb6cb12cde436f8f954446b7488628bf5c07932e00c9fcd41bfb6",
+  "milestone_a_complete": false,
+  "milestone_b_started": false
+}

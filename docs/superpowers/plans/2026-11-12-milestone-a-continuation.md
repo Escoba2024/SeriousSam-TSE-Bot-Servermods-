@@ -169,3 +169,25 @@ Files: poc/candidates/redstation-supply-20261107/{BotDriver.cpp,bot_human.h,bot_
 - A1 V4 remains BLOCKED and immutable. Separate V5 now reports187 passing tests including skipped after-input and periodic successful-read counterexamples, preserved actual111716 replay and strict8-second flight deadline. Closure/independent review remain pending; no V5 runtime approval.
 - Last verified publication is API0e2de7465ead76b9a1b9c7c793dc543ee74cc9cb, tree59000ec639748fd8fec08c605de19bffa23bb832, matching local399bd2b38b15731270f99dfded1aa7632e39c30e after actual fetch13:46:34UTC. Later source/docs require another publication and private Delta021. Delta020 Drive upload/roundtrip remains complete.
 - Next: independent source acceptance, pinned Build017, separate narrow controller copy with unchanged300-second Red Station→Red Station→Red Station protocol and all lifecycle/resource/restore gates; independent V5 review then one bounded normal-preparation trial. A1/A3/A4/stability/A5 remain open; B unstarted.
+
+
+## Build017 completed 2026-11-12T14:59:33.569245+00:00
+
+- Source-only observer independently READY0/0, integratedb35397f and actually published/fetched as6687e2a with exacttreece74a529. Build017 succeeded14:53:38UTC with DLL a5a379aadfd0cc376ad15a8368dd6814518e3f2da1fde22fdde9bd86f02abc5d, manifestb4905cf1c279c6461ea892f159c16d3e92196901c6aa8d255bf62311a8e0e32f; qualifiedfalse. No native017 test/deployment yet.
+- A1 V5 docs integrated fromdc34fcd;187tests and strict original203-pair replay are preserved. Independent re-review is active, both executiongatesfalse. V4BLOCKED remainsunchanged.
+- Root alone owns later freeze/native; A4worker prepares only a disabled017retarget retaining all original limits/predicates. New evidence requiresDelta021;020isverified. A remains incomplete,Bunstarted.
+
+
+## A1 V5 CPU abort 2026-11-12T15:21:57.856320+00:00
+
+- The single reviewed90s-preparation attempt151250 failed during calibration at an actually archived82.285714% CPU interval, limit75%. One confirmed input; no route/flight/pickup/fire/first-state proof. All3roles/two displays closed and Root verified664files+9absences, all4roots quiescent.
+- No automatic retry. review_names_transaction owns read-only resource/render causality analysis; identify_latest_codex finishes the disabled Build017 A4 package. finish_names_transaction is idle after V5 READY review. Root retains all native authority. Next operation requires a concrete resources decision; no limit is relaxed.
+
+
+## Continuation checkpoint 2026-11-12T15:40:30.541733+00:00
+
+- Root terminated only the verified stuck RDC search session. Both identities are absent. Ten-second host CPU changed from 57.5297 % to 37.0390 %; no render/game/guard changes. Historical allocation of the 82.2857 % failure remains unknown.
+- A separately declared single unchanged V5 trial 153533 ended FAIL at the existing eight-second flight deadline after 16 confirmed inputs. No pickup/fire/first-state proof. Peak measured interval CPU was 68.75 %; the 24.6511 s startup measurement gap is retained.
+- Root independently confirmed all four lab roots quiescent, both displays absent, 664 restored file hashes and nine absent paths. No native process remains from this window.
+- The CPU analyst moves to read-only flight-cause analysis; the second worker completes the independent Build017 controller review. Root alone freezes and runs the next bounded A4 diagnostic. Maximum two workers.
+- New evidence requires Delta021 and a new exact-tree GitHub publication. A remains incomplete; B is unstarted. See a1-v5-cpu-correction-flight-followup report.

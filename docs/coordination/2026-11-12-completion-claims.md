@@ -31,3 +31,22 @@ A1 author: separate disabled V5 correction after independently proven V4 blocker
 ## Current claims — 2026-11-12T14:34:46.397561+00:00
 
 review_names_transaction is finishing the isolated disabled A1 V5 package after 187 passing offline tests; no native authority. identify_latest_codex completed A4 observer source commit3cf2937476a9968ec792b451a53b2365ed3d2e46 and is idle. finish_names_transaction owns read-only independent A4 source review in /srv/tse-a4-passive-observer-independent-review-20261112. Root owns integration, new Build017 preparation and later bounded native trials. No build/native successor has started. Maximum two active workers remains enforced.
+
+
+## Current claims — 2026-11-12T14:59:33.569245+00:00
+
+Root completed guardedBuild017 and sourcepublication; owns all integration/native/live work. finish_names_transaction: independent read-only A1V5re-review. identify_latest_codex: new disabledA4Build017controller constants/pins/labels only, no repository/source changes or native actions. review_names_transaction: idle afterV5handoff. Maximumtwoactiveworkers; no activeRootbuild/nativewindow.
+
+
+## Current claims — 2026-11-12T15:21:57.856320+00:00
+
+Root has closed and independently restored the V5 CPU-aborted window. review_names_transaction owns only read-only CPU/render analysis in /srv/tse-a1-v5-cpu-analysis-20261112. identify_latest_codex finishes only the disabled A4 Build017 controller and its pins. finish_names_transaction is idle after the completed V5 review. No native/build process is active; maximum two workers remains in force.
+
+
+## Continuation checkpoint 2026-11-12T15:40:30.541733+00:00
+
+- Root terminated only the verified stuck RDC search session. Both identities are absent. Ten-second host CPU changed from 57.5297 % to 37.0390 %; no render/game/guard changes. Historical allocation of the 82.2857 % failure remains unknown.
+- A separately declared single unchanged V5 trial 153533 ended FAIL at the existing eight-second flight deadline after 16 confirmed inputs. No pickup/fire/first-state proof. Peak measured interval CPU was 68.75 %; the 24.6511 s startup measurement gap is retained.
+- Root independently confirmed all four lab roots quiescent, both displays absent, 664 restored file hashes and nine absent paths. No native process remains from this window.
+- The CPU analyst moves to read-only flight-cause analysis; the second worker completes the independent Build017 controller review. Root alone freezes and runs the next bounded A4 diagnostic. Maximum two workers.
+- New evidence requires Delta021 and a new exact-tree GitHub publication. A remains incomplete; B is unstarted. See a1-v5-cpu-correction-flight-followup report.

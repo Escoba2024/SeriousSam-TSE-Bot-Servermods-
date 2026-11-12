@@ -1,5 +1,5 @@
 <!-- CURRENT_COMPLETION_BEGIN -->
-# Current continuation checkpoint — 2026-11-12T13:43:28.243480+00:00
+# Current continuation checkpoint — 2026-11-12T14:59:33.569245+00:00
 
 **A remains incomplete. B remains unstarted.** This section supersedes historical checkpoints below. Original request: `/srv/tse-milestone-a-evidence-20261111/request.md`. Full current German report: `docs/reports/2026-11-12-codex-continuation-status.md`.
 
@@ -13,6 +13,12 @@ Public bot DLL remains 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a9
 
 ## Latest candidate and native outcomes
 
+Latest continuation: the stuck RDC search has been removed and its load reduction verified. One separately declared unchanged V5 follow-up, window 153533, ended FAIL at the eight-second flight deadline after 16 confirmed inputs; no pickup/fire. Root independently checked all 673 restoration paths and four quiescent lab roots. Maximum measured interval CPU was 68.75 %, with a retained startup sample gap. The earlier CPU-abort account below remains historical evidence. Current owners: review_names_transaction analyses the closed flight trace read-only; finish_names_transaction reviews the disabled A4 Build017 controller; identify_latest_codex is idle. Root alone owns native execution. See docs/reports/2026-11-12-a1-v5-cpu-correction-flight-followup.md.
+
+Latest A1 native V5 window151250 is FAIL in calibration because the retained window CPU sample is82.285714% over1.337170s, above the unchanged75% limit. Only1input receipt; route/pickup/fire not reached. Root wrapper1196462 exited1 after39.36s. All3roles closed; root independently checked664files+9absent paths and all4roots/two displays quiescent. ResultSHA0ccbe6089f2fdcc35e68fc3cc7215ab3d7c2898f0d787e7b187ea2466d20e391. Private root postflight receipt and public a1-v5-cpu-abort report identify this newer outcome. No automatic retry; read-only CPU/render cause analysis is active. A4Build017 remains disabled pending Root review/resources.
+
+Latest Build017 is complete from sourceb35397f024b8a8722a01178a08c06d3d40802f65, DLL a5a379aadfd0cc376ad15a8368dd6814518e3f2da1fde22fdde9bd86f02abc5d,428032bytes, manifestb4905cf1c279c6461ea892f159c16d3e92196901c6aa8d255bf62311a8e0e32f. Source-only passive observer:68/2687 sanitized checks plus Driver guards, independent0Critical/0Important. Build completed14:53:38UTC, qualifiedfalse. No017native test or deployment yet; see build017-observer-progress report. Build016 below is the preceding candidate and latest actual A4 native result.
+
 Build016 source: 58e8559903d999772218a6b5fd1d042b1759b547. DLL: e5a80634b5247c900ae25b5b18869c433c30dcfb49b890338fb231da63b04825. Manifest: 4cd6b5a8d853afe2dbe492fb12fff0aed22a06c77b5de7fc4e732795d2676603. Build succeeded, qualified=false. The actual Driver rotation regression reproduced eight failures before the correction, then passed 47 ASan/UBSan checks plus existing action guards.
 
 A4 trial104821 is **FAIL**, retained unchanged. Protocol was Red Station → Red Station → Red Station. Sixteen slot/reload transitions confirm fresh rotation baselines and first observed live zero View/Input/Last pitch; 49 ordinary respawns remain distinguished. All-four normal close, accepted closed logs, and 648 independently rechecked restoration paths. Early inventory contributes 259 additional accepted group samples. Only 16/24 slot-phase rows satisfy all existing activity fields. Four missing fire lines are sampling gaps, one pickup is left-censored, and genuine useful-weapon/fire gaps remain. See build016-native-reset-analysis report and private `/srv/tse-a4-build016-analysis-20261112-104821`.
@@ -23,7 +29,7 @@ The single authorized V3 trial111716 is also **FAIL**, retained unchanged. Calib
 
 A1 first-state damage, full current-candidate A3 crossed comparisons, A4 map/weapon/activity acceptance and the still-applicable 1/4/8-bot 3600/3600/7200-second gates remain open. Build015 MITTEL is mixed and its single STARK window positive; these are not complete Build016 qualification. B is strictly dependent on full A acceptance.
 
-## Backup, publication and external blocker
+## Backup and publication
 
 Delta020 exists at /srv/tse-milestone-a-backup-completion-20261112/runtime-evidence-delta020-build016-114326.tar.gz, 114833032 bytes, SHA256 82a661bb52ae8d6b08232aba3f70577ebdaa594e52ddf8dfe9edee147cb7c132. Its exact archived source is cd7a4a639191a2033390f39f0681e8b64b3d6b6c. Separate restore /srv/tse-milestone-a-backup-completion-20261112/restore-delta020-build016-114326 wrote/rehashed 14707 regular files / 999970861 bytes with exact owner/mode/mtime verification. Symlinks indexed: 2; no native startup from restore. Drive upload and actual download/reassembly verification are complete; see the newer delta020-drive-complete-resume1.json receipt. Final report/receipt metadata postdates this archive; source and runtime scope is explicit.
 
@@ -39,11 +45,11 @@ Build016 source publication553afa7c73af0c080f9ac165c7b2045f20d65724 was independ
 
 ## Ownership and resumption
 
-Original end-to-end user authorization remains valid. Root alone integrates, builds and changes native/live runtime. Maximum two active workers. A1 V4 author work is complete (174 tests), but its independent review is BLOCKED with one Important skipped route-after-input anchor finding. V4 remains disabled and was not started. review_names_transaction now owns a separate V5 correction; see docs/reports/2026-11-12-a1-flight-v4-independent-review.md. identify_latest_codex completed read-only A4 useful-weapon causal analysis and now owns a separate default-OFF passive observer extension, with limits of 200 samples/10 seconds per class/player/map epoch and no gameplay changes. finish_names_transaction completed the V4 BLOCKED review and is idle until V5 is ready and an active-worker slot is free. No native successor has been launched in this resumed phase.
+Original end-to-end authorization persists. Root alone integrates/builds/changes runtime; maximum two active workers. finish_names_transaction independently reviews the frozen A1 V5 package after V4BLOCKED; identify_latest_codex prepares only a new disabled A4 Build017 controller with unchanged300sRed-only protocol. Both original authorship/source packages remain immutable. review_names_transaction is idle after187V5tests and strict203-pair replay. SourceBuild017 is complete; the newer V5 native CPU abort above supersedes the earlier no-native checkpoint. Qualification gates precede the authorized Dev-first release rollout; fullA includes successful six-instance deployment and backups. Only completeA permitsB.
 
 A4 analysis confirms four real competing weapon pickups; the actual remaining trajectory/control cause is not identified by one-second samples. Do not remove Original-Cecil jump flags or enlarge arrival radii speculatively. Private analysis: /srv/tse-a4-supply-causal-analysis-20261112. Root will independently review the new controls, obtain the bounded actual native evidence, then address the original A1/A3/A4/stability gates and back up subsequent work. Only complete A acceptance permits Dev-first candidate rollout and then B. Never reapply the consumed names stage; never re-run an async mutation whose result is pending.
 
-The preceding final-publication receipt documents the earlier c5e36ed/c5c5337 checkpoint. New resumed documentation is committed separately and must be published/actually fetched before claiming its remote publication.
+Latest exact source publication is API6687e2abb5b46d7a1be0f95ab24f26a4222f4644, treece74a529a1c55dd3317476d44137f1bd2327d9c0, matching localb35397f024b8a8722a01178a08c06d3d40802f65 after actual fetch14:50:04UTC. Private receipt github-build017-source-publication.json. LaterV5/build-report documentation requires a new publication. Delta021 must include the new source/build/private packages and subsequent native evidence; Delta020 remains verified but earlier.
 <!-- CURRENT_COMPLETION_END -->
 
 ---
