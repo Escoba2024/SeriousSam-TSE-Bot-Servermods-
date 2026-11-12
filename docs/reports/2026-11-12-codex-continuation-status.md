@@ -1,26 +1,26 @@
 # Codex-Fortsetzung: Umsetzung, Betrieb und offene Abnahme
 
-Stand: 12.11.2026 21:47:01 MEZ.
+Stand: 12.11.2026 23:01:07 MEZ.
 
 ## Aktueller Fortschritt
 
-**Die neue KI ist in sechs begrenzten Alt-DLL-Vergleichen überlegen. Der gesamte Rollout ist weiterhin nicht abgenommen. A2 ist abgeschlossen; B ist unbegonnen.**
+**Build018 ist in sechs kurzen Alt-DLL-Vergleichen im direkten Kampf überlegen. Der vollständige Rollout bleibt offen. A2 ist fertig; B wurde nicht begonnen.**
 
-| Teil | Tatsächlich erreicht | Noch offen |
+| Teil | Belegt | Verbleibende Abnahme |
 | --- | --- | --- |
-| A1 | Effektiver Spawnwert0; Original-Shell-Start korrigiert und nativ bestätigt; V3 stoppt vor Fire bei wechselndem Yaw-Gain | normaler Kontrolltreffer, wiederholter erster gültiger Respawnzustand mit Fremdschaden für Bot/Vanilla inklusive Mapwechsel/Neustart |
-| A2 | 458 Namen, 208 erhalten plus250 neu;48 eindeutige eigene Bots und GUID-Erhaltung | abgeschlossen |
-| A3 | sechs vollständige120-s-Vergleiche, alle drei Tiers mit vertauschten Starts; direkte Abschüsse31:12,31:13,47:8; vollständige Damageauswertung/Restore | STARK zuverlässig stärker als MITTEL, vollständige Gameplay-/Dauerabnahme |
-| A4 | Build018: zwei Red-Wechsel und drei Phasen beobachtet;23/24 Slotphasen;133 Inventarleben reproduziert | Versorgungslücke Phase1 botB:1; zusätzliche Client-Spawnmarkierung in anderem Slot verhindert vollständige Lebenskorrelation; Karten-/Navigations-/Gefahrenabnahme |
-| A5 | Build018-Quelle exakt veröffentlicht; Delta020/021 tatsächlich über Drive zurückgeprüft; Live-Flotte wieder6×8 | Delta022, lokale Dateitransportverfügbarkeit,3600/3600/7200-s-Gates und qualifizierter Dev-zuerst-Rollout |
+| A1 | Effektiver Spawnwert0; Prescan-aus tatsächlich beobachtet; letzter Eingabetest vor Schuss fehlgeschlagen; deaktivierter ObserverV2 mit89 Offline-Prüfgruppen und enger ControllerV2-Fix unabhängig bestätigt | Normaler Kontrolltreffer; wiederholter erster gültiger Respawnzustand mit Fremdschaden für Vanilla/echte KI, Kartenwechsel und Neustart; tödlicher Schaden |
+| A2 | 208 erhaltene plus250 neue Namen,458 insgesamt;48 eindeutige eigene Bots, GUIDs erhalten | abgeschlossen |
+| A3 | Sechs120-s-Vergleiche mit vertauschten Starts; direkte Abschüsse31:12,31:13,47:8, gesamt109:33 | STARK zuverlässig stärker als MITTEL; vollständige Gameplay-/Dauerabnahme |
+| A4 | 23/24 Slotphasen;133 Inventarleben; zusätzliches frühes Clientlog-Leben außerhalb der Inventarabdeckung erklärt | Tatsächliche Versorgungslücke Phase1 botB:1 bleibt FAIL; Karten-/Navigations-/Gefahren-/Resetabnahme |
+| A5 | Voriger Quellbaumc275e93 exakt gefetcht; Delta022 auf Server archiviert und separat restauriert; Delta021 extern zurückgeprüft | Neuere Belege in Delta023 sichern; tatsächlicher Drive-Upload022/023; fortgeführte Stabilitätsgates und qualifizierter Dev-zuerst-Rollout |
 
-**Betrieb:** Nach normaler begrenzter Dev-Clientpause zur RAM-Entlastung ist der ursprüngliche Stand vollständig restauriert. Frische Prüfung12.11.2026 21:32:51MEZ: sechs Instanzen mit je acht eigenen Bots, UNKNOWN0, effektiver Spawn0 und bisherige geladene DLLs. Öffentliche aktuelle Logzähler0/0, Devhistorie37BAD/3Disconnects. Keine Build018-DLL wurde auf Dev oder Public installiert. Kein Root-Native-/Buildprozess bleibt aus diesen Fenstern aktiv.
+**Betrieb:** Tatsächliche Prüfung12.11.2026 22:43:05MEZ: sechs Instanzen mit je acht eigenen Bots, UNKNOWN0, Spawn0 und bisherigen geladenen DLLs. Öffentliche aktuelle Zähler0/0, Devhistorie37BAD/3Disconnect. Die begrenzte Dev-Clientpause ist vollständig beendet. Build018 ist nicht live installiert. Alle Root-Native-/Buildfenster sind geschlossen.
 
-**Belegte Vergleiche:** [A3 mit sechs vollständigen Fenstern](2026-11-12-build018-six-window-comparison.md). [A4-FAIL, vollständige Wiederherstellung und Flotte](2026-11-12-a4-build018-native-failure.md). Ein Inventar-Sample mit Fire-Anforderung wird nicht als Projektil/Treffer ausgegeben; die beiden vorangegangenen STARK-RAM-FAILs bleiben erhalten.
+**Neue Ergebnisse:** [Belegte Verbesserung und verbleibende Abnahme](2026-11-12-build018-acceptance-checkpoint.md), [sechs vollständige A3-Vergleiche](2026-11-12-build018-six-window-comparison.md), [ursprünglicher A4-FAIL](2026-11-12-a4-build018-native-failure.md), [deaktivierter First-State-Controller](2026-11-12-a1-first-state-controller-disabled.md). Prescan-aus behebt die abweichende Drehantwort nicht. Der praktische A1-Test bleibt vor Fire gescheitert;664Dateien und neun Abwesenheiten sind unabhängig restauriert.
 
-**Quellen und Sicherung:** Build018 stammt aus1802fb3f0720b53feb032abfe2c2a83407bfea6e. DLL6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a. Letzter tatsächlich gefetchter exakter Quellbaum: GitHube53d6c601a80f627047c7a3aa6b3b36b81983b8a. Spätere Berichte werden separat veröffentlicht. Delta021 ist der letzte vollständig hochgeladene/zurückgeprüfte private Stand; spätere Quellen und Belege benötigen Delta022.
+**Sicherung:** Delta022:101451161Archivbytes;16033 reguläre Dateien/826890437Bytes separat geschrieben, nachgehasht und Metadaten geprüft. Keine externe022-Kopie behauptet. Der tatsächliche Drive-Upload scheitert an „no primary turn environment is available“. Delta023 für die späteren Arbeiten wird als eigener Nachtrag vorbereitet.
 
-**Arbeitsumgebung:** Local exec ist seit etwa21:19MEZ ausgefallen. Ein echter Drive-Upload lokaler Testbelege scheitert an no primary turn environment is available. RDC und das Projekt bleiben erreichbar. Zwei getrennte Worker sichern die passiven A1-Originalbindungen und den deaktivierten Endvalidator/Controller; Root besitzt Integration, Native, Build und Live. Keine Freigabe aus einem lokalen Test oder begonnenen Prozess.
+**Fortsetzung:** Beide Worker sind nach Abschluss und engem Folgereview ruhig. Root beendet Quellenveröffentlichung und Sicherung. Anschließend bestehen ein belegter externer Dateitransportblocker sowie die ausdrücklich offenen fachlichen Abnahmen. Keine Abnahme wird aus Offline-Tests, einem Start oder einer Teilprüfung abgeleitet.
 
 ---
 

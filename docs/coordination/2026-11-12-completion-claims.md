@@ -136,3 +136,15 @@ Die lokale ChatGPT-Ausführung ist seit ca.21:19 MEZ erneut nicht erreichbar; RD
 ## Geschlossener Runtimecheckpoint — 12.11.2026 21:47:01 MEZ
 
 Alle sechs A3-Build018-Fenster und die strenge Auswertung sind abgeschlossen. A4-Build018 bleibt FAIL:23/24 Slotphasen;133 inventarbeobachtete Leben reproduziert, vollständige Client-Lebenskorrelation wegen6/7-Abweichung in Phase1 botA:2 offen. Kein Ursache-/Whitelist-/Rollout-PASS. Alle Root-Nativeprozesse geschlossen,643 Dateihashes und5 Absenzen restauriert. Dev um21:31:53MEZ erfolgreich auf Original8Bots restauriert; frische Flotte21:32:51MEZ6×8,UNKNOWN0,Spawn0,bisherige DLLs. A2 fertig;A1/A3/A4/Dauer/A5 offen;B unbegonnen. Lokaler Dateiupload durch tatsächlichen Fehler no primary turn environment is available blockiert. Neue Hauptberichte und Fehler-/Bestandsquittungen sind im Status verlinkt. Die vorherige aktive Runtime-Ownership ist hiermit geschlossen; Root besitzt weiterhin Integration und gegebenenfalls spätere explizite Nativefenster.
+
+## Geschlossener Abnahmecheckpoint — 12.11.2026 23:01:07 MEZ
+
+Sechs Build018-Altvergleiche vollständig: direkte Abschüsse109:33 (MITTEL31:12, STARK31:13, DEMON47:8). Kein STARK>MITTEL-/Gesamt-A3-PASS. A4 bleibt23/24FAIL; die133/134-Lebensabweichung ist als frühes ausschließlich geloggtes Leben vor Inventarabdeckung erklärt, ohne die ursprüngliche Korrelation oder den anderen Waffenversorgungsfehler aufzuwerten.
+
+Der zusätzliche Root-Prescan-aus-Versuch bleibt FAIL vor Fire:72 tatsächliche gültige Doppelbeobachtungen mit Beschleunigung0/Empfindlichkeit0,25/Prescan0, dennoch erwartete Drehantwort minus3Grad gegenüber tatsächlichen minus6Grad. Drei normale Closes, drei akzeptierte/nachgehashte Logs,664Dateien und neun Abwesenheiten unabhängig restauriert. Keine Wiederholung ohne geänderte belegte Voraussetzung.
+
+ObserverV2:89 Offline-Prüfgruppen. ControllerV1:76 fokussierte Tests; unabhängiger I1-Befund in separaterV2 mit13 relevanten Prüfungen korrigiert und unabhängig READY0C/0I bestätigt. Alle Gatesfalse, Vanilla/warm-Adapter allein; tatsächliche KI/Map-/Restart-/First-State-Abnahme offen. Beide Worker sind ruhig; Root allein besitzt Quellenveröffentlichung und Sicherung. Kein Native/Build aktiv.
+
+Fleet vom22:43:05MEZ:6×8eigene,UNKNOWN0,Spawn0,bisherigeDLLs,Devhistorie37/3. A2fertig;A1/A3/A4/Dauer/A5offen;Bunbegonnen. Delta022 auf Server samt separatem Restore vollständig geprüft; tatsächlicher Drive-Upload durch ausgefallene Primärumgebung blockiert. Delta023 für spätere Belege folgt. Keine externe022/023-Kopie oder Veröffentlichung eines neuen Livebuilds behauptet.
+
+Aktuelle Belege und nächste Schritte: docs/reports/2026-11-12-build018-acceptance-checkpoint.md. Vorige aktive Ownership-/Laufangaben sind für den aktuellen Stand durch diesen geschlossenen Checkpoint ersetzt.

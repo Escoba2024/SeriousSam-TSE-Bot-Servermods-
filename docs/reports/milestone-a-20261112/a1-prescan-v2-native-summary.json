@@ -1,0 +1,54 @@
+{
+  "created_utc": "2026-11-12T21:43:58.495191+00:00",
+  "scope": "BOUNDED_NORMAL_INPUT_PRESCAN_COMPARISON_NOT_A1_FIRST_STATE_PROOF",
+  "window_label": "a1-colt-preparation-20261112-213339",
+  "status": "FAIL",
+  "result_sha256": "e2e098a7bf53ba750abb2868b9a82391739871503fc7ea47c7963a21a547692d",
+  "postflight_sha256": "9fe2660c05c091be193c3482e3845043ac061d596c79d03484d022660299fc21",
+  "frozen_manifest_sha256": "1819bbfdb593acd251b1f6741e19d83ce18fa54f6256d1d7f7828153950c11df",
+  "independent_review_sha256": "5319a34b44e94fe0eaa2eb1c19541bc9a658cb35bca8fa9e22a748eaf17fb742",
+  "normal_shell_startup_receipt_accepted": true,
+  "successful_native_pairs": 72,
+  "actual_profile_in_every_successful_pair": {
+    "allow_mouse_acceleration": 0,
+    "mouse_sensitivity": 0.25,
+    "allow_prescan": 0
+  },
+  "prepared_receipt_flags_not_retroactively_modified": true,
+  "actions_attempted": 7,
+  "preparation_elapsed_seconds": 5.865609664935619,
+  "failure_stage": "aim",
+  "failure": "ValueError('normal aim ACK differs from calibrated axis gain')",
+  "axis_gains_deg_per_pixel": {
+    "x": -0.25,
+    "y": -0.5
+  },
+  "rejected_aim_pixels": 12,
+  "expected_yaw_delta_deg": -3.0,
+  "actual_yaw_delta_deg": {
+    "server": -6.0,
+    "client": -6.0
+  },
+  "normal_fire_completed": false,
+  "actual_shot_proven": false,
+  "foreign_hit_proven": false,
+  "first_processed_state_proven": false,
+  "restore": {
+    "all_four_lab_roots_quiescent": true,
+    "both_displays_absent": true,
+    "normal_roles_closed": [
+      "botA",
+      "server",
+      "vanilla"
+    ],
+    "closed_logs_accepted": true,
+    "closed_logs_independently_rehashed": 3,
+    "restored_regular_files_independently_hashed": 664,
+    "restored_absent_paths_independently_checked": 9,
+    "restoration_pass": true
+  },
+  "interpretation": "Disabling Original Prescan did not remove the calibrated-versus-aim input response mismatch. Do not change gain tolerances or deadlines or relabel the failure.",
+  "next_diagnostic": "Inspect actual Original input processing/smoothing and ACK observation timing with a narrowly specified causal capture; neither mechanism has been proven as the cause here.",
+  "automatic_retry": false,
+  "release_qualified": false
+}

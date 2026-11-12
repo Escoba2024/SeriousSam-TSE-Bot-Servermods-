@@ -1,3 +1,17 @@
+## Geschlossener Abnahmecheckpoint — 12.11.2026 23:01:07 MEZ
+
+Sechs Build018-Altvergleiche vollständig: direkte Abschüsse109:33 (MITTEL31:12, STARK31:13, DEMON47:8). Kein STARK>MITTEL-/Gesamt-A3-PASS. A4 bleibt23/24FAIL; die133/134-Lebensabweichung ist als frühes ausschließlich geloggtes Leben vor Inventarabdeckung erklärt, ohne die ursprüngliche Korrelation oder den anderen Waffenversorgungsfehler aufzuwerten.
+
+Der zusätzliche Root-Prescan-aus-Versuch bleibt FAIL vor Fire:72 tatsächliche gültige Doppelbeobachtungen mit Beschleunigung0/Empfindlichkeit0,25/Prescan0, dennoch erwartete Drehantwort minus3Grad gegenüber tatsächlichen minus6Grad. Drei normale Closes, drei akzeptierte/nachgehashte Logs,664Dateien und neun Abwesenheiten unabhängig restauriert. Keine Wiederholung ohne geänderte belegte Voraussetzung.
+
+ObserverV2:89 Offline-Prüfgruppen. ControllerV1:76 fokussierte Tests; unabhängiger I1-Befund in separaterV2 mit13 relevanten Prüfungen korrigiert und unabhängig READY0C/0I bestätigt. Alle Gatesfalse, Vanilla/warm-Adapter allein; tatsächliche KI/Map-/Restart-/First-State-Abnahme offen. Beide Worker sind ruhig; Root allein besitzt Quellenveröffentlichung und Sicherung. Kein Native/Build aktiv.
+
+Fleet vom22:43:05MEZ:6×8eigene,UNKNOWN0,Spawn0,bisherigeDLLs,Devhistorie37/3. A2fertig;A1/A3/A4/Dauer/A5offen;Bunbegonnen. Delta022 auf Server samt separatem Restore vollständig geprüft; tatsächlicher Drive-Upload durch ausgefallene Primärumgebung blockiert. Delta023 für spätere Belege folgt. Keine externe022/023-Kopie oder Veröffentlichung eines neuen Livebuilds behauptet.
+
+Aktuelle Belege und nächste Schritte: docs/reports/2026-11-12-build018-acceptance-checkpoint.md. Vorige aktive Ownership-/Laufangaben sind für den aktuellen Stand durch diesen geschlossenen Checkpoint ersetzt.
+
+---
+
 <!-- CURRENT_COMPLETION_BEGIN -->
 # Aktuelle Fortsetzung — 2026-11-12T17:39:09.732389+00:00
 
