@@ -1,26 +1,27 @@
 # Codex-Fortsetzung: Umsetzung, Betrieb und offene Abnahme
 
-Stand: 12.11.2026 23:01:07 MEZ.
+Stand: 12.11.2026 23:20:47 MEZ.
 
 ## Aktueller Fortschritt
 
-**Build018 ist in sechs kurzen Alt-DLL-Vergleichen im direkten Kampf überlegen. Der vollständige Rollout bleibt offen. A2 ist fertig; B wurde nicht begonnen.**
+**Build018 verbessert den direkten Kampf in sechs kurzen Vergleichen gegen die bisherige öffentliche Bot-Version. Der Gesamtauftrag ist offen und die weitere Serverarbeit durch das ausgeschöpfte RDC-Monatskontingent blockiert. A2 ist fertig; B wurde nicht begonnen.**
 
 | Teil | Belegt | Verbleibende Abnahme |
 | --- | --- | --- |
-| A1 | Effektiver Spawnwert0; Prescan-aus tatsächlich beobachtet; letzter Eingabetest vor Schuss fehlgeschlagen; deaktivierter ObserverV2 mit89 Offline-Prüfgruppen und enger ControllerV2-Fix unabhängig bestätigt | Normaler Kontrolltreffer; wiederholter erster gültiger Respawnzustand mit Fremdschaden für Vanilla/echte KI, Kartenwechsel und Neustart; tödlicher Schaden |
-| A2 | 208 erhaltene plus250 neue Namen,458 insgesamt;48 eindeutige eigene Bots, GUIDs erhalten | abgeschlossen |
-| A3 | Sechs120-s-Vergleiche mit vertauschten Starts; direkte Abschüsse31:12,31:13,47:8, gesamt109:33 | STARK zuverlässig stärker als MITTEL; vollständige Gameplay-/Dauerabnahme |
-| A4 | 23/24 Slotphasen;133 Inventarleben; zusätzliches frühes Clientlog-Leben außerhalb der Inventarabdeckung erklärt | Tatsächliche Versorgungslücke Phase1 botB:1 bleibt FAIL; Karten-/Navigations-/Gefahren-/Resetabnahme |
-| A5 | Voriger Quellbaumc275e93 exakt gefetcht; Delta022 auf Server archiviert und separat restauriert; Delta021 extern zurückgeprüft | Neuere Belege in Delta023 sichern; tatsächlicher Drive-Upload022/023; fortgeführte Stabilitätsgates und qualifizierter Dev-zuerst-Rollout |
+| A1 | Effektiver Spawnwert 0; Prescan-aus tatsächlich beobachtet; letzter normaler Eingabetest vor Schuss fehlgeschlagen; deaktivierter ObserverV2 und enger ControllerV2-Fix geprüft | Normaler Kontrolltreffer; erster gültiger Respawnzustand mit Fremdschaden für Vanilla/echte KI, Kartenwechsel und Neustart; tödlicher Schaden |
+| A2 | 208 erhaltene plus 250 neue Namen, 458 insgesamt; 48 eindeutige eigene Bots, GUIDs erhalten | abgeschlossen |
+| A3 | Sechs 120-s-Vergleiche mit vertauschten Starts; direkte Abschüsse 31:12, 31:13, 47:8, insgesamt 109:33 | STARK zuverlässig stärker als MITTEL; vollständige Gameplay-/Dauerabnahme |
+| A4 | 23/24 Slotphasen; 133 Inventarleben; zusätzliches frühes Clientlog-Leben außerhalb der Inventarabdeckung erklärt | Tatsächliche Versorgungslücke Phase1 botB:1 bleibt FAIL; Karten-/Navigations-/Gefahren-/Resetabnahme |
+| A5 | Quelle bis d0b8fb6 exakt auf dem Server gefetcht; Delta022 und Delta023 dort archiviert und separat restauriert; Delta022-Manifest auf Drive zurückgeprüft | Archive022/023 auf Drive übertragen und zurückprüfen; fortgeführte Stabilitätsgates und qualifizierter Dev-zuerst-Rollout |
 
-**Betrieb:** Tatsächliche Prüfung12.11.2026 22:43:05MEZ: sechs Instanzen mit je acht eigenen Bots, UNKNOWN0, Spawn0 und bisherigen geladenen DLLs. Öffentliche aktuelle Zähler0/0, Devhistorie37BAD/3Disconnect. Die begrenzte Dev-Clientpause ist vollständig beendet. Build018 ist nicht live installiert. Alle Root-Native-/Buildfenster sind geschlossen.
+**Betrieb:** Letzte tatsächliche Prüfung 12.11.2026 22:43:05 MEZ: sechs Instanzen mit je acht eigenen Bots, UNKNOWN0, Spawn0 und bisherigen DLLs. Build018 ist nicht live installiert. Alle dokumentierten Spiel-, Build- und Sicherungsfenster sind beendet; beide Worker sind ruhig. Eine neue Bestandsprüfung nach der Zugriffssperre wird nicht behauptet.
 
-**Neue Ergebnisse:** [Belegte Verbesserung und verbleibende Abnahme](2026-11-12-build018-acceptance-checkpoint.md), [sechs vollständige A3-Vergleiche](2026-11-12-build018-six-window-comparison.md), [ursprünglicher A4-FAIL](2026-11-12-a4-build018-native-failure.md), [deaktivierter First-State-Controller](2026-11-12-a1-first-state-controller-disabled.md). Prescan-aus behebt die abweichende Drehantwort nicht. Der praktische A1-Test bleibt vor Fire gescheitert;664Dateien und neun Abwesenheiten sind unabhängig restauriert.
+**Sicherung:** Delta022: 16033 Dateien / 826890437 Bytes separat wiederhergestellt. Delta023: 7982 Dateien / 115121646 Bytes separat wiederhergestellt, Archiv 35086463 Bytes, Exitcode0. Hashes und Metadaten geprüft. Beide Archive liegen bisher nur auf dem Server. Das unveränderte Delta022-Manifest wurde dagegen bereits tatsächlich auf Drive hochgeladen und nach Rückdownload bytegleich geprüft.
 
-**Sicherung:** Delta022:101451161Archivbytes;16033 reguläre Dateien/826890437Bytes separat geschrieben, nachgehasht und Metadaten geprüft. Keine externe022-Kopie behauptet. Der tatsächliche Drive-Upload scheitert an „no primary turn environment is available“. Delta023 für die späteren Arbeiten wird als eigener Nachtrag vorbereitet.
+**Aktueller Blocker:** Local exec und Drive funktionieren wieder. Weitere RDC-Aufrufe sind wegen ausgeschöpften Monatskontingents pausiert. Kein Wiederholen oder Umgehen der Sperre. Die beiden aktuellen Archive und geschlossenen Rohbelege sind lokal nicht verfügbar; die neuen Ursachenaufgaben konnten deshalb nicht beginnen. Der letzte vollständige externe Archivstand bleibt Delta021.
 
-**Fortsetzung:** Beide Worker sind nach Abschluss und engem Folgereview ruhig. Root beendet Quellenveröffentlichung und Sicherung. Anschließend bestehen ein belegter externer Dateitransportblocker sowie die ausdrücklich offenen fachlichen Abnahmen. Keine Abnahme wird aus Offline-Tests, einem Start oder einer Teilprüfung abgeleitet.
+**Belege und Fortsetzung:** [Geschlossener Stand mit Quotenblocker](2026-11-12-build018-final-access-blocker.md), [sechs A3-Vergleiche](2026-11-12-build018-six-window-comparison.md), [Abnahmedetails](2026-11-12-build018-acceptance-checkpoint.md), [ursprünglicher A4-FAIL](2026-11-12-a4-build018-native-failure.md). Die spätere Abschlussdokumentation wird separat auf GitHub veröffentlicht; ein zusätzlicher Server-Fetch ist blockiert. Keine volle Abnahme oder unbeaufsichtigte Hintergrundfortsetzung.
+
 
 ---
 

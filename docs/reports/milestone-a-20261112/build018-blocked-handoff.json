@@ -1,0 +1,128 @@
+{
+  "schema": "tse-build018-closed-progress-access-blocker-v1",
+  "created_utc": "2026-11-12T22:20:47Z",
+  "status": "INCOMPLETE_EXTERNAL_REMOTE_ACCESS_BLOCKER",
+  "comparison": {
+    "windows": 6,
+    "seconds_per_window": 120,
+    "reference": "previous_public_bot_dll",
+    "direct_kills": [
+      {
+        "tier": "MITTEL",
+        "new_to_old": 31,
+        "old_to_new": 12
+      },
+      {
+        "tier": "STARK",
+        "new_to_old": 31,
+        "old_to_new": 13
+      },
+      {
+        "tier": "DEMON",
+        "new_to_old": 47,
+        "old_to_new": 8
+      }
+    ],
+    "total_new_to_old": 109,
+    "total_old_to_new": 33,
+    "damage_events": 1490,
+    "stronger_stark_than_mittel_proven": false,
+    "human_skill_claim": false
+  },
+  "acceptance": {
+    "A1": "OPEN",
+    "A2": "COMPLETE",
+    "A3": "PARTIAL",
+    "A4": "FAIL_23_OF_24_SLOT_PHASES",
+    "A5": "OPEN",
+    "B": "NOT_STARTED",
+    "new_build_live": false,
+    "release_qualified": false
+  },
+  "source": {
+    "archived_local_head": "82ccda74e704fe8b4ba8e636c8b7ea6d2dd08614",
+    "last_actual_server_fetched_public_commit": "d0b8fb6ea1d7d4fab4e751bbbf82ed90fd3d007a",
+    "archived_tree": "4e1d3381fbb919d41e0dafb0e2b907b514dc6f1d",
+    "last_actual_fetch_utc": "2026-11-12T22:02:53.719956+00:00",
+    "this_documentation_is_later_than_archive": true,
+    "server_fetch_of_later_documentation_blocked": true
+  },
+  "backups": [
+    {
+      "label": "delta022",
+      "archive_name": "runtime-evidence-delta022-build018-205653.tar.gz",
+      "bytes": 101451161,
+      "sha256": "e88caecf53ed94ddbac6ade1b3c638a637b50459d4dc4ff699dec50513861196",
+      "regular_files_restored_rehashed": 16033,
+      "restored_bytes": 826890437,
+      "metadata_verified": true,
+      "symlinks_indexed_not_materialized": 2,
+      "archive_uploaded": false
+    },
+    {
+      "label": "delta023",
+      "archive_name": "runtime-evidence-delta023-build018-220818.tar.gz",
+      "bytes": 35086463,
+      "sha256": "189f8186d0ca9180d851fb75f9e3dfe5b5e06d9994b1edecbde84b40c35724d9",
+      "regular_files_restored_rehashed": 7982,
+      "restored_bytes": 115121646,
+      "metadata_verified": true,
+      "symlinks_indexed_not_materialized": 0,
+      "elapsed_seconds": 12.210392807144672,
+      "actual_exit_code": 0,
+      "actual_finished_utc": "2026-11-12T22:08:30.275790+00:00",
+      "source_descriptor_and_path_guards": true,
+      "archive_uploaded": false
+    }
+  ],
+  "offsite": {
+    "last_complete_archive_roundtrip": "delta021",
+    "delta022_manifest_only_uploaded_and_download_verified": true,
+    "delta022_manifest_sha256": "d69a4ec7a72da2b2df7f193d84cf7236ef668c07e0aa015afb65830ab6119cfe",
+    "delta022_manifest_bytes": 50063,
+    "manifest_actual_download_utc": "2026-11-12T22:16:55.392807+00:00",
+    "delta022_or_023_archive_local_copy_available": false
+  },
+  "blocker": {
+    "local_executor_recovered": true,
+    "drive_upload_working_for_available_local_file": true,
+    "remote_desktop_commander": "MONTHLY_USAGE_EXHAUSTED_TOOL_CALLS_PAUSED",
+    "first_failure_observed_independently_by_workers": 2,
+    "subsequent_rdc_retries": 0,
+    "alternate_remote_execution_attempts": 0,
+    "current_raw_evidence_accessible_locally": false
+  },
+  "activity": {
+    "root_native_or_build_active": false,
+    "backup_process_active": false,
+    "workers_idle": true,
+    "new_remote_cause_analysis_roots_created": false,
+    "latest_fleet_receipt_utc": "2026-11-12T21:43:05.046931+00:00",
+    "last_verified_owned_bots": [
+      8,
+      8,
+      8,
+      8,
+      8,
+      8
+    ],
+    "last_verified_unknown": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "last_verified_spawn_value": 0,
+    "latest_receipt_is_not_a_new_current_probe": true
+  },
+  "limits": [
+    "No native launch from composite restore",
+    "No archive022/023 offsite copy",
+    "No full A1/A3/A4/duration acceptance",
+    "No live Build018 deployment",
+    "No new cause proof from historical019 Controls.cpp",
+    "Server continuation after this quota block has not occurred"
+  ]
+}

@@ -289,3 +289,15 @@ ObserverV2:89 Offline-Prüfgruppen. ControllerV1:76 fokussierte Tests; unabhäng
 Fleet vom22:43:05MEZ:6×8eigene,UNKNOWN0,Spawn0,bisherigeDLLs,Devhistorie37/3. A2fertig;A1/A3/A4/Dauer/A5offen;Bunbegonnen. Delta022 auf Server samt separatem Restore vollständig geprüft; tatsächlicher Drive-Upload durch ausgefallene Primärumgebung blockiert. Delta023 für spätere Belege folgt. Keine externe022/023-Kopie oder Veröffentlichung eines neuen Livebuilds behauptet.
 
 Aktuelle Belege und nächste Schritte: docs/reports/2026-11-12-build018-acceptance-checkpoint.md. Vorige aktive Ownership-/Laufangaben sind für den aktuellen Stand durch diesen geschlossenen Checkpoint ersetzt.
+
+## Geschlossener Handoff nach RDC-Kontingentsperre — 12.11.2026 23:20:47 MEZ
+
+Build018 bleibt unqualifiziert und nicht live. Sechs kurze Alt-DLL-Vergleiche: direkte Abschüsse 109:33 (MITTEL31:12, STARK31:13, DEMON47:8). A2 fertig; A1, vollständige A3-/A4-Abnahme, Dauerprüfungen und A5 offen; B unbegonnen.
+
+Delta023 tatsächlich erfolgreich beendet am 12.11.2026 um 23:08:30 MEZ: 35086463 Archivbytes, SHA256189f8186d0ca9180d851fb75f9e3dfe5b5e06d9994b1edecbde84b40c35724d9, 7982 reguläre Dateien / 115121646 Bytes separat restauriert und nachgehasht, Metadaten geprüft. Zusammen mit Delta022 vollständig auf dem Server; keine externe Archivkopie022/023. Der im Archiv festgelegte lokale Quellstand bleibt82ccda74e704fe8b4ba8e636c8b7ea6d2dd08614; der letzte tatsächlich auf dem Server gefetchte öffentliche Stand ist d0b8fb6ea1d7d4fab4e751bbbf82ed90fd3d007a mit identischem Baum4e1d3381fbb919d41e0dafb0e2b907b514dc6f1d.
+
+Die lokale Umgebung und der Drive-Upload wurden tatsächlich wieder verfügbar. Das originale Delta022-Manifest wurde hochgeladen und am23:16:55MEZ vollständig zurückgeladen: 50063Bytes, SHA256d69a4ec7a72da2b2df7f193d84cf7236ef668c07e0aa015afb65830ab6119cfe. Danach bestätigten beide Worker beim ersten neuen RDC-Lesezugriff die ausgeschöpfte Monatsquote. Alle weiteren RDC-Aufrufe sind pausiert; kein Wiederholen, keine Neuverbindung und kein Umgehungszugriff. Die Archive und aktuellen geschlossenen Raws sind nicht lokal.
+
+Root-Spiel-/Build-/Sicherungsfenster geschlossen; beide Worker idle. Neue Remote-Ursachenordner wurden nicht angelegt. A1 hat nur einen ausdrücklich historischen lokalen019-Quellbefund, A4 keine neue Rohdatenanalyse. Keine neue Ursache oder neue Tests behauptet. Aktuelle private lokale Handoffs werden separat im bestehenden privaten Drive-Ordner gesichert. Es läuft keine automatische Hintergrundfortsetzung.
+
+Nach legitimer Wiederverfügbarkeit: aktuellen Server-/Git-/Lockzustand prüfen, Archive022/023 privat übertragen und tatsächlich zurückprüfen, neue öffentliche Dokumentation bei Erhalt der vorhandenen Historie abgleichen, dann genaue A1-Eingabe-/ACK-Ursache und A4-Versorgungslücke bearbeiten. Vorbereitete veraltete Abschlusshelper nicht unverändert ausführen; verbrauchte Wrapper nicht erneut starten. Genaue Größen, Grenzen und Reihenfolge: docs/reports/2026-11-12-build018-final-access-blocker.md. Diese neuen Dokumentationsänderungen liegen nach Delta023 und können derzeit nicht auf den Server gefetcht werden.
