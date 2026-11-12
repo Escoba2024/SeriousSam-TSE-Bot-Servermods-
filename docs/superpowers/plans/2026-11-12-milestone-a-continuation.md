@@ -254,3 +254,26 @@ Actual build finished18:33:54.876145UTC. Root wrapper1226016 returned0 after26.7
 The fresh18:33:29UTCpreflight verified allfourLabrootsquiescent, bothdisplaysabsent and bothlocksavailable; CPU40.104167%, availableRAM2616410112bytes, freedisk14200320000bytes. This snapshot is not a duration/resource gate.
 
 Current worker ownership: identify_latest_codex authors only the separately disabled018A3retarget from the independently READYinitial-capture correction; review_names_transaction fixes only the separately reproduced sticky optional-input-reader defect in disabledV2. finish_names_transaction is idle for independent retarget review. Root retains all build/native/live execution. No native controller is active. Next steps and all original A1/A3/A4/duration/rollout gates remain unchanged. Exact-tree public source publication for this checkpoint is in progress; Delta022 remains required for private evidence.
+
+
+## Build018-Messlauf und A1-Startfehler — 2026-11-12T19:19:45.552358+00:00
+
+Build018-A3-Kontrolllauf185712 und instrumentierter MITTEL-Lauf191256 sind vollständig geschlossen:120,101417/120,035109s, alle neun Anfangszustände passend, im Messlauf206Schadensereignisse/0Drops/0Faults, volle Originalkörper-Restaurierung und jeweils640Dateien geprüft. Index2 mit vertauschten Starts läuft unter Root-ParentPID1233398; sein Ergebnis bleibt offen.
+
+A1-NoAccel-V2/190240 bleibt FAIL vor Eingaben: Original-Shell Type mismatch, nurserver+vanilla gestartet. Root bestätigte beide normalenCloses,664Dateihashes/Metadaten und9Absenzen. SeparaterV3-Entwurf ändert nur den FLOAT-Vergleichscast undUnitkennung;70Tests bestanden, unabhängigerReview läuft. A4-018 ist unabhängigREADY und vonRoot eingefroren, noch nicht nativ ausgeführt.
+
+Root: Integration/Native/Build/Live. identify_latest_codex: nurA1-Observer/Originalbindungen. finish_names_transaction: nurV3-Review, danachA1-I3/I4. MaximalzweiWorker. A1/A3/A4/Dauer/A5offen; A2fertig; Bnichtbegonnen. ExakterQuellbaum55146a6de3809cd2da88f1c1a38d16206b2f13c6 ist als e53d6c6 tatsächlich gefetcht; neuereBerichte nochzuveröffentlichen. Delta022erforderlich. Details: docs/reports/2026-11-12-build018-native-progress.md.
+
+## Fortschrittscheckpoint — 2026-11-12 21:21–21:27 MEZ
+
+Sechs vollständige Build018-Vergleichsfenster (MITTEL/STARK/DEMON, je zwei vertauschte Startverteilungen) sind streng geschlossen ausgewertet. Direkte Abschüsse neu→alt / alt→neu: 31/12, 31/13, 47/8. Alle 1490 Schadensereignisse bleiben kategorisiert; sämtliche nativen Abschusspaare stimmen mit den tödlichen Fremdschadensbelegen überein. Alle Originalkörper/Dateien/Prozesse wurden nach jedem Fenster geprüft. 71 von 100 neuen Leben und 16 von 186 alten Leben besitzen eine nützliche Zusatzwaffe nach der bestehenden Maske. STARK > MITTEL ist nicht belegt; Gesamt-A3 bleibt offen. Bericht: docs/reports/2026-11-12-build018-six-window-comparison.md.
+
+Die zwei bisherigen STARK-RAM-FAILs bleiben erhalten. Für die vollständigen STARK-/DEMON-Läufe pausieren ausschließlich die beiden bisherigen Dev-Botdienste normal unter einem eigenen Restore-Wächter; +364425216 Byte gemessener MemAvailable-Spielraum, unveränderte Guardgrenzen, keine neue Live-DLL. Spätester automatischer Wiederanlauf ca.21:38:40 MEZ, expliziter Abschluss früher vorgesehen. Dev-Server und öffentliche Instanzen bleiben bestehen. Vollständige Flottenprüfung nach Wiederanlauf erforderlich.
+
+Root hat das separat gefrorene A4-Build018-Fenster mit 480-Sekunden-Grenze gestartet; noch keine Abschlussbehauptung. Danach zuerst Restore und Flottenkontrolle. Root besitzt weiter ausschließlich Integration/Build/Native/Live. identify_latest_codex besitzt den passiven A1-Observer/Original-Lifecyclebindungen, finish_names_transaction Endvalidator/Eingabecontroller in getrennten Arbeitsständen; maximal zwei aktive Worker.
+
+Die lokale ChatGPT-Ausführung ist seit ca.21:19 MEZ erneut nicht erreichbar; RDC bleibt tatsächlich erreichbar. Ein lokal mit elf Fällen getesteter, deaktivierter Prescan-Vergleich ist nicht nativ freigegeben und muss wieder persistent gebunden sowie unabhängig geprüft werden. Kein Sicherheits-/Timing-/Inputlimit wird gelockert. A1-Erstzustand, vollständige A3/A4-Abnahme, 3600/3600/7200 s, Delta022 und qualifizierter Dev-zuerst-Rollout bleiben offen. A2 fertig, B unbegonnen.
+
+## Geschlossener Runtimecheckpoint — 12.11.2026 21:47:01 MEZ
+
+Alle sechs A3-Build018-Fenster und die strenge Auswertung sind abgeschlossen. A4-Build018 bleibt FAIL:23/24 Slotphasen;133 inventarbeobachtete Leben reproduziert, vollständige Client-Lebenskorrelation wegen6/7-Abweichung in Phase1 botA:2 offen. Kein Ursache-/Whitelist-/Rollout-PASS. Alle Root-Nativeprozesse geschlossen,643 Dateihashes und5 Absenzen restauriert. Dev um21:31:53MEZ erfolgreich auf Original8Bots restauriert; frische Flotte21:32:51MEZ6×8,UNKNOWN0,Spawn0,bisherige DLLs. A2 fertig;A1/A3/A4/Dauer/A5 offen;B unbegonnen. Lokaler Dateiupload durch tatsächlichen Fehler no primary turn environment is available blockiert. Neue Hauptberichte und Fehler-/Bestandsquittungen sind im Status verlinkt. Die vorherige aktive Runtime-Ownership ist hiermit geschlossen; Root besitzt weiterhin Integration und gegebenenfalls spätere explizite Nativefenster.

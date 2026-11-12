@@ -1,0 +1,583 @@
+{
+  "utc": "2026-11-12T20:21:27.426557+00:00",
+  "scope": "SIX_COMPLETED_120_SECOND_TIER_SWAP_COMPARISONS_ONLY",
+  "qualified": false,
+  "a3_accepted": false,
+  "original_failed_stark_results_preserved": [
+    "4259e52a10a26a72b4ee79f863db22c4ef63b7f5a366d9e317b4e7ca3296d6eb",
+    "69f23353c3851d3a1b3a1e4d683b3bad39ad20277b5b3a3efbddbbad799bb36b"
+  ],
+  "condition_note": "MITTEL all six live instances; STARK and DEMON two original development clients normally paused, gameplay/test guards unchanged",
+  "rows": [
+    {
+      "window": "arena018public-initialcapture-swap0-trial-1-191256",
+      "tier": 1,
+      "swap": false,
+      "seconds": 120.0351091499906,
+      "cohorts": {
+        "public": {
+          "lives": 32,
+          "observed_deaths": 29,
+          "censored_lives": 3,
+          "useful_owned_lives": 4,
+          "completed_without_useful": 26,
+          "useful_current_lives": 2,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 14
+        },
+        "candidate": {
+          "lives": 15,
+          "observed_deaths": 11,
+          "censored_lives": 4,
+          "useful_owned_lives": 12,
+          "completed_without_useful": 2,
+          "useful_current_lives": 12,
+          "useful_fire_request_lives": 11,
+          "query_frags_delta": 27
+        },
+        "vanilla": {
+          "lives": 1,
+          "observed_deaths": 1,
+          "censored_lives": 0,
+          "useful_owned_lives": 0,
+          "completed_without_useful": 1,
+          "useful_current_lives": 0,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 0
+        }
+      },
+      "cross_cohort_kills": {
+        "candidate->public": 20,
+        "candidate->vanilla": 1,
+        "public->candidate": 5
+      },
+      "damage_records": 206,
+      "damage_matrix": {
+        "public -> public": {
+          "calls": 34,
+          "hp_loss_raw": 1360,
+          "hp_loss_capped_at_pre_hit_health": 1177.6580505371094,
+          "armor_loss_raw": 0,
+          "lethal_calls": 9
+        },
+        "candidate -> public": {
+          "calls": 66,
+          "hp_loss_raw": 5484.3814697265625,
+          "hp_loss_capped_at_pre_hit_health": 1726.9810791015625,
+          "armor_loss_raw": 0,
+          "lethal_calls": 20
+        },
+        "candidate -> candidate": {
+          "calls": 24,
+          "hp_loss_raw": 660,
+          "hp_loss_capped_at_pre_hit_health": 525,
+          "armor_loss_raw": 0,
+          "lethal_calls": 6
+        },
+        "public -> candidate": {
+          "calls": 23,
+          "hp_loss_raw": 795,
+          "hp_loss_capped_at_pre_hit_health": 719.542724609375,
+          "armor_loss_raw": 125,
+          "lethal_calls": 5
+        },
+        "candidate -> vanilla": {
+          "calls": 1,
+          "hp_loss_raw": 180,
+          "hp_loss_capped_at_pre_hit_health": 100,
+          "armor_loss_raw": 0,
+          "lethal_calls": 1
+        }
+      },
+      "full_coverage": true,
+      "original_bodies_restored": true,
+      "all_nine_initial_reference_match": true,
+      "strict_result_sha256": "4634b8ddd5292a6fc7a21e80e80d7f5d57804a24ccb2fb1eb9cae0c5a7a75e84",
+      "behavior_result_sha256": "bb765c19083ae6405495fca466c7a20269a2c5e2391cb7a56dbd3dbf9730fffb"
+    },
+    {
+      "window": "arena018public-initialcapture-swap1-trial-1-191735",
+      "tier": 1,
+      "swap": true,
+      "seconds": 120.0522161340341,
+      "cohorts": {
+        "public": {
+          "lives": 27,
+          "observed_deaths": 23,
+          "censored_lives": 4,
+          "useful_owned_lives": 1,
+          "completed_without_useful": 22,
+          "useful_current_lives": 0,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 19
+        },
+        "candidate": {
+          "lives": 21,
+          "observed_deaths": 17,
+          "censored_lives": 4,
+          "useful_owned_lives": 13,
+          "completed_without_useful": 6,
+          "useful_current_lives": 13,
+          "useful_fire_request_lives": 12,
+          "query_frags_delta": 22
+        },
+        "vanilla": {
+          "lives": 1,
+          "observed_deaths": 1,
+          "censored_lives": 0,
+          "useful_owned_lives": 0,
+          "completed_without_useful": 1,
+          "useful_current_lives": 0,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 0
+        }
+      },
+      "cross_cohort_kills": {
+        "public->candidate": 7,
+        "candidate->public": 11,
+        "candidate->vanilla": 1
+      },
+      "damage_records": 183,
+      "damage_matrix": {
+        "public -> candidate": {
+          "calls": 29,
+          "hp_loss_raw": 1135,
+          "hp_loss_capped_at_pre_hit_health": 989.1377029418945,
+          "armor_loss_raw": 25,
+          "lethal_calls": 7
+        },
+        "candidate -> public": {
+          "calls": 41,
+          "hp_loss_raw": 1420,
+          "hp_loss_capped_at_pre_hit_health": 1120,
+          "armor_loss_raw": 0,
+          "lethal_calls": 11
+        },
+        "candidate -> candidate": {
+          "calls": 35,
+          "hp_loss_raw": 1273.245849609375,
+          "hp_loss_capped_at_pre_hit_health": 847.1926574707031,
+          "armor_loss_raw": 50,
+          "lethal_calls": 10
+        },
+        "public -> vanilla": {
+          "calls": 2,
+          "hp_loss_raw": 80,
+          "hp_loss_capped_at_pre_hit_health": 80,
+          "armor_loss_raw": 0,
+          "lethal_calls": 0
+        },
+        "public -> public": {
+          "calls": 37,
+          "hp_loss_raw": 1480,
+          "hp_loss_capped_at_pre_hit_health": 1222,
+          "armor_loss_raw": 0,
+          "lethal_calls": 12
+        },
+        "candidate -> vanilla": {
+          "calls": 1,
+          "hp_loss_raw": 180,
+          "hp_loss_capped_at_pre_hit_health": 20,
+          "armor_loss_raw": 0,
+          "lethal_calls": 1
+        }
+      },
+      "full_coverage": true,
+      "original_bodies_restored": true,
+      "all_nine_initial_reference_match": true,
+      "strict_result_sha256": "43530badf04850a61ef3e6fec3d1edfabb192094c4da0a5c0b92884138769d60",
+      "behavior_result_sha256": "577c6ec28ea5656d92aa635e949fa64234e39521cd8badc5aa8cac63521a79a9"
+    },
+    {
+      "window": "arena018public-initialcapture-swap0-trial-2-200445",
+      "tier": 2,
+      "swap": false,
+      "seconds": 120.12931023398414,
+      "cohorts": {
+        "public": {
+          "lives": 28,
+          "observed_deaths": 25,
+          "censored_lives": 3,
+          "useful_owned_lives": 3,
+          "completed_without_useful": 23,
+          "useful_current_lives": 3,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 13
+        },
+        "candidate": {
+          "lives": 17,
+          "observed_deaths": 13,
+          "censored_lives": 4,
+          "useful_owned_lives": 14,
+          "completed_without_useful": 3,
+          "useful_current_lives": 12,
+          "useful_fire_request_lives": 11,
+          "query_frags_delta": 23
+        },
+        "vanilla": {
+          "lives": 1,
+          "observed_deaths": 1,
+          "censored_lives": 0,
+          "useful_owned_lives": 0,
+          "completed_without_useful": 1,
+          "useful_current_lives": 0,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 0
+        }
+      },
+      "cross_cohort_kills": {
+        "candidate->public": 19,
+        "candidate->vanilla": 1,
+        "public->candidate": 7
+      },
+      "damage_records": 256,
+      "damage_matrix": {
+        "public -> public": {
+          "calls": 27,
+          "hp_loss_raw": 1080,
+          "hp_loss_capped_at_pre_hit_health": 982,
+          "armor_loss_raw": 0,
+          "lethal_calls": 6
+        },
+        "candidate -> candidate": {
+          "calls": 41,
+          "hp_loss_raw": 757.1086912155151,
+          "hp_loss_capped_at_pre_hit_health": 602,
+          "armor_loss_raw": 25,
+          "lethal_calls": 5
+        },
+        "public -> candidate": {
+          "calls": 21,
+          "hp_loss_raw": 840,
+          "hp_loss_capped_at_pre_hit_health": 738,
+          "armor_loss_raw": 0,
+          "lethal_calls": 7
+        },
+        "candidate -> vanilla": {
+          "calls": 5,
+          "hp_loss_raw": 1507.4395751953125,
+          "hp_loss_capped_at_pre_hit_health": 100,
+          "armor_loss_raw": 0,
+          "lethal_calls": 1
+        },
+        "candidate -> public": {
+          "calls": 69,
+          "hp_loss_raw": 3329.120705604553,
+          "hp_loss_capped_at_pre_hit_health": 1572.7232398986816,
+          "armor_loss_raw": 0,
+          "lethal_calls": 19
+        }
+      },
+      "full_coverage": true,
+      "original_bodies_restored": true,
+      "all_nine_initial_reference_match": true,
+      "strict_result_sha256": "04e66c038748379afc66a24295add65fdc82c9008cf12aa562c9639c9730913f",
+      "behavior_result_sha256": "007887f6d1a48ada71da647c15ae946db3388e9456008929293e11ee19108602"
+    },
+    {
+      "window": "arena018public-initialcapture-swap1-trial-2-200928",
+      "tier": 2,
+      "swap": true,
+      "seconds": 120.08161014411598,
+      "cohorts": {
+        "public": {
+          "lives": 29,
+          "observed_deaths": 26,
+          "censored_lives": 3,
+          "useful_owned_lives": 3,
+          "completed_without_useful": 24,
+          "useful_current_lives": 2,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 17
+        },
+        "candidate": {
+          "lives": 14,
+          "observed_deaths": 10,
+          "censored_lives": 4,
+          "useful_owned_lives": 11,
+          "completed_without_useful": 2,
+          "useful_current_lives": 11,
+          "useful_fire_request_lives": 9,
+          "query_frags_delta": 17
+        },
+        "vanilla": {
+          "lives": 1,
+          "observed_deaths": 1,
+          "censored_lives": 0,
+          "useful_owned_lives": 0,
+          "completed_without_useful": 1,
+          "useful_current_lives": 0,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 0
+        }
+      },
+      "cross_cohort_kills": {
+        "candidate->public": 12,
+        "public->candidate": 6,
+        "candidate->vanilla": 1
+      },
+      "damage_records": 188,
+      "damage_matrix": {
+        "candidate -> candidate": {
+          "calls": 28,
+          "hp_loss_raw": 580,
+          "hp_loss_capped_at_pre_hit_health": 570,
+          "armor_loss_raw": 0,
+          "lethal_calls": 4
+        },
+        "public -> public": {
+          "calls": 45,
+          "hp_loss_raw": 1800,
+          "hp_loss_capped_at_pre_hit_health": 1519,
+          "armor_loss_raw": 0,
+          "lethal_calls": 13
+        },
+        "public -> vanilla": {
+          "calls": 1,
+          "hp_loss_raw": 40,
+          "hp_loss_capped_at_pre_hit_health": 40,
+          "armor_loss_raw": 0,
+          "lethal_calls": 0
+        },
+        "public -> candidate": {
+          "calls": 22,
+          "hp_loss_raw": 751.6666564941406,
+          "hp_loss_capped_at_pre_hit_health": 676.6666564941406,
+          "armor_loss_raw": 128.33333587646484,
+          "lethal_calls": 6
+        },
+        "candidate -> public": {
+          "calls": 45,
+          "hp_loss_raw": 1524.8023376464844,
+          "hp_loss_capped_at_pre_hit_health": 1105,
+          "armor_loss_raw": 0,
+          "lethal_calls": 12
+        },
+        "candidate -> vanilla": {
+          "calls": 1,
+          "hp_loss_raw": 200,
+          "hp_loss_capped_at_pre_hit_health": 60,
+          "armor_loss_raw": 0,
+          "lethal_calls": 1
+        }
+      },
+      "full_coverage": true,
+      "original_bodies_restored": true,
+      "all_nine_initial_reference_match": true,
+      "strict_result_sha256": "ed635f130ab61b7d022d46b2b0fd7bca7fe2b840fa468dd5c81d0dd806e6824c",
+      "behavior_result_sha256": "86dd8fbad23c71ead89fd23b8e2db3add160a19f31c829ea5bf8414985171690"
+    },
+    {
+      "window": "arena018public-initialcapture-swap0-trial-3-201343",
+      "tier": 3,
+      "swap": false,
+      "seconds": 120.06651403708383,
+      "cohorts": {
+        "public": {
+          "lives": 35,
+          "observed_deaths": 32,
+          "censored_lives": 3,
+          "useful_owned_lives": 3,
+          "completed_without_useful": 30,
+          "useful_current_lives": 3,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 9
+        },
+        "candidate": {
+          "lives": 14,
+          "observed_deaths": 11,
+          "censored_lives": 3,
+          "useful_owned_lives": 10,
+          "completed_without_useful": 3,
+          "useful_current_lives": 10,
+          "useful_fire_request_lives": 10,
+          "query_frags_delta": 32
+        },
+        "vanilla": {
+          "lives": 1,
+          "observed_deaths": 1,
+          "censored_lives": 0,
+          "useful_owned_lives": 0,
+          "completed_without_useful": 1,
+          "useful_current_lives": 0,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 0
+        }
+      },
+      "cross_cohort_kills": {
+        "candidate->vanilla": 1,
+        "candidate->public": 27,
+        "public->candidate": 4
+      },
+      "damage_records": 399,
+      "damage_matrix": {
+        "public -> public": {
+          "calls": 26,
+          "hp_loss_raw": 1040,
+          "hp_loss_capped_at_pre_hit_health": 933,
+          "armor_loss_raw": 0,
+          "lethal_calls": 5
+        },
+        "public -> candidate": {
+          "calls": 20,
+          "hp_loss_raw": 800,
+          "hp_loss_capped_at_pre_hit_health": 708.8067474365234,
+          "armor_loss_raw": 0,
+          "lethal_calls": 4
+        },
+        "candidate -> public": {
+          "calls": 72,
+          "hp_loss_raw": 8114.38623046875,
+          "hp_loss_capped_at_pre_hit_health": 2352,
+          "armor_loss_raw": 25,
+          "lethal_calls": 27
+        },
+        "candidate -> candidate": {
+          "calls": 22,
+          "hp_loss_raw": 1138.0292663574219,
+          "hp_loss_capped_at_pre_hit_health": 612,
+          "armor_loss_raw": 44.407493591308594,
+          "lethal_calls": 6
+        },
+        "candidate -> vanilla": {
+          "calls": 1,
+          "hp_loss_raw": 307.0364074707031,
+          "hp_loss_capped_at_pre_hit_health": 100,
+          "armor_loss_raw": 0,
+          "lethal_calls": 1
+        }
+      },
+      "full_coverage": true,
+      "original_bodies_restored": true,
+      "all_nine_initial_reference_match": true,
+      "strict_result_sha256": "d86804500b2a6485cf801b3fb1e551b930920117a2a398d4be16200ab47af1b4",
+      "behavior_result_sha256": "bf73b94d9e82e7bedd57a9c617db2204edf33060ac005f83f2b6730bc7dce1e2"
+    },
+    {
+      "window": "arena018public-initialcapture-swap1-trial-3-201717",
+      "tier": 3,
+      "swap": true,
+      "seconds": 120.04862990602851,
+      "cohorts": {
+        "public": {
+          "lives": 35,
+          "observed_deaths": 32,
+          "censored_lives": 3,
+          "useful_owned_lives": 2,
+          "completed_without_useful": 30,
+          "useful_current_lives": 1,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 15
+        },
+        "candidate": {
+          "lives": 19,
+          "observed_deaths": 15,
+          "censored_lives": 4,
+          "useful_owned_lives": 11,
+          "completed_without_useful": 6,
+          "useful_current_lives": 10,
+          "useful_fire_request_lives": 9,
+          "query_frags_delta": 27
+        },
+        "vanilla": {
+          "lives": 1,
+          "observed_deaths": 1,
+          "censored_lives": 0,
+          "useful_owned_lives": 0,
+          "completed_without_useful": 1,
+          "useful_current_lives": 0,
+          "useful_fire_request_lives": 0,
+          "query_frags_delta": 0
+        }
+      },
+      "cross_cohort_kills": {
+        "public->candidate": 4,
+        "public->vanilla": 1,
+        "candidate->public": 20
+      },
+      "damage_records": 258,
+      "damage_matrix": {
+        "candidate -> candidate": {
+          "calls": 32,
+          "hp_loss_raw": 935,
+          "hp_loss_capped_at_pre_hit_health": 773.0774536132812,
+          "armor_loss_raw": 25,
+          "lethal_calls": 9
+        },
+        "public -> public": {
+          "calls": 41,
+          "hp_loss_raw": 1640,
+          "hp_loss_capped_at_pre_hit_health": 1440,
+          "armor_loss_raw": 0,
+          "lethal_calls": 11
+        },
+        "candidate -> public": {
+          "calls": 79,
+          "hp_loss_raw": 2419.634998321533,
+          "hp_loss_capped_at_pre_hit_health": 1686,
+          "armor_loss_raw": 0,
+          "lethal_calls": 20
+        },
+        "public -> vanilla": {
+          "calls": 3,
+          "hp_loss_raw": 120,
+          "hp_loss_capped_at_pre_hit_health": 100,
+          "armor_loss_raw": 0,
+          "lethal_calls": 1
+        },
+        "public -> candidate": {
+          "calls": 21,
+          "hp_loss_raw": 765,
+          "hp_loss_capped_at_pre_hit_health": 725,
+          "armor_loss_raw": 75,
+          "lethal_calls": 4
+        }
+      },
+      "full_coverage": true,
+      "original_bodies_restored": true,
+      "all_nine_initial_reference_match": true,
+      "strict_result_sha256": "6a50c759a963137ac7c81026f59b588c5ca24e5a9a2abfd38f9b12d6a71eb6f0",
+      "behavior_result_sha256": "49f0e4a620fee1f53382e3a4e3df61a202bf2e1f8c9cad27f357888369067218"
+    }
+  ],
+  "candidate_dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+  "source_commit": "1802fb3f0720b53feb032abfe2c2a83407bfea6e",
+  "published_exact_source_commit": "e53d6c601a80f627047c7a3aa6b3b36b81983b8a",
+  "totals": {
+    "candidate": {
+      "lives": 100,
+      "useful_owned_lives": 71,
+      "observed_deaths": 77,
+      "censored_lives": 23,
+      "completed_without_useful": 22,
+      "query_frags_delta": 148
+    },
+    "public": {
+      "lives": 186,
+      "useful_owned_lives": 16,
+      "observed_deaths": 167,
+      "censored_lives": 19,
+      "completed_without_useful": 155,
+      "query_frags_delta": 87
+    }
+  },
+  "direct_kills_by_tier": {
+    "MITTEL": {
+      "candidate_to_public": 31,
+      "public_to_candidate": 12
+    },
+    "STARK": {
+      "candidate_to_public": 31,
+      "public_to_candidate": 13
+    },
+    "DEMON": {
+      "candidate_to_public": 47,
+      "public_to_candidate": 8
+    }
+  },
+  "tier2_stronger_than_tier1_proven": false,
+  "overall_rollout_qualified": false,
+  "A_complete": false,
+  "B_started": false,
+  "private_delta022_required": true
+}

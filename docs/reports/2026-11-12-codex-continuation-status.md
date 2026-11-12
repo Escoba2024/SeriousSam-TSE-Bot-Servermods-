@@ -1,28 +1,26 @@
 # Codex-Fortsetzung: Umsetzung, Betrieb und offene Abnahme
 
-Stand: 12.11.2026 18:39:09 MEZ.
+Stand: 12.11.2026 21:47:01 MEZ.
 
 ## Aktueller Fortschritt
 
-**A2 ist abgeschlossen. A bleibt insgesamt offen; B ist unbegonnen.**
+**Die neue KI ist in sechs begrenzten Alt-DLL-Vergleichen überlegen. Der gesamte Rollout ist weiterhin nicht abgenommen. A2 ist abgeschlossen; B ist unbegonnen.**
 
 | Teil | Tatsächlich erreicht | Noch offen |
 | --- | --- | --- |
-| A1 | Spawnparameter und Vorlagen effektiv null; Colt-Vorbereitung tatsächlich versucht und exakt restauriert | Pitchkalibrierung fehlgeschlagen; Kontrolltreffer und wiederholter erster gültiger Respawnzustand mit Fremdschaden, Bot/Vanilla, Mapwechsel und Neustart |
-| A2 | 458 Namen, 208 erhalten plus 250 neu; sechs Instanzen und 48 eindeutige eigene Botidentitäten geprüft | abgeschlossen |
-| A3 | aktueller uninstrumentierter Kontrolllauf120,110s bestanden; instrumentierter Erstlauf verworfen und restauriert | Erfassung der neutralen Anfangsphase korrigieren, dann Kreuzvergleiche aller drei Tiers und aller Leben |
-| A4 | 24/24 Slotphasen nach zwei Red-Reloads;178Leben vollständig ausgewertet, sieben echte Nordkanten-Erfolge | nur57Leben mit nützlichem Besitz; ein Leben mindestens63,454s ohne; Kampf-/Flugarbitration, übrige Navigation/Gefahren und Rotation offen |
-| A5 | Build017 gebaut; GitHub-Checkpoint sowie Delta020 undDelta021 aufDrive vollständig zurückgeprüft | neuere Änderungen separat sichern; 1/4/8-Bot-Gates3600/3600/7200s und qualifizierter Dev-zuerst-Rollout |
+| A1 | Effektiver Spawnwert0; Original-Shell-Start korrigiert und nativ bestätigt; V3 stoppt vor Fire bei wechselndem Yaw-Gain | normaler Kontrolltreffer, wiederholter erster gültiger Respawnzustand mit Fremdschaden für Bot/Vanilla inklusive Mapwechsel/Neustart |
+| A2 | 458 Namen, 208 erhalten plus250 neu;48 eindeutige eigene Bots und GUID-Erhaltung | abgeschlossen |
+| A3 | sechs vollständige120-s-Vergleiche, alle drei Tiers mit vertauschten Starts; direkte Abschüsse31:12,31:13,47:8; vollständige Damageauswertung/Restore | STARK zuverlässig stärker als MITTEL, vollständige Gameplay-/Dauerabnahme |
+| A4 | Build018: zwei Red-Wechsel und drei Phasen beobachtet;23/24 Slotphasen;133 Inventarleben reproduziert | Versorgungslücke Phase1 botB:1; zusätzliche Client-Spawnmarkierung in anderem Slot verhindert vollständige Lebenskorrelation; Karten-/Navigations-/Gefahrenabnahme |
+| A5 | Build018-Quelle exakt veröffentlicht; Delta020/021 tatsächlich über Drive zurückgeprüft; Live-Flotte wieder6×8 | Delta022, lokale Dateitransportverfügbarkeit,3600/3600/7200-s-Gates und qualifizierter Dev-zuerst-Rollout |
 
-**Neuester abgeschlossener A4-Test:** `165124` ist `PASS_LIMITED_BOT_RESET_FRESH_OBSERVER_REVIEW_REQUIRED`. Alle 178 Botleben bleiben im Nenner. Die längere Beobachtung beweist keine Gameplayverbesserung; die früheren FAILs bleiben erhalten. [Ergebnis und Grenzen](2026-11-12-a4-build017-extended-reset.md).
+**Betrieb:** Nach normaler begrenzter Dev-Clientpause zur RAM-Entlastung ist der ursprüngliche Stand vollständig restauriert. Frische Prüfung12.11.2026 21:32:51MEZ: sechs Instanzen mit je acht eigenen Bots, UNKNOWN0, effektiver Spawn0 und bisherige geladene DLLs. Öffentliche aktuelle Logzähler0/0, Devhistorie37BAD/3Disconnects. Keine Build018-DLL wurde auf Dev oder Public installiert. Kein Root-Native-/Buildprozess bleibt aus diesen Fenstern aktiv.
 
-**Aktueller nativer Stand:** Der uninstrumentierte Build017-Kontrolllauf 170346 ist nach 120,109788 s begrenzt bestanden; erste neutrale Anfangszustände und alle vier normalen Closes sind bestätigt, 640 Dateien unabhängig wiederhergestellt. Die Colt-Vorbereitung 171044 endete mit FAIL vor jedem Fire: +12 Pixel ergaben −3°, −12 Pixel ergaben +6°. Der unveränderte Gegenprobenwächter brach ab. Alle drei Rollen wurden normal geschlossen; 664 Dateien und neun Abwesenheiten sind unabhängig wiederhergestellt. Der erste instrumentierte Build017-Kreuzvergleich (Index1, Tier1, Swap0; 171827) wurde wegen ungültiger Zwischenzustände vor der neutralen Anfangserfassung für Slots4–8 verworfen. Beide Original-Hookkörper wurden wiederhergestellt, alle vier Rollen normal geschlossen und640Dateien unabhängig restauriert. Indizes2–6 sind bis zur Ursachenanalyse unbegonnen; kein Kampfleistungsurteil aus diesem Fenster. [Abbruchbeleg](milestone-a-20261112/a3-build017-window1-initial-failure.json). [Colt-Beleg](milestone-a-20261112/a1-colt-preparation-failed.json). [Kontrollbeleg](milestone-a-20261112/a3-build017-control.json).
+**Belegte Vergleiche:** [A3 mit sechs vollständigen Fenstern](2026-11-12-build018-six-window-comparison.md). [A4-FAIL, vollständige Wiederherstellung und Flotte](2026-11-12-a4-build018-native-failure.md). Ein Inventar-Sample mit Fire-Anforderung wird nicht als Projektil/Treffer ausgegeben; die beiden vorangegangenen STARK-RAM-FAILs bleiben erhalten.
 
-**Flottenstand:** letzte eigene vollständige Prüfung am 12.11.2026, 16:56:33 MEZ: sechs Instanzen mit jeweils acht eigenen Bots, zusätzlich ein UNKNOWN auf Hole ohne Identitätsannahme. Der bisherige Public-/Dev-DLL-Stand ist unverändert; kein Build017-Rollout. Dieses Bestandsbild ist keine neue Aktivitäts- oder Langzeitabnahme.
+**Quellen und Sicherung:** Build018 stammt aus1802fb3f0720b53feb032abfe2c2a83407bfea6e. DLL6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a. Letzter tatsächlich gefetchter exakter Quellbaum: GitHube53d6c601a80f627047c7a3aa6b3b36b81983b8a. Spätere Berichte werden separat veröffentlicht. Delta021 ist der letzte vollständig hochgeladene/zurückgeprüfte private Stand; spätere Quellen und Belege benötigen Delta022.
 
-**Persistenz:** zuletzt tatsächlich gefetchter GitHub-Checkpoint 655106778be04d8413a44419907e837358917fe9 mit exakt dem lokalen Baum von 64096516d959e72e3678880be9b086ac068d9bbe. Neuere Dokumentation benötigt noch Veröffentlichung. Delta021 ist seit17:34:22UTC vollständig hochgeladen und tatsächlich zurückgeprüft:45.026.802Bytes, SHA25623d0b0d94c229bb48f75c15cc36a38fcb3f5442d02ba8dffd40d09c518856f06; separate Wiederherstellung von10.818Dateien/266.778.344Bytes einschließlich Metadaten. Quelle0e807f7; die damals aktiven Analyseordner und spätere Änderungen liegen ausdrücklich außerhalb dieses Checkpoints. [Sicherungsbeleg](milestone-a-20261112/delta021-verified.json). Die lokale ChatGPT-Ausführung ist seit tatsächlich erfolgreicher Prüfung wieder verfügbar. Neue Übertragung/Upload/Rückdownload werden erst nach erfolgreicher Ausführung bestätigt.
-
-Die [A4-Lebensauswertung](2026-11-12-a4-build017-all-lives.md) und der [Original-First-State-Vertrag](2026-11-12-a1-original-first-state-contract.md) sind abgeschlossen. Zwei Worker bearbeiten getrennt die A3-Anfangserfassung und die Colt-Pitchfolge. Root prüft zusätzlich die konkrete Kampfunterbrechung einer laufenden Flugroute zunächst offline am tatsächlichen Native-Bridge-Code. Noch keine Gameplaykorrektur oder neue Nativefreigabe daraus.
+**Arbeitsumgebung:** Local exec ist seit etwa21:19MEZ ausgefallen. Ein echter Drive-Upload lokaler Testbelege scheitert an no primary turn environment is available. RDC und das Projekt bleiben erreichbar. Zwei getrennte Worker sichern die passiven A1-Originalbindungen und den deaktivierten Endvalidator/Controller; Root besitzt Integration, Native, Build und Live. Keine Freigabe aus einem lokalen Test oder begonnenen Prozess.
 
 ---
 

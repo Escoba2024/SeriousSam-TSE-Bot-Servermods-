@@ -1,0 +1,165 @@
+{
+  "utc": "2026-11-12T19:19:45.552358+00:00",
+  "scope": "Build018 completed control and first instrumented observation; A1 startup failure; not overall acceptance",
+  "candidate_dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+  "build_source_commit": "1802fb3f0720b53feb032abfe2c2a83407bfea6e",
+  "public_exact_source_commit": "e53d6c601a80f627047c7a3aa6b3b36b81983b8a",
+  "windows": [
+    {
+      "schedule_index": 0,
+      "window": "arena018public-initialcapture-swap0-trial-1-185712",
+      "result_sha256": "0c6d3b4322d06351a043595d4d5b24c876dcc40c4a8c49501ab9ba644487c437",
+      "root_postflight_sha256": "3a737bccad127607196085f84e4fd47a1031f41c64108e9a3377b28073cd26f7",
+      "status": "PASS_LIMITED_A3_DAMAGE_OBSERVATION_REVIEW_REQUIRED",
+      "observed_seconds": 120.10141703183763,
+      "initial_capture": {
+        "started_elapsed": 0.006444606930017471,
+        "deadline_elapsed": 0.20644460688345134,
+        "wall_cap_seconds": 0.2,
+        "round_cap": 32,
+        "read_cap": 96,
+        "rounds": 11,
+        "completed_elapsed": 0.12952741282060742,
+        "neutral_slots": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "pending_slots": [],
+        "attempts_count": 33
+      },
+      "initial_reference_matched": true,
+      "instrumentation_requested": false,
+      "damage": null,
+      "restored_files": 640,
+      "normal_roles_closed": [
+        "botA",
+        "botB",
+        "server",
+        "vanilla"
+      ],
+      "qualified": false
+    },
+    {
+      "schedule_index": 1,
+      "window": "arena018public-initialcapture-swap0-trial-1-191256",
+      "result_sha256": "847b021aa051c8cd82d0427717d6a504217b802d48f7161f51b538da72f1912d",
+      "root_postflight_sha256": "f3b0e36ef44a1c827841ba4a881fe3bb9616621d71c2c696151fd8c8c4a5d0d9",
+      "status": "PASS_LIMITED_A3_DAMAGE_OBSERVATION_REVIEW_REQUIRED",
+      "observed_seconds": 120.0351091499906,
+      "initial_capture": {
+        "started_elapsed": 0.014304777840152383,
+        "deadline_elapsed": 0.21430477779358625,
+        "wall_cap_seconds": 0.2,
+        "round_cap": 32,
+        "read_cap": 96,
+        "rounds": 13,
+        "completed_elapsed": 0.1595603700261563,
+        "neutral_slots": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "pending_slots": [],
+        "attempts_count": 39
+      },
+      "initial_reference_matched": true,
+      "instrumentation_requested": true,
+      "damage": {
+        "records_received": 206,
+        "matched_calls": 206,
+        "dropped": 0,
+        "faults": 0,
+        "game_state_writes": 0,
+        "original_getter_restored": true,
+        "original_damage_restored": true,
+        "detached": true,
+        "trace_status": "OBSERVED_MATCHED_EVENTS"
+      },
+      "restored_files": 640,
+      "normal_roles_closed": [
+        "botA",
+        "botB",
+        "server",
+        "vanilla"
+      ],
+      "qualified": false
+    }
+  ],
+  "a1_failed_prelaunch": {
+    "result_sha256": "1be604f72db761f987d0c1f81392704e0755f929d988344e6fc4c395d02f9f81",
+    "status": "FAIL",
+    "normal_roles_closed": [
+      "server",
+      "vanilla"
+    ],
+    "botA_never_started": true,
+    "input_receipts": 0,
+    "restored_regular_files_independently_hashed": 664,
+    "restored_absent_paths_independently_checked": 9,
+    "failure_location": "PersistentSymbols.ini line 447, Original shell Type mismatch before profile applied",
+    "startup_markers": [
+      "SSAM_A1_NOACCEL_BEGIN",
+      "SSAM_A1_NOACCEL_BASELINE_REJECTED"
+    ],
+    "errors": [
+      "ValueError('mouse input profile: startup baseline/applied receipt missing, rejected, reordered or duplicate')",
+      "post-close:RuntimeError('roles_mismatch:cleanup')"
+    ]
+  },
+  "a1_v3_draft": {
+    "utc": "2026-11-12T19:16:16.193194+00:00",
+    "path": "/srv/tse-milestone-a-continuation-evidence-20261112/a1-colt-noaccel-v3-draft",
+    "manifest_sha256": "d9715888a896cf59510f6932cdf44773cec69290f41fa7bedcfbdfb5ad2fa8d7",
+    "controller_sha256": "f15e4b92988d117bcba5de0a70c70aede3b34fb4b338e87bed6d8fc62e15db8e",
+    "profile_sha256": "cffca92a717fc5bacba62929cf740603c8192718241ca54b9e92ce814fa39062",
+    "delta_sha256": "e2b314ef4d7c5382c0f506ad0de044a608b5db677327bf5499afa5c433230b67",
+    "test_receipt_sha256": "4bd1be7f68c8773e19d23e0c130c6b06777ee0b0384990d40fab7699ea0b8bb5",
+    "test_count": 70,
+    "runtime_sources": 49,
+    "own_sources": 71,
+    "runtime_reviewed": false,
+    "native_executed": false,
+    "runtime_pins_currently_rechecked": false,
+    "runtime_pin_reason": "Concurrent Root A3 window; current Lab reads prohibited during draft preparation",
+    "prior_parent_unchanged": true
+  },
+  "a4_root_freeze": {
+    "utc": "2026-11-12T19:17:23.498142+00:00",
+    "source": "/srv/tse-milestone-a-continuation-evidence-20261112/a4-build018-extended-draft",
+    "frozen": "/srv/tse-milestone-a-continuation-evidence-20261112/a4-build018-extended-root-frozen",
+    "manifest_sha256": "9064439561caac5deed96b1be4e546d8fa0c69ac6fbdf24a5c836b3538d0817c",
+    "controller_sha256": "adde4ec61110efb6644d628b57af6a41fe05b26be190f0eb441e234ef36f6f27",
+    "wrapper_sha256": "d016763d063fce56b752a6a0547588b5a7d99691ec30ba3026e038646e2bdccd",
+    "review_result_sha256": "7084623358e138d52d1e4f23a5babe7c246d4c03d66f8df7090d7c788a5b894f",
+    "sources_verified": 41,
+    "runtime_pins_verified": 65,
+    "verification_pins_verified": 6,
+    "build_source_pins_verified": 75,
+    "maximum_runs": 1,
+    "automatic_retry": false,
+    "native_started": false,
+    "qualified": false
+  },
+  "current_native_owner": {
+    "scope": "A3 schedule index2, tier1 swapped starts",
+    "rdc_parent_pid": 1233398,
+    "result_not_yet_claimed": true
+  },
+  "qualified": false,
+  "A_complete": false,
+  "B_started": false,
+  "private_delta022_required": true
+}

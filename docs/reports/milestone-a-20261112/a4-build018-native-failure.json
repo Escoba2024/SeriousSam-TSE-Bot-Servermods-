@@ -1,0 +1,287 @@
+{
+  "utc": "2026-11-12T20:42:13.992002+00:00",
+  "window": "a4-reset018-extended-20261112-202210",
+  "native_status": "FAIL",
+  "result_sha256": "40ec26b7c4987a05931f4ca09f90df25f19157b61a64874f04951e0feb584f45",
+  "observed_seconds": 424.96977140405215,
+  "reset_sequence_observed": true,
+  "original_auto_rejoin_proven": false,
+  "slotphases": 24,
+  "slotphases_with_all_activity": 23,
+  "missing_activity": {
+    "1": [
+      "botB:1:observed_useful_pickup_lives",
+      "botB:1:native_ranged_fire_samples"
+    ]
+  },
+  "inventory_observed_lives": 133,
+  "inventory_hp_deaths": 110,
+  "inventory_right_censored": 23,
+  "useful_possession_lives": 54,
+  "observed_useful_pickup_lives": 50,
+  "native_useful_fire_samples": 1601,
+  "inventory_original_field_checks": 178,
+  "source_rehashes": 57,
+  "all_client_lifecycle_correlation_complete": false,
+  "correlation_failure_sha256": "c05bd95b94888b49fdbac9832c63aa0111c7fa35d30d95e9128c853c2cc6c3d0",
+  "functional_pass": false,
+  "qualified": false,
+  "causal_gameplay_improvement_proven": false,
+  "state_writes": false,
+  "host": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 399,
+    "cpu_busy_max_measured_percent": 56.470588235294116,
+    "mem_available_min_bytes": 1916665856,
+    "disk_free_min_bytes": 13250899968,
+    "max_sample_gap_seconds": 47.670988811179996,
+    "budget_pass_claim": false,
+    "gameplay_max_sample_gap_seconds": 2.3575242678634822
+  },
+  "correlation_mismatches": [
+    {
+      "phase": 1,
+      "role": "botA",
+      "local": 2,
+      "inventory_lives": 6,
+      "client_spawn_markers": 7
+    }
+  ],
+  "failed_slot": {
+    "phase": 1,
+    "role": "botB",
+    "local": 1,
+    "inventory_lives": 8,
+    "hp_deaths": 7,
+    "last_alive_ages": [
+      46.399574279785156,
+      14.799774169921875,
+      18.8011474609375,
+      3.3502044677734375,
+      5.8503570556640625,
+      0.700042724609375,
+      11.350692749023438,
+      6.0003662109375
+    ],
+    "native_useful_fire_samples": 0,
+    "goal_end_reasons": {
+      "unavailable": 8,
+      "death": 5
+    },
+    "marker_counts": {
+      "BotRotationBaseline": 1,
+      "CecilSpawn": 8,
+      "CecilSupplyDiagCandidate": 28,
+      "CecilSupplyDiagSelection": 20,
+      "CecilSupplyDiagConnector": 13,
+      "CecilGoal": 14,
+      "CecilWeaponObserve": 109,
+      "BotSupplyWeapon": 54,
+      "CecilState": 120,
+      "BotHuman": 10,
+      "BotCombat": 44,
+      "BotAimTrace": 10,
+      "BotAimTransport": 10,
+      "CecilSupplyDiagUnavailable": 7,
+      "CecilGoalEnd": 13,
+      "CecilFlightFinish": 4,
+      "CecilMotionProbe": 7,
+      "CecilSupplyDiagWindow": 43,
+      "CecilSupplyDiagApproach": 90,
+      "CecilDeath": 7,
+      "CecilPickup": 1
+    }
+  },
+  "restoration": {
+    "all_four_lab_roots_quiescent": true,
+    "both_displays_absent": true,
+    "normal_roles_closed": [
+      "botA",
+      "botB",
+      "server",
+      "vanilla"
+    ],
+    "closed_logs_accepted": true,
+    "restored_regular_files_independently_hashed": 643,
+    "restored_absent_paths_independently_checked": 5,
+    "restoration_pass": true
+  },
+  "dev_restoration": {
+    "utc": "2026-11-12T20:31:53.172241+00:00",
+    "status": "ORIGINAL_EIGHT_DEV_BOTS_RESTORED",
+    "pause_error": null,
+    "restore_errors": [],
+    "duration_seconds": 1692.6479262979701,
+    "new_release_installed": false
+  },
+  "fleet_after_restoration": {
+    "utc": "2026-11-12T20:32:51.242883+00:00",
+    "scope": "FRESH_QUERY_AND_CURRENT_LOGS_NOT_LONGTERM_SYNC_OR_HUMAN_CLASSIFICATION",
+    "fleet": [
+      {
+        "instance": "redstation",
+        "port": 25600,
+        "map": "Red Station",
+        "own_bots": 8,
+        "additional_unknown": 0,
+        "live_dlls": [
+          {
+            "role": "server",
+            "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+          },
+          {
+            "role": "botA",
+            "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+          },
+          {
+            "role": "botB",
+            "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+          }
+        ],
+        "current_log_bad": 0,
+        "current_log_disconnects": 0,
+        "config_spawn_zero": true,
+        "live_session_spawn": 0.0
+      },
+      {
+        "instance": "yodeller",
+        "port": 25610,
+        "map": "Yodeller",
+        "own_bots": 8,
+        "additional_unknown": 0,
+        "live_dlls": [
+          {
+            "role": "server",
+            "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+          },
+          {
+            "role": "botA",
+            "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+          },
+          {
+            "role": "botB",
+            "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+          }
+        ],
+        "current_log_bad": 0,
+        "current_log_disconnects": 0,
+        "config_spawn_zero": true,
+        "live_session_spawn": 0.0
+      },
+      {
+        "instance": "skulls",
+        "port": 25620,
+        "map": "We Got Skulls'n'Bones Too",
+        "own_bots": 8,
+        "additional_unknown": 0,
+        "live_dlls": [
+          {
+            "role": "server",
+            "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+          },
+          {
+            "role": "botA",
+            "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+          },
+          {
+            "role": "botB",
+            "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+          }
+        ],
+        "current_log_bad": 0,
+        "current_log_disconnects": 0,
+        "config_spawn_zero": true,
+        "live_session_spawn": 0.0
+      },
+      {
+        "instance": "trouble",
+        "port": 25630,
+        "map": "Little Trouble",
+        "own_bots": 8,
+        "additional_unknown": 0,
+        "live_dlls": [
+          {
+            "role": "server",
+            "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+          },
+          {
+            "role": "botA",
+            "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+          },
+          {
+            "role": "botB",
+            "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+          }
+        ],
+        "current_log_bad": 0,
+        "current_log_disconnects": 0,
+        "config_spawn_zero": true,
+        "live_session_spawn": 0.0
+      },
+      {
+        "instance": "hole",
+        "port": 25640,
+        "map": "Hole",
+        "own_bots": 8,
+        "additional_unknown": 0,
+        "live_dlls": [
+          {
+            "role": "server",
+            "sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208"
+          },
+          {
+            "role": "botA",
+            "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+          },
+          {
+            "role": "botB",
+            "sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+          }
+        ],
+        "current_log_bad": 0,
+        "current_log_disconnects": 0,
+        "config_spawn_zero": true,
+        "live_session_spawn": 0.0
+      },
+      {
+        "instance": "development",
+        "port": 25650,
+        "map": "Red Station",
+        "own_bots": 8,
+        "additional_unknown": 0,
+        "live_dlls": [
+          {
+            "role": "server",
+            "sha256": "fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0"
+          },
+          {
+            "role": "botA",
+            "sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530"
+          },
+          {
+            "role": "botB",
+            "sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530"
+          }
+        ],
+        "current_log_bad": 37,
+        "current_log_disconnects": 3,
+        "config_spawn_zero": true,
+        "live_session_spawn": 0.0
+      }
+    ],
+    "disk_free_gib": 12.69,
+    "mem_available_gib": 2.08
+  },
+  "local_file_transport": {
+    "status": "BLOCKED",
+    "observed_error": "no primary turn environment is available",
+    "drive_upload_completed": false,
+    "latest_complete_private_checkpoint": "Delta021"
+  }
+}
