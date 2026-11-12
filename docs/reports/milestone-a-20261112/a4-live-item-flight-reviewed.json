@@ -1,0 +1,21 @@
+{
+  "utc": "2026-11-12T18:31:47.457732+00:00",
+  "status": "SOURCE_REVIEW_READY_NATIVE_UNQUALIFIED",
+  "source_sha256": {
+    "BotSupplyNative.h": "ae38432d20a3789e71b17b2180e7e945f24f0927130fb898251bd0c730e6cae7",
+    "BotDriver.cpp": "75cf99356b70ec1150e3af1316c8bae2d989c37b1608f2d0e64ec056e5e71551",
+    "test_cecil_native_bridge.py": "b8e78dd9c2ca75454e76dd1bc44459f8346307b1cc009d8cd974831c8a577a18"
+  },
+  "manifest_sha256": "c7915a0756310c3aa67c361b1cc32a38de4910c253dd816d3d5f6e5c327d0585",
+  "independent_review_sha256": "4b9f0db5de612fae800682134873994bbe4cf60b0d9aaaeddb2a1cdbabb9af49",
+  "checks": 2763,
+  "failures": 0,
+  "sanitizers": [
+    "ASan",
+    "UBSan"
+  ],
+  "old_review_status": "BLOCKED_0C_2I_PRESERVED",
+  "native_performed": false,
+  "rollout_performed": false,
+  "backup021_contains_this_change": false
+}

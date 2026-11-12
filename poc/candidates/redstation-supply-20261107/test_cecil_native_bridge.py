@@ -3377,7 +3377,117 @@ void flightVisibleOwnership(){
  check(!BotSupplyState(0).flightFinishing&&!bridgeDriverOwns(true,ordinary,&player,true),
    "ordinary FALL loss does not gain dedicated special-flight arbitration");
 }
+void liveItemFlightCloseEnemyReproduction(){
+ for(bool launch:{false,true}){
+  flightLossFixture(true,20.4,false,!launch);auto& state=BotSupplyState(0);
+  player.pl.pl_PositionVector=FLOAT3D(0,launch?20:40,12);
+  check(BotCecilFlightFresh(&player,state,5.05)&&BotCecilFlightEdge(state),"fixture has fresh accepted original special flight before visible close enemy");
+  const auto move=flightDriverTick(101,true,6);
+  check(move.active&&bridgeDriverOwns(true,move,&player,true),"RED live needed weapon keeps actual accepted airborne route against close enemy");
+  check(!state.flightFinishing&&state.goalEntity==267&&state.goal==2&&near(state.goalDeadline,20.4),"live flight priority must preserve existing item identity and deadline");
+  check(near(state.flightAccepted,5.05),"RED actual accepted live-flight action renews its own provenance");
+ }
+}
+void liveItemFlightPriorityGuards(){
+ for(int bad=0;bad<17;++bad){
+  flightLossFixture();auto& state=BotSupplyState(0);CWorld other;
+  player.pl.pl_PositionVector=FLOAT3D(0,40,12);int tick=101;
+  if(bad==0)state.flightWorld=&other;
+  if(bad==1)++state.flightMap;
+  if(bad==2)++state.flightEntity;
+  if(bad==3)++state.flightGeneration;
+  if(bad==4)++state.flightItem;
+  if(bad==5)++state.flightGoal;
+  if(bad==6)state.flightAttempt+=.1;
+  if(bad==7)state.flightDeadline+=.1;
+  if(bad==8)state.flightAccepted=-1;
+  if(bad==9)tick=107;
+  if(bad==10)player.m_pstState=PST_STAND;
+  if(bad==11)player.health=0;
+  if(bad==12)state.flightGravity[0]=1;
+  if(bad==13)state.blocked[state.flightSource]=1;
+  if(bad==14)state.blocked[state.flightHop]=1;
+  if(bad==15)BotSupplyGraph().points[state.flightSource].links.clear();
+  if(bad==16)state.goalDeadline=5.05;
+  const auto move=flightDriverTick(tick,true,6);
+  check(!move.activeFlight&&!bridgeDriverOwns(true,move,&player,true),"invalid world map life item goal clock deadline gravity grounding death lock or topology cannot gain live-flight priority");
+ }
+ for(bool supported:{false,true}){
+  flightLossFixture(false);player.pl.pl_PositionVector=FLOAT3D(0,40,12);
+  if(supported)player.m_pstState=PST_STAND;
+  const auto move=flightDriverTick(101,true,6);
+  check(!move.activeFlight&&!bridgeDriverOwns(true,move,&player,true),"ordinary FALL or grounded pickup still yields close combat");
+ }
+ int rays[2],lookups[2];unsigned random[2];SCecilMove commands[2];
+ for(int visible=0;visible<2;++visible){
+  flightLossFixture();auto& state=BotSupplyState(0);player.pl.pl_PositionVector=FLOAT3D(0,40,12);
+  rayCount=worldLookups=0;commands[visible]=flightDriverTick(101,visible!=0,6);
+  rays[visible]=rayCount;lookups[visible]=worldLookups;random[visible]=state.rng;
+  check(commands[visible].activeFlight&&!commands[visible].flightGoal&&commands[visible].itemGoal&&state.goalEntity==267&&!state.flightFinishing,
+    "live accepted priority retains actual item ownership without orphaning it");
+ }
+ check(rays[0]==rays[1]&&lookups[0]==lookups[1]&&random[0]==random[1]&&near(commands[0].forward,commands[1].forward)&&near(commands[0].strafe,commands[1].strafe)&&near(commands[0].up,commands[1].up),
+   "live flight visibility changes neither original nav command casts lookups RNG nor deadline");
+ flightLossFixture();player.pl.pl_PositionVector=FLOAT3D(0,40,12);flightDriverTick(101,true,6);auto& landing=BotSupplyState(0);player.m_pstState=PST_STAND;
+ const auto landed=flightDriverTick(102,true,6);check(!landed.activeFlight&&!bridgeDriverOwns(true,landed,&player,true)&&near(landing.goalDeadline,20.4),"landing releases flight priority immediately without extending attempt");
+}
+void liveItemFlightArrivalPriority(){
+ for(int budget:{40,2}){
+  flightLossFixture();auto& state=BotSupplyState(0);
+  player.pl.pl_PositionVector=FLOAT3D(-4.5,37.25,12);
+  check(BotCecilFlightFresh(&player,state,5.05)&&BotCecilFlightEdge(state)&&BotCecilAtNode(&player,state.goal),
+    "transition fixture starts with accepted live flight at the exact goal node");
+  _botRayBudget=budget;const auto arrived=BotSupplyTick(&player,0,101,6);
+  check(!arrived.activeFlight&&state.flightAccepted<0,"goal arrival removes actual flight provenance");
+  check(!bridgeDriverOwns(true,arrived,&player,true),"RED arrival and early no-ray return restore visible close-combat priority");
+  check(!arrived.active&&!arrived.ownsMovement,"RED expired flight cannot leave either active or inactive urgent movement ownership");
+  check(state.goalEntity==267&&state.goal==2&&near(state.goalDeadline,20.4),"combat handback preserves original live item and fixed attempt deadline");
+ }
+ flightLossFixture();player.pl.pl_PositionVector=FLOAT3D(-4.5,37.25,12);_botRayBudget=40;
+ const auto boundary=BotSupplyTick(&player,0,101,8);
+ check(!boundary.activeFlight&&boundary.active&&bridgeDriverOwns(true,boundary,&player,true),
+   "exact eight-unit boundary retains ordinary urgent item-connector priority");
+}
+void liveItemFlightLockReplanPriority(){
+ setup(4);auto& g=BotSupplyGraph();
+ g.points[0].x=0;g.points[0].y=.5;g.points[0].z=12;g.points[0].radius=4;
+ g.points[0].flags=botcore::CECIL_JUMP|botcore::CECIL_OVERRIDE;g.points[0].links={1,3};
+ g.points[1].x=0;g.points[1].y=38;g.points[1].z=12;g.points[1].links={2};
+ g.points[2].x=-4.5;g.points[2].y=37.25;g.points[2].z=12;g.points[2].links.clear();
+ g.points[3].x=3;g.points[3].y=38;g.points[3].z=12;g.points[3].links={2};
+ auto& item=addItem(267,-4.5,12,botcore::CecilItemKind::Weapon);item.pl.pl_PositionVector(2)=37.25;
+ auto& lock=addItem(777,0,0);lock.type=CEntity::RT_BRUSH;lock.pl.pl_PositionVector=FLOAT3D(0,0,0);
+ g.points[1].lock_entity=777;for(int i=0;i<6;++i)g.points[1].lock_origin[i]=0;
+ g.points[2].important_entity=267;
+ auto& state=BotSupplyState(0);state.goal=2;state.goalEntity=267;state.mappedWeaponGoal=true;
+ state.goalSince=0;state.goalDeadline=20.4;state.scanTick=999;state.searchAfter=999;
+ player.m_pstState=PST_FALL;player.en_penReference=nullptr;player.pl.pl_PositionVector=FLOAT3D(0,.5,12);
+ flightLossTick(98);
+ check(state.flightSource==0&&state.flightHop==1&&near(state.flightAccepted,4.9),
+   "lock fixture starts on an actually accepted special edge zero to one");
+ lock.pl.pl_PositionVector(1)=1;player.pl.pl_PositionVector=FLOAT3D(0,1.5,12);
+ check(BotCecilFlightFresh(&player,state,5.05)&&BotCecilFlightEdge(state)&&!state.blocked[1],
+   "pre-refresh cache still describes the genuinely accepted old edge");
+ _botRayBudget=40;const auto replanned=BotSupplyTick(&player,0,101,6);
+ check(state.blocked[1]==1&&state.flightSource==0&&state.flightHop==3&&near(state.flightPlanned,5.05),
+   "actual lock refresh replans a new special edge zero to three");
+ check(state.flightAccepted<0&&!replanned.activeFlight&&!bridgeDriverOwns(true,replanned,&player,true),
+   "new special plan cannot inherit the previous edge's acceptance before actual safety");
+ _botRayBudget=40;const auto next=BotSupplyTick(&player,0,102,6);
+ check(state.flightAccepted<0&&!next.activeFlight&&!bridgeDriverOwns(true,next,&player,true),
+   "following close-combat tick cannot revive inherited acceptance on the new edge");
+ const auto normallyAccepted=flightDriverTick(103,true,8);
+ check(bridgeDriverOwns(true,normallyAccepted,&player,true)&&near(state.flightAccepted,5.15),
+   "ordinary eight-unit item action may establish new acceptance through actual safety");
+ const auto carried=flightDriverTick(104,true,6);
+ check(carried.activeFlight&&bridgeDriverOwns(true,carried,&player,true)&&near(state.flightAccepted,5.2),
+   "only after genuine new-edge acceptance may close-combat traversal priority resume");
+}
 int main(){
+ liveItemFlightLockReplanPriority();
+ liveItemFlightArrivalPriority();
+ liveItemFlightPriorityGuards();
+ liveItemFlightCloseEnemyReproduction();
  flightSelectedPathGuards();flightSealedGuards();flightSealedRegression();flightVisibleOwnership();flightLossRegression();flightLossGuards();
  boundedSupplySegment(); approachArrivalGeometry();approach008Transitions();bouncer009Transitions();bouncer010Native009Replay();bouncer011Native010Replay();bouncer012Native011Arrival();bouncer012RecordedArrivals();bouncer012ArrivalGuards();approachElevenDiagnostics();approachDiagnostics();approachDeathRespawnDiagnostics();supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
  itemTransit49();itemTransit49Guards();

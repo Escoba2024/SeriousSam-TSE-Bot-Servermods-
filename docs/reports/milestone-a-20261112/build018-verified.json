@@ -1,0 +1,19 @@
+{
+  "utc": "2026-11-12T18:38:51.851870+00:00",
+  "status": "BUILD_PASSED_NATIVE_UNQUALIFIED",
+  "build_source_commit": "1802fb3f0720b53feb032abfe2c2a83407bfea6e",
+  "build_source_tree": "df9f4336153662e3398a28793e72c53e0c2161a3",
+  "manifest_sha256": "f4212443317b58b04808bd42d084e6a3286e458af2c0dbcfb276aa3bca931c2e",
+  "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+  "dll_bytes": 428544,
+  "root_wrapper_pid": 1226016,
+  "root_wrapper_exit": 0,
+  "root_wrapper_seconds": 26.7,
+  "native_started": false,
+  "qualified": false,
+  "review_sha256": "4b9f0db5de612fae800682134873994bbe4cf60b0d9aaaeddb2a1cdbabb9af49",
+  "portable_checks": 2763,
+  "portable_failures": 0,
+  "driver_action_guards_passed": true,
+  "public_rollout": false
+}

@@ -476,3 +476,23 @@ Die zusätzliche30s-Dev-Bestandsmessung23:19 ergab8 eigene Bots+1UNKNOWN, elf ku
 - Sequential names source integrated at local0e7deda; API20997ae526bde5c361585a93dea04a206c6d2090 was fetched and exact treea5af7fb07ab591d4b97aab19a2fb61b372f6611e matched. Independent root review READY;123/123 tests and all9/11/2063 closure pins verified.
 - Names apply is IN PROGRESS under root PID1161582, private evidence `restart-fleet-20261111-names-20261112-094338-f5180ed1aec8`. Development has been accepted with8 verified new names; next instances proceed only after their own fresh verification. Root frozen manifest69dd3facdd2973a7a33942c0578162d804867b584ac64e8aad706ee83c7ba7a9. This is names only, not DLL/server/nav promotion or milestoneA completion.
 - A1 normal route/control-fire preparation is being implemented in an isolated worker branch after the complete V3 calibration. A4 phase-activity investigation owns a separate worktree. No worker performs native operations. Root must wait for the active names transaction and verify its final/partial state before another native lab window.
+
+
+## Continuation checkpoint 2026-11-12T18:31:47.457732+00:00
+
+- Root integrated the independently reviewed live-item flight V3 source. Both actual review blockers are closed for its exact hashes; final actual-body ASan/UBSan run2763checks/0FAIL. The original2742/0scope and both independent behavioral REDs remain preserved. Build018 is prepared but not yet executed; native qualification remains false. See a4-live-item-flight report.
+- The A3 initial-acquisition correction is independently READY0C/0I with74actual runtime pins,141source pins,11verification pins and65unchanged parent files. The native017initial FAIL remains FAIL. A separate retarget must use actual018build pins before a new control and one instrumented tier1/swap0 trial.
+- The compensated A1input comparison retains original effective gain through normal settings1/1to0/0.25. Independent review found one actual sticky-reader defect: an already-read wrong global pair can be hidden by a concurrent retryable tick change. A separate disabled V2 correction is in progress; no native repeat is authorized from the blocked V1package.
+- Latest verified public source before this integration is GitHubc1fb8346cb1064ca7dffda17527cb4c0a65ff8c0, exact local55efaa2tree90c2b972. New source publication remains pending. Delta021archive and complete restore manifest are actually restored and Drive-roundtrip verified; this later work requires Delta022.
+- Last actual fleet receipt17:48:53UTC reports6x8ownbots,UNKNOWN0andunchanged historical Dev counters. Public candidate DLL rollout has not occurred.
+- Root alone owns integration/build/native/live. identify_latest_codex closes the blocked V1input review; review_names_transaction owns only its separate sticky-reader V2correction; finish_names_transaction is idle after the completed A4V3review. At most two workers. No native game is active.
+- Next: guarded018build; independently checked018controller retarget; new A3control plus one instrumented trial, then remaining tier/start windows if valid; native A4verification; finish the bounded A1first-state proof and original duration/rollout gates. A remains incomplete;B unstarted.
+
+
+## Guarded Build018 completed — 2026-11-12T18:38:51.851870+00:00
+
+Actual build finished18:33:54.876145UTC. Root wrapper1226016 returned0 after26.70seconds. Build source1802fb3f0720b53feb032abfe2c2a83407bfea6e/tree df9f4336153662e3398a28793e72c53e0c2161a3. The actual428544-byte DLL is6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a; manifest f4212443317b58b04808bd42d084e6a3286e458af2c0dbcfb276aa3bca931c2e. All47stagedsource and28overlay pins were independently verified by the A3retarget author. native_qualified remainsfalse; no newDLLwasinstalledinLab,fleetorDev.
+
+The fresh18:33:29UTCpreflight verified allfourLabrootsquiescent, bothdisplaysabsent and bothlocksavailable; CPU40.104167%, availableRAM2616410112bytes, freedisk14200320000bytes. This snapshot is not a duration/resource gate.
+
+Current worker ownership: identify_latest_codex authors only the separately disabled018A3retarget from the independently READYinitial-capture correction; review_names_transaction fixes only the separately reproduced sticky optional-input-reader defect in disabledV2. finish_names_transaction is idle for independent retarget review. Root retains all build/native/live execution. No native controller is active. Next steps and all original A1/A3/A4/duration/rollout gates remain unchanged. Exact-tree public source publication for this checkpoint is in progress; Delta022 remains required for private evidence.

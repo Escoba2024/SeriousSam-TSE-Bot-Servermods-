@@ -154,6 +154,7 @@ struct SSupplyState {
 struct SCecilMove {
   bool active=false,ownsMovement=false,itemGoal=false,urgent=false,followGoal=false,useControl=false;
   bool flightGoal=false; // Only a freshly validated, bounded orphaned physical edge.
+  bool activeFlight=false; // A fresh accepted special edge toward its still-live item.
   botcore::CecilItemKind itemKind=botcore::CecilItemKind::Weapon;
   double forward=0,strafe=0,up=0,yaw_delta=0,pitch_delta=0;uint32_t flags=0,buttons=0;
 };
@@ -1359,6 +1360,9 @@ static void BotCecilFlightPlan(CPlayer* player,SSupplyState& s,double now,const 
   const bool advanced=reachedHop&&source==previousHop;
   const bool special=valid&&(move.flags&(botcore::CECIL_JUMP|botcore::CECIL_TELEPORT));
   if(!valid||(!special&&!(carried&&(same||advanced)))){s.ClearFlight();return;}
+  // An old accepted action belongs only to its same or naturally reached edge.
+  // A fresh special plan is eligible only after actual final safety accepts it.
+  if(!(carried&&(same||advanced)))s.flightAccepted=-1;
   if(!carried||!same){s.flightSuccessor=-1;s.flightSuccessorConsumed=false;}
   s.flightSuccessorPlanned=-1;
   if(!s.flightFinishing&&!s.flightSuccessorConsumed&&s.flightSuccessor<0&&source==84&&s.hop==86&&
@@ -1477,10 +1481,15 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     s.goalKind=item.kind;urgent=BotCecilUrgentItem(item,input);
   }
   result.followGoal=s.followEntity!=0;result.itemGoal=s.goalEntity!=0;result.urgent=result.itemGoal&&urgent;result.itemKind=s.goalKind;
-  if(!s.flightFinishing&&enemyDistance<8&&!(result.urgent&&result.itemKind==botcore::CecilItemKind::Health)){
-    // Keep the bounded attempt, but let visible-target combat own this action.
-    // Inactive owned urgent-weapon output would otherwise suppress Human fire.
-    result.ownsMovement=false;return result;
+  const bool activeFlight=s.goalEntity!=0&&!s.flightFinishing&&
+    BotCecilFlightFresh(player,s,now)&&BotCecilFlightEdge(s);
+  const bool closeCombat=!s.flightFinishing&&enemyDistance<8&&
+    !(result.urgent&&result.itemKind==botcore::CecilItemKind::Health);
+  if(closeCombat){
+    // Only the final validated flight may retain this action. Early returns
+    // must not regain close-combat priority through an inactive urgent item.
+    result.ownsMovement=false;
+    if(!activeFlight)return result;
   }
   BotCecilLocks(player,s,now);
   if(s.flightFinishing&&!BotCecilFlightEdge(s)){BotCecilFlightEnd(s,slot,tick,now,"locked");return result;}
@@ -1572,6 +1581,11 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   // Set only after fresh context, refreshed locks and unchanged committed edge
   // passed this tick. This is traversal ownership, never a synthetic item need.
   result.flightGoal=s.flightFinishing;
+  // Recheck the accepted route after lock refresh and the actual navigator step.
+  // Arrival, replanning, loss of identity or rejected movement grants no priority.
+  result.activeFlight=activeFlight&&flightCarried&&move.active&&!move.arrived&&!move.stuck&&!move.relocated&&
+    BotCecilFlightFresh(player,s,now)&&BotCecilFlightEdge(s)&&std::fabs(s.flightPlanned-now)<=1e-6;
+  if(closeCombat&&!result.activeFlight)return result;
   result.active=move.active;result.forward=move.forward*BotCecilSettings().fSpeedMul;
   result.strafe=BotCecilSettings().bStrafe?move.strafe*BotCecilSettings().fSpeedMul:0;
   result.up=move.up;result.yaw_delta=move.yaw_delta;result.pitch_delta=move.pitch_delta;result.flags=move.flags;
