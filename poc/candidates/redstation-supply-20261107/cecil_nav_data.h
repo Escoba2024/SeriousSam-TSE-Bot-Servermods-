@@ -170,6 +170,29 @@ class CecilNavSearch {
   int Parent(int slot) const {
     return start_>=0&&slot>=0&&(size_t)slot<parents_.size()?parents_[slot]:-1;
   }
+  // Observe only this existing search tree. The root may be the committed
+  // source (initial search) or its hop (suffix refresh); never search here.
+  int SelectedSuccessor(const CecilNavGraph& graph,int goal,int source,int hop,
+      const unsigned char* blocked,size_t count) const {
+    const size_t n=parents_.size();
+    if(n==0||n!=graph.points.size()||!blocked||count!=n||
+       source<0||hop<0||source==hop||(size_t)source>=n||(size_t)hop>=n||
+       (start_!=source&&start_!=hop)||!std::isfinite(Distance(goal))||
+       blocked[source]||blocked[hop]||
+       (start_==source&&Parent(hop)!=source))return -1;
+    int at=goal,successor=-1;
+    for(size_t steps=0;steps<n;++steps){
+      if(at<0||(size_t)at>=n||blocked[at])return -1;
+      if(at==start_)return successor;
+      const int parent=parents_[at];
+      if(parent<0||(size_t)parent>=n||parent==at)return -1;
+      const auto& links=graph.points[parent].links;
+      if(std::find(links.begin(),links.end(),at)==links.end())return -1;
+      if(parent==hop)successor=at;
+      at=parent;
+    }
+    return -1;
+  }
   int NextHop(int goal) const {
     if(!std::isfinite(Distance(goal)))return -1;
     if(goal==start_)return start_;

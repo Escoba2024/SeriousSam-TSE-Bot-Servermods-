@@ -1,0 +1,741 @@
+{
+  "schema": 2,
+  "window": "arena012public-v4-checked-swap1-trial-1-004059",
+  "scope": "One completed private Original107 RedStation comparison, Swap1 MITTEL; no overall A3 or release approval",
+  "observed_seconds": 240.03747053816915,
+  "useful_weapon_mask": "0x3df8",
+  "cohorts": {
+    "botA": {
+      "dll_sha256": "e049557795e85a5b6676612500ee93c23f4d61233eead757f43b4e8d6bff43c0",
+      "actual_slots": [
+        0,
+        2,
+        3,
+        4
+      ],
+      "lives": 28,
+      "observed_deaths": 24,
+      "right_censored": 4,
+      "useful_owned_lives": 21,
+      "completed_without_useful": 5,
+      "censored_without_useful": 2,
+      "useful_current_lives": 21,
+      "useful_fire_requested_lives": 18,
+      "success_only_median_first_useful_seconds": 11.20068359375,
+      "success_only_max_first_useful_seconds": 33.45204162597656,
+      "observed_health_decreases_clamped": 2662.542739868164,
+      "observed_armor_decreases_clamped": 150.0,
+      "frags": [
+        {
+          "local": 0,
+          "global_slot": 0,
+          "first": 0,
+          "last": 21,
+          "delta": 21,
+          "observed_downward_transitions": 0
+        },
+        {
+          "local": 1,
+          "global_slot": 2,
+          "first": 0,
+          "last": 3,
+          "delta": 3,
+          "observed_downward_transitions": 1
+        },
+        {
+          "local": 2,
+          "global_slot": 3,
+          "first": 0,
+          "last": 8,
+          "delta": 8,
+          "observed_downward_transitions": 0
+        },
+        {
+          "local": 3,
+          "global_slot": 4,
+          "first": 0,
+          "last": 10,
+          "delta": 10,
+          "observed_downward_transitions": 1
+        }
+      ],
+      "frags_delta": 42,
+      "maximum_sampled_one_meter_residence_seconds": 2.0501251220703125,
+      "first_life_useful_ages_seconds": [
+        2.6499977707862854,
+        11.550028860569,
+        8.400016844272614,
+        7.900014936923981
+      ]
+    },
+    "botB": {
+      "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+      "actual_slots": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "lives": 46,
+      "observed_deaths": 42,
+      "right_censored": 4,
+      "useful_owned_lives": 2,
+      "completed_without_useful": 41,
+      "censored_without_useful": 3,
+      "useful_current_lives": 2,
+      "useful_fire_requested_lives": 0,
+      "success_only_median_first_useful_seconds": 7.40045166015625,
+      "success_only_max_first_useful_seconds": 13.650833129882812,
+      "observed_health_decreases_clamped": 4286.0,
+      "observed_armor_decreases_clamped": 0,
+      "frags": [
+        {
+          "local": 0,
+          "global_slot": 5,
+          "first": 0,
+          "last": 4,
+          "delta": 4,
+          "observed_downward_transitions": 0
+        },
+        {
+          "local": 1,
+          "global_slot": 6,
+          "first": 0,
+          "last": 2,
+          "delta": 2,
+          "observed_downward_transitions": 1
+        },
+        {
+          "local": 2,
+          "global_slot": 7,
+          "first": 0,
+          "last": 5,
+          "delta": 5,
+          "observed_downward_transitions": 0
+        },
+        {
+          "local": 3,
+          "global_slot": 8,
+          "first": 0,
+          "last": 8,
+          "delta": 8,
+          "observed_downward_transitions": 0
+        }
+      ],
+      "frags_delta": 19,
+      "maximum_sampled_one_meter_residence_seconds": 13.900848388671875,
+      "first_life_useful_ages_seconds": [
+        null,
+        null,
+        null,
+        null
+      ]
+    }
+  },
+  "initial": {
+    "first_simulation_state_proven": false,
+    "independent_all_sample_replay_passed": true,
+    "pending_errors": {},
+    "all_nine_exact_reference": true,
+    "reference_sha256": "073f4d9af0c3a1075462716aef09f628913597b5c80c5670cc4578df9861e66c",
+    "samples": [
+      {
+        "slot": 0,
+        "entity_id": 565,
+        "raw_elapsed": 0.123473766958341,
+        "neutral_elapsed": 0.123473766958341,
+        "raw_physics": "0x40000284",
+        "neutral_physics": "0x40000284",
+        "raw_placement": [
+          -75.75,
+          0.032499998807907104,
+          23.25,
+          -90.00000762939453,
+          0.0,
+          0.0
+        ],
+        "neutral_placement": [
+          -75.75,
+          0.032499998807907104,
+          23.25,
+          -90.00000762939453,
+          0.0,
+          0.0
+        ],
+        "exact_reference_match": true,
+        "common_spawn_clock": 0.8000001311302185
+      },
+      {
+        "slot": 1,
+        "entity_id": 563,
+        "raw_elapsed": 0.123473766958341,
+        "neutral_elapsed": 0.123473766958341,
+        "raw_physics": "0x40000284",
+        "neutral_physics": "0x40000284",
+        "raw_placement": [
+          -6.375,
+          0.032499998807907104,
+          80.625,
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "neutral_placement": [
+          -6.375,
+          0.032499998807907104,
+          80.625,
+          0.0,
+          -0.0,
+          0.0
+        ],
+        "exact_reference_match": true,
+        "common_spawn_clock": 0.8000001311302185
+      },
+      {
+        "slot": 2,
+        "entity_id": 566,
+        "raw_elapsed": 0.08056136406958103,
+        "neutral_elapsed": 0.123473766958341,
+        "raw_physics": "0x40000287",
+        "neutral_physics": "0x40000284",
+        "raw_placement": [
+          18.0,
+          0.10750000178813934,
+          -63.75,
+          -180.0,
+          0.0,
+          0.0
+        ],
+        "neutral_placement": [
+          18.0,
+          0.032499998807907104,
+          -63.75,
+          179.99998474121094,
+          -0.0,
+          0.0
+        ],
+        "exact_reference_match": true,
+        "common_spawn_clock": 0.8000001311302185
+      },
+      {
+        "slot": 3,
+        "entity_id": 567,
+        "raw_elapsed": 0.08056136406958103,
+        "neutral_elapsed": 0.123473766958341,
+        "raw_physics": "0x40000287",
+        "neutral_physics": "0x40000284",
+        "raw_placement": [
+          -21.0,
+          0.29499998688697815,
+          -9.75,
+          -137.5,
+          0.0,
+          0.0
+        ],
+        "neutral_placement": [
+          -21.0,
+          0.2199999839067459,
+          -9.75,
+          -137.5,
+          0.0,
+          0.0
+        ],
+        "exact_reference_match": true,
+        "common_spawn_clock": 0.8000001311302185
+      },
+      {
+        "slot": 4,
+        "entity_id": 568,
+        "raw_elapsed": 0.123473766958341,
+        "neutral_elapsed": 0.123473766958341,
+        "raw_physics": "0x40000284",
+        "neutral_physics": "0x40000284",
+        "raw_placement": [
+          32.25,
+          0.2199999839067459,
+          -3.0,
+          102.50000762939453,
+          -0.0,
+          0.0
+        ],
+        "neutral_placement": [
+          32.25,
+          0.2199999839067459,
+          -3.0,
+          102.50000762939453,
+          -0.0,
+          0.0
+        ],
+        "exact_reference_match": true,
+        "common_spawn_clock": 0.8000001311302185
+      },
+      {
+        "slot": 5,
+        "entity_id": 569,
+        "raw_elapsed": 0.08056136406958103,
+        "neutral_elapsed": 0.123473766958341,
+        "raw_physics": "0x40000287",
+        "neutral_physics": "0x40000284",
+        "raw_placement": [
+          18.0,
+          0.4749999940395355,
+          28.5,
+          30.0,
+          0.0,
+          0.0
+        ],
+        "neutral_placement": [
+          18.0,
+          0.3999999761581421,
+          28.5,
+          30.000001907348633,
+          -0.0,
+          0.0
+        ],
+        "exact_reference_match": true,
+        "common_spawn_clock": 0.8000001311302185
+      },
+      {
+        "slot": 6,
+        "entity_id": 570,
+        "raw_elapsed": 0.08056136406958103,
+        "neutral_elapsed": 0.123473766958341,
+        "raw_physics": "0x40000287",
+        "neutral_physics": "0x40000284",
+        "raw_placement": [
+          -20.25,
+          0.4749999940395355,
+          32.25,
+          -60.0,
+          0.0,
+          0.0
+        ],
+        "neutral_placement": [
+          -20.25,
+          0.3999999761581421,
+          32.25,
+          -60.00000762939453,
+          -0.0,
+          0.0
+        ],
+        "exact_reference_match": true,
+        "common_spawn_clock": 0.8000001311302185
+      },
+      {
+        "slot": 7,
+        "entity_id": 571,
+        "raw_elapsed": 0.08056136406958103,
+        "neutral_elapsed": 0.123473766958341,
+        "raw_physics": "0x40000287",
+        "neutral_physics": "0x40000284",
+        "raw_placement": [
+          70.875,
+          0.48249998688697815,
+          63.0,
+          90.0,
+          0.0,
+          0.0
+        ],
+        "neutral_placement": [
+          70.875,
+          0.4074999690055847,
+          63.0,
+          90.00000762939453,
+          -0.0,
+          0.0
+        ],
+        "exact_reference_match": true,
+        "common_spawn_clock": 0.8000001311302185
+      },
+      {
+        "slot": 8,
+        "entity_id": 572,
+        "raw_elapsed": 0.08056136406958103,
+        "neutral_elapsed": 0.123473766958341,
+        "raw_physics": "0x40000287",
+        "neutral_physics": "0x40000284",
+        "raw_placement": [
+          -65.25,
+          12.107500076293945,
+          -69.75,
+          -135.0,
+          0.0,
+          0.0
+        ],
+        "neutral_placement": [
+          -65.25,
+          12.032500267028809,
+          -69.75,
+          -135.00001525878906,
+          0.0,
+          0.0
+        ],
+        "exact_reference_match": true,
+        "common_spawn_clock": 0.8000001311302185
+      }
+    ]
+  },
+  "identity_and_logs": {
+    "attach_mapping_independently_reparsed": true,
+    "canonical_cohort_configs_independently_regenerated": true,
+    "all_inventory_server_identities_and_original_hashes_match": true,
+    "closed_logs": {
+      "server": {
+        "sha256": "4e080058c5ab698bc71312ab1d3f8724eff77f28f766c67502598df65e4c5f33",
+        "bytes": 43459,
+        "error_pattern_lines": [],
+        "normal_close_attested": true,
+        "matching_launch_close_identity": true
+      },
+      "botA": {
+        "sha256": "ef98a01c701c0e107011720e642876d64b3f14c6825759938f67afe19672f5cc",
+        "bytes": 1541036,
+        "error_pattern_lines": [],
+        "normal_close_attested": true,
+        "matching_launch_close_identity": true
+      },
+      "botB": {
+        "sha256": "a6b409c654dbc72c7fb8c72612c96ee931b0c261e89d7ec0b0c025c01e0c43e9",
+        "bytes": 217702,
+        "error_pattern_lines": [],
+        "normal_close_attested": true,
+        "matching_launch_close_identity": true
+      },
+      "vanilla": {
+        "sha256": "bd79fd44cf7b883c61d6b4c21a6e157dc6f4cbb557d2553c58c86094af09499e",
+        "bytes": 10126,
+        "error_pattern_lines": [],
+        "normal_close_attested": true,
+        "matching_launch_close_identity": true
+      }
+    },
+    "postclose_all_patterns_absent": true
+  },
+  "inventory": {
+    "enabled": true,
+    "tool_sha256": "920613df96771c14d3600f7f15fbbf5ae44254365774a9168fe16dbcee735cbb",
+    "valid_samples": 5901,
+    "discarded_changed": 147,
+    "sample_seconds_total": 24.6101092020981,
+    "sample_seconds_max": 0.01205842406488955,
+    "setup_seconds": 0.007194874109700322,
+    "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+  },
+  "queries": {
+    "count": 117,
+    "all_nine": true,
+    "name_to_slot_continuity_verified_privately": true,
+    "last_elapsed": 239.75590170104988
+  },
+  "files": {
+    "result.json": "eb1517c518bf0a98b718e0f1e0643892267ea2716c65bbf5cb9bd80c83b85b13",
+    "inventory.jsonl": "56a4eb974981cdee48f3faa4fbaec1ef238cab41ef7a56c6d69677d98511921f",
+    "queries.json": "31acfefdd1d6794ec0b72e2c2e812a87e39edffb67eedac5df67513c36f43782",
+    "botA.log": "f07b67f472097158c6f9c3efee27865a802bd502d230cd4a3f3f7aac78b3db9d",
+    "botB.log": "52f57078bdc92adf4058a5c80ed1ee22f26fabbec15794ed8aaaa0333b6414f9",
+    "server.log": "4d51fc0d2d9ed2d43e761434ff8985ef048ebcb88776930948f0143ae2041306",
+    "first-spawn-observations.json": "d743a706953f97d688819a88193ed150ae0b4c789eb9f4a293b112dc467b3e9f",
+    "neutral-spawn-observations.json": "d5943519706f3f1b328ca71766fbcc4ab9ce44ae31573cf461a9be632652e521",
+    "pending-phase-errors.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "initial-reference.json": "073f4d9af0c3a1075462716aef09f628913597b5c80c5670cc4578df9861e66c",
+    "controller-source.py": "32cba5a68ffb38004686f4ad742f1edcd3d4d7bddc4cbb96065a5c9167cabe3b",
+    "controller_policy.py": "bc4fbb5121fadb6741aae8c6e0a54a44e67f01372ac263691bcf78067d097609",
+    "source-manifest.json": "5aa79fb15518d1656a19d02ba76262faf06ec763dda58fdfaab524b0dd50346b",
+    "candidate.ini": "9f2dfea816c3bd4d3ca0de9f3d09c2e457c208a3b50e5765575c9d0c888e465a",
+    "public.ini": "0aa3aa3f97419cbf30fb73fab1a82125e190e43fa44ff993b241e6280abf87fd",
+    "botA-cohort.ini": "559977563d79a7c329ff0c7daf065e7f4272089f1b2639ac1f7ba5d091ffdda5",
+    "botB-cohort.ini": "0aa3aa3f97419cbf30fb73fab1a82125e190e43fa44ff993b241e6280abf87fd"
+  },
+  "limitations": [
+    "Inventory is repeated equal reads, not atomic or exhaustive. Unobserved lives/damage/actions cannot be excluded.",
+    "Life acquisition times are first observed possession; failed and censored lives retained. Success-only medians are not all-life performance.",
+    "Fire_requested and Cecil shots are action requests, not projectile/hit counts. No shooter attribution from HP/armor changes.",
+    "Summed positive sampled clamped HP/armor decreases exclude initial spawn clock and overkill; state-loss lower bounds, not actual Damage call totals.",
+    "Position polyline is sampled displacement; residence metric uses fixed first-position radius1m, gaps<=0.5s, and is not a stuck verdict.",
+    "No Frida Bouncer hook in this comparison; trajectories do not establish a particular native function call.",
+    "Diagnostics enabled; only one direction/tier/window. No three matched comparisons, map suite, long-term sync or release qualification."
+  ],
+  "analysis_source_sha256": {
+    "analyze.py": "d775f628a9b733306ccf2289e46605bf302acaaee5fb0dd58a8395d4e05cfe49",
+    "enrich.py": "3d196f04d61638e33f28d9cb7b9a48c14f0f2eab33239bd4024fdb0a5e6eee59",
+    "finalize.py": "0846e0e35186afad70ab93a781e6161531327e63c701032874def319a11c0e7c"
+  },
+  "candidate_cecil": {
+    "event_counts": {
+      "CecilLoad": 1,
+      "CecilReference": 9,
+      "CecilWeaponObserve": 1044,
+      "CecilGravity": 4,
+      "CecilState": 996,
+      "CecilSpawn": 28,
+      "CecilLock": 43,
+      "CecilSupplyDiagCandidate": 128,
+      "CecilSupplyDiagSelection": 37,
+      "CecilSupplyDiagConnector": 37,
+      "CecilGoal": 97,
+      "CecilPickup": 33,
+      "CecilSupplyDiagTerminal": 158,
+      "CecilSupplyDiagUnavailable": 63,
+      "CecilGoalEnd": 95,
+      "CecilDeath": 24,
+      "CecilReacquireSupport": 26,
+      "CecilFlightFinish": 14,
+      "CecilMotionProbe": 8,
+      "CecilPlayerObserve": 2,
+      "CecilInteraction": 2,
+      "CecilGroundReplan": 3,
+      "CecilAirRecovery": 4,
+      "CecilGoalBudget": 1,
+      "CecilSupplyDiagApproach": 0
+    },
+    "spawn_death_useful_pickup_life_presence_crosscheck": true,
+    "timeout_events": [
+      {
+        "local": 1,
+        "tick": 2350,
+        "entity": 293,
+        "reason": "timeout",
+        "source_line": 2217
+      },
+      {
+        "local": 3,
+        "tick": 2403,
+        "entity": 309,
+        "reason": "timeout",
+        "source_line": 2289
+      },
+      {
+        "local": 2,
+        "tick": 3960,
+        "entity": 310,
+        "reason": "timeout",
+        "source_line": 3615
+      }
+    ],
+    "state_field_warning": "CecilState liquid is actual m_pstState enum:0 STAND,1 CROUCH,2 SWIM,3 DIVE,4 FALL; not a liquid boolean.",
+    "alive_state_enum_counts": {
+      "0": 765,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 156
+    },
+    "flight_events": [
+      {
+        "local": 2,
+        "tick": 595,
+        "action": "begin",
+        "source": 86,
+        "hop": 176,
+        "deadline": 47.936,
+        "source_line": 660
+      },
+      {
+        "local": 2,
+        "tick": 598,
+        "action": "end",
+        "reason": "arrived",
+        "source": 86,
+        "hop": 176,
+        "deadline": 47.936,
+        "source_line": 662
+      },
+      {
+        "local": 0,
+        "tick": 1909,
+        "action": "begin",
+        "source": 86,
+        "hop": 176,
+        "deadline": 108.585,
+        "source_line": 1809
+      },
+      {
+        "local": 3,
+        "tick": 1909,
+        "action": "begin",
+        "source": 86,
+        "hop": 176,
+        "deadline": 103.898,
+        "source_line": 1813
+      },
+      {
+        "local": 0,
+        "tick": 1911,
+        "action": "end",
+        "reason": "arrived",
+        "source": 86,
+        "hop": 176,
+        "deadline": 108.585,
+        "source_line": 1815
+      },
+      {
+        "local": 3,
+        "tick": 1963,
+        "action": "end",
+        "reason": "arrived",
+        "source": 86,
+        "hop": 176,
+        "deadline": 103.898,
+        "source_line": 1854
+      },
+      {
+        "local": 2,
+        "tick": 2993,
+        "action": "begin",
+        "source": 86,
+        "hop": 176,
+        "deadline": 171.172,
+        "source_line": 2707
+      },
+      {
+        "local": 2,
+        "tick": 2996,
+        "action": "end",
+        "reason": "arrived",
+        "source": 86,
+        "hop": 176,
+        "deadline": 171.172,
+        "source_line": 2713
+      },
+      {
+        "local": 0,
+        "tick": 3891,
+        "action": "begin",
+        "source": 86,
+        "hop": 176,
+        "deadline": 212.412,
+        "source_line": 3572
+      },
+      {
+        "local": 0,
+        "tick": 3893,
+        "action": "end",
+        "reason": "arrived",
+        "source": 86,
+        "hop": 176,
+        "deadline": 212.412,
+        "source_line": 3575
+      },
+      {
+        "local": 0,
+        "tick": 4733,
+        "action": "begin",
+        "source": 86,
+        "hop": 176,
+        "deadline": 259.788,
+        "source_line": 4305
+      },
+      {
+        "local": 1,
+        "tick": 4733,
+        "action": "begin",
+        "source": 84,
+        "hop": 86,
+        "deadline": 255.248,
+        "source_line": 4309
+      },
+      {
+        "local": 1,
+        "tick": 4743,
+        "action": "end",
+        "reason": "arrived",
+        "source": 84,
+        "hop": 86,
+        "deadline": 255.248,
+        "source_line": 4320
+      },
+      {
+        "local": 0,
+        "tick": 4749,
+        "action": "end",
+        "reason": "context",
+        "source": 86,
+        "hop": 176,
+        "deadline": 259.788,
+        "source_line": 4327
+      }
+    ]
+  },
+  "private_full_analysis_sha256": "5292212a44b3825480ad26195423c4ae93de360a97c84404ebc7f7e17b18f971",
+  "life_format": "One compact object per life; first observed useful possession/current/fire-request ages measured from original native spawned_tick; null is not observed.",
+  "lives": {
+    "botA": [
+      {"local":0,"global_slot":0,"life_index":1,"entity_id":565,"spawn_clock":0.8000001311302185,"first_alive_clock":0.8000001311302185,"first_alive_line":10,"first_alive_owned":3,"death_clock":44.54960632324219,"death_line":1179,"right_censored":false,"last_alive_clock":44.449607849121094,"last_alive_line":1177,"observed_life_seconds":43.74960619211197,"first_useful_owned_age":2.6499977707862854,"first_useful_owned_line":193,"first_useful_owned_mask":11,"first_useful_current_age":2.9999974370002747,"first_useful_current_line":202,"first_useful_fire_requested_age":6.200008451938629,"first_useful_fire_requested_line":277,"cecil_generation":5,"cecil_spawn_line":249,"cecil_spawn_driver_tick":187,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.4499778747558594,"start_clock":18.799999237060547,"end_clock":20.249977111816406,"start_line":561,"end_line":596},"cecil_death_lines":[1085],"cecil_first_useful_pickup_line":370},
+      {"local":0,"global_slot":0,"life_index":2,"entity_id":565,"spawn_clock":46.09958267211914,"first_alive_clock":46.14958190917969,"first_alive_line":1218,"first_alive_owned":3,"death_clock":76.90009307861328,"death_line":1954,"right_censored":false,"last_alive_clock":76.75008392333984,"last_alive_line":1953,"observed_life_seconds":30.80051040649414,"first_useful_owned_age":9.799850463867188,"first_useful_owned_line":1450,"first_useful_owned_mask":4099,"first_useful_current_age":12.7998046875,"first_useful_current_line":1521,"first_useful_fire_requested_age":13.649791717529297,"first_useful_fire_requested_line":1544,"cecil_generation":6,"cecil_spawn_line":1107,"cecil_spawn_driver_tick":1093,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.4499931335449219,"start_clock":61.1993522644043,"end_clock":61.64934539794922,"start_line":1580,"end_line":1592},"cecil_death_lines":[1639],"cecil_first_useful_pickup_line":1284},
+      {"local":0,"global_slot":0,"life_index":3,"entity_id":565,"spawn_clock":78.50019073486328,"first_alive_clock":78.50019073486328,"first_alive_line":1992,"first_alive_owned":3,"death_clock":98.35140228271484,"death_line":2469,"right_censored":false,"last_alive_clock":98.2013931274414,"last_alive_line":2468,"observed_life_seconds":19.851211547851562,"first_useful_owned_age":8.350509643554688,"first_useful_owned_line":2194,"first_useful_owned_mask":2051,"first_useful_current_age":8.700531005859375,"first_useful_current_line":2203,"first_useful_fire_requested_age":8.950546264648438,"first_useful_fire_requested_line":2209,"cecil_generation":7,"cecil_spawn_line":1660,"cecil_spawn_driver_tick":1741,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.2500152587890625,"start_clock":86.1506576538086,"end_clock":86.40067291259766,"start_line":2178,"end_line":2184},"cecil_death_lines":[2000],"cecil_first_useful_pickup_line":1806},
+      {"local":0,"global_slot":0,"life_index":4,"entity_id":565,"spawn_clock":100.1515121459961,"first_alive_clock":100.1515121459961,"first_alive_line":2513,"first_alive_owned":3,"death_clock":151.00460815429688,"death_line":3740,"right_censored":false,"last_alive_clock":150.90460205078125,"last_alive_line":3739,"observed_life_seconds":50.85309600830078,"first_useful_owned_age":3.2001953125,"first_useful_owned_line":2588,"first_useful_owned_mask":19,"first_useful_current_age":4.1502532958984375,"first_useful_current_line":2611,"first_useful_fire_requested_age":5.100311279296875,"first_useful_fire_requested_line":2634,"cecil_generation":8,"cecil_spawn_line":2036,"cecil_spawn_driver_tick":2174,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.3500823974609375,"start_clock":103.8017349243164,"end_clock":105.15181732177734,"start_line":2602,"end_line":2633},"cecil_death_lines":[2899],"cecil_first_useful_pickup_line":2122},
+      {"local":0,"global_slot":0,"life_index":5,"entity_id":565,"spawn_clock":152.50469970703125,"first_alive_clock":152.60470581054688,"first_alive_line":3777,"first_alive_owned":3,"death_clock":211.30828857421875,"death_line":5193,"right_censored":false,"last_alive_clock":211.20828247070312,"last_alive_line":5192,"observed_life_seconds":58.8035888671875,"first_useful_owned_age":33.45204162597656,"first_useful_owned_line":4586,"first_useful_owned_mask":2051,"first_useful_current_age":33.85206604003906,"first_useful_current_line":4595,"first_useful_fire_requested_age":34.05207824707031,"first_useful_fire_requested_line":4601,"cecil_generation":9,"cecil_spawn_line":2943,"cecil_spawn_driver_tick":3221,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.700103759765625,"start_clock":202.3577423095703,"end_clock":204.05784606933594,"start_line":4981,"end_line":5022},"cecil_death_lines":[4020],"cecil_first_useful_pickup_line":3569},
+      {"local":0,"global_slot":0,"life_index":6,"entity_id":565,"spawn_clock":212.95838928222656,"first_alive_clock":213.00839233398438,"first_alive_line":5235,"first_alive_owned":3,"death_clock":null,"death_line":null,"right_censored":true,"last_alive_clock":240.61007690429688,"last_alive_line":5904,"observed_life_seconds":27.651687622070312,"first_useful_owned_age":15.250930786132812,"first_useful_owned_line":5603,"first_useful_owned_mask":2051,"first_useful_current_age":15.700958251953125,"first_useful_current_line":5614,"first_useful_fire_requested_age":19.201171875,"first_useful_fire_requested_line":5700,"cecil_generation":10,"cecil_spawn_line":4070,"cecil_spawn_driver_tick":4430,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.3500213623046875,"start_clock":220.80886840820312,"end_clock":221.1588897705078,"start_line":5425,"end_line":5434},"cecil_death_lines":[],"cecil_first_useful_pickup_line":4302},
+      {"local":1,"global_slot":2,"life_index":1,"entity_id":566,"spawn_clock":0.8000001311302185,"first_alive_clock":0.8000001311302185,"first_alive_line":9,"first_alive_owned":3,"death_clock":28.299854278564453,"death_line":788,"right_censored":false,"last_alive_clock":28.19985580444336,"last_alive_line":787,"observed_life_seconds":27.499854147434235,"first_useful_owned_age":11.550028860569,"first_useful_owned_line":406,"first_useful_owned_mask":259,"first_useful_current_age":16.800017416477203,"first_useful_current_line":530,"first_useful_fire_requested_age":17.050013601779938,"first_useful_fire_requested_line":535,"cecil_generation":5,"cecil_spawn_line":261,"cecil_spawn_driver_tick":187,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.2500009536743164,"start_clock":6.350006103515625,"end_clock":6.600007057189941,"start_line":263,"end_line":270},"cecil_death_lines":[799],"cecil_first_useful_pickup_line":529},
+      {"local":1,"global_slot":2,"life_index":2,"entity_id":566,"spawn_clock":30.09982681274414,"first_alive_clock":30.09982681274414,"first_alive_line":831,"first_alive_owned":3,"death_clock":33.74977111816406,"death_line":921,"right_censored":false,"last_alive_clock":33.59977340698242,"last_alive_line":919,"observed_life_seconds":3.649944305419922,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"cecil_generation":6,"cecil_spawn_line":826,"cecil_spawn_driver_tick":773,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.09999847412109375,"start_clock":30.09982681274414,"end_clock":30.199825286865234,"start_line":833,"end_line":836},"cecil_death_lines":[916],"cecil_first_useful_pickup_line":null},
+      {"local":1,"global_slot":2,"life_index":3,"entity_id":566,"spawn_clock":35.299747467041016,"first_alive_clock":35.299747467041016,"first_alive_line":958,"first_alive_owned":3,"death_clock":40.64966583251953,"death_line":1087,"right_censored":false,"last_alive_clock":40.54966735839844,"last_alive_line":1086,"observed_life_seconds":5.349918365478516,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"cecil_generation":7,"cecil_spawn_line":930,"cecil_spawn_driver_tick":877,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.3499946594238281,"start_clock":37.49971389770508,"end_clock":37.849708557128906,"start_line":1013,"end_line":1022},"cecil_death_lines":[1007],"cecil_first_useful_pickup_line":null},
+      {"local":1,"global_slot":2,"life_index":4,"entity_id":566,"spawn_clock":42.499637603759766,"first_alive_clock":42.499637603759766,"first_alive_line":1131,"first_alive_owned":3,"death_clock":114.85240936279297,"death_line":2868,"right_censored":false,"last_alive_clock":114.75240325927734,"last_alive_line":2867,"observed_life_seconds":72.3527717590332,"first_useful_owned_age":12.099815368652344,"first_useful_owned_line":1419,"first_useful_owned_mask":259,"first_useful_current_age":12.249813079833984,"first_useful_current_line":1424,"first_useful_fire_requested_age":28.30008316040039,"first_useful_fire_requested_line":1807,"cecil_generation":8,"cecil_spawn_line":1052,"cecil_spawn_driver_tick":1021,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.8500518798828125,"start_clock":108.45201873779297,"end_clock":109.30207061767578,"start_line":2713,"end_line":2734},"cecil_death_lines":[2332],"cecil_first_useful_pickup_line":1249},
+      {"local":1,"global_slot":2,"life_index":5,"entity_id":566,"spawn_clock":116.50251007080078,"first_alive_clock":116.50251007080078,"first_alive_line":2909,"first_alive_owned":3,"death_clock":148.55445861816406,"death_line":3681,"right_censored":false,"last_alive_clock":148.45445251464844,"last_alive_line":3680,"observed_life_seconds":32.05194854736328,"first_useful_owned_age":15.750953674316406,"first_useful_owned_line":3288,"first_useful_owned_mask":4099,"first_useful_current_age":21.151283264160156,"first_useful_current_line":3417,"first_useful_fire_requested_age":25.05152130126953,"first_useful_fire_requested_line":3512,"cecil_generation":9,"cecil_spawn_line":2349,"cecil_spawn_driver_tick":2501,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.3500823974609375,"start_clock":145.40426635742188,"end_clock":146.7543487548828,"start_line":3608,"end_line":3639},"cecil_death_lines":[2855],"cecil_first_useful_pickup_line":2580},
+      {"local":1,"global_slot":2,"life_index":6,"entity_id":566,"spawn_clock":150.10455322265625,"first_alive_clock":150.15455627441406,"first_alive_line":3720,"first_alive_owned":3,"death_clock":214.85850524902344,"death_line":5280,"right_censored":false,"last_alive_clock":214.7584991455078,"last_alive_line":5279,"observed_life_seconds":64.75395202636719,"first_useful_owned_age":6.400390625,"first_useful_owned_line":3870,"first_useful_owned_mask":1027,"first_useful_current_age":8.450515747070312,"first_useful_current_line":3919,"first_useful_fire_requested_age":10.150619506835938,"first_useful_fire_requested_line":3960,"cecil_generation":10,"cecil_spawn_line":2877,"cecil_spawn_driver_tick":3173,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.60003662109375,"start_clock":193.60720825195312,"end_clock":194.20724487304688,"start_line":4770,"end_line":4787},"cecil_death_lines":[4105],"cecil_first_useful_pickup_line":2994},
+      {"local":1,"global_slot":2,"life_index":7,"entity_id":566,"spawn_clock":216.50860595703125,"first_alive_clock":216.55860900878906,"first_alive_line":5319,"first_alive_owned":3,"death_clock":null,"death_line":null,"right_censored":true,"last_alive_clock":240.61007690429688,"last_alive_line":5904,"observed_life_seconds":24.101470947265625,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"cecil_generation":11,"cecil_spawn_line":4120,"cecil_spawn_driver_tick":4501,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.4000244140625,"start_clock":234.2596893310547,"end_clock":234.6597137451172,"start_line":5751,"end_line":5760},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":3,"life_index":1,"entity_id":567,"spawn_clock":0.8000001311302185,"first_alive_clock":0.8000001311302185,"first_alive_line":9,"first_alive_owned":3,"death_clock":11.950027465820312,"death_line":397,"right_censored":false,"last_alive_clock":11.850027084350586,"last_alive_line":396,"observed_life_seconds":11.150027334690094,"first_useful_owned_age":8.400016844272614,"first_useful_owned_line":328,"first_useful_owned_mask":1027,"first_useful_current_age":9.950022757053375,"first_useful_current_line":367,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"cecil_generation":5,"cecil_spawn_line":273,"cecil_spawn_driver_tick":187,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.35000133514404297,"start_clock":11.1500244140625,"end_clock":11.500025749206543,"start_line":378,"end_line":387},"cecil_death_lines":[526],"cecil_first_useful_pickup_line":442},
+      {"local":2,"global_slot":3,"life_index":2,"entity_id":567,"spawn_clock":13.700034141540527,"first_alive_clock":13.700034141540527,"first_alive_line":437,"first_alive_owned":3,"death_clock":21.599956512451172,"death_line":626,"right_censored":false,"last_alive_clock":21.499958038330078,"last_alive_line":625,"observed_life_seconds":7.8999223709106445,"first_useful_owned_age":7.4999284744262695,"first_useful_owned_line":617,"first_useful_owned_mask":2051,"first_useful_current_age":7.799923896789551,"first_useful_current_line":623,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"cecil_generation":6,"cecil_spawn_line":550,"cecil_spawn_driver_tick":446,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.10000038146972656,"start_clock":13.700034141540527,"end_clock":13.800034523010254,"start_line":439,"end_line":442},"cecil_death_lines":[701],"cecil_first_useful_pickup_line":657},
+      {"local":2,"global_slot":3,"life_index":3,"entity_id":567,"spawn_clock":23.299930572509766,"first_alive_clock":23.299930572509766,"first_alive_line":667,"first_alive_owned":3,"death_clock":45.549591064453125,"death_line":1203,"right_censored":false,"last_alive_clock":45.399593353271484,"last_alive_line":1202,"observed_life_seconds":22.24966049194336,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"cecil_generation":7,"cecil_spawn_line":726,"cecil_spawn_driver_tick":637,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.3499946594238281,"start_clock":32.54978942871094,"end_clock":32.899784088134766,"start_line":893,"end_line":902},"cecil_death_lines":[1104],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":3,"life_index":4,"entity_id":567,"spawn_clock":47.299564361572266,"first_alive_clock":47.299564361572266,"first_alive_line":1245,"first_alive_owned":3,"death_clock":97.8013687133789,"death_line":2457,"right_censored":false,"last_alive_clock":97.70136260986328,"last_alive_line":2456,"observed_life_seconds":50.50180435180664,"first_useful_owned_age":13.149799346923828,"first_useful_owned_line":1560,"first_useful_owned_mask":131,"first_useful_current_age":14.099784851074219,"first_useful_current_line":1584,"first_useful_fire_requested_age":17.949817657470703,"first_useful_fire_requested_line":1674,"cecil_generation":8,"cecil_spawn_line":1132,"cecil_spawn_driver_tick":1117,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.700103759765625,"start_clock":88.85082244873047,"end_clock":90.5509262084961,"start_line":2244,"end_line":2284},"cecil_death_lines":[1995],"cecil_first_useful_pickup_line":1321},
+      {"local":2,"global_slot":3,"life_index":5,"entity_id":567,"spawn_clock":99.3514633178711,"first_alive_clock":99.4014663696289,"first_alive_line":2496,"first_alive_owned":3,"death_clock":124.00296783447266,"death_line":3089,"right_censored":false,"last_alive_clock":123.90296173095703,"last_alive_line":3088,"observed_life_seconds":24.651504516601562,"first_useful_owned_age":11.650711059570312,"first_useful_owned_line":2774,"first_useful_owned_mask":259,"first_useful_current_age":18.051101684570312,"first_useful_current_line":2930,"first_useful_fire_requested_age":23.451431274414062,"first_useful_fire_requested_line":3061,"cecil_generation":9,"cecil_spawn_line":2009,"cecil_spawn_driver_tick":2159,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.3500213623046875,"start_clock":111.0021743774414,"end_clock":111.3521957397461,"start_line":2776,"end_line":2785},"cecil_death_lines":[2472],"cecil_first_useful_pickup_line":2243},
+      {"local":2,"global_slot":3,"life_index":6,"entity_id":567,"spawn_clock":125.70307159423828,"first_alive_clock":125.7530746459961,"first_alive_line":3130,"first_alive_owned":3,"death_clock":156.10491943359375,"death_line":3861,"right_censored":false,"last_alive_clock":156.00491333007812,"last_alive_line":3860,"observed_life_seconds":30.40184783935547,"first_useful_owned_age":15.450935363769531,"first_useful_owned_line":3503,"first_useful_owned_mask":2051,"first_useful_current_age":15.700950622558594,"first_useful_current_line":3509,"first_useful_fire_requested_age":16.45099639892578,"first_useful_fire_requested_line":3527,"cecil_generation":10,"cecil_spawn_line":2491,"cecil_spawn_driver_tick":2685,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.3500213623046875,"start_clock":132.40347290039062,"end_clock":132.7534942626953,"start_line":3292,"end_line":3301},"cecil_death_lines":[2988],"cecil_first_useful_pickup_line":2704},
+      {"local":2,"global_slot":3,"life_index":7,"entity_id":567,"spawn_clock":157.70501708984375,"first_alive_clock":157.70501708984375,"first_alive_line":3901,"first_alive_owned":3,"death_clock":193.00717163085938,"death_line":4756,"right_censored":false,"last_alive_clock":192.85716247558594,"last_alive_line":4755,"observed_life_seconds":35.302154541015625,"first_useful_owned_age":19.751205444335938,"first_useful_owned_line":4379,"first_useful_owned_mask":8195,"first_useful_current_age":20.001220703125,"first_useful_current_line":4385,"first_useful_fire_requested_age":30.901885986328125,"first_useful_fire_requested_line":4651,"cecil_generation":11,"cecil_spawn_line":3009,"cecil_spawn_driver_tick":3325,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.3500823974609375,"start_clock":174.20602416992188,"end_clock":175.5561065673828,"start_line":4301,"end_line":4333},"cecil_death_lines":[3696],"cecil_first_useful_pickup_line":3371},
+      {"local":2,"global_slot":3,"life_index":8,"entity_id":567,"spawn_clock":194.50726318359375,"first_alive_clock":194.55726623535156,"first_alive_line":4794,"first_alive_owned":3,"death_clock":199.9575958251953,"death_line":4919,"right_censored":false,"last_alive_clock":199.8575897216797,"last_alive_line":4918,"observed_life_seconds":5.4503326416015625,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"cecil_generation":12,"cecil_spawn_line":3717,"cecil_spawn_driver_tick":4061,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.1500091552734375,"start_clock":196.2573699951172,"end_clock":196.40737915039062,"start_line":4836,"end_line":4839},"cecil_death_lines":[3799],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":3,"life_index":9,"entity_id":567,"spawn_clock":201.70770263671875,"first_alive_clock":201.75770568847656,"first_alive_line":4964,"first_alive_owned":3,"death_clock":231.5595245361328,"death_line":5685,"right_censored":false,"last_alive_clock":231.509521484375,"last_alive_line":5684,"observed_life_seconds":29.851821899414062,"first_useful_owned_age":7.7504730224609375,"first_useful_owned_line":5149,"first_useful_owned_mask":1027,"first_useful_current_age":13.150802612304688,"first_useful_current_line":5280,"first_useful_fire_requested_age":15.80096435546875,"first_useful_fire_requested_line":5342,"cecil_generation":13,"cecil_spawn_line":3857,"cecil_spawn_driver_tick":4206,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.80010986328125,"start_clock":215.1085205078125,"end_clock":216.90863037109375,"start_line":5287,"end_line":5330},"cecil_death_lines":[4408],"cecil_first_useful_pickup_line":3978},
+      {"local":2,"global_slot":3,"life_index":10,"entity_id":567,"spawn_clock":233.35963439941406,"first_alive_clock":233.40963745117188,"first_alive_line":5730,"first_alive_owned":3,"death_clock":null,"death_line":null,"right_censored":true,"last_alive_clock":240.61007690429688,"last_alive_line":5904,"observed_life_seconds":7.2504425048828125,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"cecil_generation":14,"cecil_spawn_line":4425,"cecil_spawn_driver_tick":4838,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.3500213623046875,"start_clock":235.35975646972656,"end_clock":235.70977783203125,"start_line":5778,"end_line":5785},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":4,"life_index":1,"entity_id":568,"spawn_clock":0.8000001311302185,"first_alive_clock":0.8000001311302185,"first_alive_line":10,"first_alive_owned":3,"death_clock":66.29944610595703,"death_line":1701,"right_censored":false,"last_alive_clock":66.1994400024414,"last_alive_line":1698,"observed_life_seconds":65.49944597482681,"first_useful_owned_age":7.900014936923981,"first_useful_owned_line":317,"first_useful_owned_mask":19,"first_useful_current_age":8.400016844272614,"first_useful_current_line":328,"first_useful_fire_requested_age":15.800032675266266,"first_useful_fire_requested_line":508,"cecil_generation":5,"cecil_spawn_line":285,"cecil_spawn_driver_tick":187,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.600006103515625,"start_clock":13.050031661987305,"end_clock":14.65003776550293,"start_line":423,"end_line":461},"cecil_death_lines":[1458],"cecil_first_useful_pickup_line":435},
+      {"local":3,"global_slot":4,"life_index":2,"entity_id":568,"spawn_clock":68.1495590209961,"first_alive_clock":68.24956512451172,"first_alive_line":1745,"first_alive_owned":3,"death_clock":142.95411682128906,"death_line":3548,"right_censored":false,"last_alive_clock":142.85411071777344,"last_alive_line":3545,"observed_life_seconds":74.80455780029297,"first_useful_owned_age":31.501922607421875,"first_useful_owned_line":2502,"first_useful_owned_mask":8195,"first_useful_current_age":33.55204772949219,"first_useful_current_line":2550,"first_useful_fire_requested_age":42.502593994140625,"first_useful_fire_requested_line":2765,"cecil_generation":6,"cecil_spawn_line":1488,"cecil_spawn_driver_tick":1534,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":2.0501251220703125,"start_clock":80.00028228759766,"end_clock":82.05040740966797,"start_line":2027,"end_line":2077},"cecil_death_lines":[2773],"cecil_first_useful_pickup_line":2027},
+      {"local":3,"global_slot":4,"life_index":3,"entity_id":568,"spawn_clock":144.50421142578125,"first_alive_clock":144.55421447753906,"first_alive_line":3586,"first_alive_owned":3,"death_clock":147.75440979003906,"death_line":3660,"right_censored":false,"last_alive_clock":147.4543914794922,"last_alive_line":3655,"observed_life_seconds":3.2501983642578125,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"cecil_generation":7,"cecil_spawn_line":2795,"cecil_spawn_driver_tick":3061,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.100006103515625,"start_clock":144.55421447753906,"end_clock":144.6542205810547,"start_line":3586,"end_line":3589},"cecil_death_lines":[2841],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":4,"life_index":4,"entity_id":568,"spawn_clock":149.30450439453125,"first_alive_clock":149.30450439453125,"first_alive_line":3699,"first_alive_owned":3,"death_clock":208.6581268310547,"death_line":5129,"right_censored":false,"last_alive_clock":208.50811767578125,"last_alive_line":5126,"observed_life_seconds":59.35362243652344,"first_useful_owned_age":11.20068359375,"first_useful_owned_line":3965,"first_useful_owned_mask":259,"first_useful_current_age":17.751083374023438,"first_useful_current_line":4123,"first_useful_fire_requested_age":24.20147705078125,"first_useful_fire_requested_line":4281,"cecil_generation":8,"cecil_spawn_line":2859,"cecil_spawn_driver_tick":3157,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.500030517578125,"start_clock":191.30706787109375,"end_clock":191.80709838867188,"start_line":4716,"end_line":4728},"cecil_death_lines":[3970],"cecil_first_useful_pickup_line":3057},
+      {"local":3,"global_slot":4,"life_index":5,"entity_id":568,"spawn_clock":210.10821533203125,"first_alive_clock":210.10821533203125,"first_alive_line":5164,"first_alive_owned":3,"death_clock":null,"death_line":null,"right_censored":true,"last_alive_clock":240.61007690429688,"last_alive_line":5902,"observed_life_seconds":30.501861572265625,"first_useful_owned_age":10.300628662109375,"first_useful_owned_line":5414,"first_useful_owned_mask":4099,"first_useful_current_age":13.950851440429688,"first_useful_current_line":5504,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"cecil_generation":9,"cecil_spawn_line":3993,"cecil_spawn_driver_tick":4373,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.60003662109375,"start_clock":233.30963134765625,"end_clock":233.90966796875,"start_line":5727,"end_line":5741},"cecil_death_lines":[],"cecil_first_useful_pickup_line":4175}
+    ],
+    "botB": [
+      {"local":0,"global_slot":5,"life_index":1,"entity_id":569,"spawn_clock":0.8000001311302185,"first_alive_clock":0.8000001311302185,"first_alive_line":8,"first_alive_owned":3,"death_clock":11.850027084350586,"death_line":395,"right_censored":false,"last_alive_clock":11.75002670288086,"last_alive_line":392,"observed_life_seconds":11.050026953220367,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":7.650023460388184,"start_clock":2.8499984741210938,"end_clock":10.500021934509277,"start_line":179,"end_line":362},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":2,"entity_id":569,"spawn_clock":14.20003604888916,"first_alive_clock":14.20003604888916,"first_alive_line":450,"first_alive_owned":3,"death_clock":27.799861907958984,"death_line":777,"right_censored":false,"last_alive_clock":27.69986343383789,"last_alive_line":774,"observed_life_seconds":13.599825859069824,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":2.2999649047851562,"start_clock":23.799922943115234,"end_clock":26.09988784790039,"start_line":679,"end_line":736},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":3,"entity_id":569,"spawn_clock":30.199825286865234,"first_alive_clock":30.199825286865234,"first_alive_line":835,"first_alive_owned":3,"death_clock":36.29973220825195,"death_line":982,"right_censored":false,"last_alive_clock":36.14973449707031,"last_alive_line":979,"observed_life_seconds":6.099906921386719,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.199981689453125,"start_clock":30.199825286865234,"end_clock":31.39980697631836,"start_line":835,"end_line":865},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":4,"entity_id":569,"spawn_clock":38.199703216552734,"first_alive_clock":38.24970245361328,"first_alive_line":1030,"first_alive_owned":3,"death_clock":53.249473571777344,"death_line":1388,"right_censored":false,"last_alive_clock":53.14947509765625,"last_alive_line":1385,"observed_life_seconds":15.04977035522461,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":4.049938201904297,"start_clock":41.849647521972656,"end_clock":45.89958572387695,"start_line":1117,"end_line":1213},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":5,"entity_id":569,"spawn_clock":55.19944381713867,"first_alive_clock":55.19944381713867,"first_alive_line":1434,"first_alive_owned":3,"death_clock":73.24987030029297,"death_line":1867,"right_censored":false,"last_alive_clock":73.09986114501953,"last_alive_line":1864,"observed_life_seconds":18.050426483154297,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":2.6499595642089844,"start_clock":56.49942398071289,"end_clock":59.149383544921875,"start_line":1466,"end_line":1528},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":6,"entity_id":569,"spawn_clock":75.19998931884766,"first_alive_clock":75.3499984741211,"first_alive_line":1917,"first_alive_owned":3,"death_clock":92.85106658935547,"death_line":2339,"right_censored":false,"last_alive_clock":92.75106048583984,"last_alive_line":2336,"observed_life_seconds":17.651077270507812,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":5.00030517578125,"start_clock":83.20047760009766,"end_clock":88.2007827758789,"start_line":2108,"end_line":2228},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":7,"entity_id":569,"spawn_clock":95.20121002197266,"first_alive_clock":95.30121612548828,"first_alive_line":2397,"first_alive_owned":3,"death_clock":111.3521957397461,"death_line":2784,"right_censored":false,"last_alive_clock":111.25218963623047,"last_alive_line":2781,"observed_life_seconds":16.150985717773438,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.500030517578125,"start_clock":97.10132598876953,"end_clock":97.60135650634766,"start_line":2440,"end_line":2452},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":8,"entity_id":569,"spawn_clock":113.20230865478516,"first_alive_clock":113.30231475830078,"first_alive_line":2831,"first_alive_owned":3,"death_clock":120.45275115966797,"death_line":3004,"right_censored":false,"last_alive_clock":120.35274505615234,"last_alive_line":3001,"observed_life_seconds":7.2504425048828125,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":2.5501556396484375,"start_clock":116.70252227783203,"end_clock":119.25267791748047,"start_line":2913,"end_line":2976},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":9,"entity_id":569,"spawn_clock":122.2028579711914,"first_alive_clock":122.30286407470703,"first_alive_line":3048,"first_alive_owned":3,"death_clock":142.95411682128906,"death_line":3549,"right_censored":false,"last_alive_clock":142.85411071777344,"last_alive_line":3546,"observed_life_seconds":20.751258850097656,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":8.750534057617188,"start_clock":132.6534881591797,"end_clock":141.40402221679688,"start_line":3297,"end_line":3510},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":10,"entity_id":569,"spawn_clock":145.20425415039062,"first_alive_clock":145.30426025390625,"first_alive_line":3604,"first_alive_owned":3,"death_clock":149.0544891357422,"death_line":3694,"right_censored":false,"last_alive_clock":148.95448303222656,"last_alive_line":3691,"observed_life_seconds":3.8502349853515625,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":3.6502227783203125,"start_clock":145.30426025390625,"end_clock":148.95448303222656,"start_line":3604,"end_line":3691},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":11,"entity_id":569,"spawn_clock":151.20462036132812,"first_alive_clock":151.25462341308594,"first_alive_line":3747,"first_alive_owned":3,"death_clock":169.35572814941406,"death_line":4181,"right_censored":false,"last_alive_clock":169.25572204589844,"last_alive_line":4178,"observed_life_seconds":18.151107788085938,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":3.6502227783203125,"start_clock":162.80532836914062,"end_clock":166.45555114746094,"start_line":4022,"end_line":4109},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":12,"entity_id":569,"spawn_clock":171.20584106445312,"first_alive_clock":171.20584106445312,"first_alive_line":4225,"first_alive_owned":3,"death_clock":177.25621032714844,"death_line":4374,"right_censored":false,"last_alive_clock":177.106201171875,"last_alive_line":4371,"observed_life_seconds":6.0503692626953125,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":3.2501983642578125,"start_clock":173.8560028076172,"end_clock":177.106201171875,"start_line":4291,"end_line":4371},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":13,"entity_id":569,"spawn_clock":179.20632934570312,"first_alive_clock":179.20632934570312,"first_alive_line":4420,"first_alive_owned":3,"death_clock":188.7569122314453,"death_line":4655,"right_censored":false,"last_alive_clock":188.60690307617188,"last_alive_line":4652,"observed_life_seconds":9.550582885742188,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":3.700225830078125,"start_clock":184.90667724609375,"end_clock":188.60690307617188,"start_line":4560,"end_line":4652},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":14,"entity_id":569,"spawn_clock":190.20700073242188,"first_alive_clock":190.20700073242188,"first_alive_line":4691,"first_alive_owned":3,"death_clock":210.3582305908203,"death_line":5171,"right_censored":false,"last_alive_clock":210.20822143554688,"last_alive_line":5168,"observed_life_seconds":20.151229858398438,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":4.60028076171875,"start_clock":202.707763671875,"end_clock":207.30804443359375,"start_line":4989,"end_line":5100},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":15,"entity_id":569,"spawn_clock":212.20834350585938,"first_alive_clock":212.20834350585938,"first_alive_line":5215,"first_alive_owned":3,"death_clock":231.4595184326172,"death_line":5683,"right_censored":false,"last_alive_clock":231.35951232910156,"last_alive_line":5680,"observed_life_seconds":19.251174926757812,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":5.8503570556640625,"start_clock":225.5091552734375,"end_clock":231.35951232910156,"start_line":5539,"end_line":5680},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":0,"global_slot":5,"life_index":16,"entity_id":569,"spawn_clock":233.20962524414062,"first_alive_clock":233.30963134765625,"first_alive_line":5728,"first_alive_owned":3,"death_clock":null,"death_line":null,"right_censored":true,"last_alive_clock":240.61007690429688,"last_alive_line":5903,"observed_life_seconds":7.40045166015625,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.00006103515625,"start_clock":237.80990600585938,"end_clock":238.80996704101562,"start_line":5836,"end_line":5859},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":1,"global_slot":6,"life_index":1,"entity_id":570,"spawn_clock":0.8000001311302185,"first_alive_clock":0.8000001311302185,"first_alive_line":8,"first_alive_owned":3,"death_clock":8.350013732910156,"death_line":310,"right_censored":false,"last_alive_clock":8.200013160705566,"last_alive_line":307,"observed_life_seconds":7.550013601779938,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":5.45000559091568,"start_clock":0.8000001311302185,"end_clock":6.250005722045898,"start_line":11,"end_line":261},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":1,"global_slot":6,"life_index":2,"entity_id":570,"spawn_clock":9.950019836425781,"first_alive_clock":10.050020217895508,"first_alive_line":350,"first_alive_owned":3,"death_clock":30.549819946289062,"death_line":844,"right_censored":false,"last_alive_clock":30.44982147216797,"last_alive_line":841,"observed_life_seconds":20.59980010986328,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":8.399871826171875,"start_clock":21.199962615966797,"end_clock":29.599834442138672,"start_line":618,"end_line":820},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":1,"global_slot":6,"life_index":3,"entity_id":570,"spawn_clock":32.94978332519531,"first_alive_clock":32.99978256225586,"first_alive_line":904,"first_alive_owned":3,"death_clock":64.34932708740234,"death_line":1656,"right_censored":false,"last_alive_clock":64.09931182861328,"last_alive_line":1651,"observed_life_seconds":31.39954376220703,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":3.949939727783203,"start_clock":50.499515533447266,"end_clock":54.44945526123047,"start_line":1320,"end_line":1417},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":1,"global_slot":6,"life_index":4,"entity_id":570,"spawn_clock":65.94942474365234,"first_alive_clock":65.94942474365234,"first_alive_line":1693,"first_alive_owned":3,"death_clock":70.79972076416016,"death_line":1808,"right_censored":false,"last_alive_clock":70.69971466064453,"last_alive_line":1805,"observed_life_seconds":4.8502960205078125,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.700042724609375,"start_clock":65.94942474365234,"end_clock":66.64946746826172,"start_line":1693,"end_line":1710},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":1,"global_slot":6,"life_index":5,"entity_id":570,"spawn_clock":72.9498519897461,"first_alive_clock":72.9498519897461,"first_alive_line":1861,"first_alive_owned":3,"death_clock":79.3502426147461,"death_line":2013,"right_censored":false,"last_alive_clock":79.20023345947266,"last_alive_line":2010,"observed_life_seconds":6.400390625,"first_useful_owned_age":1.1500701904296875,"first_useful_owned_line":1888,"first_useful_owned_mask":131,"first_useful_current_age":1.40008544921875,"first_useful_current_line":1894,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.500030517578125,"start_clock":77.4001235961914,"end_clock":77.90015411376953,"start_line":1966,"end_line":1978},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":1,"global_slot":6,"life_index":6,"entity_id":570,"spawn_clock":80.9503402709961,"first_alive_clock":80.9503402709961,"first_alive_line":2051,"first_alive_owned":3,"death_clock":105.25182342529297,"death_line":2635,"right_censored":false,"last_alive_clock":105.15181732177734,"last_alive_line":2632,"observed_life_seconds":24.301483154296875,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":4.000244140625,"start_clock":84.70056915283203,"end_clock":88.70081329345703,"start_line":2142,"end_line":2240},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":1,"global_slot":6,"life_index":7,"entity_id":570,"spawn_clock":106.9519271850586,"first_alive_clock":107.0019302368164,"first_alive_line":2677,"first_alive_owned":3,"death_clock":null,"death_line":null,"right_censored":true,"last_alive_clock":240.61007690429688,"last_alive_line":5903,"observed_life_seconds":133.65814971923828,"first_useful_owned_age":13.650833129882812,"first_useful_owned_line":3007,"first_useful_owned_mask":259,"first_useful_current_age":13.900848388671875,"first_useful_current_line":3013,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":11.850715637207031,"start_clock":125.4030532836914,"end_clock":137.25376892089844,"start_line":3122,"end_line":3409},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":7,"life_index":1,"entity_id":571,"spawn_clock":0.8000001311302185,"first_alive_clock":0.8000001311302185,"first_alive_line":8,"first_alive_owned":3,"death_clock":17.700016021728516,"death_line":534,"right_censored":false,"last_alive_clock":17.600017547607422,"last_alive_line":531,"observed_life_seconds":16.900015890598297,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":4.500006675720215,"start_clock":12.000027656555176,"end_clock":16.50003433227539,"start_line":398,"end_line":506},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":7,"life_index":2,"entity_id":571,"spawn_clock":19.69998550415039,"first_alive_clock":19.799983978271484,"first_alive_line":583,"first_alive_owned":3,"death_clock":32.14979553222656,"death_line":883,"right_censored":false,"last_alive_clock":32.04979705810547,"last_alive_line":880,"observed_life_seconds":12.449810028076172,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":3.0999526977539062,"start_clock":26.24988555908203,"end_clock":29.349838256835938,"start_line":739,"end_line":814},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":7,"life_index":3,"entity_id":571,"spawn_clock":33.699771881103516,"first_alive_clock":33.74977111816406,"first_alive_line":920,"first_alive_owned":3,"death_clock":38.349700927734375,"death_line":1033,"right_censored":false,"last_alive_clock":38.24970245361328,"last_alive_line":1030,"observed_life_seconds":4.649929046630859,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":2.2999649047851562,"start_clock":35.949737548828125,"end_clock":38.24970245361328,"start_line":973,"end_line":1030},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":7,"life_index":4,"entity_id":571,"spawn_clock":40.69966506958008,"first_alive_clock":40.79966354370117,"first_alive_line":1091,"first_alive_owned":3,"death_clock":54.349456787109375,"death_line":1414,"right_censored":false,"last_alive_clock":54.199459075927734,"last_alive_line":1411,"observed_life_seconds":13.649791717529297,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":6.749897003173828,"start_clock":45.64958953857422,"end_clock":52.39948654174805,"start_line":1207,"end_line":1367},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":7,"life_index":5,"entity_id":571,"spawn_clock":56.69942092895508,"first_alive_clock":56.899417877197266,"first_alive_line":1474,"first_alive_owned":3,"death_clock":115.10242462158203,"death_line":2874,"right_censored":false,"last_alive_clock":115.0024185180664,"last_alive_line":2871,"observed_life_seconds":58.40300369262695,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":8.650527954101562,"start_clock":88.35079193115234,"end_clock":97.0013198852539,"start_line":2231,"end_line":2437},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":7,"life_index":6,"entity_id":571,"spawn_clock":116.70252227783203,"first_alive_clock":116.70252227783203,"first_alive_line":2913,"first_alive_owned":3,"death_clock":119.25267791748047,"death_line":2976,"right_censored":false,"last_alive_clock":119.10266876220703,"last_alive_line":2973,"observed_life_seconds":2.5501556396484375,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.300079345703125,"start_clock":116.70252227783203,"end_clock":118.00260162353516,"start_line":2913,"end_line":2946},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":7,"life_index":7,"entity_id":571,"spawn_clock":120.70276641845703,"first_alive_clock":120.70276641845703,"first_alive_line":3010,"first_alive_owned":3,"death_clock":141.25401306152344,"death_line":3507,"right_censored":false,"last_alive_clock":141.1540069580078,"last_alive_line":3504,"observed_life_seconds":20.551246643066406,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":7.800468444824219,"start_clock":124.85301971435547,"end_clock":132.6534881591797,"start_line":3110,"end_line":3297},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":7,"life_index":8,"entity_id":571,"spawn_clock":142.7041015625,"first_alive_clock":142.7541046142578,"first_alive_line":3543,"first_alive_owned":3,"death_clock":206.3579864501953,"death_line":5076,"right_censored":false,"last_alive_clock":206.2579803466797,"last_alive_line":5073,"observed_life_seconds":63.65388488769531,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":13.900848388671875,"start_clock":172.90594482421875,"end_clock":186.80679321289062,"start_line":4267,"end_line":4608},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":2,"global_slot":7,"life_index":9,"entity_id":571,"spawn_clock":208.7081298828125,"first_alive_clock":208.7581329345703,"first_alive_line":5133,"first_alive_owned":3,"death_clock":null,"death_line":null,"right_censored":true,"last_alive_clock":240.61007690429688,"last_alive_line":5903,"observed_life_seconds":31.901947021484375,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":6.300384521484375,"start_clock":212.80838012695312,"end_clock":219.1087646484375,"start_line":5230,"end_line":5382},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":1,"entity_id":572,"spawn_clock":0.8000001311302185,"first_alive_clock":0.8000001311302185,"first_alive_line":8,"first_alive_owned":3,"death_clock":28.899845123291016,"death_line":803,"right_censored":false,"last_alive_clock":28.749847412109375,"last_alive_line":801,"observed_life_seconds":28.099844992160797,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":9.599853515625,"start_clock":19.149993896484375,"end_clock":28.749847412109375,"start_line":568,"end_line":801},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":2,"entity_id":572,"spawn_clock":30.44982147216797,"first_alive_clock":30.44982147216797,"first_alive_line":841,"first_alive_owned":3,"death_clock":60.099369049072266,"death_line":1552,"right_censored":false,"last_alive_clock":59.949371337890625,"last_alive_line":1549,"observed_life_seconds":29.649547576904297,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":10.299842834472656,"start_clock":41.49965286254883,"end_clock":51.799495697021484,"start_line":1109,"end_line":1352},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":3,"entity_id":572,"spawn_clock":62.44933319091797,"first_alive_clock":62.499332427978516,"first_alive_line":1612,"first_alive_owned":3,"death_clock":75.8000259399414,"death_line":1929,"right_censored":false,"last_alive_clock":75.70001983642578,"last_alive_line":1926,"observed_life_seconds":13.350692749023438,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":7.80047607421875,"start_clock":67.89954376220703,"end_clock":75.70001983642578,"start_line":1738,"end_line":1926},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":4,"entity_id":572,"spawn_clock":77.45012664794922,"first_alive_clock":77.55013275146484,"first_alive_line":1969,"first_alive_owned":3,"death_clock":93.0010757446289,"death_line":2342,"right_censored":false,"last_alive_clock":92.85106658935547,"last_alive_line":2339,"observed_life_seconds":15.550949096679688,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":3.7502288818359375,"start_clock":81.05034637451172,"end_clock":84.80057525634766,"start_line":2054,"end_line":2145},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":5,"entity_id":572,"spawn_clock":94.45116424560547,"first_alive_clock":94.45116424560547,"first_alive_line":2376,"first_alive_owned":3,"death_clock":107.60196685791016,"death_line":2692,"right_censored":false,"last_alive_clock":107.45195770263672,"last_alive_line":2689,"observed_life_seconds":13.150802612304688,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":9.00054931640625,"start_clock":98.45140838623047,"end_clock":107.45195770263672,"start_line":2473,"end_line":2689},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":6,"entity_id":572,"spawn_clock":109.45207977294922,"first_alive_clock":109.50208282470703,"first_alive_line":2739,"first_alive_owned":3,"death_clock":125.30304718017578,"death_line":3119,"right_censored":false,"last_alive_clock":125.15303802490234,"last_alive_line":3116,"observed_life_seconds":15.850967407226562,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":9.500579833984375,"start_clock":109.50208282470703,"end_clock":119.0026626586914,"start_line":2739,"end_line":2970},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":7,"entity_id":572,"spawn_clock":127.45317840576172,"first_alive_clock":127.45317840576172,"first_alive_line":3171,"first_alive_owned":3,"death_clock":139.60391235351562,"death_line":3466,"right_censored":false,"last_alive_clock":139.50390625,"last_alive_line":3463,"observed_life_seconds":12.150733947753906,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":4.80029296875,"start_clock":134.70361328125,"end_clock":139.50390625,"start_line":3347,"end_line":3463},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":8,"entity_id":572,"spawn_clock":141.4540252685547,"first_alive_clock":141.5540313720703,"first_alive_line":3513,"first_alive_owned":3,"death_clock":145.30426025390625,"death_line":3604,"right_censored":false,"last_alive_clock":145.1542510986328,"last_alive_line":3602,"observed_life_seconds":3.8502349853515625,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":0.9500579833984375,"start_clock":141.5540313720703,"end_clock":142.50408935546875,"start_line":3513,"end_line":3537},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":9,"entity_id":572,"spawn_clock":147.4543914794922,"first_alive_clock":147.4543914794922,"first_alive_line":3656,"first_alive_owned":3,"death_clock":152.10467529296875,"death_line":3767,"right_censored":false,"last_alive_clock":152.00466918945312,"last_alive_line":3764,"observed_life_seconds":4.6502838134765625,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":4.2502593994140625,"start_clock":147.4543914794922,"end_clock":151.70465087890625,"start_line":3656,"end_line":3759},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":10,"entity_id":572,"spawn_clock":154.45481872558594,"first_alive_clock":154.55482482910156,"first_alive_line":3824,"first_alive_owned":3,"death_clock":162.90533447265625,"death_line":4025,"right_censored":false,"last_alive_clock":162.80532836914062,"last_alive_line":4022,"observed_life_seconds":8.450515747070312,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":4.8502960205078125,"start_clock":156.50494384765625,"end_clock":161.35523986816406,"start_line":3871,"end_line":3986},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":11,"entity_id":572,"spawn_clock":164.45542907714844,"first_alive_clock":164.50543212890625,"first_alive_line":4063,"first_alive_owned":3,"death_clock":199.80758666992188,"death_line":4917,"right_censored":false,"last_alive_clock":199.70758056640625,"last_alive_line":4914,"observed_life_seconds":35.35215759277344,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":4.3502655029296875,"start_clock":182.20651245117188,"end_clock":186.55677795410156,"start_line":4495,"end_line":4602},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":12,"entity_id":572,"spawn_clock":201.4576873779297,"first_alive_clock":201.5576934814453,"first_alive_line":4959,"first_alive_owned":3,"death_clock":224.05906677246094,"death_line":5505,"right_censored":false,"last_alive_clock":223.9090576171875,"last_alive_line":5502,"observed_life_seconds":22.60137939453125,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":6.300384521484375,"start_clock":213.1584014892578,"end_clock":219.4587860107422,"start_line":5239,"end_line":5391},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":13,"entity_id":572,"spawn_clock":226.45921325683594,"first_alive_clock":226.50921630859375,"first_alive_line":5563,"first_alive_owned":3,"death_clock":235.509765625,"death_line":5780,"right_censored":false,"last_alive_clock":235.35975646972656,"last_alive_line":5777,"observed_life_seconds":9.050552368164062,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":3.700225830078125,"start_clock":229.1593780517578,"end_clock":232.85960388183594,"start_line":5626,"end_line":5716},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null},
+      {"local":3,"global_slot":8,"life_index":14,"entity_id":572,"spawn_clock":237.4598846435547,"first_alive_clock":237.5598907470703,"first_alive_line":5830,"first_alive_owned":3,"death_clock":null,"death_line":null,"right_censored":true,"last_alive_clock":240.61007690429688,"last_alive_line":5903,"observed_life_seconds":3.1501922607421875,"first_useful_owned_age":null,"first_useful_owned_line":null,"first_useful_owned_mask":null,"first_useful_current_age":null,"first_useful_current_line":null,"first_useful_fire_requested_age":null,"first_useful_fire_requested_line":null,"minigun_observed":false,"longest_sampled_one_meter_residence":{"seconds":1.700103759765625,"start_clock":237.5598907470703,"end_clock":239.25999450683594,"start_line":5830,"end_line":5871},"cecil_death_lines":[],"cecil_first_useful_pickup_line":null}
+    ]
+  }
+}

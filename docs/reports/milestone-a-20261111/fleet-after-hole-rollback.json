@@ -1,5 +1,5 @@
 {
-  "utc": "2026-11-12T00:33:58.152166+00:00",
+  "utc": "2026-11-12T01:02:24.292458+00:00",
   "scope": "FRESH_QUERY_AND_CURRENT_LOGS_NOT_LONGTERM_SYNC_OR_HUMAN_CLASSIFICATION",
   "fleet": [
     {
@@ -153,6 +153,6 @@
       "live_session_spawn": 0.0
     }
   ],
-  "disk_free_gib": 21.83,
-  "mem_available_gib": 2.53
+  "disk_free_gib": 21.44,
+  "mem_available_gib": 1.84
 }

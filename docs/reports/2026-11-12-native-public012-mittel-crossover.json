@@ -1,0 +1,65 @@
+{
+  "scope": "Descriptive two-window MITTEL crossover; not three comparisons or overall A3 acceptance",
+  "swap0": "arena012public-v4-checked-swap0-trial-1-003511",
+  "swap1": "arena012public-v4-checked-swap1-trial-1-004059",
+  "actual_positions_and_yaw_exact_all_nine": true,
+  "actual_slot_mapping_equal": true,
+  "same_dlls_exchanged_physical_groups": true,
+  "crossed_config_differences": {
+    "candidate": {
+      "bot_iRosterOffset": [
+        "4",
+        "0"
+      ]
+    },
+    "legacy": {
+      "bot_iRosterOffset": [
+        "0",
+        "4"
+      ]
+    }
+  },
+  "canonical_source_and_reference_bytes_identical": true,
+  "positive_common_spawn_clocks_by_window": [
+    0.9000001549720764,
+    0.8000001311302185
+  ],
+  "first_simulation_state_proven": false,
+  "cohorts": {
+    "candidate": {
+      "lives": 51,
+      "observed_deaths": 43,
+      "right_censored": 8,
+      "useful_owned_lives": 40,
+      "completed_without_useful": 7,
+      "censored_without_useful": 4,
+      "useful_current_lives": 40,
+      "useful_fire_requested_lives": 33,
+      "frags_delta": 62,
+      "frags_by_leg": [
+        20,
+        42
+      ],
+      "dll_sha256": "e049557795e85a5b6676612500ee93c23f4d61233eead757f43b4e8d6bff43c0"
+    },
+    "legacy": {
+      "lives": 84,
+      "observed_deaths": 76,
+      "right_censored": 8,
+      "useful_owned_lives": 9,
+      "completed_without_useful": 68,
+      "censored_without_useful": 7,
+      "useful_current_lives": 7,
+      "useful_fire_requested_lives": 2,
+      "frags_delta": 45,
+      "frags_by_leg": [
+        26,
+        19
+      ],
+      "dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835"
+    }
+  },
+  "swap0_report": "2026-11-12-native-public012-swap0-analysis.json",
+  "swap1_report": "2026-11-12-native-public012-swap1-analysis.json",
+  "private_paired_analysis_sha256": "02cad8ccde9f6f0cd22352d7a2d4ce45b3a306cd7f1d4e379a6dd297dc30bc55"
+}

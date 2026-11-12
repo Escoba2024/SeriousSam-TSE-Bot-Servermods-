@@ -3055,6 +3055,169 @@ void flightLossFixture(bool special=true,double deadline=20.4,bool escape=false,
  wallMode=0;
  check(s.navigator.SourceSlot(2)==1&&s.hop==2,"native004 fixture reaches ordinary successor of jump edge before item loss");
 }
+
+void flightSealedFixture(bool replan=false){
+ bouncer009Fixture();auto& g=BotSupplyGraph();auto& s=BotSupplyState(0);
+ for(auto& p:g.points)p.links.clear();
+ // Keep exact verified binding metadata; unrelated branches are dead ends here.
+ g.points[8].links={7,13,12,187,83,94};g.points[11].links={10,13,12,89,189,94};g.points[12].links={34};
+ auto& a=g.points[84];a.id=84;a.x=0;a.y=.5;a.z=12;a.radius=4;a.flags=10;a.links={85,86,92,95,94,93,156,160,165};
+ auto& b=g.points[86];b.id=86;b.x=0;b.y=38;b.z=12;b.radius=1;b.flags=0;b.links={94,95,93,176};
+ auto& c=g.points[176];c.id=178;c.x=-4.5;c.y=37.25;c.z=12;c.radius=1;c.flags=0;c.important_entity=267;c.links={94,93,95,156};
+ items.clear();player.world.wo_cenEntities.clear();auto& item=addItem(267,-4.5,12,botcore::CecilItemKind::Weapon);item.pl.pl_PositionVector(2)=37.25;item.item.weapon=12;
+ s.ClearGoal();s.goal=176;s.goalEntity=267;s.mappedWeaponGoal=true;s.goalSince=100;s.goalDeadline=140.518;
+ s.scanTick=99999;s.searchAfter=99999;s.anchor=84;s.generation=8;s.entity=567;
+ player.m_pstState=PST_FALL;player.en_penReference=nullptr;player.pl.pl_PositionVector=FLOAT3D(0,.5,12);
+ flightLossTick(replan?2420:2443);
+ // Actual pre-loss native position, used as an input, not simulated physics.
+ player.pl.pl_PositionVector=FLOAT3D(.667f,28.133f,13.458f);
+ if(replan)for(int tick=2421;tick<2444;++tick)flightLossTick(tick);
+ flightLossTick(2444);
+ check(s.navigator.SourceSlot(176)==84&&s.hop==86,"sealed fixture has actual predecessor edge before native loss boundary");
+}
+void flightSealedLossAndArrival(){
+ auto& s=BotSupplyState(0);items[0].pickable=false;flightLossTick(2445);
+ check(s.flightFinishing&&s.goalEntity==0&&s.goal==176,"native2445 item loss retains bounded original84 to86");
+ // Retain known native2460 position over intermediate test actions. This is
+ // deliberately not a simulation/interpolation of missing native snapshots.
+ player.pl.pl_PositionVector=FLOAT3D(-.536f,6.259f,12.015f);
+ for(int tick=2446;tick<2474;++tick)flightLossTick(tick);
+ // Native2474 reports reached86; exact position was not sampled. The original
+ // node center is a synthetic radius-boundary fixture, not a claimed raw sample.
+ player.pl.pl_PositionVector=FLOAT3D(0,38,12);
+}
+void flightSealedRegression(){
+ for(bool replan:{false,true}){
+  flightSealedFixture(replan);auto& s=BotSupplyState(0);flightSealedLossAndArrival();
+  const double since=s.goalSince,deadline=s.goalDeadline;const auto rng=s.rng;const int goals=goalEvents;
+  const auto out=flightLossTick(2474);
+  check(s.flightFinishing&&s.goal==176&&s.navigator.SourceSlot(176)==86&&s.hop==176&&out.flightGoal,
+    "RED native2474 reached86 preserves exactly pre-loss selected86 to176 instead of clearing flight");
+  check(!out.itemGoal&&!out.urgent&&!out.useControl&&!s.importantGoal&&s.goalEntity==0&&
+    s.goalSince==since&&s.goalDeadline==deadline&&s.rng==rng&&goalEvents==goals,
+    "sealed successor neither selects an item nor changes original deadline RNG or important authority");
+  if(s.flightFinishing){
+   player.pl.pl_PositionVector=FLOAT3D(-4.5,37.25,12);const auto end=flightLossTick(2475);
+   check(!s.flightFinishing&&s.goal==-1&&!end.flightGoal&&end.up==0,"single sealed continuation ends at original176 radius without further edge");
+  }
+ }
+}
+
+void flightSelectedPathGuards(){
+ setup(5);auto& g=BotSupplyGraph();botcore::CecilNavSearch search;search.Prepare(5);
+ unsigned char locks[5]={0,0,0,0,0};
+ for(int root:{0,1}){
+  check(search.Run(g,root,locks,5),"existing parent tree is prepared before selected suffix observation");
+  check(search.SelectedSuccessor(g,4,0,1,locks,5)==2,"both existing source and hop root identify immediate selected successor");
+  const double distance=search.Distance(4);const int parent=search.Parent(4);allocations=0;measuring=true;
+  for(int i=0;i<100;++i)search.SelectedSuccessor(g,4,0,1,locks,5);
+  measuring=false;check(allocations==0&&search.Distance(4)==distance&&search.Parent(4)==parent,"selected path observation allocates nothing and keeps existing search unchanged");
+  for(int bad=0;bad<9;++bad){
+   const int goal=bad==0?-1:bad==1?5:bad==2?1:4;
+   const int source=bad==3?-1:bad==4?5:0,hop=bad==5?source:1;
+   if(bad==6)locks[2]=1;
+   check(search.SelectedSuccessor(g,goal,source,hop,bad==7?nullptr:locks,bad==8?4:5)==-1,
+     "invalid goal source hop lock pointer or count cannot reveal a suffix");locks[2]=0;
+  }
+ }
+ check(search.Run(g,2,locks,5)&&search.SelectedSuccessor(g,4,0,1,locks,5)==-1,"unrelated cached origin is not pre-loss route evidence");
+ g.points[1].links={4};search.Run(g,0,locks,5);g.points[1].links={2};
+ check(search.SelectedSuccessor(g,4,0,1,locks,5)==-1,"changed cached arc fails despite alternative new path; observer does not rerun search");
+ search.Prepare(5);check(search.SelectedSuccessor(g,4,0,1,locks,5)==-1,"absent search tree is not a route");
+ flightSealedFixture();auto& s=BotSupplyState(0);
+ check(s.flightSuccessor==176&&s.navigator.SelectedSuccessor(BotSupplyGraph(),176)==176,"only accepted original plan seals existing actual route suffix");
+ s.navigator.Reset();check(s.navigator.SelectedSuccessor(BotSupplyGraph(),176)==-1,"navigator reset hides retained internal search cache");
+}
+SCecilMove flightDriverTick(int tick,bool visible,double distance);
+void flightSealedGuards(){
+ for(int guard=0;guard<29;++guard){
+  flightSealedFixture();auto& s=BotSupplyState(0);flightSealedLossAndArrival();CWorld other;
+  auto& g=BotSupplyGraph();int tick=2474;
+  if(guard==0)++s.generation;
+  if(guard==1)++player.en_ulID;
+  if(guard==2)++_botSupplyMapSerial;
+  if(guard==3)player.worldOverride=&other;
+  if(guard==4)player.en_vGravityDir=FLOAT3D(0,1,0);
+  if(guard==5)++s.goalSince;
+  if(guard==6)++s.goalDeadline;
+  if(guard==7)tick=2480;
+  if(guard==8)player.m_pstState=PST_STAND;
+  if(guard==9)player.health=0;
+  if(guard==10)s.navigator.Reset();
+  if(guard==11)s.blocked[176]=1;
+  if(guard==12)s.blocked[86]=1;
+  if(guard==13)s.blocked[84]=1;
+  if(guard==14){double f=0,st=0,u=0;BotCecilSafeMotion(&player,s,2473*.05,f,st,u,0,1,false);}
+  if(guard==15)s.flightSuccessor=-1;
+  if(guard==16)s.flightSuccessor=175;
+  if(guard==17)s.flightSuccessorConsumed=true;
+  if(guard==18)g.points[176].important_entity=-1;
+  if(guard==19)g.points[176].id=176;
+  if(guard==20)g.points[86].flags=2;
+  if(guard==21)g.points[84].radius=3;
+  if(guard==22)g.points[86].links={176};
+  if(guard==23)g.points[176].lock_entity=777;
+  if(guard==24)_botSupplyMapReady=0;
+  if(guard==25)bot_bSupplyNavigation=false;
+  if(guard==26)BotCecilBouncerPublish(false,nullptr,0,0,7);
+  if(guard==27)s.followEntity=777;
+  if(guard==28)s.importantGoal=true;
+  const auto out=flightLossTick(tick);
+  check(!s.flightFinishing&&s.goal==-1&&!out.flightGoal&&out.forward==0&&out.strafe==0&&out.up==0&&
+    s.flightSuccessor==-1&&s.flightSuccessorPlanned==-1&&!s.flightSuccessorConsumed,
+    "sealed exit fails closed and clears all seal fields on changed identity physics map path context lock or safety");
+  bot_bSupplyNavigation=true;_botSupplyMapReady=1;
+ }
+ for(int bad=0;bad<5;++bad){
+  flightSealedFixture();auto& s=BotSupplyState(0);s.ClearFlight();
+  if(bad==0)BotCecilBouncerPublish(true,"wrong",0xff3776e0u,0xe4571656u,7);
+  if(bad==1)BotCecilBouncerPublish(true,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld",0,0xe4571656u,7);
+  if(bad==2)BotCecilBouncerPublish(true,"Levels\\LevelsMP\\Deathmatch\\RedStation.wld",0xff3776e0u,0,7);
+  if(bad==3)BotSupplyGraph().points.resize(176);
+  if(bad==4)s.goalEntity=999;
+  if(bad!=3){flightLossTick(2445);check(s.flightSuccessor==-1,"wrong file binding or item never seals a new continuation");}
+  else check(!BotCecilFlightExitMetadata(),"metadata bounds fail before indexing exit node");
+ }
+ flightSealedFixture();auto& live=BotSupplyState(0);player.pl.pl_PositionVector=FLOAT3D(0,38,12);
+ const auto normal=flightLossTick(2445);
+ check(!live.flightFinishing&&normal.itemGoal&&!normal.flightGoal&&live.goalEntity==267&&
+   live.navigator.SourceSlot(176)==86&&live.hop==176&&near(live.goalDeadline,140.518),
+   "valid live item follows unchanged ordinary successor; new finish authority is absent");
+ flightSealedFixture();auto& reset=BotSupplyState(0);player.health=0;flightLossTick(2445);
+ check(reset.flightSuccessor==-1&&!reset.flightSuccessorConsumed,"same-entity death clears pending sealed successor");
+ player.health=100;player.m_pstState=PST_STAND;flightLossTick(2446);
+ check(reset.flightSuccessor==-1&&!reset.flightSuccessorConsumed,"same-entity next life cannot inherit old seal");
+
+ for(bool relocated:{false,true}){
+  flightSealedFixture();auto& s=BotSupplyState(0);items[0].pickable=false;flightLossTick(2445);
+  if(relocated){s.anchor=94;const auto& node=BotSupplyGraph().points[94];player.pl.pl_PositionVector=FLOAT3D(node.x,node.y,node.z);flightLossTick(2446);}
+  else{
+   player.pl.pl_PositionVector=FLOAT3D(2,30,12);
+   for(int tick=2446;tick<2500&&s.flightFinishing;++tick)flightLossTick(tick);
+  }
+  check(!s.flightFinishing&&s.flightSuccessor==-1&&s.goal==-1,"normal navigator relocation or stuck recovery cancels sealed flight instead of rebasing authority");
+ }
+ for(int acceptance=0;acceptance<3;++acceptance){
+  flightSealedFixture();auto& s=BotSupplyState(0);s.ClearFlight();_botRayBudget=40;
+  auto out=BotSupplyTick(&player,0,2445,100);double f=out.forward,st=out.strafe,u=out.up;
+  check(s.flightSuccessor==-1&&s.flightSuccessorPlanned==176,"planning alone does not seal a continuation before final movement safety");
+  if(acceptance==0){BotCecilSafeMotion(&player,s,122.25,f,st,u,out.yaw_delta,1,false);check(s.flightSuccessor==-1,"NAV ownership rejection cannot seal planned suffix");}
+  if(acceptance==1){BotCecilFlightAccepted(s,122.30,true);check(s.flightSuccessor==-1,"other action clock cannot seal previous plan");}
+  if(acceptance==2){BotCecilSafeMotion(&player,s,122.25,f,st,u,out.yaw_delta,1,true);check(s.flightSuccessor==176,"actual accepted same action seals existing parent suffix");}
+ }
+ flightSealedFixture();flightSealedLossAndArrival();auto& owned=BotSupplyState(0);
+ const auto visible=flightDriverTick(2474,true,6);
+ check(owned.flightFinishing&&visible.flightGoal&&bridgeDriverOwns(true,visible,&player,true)&&owned.flightSuccessorConsumed&&owned.flightSuccessor==-1,
+   "actual Driver retains only bounded consumed flight continuation against visible close combat");
+ owned.flightAccepted=-1;const auto stale=flightDriverTick(2475,true,6);
+ check(!owned.flightFinishing&&!stale.flightGoal&&owned.flightSuccessor==-1&&!owned.flightSuccessorConsumed,
+   "losing movement acceptance after consumed continuation ends flight and clears its seal");
+ flightSealedFixture();auto& observation=BotSupplyState(0);const int rays=rayCount,lookups=worldLookups;const auto rng=observation.rng;
+ const double deadline=observation.goalDeadline;allocations=0;measuring=true;
+ for(int i=0;i<100;++i){BotCecilFlightExitMetadata();BotCecilFlightContinuation(observation);observation.navigator.SelectedSuccessor(BotSupplyGraph(),176);}
+ measuring=false;check(allocations==0&&rayCount==rays&&worldLookups==lookups&&observation.rng==rng&&observation.goalDeadline==deadline,
+   "new bounded observations add no allocations rays world lookups RNG or deadline changes");
+}
 void flightLossRegression(){
  flightLossFixture();auto& s=BotSupplyState(0);items[0].pickable=false;player.pl.pl_PositionVector(2)=40.0;
  const auto m=flightLossTick(101);
@@ -3215,7 +3378,7 @@ void flightVisibleOwnership(){
    "ordinary FALL loss does not gain dedicated special-flight arbitration");
 }
 int main(){
- flightVisibleOwnership();flightLossRegression();flightLossGuards();
+ flightSelectedPathGuards();flightSealedGuards();flightSealedRegression();flightVisibleOwnership();flightLossRegression();flightLossGuards();
  boundedSupplySegment(); approachArrivalGeometry();approach008Transitions();bouncer009Transitions();bouncer010Native009Replay();bouncer011Native010Replay();bouncer012Native011Arrival();bouncer012RecordedArrivals();bouncer012ArrivalGuards();approachElevenDiagnostics();approachDiagnostics();approachDeathRespawnDiagnostics();supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
  itemTransit49();itemTransit49Guards();
  liquidProjection48();

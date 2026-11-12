@@ -1,0 +1,455 @@
+{
+  "scope": "INDEPENDENT_SAVED_ARTIFACT_ANALYSIS_ONLY",
+  "first_processed_state_proven": false,
+  "a1_accepted": false,
+  "useful_owned_mask": "0x3df8",
+  "method": "Deduplicate inventory by actual slot/entity/spawn clock/game tick; derive cohorts from local-to-global BotDriver mappings. Counts of observed gains are lower bounds, not exact pickup events. Damage records require pinned pointer/main TLS/same positive life clock and equal entry/exit current tick. Only alive distinct-known-player DMT_BULLET included in normal-hit subset.",
+  "windows": [
+    {
+      "window": "a1-dm012-pulses-spawn0-trial-1-011052",
+      "spawn_seconds": 0,
+      "instrumented": false,
+      "wall_seconds": 90.11703383899294,
+      "hashes": {
+        "result.json": "9d7ee1547048d3d91ac1b6d199aa2a89ccb68d9869d3c36bdbe7974a3d32c923",
+        "controller-source.py": "e2ce9b3c3be60e0963308797eb0b38b01bda6f798af99a2ba7d3301b11b72efc",
+        "inventory.jsonl": "61465246c6c526e324a251b0763c19d94ccdaf0d7aa92bd8b08f4af5e13e1d18",
+        "session-health.jsonl": "7570323ac00574d676815a19228066882d03cdcb96530edb807e37f3ee52b0f5",
+        "server-closed.log": "1c79e0a6318667dd1abca457594fbf767b1575f1626fab638ee9a90df33b06a3",
+        "botA-closed.log": "c6b810077119742db5bcc033aef60fc9dd30a01f0a12761f78de85d2f5288194",
+        "botB-closed.log": "49c77afefc2628b18509d8e535ee8b42d0ada9963a239955f10a78d42e92c8a6",
+        "vanilla-closed.log": "6b0c28fd23db28e4f379a380ee4701f65d3bf6fa7198a404664bef1f732a11de"
+      },
+      "life_counts": {
+        "vanilla": {
+          "lives": 2,
+          "respawns": 1,
+          "deaths_observed": 1,
+          "right_censored": 1,
+          "lives_useful_owned_observed": 0,
+          "within_life_observed_useful_gain_transitions": 0
+        },
+        "botA": {
+          "lives": 12,
+          "respawns": 8,
+          "deaths_observed": 8,
+          "right_censored": 4,
+          "lives_useful_owned_observed": 9,
+          "within_life_observed_useful_gain_transitions": 10
+        },
+        "botB": {
+          "lives": 8,
+          "respawns": 4,
+          "deaths_observed": 4,
+          "right_censored": 4,
+          "lives_useful_owned_observed": 6,
+          "within_life_observed_useful_gain_transitions": 9
+        }
+      },
+      "inputs": {
+        "fire_pulses": 3,
+        "release_only": 1,
+        "input_total_block_seconds": 2.5393102280795574,
+        "all_button_releases_confirmed": true
+      },
+      "cost": {
+        "max_observation_gap_seconds": 0.7941854607779533,
+        "controller_cpu_seconds": 13.611047,
+        "inventory": {
+          "enabled": true,
+          "tool_sha256": "920613df96771c14d3600f7f15fbbf5ae44254365774a9168fe16dbcee735cbb",
+          "valid_samples": 2213,
+          "discarded_changed": 55,
+          "sample_seconds_total": 8.772746841423213,
+          "sample_seconds_max": 0.009910583030432463,
+          "setup_seconds": 0.0070791118778288364,
+          "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+        },
+        "role_cpu_seconds": {
+          "server": 2.97,
+          "botA": 3.06,
+          "vanilla": 60.0,
+          "botB": 3.18
+        },
+        "role_rss_end_mib": {
+          "server": 49.140625,
+          "botA": 180.0625,
+          "vanilla": 205.24609375,
+          "botB": 180.26171875
+        }
+      },
+      "cleanup_four_closed": true,
+      "postclose_accepted": true,
+      "sync": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "a1_accepted": false,
+      "first_processed_state_proven": false,
+      "actual_spawn_session_samples_per_role": 756,
+      "cohort_game_sha256": {
+        "server": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+        "botA": "e049557795e85a5b6676612500ee93c23f4d61233eead757f43b4e8d6bff43c0",
+        "vanilla": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+        "botB": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530"
+      },
+      "actual_slots": {
+        "vanilla": [
+          1
+        ],
+        "botA": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "botB": [
+          5,
+          6,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "window": "a1-dm012-pulses-spawn0-trial-1-011501",
+      "spawn_seconds": 0,
+      "instrumented": true,
+      "wall_seconds": 90.1200426069554,
+      "hashes": {
+        "result.json": "ceb614ece5a7aecbe0c394d07e9d2b54b0092fa1f0992508a4d0840115764e27",
+        "controller-source.py": "e2ce9b3c3be60e0963308797eb0b38b01bda6f798af99a2ba7d3301b11b72efc",
+        "inventory.jsonl": "8975624d0f5850cd65174b4d0cffe02faf96baa08af0dc119af8dfb201b4dede",
+        "session-health.jsonl": "6ebbc09584481590e9cad7f316ec199e3a8a67e465b6815a31c5342bdc73aee0",
+        "server-closed.log": "47e35dbc097672cf44d954e63ce83aeb98d1d3bd22ceeed6faaecf0b5d703621",
+        "botA-closed.log": "ce13ff5c1bff47e3cc002416f747878cb641f4f4136d0645809345e274dc6c19",
+        "botB-closed.log": "3e719fbb0c01cf74cd5257f9556b4f54d37127f7fc1482e5ed9dd3e947f7bb38",
+        "vanilla-closed.log": "43b9eb5b2b2738ce133a9e89c05fe27d5cb372a7e81c031cd481cff73bf01b22",
+        "frida-damage.jsonl": "473f75897de456e313a8922fb37b3491c860ac333273474cb4272dbb9ad05f66",
+        "frida-owned-registry.json": "1e6bac29a590427c00403fdd74b2fbb4fba899ed4c9595e9da434fa369d18288"
+      },
+      "life_counts": {
+        "vanilla": {
+          "lives": 4,
+          "respawns": 3,
+          "deaths_observed": 4,
+          "right_censored": 0,
+          "lives_useful_owned_observed": 0,
+          "within_life_observed_useful_gain_transitions": 0
+        },
+        "botA": {
+          "lives": 12,
+          "respawns": 8,
+          "deaths_observed": 8,
+          "right_censored": 4,
+          "lives_useful_owned_observed": 5,
+          "within_life_observed_useful_gain_transitions": 5
+        },
+        "botB": {
+          "lives": 8,
+          "respawns": 4,
+          "deaths_observed": 5,
+          "right_censored": 3,
+          "lives_useful_owned_observed": 4,
+          "within_life_observed_useful_gain_transitions": 7
+        }
+      },
+      "inputs": {
+        "fire_pulses": 7,
+        "release_only": 1,
+        "input_total_block_seconds": 5.190167139749974,
+        "all_button_releases_confirmed": true
+      },
+      "cost": {
+        "max_observation_gap_seconds": 0.8701309331227094,
+        "controller_cpu_seconds": 17.694176,
+        "inventory": {
+          "enabled": true,
+          "tool_sha256": "920613df96771c14d3600f7f15fbbf5ae44254365774a9168fe16dbcee735cbb",
+          "valid_samples": 1832,
+          "discarded_changed": 46,
+          "sample_seconds_total": 7.685559032019228,
+          "sample_seconds_max": 0.010343857109546661,
+          "setup_seconds": 0.007228106027469039,
+          "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+        },
+        "role_cpu_seconds": {
+          "server": 3.28,
+          "botA": 3.04,
+          "vanilla": 55.54,
+          "botB": 3.19
+        },
+        "role_rss_end_mib": {
+          "server": 101.828125,
+          "botA": 179.328125,
+          "vanilla": 202.859375,
+          "botB": 178.89453125
+        }
+      },
+      "cleanup_four_closed": true,
+      "postclose_accepted": true,
+      "sync": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "a1_accepted": false,
+      "first_processed_state_proven": false,
+      "damage": {
+        "counts": {
+          "records": 85,
+          "within_gameplay_window": 85,
+          "type_4": 51,
+          "already_dead_at_entry": 14,
+          "health_drop_including_corpses": 85,
+          "alive_health_drop": 71,
+          "same_spawn_tick_health_drop": 0,
+          "alive_known_foreign_bullet": 45,
+          "alive_known_foreign_bullet_hp_drop": 45,
+          "alive_known_foreign_bullet_lethal": 10,
+          "alive_known_foreign_bullet_armor_only": 0,
+          "type_6": 3,
+          "type_2": 24,
+          "type_1": 1,
+          "type_12": 1,
+          "type_13": 4,
+          "type_9": 1
+        },
+        "all_registry_tls_life_pins_rechecked": true,
+        "all_record_lives_found_in_inventory": true,
+        "coverage": true,
+        "faults": 0,
+        "dropped": 0,
+        "in_flight": 0,
+        "detach_errors": [],
+        "original_getter_restored": true,
+        "original_damage_restored": true,
+        "hook_sha256": "767a013ae896aa507d536e16f34ee3ed9bcc73121b41970ea329478f59381787",
+        "under_three_seconds": {
+          "foreign_bullet_calls": 3,
+          "hp_decrease_calls": 3,
+          "armor_decrease_calls": 0,
+          "distinct_lives": 1,
+          "minimum_age": 2.699983596801758,
+          "maximum_age": 2.699983596801758,
+          "all_victims_candidate012": true,
+          "lethal_calls": 0
+        },
+        "earliest_foreign_bullet_hp_drop_age": 2.699983596801758
+      },
+      "actual_spawn_session_samples_per_role": 626,
+      "cohort_game_sha256": {
+        "server": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+        "botA": "e049557795e85a5b6676612500ee93c23f4d61233eead757f43b4e8d6bff43c0",
+        "vanilla": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+        "botB": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530"
+      },
+      "actual_slots": {
+        "vanilla": [
+          1
+        ],
+        "botA": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "botB": [
+          5,
+          6,
+          7,
+          8
+        ]
+      }
+    },
+    {
+      "window": "a1-dm012-pulses-spawn3-trial-1-011747",
+      "spawn_seconds": 3,
+      "instrumented": true,
+      "wall_seconds": 90.03180633601733,
+      "hashes": {
+        "result.json": "8d11f85b41118b9ffbe7929532df79ce9a9dc23037019a5642ecdb70fbe3401c",
+        "controller-source.py": "e2ce9b3c3be60e0963308797eb0b38b01bda6f798af99a2ba7d3301b11b72efc",
+        "inventory.jsonl": "8e92655e174dc41525a5a47031775cf7aa57de4bed8c1bdca5c2c6eb1d479bca",
+        "session-health.jsonl": "823f14e4ce38e76899c1e7f1c49d17553e5b03c1d92716de4bae81058ccdf97c",
+        "server-closed.log": "8a2be043bf7c31de5dfa9e7545b296399efd35f80efe2b20fc7e62a11e7b5f38",
+        "botA-closed.log": "81d3dfbe13888b1c5e659a4ea7b7f66f7848b0793abdc73b9a237332561c4857",
+        "botB-closed.log": "e196122adca02dc006ca5cbe6d035dee7c5ac63cfb6d34a7b11f28b697c3f76a",
+        "vanilla-closed.log": "22d02166f10f9ca3e22a2f371560f2e27592e9f64cf3816e923e50eb2e81e0c5",
+        "frida-damage.jsonl": "19fb42de1c0df46d80b960af70afe95e60d7ab4d7a9d4dde9340d2563aeb4b4a",
+        "frida-owned-registry.json": "5c3baa21479f551f03defe33e3eb0c0a08caf23575c2b21d64d277934958383f"
+      },
+      "life_counts": {
+        "vanilla": {
+          "lives": 4,
+          "respawns": 3,
+          "deaths_observed": 4,
+          "right_censored": 0,
+          "lives_useful_owned_observed": 0,
+          "within_life_observed_useful_gain_transitions": 0
+        },
+        "botA": {
+          "lives": 10,
+          "respawns": 6,
+          "deaths_observed": 6,
+          "right_censored": 4,
+          "lives_useful_owned_observed": 8,
+          "within_life_observed_useful_gain_transitions": 14
+        },
+        "botB": {
+          "lives": 13,
+          "respawns": 9,
+          "deaths_observed": 9,
+          "right_censored": 4,
+          "lives_useful_owned_observed": 7,
+          "within_life_observed_useful_gain_transitions": 8
+        }
+      },
+      "inputs": {
+        "fire_pulses": 7,
+        "release_only": 1,
+        "input_total_block_seconds": 5.195972438668832,
+        "all_button_releases_confirmed": true
+      },
+      "cost": {
+        "max_observation_gap_seconds": 0.8706449661403894,
+        "controller_cpu_seconds": 17.750726999999998,
+        "inventory": {
+          "enabled": true,
+          "tool_sha256": "920613df96771c14d3600f7f15fbbf5ae44254365774a9168fe16dbcee735cbb",
+          "valid_samples": 1817,
+          "discarded_changed": 52,
+          "sample_seconds_total": 7.7629844741895795,
+          "sample_seconds_max": 0.011012446135282516,
+          "setup_seconds": 0.007370742037892342,
+          "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+        },
+        "role_cpu_seconds": {
+          "server": 3.3,
+          "botA": 2.98,
+          "vanilla": 60.77,
+          "botB": 3.07
+        },
+        "role_rss_end_mib": {
+          "server": 101.890625,
+          "botA": 178.265625,
+          "vanilla": 207.03515625,
+          "botB": 180.1484375
+        }
+      },
+      "cleanup_four_closed": true,
+      "postclose_accepted": true,
+      "sync": {
+        "server": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botA": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "vanilla": {
+          "bad": 0,
+          "disconnects": 0
+        },
+        "botB": {
+          "bad": 0,
+          "disconnects": 0
+        }
+      },
+      "a1_accepted": false,
+      "first_processed_state_proven": false,
+      "damage": {
+        "counts": {
+          "records": 146,
+          "within_gameplay_window": 146,
+          "type_6": 6,
+          "already_dead_at_entry": 49,
+          "health_drop_including_corpses": 141,
+          "alive_health_drop": 92,
+          "same_spawn_tick_health_drop": 0,
+          "alive_known_foreign_bullet": 80,
+          "alive_known_foreign_bullet_hp_drop": 75,
+          "alive_known_foreign_bullet_lethal": 14,
+          "alive_known_foreign_bullet_armor_only": 0,
+          "type_4": 98,
+          "type_12": 32,
+          "type_2": 9,
+          "type_1": 1
+        },
+        "all_registry_tls_life_pins_rechecked": true,
+        "all_record_lives_found_in_inventory": true,
+        "coverage": true,
+        "faults": 0,
+        "dropped": 0,
+        "in_flight": 0,
+        "detach_errors": [],
+        "original_getter_restored": true,
+        "original_damage_restored": true,
+        "hook_sha256": "767a013ae896aa507d536e16f34ee3ed9bcc73121b41970ea329478f59381787",
+        "under_three_seconds": {
+          "foreign_bullet_calls": 5,
+          "hp_decrease_calls": 0,
+          "armor_decrease_calls": 0,
+          "distinct_lives": 1,
+          "minimum_age": 1.500091552734375,
+          "maximum_age": 1.700103759765625,
+          "all_victims_candidate012": true,
+          "lethal_calls": 0
+        },
+        "earliest_foreign_bullet_hp_drop_age": 5.650006711483002
+      },
+      "actual_spawn_session_samples_per_role": 623,
+      "cohort_game_sha256": {
+        "server": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+        "botA": "e049557795e85a5b6676612500ee93c23f4d61233eead757f43b4e8d6bff43c0",
+        "vanilla": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+        "botB": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530"
+      },
+      "actual_slots": {
+        "vanilla": [
+          1
+        ],
+        "botA": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "botB": [
+          5,
+          6,
+          7,
+          8
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "scope": "CONTROL_AND_BOUNDED_ORIGINAL_FUNCTION_OBSERVATION_NOT_GAMEPLAY_ACCEPTANCE",
+  "windows": [
+    {
+      "window": "arena012brush3-i0-swap1-trial-1-010000",
+      "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+      "instrumentation_enabled": false,
+      "controller_sha256": "dfa88d4bea91c5c45dd77d315214901fcb1497c4cfc5c21cdab2379ed49ce7d0",
+      "observed_seconds": 120.0311397749465,
+      "errors": [],
+      "normal_close_all_roles": true,
+      "post_close_logs_accepted": true,
+      "closed_logs": {
+        "server": {
+          "sha256": "9d6e7f2ba95bc89ee9ae7b40ad4f2ec0f0c961ab0474db9930dcdc0017780ac7",
+          "bytes": 24338
+        },
+        "botA": {
+          "sha256": "9ab9ec166ee71e6b699fbcd588844ed24b8137aa96f15d9a7628ccd3ca98ed0c",
+          "bytes": 993955
+        },
+        "botB": {
+          "sha256": "418de60e27ad8867cc15f1fcf1aa05d21d82d525c0c08b97f9039ac4b4a7b858",
+          "bytes": 673843
+        },
+        "vanilla": {
+          "sha256": "22fccbb565705f3a70208dce43f099b038ae8f8b665a127d55bf2e97d082972f",
+          "bytes": 8021
+        }
+      },
+      "usage": {
+        "server": {
+          "cpu_seconds": 4.18,
+          "end_rss_mib": 49.35546875
+        },
+        "botA": {
+          "cpu_seconds": 4.32,
+          "end_rss_mib": 180.39453125
+        },
+        "vanilla": {
+          "cpu_seconds": 64.96,
+          "end_rss_mib": 204.39453125
+        },
+        "botB": {
+          "cpu_seconds": 4.4,
+          "end_rss_mib": 180.6640625
+        }
+      },
+      "inventory": {
+        "enabled": true,
+        "tool_sha256": "920613df96771c14d3600f7f15fbbf5ae44254365774a9168fe16dbcee735cbb",
+        "valid_samples": 3006,
+        "discarded_changed": 87,
+        "sample_seconds_total": 12.316627335967496,
+        "sample_seconds_max": 0.013595154043287039,
+        "setup_seconds": 0.007185621187090874,
+        "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+      },
+      "cohort_config_sha256": {
+        "botA": "559977563d79a7c329ff0c7daf065e7f4272089f1b2639ac1f7ba5d091ffdda5",
+        "botB": "c2ce234a285f7612385ca412275685c0b512f36ee88bb560902fd7315e28edca"
+      },
+      "qualified": false
+    },
+    {
+      "window": "arena012brush3p-i1-swap1-trial-1-010721",
+      "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+      "instrumentation_enabled": true,
+      "controller_sha256": "7e982962ccbe384ca31b49d2620a89437d930a615cf3f3c9751491af4b55bc2e",
+      "observed_seconds": 120.04119313810952,
+      "errors": [],
+      "normal_close_all_roles": true,
+      "post_close_logs_accepted": true,
+      "closed_logs": {
+        "server": {
+          "sha256": "8a0a09c852c69455eabd408904aceecf99c0e1cc835201d4371e7cc20e8298fe",
+          "bytes": 24248
+        },
+        "botA": {
+          "sha256": "c23321683ab8176e528754ac1a235ef95d1cb63b27acf1ceca03c0ebec8e6f03",
+          "bytes": 848255
+        },
+        "botB": {
+          "sha256": "6dc59cd9b4970b931c5e5134ac109ea826aba31def545d9880eb4cb6e8ea9b61",
+          "bytes": 659194
+        },
+        "vanilla": {
+          "sha256": "da8313f2a17dc2f1e410317ff31dbcf4b90afe410751be3ea8bd17434c6e6c6a",
+          "bytes": 8193
+        }
+      },
+      "usage": {
+        "server": {
+          "cpu_seconds": 4.34,
+          "end_rss_mib": 101.26171875
+        },
+        "botA": {
+          "cpu_seconds": 4.04,
+          "end_rss_mib": 180.55859375
+        },
+        "vanilla": {
+          "cpu_seconds": 78.18,
+          "end_rss_mib": 201.3046875
+        },
+        "botB": {
+          "cpu_seconds": 3.93,
+          "end_rss_mib": 180.28125
+        }
+      },
+      "inventory": {
+        "enabled": true,
+        "tool_sha256": "920613df96771c14d3600f7f15fbbf5ae44254365774a9168fe16dbcee735cbb",
+        "valid_samples": 2938,
+        "discarded_changed": 68,
+        "sample_seconds_total": 12.454278871184215,
+        "sample_seconds_max": 0.011386249912902713,
+        "setup_seconds": 0.007006661966443062,
+        "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+      },
+      "cohort_config_sha256": {
+        "botA": "559977563d79a7c329ff0c7daf065e7f4272089f1b2639ac1f7ba5d091ffdda5",
+        "botB": "c2ce234a285f7612385ca412275685c0b512f36ee88bb560902fd7315e28edca"
+      },
+      "qualified": false,
+      "trace": {
+        "version": "17.26.2",
+        "hook_source_sha256": "bee3791a7a3735f80c54438e15d07aa67bc9d7fa37510b8e90a0d1784567e3f9",
+        "host_source_sha256": "5ca569ac2b3f144c334e8473fb99aa1346c76b54fe0058aee262318de9aa1332",
+        "guard_source_sha256": "b887f72b69ff4bb9dcd3e569f492ec8b465ee34d63b72e0c6b0be118d2d71938",
+        "records_received": 31,
+        "calls": 31,
+        "total_calls": 31,
+        "unregistered_brush_calls": 0,
+        "unmatched_player_calls": 0,
+        "faults": 0,
+        "dropped": 0,
+        "detach_errors": [],
+        "stop_receipt": {
+          "stopped": true,
+          "detach_errors": []
+        },
+        "detached": true,
+        "original_body_restored": true,
+        "completion": {
+          "scope": "COMPLETE_KNOWN_BRUSH_CALL_RECORDS",
+          "launch_proven": false,
+          "bouncer_class_inferred": false,
+          "qualified": false
+        },
+        "coverage": {
+          "armed_ms": 1794445687107,
+          "expires_ms": 1794445812107,
+          "stopped_ms": 1794445808588,
+          "last_observed_ms": 1794445808589,
+          "gameplay_window_start_ms": 1794445688471.9119,
+          "gameplay_window_end_ms": 1794445808510.9082,
+          "observed_overlap_ms": 120038.99633789062,
+          "entire_gameplay_window_covered": true,
+          "meaning": "observed listener lifetime overlap; not complete gameplay/event proof"
+        },
+        "setup_seconds": 0.3225629630032927
+      },
+      "known_brush_call_counts": {
+        "129": 8,
+        "274": 3,
+        "136": 11,
+        "73": 6,
+        "234": 2,
+        "517": 1
+      }
+    }
+  ],
+  "cohort_configs_identical": true,
+  "preserved_pre_attach_failure": {
+    "window": "arena012brush3-i1-swap1-trial-1-010327",
+    "status": "FAIL",
+    "errors": [
+      "ModuleNotFoundError(\"No module named 'frida'\")"
+    ],
+    "normal_close_all_roles": true,
+    "post_close_logs_accepted": true
+  },
+  "limitations": [
+    "Recorded function calls do not prove Bouncer class or successful navigation",
+    "Support registry IDs are opaque frozen associations",
+    "Different natural match trajectories do not provide a causal overhead figure",
+    "Observed additional original-server RSS must be included in future instrumentation budgeting",
+    "No external WAN, Windows GPU, long-duration or A acceptance"
+  ]
+}

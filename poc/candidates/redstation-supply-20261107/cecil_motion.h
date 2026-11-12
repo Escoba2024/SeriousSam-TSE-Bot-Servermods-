@@ -62,6 +62,9 @@ class CecilNavigator {
       (size_t)source_<locks_.size()&&(size_t)hop_<locks_.size();
   }
   int SourceSlot(int goal)const {return HasCommittedEdge(goal)?source_:-1;}
+  int SelectedSuccessor(const CecilNavGraph& graph,int goal)const {
+    return HasCommittedEdge(goal)?search_.SelectedSuccessor(graph,goal,source_,hop_,locks_.data(),locks_.size()):-1;
+  }
   CecilMotion Update(const CecilNavGraph& g,const unsigned char* blocked,size_t count,const CecilMotionInput& in) {
     CecilMotion out;const size_t n=g.points.size();
     if(!in.alive||n==0||n!=locks_.size()||in.anchor<0||(size_t)in.anchor>=n||

@@ -250,5 +250,35 @@
     "drive_url": "https://drive.google.com/file/d/1nS6XNO2bfXi1R85WXA22qa8kMUNOiNNV/view",
     "scope": "PROGRESS_NOT_RELEASE_ACCEPTANCE",
     "covers": "Unqualified010/011 builds, closed011 diagnostics, full life-denominator reports, failed Public011 initial-state guard, existing Dev local control, closed uninstrumented A1 control, immutable private A1v2/controller/x87 selftest, actual private Dev21BAD/2Disconnect logs, source bundle through f51436a. Does not include the subsequent first instrumented A1 window,012 fix or a final release. Requires original baseline and fixture backups."
+  },
+  "build012_native_progress": {
+    "bytes": 16521905,
+    "sha256": "425f8b8c7fa703db81aff86bb2c77ef68147d0e816248c2bdde64458a5fd60cf",
+    "repo_head": "9da1048739117ee61150a37ca3da5efdafea8ac3",
+    "regular_files_written_rehashed": 544,
+    "restored_bytes": 181493003,
+    "symlinks_indexed_not_materialized": 2,
+    "native_launch_from_restore": false,
+    "drive_uploaded": true,
+    "drive_id": "1HnEwF6JdkSDcKeQ0eOeLfXOOGxMKmLLM",
+    "roundtrip_verified": true,
+    "drive_url": "https://drive.google.com/file/d/1HnEwF6JdkSDcKeQ0eOeLfXOOGxMKmLLM/view",
+    "scope": "PROGRESS_NOT_RELEASE_ACCEPTANCE",
+    "covers": "Unqualified012 source/build, actual closed initial012 diagnostic, both Public012 MITTEL windows and first STARK window, original Public012-v3 FAIL plus separately verified normal recovery, first native A1 damage observation and earlier control, immutable private multi-brush v3 sources and first reviewed controller, A4 prepared-only files. Later controlled-v3 copy/runs and new A1 pulse controller are not included. Requires previous original baseline/fixture/SDK/include backups and011 delta. Separate restore wrote and rehashed files; no native restore launch."
+  },
+  "runtime_evidence_delta013_for_build012": {
+    "bytes": 24022302,
+    "sha256": "97d7fbf653be85677f1e41a661ab763f1fc58531282802c5ac2433088e4947ea",
+    "repo_head": "451978ba479d7c85eb44d4382821ceeb33e94639",
+    "regular_files_written_rehashed": 767,
+    "restored_bytes": 279823568,
+    "symlinks_indexed_not_materialized": 2,
+    "native_launch_from_restore": false,
+    "drive_uploaded": true,
+    "scope": "RUNTIME_EVIDENCE_DELTA013_FOR_BUILD012_NOT_A_BUILD013_OR_RELEASE",
+    "drive_id": "1CRAkgWvOQewMibPLaJBapSCFs3Hrj0NM",
+    "roundtrip_verified": true,
+    "drive_url": "https://drive.google.com/file/d/1CRAkgWvOQewMibPLaJBapSCFs3Hrj0NM/view",
+    "covers": "Completed controlled v3 brush capture/control, preserved pre-attach FAIL, immutable pinned-package controller, repeated normal-input A1 Spawn0 uninstrumented/damage and Spawn3 damage windows, immutable A1 controller, original source/build012. Source bundle through451978b. No future flight continuation fix, Build013 binary or A4 adapter. Requires earlier baseline/fixture/SDK/include/private deltas. File restore only, no native launch."
   }
 }
