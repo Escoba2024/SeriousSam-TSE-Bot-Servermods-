@@ -1,0 +1,36 @@
+{
+  "utc": "2026-11-12T14:03:29.916601+00:00",
+  "verdict": "BLOCKED",
+  "critical": 0,
+  "important": 1,
+  "manifest_sha256": "330c5c3b972bb6e83d3f573f1105b4ee3077559a8edc3b20865967d811339e71",
+  "review_sha256": "bfe3dee9a8ee83b41805ebf5f17bcee60a4dfb5857b41f97285df840e197dcf6",
+  "counterexample_sha256": "e6efae1e871b18496ba72c13e2f0cd1e03cf32d73c50887a2aa92685a16985a7",
+  "review_path": "/srv/tse-a1-flight-v4-independent-review-20261112",
+  "finding": "A newer route-after-input observation is recorded but omitted from Route anchor updates, allowing an older favorable pre-emission anchor to survive.",
+  "counterexamples": [
+    "same-tick support zero",
+    "same-tick outside Original Node12 radius",
+    "same-tick outside approach corridor"
+  ],
+  "counterexamples_are_synthetic": true,
+  "real_111716_replay": {
+    "rd_pairs": 27,
+    "role_frames": 66,
+    "original_input_receipts": 16,
+    "seventeenth_down_request": false,
+    "unrecorded_followup_states_claimed": false
+  },
+  "independent_targeted_tests": 19,
+  "author_full_suite_tests": 174,
+  "closure": {
+    "own_source": 44,
+    "evidence": 96,
+    "runtime": 48
+  },
+  "all_pins_verified_by_root": true,
+  "runtime_gates_false": true,
+  "v4_native_started": false,
+  "original_native_FAIL_preserved": true,
+  "next": "Separate disabled V5 fixes every newer observed route frame, including route-after-input; independent re-review before any Root native successor."
+}

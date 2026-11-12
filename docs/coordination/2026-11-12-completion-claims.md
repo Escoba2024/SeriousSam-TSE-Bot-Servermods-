@@ -22,3 +22,12 @@ All three workers remain complete/idle. Root completed the reviewed quiescent De
 ## Resumed ownership — 2026-11-12T13:21:15.395147+00:00
 
 Root: unchanged Delta020 transfer/Drive verification, root integration and all native/live execution. review_names_transaction: isolated new A1 flight-transition V4 correction only. identify_latest_codex: isolated A4 useful-weapon/fire diagnosis/correction only. finish_names_transaction: idle, reserved for independent review. At most two active workers. Earlier closed claims remain historical.
+
+## Current claims — 2026-11-12T14:03:29.916601+00:00
+
+A1 author: separate disabled V5 correction after independently proven V4 blocker. A4 author: passive bounded supply observer only. V4 reviewer: completed/idle. Root: documentation/integration, later independent freeze and all native/build/live. Delta020 Drive roundtrip is complete. No resumed native trial has started.
+
+
+## Current claims — 2026-11-12T14:34:46.397561+00:00
+
+review_names_transaction is finishing the isolated disabled A1 V5 package after 187 passing offline tests; no native authority. identify_latest_codex completed A4 observer source commit3cf2937476a9968ec792b451a53b2365ed3d2e46 and is idle. finish_names_transaction owns read-only independent A4 source review in /srv/tse-a4-passive-observer-independent-review-20261112. Root owns integration, new Build017 preparation and later bounded native trials. No build/native successor has started. Maximum two active workers remains enforced.

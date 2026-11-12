@@ -181,8 +181,10 @@ static void BotCecilApproachCapture(SSupplyState& s,int tick,double now,int sour
   if(now<d.start||now-d.start>=6||d.rows>=120)return;
   d.updated=now;d.updateTick=tick;d.previousSource=source;d.previousHop=hop;d.reached=reached;d.move=move;d.goal=s.goal;d.goalEntity=s.goalEntity;d.deadline=s.goalDeadline;
 }
+static void BotCecilSupplyApproachFinal(CPlayer*,SSupplyState&,int,int,double,bool,int,bool,const FLOAT3D&,const FLOAT3D&,ULONG);
 static void BotCecilApproachFinal(CPlayer* player,SSupplyState& s,int slot,int tick,double now,
     bool nav,int safety,bool visible,const FLOAT3D& action,const FLOAT3D& rotation,ULONG buttons){
+  BotCecilSupplyApproachFinal(player,s,slot,tick,now,nav,safety,visible,action,rotation,buttons);
   auto& d=s.approach;
   if(!bot_bDiagnostics||!player||d.start<0||!std::isfinite(now)||now<d.start||
      now-d.start>=6||d.rows>=120||tick<=d.lastTick)return;
@@ -233,6 +235,103 @@ static bool BotCecilBouncerBindingValid(){
   return bot_bEnabled&&bot_bSupplyNavigation&&_botSupplyMapReady&&
     BotCecilBouncerBindingSerial()>=0&&BotCecilBouncerBindingSerial()==_botSupplyMapSerial;
 }
+// Separate from SSupplyState: death, ClearGoal and Reset cannot renew a map quota.
+// Only the already published Red Station binding admits these two observations.
+struct SCecilSupplyWindow {
+  bool opened=false,closed=false,ending=false;
+  double start=-1,updated=-1,attempt=0,deadline=0;
+  int updateTick=-1,lastTick=-1,previousSource=-1,previousHop=-1,source=-1,anchor=-1,goal=-1;
+  unsigned rows=0;bool reached=false;
+  CPlayer* player=NULL;CWorld* world=NULL;
+  ULONG entity=0,goalEntity=0;uint32_t generation=0,owned=0,usable=0;
+  botcore::CecilMotion move;
+};
+struct SCecilSupplyWindows {
+  long map=-1;CWorld* world=NULL;bool invalidWorld=false;
+  SCecilSupplyWindow episode[2];
+  void Close(){for(auto& e:episode)if(e.opened)e.closed=true;}
+};
+static SCecilSupplyWindows* BotCecilSupplyWindowsAt(int slot){
+  static SCecilSupplyWindows windows[4];
+  return slot>=0&&slot<4?windows+slot:NULL;
+}
+static void BotCecilSupplyApproachCapture(CPlayer* player,SSupplyState& s,int slot,int tick,double now,
+    int source,int hop,bool reached,const botcore::CecilMotion& move,const botcore::CecilItemInput& input){
+  if(!bot_bDiagnostics)return;
+  auto* windows=BotCecilSupplyWindowsAt(slot);if(!windows)return;
+  const long map=_botSupplyMapSerial;
+  if(!BotCecilBouncerBindingValid()||map<0||map<windows->map){windows->Close();return;}
+  if(map>windows->map){*windows=SCecilSupplyWindows();windows->map=map;}
+  CWorld* world=player?player->GetWorld():NULL;
+  if(!player||!world||!s.playable||player->en_ulID!=s.entity||!s.generation||
+     !player->m_penWeapons||!std::isfinite(player->GetHealth())||player->GetHealth()<=0||
+     !std::isfinite(now)||now<0||tick<0){windows->Close();return;}
+  if(!windows->world)windows->world=world;
+  if(world!=windows->world){windows->invalidWorld=true;windows->Close();return;}
+  if(windows->invalidWorld)return;
+  const int after=s.navigator.SourceSlot(s.goal);
+  const bool typed=s.goalEntity&&s.goal>=0&&s.mappedWeaponGoal&&
+    s.goalKind==botcore::CecilItemKind::Weapon&&!s.followEntity&&!s.importantGoal&&
+    input.generation==s.generation&&((input.owned|input.usable)&0x3df8u)==0;
+  const bool post[2]={after==68&&move.hop==6&&move.active&&!move.arrived,
+    after<0&&s.anchor==87&&move.hop==87&&move.active&&!move.arrived};
+  const bool prior[2]={source==68&&hop==6,source<0&&s.anchor==87&&hop==87};
+  for(int kind=0;kind<2;++kind){
+    auto& e=windows->episode[kind];if(e.closed)continue;
+    if(e.opened&&(e.player!=player||e.world!=world||e.entity!=player->en_ulID||
+       e.generation!=s.generation||now<e.updated||now-e.start>=10||e.rows>=200||
+       tick<e.updateTick)){e.closed=true;continue;}
+    if(!typed||!(post[kind]||prior[kind])){if(e.opened)e.closed=true;continue;}
+    if(e.opened&&tick<=e.updateTick)continue;
+    if(!e.opened){e.opened=true;e.start=now;e.player=player;e.world=world;
+      e.entity=player->en_ulID;e.generation=s.generation;}
+    e.updated=now;e.updateTick=tick;e.previousSource=source;e.previousHop=hop;e.reached=reached;
+    e.source=after;e.anchor=s.anchor;e.move=move;e.goal=s.goal;e.goalEntity=s.goalEntity;
+    e.attempt=s.goalSince;e.deadline=s.goalDeadline;e.owned=input.owned;e.usable=input.usable;
+    e.ending=!post[kind];
+  }
+}
+static void BotCecilSupplyApproachFinal(CPlayer* player,SSupplyState& s,int slot,int tick,double now,
+    bool nav,int safety,bool visible,const FLOAT3D& action,const FLOAT3D& rotation,ULONG buttons){
+  if(!bot_bDiagnostics)return;
+  auto* windows=BotCecilSupplyWindowsAt(slot);if(!windows)return;
+  if(!BotCecilBouncerBindingValid()||windows->map!=_botSupplyMapSerial||windows->invalidWorld||
+     !player||!player->GetWorld()||player->GetWorld()!=windows->world||!s.playable||
+     !player->m_penWeapons||!std::isfinite(player->GetHealth())||player->GetHealth()<=0||
+     !std::isfinite(now)||now<0||tick<0){windows->Close();return;}
+  for(int kind=0;kind<2;++kind){
+    auto& e=windows->episode[kind];if(!e.opened||e.closed)continue;
+    if(e.player!=player||e.world!=player->GetWorld()||e.entity!=player->en_ulID||
+       e.entity!=s.entity||e.generation!=s.generation||now<e.start||now-e.start>=10||
+       e.rows>=200){e.closed=true;continue;}
+    if(tick<=e.lastTick)continue;
+    if(e.updateTick!=tick||e.updated!=now){e.closed=true;continue;}
+    bool finite=true;for(int i=1;i<=3;++i)finite=finite&&std::isfinite(action(i))&&std::isfinite(rotation(i));
+    if(!finite){e.closed=true;continue;}
+    const auto& m=e.move;const auto& p=player->GetPlacement().pl_PositionVector;
+    const auto& v=player->en_vCurrentTranslationAbsolute;CEntity* ref=player->en_penReference;
+    const auto& body=player->GetPlacement().pl_OrientationAngle;const auto& view=player->en_plViewpoint.pl_OrientationAngle;
+    const auto& last=player->m_aLastRotation;const auto& probe=s.probe;
+    const bool ending=e.ending||e.rows+1>=200||s.goal!=e.goal||s.goalEntity!=e.goalEntity;
+    BotLog("[CecilSupplyDiagWindow] local=%d class=%s map=%ld entity=%lu generation=%lu tick=%d time=%.9g sample=%u age=%.9g goal_entity=%lu goal=%d attempt=%.9g deadline=%.9g owned=%lu usable=%lu anchor=%d prev_source=%d prev_hop=%d reached=%d source=%d out_hop=%d active=%d arrived=%d stuck=%d relocated=%d flags=%lu requested=(%.9g,%.9g,%.9g) turn=(%.9g,%.9g) nav=%d safety=%d visible=%d final_goal_entity=%lu final_goal=%d final_source=%d final_hop=%d action=(%.9g,%.9g,%.9g) rotation=(%.9g,%.9g,%.9g) buttons=%lu pos=(%.9g,%.9g,%.9g) velocity=(%.9g,%.9g,%.9g) gravity=(%.9g,%.9g,%.9g) support=%lu support_render=%d support_physics=%lu state=%d body=(%.9g,%.9g,%.9g) view=(%.9g,%.9g,%.9g) last=(%.9g,%.9g,%.9g) probe_request=(%.9g,%.9g,%.9g) probe_yaw=%.9g probe_primary=%d probe_last=%d probe_mask=%u probe_rays=(%u,%u) probe_hit=%lu probe_render=%d probe_support=%.9g probe_normal=(%.9g,%.9g,%.9g) probe_from=(%.9g,%.9g,%.9g) probe_to=(%.9g,%.9g,%.9g) ending=%d\n",
+      slot,kind?"source87":"north68_6",windows->map,(unsigned long)e.entity,(unsigned long)e.generation,
+      tick,now,e.rows+1,now-e.start,(unsigned long)e.goalEntity,e.goal,e.attempt,e.deadline,
+      (unsigned long)e.owned,(unsigned long)e.usable,e.anchor,e.previousSource,e.previousHop,e.reached,e.source,m.hop,
+      m.active,m.arrived,m.stuck,m.relocated,(unsigned long)m.flags,m.forward,m.strafe,m.up,m.yaw_delta,m.pitch_delta,
+      nav,safety,visible,(unsigned long)s.goalEntity,s.goal,s.navigator.SourceSlot(s.goal),s.hop,
+      (double)action(1),(double)action(2),(double)action(3),(double)rotation(1),(double)rotation(2),(double)rotation(3),(unsigned long)buttons,
+      (double)p(1),(double)p(2),(double)p(3),(double)v(1),(double)v(2),(double)v(3),
+      (double)player->en_vGravityDir(1),(double)player->en_vGravityDir(2),(double)player->en_vGravityDir(3),
+      ref?(unsigned long)ref->en_ulID:0ul,ref?(int)ref->GetRenderType():-1,ref?(unsigned long)ref->GetPhysicsFlags():0ul,
+      (int)player->m_pstState,(double)body(1),(double)body(2),(double)body(3),(double)view(1),(double)view(2),(double)view(3),
+      (double)last(1),(double)last(2),(double)last(3),probe.inputForward,probe.inputStrafe,probe.inputUp,probe.finalYaw,
+      (int)probe.primaryReason,(int)probe.lastReason,probe.reasonMask,probe.wallRays,probe.floorRays,
+      (unsigned long)probe.hitEntity,probe.renderType,probe.support,probe.normal[0],probe.normal[1],probe.normal[2],
+      probe.from[0],probe.from[1],probe.from[2],probe.to[0],probe.to[1],probe.to[2],ending);
+    ++e.rows;e.lastTick=tick;if(ending)e.closed=true;
+  }
+}
+
 static void BotSupplyUpdateNavigation(CGame *game){
   static CTString previousWorld="";static BOOL previousEnabled=FALSE;static LONG previousSerial=-1;
   const BOOL enabled=bot_bEnabled&&bot_bSupplyNavigation&&game!=NULL&&game->gm_bGameOn;
@@ -1401,6 +1500,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   const bool reachedBouncerApproach=reachedHop&&BotCecilBouncerApproaching(player,s);
   auto move=s.navigator.Update(BotSupplyGraph(),s.blocked.data(),s.blocked.size(),in);s.hop=move.hop;
   BotCecilApproachCapture(s,tick,now,previousSource,previousHop,reachedHop,move);
+  BotCecilSupplyApproachCapture(player,s,slot,tick,now,previousSource,previousHop,reachedHop,move,input);
   BotCecilBouncerApproach(player,s,move,reachedBouncerApproach);
   if(s.flightFinishing){
     if(continueFlight){

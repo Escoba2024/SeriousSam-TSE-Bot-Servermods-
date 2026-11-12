@@ -153,3 +153,19 @@ Files: poc/candidates/redstation-supply-20261107/{BotDriver.cpp,bot_human.h,bot_
 - Both prepared parts uploaded to the existing private folder, downloaded again, individual sizes/hashes verified, combined archive SHA256 exactly82a661bb52ae8d6b08232aba3f70577ebdaa594e52ddf8dfe9edee147cb7c132. Manifest upload/readback also verified. See docs/reports/milestone-a-20261112/backup020-drive-roundtrip.json.
 - Previous external local-execution/upload blocker is resolved. A1/A3/A4/stability/release and B dependency remain unchanged. Subsequent source/evidence work requires a later incremental backup.
 - A4 supply analysis found genuine competing pickups and insufficient intermediate motion evidence; new bounded passive observer is under implementation. A1 V4 targeted real-recording RED/GREEN is demonstrated; independent review/native execution still pending.
+
+
+## A1 V4 independent review blocker — 2026-11-12T14:03:29.916601+00:00
+
+- V4 author docs integrated from c209e73. Independent review:0 Critical/1 Important. Three complete PP counterexamples prove route-after-input frames do not update/invalidate the older launch anchor. Full report and source/repro pins are preserved.
+- Root verified all44/96/48 pins and disabled gates. No V4 native start or freeze.
+- Separate V5 correction is assigned to the author; original V4 and native111716 FAIL remain unchanged. Required RED/GREEN includes all three reviewer counterexamples and every actual route observation path, with original budgets and no additional input.
+- A4 passive bounded observer remains in a separate worker/worktree. Maximum two active workers; Root alone owns native/build/live.
+
+
+## Source review checkpoint 2026-11-12T14:34:46.397561+00:00
+
+- A4 passive observer source3cf2937476a9968ec792b451a53b2365ed3d2e46 is frozen:100 additive production lines, Driver unchanged. Actual final tests68 observer ASan/UBSan,2687 existing bridge ASan/UBSan and Driver actions pass. Root checked all12 manifest pins and exact receipts; independent source review is in progress. No DLL/native trial or gameplay repair is claimed.
+- A1 V4 remains BLOCKED and immutable. Separate V5 now reports187 passing tests including skipped after-input and periodic successful-read counterexamples, preserved actual111716 replay and strict8-second flight deadline. Closure/independent review remain pending; no V5 runtime approval.
+- Last verified publication is API0e2de7465ead76b9a1b9c7c793dc543ee74cc9cb, tree59000ec639748fd8fec08c605de19bffa23bb832, matching local399bd2b38b15731270f99dfded1aa7632e39c30e after actual fetch13:46:34UTC. Later source/docs require another publication and private Delta021. Delta020 Drive upload/roundtrip remains complete.
+- Next: independent source acceptance, pinned Build017, separate narrow controller copy with unchanged300-second Red Station→Red Station→Red Station protocol and all lifecycle/resource/restore gates; independent V5 review then one bounded normal-preparation trial. A1/A3/A4/stability/A5 remain open; B unstarted.
