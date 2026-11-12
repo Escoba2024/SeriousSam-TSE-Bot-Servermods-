@@ -1,0 +1,1855 @@
+{
+  "window": "a4-013-skulls-20261112-022140",
+  "status": "PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED",
+  "independent_functional_verdict": "FAIL_LONG_UNARMED_REACQUISITION",
+  "functional_pass": false,
+  "qualified": false,
+  "map_reset_proven": false,
+  "first_simulation_state_proven": false,
+  "observed_seconds": 600.1169680249877,
+  "last_inventory_elapsed": 599.9717615370173,
+  "last_inventory_clock": 600.7268676757812,
+  "candidate_sha256": "3a8d84c9c04e4839ee08d5d8ec879c37f25265df267c03e966ec869754a81f93",
+  "map_binding": {
+    "world_crc": "42d03dd2",
+    "nav_crc": "70b554dd",
+    "path_hash_not_world_crc": "9b573405",
+    "nodes": 296
+  },
+  "actual_slot_mapping": {
+    "botA": [
+      0,
+      2,
+      3,
+      4
+    ],
+    "botB": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "vanilla": [
+      1
+    ]
+  },
+  "all_eight_candidate": true,
+  "profile": "DEMON/tier3 canonical migration",
+  "useful_weapon_mask": "0x3df8",
+  "alive_observed_life_denominators": {
+    "botA": {
+      "lives": 104,
+      "dead": 100,
+      "censored": 4,
+      "useful_owned": 42,
+      "useful_current": 42,
+      "useful_fire_requested": 42,
+      "dead_without": 59,
+      "censored_without": 3,
+      "success_only_median": 3.4250755310058594,
+      "success_only_max": 28.4017333984375
+    },
+    "botB": {
+      "lives": 101,
+      "dead": 97,
+      "censored": 4,
+      "useful_owned": 49,
+      "useful_current": 48,
+      "useful_fire_requested": 45,
+      "dead_without": 51,
+      "censored_without": 1,
+      "success_only_median": 7.14825439453125,
+      "success_only_max": 34.8914794921875
+    },
+    "all": {
+      "lives": 205,
+      "dead": 197,
+      "censored": 8,
+      "useful_owned": 91,
+      "useful_current": 90,
+      "useful_fire_requested": 87,
+      "dead_without": 110,
+      "censored_without": 4,
+      "success_only_median": 5.049922943115234,
+      "success_only_max": 34.8914794921875
+    }
+  },
+  "positive_epochs_without_alive_sample": [],
+  "lives": [
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":5,"spawn_clock":0.9500001668930054,"life_seconds":10.700026154518127,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":7,"inventory_death_line":364,"cecil_spawn_line":275},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":6,"spawn_clock":13.450033187866211,"life_seconds":17.399782180786133,"right_censored":false,"first_alive_sampling_age":0.05000019073486328,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":408,"inventory_death_line":803,"cecil_spawn_line":548},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":7,"spawn_clock":32.64978790283203,"life_seconds":38.49995422363281,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":2.049968719482422,"useful_current_age":4.949924468994141,"useful_fire_requested_age":4.949924468994141,"inventory_first_line":844,"inventory_death_line":1728,"cecil_spawn_line":919},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":8,"spawn_clock":72.64983367919922,"life_seconds":12.4007568359375,"right_censored":false,"first_alive_sampling_age":0.100006103515625,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":1763,"inventory_death_line":2041,"cecil_spawn_line":1573},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":9,"spawn_clock":86.65068817138672,"life_seconds":2.0001220703125,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":2079,"inventory_death_line":2123,"cecil_spawn_line":1774},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":10,"spawn_clock":90.25090789794922,"life_seconds":6.700408935546875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":2.3501434326171875,"useful_current_age":2.6501617431640625,"useful_fire_requested_age":2.7501678466796875,"inventory_first_line":2160,"inventory_death_line":2313,"cecil_spawn_line":1847},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":11,"spawn_clock":98.65142059326172,"life_seconds":4.000244140625,"right_censored":false,"first_alive_sampling_age":0.100006103515625,"useful_owned_age":2.7501678466796875,"useful_current_age":3.100189208984375,"useful_fire_requested_age":3.3502044677734375,"inventory_first_line":2353,"inventory_death_line":2443,"cecil_spawn_line":1992},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":12,"spawn_clock":104.25176239013672,"life_seconds":17.351058959960938,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":2480,"inventory_death_line":2873,"cecil_spawn_line":2094},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":13,"spawn_clock":123.05290985107422,"life_seconds":9.250556945800781,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":2.3501434326171875,"useful_current_age":2.6501617431640625,"useful_fire_requested_age":3.1501922607421875,"inventory_first_line":2909,"inventory_death_line":3115,"cecil_spawn_line":2340},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":14,"spawn_clock":133.8535614013672,"life_seconds":3.300201416015625,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":3153,"inventory_death_line":3227,"cecil_spawn_line":2514},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":15,"spawn_clock":138.6538543701172,"life_seconds":2.400146484375,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":3262,"inventory_death_line":3315,"cecil_spawn_line":2583},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":16,"spawn_clock":142.6540985107422,"life_seconds":0.9500579833984375,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":3353,"inventory_death_line":3374,"cecil_spawn_line":2653},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":17,"spawn_clock":145.0542449951172,"life_seconds":25.701568603515625,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":3407,"inventory_death_line":3997,"cecil_spawn_line":2706},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":18,"spawn_clock":172.2559051513672,"life_seconds":10.350631713867188,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":4031,"inventory_death_line":4269,"cecil_spawn_line":3139},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":19,"spawn_clock":184.2566375732422,"life_seconds":23.201416015625,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":7.40045166015625,"useful_current_age":8.4005126953125,"useful_fire_requested_age":20.351242065429688,"inventory_first_line":4308,"inventory_death_line":4836,"cecil_spawn_line":3330},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":20,"spawn_clock":209.0581512451172,"life_seconds":15.40093994140625,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":7.9504852294921875,"useful_current_age":9.00054931640625,"useful_fire_requested_age":9.150558471679688,"inventory_first_line":4877,"inventory_death_line":5223,"cecil_spawn_line":3706},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":21,"spawn_clock":226.2592010498047,"life_seconds":34.50065612792969,"right_censored":false,"first_alive_sampling_age":0.100006103515625,"useful_owned_age":20.251235961914062,"useful_current_age":21.751327514648438,"useful_fire_requested_age":22.0013427734375,"inventory_first_line":5266,"inventory_death_line":6052,"cecil_spawn_line":3970},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":22,"spawn_clock":262.6593933105469,"life_seconds":92.577392578125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":9.44769287109375,"useful_current_age":10.2974853515625,"useful_fire_requested_age":10.44744873046875,"inventory_first_line":6093,"inventory_death_line":8199,"cecil_spawn_line":4536},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":23,"spawn_clock":357.0363464355469,"life_seconds":4.94879150390625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":8243,"inventory_death_line":8357,"cecil_spawn_line":6025},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":24,"spawn_clock":363.8346862792969,"life_seconds":11.59716796875,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":8402,"inventory_death_line":8658,"cecil_spawn_line":6174},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":25,"spawn_clock":377.0314636230469,"life_seconds":2.14947509765625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":8697,"inventory_death_line":8745,"cecil_spawn_line":6366},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":26,"spawn_clock":381.0304870605469,"life_seconds":91.22772216796875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":2.0994873046875,"useful_current_age":9.34771728515625,"useful_fire_requested_age":9.84759521484375,"inventory_first_line":8788,"inventory_death_line":10847,"cecil_spawn_line":6441},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":27,"spawn_clock":473.8078308105469,"life_seconds":3.24920654296875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":10886,"inventory_death_line":10958,"cecil_spawn_line":7938},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":28,"spawn_clock":478.6066589355469,"life_seconds":14.44647216796875,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":2.3994140625,"useful_current_age":2.64935302734375,"useful_fire_requested_age":3.2991943359375,"inventory_first_line":10996,"inventory_death_line":11326,"cecil_spawn_line":8001},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":29,"spawn_clock":494.6027526855469,"life_seconds":1.04974365234375,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11361,"inventory_death_line":11384,"cecil_spawn_line":8287},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":30,"spawn_clock":497.4020690917969,"life_seconds":3.04925537109375,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11426,"inventory_death_line":11496,"cecil_spawn_line":8344},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":31,"spawn_clock":502.2008972167969,"life_seconds":1.6995849609375,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11537,"inventory_death_line":11572,"cecil_spawn_line":8451},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":32,"spawn_clock":505.4001159667969,"life_seconds":28.593048095703125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":0.64984130859375,"useful_current_age":16.096099853515625,"useful_fire_requested_age":16.096099853515625,"inventory_first_line":11609,"inventory_death_line":12259,"cecil_spawn_line":8500},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":33,"spawn_clock":535.792724609375,"life_seconds":21.5947265625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":12299,"inventory_death_line":12794,"cecil_spawn_line":9002},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":34,"spawn_clock":558.987060546875,"life_seconds":0.94976806640625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":12831,"inventory_death_line":12850,"cecil_spawn_line":9407},
+    {"role":"botA","local":0,"slot":0,"entity":1850,"generation":35,"spawn_clock":561.786376953125,"life_seconds":38.94049072265625,"right_censored":true,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":3.24920654296875,"useful_current_age":4.4989013671875,"useful_fire_requested_age":12.24700927734375,"inventory_first_line":12893,"inventory_death_line":null,"cecil_spawn_line":9477},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":5,"spawn_clock":0.9500001668930054,"life_seconds":15.00004255771637,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":8.1500164270401,"useful_current_age":9.350021004676819,"useful_fire_requested_age":9.550021767616272,"inventory_first_line":7,"inventory_death_line":462,"cecil_spawn_line":285},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":6,"spawn_clock":17.45001983642578,"life_seconds":7.749881744384766,"right_censored":false,"first_alive_sampling_age":0.09999847412109375,"useful_owned_age":3.4999465942382812,"useful_current_age":5.499916076660156,"useful_fire_requested_age":5.499916076660156,"inventory_first_line":496,"inventory_death_line":673,"cecil_spawn_line":615},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":7,"spawn_clock":26.649879455566406,"life_seconds":63.35101318359375,"right_censored":false,"first_alive_sampling_age":0.049999237060546875,"useful_owned_age":5.049922943115234,"useful_current_age":5.249919891357422,"useful_fire_requested_age":5.499916076660156,"inventory_first_line":708,"inventory_death_line":2155,"cecil_spawn_line":802},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":8,"spawn_clock":91.45098114013672,"life_seconds":2.500152587890625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":2189,"inventory_death_line":2244,"cecil_spawn_line":1891},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":9,"spawn_clock":95.45122528076172,"life_seconds":5.40032958984375,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":2280,"inventory_death_line":2403,"cecil_spawn_line":1956},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":10,"spawn_clock":102.65166473388672,"life_seconds":5.8503570556640625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":2443,"inventory_death_line":2579,"cecil_spawn_line":2074},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":11,"spawn_clock":110.25212860107422,"life_seconds":18.25110626220703,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":2619,"inventory_death_line":3031,"cecil_spawn_line":2171},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":12,"spawn_clock":130.2533416748047,"life_seconds":4.20025634765625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":3068,"inventory_death_line":3164,"cecil_spawn_line":2422},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":13,"spawn_clock":135.8536834716797,"life_seconds":6.5503997802734375,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":3200,"inventory_death_line":3347,"cecil_spawn_line":2551},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":14,"spawn_clock":143.8541717529297,"life_seconds":24.751510620117188,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":3381,"inventory_death_line":3949,"cecil_spawn_line":2679},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":15,"spawn_clock":170.2557830810547,"life_seconds":15.950973510742188,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":6.4503936767578125,"useful_current_age":6.700408935546875,"useful_fire_requested_age":7.100433349609375,"inventory_first_line":3986,"inventory_death_line":4351,"cecil_spawn_line":3079},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":16,"spawn_clock":187.8568572998047,"life_seconds":31.701934814453125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":28.4017333984375,"useful_current_age":28.60174560546875,"useful_fire_requested_age":31.551925659179688,"inventory_first_line":4387,"inventory_death_line":5114,"cecil_spawn_line":3381},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":17,"spawn_clock":221.0588836669922,"life_seconds":14.900909423828125,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":5148,"inventory_death_line":5486,"cecil_spawn_line":3913},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":18,"spawn_clock":237.4598846435547,"life_seconds":12.050735473632812,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":2.400146484375,"useful_current_age":2.700164794921875,"useful_fire_requested_age":3.8502349853515625,"inventory_first_line":5521,"inventory_death_line":5794,"cecil_spawn_line":4132},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":19,"spawn_clock":251.0607147216797,"life_seconds":7.1997528076171875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":5828,"inventory_death_line":5993,"cecil_spawn_line":4370},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":20,"spawn_clock":259.8600769042969,"life_seconds":6.24847412109375,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":6031,"inventory_death_line":6172,"cecil_spawn_line":4483},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":21,"spawn_clock":267.8581237792969,"life_seconds":24.194091796875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":13.396728515625,"useful_current_age":14.34649658203125,"useful_fire_requested_age":14.44647216796875,"inventory_first_line":6214,"inventory_death_line":6765,"cecil_spawn_line":4620},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":22,"spawn_clock":293.8517761230469,"life_seconds":21.94464111328125,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":6810,"inventory_death_line":7306,"cecil_spawn_line":5075},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":23,"spawn_clock":317.4460144042969,"life_seconds":4.998779296875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":7343,"inventory_death_line":7456,"cecil_spawn_line":5380},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":24,"spawn_clock":324.2443542480469,"life_seconds":11.94708251953125,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":2.3994140625,"useful_current_age":2.64935302734375,"useful_fire_requested_age":3.8990478515625,"inventory_first_line":7498,"inventory_death_line":7764,"cecil_spawn_line":5502},
+    {"role":"botA","local":1,"slot":2,"entity":1851,"generation":25,"spawn_clock":337.8410339355469,"life_seconds":262.8858337402344,"right_censored":true,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":7802,"inventory_death_line":null,"cecil_spawn_line":5729},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":5,"spawn_clock":0.9500001668930054,"life_seconds":24.999889969825745,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":7,"inventory_death_line":690,"cecil_spawn_line":288},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":6,"spawn_clock":27.449867248535156,"life_seconds":16.599746704101562,"right_censored":false,"first_alive_sampling_age":0.049999237060546875,"useful_owned_age":7.149890899658203,"useful_current_age":7.9998779296875,"useful_fire_requested_age":10.899833679199219,"inventory_first_line":725,"inventory_death_line":1106,"cecil_spawn_line":822},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":7,"spawn_clock":45.44959259033203,"life_seconds":13.74979019165039,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":1140,"inventory_death_line":1455,"cecil_spawn_line":1141},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":8,"spawn_clock":61.049354553222656,"life_seconds":2.0999679565429688,"right_censored":false,"first_alive_sampling_age":0.049999237060546875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":1499,"inventory_death_line":1544,"cecil_spawn_line":1402},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":9,"spawn_clock":64.64934539794922,"life_seconds":23.351425170898438,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":13.500823974609375,"useful_current_age":14.500885009765625,"useful_fire_requested_age":17.501068115234375,"inventory_first_line":1579,"inventory_death_line":2108,"cecil_spawn_line":1451},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":10,"spawn_clock":89.45085906982422,"life_seconds":26.701629638671875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":3.3502044677734375,"useful_current_age":8.350509643554688,"useful_fire_requested_age":17.451065063476562,"inventory_first_line":2143,"inventory_death_line":2748,"cecil_spawn_line":1828},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":11,"spawn_clock":117.85259246826172,"life_seconds":15.950965881347656,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":2789,"inventory_death_line":3150,"cecil_spawn_line":2262},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":12,"spawn_clock":135.4536590576172,"life_seconds":36.45222473144531,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":8.950546264648438,"useful_current_age":9.150558471679688,"useful_fire_requested_age":9.300567626953125,"inventory_first_line":3190,"inventory_death_line":4023,"cecil_spawn_line":2538},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":13,"spawn_clock":173.4559783935547,"life_seconds":6.0003662109375,"right_censored":false,"first_alive_sampling_age":0.100006103515625,"useful_owned_age":0.7500457763671875,"useful_current_age":4.3502655029296875,"useful_fire_requested_age":5.500335693359375,"inventory_first_line":4061,"inventory_death_line":4197,"cecil_spawn_line":3153},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":14,"spawn_clock":181.0564422607422,"life_seconds":10.400634765625,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":2.3501434326171875,"useful_current_age":2.6501617431640625,"useful_fire_requested_age":7.200439453125,"inventory_first_line":4234,"inventory_death_line":4468,"cecil_spawn_line":3275},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":15,"spawn_clock":193.0571746826172,"life_seconds":71.85166931152344,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":11.20068359375,"useful_current_age":11.450698852539062,"useful_fire_requested_age":11.700714111328125,"inventory_first_line":4503,"inventory_death_line":6146,"cecil_spawn_line":3478},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":16,"spawn_clock":266.6584167480469,"life_seconds":13.8966064453125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":7.44818115234375,"useful_current_age":7.59814453125,"useful_fire_requested_age":7.84808349609375,"inventory_first_line":6184,"inventory_death_line":6504,"cecil_spawn_line":4591},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":17,"spawn_clock":282.2546081542969,"life_seconds":5.4986572265625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":6542,"inventory_death_line":6666,"cecil_spawn_line":4872},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":18,"spawn_clock":289.4528503417969,"life_seconds":30.84246826171875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":3.0992431640625,"useful_current_age":4.74884033203125,"useful_fire_requested_age":4.798828125,"inventory_first_line":6707,"inventory_death_line":7406,"cecil_spawn_line":4986},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":19,"spawn_clock":321.8449401855469,"life_seconds":60.43524169921875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":10.997314453125,"useful_current_age":13.94659423828125,"useful_fire_requested_age":13.94659423828125,"inventory_first_line":7443,"inventory_death_line":8816,"cecil_spawn_line":5472},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":20,"spawn_clock":383.8298034667969,"life_seconds":4.14898681640625,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":8850,"inventory_death_line":8943,"cecil_spawn_line":6486},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":21,"spawn_clock":389.4284362792969,"life_seconds":7.74810791015625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":8978,"inventory_death_line":9150,"cecil_spawn_line":6554},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":22,"spawn_clock":399.0260925292969,"life_seconds":8.7978515625,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":9192,"inventory_death_line":9393,"cecil_spawn_line":6706},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":23,"spawn_clock":409.4235534667969,"life_seconds":14.79638671875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":9427,"inventory_death_line":9763,"cecil_spawn_line":6882},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":24,"spawn_clock":425.8195495605469,"life_seconds":37.2908935546875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":2.04949951171875,"useful_current_age":11.59716796875,"useful_fire_requested_age":31.1923828125,"inventory_first_line":9802,"inventory_death_line":10643,"cecil_spawn_line":7124},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":25,"spawn_clock":464.6100769042969,"life_seconds":2.94927978515625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":10678,"inventory_death_line":10742,"cecil_spawn_line":7763},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":26,"spawn_clock":469.4089050292969,"life_seconds":10.2974853515625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":0.6998291015625,"useful_current_age":8.74786376953125,"useful_fire_requested_age":8.84783935546875,"inventory_first_line":10782,"inventory_death_line":11019,"cecil_spawn_line":7845},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":27,"spawn_clock":481.4059753417969,"life_seconds":4.64886474609375,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11060,"inventory_death_line":11166,"cecil_spawn_line":8081},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":28,"spawn_clock":487.8044128417969,"life_seconds":40.040252685546875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":2.0994873046875,"useful_current_age":4.39892578125,"useful_fire_requested_age":4.4989013671875,"inventory_first_line":11207,"inventory_death_line":12116,"cecil_spawn_line":8171},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":29,"spawn_clock":529.394287109375,"life_seconds":11.9970703125,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":12155,"inventory_death_line":12429,"cecil_spawn_line":8871},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":30,"spawn_clock":542.990966796875,"life_seconds":15.84613037109375,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":8.997802734375,"useful_current_age":9.24774169921875,"useful_fire_requested_age":9.84759521484375,"inventory_first_line":12465,"inventory_death_line":12825,"cecil_spawn_line":9137},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":31,"spawn_clock":560.586669921875,"life_seconds":8.54791259765625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":12865,"inventory_death_line":13057,"cecil_spawn_line":9427},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":32,"spawn_clock":570.984130859375,"life_seconds":4.198974609375,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":13097,"inventory_death_line":13187,"cecil_spawn_line":9622},
+    {"role":"botA","local":2,"slot":3,"entity":1852,"generation":33,"spawn_clock":576.982666015625,"life_seconds":23.74420166015625,"right_censored":true,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":13231,"inventory_death_line":null,"cecil_spawn_line":9697},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":5,"spawn_clock":0.9500001668930054,"life_seconds":11.150027871131897,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":2.4499977827072144,"useful_current_age":3.5499988794326782,"useful_fire_requested_age":4.050000786781311,"inventory_first_line":7,"inventory_death_line":376,"cecil_spawn_line":298},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":6,"spawn_clock":13.850034713745117,"life_seconds":2.2000064849853516,"right_censored":false,"first_alive_sampling_age":0.05000019073486328,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":414,"inventory_death_line":463,"cecil_spawn_line":562},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":7,"spawn_clock":17.850013732910156,"life_seconds":1.6999740600585938,"right_censored":false,"first_alive_sampling_age":0.09999847412109375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":505,"inventory_death_line":542,"cecil_spawn_line":630},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":8,"spawn_clock":21.049964904785156,"life_seconds":2.799957275390625,"right_censored":false,"first_alive_sampling_age":0.049999237060546875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":577,"inventory_death_line":642,"cecil_spawn_line":714},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":9,"spawn_clock":25.44989776611328,"life_seconds":12.449810028076172,"right_censored":false,"first_alive_sampling_age":0.049999237060546875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":679,"inventory_death_line":965,"cecil_spawn_line":780},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":10,"spawn_clock":39.449684143066406,"life_seconds":12.049816131591797,"right_censored":false,"first_alive_sampling_age":0.049999237060546875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":1002,"inventory_death_line":1279,"cecil_spawn_line":1030},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":11,"spawn_clock":53.049476623535156,"life_seconds":223.70647430419922,"right_censored":false,"first_alive_sampling_age":0.1999969482421875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":1319,"inventory_death_line":6414,"cecil_spawn_line":1267},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":12,"spawn_clock":278.2555847167969,"life_seconds":50.13775634765625,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":10.79736328125,"useful_current_age":13.796630859375,"useful_fire_requested_age":14.04656982421875,"inventory_first_line":6453,"inventory_death_line":7590,"cecil_spawn_line":4776},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":13,"spawn_clock":330.2428894042969,"life_seconds":3.64910888671875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":7632,"inventory_death_line":7711,"cecil_spawn_line":5592},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":14,"spawn_clock":335.4416198730469,"life_seconds":23.04437255859375,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":7750,"inventory_death_line":8275,"cecil_spawn_line":5691},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":15,"spawn_clock":359.8356628417969,"life_seconds":6.6983642578125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":8307,"inventory_death_line":8461,"cecil_spawn_line":6080},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":16,"spawn_clock":368.2336120605469,"life_seconds":14.8963623046875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":8497,"inventory_death_line":8833,"cecil_spawn_line":6227},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":17,"spawn_clock":384.6296081542969,"life_seconds":7.34820556640625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":8868,"inventory_death_line":9033,"cecil_spawn_line":6499},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":18,"spawn_clock":393.8273620605469,"life_seconds":5.04876708984375,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":9076,"inventory_death_line":9186,"cecil_spawn_line":6638},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":19,"spawn_clock":400.2257995605469,"life_seconds":4.44891357421875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":2.4993896484375,"useful_current_age":2.6993408203125,"useful_fire_requested_age":3.0992431640625,"inventory_first_line":9217,"inventory_death_line":9321,"cecil_spawn_line":6725},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":20,"spawn_clock":406.2243347167969,"life_seconds":22.994384765625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":9.59765625,"useful_current_age":15.2962646484375,"useful_fire_requested_age":15.44622802734375,"inventory_first_line":9356,"inventory_death_line":9878,"cecil_spawn_line":6827},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":21,"spawn_clock":430.6183776855469,"life_seconds":49.0880126953125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":15.64617919921875,"useful_current_age":15.84613037109375,"useful_fire_requested_age":18.6954345703125,"inventory_first_line":9908,"inventory_death_line":11019,"cecil_spawn_line":7183},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":22,"spawn_clock":481.4059753417969,"life_seconds":40.440155029296875,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":9.19775390625,"useful_current_age":10.14752197265625,"useful_fire_requested_age":10.14752197265625,"inventory_first_line":11060,"inventory_death_line":11978,"cecil_spawn_line":8089},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":23,"spawn_clock":523.395751953125,"life_seconds":5.04876708984375,"right_censored":false,"first_alive_sampling_age":0.14996337890625,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":12015,"inventory_death_line":12131,"cecil_spawn_line":8782},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":24,"spawn_clock":530.194091796875,"life_seconds":6.14849853515625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":2.44940185546875,"useful_current_age":2.79931640625,"useful_fire_requested_age":2.94927978515625,"inventory_first_line":12172,"inventory_death_line":12311,"cecil_spawn_line":8896},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":25,"spawn_clock":537.792236328125,"life_seconds":17.34576416015625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":12347,"inventory_death_line":12742,"cecil_spawn_line":9053},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":26,"spawn_clock":556.587646484375,"life_seconds":38.64056396484375,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":2.34942626953125,"useful_current_age":4.4989013671875,"useful_fire_requested_age":4.4989013671875,"inventory_first_line":12776,"inventory_death_line":13644,"cecil_spawn_line":9342},
+    {"role":"botA","local":3,"slot":4,"entity":1853,"generation":27,"spawn_clock":596.977783203125,"life_seconds":3.59912109375,"right_censored":true,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":13685,"inventory_death_line":null,"cecil_spawn_line":10000},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":5,"spawn_clock":0.9500001668930054,"life_seconds":8.550017952919006,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":8,"inventory_death_line":316,"cecil_spawn_line":218},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":6,"spawn_clock":11.250024795532227,"life_seconds":6.449991226196289,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":356,"inventory_death_line":500,"cecil_spawn_line":400},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":7,"spawn_clock":19.24999237060547,"life_seconds":5.349918365478516,"right_censored":false,"first_alive_sampling_age":0.1999969482421875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":540,"inventory_death_line":660,"cecil_spawn_line":543},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":8,"spawn_clock":26.049888610839844,"life_seconds":9.149860382080078,"right_censored":false,"first_alive_sampling_age":0.049999237060546875,"useful_owned_age":3.0499534606933594,"useful_current_age":3.949939727783203,"useful_fire_requested_age":4.1999359130859375,"inventory_first_line":694,"inventory_death_line":903,"cecil_spawn_line":654},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":9,"spawn_clock":36.84972381591797,"life_seconds":5.049922943115234,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":942,"inventory_death_line":1058,"cecil_spawn_line":837},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":10,"spawn_clock":43.649620056152344,"life_seconds":3.2999496459960938,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":0.6499900817871094,"useful_current_age":2.2499656677246094,"useful_fire_requested_age":2.39996337890625,"inventory_first_line":1098,"inventory_death_line":1174,"cecil_spawn_line":946},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":11,"spawn_clock":48.449546813964844,"life_seconds":24.30029296875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":19.750015258789062,"useful_current_age":20.300048828125,"useful_fire_requested_age":null,"inventory_first_line":1210,"inventory_death_line":1764,"cecil_spawn_line":1036},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":12,"spawn_clock":74.44994354248047,"life_seconds":45.15275573730469,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":3.700225830078125,"useful_current_age":5.2003173828125,"useful_fire_requested_age":6.0503692626953125,"inventory_first_line":1806,"inventory_death_line":2827,"cecil_spawn_line":1487},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":13,"spawn_clock":121.25279998779297,"life_seconds":25.301536560058594,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":9.500572204589844,"useful_current_age":9.750587463378906,"useful_fire_requested_age":10.500633239746094,"inventory_first_line":2868,"inventory_death_line":3444,"cecil_spawn_line":2292},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":14,"spawn_clock":148.05442810058594,"life_seconds":22.101348876953125,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":9.2005615234375,"useful_current_age":12.80078125,"useful_fire_requested_age":13.350814819335938,"inventory_first_line":3477,"inventory_death_line":3984,"cecil_spawn_line":2720},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":15,"spawn_clock":171.65586853027344,"life_seconds":20.751266479492188,"right_censored":false,"first_alive_sampling_age":0.100006103515625,"useful_owned_age":0.900054931640625,"useful_current_age":15.450942993164062,"useful_fire_requested_age":15.6009521484375,"inventory_first_line":4021,"inventory_death_line":4490,"cecil_spawn_line":3081},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":16,"spawn_clock":194.05723571777344,"life_seconds":7.200439453125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":4528,"inventory_death_line":4695,"cecil_spawn_line":3476},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":17,"spawn_clock":202.85777282714844,"life_seconds":8.20050048828125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":4734,"inventory_death_line":4923,"cecil_spawn_line":3651},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":18,"spawn_clock":212.45835876464844,"life_seconds":1.5500946044921875,"right_censored":false,"first_alive_sampling_age":0.1500091552734375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":4957,"inventory_death_line":4988,"cecil_spawn_line":3794},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":19,"spawn_clock":215.65855407714844,"life_seconds":30.051834106445312,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":5028,"inventory_death_line":5709,"cecil_spawn_line":3848},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":20,"spawn_clock":247.26048278808594,"life_seconds":21.647384643554688,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":3.5502166748046875,"useful_current_age":6.5503997802734375,"useful_fire_requested_age":7.80047607421875,"inventory_first_line":5742,"inventory_death_line":6237,"cecil_spawn_line":4334},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":21,"spawn_clock":270.4574890136719,"life_seconds":5.798583984375,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":6275,"inventory_death_line":6404,"cecil_spawn_line":4719},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":22,"spawn_clock":278.0556335449219,"life_seconds":57.23602294921875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":9.94757080078125,"useful_current_age":11.0972900390625,"useful_fire_requested_age":11.197265625,"inventory_first_line":6448,"inventory_death_line":7745,"cecil_spawn_line":4813},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":23,"spawn_clock":336.8412780761719,"life_seconds":69.0831298828125,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":1.0997314453125,"useful_current_age":38.590576171875,"useful_fire_requested_age":65.8839111328125,"inventory_first_line":7782,"inventory_death_line":9351,"cecil_spawn_line":5834},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":24,"spawn_clock":407.6239929199219,"life_seconds":33.4918212890625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":9.99755859375,"useful_current_age":10.24749755859375,"useful_fire_requested_age":14.04656982421875,"inventory_first_line":9388,"inventory_death_line":10149,"cecil_spawn_line":6976},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":25,"spawn_clock":442.8153991699219,"life_seconds":19.74517822265625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":10188,"inventory_death_line":10632,"cecil_spawn_line":7652},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":26,"spawn_clock":464.4101257324219,"life_seconds":6.0985107421875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":10672,"inventory_death_line":10806,"cecil_spawn_line":8009},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":27,"spawn_clock":472.0082702636719,"life_seconds":25.99365234375,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":3.54913330078125,"useful_current_age":12.6968994140625,"useful_fire_requested_age":12.94683837890625,"inventory_first_line":10845,"inventory_death_line":11442,"cecil_spawn_line":8157},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":28,"spawn_clock":499.6015319824219,"life_seconds":1.799560546875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11477,"inventory_death_line":11520,"cecil_spawn_line":8611},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":29,"spawn_clock":503.2006530761719,"life_seconds":24.993927001953125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11559,"inventory_death_line":12126,"cecil_spawn_line":8663},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":30,"spawn_clock":529.994140625,"life_seconds":3.44915771484375,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":12168,"inventory_death_line":12245,"cecil_spawn_line":9095},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":31,"spawn_clock":535.19287109375,"life_seconds":4.54888916015625,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":12289,"inventory_death_line":12391,"cecil_spawn_line":9176},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":32,"spawn_clock":541.59130859375,"life_seconds":16.44598388671875,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":12434,"inventory_death_line":12808,"cecil_spawn_line":9320},
+    {"role":"botB","local":0,"slot":5,"entity":1854,"generation":33,"spawn_clock":559.5869140625,"life_seconds":41.13995361328125,"right_censored":true,"first_alive_sampling_age":0.0,"useful_owned_age":7.0982666015625,"useful_current_age":35.24139404296875,"useful_fire_requested_age":35.34136962890625,"inventory_first_line":12842,"inventory_death_line":null,"cecil_spawn_line":9603},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":5,"spawn_clock":0.9500001668930054,"life_seconds":22.99992048740387,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":0.6499993801116943,"useful_current_age":8.1500164270401,"useful_fire_requested_age":8.400017380714417,"inventory_first_line":8,"inventory_death_line":646,"cecil_spawn_line":228},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":6,"spawn_clock":25.64989471435547,"life_seconds":8.299873352050781,"right_censored":false,"first_alive_sampling_age":0.09999847412109375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":685,"inventory_death_line":873,"cecil_spawn_line":643},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":7,"spawn_clock":35.649742126464844,"life_seconds":9.799850463867188,"right_censored":false,"first_alive_sampling_age":0.09999847412109375,"useful_owned_age":8.249874114990234,"useful_current_age":8.549869537353516,"useful_fire_requested_age":8.899864196777344,"inventory_first_line":915,"inventory_death_line":1139,"cecil_spawn_line":820},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":8,"spawn_clock":47.24956512451172,"life_seconds":11.299827575683594,"right_censored":false,"first_alive_sampling_age":0.09999847412109375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":1183,"inventory_death_line":1443,"cecil_spawn_line":1022},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":9,"spawn_clock":60.04936981201172,"life_seconds":15.8006591796875,"right_censored":false,"first_alive_sampling_age":0.049999237060546875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":1477,"inventory_death_line":1833,"cecil_spawn_line":1278},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":10,"spawn_clock":77.65013885498047,"life_seconds":8.550521850585938,"right_censored":false,"first_alive_sampling_age":0.100006103515625,"useful_owned_age":0.700042724609375,"useful_current_age":6.0503692626953125,"useful_fire_requested_age":null,"inventory_first_line":1876,"inventory_death_line":2068,"cecil_spawn_line":1531},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":11,"spawn_clock":87.65074920654297,"life_seconds":34.102081298828125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":16.60101318359375,"useful_current_age":17.501068115234375,"useful_fire_requested_age":29.2017822265625,"inventory_first_line":2100,"inventory_death_line":2877,"cecil_spawn_line":1712},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":12,"spawn_clock":123.25292205810547,"life_seconds":7.350440979003906,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":2916,"inventory_death_line":3078,"cecil_spawn_line":2328},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":13,"spawn_clock":132.05345153808594,"life_seconds":68.05415344238281,"right_censored":false,"first_alive_sampling_age":0.100006103515625,"useful_owned_age":1.00006103515625,"useful_current_age":42.402587890625,"useful_fire_requested_age":42.502593994140625,"inventory_first_line":3113,"inventory_death_line":4668,"cecil_spawn_line":2499},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":14,"spawn_clock":201.65769958496094,"life_seconds":4.000244140625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":4704,"inventory_death_line":4795,"cecil_spawn_line":3630},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":15,"spawn_clock":207.25804138183594,"life_seconds":15.150924682617188,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":4834,"inventory_death_line":5177,"cecil_spawn_line":3708},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":16,"spawn_clock":224.05906677246094,"life_seconds":9.650588989257812,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":5217,"inventory_death_line":5437,"cecil_spawn_line":3991},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":17,"spawn_clock":235.25975036621094,"life_seconds":16.300994873046875,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":14.900909423828125,"useful_current_age":15.150924682617188,"useful_fire_requested_age":15.350936889648438,"inventory_first_line":5473,"inventory_death_line":5841,"cecil_spawn_line":4155},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":18,"spawn_clock":253.26084899902344,"life_seconds":49.23881530761719,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":2.100128173828125,"useful_current_age":12.497787475585938,"useful_fire_requested_age":48.58897399902344,"inventory_first_line":5881,"inventory_death_line":7007,"cecil_spawn_line":4448},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":19,"spawn_clock":304.0492858886719,"life_seconds":5.19873046875,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":7044,"inventory_death_line":7158,"cecil_spawn_line":5281},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":20,"spawn_clock":310.8476257324219,"life_seconds":25.34381103515625,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":10.597412109375,"useful_current_age":12.84686279296875,"useful_fire_requested_age":14.14654541015625,"inventory_first_line":7196,"inventory_death_line":7765,"cecil_spawn_line":5385},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":21,"spawn_clock":338.0409851074219,"life_seconds":2.79931640625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":2.44940185546875,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":7807,"inventory_death_line":7870,"cecil_spawn_line":5858},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":22,"spawn_clock":342.4399108886719,"life_seconds":20.6949462890625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":7907,"inventory_death_line":8384,"cecil_spawn_line":5943},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":23,"spawn_clock":364.8344421386719,"life_seconds":14.64642333984375,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":9.797607421875,"useful_current_age":10.04754638671875,"useful_fire_requested_age":10.14752197265625,"inventory_first_line":8425,"inventory_death_line":8752,"cecil_spawn_line":6262},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":24,"spawn_clock":381.2304382324219,"life_seconds":30.592529296875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":8792,"inventory_death_line":9484,"cecil_spawn_line":6530},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":25,"spawn_clock":413.6225280761719,"life_seconds":11.64715576171875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":9523,"inventory_death_line":9788,"cecil_spawn_line":7089},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":26,"spawn_clock":426.8193054199219,"life_seconds":18.79541015625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":13.396728515625,"useful_current_age":14.54644775390625,"useful_fire_requested_age":null,"inventory_first_line":9826,"inventory_death_line":10249,"cecil_spawn_line":7313},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":27,"spawn_clock":447.2143249511719,"life_seconds":6.64837646484375,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":2.999267578125,"useful_current_age":3.14923095703125,"useful_fire_requested_age":3.24920654296875,"inventory_first_line":10287,"inventory_death_line":10433,"cecil_spawn_line":7716},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":28,"spawn_clock":455.6122741699219,"life_seconds":3.8990478515625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":10473,"inventory_death_line":10561,"cecil_spawn_line":7859},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":29,"spawn_clock":461.2109069824219,"life_seconds":7.4981689453125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":10600,"inventory_death_line":10767,"cecil_spawn_line":7965},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":30,"spawn_clock":470.4086608886719,"life_seconds":22.24456787109375,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":10806,"inventory_death_line":11318,"cecil_spawn_line":8130},
+    {"role":"botB","local":1,"slot":6,"entity":1855,"generation":31,"spawn_clock":494.4028015136719,"life_seconds":106.32406616210938,"right_censored":true,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":3.4991455078125,"useful_current_age":14.79638671875,"useful_fire_requested_age":15.396240234375,"inventory_first_line":11359,"inventory_death_line":null,"cecil_spawn_line":8499},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":5,"spawn_clock":0.9500001668930054,"life_seconds":43.09961378574371,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":0.8999991416931152,"useful_current_age":39.44966948032379,"useful_fire_requested_age":39.699665665626526,"inventory_first_line":8,"inventory_death_line":1107,"cecil_spawn_line":232},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":6,"spawn_clock":45.64958953857422,"life_seconds":50.45167541503906,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":10.24984359741211,"useful_current_age":10.499839782714844,"useful_fire_requested_age":10.849834442138672,"inventory_first_line":1145,"inventory_death_line":2295,"cecil_spawn_line":1000},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":7,"spawn_clock":97.65135955810547,"life_seconds":82.05500030517578,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":11.40069580078125,"useful_current_age":11.650711059570312,"useful_fire_requested_age":17.851089477539062,"inventory_first_line":2332,"inventory_death_line":4204,"cecil_spawn_line":1882},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":8,"spawn_clock":181.25645446777344,"life_seconds":26.651626586914062,"right_censored":false,"first_alive_sampling_age":0.100006103515625,"useful_owned_age":13.450820922851562,"useful_current_age":17.101043701171875,"useful_fire_requested_age":17.2010498046875,"inventory_first_line":4241,"inventory_death_line":4849,"cecil_spawn_line":3261},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":9,"spawn_clock":209.65818786621094,"life_seconds":73.69615173339844,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":0.6500396728515625,"useful_current_age":3.900238037109375,"useful_fire_requested_age":4.0502471923828125,"inventory_first_line":4890,"inventory_death_line":6566,"cecil_spawn_line":3767},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":10,"spawn_clock":284.8539733886719,"life_seconds":8.74786376953125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":6602,"inventory_death_line":6802,"cecil_spawn_line":4927},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":11,"spawn_clock":295.2514343261719,"life_seconds":14.4964599609375,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":6841,"inventory_death_line":7169,"cecil_spawn_line":5106},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":12,"spawn_clock":311.2475280761719,"life_seconds":7.94805908203125,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":7205,"inventory_death_line":7381,"cecil_spawn_line":5400},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":13,"spawn_clock":320.8451843261719,"life_seconds":16.2960205078125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":2.44940185546875,"useful_current_age":2.64935302734375,"useful_fire_requested_age":3.8990478515625,"inventory_first_line":7419,"inventory_death_line":7787,"cecil_spawn_line":5553},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":14,"spawn_clock":338.8407897949219,"life_seconds":41.03997802734375,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":34.8914794921875,"useful_current_age":35.14141845703125,"useful_fire_requested_age":35.6912841796875,"inventory_first_line":7827,"inventory_death_line":8760,"cecil_spawn_line":5894},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":15,"spawn_clock":381.6303405761719,"life_seconds":72.582275390625,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":3.54913330078125,"useful_current_age":3.9990234375,"useful_fire_requested_age":14.396484375,"inventory_first_line":8801,"inventory_death_line":10441,"cecil_spawn_line":6544},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":16,"spawn_clock":456.0121765136719,"life_seconds":8.14801025390625,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":10485,"inventory_death_line":10666,"cecil_spawn_line":7870},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":17,"spawn_clock":466.0097351074219,"life_seconds":5.4986572265625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":2.34942626953125,"useful_current_age":3.19921875,"useful_fire_requested_age":3.34918212890625,"inventory_first_line":10708,"inventory_death_line":10830,"cecil_spawn_line":8033},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":18,"spawn_clock":473.2079772949219,"life_seconds":43.389434814453125,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":28.8929443359375,"useful_current_age":29.14288330078125,"useful_fire_requested_age":29.64276123046875,"inventory_first_line":10872,"inventory_death_line":11860,"cecil_spawn_line":8176},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":19,"spawn_clock":518.39697265625,"life_seconds":5.24871826171875,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11899,"inventory_death_line":12019,"cecil_spawn_line":8874},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":20,"spawn_clock":525.1953125,"life_seconds":53.83685302734375,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":11.74713134765625,"useful_current_age":11.9970703125,"useful_fire_requested_age":15.6961669921875,"inventory_first_line":12058,"inventory_death_line":13279,"cecil_spawn_line":9003},
+    {"role":"botB","local":2,"slot":7,"entity":1856,"generation":21,"spawn_clock":580.78173828125,"life_seconds":19.94512939453125,"right_censored":true,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":7.14825439453125,"useful_current_age":7.998046875,"useful_fire_requested_age":15.44622802734375,"inventory_first_line":13318,"inventory_death_line":null,"cecil_spawn_line":9933},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":5,"spawn_clock":0.9500001668930054,"life_seconds":29.89981520175934,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":1.2999988794326782,"useful_current_age":3.149997353553772,"useful_fire_requested_age":3.299997925758362,"inventory_first_line":8,"inventory_death_line":804,"cecil_spawn_line":235},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":6,"spawn_clock":32.449790954589844,"life_seconds":9.74985122680664,"right_censored":false,"first_alive_sampling_age":0.09999847412109375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":842,"inventory_death_line":1064,"cecil_spawn_line":769},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":7,"spawn_clock":44.04961395263672,"life_seconds":12.449810028076172,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":9.849849700927734,"useful_current_age":10.049846649169922,"useful_fire_requested_age":10.299842834472656,"inventory_first_line":1107,"inventory_death_line":1397,"cecil_spawn_line":963},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":8,"spawn_clock":58.049400329589844,"life_seconds":59.65318298339844,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":23.850997924804688,"useful_current_age":27.651229858398438,"useful_fire_requested_age":27.9012451171875,"inventory_first_line":1431,"inventory_death_line":2784,"cecil_spawn_line":1222},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":9,"spawn_clock":119.25267791748047,"life_seconds":7.700469970703125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":2821,"inventory_death_line":2997,"cecil_spawn_line":2263},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":10,"spawn_clock":128.45323181152344,"life_seconds":42.95262145996094,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":18.101104736328125,"useful_current_age":19.301177978515625,"useful_fire_requested_age":19.651199340820312,"inventory_first_line":3032,"inventory_death_line":4012,"cecil_spawn_line":2397},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":11,"spawn_clock":172.85594177246094,"life_seconds":1.9501190185546875,"right_censored":false,"first_alive_sampling_age":0.100006103515625,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":4047,"inventory_death_line":4090,"cecil_spawn_line":3112},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":12,"spawn_clock":176.45616149902344,"life_seconds":6.9504241943359375,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":4127,"inventory_death_line":4287,"cecil_spawn_line":3159},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":13,"spawn_clock":185.25669860839844,"life_seconds":2.4501495361328125,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":4330,"inventory_death_line":4385,"cecil_spawn_line":3324},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":14,"spawn_clock":189.25694274902344,"life_seconds":36.65223693847656,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":2.900177001953125,"useful_current_age":5.2003173828125,"useful_fire_requested_age":5.3503265380859375,"inventory_first_line":4420,"inventory_death_line":5258,"cecil_spawn_line":3409},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":15,"spawn_clock":227.65928649902344,"life_seconds":7.200439453125,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":5299,"inventory_death_line":5462,"cecil_spawn_line":4043},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":16,"spawn_clock":236.45982360839844,"life_seconds":54.84257507324219,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":9.500579833984375,"useful_current_age":12.850784301757812,"useful_fire_requested_age":22.950363159179688,"inventory_first_line":5499,"inventory_death_line":6748,"cecil_spawn_line":4188},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":17,"spawn_clock":292.8520202636719,"life_seconds":18.34552001953125,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":6787,"inventory_death_line":7202,"cecil_spawn_line":5070},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":18,"spawn_clock":312.8471374511719,"life_seconds":24.44403076171875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":21.54473876953125,"useful_current_age":21.794677734375,"useful_fire_requested_age":21.8946533203125,"inventory_first_line":7239,"inventory_death_line":7790,"cecil_spawn_line":5424},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":19,"spawn_clock":338.8407897949219,"life_seconds":69.13311767578125,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":12.6968994140625,"useful_current_age":12.94683837890625,"useful_fire_requested_age":17.24578857421875,"inventory_first_line":7827,"inventory_death_line":9396,"cecil_spawn_line":5897},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":20,"spawn_clock":409.6235046386719,"life_seconds":10.74737548828125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":9434,"inventory_death_line":9676,"cecil_spawn_line":7037},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":21,"spawn_clock":422.0204772949219,"life_seconds":7.34820556640625,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":3.04925537109375,"useful_current_age":3.24920654296875,"useful_fire_requested_age":3.74908447265625,"inventory_first_line":9713,"inventory_death_line":9882,"cecil_spawn_line":7241},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":22,"spawn_clock":431.2182312011719,"life_seconds":6.74835205078125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":9924,"inventory_death_line":10076,"cecil_spawn_line":7431},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":23,"spawn_clock":439.6161804199219,"life_seconds":10.84735107421875,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":2.24945068359375,"useful_current_age":2.54937744140625,"useful_fire_requested_age":2.64935302734375,"inventory_first_line":10117,"inventory_death_line":10359,"cecil_spawn_line":7587},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":24,"spawn_clock":452.0131530761719,"life_seconds":6.34844970703125,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":10394,"inventory_death_line":10535,"cecil_spawn_line":7808},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":25,"spawn_clock":460.0111999511719,"life_seconds":18.3955078125,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":10573,"inventory_death_line":10991,"cecil_spawn_line":7947},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":26,"spawn_clock":480.0063171386719,"life_seconds":8.44793701171875,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11029,"inventory_death_line":11223,"cecil_spawn_line":8277},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":27,"spawn_clock":490.0038757324219,"life_seconds":4.598876953125,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11257,"inventory_death_line":11362,"cecil_spawn_line":8418},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":28,"spawn_clock":496.4023132324219,"life_seconds":5.6986083984375,"right_censored":false,"first_alive_sampling_age":0.0,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11403,"inventory_death_line":11535,"cecil_spawn_line":8534},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":29,"spawn_clock":503.6005554199219,"life_seconds":14.346527099609375,"right_censored":false,"first_alive_sampling_age":0.0999755859375,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11570,"inventory_death_line":11891,"cecil_spawn_line":8676},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":30,"spawn_clock":519.5966796875,"life_seconds":10.64739990234375,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":11929,"inventory_death_line":12173,"cecil_spawn_line":8920},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":31,"spawn_clock":531.99365234375,"life_seconds":53.43695068359375,"right_censored":false,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":7.1982421875,"useful_current_age":7.4981689453125,"useful_fire_requested_age":8.24798583984375,"inventory_first_line":12214,"inventory_death_line":13422,"cecil_spawn_line":9125},
+    {"role":"botB","local":3,"slot":8,"entity":1857,"generation":32,"spawn_clock":587.18017578125,"life_seconds":13.54669189453125,"right_censored":true,"first_alive_sampling_age":0.04998779296875,"useful_owned_age":null,"useful_current_age":null,"useful_fire_requested_age":null,"inventory_first_line":13462,"inventory_death_line":null,"cecil_spawn_line":10007}
+  ],
+  "item_transit_ends": [
+    {
+      "role": "botA",
+      "local": 0,
+      "generation": 7,
+      "event": {
+        "tag": "CecilItemTransitEnd",
+        "line": 1190,
+        "entity": 1850,
+        "generation": 7,
+        "time": 58.45,
+        "goal_entity": 917,
+        "goal": 271,
+        "source": 129,
+        "hop": 248,
+        "since": 48.45,
+        "best_distance": 11.632521,
+        "reason": "no_hop_progress"
+      },
+      "useful_possession_preceded_abort": true,
+      "life_first_useful_owned_age": 2.049968719482422,
+      "life_first_useful_fire_age": 4.949924468994141,
+      "later_goal_and_pickup_events": [
+        {
+          "tag": "CecilGoal",
+          "line": 1292,
+          "local": 0,
+          "tick": 1270,
+          "entity": 1475,
+          "kind": 3,
+          "weapon": 0,
+          "anchor": 253,
+          "pos": [
+            -6.5,
+            -63.999,
+            -12.0
+          ]
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 1296,
+          "local": 0,
+          "tick": 1278,
+          "entity": 1475,
+          "reason": "unavailable"
+        },
+        {
+          "tag": "CecilGoal",
+          "line": 1336,
+          "local": 0,
+          "tick": 1338,
+          "entity": 1479,
+          "kind": 3,
+          "weapon": 0,
+          "anchor": 256,
+          "pos": [
+            42.0,
+            -63.999,
+            -12.0
+          ]
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 1338,
+          "local": 0,
+          "tick": 1339,
+          "entity": 1479,
+          "reason": "unavailable"
+        }
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 0,
+      "generation": 25,
+      "event": {
+        "tag": "CecilItemTransitEnd",
+        "line": 7956,
+        "entity": 1854,
+        "generation": 25,
+        "time": 462.0,
+        "goal_entity": 917,
+        "goal": 271,
+        "source": 129,
+        "hop": 248,
+        "since": 452.0,
+        "best_distance": 11.657087,
+        "reason": "no_hop_progress"
+      },
+      "useful_possession_preceded_abort": false,
+      "life_first_useful_owned_age": null,
+      "life_first_useful_fire_age": null,
+      "later_goal_and_pickup_events": []
+    },
+    {
+      "role": "botB",
+      "local": 0,
+      "generation": 33,
+      "event": {
+        "tag": "CecilItemTransitEnd",
+        "line": 9932,
+        "entity": 1854,
+        "generation": 33,
+        "time": 582.2,
+        "goal_entity": 917,
+        "goal": 271,
+        "source": 129,
+        "hop": 248,
+        "since": 572.2,
+        "best_distance": 11.593914,
+        "reason": "no_hop_progress"
+      },
+      "useful_possession_preceded_abort": true,
+      "life_first_useful_owned_age": 7.0982666015625,
+      "life_first_useful_fire_age": 35.34136962890625,
+      "later_goal_and_pickup_events": [
+        {
+          "tag": "CecilGoal",
+          "line": 10022,
+          "local": 0,
+          "tick": 11785,
+          "entity": 1475,
+          "kind": 3,
+          "weapon": 0,
+          "anchor": 253,
+          "pos": [
+            -6.5,
+            -63.999,
+            -12.0
+          ]
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 10028,
+          "local": 0,
+          "tick": 11788,
+          "entity": 1475,
+          "reason": "unavailable"
+        },
+        {
+          "tag": "CecilGoal",
+          "line": 10096,
+          "local": 0,
+          "tick": 11848,
+          "entity": 1476,
+          "kind": 3,
+          "weapon": 0,
+          "anchor": 261,
+          "pos": [
+            -7.25,
+            -63.999,
+            27.75
+          ]
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 10111,
+          "local": 0,
+          "tick": 11873,
+          "entity": 1476,
+          "reason": "unavailable"
+        }
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 1,
+      "generation": 30,
+      "event": {
+        "tag": "CecilItemTransitEnd",
+        "line": 8417,
+        "entity": 1855,
+        "generation": 30,
+        "time": 491.35,
+        "goal_entity": 917,
+        "goal": 271,
+        "source": 129,
+        "hop": 248,
+        "since": 481.35,
+        "best_distance": 11.607303,
+        "reason": "no_hop_progress"
+      },
+      "useful_possession_preceded_abort": false,
+      "life_first_useful_owned_age": null,
+      "life_first_useful_fire_age": null,
+      "later_goal_and_pickup_events": [
+        {
+          "tag": "CecilGoal",
+          "line": 8465,
+          "local": 1,
+          "tick": 9868,
+          "entity": 1027,
+          "kind": 0,
+          "weapon": 12,
+          "anchor": 1,
+          "pos": [
+            -6.703,
+            -12.499,
+            51.0
+          ],
+          "mapped": 1,
+          "deadline": 538.212
+        }
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 3,
+      "generation": 8,
+      "event": {
+        "tag": "CecilItemTransitEnd",
+        "line": 1455,
+        "entity": 1857,
+        "generation": 8,
+        "time": 73.75,
+        "goal_entity": 917,
+        "goal": 271,
+        "source": 129,
+        "hop": 248,
+        "since": 63.75,
+        "best_distance": 11.606461,
+        "reason": "no_hop_progress"
+      },
+      "useful_possession_preceded_abort": false,
+      "life_first_useful_owned_age": 23.850997924804688,
+      "life_first_useful_fire_age": 27.9012451171875,
+      "later_goal_and_pickup_events": [
+        {
+          "tag": "CecilGoal",
+          "line": 1486,
+          "local": 3,
+          "tick": 1516,
+          "entity": 964,
+          "kind": 0,
+          "weapon": 8,
+          "anchor": 177,
+          "pos": [
+            -113.203,
+            12.0,
+            8.094
+          ],
+          "mapped": 1,
+          "deadline": 120.8
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 1542,
+          "local": 3,
+          "tick": 1591,
+          "entity": 964,
+          "reason": "unavailable"
+        },
+        {
+          "tag": "CecilGoal",
+          "line": 1543,
+          "local": 3,
+          "tick": 1591,
+          "entity": 1762,
+          "kind": 0,
+          "weapon": 5,
+          "anchor": 128,
+          "pos": [
+            -15.0,
+            -71.999,
+            7.5
+          ]
+        },
+        {
+          "tag": "CecilPickup",
+          "line": 1613,
+          "local": 3,
+          "tick": 1667,
+          "old": 3,
+          "owned": 19,
+          "current": 1,
+          "goal_entity": 1762,
+          "goal_picked": 0,
+          "pos": [
+            -12.772,
+            -71.995,
+            8.016
+          ]
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 1615,
+          "local": 3,
+          "tick": 1667,
+          "entity": 1762,
+          "reason": "unavailable"
+        },
+        {
+          "tag": "CecilGoal",
+          "line": 1642,
+          "local": 3,
+          "tick": 1707,
+          "entity": 1475,
+          "kind": 3,
+          "weapon": 0,
+          "anchor": 253,
+          "pos": [
+            -6.5,
+            -63.999,
+            -12.0
+          ]
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 1659,
+          "local": 3,
+          "tick": 1724,
+          "entity": 1475,
+          "reason": "unavailable"
+        },
+        {
+          "tag": "CecilGoal",
+          "line": 2014,
+          "local": 3,
+          "tick": 2171,
+          "entity": 1372,
+          "kind": 3,
+          "weapon": 0,
+          "anchor": 162,
+          "pos": [
+            -72.5,
+            -7.999,
+            7.75
+          ]
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 2104,
+          "local": 3,
+          "tick": 2245,
+          "entity": 1372,
+          "reason": "unavailable"
+        }
+      ]
+    }
+  ],
+  "edge129_248_lives": [
+    {
+      "role": "botA",
+      "local": 0,
+      "generation": 6,
+      "samples": 14,
+      "ticks": [
+        520,
+        780
+      ],
+      "lines": [
+        606,
+        852
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 0,
+      "generation": 7,
+      "samples": 14,
+      "ticks": [
+        900,
+        1160
+      ],
+      "lines": [
+        972,
+        1177
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 0,
+      "generation": 26,
+      "samples": 19,
+      "ticks": [
+        7880,
+        8240
+      ],
+      "lines": [
+        6509,
+        6788
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 1,
+      "generation": 16,
+      "samples": 1,
+      "ticks": [
+        4020,
+        4020
+      ],
+      "lines": [
+        3460,
+        3460
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 1,
+      "generation": 20,
+      "samples": 3,
+      "ticks": [
+        5460,
+        5500
+      ],
+      "lines": [
+        4561,
+        4583
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 1,
+      "generation": 25,
+      "samples": 18,
+      "ticks": [
+        7440,
+        7780
+      ],
+      "lines": [
+        6154,
+        6400
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 2,
+      "generation": 5,
+      "samples": 12,
+      "ticks": [
+        480,
+        700
+      ],
+      "lines": [
+        578,
+        792
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 2,
+      "generation": 10,
+      "samples": 2,
+      "ticks": [
+        1980,
+        2000
+      ],
+      "lines": [
+        1840,
+        1881
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 2,
+      "generation": 18,
+      "samples": 2,
+      "ticks": [
+        5980,
+        6000
+      ],
+      "lines": [
+        4998,
+        5027
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 2,
+      "generation": 21,
+      "samples": 5,
+      "ticks": [
+        8040,
+        8120
+      ],
+      "lines": [
+        6629,
+        6680
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 2,
+      "generation": 24,
+      "samples": 18,
+      "ticks": [
+        8780,
+        9120
+      ],
+      "lines": [
+        7181,
+        7449
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 2,
+      "generation": 28,
+      "samples": 3,
+      "ticks": [
+        10020,
+        10060
+      ],
+      "lines": [
+        8256,
+        8282
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 3,
+      "generation": 9,
+      "samples": 9,
+      "ticks": [
+        760,
+        920
+      ],
+      "lines": [
+        848,
+        988
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botA",
+      "local": 3,
+      "generation": 17,
+      "samples": 5,
+      "ticks": [
+        7940,
+        8020
+      ],
+      "lines": [
+        6536,
+        6616
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 0,
+      "generation": 21,
+      "samples": 2,
+      "ticks": [
+        5520,
+        5540
+      ],
+      "lines": [
+        4766,
+        4781
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 0,
+      "generation": 25,
+      "samples": 13,
+      "ticks": [
+        8980,
+        9220
+      ],
+      "lines": [
+        7725,
+        7943
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 0,
+      "generation": 33,
+      "samples": 13,
+      "ticks": [
+        11400,
+        11640
+      ],
+      "lines": [
+        9725,
+        9924
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 1,
+      "generation": 18,
+      "samples": 19,
+      "ticks": [
+        5160,
+        5520
+      ],
+      "lines": [
+        4491,
+        4768
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 1,
+      "generation": 24,
+      "samples": 1,
+      "ticks": [
+        8260,
+        8260
+      ],
+      "lines": [
+        7068,
+        7068
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 1,
+      "generation": 30,
+      "samples": 16,
+      "ticks": [
+        9520,
+        9820
+      ],
+      "lines": [
+        8194,
+        8414
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 3,
+      "generation": 8,
+      "samples": 13,
+      "ticks": [
+        1220,
+        1460
+      ],
+      "lines": [
+        1277,
+        1447
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 3,
+      "generation": 14,
+      "samples": 2,
+      "ticks": [
+        3820,
+        3840
+      ],
+      "lines": [
+        3423,
+        3434
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 3,
+      "generation": 22,
+      "samples": 4,
+      "ticks": [
+        8720,
+        8780
+      ],
+      "lines": [
+        7493,
+        7528
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    },
+    {
+      "role": "botB",
+      "local": 3,
+      "generation": 25,
+      "samples": 12,
+      "ticks": [
+        9360,
+        9580
+      ],
+      "lines": [
+        8050,
+        8229
+      ],
+      "distinct_goal_entities": [
+        917
+      ]
+    }
+  ],
+  "edge_geometry": {
+    "129": {
+      "idx": 129,
+      "pos": [
+        -36.0,
+        -71.5,
+        8.0
+      ],
+      "range": 4.0,
+      "flags": 0,
+      "important_entity": -1,
+      "next_slot": -1,
+      "lock_entity": -1,
+      "links": [
+        128,
+        124,
+        123,
+        132,
+        248
+      ],
+      "polygon_vertices": 0
+    },
+    "248": {
+      "idx": 250,
+      "pos": [
+        -56.0,
+        -63.5,
+        8.0
+      ],
+      "range": 2.0,
+      "flags": 0,
+      "important_entity": -1,
+      "next_slot": -1,
+      "lock_entity": -1,
+      "links": [
+        129,
+        249,
+        250,
+        270
+      ],
+      "polygon_vertices": 0
+    },
+    "271": {
+      "idx": 273,
+      "pos": [
+        -76.0,
+        -63.5,
+        8.0
+      ],
+      "range": 3.0,
+      "flags": 0,
+      "important_entity": 917,
+      "next_slot": -1,
+      "lock_entity": -1,
+      "links": [
+        270
+      ],
+      "polygon_vertices": 0
+    }
+  },
+  "long_unarmed_lives": [
+    {
+      "role": "botA",
+      "local": 1,
+      "entity": 1851,
+      "generation": 25,
+      "life_seconds": 262.8858337402344,
+      "right_censored": true,
+      "goal_events": [
+        {
+          "tag": "CecilGoal",
+          "line": 5836,
+          "local": 1,
+          "tick": 7058,
+          "entity": 1027,
+          "kind": 0,
+          "weapon": 12,
+          "anchor": 1,
+          "pos": [
+            -6.703,
+            -12.499,
+            51.0
+          ],
+          "mapped": 1,
+          "deadline": 391.222
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 5947,
+          "local": 1,
+          "tick": 7215,
+          "entity": 1027,
+          "reason": "unavailable"
+        },
+        {
+          "tag": "CecilGoal",
+          "line": 5948,
+          "local": 1,
+          "tick": 7215,
+          "entity": 1764,
+          "kind": 1,
+          "weapon": 0,
+          "anchor": 133,
+          "pos": [
+            0.125,
+            -71.999,
+            20.75
+          ]
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 6010,
+          "local": 1,
+          "tick": 7305,
+          "entity": 1764,
+          "reason": "unavailable"
+        },
+        {
+          "tag": "CecilGoal",
+          "line": 6011,
+          "local": 1,
+          "tick": 7305,
+          "entity": 1766,
+          "kind": 1,
+          "weapon": 0,
+          "anchor": 134,
+          "pos": [
+            22.125,
+            -71.999,
+            20.125
+          ]
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 6039,
+          "local": 1,
+          "tick": 7332,
+          "entity": 1766,
+          "reason": "unavailable"
+        },
+        {
+          "tag": "CecilGoal",
+          "line": 6045,
+          "local": 1,
+          "tick": 7332,
+          "entity": 917,
+          "kind": 0,
+          "weapon": 13,
+          "anchor": 271,
+          "pos": [
+            -76.0,
+            -63.999,
+            8.0
+          ],
+          "mapped": 1,
+          "deadline": 389.098
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 6404,
+          "local": 1,
+          "tick": 7782,
+          "entity": 917,
+          "reason": "timeout"
+        }
+      ],
+      "after_last_goal_end": {
+        "ticks": [
+          7800,
+          12180
+        ],
+        "lines": [
+          6425,
+          10038
+        ],
+        "sampled_span_seconds": 219.0,
+        "samples": 220,
+        "NAV_samples": 220,
+        "visible_samples": 0,
+        "reacquire_counts": {
+          "-1": 220
+        },
+        "floor_counts": {
+          "1": 137,
+          "2": 61,
+          "0": 22
+        },
+        "position_min": [
+          -51.5,
+          -71.997,
+          14.5
+        ],
+        "position_max": [
+          -48.364,
+          -70.502,
+          17.339
+        ],
+        "first": {
+          "line": 6425,
+          "tick": 7800,
+          "pos": [
+            -50.75,
+            -71.997,
+            17.339
+          ],
+          "health": 100.0,
+          "owned": 3,
+          "goal_entity": 0,
+          "goal": -1,
+          "hop": -1,
+          "nav": 1,
+          "move": 0.0,
+          "strafe": 0.0,
+          "up": 0.0,
+          "liquid": 0,
+          "floor": 1,
+          "nav_source": -1,
+          "reacquire": -1,
+          "support_ref": 1,
+          "shots": 830,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ]
+        },
+        "last": {
+          "line": 10038,
+          "tick": 12180,
+          "pos": [
+            -51.469,
+            -70.502,
+            14.503
+          ],
+          "health": 100.0,
+          "owned": 3,
+          "goal_entity": 0,
+          "goal": -1,
+          "hop": -1,
+          "nav": 1,
+          "move": 0.3,
+          "strafe": 0.0,
+          "up": 0.0,
+          "liquid": 0,
+          "floor": 2,
+          "nav_source": -1,
+          "reacquire": -1,
+          "support_ref": 357,
+          "shots": 830,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "role": "botA",
+      "local": 3,
+      "entity": 1853,
+      "generation": 11,
+      "life_seconds": 223.70647430419922,
+      "right_censored": false,
+      "goal_events": [
+        {
+          "tag": "CecilGoal",
+          "line": 1273,
+          "local": 3,
+          "tick": 1245,
+          "entity": 965,
+          "kind": 0,
+          "weapon": 7,
+          "anchor": 208,
+          "pos": [
+            63.0,
+            -6.741,
+            7.75
+          ],
+          "mapped": 1,
+          "deadline": 82.25
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 1291,
+          "local": 3,
+          "tick": 1261,
+          "entity": 965,
+          "reason": "unavailable"
+        },
+        {
+          "tag": "CecilGoal",
+          "line": 1319,
+          "local": 3,
+          "tick": 1301,
+          "entity": 1025,
+          "kind": 0,
+          "weapon": 9,
+          "anchor": 0,
+          "pos": [
+            -7.203,
+            -12.499,
+            -33.906
+          ],
+          "mapped": 1,
+          "deadline": 104.194
+        },
+        {
+          "tag": "CecilGoalEnd",
+          "line": 1501,
+          "local": 3,
+          "tick": 1548,
+          "entity": 1025,
+          "reason": "unavailable"
+        }
+      ],
+      "after_last_goal_end": {
+        "ticks": [
+          1560,
+          5700
+        ],
+        "lines": [
+          1513,
+          4754
+        ],
+        "sampled_span_seconds": 207.0,
+        "samples": 208,
+        "NAV_samples": 208,
+        "visible_samples": 0,
+        "reacquire_counts": {
+          "148": 104,
+          "137": 104
+        },
+        "floor_counts": {
+          "2": 162,
+          "1": 24,
+          "0": 22
+        },
+        "position_min": [
+          -121.476,
+          -23.998,
+          -12.149
+        ],
+        "position_max": [
+          -120.501,
+          -23.998,
+          5.623
+        ],
+        "first": {
+          "line": 1513,
+          "tick": 1560,
+          "pos": [
+            -120.847,
+            -23.998,
+            -9.829
+          ],
+          "health": 90.0,
+          "owned": 3,
+          "goal_entity": 0,
+          "goal": -1,
+          "hop": -1,
+          "nav": 1,
+          "move": -0.05,
+          "strafe": -0.3,
+          "up": 0.0,
+          "liquid": 0,
+          "floor": 2,
+          "nav_source": -1,
+          "reacquire": 148,
+          "support_ref": 1,
+          "shots": 87,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ]
+        },
+        "last": {
+          "line": 4754,
+          "tick": 5700,
+          "pos": [
+            -120.503,
+            -23.998,
+            -5.545
+          ],
+          "health": 90.0,
+          "owned": 3,
+          "goal_entity": 0,
+          "goal": -1,
+          "hop": -1,
+          "nav": 1,
+          "move": 0.3,
+          "strafe": 0.0,
+          "up": 0.0,
+          "liquid": 0,
+          "floor": 1,
+          "nav_source": -1,
+          "reacquire": 137,
+          "support_ref": 1,
+          "shots": 87,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ]
+        }
+      }
+    }
+  ],
+  "state_counts": {
+    "0": 3662,
+    "4": 784
+  },
+  "sampled_FALL_episodes": {
+    "count": 448,
+    "outcomes": {
+      "ground_state_exit": 427,
+      "death": 20,
+      "censored": 1
+    },
+    "longest": [
+      {
+        "role": "botB",
+        "local": 3,
+        "generation": 16,
+        "ticks": [
+          5480,
+          5660
+        ],
+        "seconds": 9.0,
+        "lines": [
+          4755,
+          4893
+        ],
+        "outcome": "ground_state_exit",
+        "next_state": 0,
+        "first_pos": [
+          -91.118,
+          4.92,
+          2.895
+        ],
+        "last_pos": [
+          -99.919,
+          18.001,
+          7.908
+        ],
+        "last_health": 80.0
+      },
+      {
+        "role": "botA",
+        "local": 1,
+        "generation": 7,
+        "ticks": [
+          1500,
+          1620
+        ],
+        "seconds": 6.0,
+        "lines": [
+          1475,
+          1568
+        ],
+        "outcome": "ground_state_exit",
+        "next_state": 0,
+        "first_pos": [
+          -90.501,
+          5.871,
+          7.703
+        ],
+        "last_pos": [
+          -77.065,
+          -20.87,
+          -17.002
+        ],
+        "last_health": 100.0
+      },
+      {
+        "role": "botA",
+        "local": 3,
+        "generation": 21,
+        "ticks": [
+          8980,
+          9100
+        ],
+        "seconds": 6.0,
+        "lines": [
+          7317,
+          7437
+        ],
+        "outcome": "ground_state_exit",
+        "next_state": 0,
+        "first_pos": [
+          -89.94,
+          4.768,
+          7.69
+        ],
+        "last_pos": [
+          -94.205,
+          -18.411,
+          6.425
+        ],
+        "last_health": 100.0
+      },
+      {
+        "role": "botB",
+        "local": 1,
+        "generation": 24,
+        "ticks": [
+          7840,
+          7960
+        ],
+        "seconds": 6.0,
+        "lines": [
+          6709,
+          6795
+        ],
+        "outcome": "ground_state_exit",
+        "next_state": 0,
+        "first_pos": [
+          -90.239,
+          -0.354,
+          8.277
+        ],
+        "last_pos": [
+          -96.771,
+          -7.957,
+          7.736
+        ],
+        "last_health": 100.0
+      },
+      {
+        "role": "botB",
+        "local": 2,
+        "generation": 5,
+        "ticks": [
+          520,
+          640
+        ],
+        "seconds": 6.0,
+        "lines": [
+          632,
+          750
+        ],
+        "outcome": "ground_state_exit",
+        "next_state": 0,
+        "first_pos": [
+          -133.544,
+          -2.667,
+          -8.055
+        ],
+        "last_pos": [
+          -120.505,
+          -20.551,
+          -1.107
+        ],
+        "last_health": 100.0
+      },
+      {
+        "role": "botB",
+        "local": 3,
+        "generation": 16,
+        "ticks": [
+          5260,
+          5380
+        ],
+        "seconds": 6.0,
+        "lines": [
+          4589,
+          4656
+        ],
+        "outcome": "ground_state_exit",
+        "next_state": 0,
+        "first_pos": [
+          -90.994,
+          -3.704,
+          9.327
+        ],
+        "last_pos": [
+          -97.624,
+          -4.159,
+          5.755
+        ],
+        "last_health": 100.0
+      },
+      {
+        "role": "botB",
+        "local": 2,
+        "generation": 6,
+        "ticks": [
+          1460,
+          1560
+        ],
+        "seconds": 5.0,
+        "lines": [
+          1446,
+          1523
+        ],
+        "outcome": "ground_state_exit",
+        "next_state": 0,
+        "first_pos": [
+          -8.247,
+          -22.695,
+          66.387
+        ],
+        "last_pos": [
+          -12.755,
+          -15.572,
+          89.401
+        ],
+        "last_health": 20.0
+      },
+      {
+        "role": "botA",
+        "local": 0,
+        "generation": 35,
+        "ticks": [
+          12120,
+          12200
+        ],
+        "seconds": 4.0,
+        "lines": [
+          9988,
+          10053
+        ],
+        "outcome": "censored",
+        "next_state": null,
+        "first_pos": [
+          -134.011,
+          9.461,
+          -10.142
+        ],
+        "last_pos": [
+          -129.296,
+          16.633,
+          -8.463
+        ],
+        "last_health": 50.0
+      }
+    ]
+  },
+  "SWIM_DIVE_episodes": 0,
+  "teleport_annotated_nodes": {
+    "221": {
+      "idx": 223,
+      "pos": [
+        -72.5,
+        -7.0,
+        -10.5
+      ],
+      "range": 3.0,
+      "flags": 32,
+      "important_entity": -1,
+      "next_slot": -1,
+      "lock_entity": -1,
+      "links": [
+        208,
+        210
+      ],
+      "polygon_vertices": 0
+    },
+    "222": {
+      "idx": 224,
+      "pos": [
+        -72.5,
+        -7.0,
+        26.5
+      ],
+      "range": 3.0,
+      "flags": 32,
+      "important_entity": -1,
+      "next_slot": -1,
+      "lock_entity": -1,
+      "links": [
+        208,
+        209
+      ],
+      "polygon_vertices": 0
+    },
+    "223": {
+      "idx": 225,
+      "pos": [
+        69.0,
+        -3.5,
+        -24.0
+      ],
+      "range": 3.0,
+      "flags": 32,
+      "important_entity": -1,
+      "next_slot": -1,
+      "lock_entity": -1,
+      "links": [
+        163,
+        153
+      ],
+      "polygon_vertices": 0
+    },
+    "224": {
+      "idx": 226,
+      "pos": [
+        69.0,
+        -3.5,
+        40.0
+      ],
+      "range": 3.0,
+      "flags": 32,
+      "important_entity": -1,
+      "next_slot": -1,
+      "lock_entity": -1,
+      "links": [
+        160,
+        163
+      ],
+      "polygon_vertices": 0
+    }
+  },
+  "same_life_observed_displacements_over50m_within300ms": 0,
+  "teleport_function_proven": false,
+  "active_minima_missing": [],
+  "inventory_receipt": {
+    "enabled": true,
+    "tool_sha256": "920613df96771c14d3600f7f15fbbf5ae44254365774a9168fe16dbcee735cbb",
+    "valid_samples": 13766,
+    "discarded_changed": 526,
+    "sample_seconds_total": 58.683683475945145,
+    "sample_seconds_max": 0.1443808029871434,
+    "setup_seconds": 0.007359273033216596,
+    "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+  },
+  "host_budget": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 573,
+    "cpu_busy_max_measured_percent": 62.16216216216216,
+    "mem_available_min_bytes": 1864167424,
+    "disk_free_min_bytes": 22052061184,
+    "max_sample_gap_seconds": 48.58981647901237,
+    "budget_pass_claim": false,
+    "gameplay_max_sample_gap_seconds": 1.1877996800467372
+  },
+  "normal_closed_roles": [
+    "server",
+    "botA",
+    "vanilla",
+    "botB"
+  ],
+  "restored": true,
+  "post_close_logs": {
+    "accepted": true,
+    "reasons": [],
+    "logs": {
+      "server": {
+        "sha256": "e15f365c0246ec707294c375cf443e67e55689b7059d9904550cd680272edcab",
+        "bytes": 80680,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botA": {
+        "sha256": "667646b706d5e7b949f7d6771fce941f2681148c8013d46b46ee996812bd7a6e",
+        "bytes": 3377960,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botB": {
+        "sha256": "812c861655ac1fa2e27ac38c4906b49b4a6b330d5010532766f3d1a448db59dc",
+        "bytes": 3460634,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "vanilla": {
+        "sha256": "14c97b39a8d81d1464208faa42711f36d14acb20e544c0aeefe52b1af37d0982",
+        "bytes": 14311,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      }
+    }
+  },
+  "result_sha256": "d79b78fc708ea38b2912d75dcd23170317de3afb26caedf72cabe53b11fd438c",
+  "limitations": [
+    "All205 alive-observed lives included;197 observed deaths and8 right censorings. No proof that sub-sample transient lives cannot exist.",
+    "Useful possession,current weapon and fire_requested are distinct; fire_requested is not proven discharge/damage.",
+    "State0/1=STAND/CROUCH,2/3=SWIM/DIVE,4=FALL; SafeMotion floor is not ground class.",
+    "One-second states bound observed episodes only. FALL-ending death has no assigned cause.",
+    "TELEPORT metadata or source224 traversal is not an original teleport call or verified successful transit. The50m/300ms screening threshold is descriptive, not an engine detector.",
+    "Cecil event alignment uses within-life Driver tick relation to sampled native spawn; final action timing is non-atomic and cleanup-only tail is excluded.",
+    "Two watchdog cases already had useful possession; later sampled possession is not a new pickup.",
+    "Long unarmed failure and censored life prevent a general navigation/acquisition PASS despite all8 aggregate activity minima.",
+    "600s and clean logs do not prove in-process mapreset, first-state damage, other maps or release."
+  ]
+}

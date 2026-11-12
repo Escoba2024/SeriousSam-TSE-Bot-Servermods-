@@ -1,5 +1,16 @@
 # SSAM.AI milestones A then B — execution ledger
 
+## Fortsetzung 12.11.2026, 03:06 UTC
+
+A bleibt unvollständig, B unbegonnen; Kandidat013 und neue Namen sind nicht produktiv. LittleTrouble013:300,052715s regulär beendet, acht Mindestaktivitäten, vier normale Close/akzeptierte Closed-Logs/vollständiger Restore. Vollständiger Lebensnenner143 plus drei nichtlebende Anfangsepochen;65 Leben mit nützlichem Besitz,74 Tote und4 Zensierungen ohne. Zwei Waffenbeschaffungen bleiben54 bzw65s offen/langsam. Keine automatische Kartenfreigabe. Skulls bleibt aufgrund belegter223/263s-Unbewaffnetheit von der geplanten Whitelist ausgeschlossen; zulässiger temporärer Kartenersatz noch nicht ausgerollt.
+
+Der erste echte Red→Yodeller→Red-Mapresetversuch ist FAIL: nach regulärem ersten Rundenende wurde Yodeller tatsächlich durch Server und beide Botkohorten geladen, der Vanilla-Rejoin scheiterte mit Timeout. Der Controller verwarf zusätzlich einen nicht archivierten Statuskartennamen. Nur Phase0 persistiert; keine vollständige Reset-/Vanillaabnahme. Alle vier Rollen normal geschlossen und vollständiger Restore bestätigt, Vanilla-Closed-Log ausdrücklich abgelehnt. Originalfehler bleiben erhalten; Ursachenprüfung und passive Queryarchivierung statt spekulativer Timeoutänderung.
+
+A3: uninstrumentierte identische STARK-Kontrolle120,058940s bestanden. Zwei instrumentierte Vor-Release-Versuche scheiterten am unveränderten exakten /proc/maps-Zeilenvergleich. Archivierte Vorher/Nachher-Daten belegen ausschließlich Aufteilung angrenzender RX-Mappings bei identischen Adressbereichen, Rechten, Backing und linearen Dateioffsets. Separater enger Normalisierungsentwurf nach Root66Tests und unabhängigem Combatreview eingefroren; Originalpins/PID/start/Dateisignaturen/volle Originalbyte-Restores unverändert. Erster neuer instrumentierter120s-STARK/Swap0-Versuch läuft, kein Ergebnis oder A3-PASS vorweggenommen. Aktueller Controller e8e7299db776f5943c7d2fb399a8b12bd6a0e33522f683a0fe475d1d4f3e705e, Manifest d13a063c8fb6f51cd1706c2275b6d50a4eafc143a6420606ca052235e204acd3.
+
+Namen:48 stabile IDs und kollisionsfreie Zuweisungen vorbereitet; private reine Stagingimplementierung berücksichtigt PLC4-Namensbytes ohne GUIDänderung und Reds vorhandenen Startrotator. Noch keine Liveänderung. Letzte Live-Flottenprüfung02:08:16, letzte verifizierte Remoteveröffentlichung443c965/Delta015; neuere Befunde benötigen weiteren Push/Drive-Nachtrag. A1-Erstzustand, übrige Vergleiche/Kartengates,3600/3600/7200s-Stabilität und sechsfacher Rollout bleiben offen.
+
+
 ## Fortsetzung 12.11.2026, 01:12 UTC
 
 Der Auftrag A→B bleibt aktiv. A ist unvollständig, B unbegonnen; keine neue A-DLL oder neuen Namen sind produktiv. Die frische Flottenprüfung01:02:24 bestätigt sechs mal acht eigene Bots ohne zusätzliche UNKNOWN. Aktuelle Logs der fünf Publics0BAD/0SyncDisconnect, Dev unverändert21/2. Verfügbarer RAM1,84GiB während privatem Test, Disk21,44GiB; kein Ressourcen-Dauergate.

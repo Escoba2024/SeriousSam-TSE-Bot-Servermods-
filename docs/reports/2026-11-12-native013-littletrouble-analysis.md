@@ -1,0 +1,23 @@
+# Native013 LittleTrouble:300 s Beobachtung, Erwerbsgrenzen offen
+
+`a4-013-trouble-20261112-024235` lief300,053 s; alle vier Rollen normal geschlossen, Post-close-Logs akzeptiert, vollständiger Restore, keine protokollierten Sync-/Crash-/InvalidAction-Fehler. Host-CPU maximal59,900 %, verfügbarer RAM mindestens1,860 GiB. Alle acht aggregierten Aktivitätsminima sind vorhanden. **Daraus folgt kein allgemeiner Karten-PASS:** Zwei Leben enden nach64,904 beziehungsweise54,053 s ohne nützlichen Waffenbesitz; deren tatsächliche bewegte Routen und Zielwechsel sind unten eingegrenzt.
+
+Alle acht Bots nutzen013 `3a8d84c9…a81f93`, kanonische DEMON/tier3-Migration. Tatsächliche BotA-Slots0/2/3/4, BotB5/6/7/8; Vanilla1. WeltCRC`4060d0dd`, NavCRC`980013d4`,110Knoten; Pfadhash`6c64bf87` ist kein Welt-CRC. [Bereinigte JSON](2026-11-12-native013-littletrouble-analysis.json) enthält alle Leben und überprüfte Abschluss-Hashes; Rohdaten bleiben privat.
+
+| Kohorte | Lebend beobachtete Leben | Tod / rechtszensiert | Nützlicher Besitz / aktuelle Waffe / Feueranforderung | Tod / zensiert ohne nützlichen Besitz |
+|---|---:|---:|---:|---:|
+| BotA |80|76 /4|38 /36 /34|40 /2|
+| BotB |63|59 /4|27 /26 /26|34 /2|
+| Gesamt |143|135 /8|65 /62 /60|74 /4|
+
+Weitere drei positive initiale Spawnclock-Epochen (Slots0/2/6) enthalten ausschließlich nichtpositive HP: insgesamt146 beobachtete positive Epochen. Sie bleiben separat; daraus wird weder Nichtspawn noch eine Todesursache behauptet. Maske`0x3df8` schließt Double Colt und Nahkampf aus. Median erfolgreicher Erwerbsleben4,350 s, Maximum34,300 s; die78 erfolglosen oder zensierten Erwerbsleben bleiben im Nenner.7043 Inventarproben akzeptiert,166 zerrissene verworfen; nicht atomar. Feueranforderungen belegen keine Treffer.
+
+**BotB local3/entity691/generation11,64,904 s bis Tod ohne nützlichen Besitz:** Nach einem anderen Ziel folgen Rocket220 bei1557, unavailable1667; Flamethrower219 bei1667, unavailable1782; erneut220 bei1881, Timeout2314. Danach219 bei2452, unavailable2604, erneut219 bei2820 bis Tod2847. DoubleColt-Pickup2196 (botB-closed.log:2359, Besitz3→7) zählt nicht als nützlicher Erwerb. Zehn periodische States2100–2280 zeigen dieselbe220-Kante70→69 über9 s (2306–2460), aber7/10 mit Sicht und nur7/10 NAV-Besitz. Abgetastete Strecke40,315 m innerhalb eines16,592×0,977×6,413-m-Bereichs: bewegte Anfahrt/Kampfunterbrechung, kein9-s-Stillstand oder nachgewiesene ununterbrochene Watchdogberechtigung. Später wird wieder über andere Kanten gefahren.
+
+**BotB local2/entity690/generation8,54,053 s bis Tod ohne nützlichen Besitz:**219 bei1775→unavailable1782;220 bei1866→Timeout2266;219 bei2453→unavailable2604 und nochmals2811 bis Tod2854. Einziger Besitzgewinn ist DoubleColt2024 (2256,3→7). Kante79→70 bleibt2100–2240 über7 s gewählt (2305–2423),8/8 States mit Sicht, nur2/8 NAV-Besitz; abgetastete Strecke23,423 m. Der reine Zielwechsel-/Timeoutverlauf erklärt den fehlenden Erwerb noch nicht vollständig. Kein spekulativer globaler Timer- oder Prioritätsfix wird daraus abgeleitet.
+
+**Tatsächlicher erfolgreicher Gegenfall, BotB local2/entity690/generation6:** Erst219→unavailable90,220→unavailable216, dann DoubleColt-Ziel828→unavailable397.220 erneut417 gewählt; DoubleColt-Pickup569 bleibt unzureichend. Erst721 Rocket-Pickup7→263 (882), gleich darauf eigenes Ziel unavailable884. Native Erwerbszeit34,300 s nach Spawn, aktuelle nützliche Waffe35,200 s, erste Feueranforderung42,400 s. Die Route erreicht also in diesem Leben tatsächlich die Waffe; dieser Erfolg macht die beiden späteren Fehlleben nicht erfolgreich.
+
+Der längste erhaltene Inventar-Stillstandsindikator beträgt2,250 s: gleicher Lebenskontext, Abstand höchstens1 m vom Anker, Probenlücke höchstens0,5 s. Es gibt keine unbekannte Lücke in diesem Indikator; bewegte Schleifen bleiben dennoch möglich. Die längste zusammenhängend beobachtete identische Ziel-/Quell-/Hopkombination beträgt9 s. Kein `CecilItemTransitEnd` in den nativ abgedeckten Leben: keine positive Watchdogausübung, aber aus den Sicht-/NAV-Unterbrechungen auch kein bewiesener Watchdogdefekt.
+
+Lebende States:2141 STAND,14 FALL, keine SWIM/DIVE. FALL ist keine Flüssigkeit; SafeMotion`floor` ist keine Bodenklasse. Flüssigkeit, Teleportfunktion, Mapreset und erster Simulationszustand sind nicht qualifiziert. Die Sitzung liefert tatsächliche Respawn-, Pickup-, Bewegungs- und Feuerbelege, bleibt aber wegen der benannten langen erfolglosen Erwerbsleben ohne allgemeine Funktionsfreigabe. Weitere Whitelist-/Fallbackentscheidung benötigt die gesonderte Kartenprüfung. Keine Gameplay-, Harness- oder Runtimeänderung durch diese Analyse; größere Auswertungen liefen unter eigener CPUQuota25%-Unit.

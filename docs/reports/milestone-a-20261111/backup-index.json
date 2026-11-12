@@ -295,5 +295,20 @@
     "roundtrip_verified": true,
     "drive_url": "https://drive.google.com/file/d/1ERvpfeCD-Vk_SwxASoguz2jPQifdbAuB/view",
     "covers": "Unqualified build013 DLL and exact source bundle through e689614; closed013 uninstrumented and V3 observation windows; preserved first A4 preflight FAIL; reviewed A4 private drafts and root freezes. Does not contain later corrected A4 gameplay run. Requires earlier baseline, fixture and toolchain backups. File restore only, no native restore launch."
+  },
+  "runtime_evidence_delta015_for_build013": {
+    "scope": "RUNTIME_EVIDENCE_DELTA015_FOR_BUILD013_NOT_RELEASE",
+    "bytes": 29517618,
+    "sha256": "8afa00ec196c75b537970bf342547d1282ca92e05f204c679001d5b2d1a9b19f",
+    "repo_head": "52a033b554548ec5567ba6f605db35cf46ef5aac",
+    "regular_files_written_rehashed": 3834,
+    "restored_bytes": 284797164,
+    "symlinks_indexed_not_materialized": 2,
+    "native_launch_from_restore": false,
+    "drive_uploaded": true,
+    "drive_id": "1hlaiRaRwxzra-N4HA65IXhhR_6yasamy",
+    "roundtrip_verified": true,
+    "drive_url": "https://drive.google.com/file/d/1hlaiRaRwxzra-N4HA65IXhhR_6yasamy/view",
+    "covers": "Unqualified013 source/build; all completed013 A4/V3 windows including preserved CPU/preflight failures; first failed A3 initial-phase control and both frozen A3 controller versions. Source bundle52a033b. Later successful A3-v2 control and instrumented window not included. Mapreset draft excluded pending completed review. Earlier baseline/fixture/toolchain backups remain prerequisites. File restore only."
   }
 }
