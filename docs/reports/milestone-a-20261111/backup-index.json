@@ -310,5 +310,21 @@
     "roundtrip_verified": true,
     "drive_url": "https://drive.google.com/file/d/1hlaiRaRwxzra-N4HA65IXhhR_6yasamy/view",
     "covers": "Unqualified013 source/build; all completed013 A4/V3 windows including preserved CPU/preflight failures; first failed A3 initial-phase control and both frozen A3 controller versions. Source bundle52a033b. Later successful A3-v2 control and instrumented window not included. Mapreset draft excluded pending completed review. Earlier baseline/fixture/toolchain backups remain prerequisites. File restore only."
+  },
+  "runtime_evidence_delta016_for_build013": {
+    "scope": "RUNTIME_EVIDENCE_DELTA016_FOR_BUILD013_NOT_RELEASE",
+    "bytes": 47260376,
+    "sha256": "5c6db38c27f93cdb12a86dc5b27854b5350342cf841128375a6d6a26ef55e32a",
+    "repo_head": "d71690693a7e64560c6ccb59ad980bafa41ac868",
+    "regular_files_written_rehashed": 9555,
+    "restored_bytes": 445102118,
+    "symlinks_indexed_not_materialized": 2,
+    "native_launch_from_restore": false,
+    "drive_uploaded": true,
+    "drive_id": "1FdoXNA0RUXAcEKAdgISOwB76Ro1fzN3l",
+    "drive_url": "https://drive.google.com/file/d/1FdoXNA0RUXAcEKAdgISOwB76Ro1fzN3l/view",
+    "roundtrip_verified": true,
+    "verified_utc": "2026-11-12T03:14:12.168095+00:00",
+    "covers": "Unqualified013 source/build and source bundle d716906. All closed013 A4/V3/A3 windows through STARK013 instrumented swap0+1, including historical failures and failed first mapreset; frozen normalized damage/capture controllers and prepared private48-name staging. New live query-capture attempt started only after archive and is excluded. Earlier baseline/fixtures/toolchains remain prerequisites. No native restore launch, qualification, deployment or first-state acceptance."
   }
 }

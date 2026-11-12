@@ -1,5 +1,5 @@
 {
-  "utc": "2026-11-12T02:08:16.032103+00:00",
+  "utc": "2026-11-12T03:14:41.808677+00:00",
   "scope": "FRESH_QUERY_AND_CURRENT_LOGS_NOT_LONGTERM_SYNC_OR_HUMAN_CLASSIFICATION",
   "fleet": [
     {
@@ -147,12 +147,12 @@
           "sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530"
         }
       ],
-      "current_log_bad": 21,
-      "current_log_disconnects": 2,
+      "current_log_bad": 37,
+      "current_log_disconnects": 3,
       "config_spawn_zero": true,
       "live_session_spawn": 0.0
     }
   ],
-  "disk_free_gib": 20.69,
-  "mem_available_gib": 1.73
+  "disk_free_gib": 19.37,
+  "mem_available_gib": 1.77
 }

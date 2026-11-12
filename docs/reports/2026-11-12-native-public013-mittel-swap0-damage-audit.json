@@ -1,0 +1,3448 @@
+{
+  "window": "arena013public-damage-checked-swap0-trial-1-031704",
+  "tier": 1,
+  "swap": false,
+  "observed_seconds": 120.05524250702001,
+  "status": "PASS_LIMITED_A3_DAMAGE_OBSERVATION_REVIEW_REQUIRED",
+  "qualified": false,
+  "a3_accepted": false,
+  "first_processed_state_proven": false,
+  "cohorts": {
+    "public": {
+      "lives": 28,
+      "corpse_only_lives": 0,
+      "observed_deaths": 25,
+      "censored_lives": 3,
+      "useful_owned_lives": 4,
+      "completed_without_useful": 21,
+      "censored_without_useful": 3,
+      "useful_current_lives": 1,
+      "useful_fire_request_lives": 1,
+      "success_only_median_seconds": 5.300083160400391,
+      "success_only_max_seconds": 8.949981689453125,
+      "query_frags_delta": 27,
+      "first_life_useful_ages": [
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "candidate": {
+      "lives": 13,
+      "corpse_only_lives": 0,
+      "observed_deaths": 10,
+      "censored_lives": 3,
+      "useful_owned_lives": 9,
+      "completed_without_useful": 3,
+      "censored_without_useful": 1,
+      "useful_current_lives": 9,
+      "useful_fire_request_lives": 6,
+      "success_only_median_seconds": 11.350028097629547,
+      "success_only_max_seconds": 18.74982261657715,
+      "query_frags_delta": 8,
+      "first_life_useful_ages": [
+        4.3000012040138245,
+        3.499998152256012,
+        11.350028097629547,
+        10.350024282932281
+      ]
+    },
+    "vanilla": {
+      "lives": 1,
+      "corpse_only_lives": 0,
+      "observed_deaths": 1,
+      "censored_lives": 0,
+      "useful_owned_lives": 0,
+      "completed_without_useful": 1,
+      "censored_without_useful": 0,
+      "useful_current_lives": 0,
+      "useful_fire_request_lives": 0,
+      "success_only_median_seconds": null,
+      "success_only_max_seconds": null,
+      "query_frags_delta": 0,
+      "first_life_useful_ages": [
+        null
+      ]
+    }
+  },
+  "lives": [
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 0,
+      "slot": 0,
+      "entity_id": 565,
+      "life": 1,
+      "spawn_clock": 0.8000001311302185,
+      "corpse_only": false,
+      "first_alive_clock": 0.8000001311302185,
+      "first_alive_owned": 3,
+      "death_clock": 5.100001335144043,
+      "right_censored": false,
+      "last_sample_clock": 7.050008773803711,
+      "first_inventory_line": 6,
+      "last_inventory_line": 208,
+      "observed_seconds": 4.3000012040138245,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 136
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 0,
+      "slot": 0,
+      "entity_id": 565,
+      "life": 2,
+      "spawn_clock": 7.1500091552734375,
+      "corpse_only": false,
+      "first_alive_clock": 7.250009536743164,
+      "first_alive_owned": 3,
+      "death_clock": 14.750038146972656,
+      "right_censored": false,
+      "last_sample_clock": 17.050025939941406,
+      "first_inventory_line": 209,
+      "last_inventory_line": 409,
+      "observed_seconds": 7.600028991699219,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 135
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 0,
+      "slot": 0,
+      "entity_id": 565,
+      "life": 3,
+      "spawn_clock": 17.1500244140625,
+      "corpse_only": false,
+      "first_alive_clock": 17.250022888183594,
+      "first_alive_owned": 3,
+      "death_clock": 26.549880981445312,
+      "right_censored": false,
+      "last_sample_clock": 27.999858856201172,
+      "first_inventory_line": 410,
+      "last_inventory_line": 631,
+      "observed_seconds": 9.399856567382812,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 147
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 0,
+      "slot": 0,
+      "entity_id": 565,
+      "life": 4,
+      "spawn_clock": 28.149856567382812,
+      "corpse_only": false,
+      "first_alive_clock": 28.19985580444336,
+      "first_alive_owned": 3,
+      "death_clock": 40.2996711730957,
+      "right_censored": false,
+      "last_sample_clock": 42.049644470214844,
+      "first_inventory_line": 632,
+      "last_inventory_line": 912,
+      "observed_seconds": 12.14981460571289,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 186
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 0,
+      "slot": 0,
+      "entity_id": 565,
+      "life": 5,
+      "spawn_clock": 42.14964294433594,
+      "corpse_only": false,
+      "first_alive_clock": 42.199642181396484,
+      "first_alive_owned": 3,
+      "death_clock": 65.7494125366211,
+      "right_censored": false,
+      "last_sample_clock": 68.04955291748047,
+      "first_inventory_line": 913,
+      "last_inventory_line": 1443,
+      "observed_seconds": 23.599769592285156,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 357
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 0,
+      "slot": 0,
+      "entity_id": 565,
+      "life": 6,
+      "spawn_clock": 68.1495590209961,
+      "corpse_only": false,
+      "first_alive_clock": 68.1995620727539,
+      "first_alive_owned": 3,
+      "death_clock": 88.2007827758789,
+      "right_censored": false,
+      "last_sample_clock": 90.05089569091797,
+      "first_inventory_line": 1444,
+      "last_inventory_line": 1885,
+      "observed_seconds": 20.051223754882812,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 296
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 0,
+      "slot": 0,
+      "entity_id": 565,
+      "life": 7,
+      "spawn_clock": 90.1509017944336,
+      "corpse_only": false,
+      "first_alive_clock": 90.25090789794922,
+      "first_alive_owned": 3,
+      "death_clock": 100.90155792236328,
+      "right_censored": false,
+      "last_sample_clock": 103.10169219970703,
+      "first_inventory_line": 1886,
+      "last_inventory_line": 2147,
+      "observed_seconds": 10.750656127929688,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 173
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 0,
+      "slot": 0,
+      "entity_id": 565,
+      "life": 8,
+      "spawn_clock": 103.15169525146484,
+      "corpse_only": false,
+      "first_alive_clock": 103.25170135498047,
+      "first_alive_owned": 3,
+      "death_clock": null,
+      "right_censored": true,
+      "last_sample_clock": 120.65276336669922,
+      "first_inventory_line": 2148,
+      "last_inventory_line": 2503,
+      "observed_seconds": 17.501068115234375,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 238
+    },
+    {
+      "cohort": "vanilla",
+      "role": "vanilla",
+      "local": 0,
+      "slot": 1,
+      "entity_id": 563,
+      "life": 1,
+      "spawn_clock": 0.8000001311302185,
+      "corpse_only": false,
+      "first_alive_clock": 0.8000001311302185,
+      "first_alive_owned": 3,
+      "death_clock": 11.75002670288086,
+      "right_censored": false,
+      "last_sample_clock": 120.65276336669922,
+      "first_inventory_line": 8,
+      "last_inventory_line": 2503,
+      "observed_seconds": 10.95002657175064,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 837
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 1,
+      "slot": 2,
+      "entity_id": 566,
+      "life": 1,
+      "spawn_clock": 0.8000001311302185,
+      "corpse_only": false,
+      "first_alive_clock": 0.8000001311302185,
+      "first_alive_owned": 3,
+      "death_clock": 24.299915313720703,
+      "right_censored": false,
+      "last_sample_clock": 25.899890899658203,
+      "first_inventory_line": 6,
+      "last_inventory_line": 586,
+      "observed_seconds": 23.499915182590485,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 388
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 1,
+      "slot": 2,
+      "entity_id": 566,
+      "life": 2,
+      "spawn_clock": 25.899890899658203,
+      "corpse_only": false,
+      "first_alive_clock": 26.049888610839844,
+      "first_alive_owned": 3,
+      "death_clock": 33.249778747558594,
+      "right_censored": false,
+      "last_sample_clock": 34.849754333496094,
+      "first_inventory_line": 587,
+      "last_inventory_line": 768,
+      "observed_seconds": 7.349887847900391,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 121
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 1,
+      "slot": 2,
+      "entity_id": 566,
+      "life": 3,
+      "spawn_clock": 34.89975357055664,
+      "corpse_only": false,
+      "first_alive_clock": 34.999752044677734,
+      "first_alive_owned": 3,
+      "death_clock": 52.29948806762695,
+      "right_censored": false,
+      "last_sample_clock": 53.849464416503906,
+      "first_inventory_line": 769,
+      "last_inventory_line": 1152,
+      "observed_seconds": 17.399734497070312,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 257
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 1,
+      "slot": 2,
+      "entity_id": 566,
+      "life": 4,
+      "spawn_clock": 53.89946365356445,
+      "corpse_only": false,
+      "first_alive_clock": 53.89946365356445,
+      "first_alive_owned": 3,
+      "death_clock": 67.7995376586914,
+      "right_censored": false,
+      "last_sample_clock": 69.84966278076172,
+      "first_inventory_line": 1154,
+      "last_inventory_line": 1478,
+      "observed_seconds": 13.900074005126953,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 218
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 1,
+      "slot": 2,
+      "entity_id": 566,
+      "life": 5,
+      "spawn_clock": 69.89966583251953,
+      "corpse_only": false,
+      "first_alive_clock": 69.94966888427734,
+      "first_alive_owned": 3,
+      "death_clock": 87.25072479248047,
+      "right_censored": false,
+      "last_sample_clock": 88.80081939697266,
+      "first_inventory_line": 1479,
+      "last_inventory_line": 1858,
+      "observed_seconds": 17.351058959960938,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 255
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 1,
+      "slot": 2,
+      "entity_id": 566,
+      "life": 6,
+      "spawn_clock": 88.90082550048828,
+      "corpse_only": false,
+      "first_alive_clock": 88.90082550048828,
+      "first_alive_owned": 3,
+      "death_clock": 93.25109100341797,
+      "right_censored": false,
+      "last_sample_clock": 94.85118865966797,
+      "first_inventory_line": 1859,
+      "last_inventory_line": 1979,
+      "observed_seconds": 4.3502655029296875,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 80
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 1,
+      "slot": 2,
+      "entity_id": 566,
+      "life": 7,
+      "spawn_clock": 94.90119171142578,
+      "corpse_only": false,
+      "first_alive_clock": 95.0011978149414,
+      "first_alive_owned": 3,
+      "death_clock": 118.5526351928711,
+      "right_censored": false,
+      "last_sample_clock": 120.65276336669922,
+      "first_inventory_line": 1980,
+      "last_inventory_line": 2503,
+      "observed_seconds": 23.651443481445312,
+      "first_useful_owned_age": 1.100067138671875,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": 2000,
+      "samples": 349
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 2,
+      "slot": 3,
+      "entity_id": 567,
+      "life": 1,
+      "spawn_clock": 0.8000001311302185,
+      "corpse_only": false,
+      "first_alive_clock": 0.8000001311302185,
+      "first_alive_owned": 3,
+      "death_clock": 3.749997615814209,
+      "right_censored": false,
+      "last_sample_clock": 5.600003242492676,
+      "first_inventory_line": 6,
+      "last_inventory_line": 177,
+      "observed_seconds": 2.9499974846839905,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 115
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 2,
+      "slot": 3,
+      "entity_id": 567,
+      "life": 2,
+      "spawn_clock": 5.650003433227539,
+      "corpse_only": false,
+      "first_alive_clock": 5.650003433227539,
+      "first_alive_owned": 3,
+      "death_clock": 41.8996467590332,
+      "right_censored": false,
+      "last_sample_clock": 43.4996223449707,
+      "first_inventory_line": 179,
+      "last_inventory_line": 942,
+      "observed_seconds": 36.249643325805664,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 509
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 2,
+      "slot": 3,
+      "entity_id": 567,
+      "life": 3,
+      "spawn_clock": 43.649620056152344,
+      "corpse_only": false,
+      "first_alive_clock": 43.649620056152344,
+      "first_alive_owned": 3,
+      "death_clock": 54.29945755004883,
+      "right_censored": false,
+      "last_sample_clock": 56.49942398071289,
+      "first_inventory_line": 943,
+      "last_inventory_line": 1208,
+      "observed_seconds": 10.649837493896484,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 179
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 2,
+      "slot": 3,
+      "entity_id": 567,
+      "life": 4,
+      "spawn_clock": 56.64942169189453,
+      "corpse_only": false,
+      "first_alive_clock": 56.64942169189453,
+      "first_alive_owned": 3,
+      "death_clock": 86.65068817138672,
+      "right_censored": false,
+      "last_sample_clock": 88.5508041381836,
+      "first_inventory_line": 1209,
+      "last_inventory_line": 1852,
+      "observed_seconds": 30.001266479492188,
+      "first_useful_owned_age": 8.949981689453125,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": 1390,
+      "samples": 432
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 2,
+      "slot": 3,
+      "entity_id": 567,
+      "life": 5,
+      "spawn_clock": 88.65081024169922,
+      "corpse_only": false,
+      "first_alive_clock": 88.65081024169922,
+      "first_alive_owned": 3,
+      "death_clock": 91.25096893310547,
+      "right_censored": false,
+      "last_sample_clock": 93.55110931396484,
+      "first_inventory_line": 1853,
+      "last_inventory_line": 1954,
+      "observed_seconds": 2.60015869140625,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 68
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 2,
+      "slot": 3,
+      "entity_id": 567,
+      "life": 6,
+      "spawn_clock": 93.65111541748047,
+      "corpse_only": false,
+      "first_alive_clock": 93.70111846923828,
+      "first_alive_owned": 3,
+      "death_clock": 113.05229949951172,
+      "right_censored": false,
+      "last_sample_clock": 114.5523910522461,
+      "first_inventory_line": 1955,
+      "last_inventory_line": 2380,
+      "observed_seconds": 19.40118408203125,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 283
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 2,
+      "slot": 3,
+      "entity_id": 567,
+      "life": 7,
+      "spawn_clock": 114.65239715576172,
+      "corpse_only": false,
+      "first_alive_clock": 114.70240020751953,
+      "first_alive_owned": 3,
+      "death_clock": null,
+      "right_censored": true,
+      "last_sample_clock": 120.65276336669922,
+      "first_inventory_line": 2381,
+      "last_inventory_line": 2503,
+      "observed_seconds": 6.0003662109375,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 82
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 3,
+      "slot": 4,
+      "entity_id": 568,
+      "life": 1,
+      "spawn_clock": 0.8000001311302185,
+      "corpse_only": false,
+      "first_alive_clock": 0.8000001311302185,
+      "first_alive_owned": 3,
+      "death_clock": 11.1500244140625,
+      "right_censored": false,
+      "last_sample_clock": 13.300032615661621,
+      "first_inventory_line": 6,
+      "last_inventory_line": 330,
+      "observed_seconds": 10.350024282932281,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 108
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 3,
+      "slot": 4,
+      "entity_id": 568,
+      "life": 2,
+      "spawn_clock": 13.400032997131348,
+      "corpse_only": false,
+      "first_alive_clock": 13.500033378601074,
+      "first_alive_owned": 3,
+      "death_clock": 41.59965133666992,
+      "right_censored": false,
+      "last_sample_clock": 43.299625396728516,
+      "first_inventory_line": 333,
+      "last_inventory_line": 937,
+      "observed_seconds": 28.199618339538574,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 202
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 3,
+      "slot": 4,
+      "entity_id": 568,
+      "life": 3,
+      "spawn_clock": 43.39962387084961,
+      "corpse_only": false,
+      "first_alive_clock": 43.4996223449707,
+      "first_alive_owned": 3,
+      "death_clock": 65.59940338134766,
+      "right_censored": false,
+      "last_sample_clock": 67.3495101928711,
+      "first_inventory_line": 940,
+      "last_inventory_line": 1426,
+      "observed_seconds": 22.199779510498047,
+      "first_useful_owned_age": 6.299903869628906,
+      "first_useful_current_age": 9.74985122680664,
+      "first_useful_fire_request_age": 9.899848937988281,
+      "first_useful_owned_line": 1065,
+      "samples": 163
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 3,
+      "slot": 4,
+      "entity_id": 568,
+      "life": 4,
+      "spawn_clock": 67.3995132446289,
+      "corpse_only": false,
+      "first_alive_clock": 67.44951629638672,
+      "first_alive_owned": 3,
+      "death_clock": 78.00016021728516,
+      "right_censored": false,
+      "last_sample_clock": 80.30030059814453,
+      "first_inventory_line": 1429,
+      "last_inventory_line": 1688,
+      "observed_seconds": 10.60064697265625,
+      "first_useful_owned_age": 4.300262451171875,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": 1514,
+      "samples": 88
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 3,
+      "slot": 4,
+      "entity_id": 568,
+      "life": 5,
+      "spawn_clock": 80.40030670166016,
+      "corpse_only": false,
+      "first_alive_clock": 80.45030975341797,
+      "first_alive_owned": 3,
+      "death_clock": 94.5511703491211,
+      "right_censored": false,
+      "last_sample_clock": 96.30127716064453,
+      "first_inventory_line": 1691,
+      "last_inventory_line": 2006,
+      "observed_seconds": 14.150863647460938,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 106
+    },
+    {
+      "cohort": "public",
+      "role": "botA",
+      "local": 3,
+      "slot": 4,
+      "entity_id": 568,
+      "life": 6,
+      "spawn_clock": 96.40128326416016,
+      "corpse_only": false,
+      "first_alive_clock": 96.40128326416016,
+      "first_alive_owned": 3,
+      "death_clock": null,
+      "right_censored": true,
+      "last_sample_clock": 120.6027603149414,
+      "first_inventory_line": 2009,
+      "last_inventory_line": 2502,
+      "observed_seconds": 24.20147705078125,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 164
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 0,
+      "slot": 5,
+      "entity_id": 569,
+      "life": 1,
+      "spawn_clock": 0.8000001311302185,
+      "corpse_only": false,
+      "first_alive_clock": 0.8000001311302185,
+      "first_alive_owned": 3,
+      "death_clock": 8.650014877319336,
+      "right_censored": false,
+      "last_sample_clock": 10.100020408630371,
+      "first_inventory_line": 7,
+      "last_inventory_line": 268,
+      "observed_seconds": 7.850014746189117,
+      "first_useful_owned_age": 4.3000012040138245,
+      "first_useful_current_age": 7.450013220310211,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": 166,
+      "samples": 86,
+      "cecil_generation": 6,
+      "cecil_spawn_line": 217,
+      "cecil_first_useful_line": 327
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 0,
+      "slot": 5,
+      "entity_id": 569,
+      "life": 2,
+      "spawn_clock": 10.250020980834961,
+      "corpse_only": false,
+      "first_alive_clock": 10.250020980834961,
+      "first_alive_owned": 3,
+      "death_clock": 69.24962615966797,
+      "right_censored": false,
+      "last_sample_clock": 70.9997329711914,
+      "first_inventory_line": 270,
+      "last_inventory_line": 1500,
+      "observed_seconds": 58.99960517883301,
+      "first_useful_owned_age": 18.74982261657715,
+      "first_useful_current_age": 44.69942665100098,
+      "first_useful_fire_request_age": 53.89929389953613,
+      "first_useful_owned_line": 651,
+      "samples": 410,
+      "cecil_generation": 7,
+      "cecil_spawn_line": 418,
+      "cecil_first_useful_line": 740
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 0,
+      "slot": 5,
+      "entity_id": 569,
+      "life": 3,
+      "spawn_clock": 71.04973602294922,
+      "corpse_only": false,
+      "first_alive_clock": 71.09973907470703,
+      "first_alive_owned": 3,
+      "death_clock": 86.50067901611328,
+      "right_censored": false,
+      "last_sample_clock": 88.2007827758789,
+      "first_inventory_line": 1503,
+      "last_inventory_line": 1847,
+      "observed_seconds": 15.450942993164062,
+      "first_useful_owned_age": 7.40045166015625,
+      "first_useful_current_age": 10.700653076171875,
+      "first_useful_fire_request_age": 11.900726318359375,
+      "first_useful_owned_line": 1652,
+      "samples": 115,
+      "cecil_generation": 8,
+      "cecil_spawn_line": 1513,
+      "cecil_first_useful_line": 1632
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 0,
+      "slot": 5,
+      "entity_id": 569,
+      "life": 4,
+      "spawn_clock": 88.25078582763672,
+      "corpse_only": false,
+      "first_alive_clock": 88.35079193115234,
+      "first_alive_owned": 3,
+      "death_clock": 120.35274505615234,
+      "right_censored": false,
+      "last_sample_clock": 120.50275421142578,
+      "first_inventory_line": 1849,
+      "last_inventory_line": 2500,
+      "observed_seconds": 32.101959228515625,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 219,
+      "cecil_generation": 9,
+      "cecil_spawn_line": 1790,
+      "cecil_first_useful_line": null
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 1,
+      "slot": 6,
+      "entity_id": 570,
+      "life": 1,
+      "spawn_clock": 0.8000001311302185,
+      "corpse_only": false,
+      "first_alive_clock": 0.8000001311302185,
+      "first_alive_owned": 3,
+      "death_clock": 70.79972076416016,
+      "right_censored": false,
+      "last_sample_clock": 72.1498031616211,
+      "first_inventory_line": 7,
+      "last_inventory_line": 1524,
+      "observed_seconds": 69.99972063302994,
+      "first_useful_owned_age": 3.499998152256012,
+      "first_useful_current_age": 3.7999992966651917,
+      "first_useful_fire_request_age": 7.700014173984528,
+      "first_useful_owned_line": 151,
+      "samples": 504,
+      "cecil_generation": 6,
+      "cecil_spawn_line": 229,
+      "cecil_first_useful_line": 314
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 1,
+      "slot": 6,
+      "entity_id": 570,
+      "life": 2,
+      "spawn_clock": 72.24980926513672,
+      "corpse_only": false,
+      "first_alive_clock": 72.24980926513672,
+      "first_alive_owned": 3,
+      "death_clock": 113.8023452758789,
+      "right_censored": false,
+      "last_sample_clock": 115.3524398803711,
+      "first_inventory_line": 1527,
+      "last_inventory_line": 2397,
+      "observed_seconds": 41.55253601074219,
+      "first_useful_owned_age": 17.551071166992188,
+      "first_useful_current_age": 26.351608276367188,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": 1878,
+      "samples": 291,
+      "cecil_generation": 7,
+      "cecil_spawn_line": 1532,
+      "cecil_first_useful_line": 1851
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 1,
+      "slot": 6,
+      "entity_id": 570,
+      "life": 3,
+      "spawn_clock": 115.45244598388672,
+      "corpse_only": false,
+      "first_alive_clock": 115.55245208740234,
+      "first_alive_owned": 3,
+      "death_clock": null,
+      "right_censored": true,
+      "last_sample_clock": 120.50275421142578,
+      "first_inventory_line": 2400,
+      "last_inventory_line": 2500,
+      "observed_seconds": 5.0503082275390625,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 35,
+      "cecil_generation": 8,
+      "cecil_spawn_line": 2247,
+      "cecil_first_useful_line": null
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 2,
+      "slot": 7,
+      "entity_id": 571,
+      "life": 1,
+      "spawn_clock": 0.8000001311302185,
+      "corpse_only": false,
+      "first_alive_clock": 0.8000001311302185,
+      "first_alive_owned": 3,
+      "death_clock": 59.4993782043457,
+      "right_censored": false,
+      "last_sample_clock": 60.94935607910156,
+      "first_inventory_line": 7,
+      "last_inventory_line": 1299,
+      "observed_seconds": 58.699378073215485,
+      "first_useful_owned_age": 11.350028097629547,
+      "first_useful_current_age": 12.200031340122223,
+      "first_useful_fire_request_age": 37.64969927072525,
+      "first_useful_owned_line": 308,
+      "samples": 430,
+      "cecil_generation": 6,
+      "cecil_spawn_line": 241,
+      "cecil_first_useful_line": 468
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 2,
+      "slot": 7,
+      "entity_id": 571,
+      "life": 2,
+      "spawn_clock": 61.049354553222656,
+      "corpse_only": false,
+      "first_alive_clock": 61.0993537902832,
+      "first_alive_owned": 3,
+      "death_clock": null,
+      "right_censored": true,
+      "last_sample_clock": 120.50275421142578,
+      "first_inventory_line": 1302,
+      "last_inventory_line": 2500,
+      "observed_seconds": 59.453399658203125,
+      "first_useful_owned_age": 12.200515747070312,
+      "first_useful_current_age": 18.850921630859375,
+      "first_useful_fire_request_age": 24.701278686523438,
+      "first_useful_owned_line": 1547,
+      "samples": 400,
+      "cecil_generation": 7,
+      "cecil_spawn_line": 1371,
+      "cecil_first_useful_line": 1562
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 3,
+      "slot": 8,
+      "entity_id": 572,
+      "life": 1,
+      "spawn_clock": 0.8000001311302185,
+      "corpse_only": false,
+      "first_alive_clock": 0.8000001311302185,
+      "first_alive_owned": 3,
+      "death_clock": 44.349609375,
+      "right_censored": false,
+      "last_sample_clock": 45.79958724975586,
+      "first_inventory_line": 7,
+      "last_inventory_line": 987,
+      "observed_seconds": 43.54960924386978,
+      "first_useful_owned_age": 10.350024282932281,
+      "first_useful_current_age": 21.599944174289703,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": 288,
+      "samples": 328,
+      "cecil_generation": 6,
+      "cecil_spawn_line": 253,
+      "cecil_first_useful_line": 451
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 3,
+      "slot": 8,
+      "entity_id": 572,
+      "life": 2,
+      "spawn_clock": 45.849586486816406,
+      "corpse_only": false,
+      "first_alive_clock": 45.9495849609375,
+      "first_alive_owned": 3,
+      "death_clock": 49.249534606933594,
+      "right_censored": false,
+      "last_sample_clock": 50.999507904052734,
+      "first_inventory_line": 990,
+      "last_inventory_line": 1093,
+      "observed_seconds": 3.3999481201171875,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 34,
+      "cecil_generation": 7,
+      "cecil_spawn_line": 1018,
+      "cecil_first_useful_line": null
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 3,
+      "slot": 8,
+      "entity_id": 572,
+      "life": 3,
+      "spawn_clock": 51.04950714111328,
+      "corpse_only": false,
+      "first_alive_clock": 51.149505615234375,
+      "first_alive_owned": 3,
+      "death_clock": 59.89937210083008,
+      "right_censored": false,
+      "last_sample_clock": 61.399349212646484,
+      "first_inventory_line": 1096,
+      "last_inventory_line": 1307,
+      "observed_seconds": 8.849864959716797,
+      "first_useful_owned_age": null,
+      "first_useful_current_age": null,
+      "first_useful_fire_request_age": null,
+      "first_useful_owned_line": null,
+      "samples": 70,
+      "cecil_generation": 8,
+      "cecil_spawn_line": 1192,
+      "cecil_first_useful_line": null
+    },
+    {
+      "cohort": "candidate",
+      "role": "botB",
+      "local": 3,
+      "slot": 8,
+      "entity_id": 572,
+      "life": 4,
+      "spawn_clock": 61.44934844970703,
+      "corpse_only": false,
+      "first_alive_clock": 61.549346923828125,
+      "first_alive_owned": 3,
+      "death_clock": null,
+      "right_censored": true,
+      "last_sample_clock": 120.50275421142578,
+      "first_inventory_line": 1310,
+      "last_inventory_line": 2500,
+      "observed_seconds": 59.05340576171875,
+      "first_useful_owned_age": 13.2506103515625,
+      "first_useful_current_age": 13.400619506835938,
+      "first_useful_fire_request_age": 13.85064697265625,
+      "first_useful_owned_line": 1576,
+      "samples": 398,
+      "cecil_generation": 9,
+      "cecil_spawn_line": 1383,
+      "cecil_first_useful_line": 1582
+    }
+  ],
+  "actual_mapping": {
+    "botA": [
+      0,
+      2,
+      3,
+      4
+    ],
+    "botB": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "vanilla": [
+      1
+    ]
+  },
+  "actual_entity_by_slot": {
+    "0": 565,
+    "2": 566,
+    "3": 567,
+    "4": 568,
+    "1": 563,
+    "5": 569,
+    "6": 570,
+    "7": 571,
+    "8": 572
+  },
+  "initial_replay_exact": true,
+  "initial_reference_sha256": "073f4d9af0c3a1075462716aef09f628913597b5c80c5670cc4578df9861e66c",
+  "all_nine_initial_reference_match": true,
+  "cohort_configs_reproduced": true,
+  "damage": {
+    "records": 189,
+    "partition": {
+      "known_foreign": 140,
+      "unattributed": 5,
+      "corpse": 44
+    },
+    "known_foreign": {
+      "public": {
+        "calls": 102,
+        "hp_loss_raw": 3838.541976928711,
+        "hp_loss_capped_at_pre_hit_health": 3307.855068206787,
+        "lethal_calls": 28,
+        "damage_types": {
+          "4": 101,
+          "6": 1
+        }
+      },
+      "candidate": {
+        "calls": 38,
+        "hp_loss_raw": 1669.3418579101562,
+        "hp_loss_capped_at_pre_hit_health": 801.4100456237793,
+        "lethal_calls": 8,
+        "damage_types": {
+          "4": 14,
+          "12": 1,
+          "8": 14,
+          "2": 8,
+          "1": 1
+        }
+      }
+    },
+    "pair_calls": {
+      "public -> public": 65,
+      "public -> candidate": 34,
+      "candidate -> public": 31,
+      "public -> vanilla": 3,
+      "candidate -> candidate": 7
+    },
+    "same_spawn_tick_health_decreases": 0,
+    "server_kill_pairs_equal_all_lethal_records": true,
+    "server_kills": [
+      {
+        "source_slot": 2,
+        "target_slot": 3,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 151,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 6,
+        "target_slot": 0,
+        "source_cohort": "candidate",
+        "target_cohort": "public",
+        "line": 156,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 6,
+        "target_slot": 5,
+        "source_cohort": "candidate",
+        "target_cohort": "candidate",
+        "line": 169,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 0,
+        "target_slot": 4,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 177,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 2,
+        "target_slot": 1,
+        "source_cohort": "public",
+        "target_cohort": "vanilla",
+        "line": 180,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 2,
+        "target_slot": 0,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 192,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 2,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 225,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 3,
+        "target_slot": 0,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 232,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 2,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 252,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 0,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 272,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 7,
+        "target_slot": 4,
+        "source_cohort": "candidate",
+        "target_cohort": "public",
+        "line": 280,
+        "kind": "smashed"
+      },
+      {
+        "source_slot": 2,
+        "target_slot": 3,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 281,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 8,
+        "source_cohort": "public",
+        "target_cohort": "candidate",
+        "line": 288,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 8,
+        "source_cohort": "public",
+        "target_cohort": "candidate",
+        "line": 307,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 2,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 317,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 3,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 324,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 3,
+        "target_slot": 7,
+        "source_cohort": "public",
+        "target_cohort": "candidate",
+        "line": 339,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 2,
+        "target_slot": 8,
+        "source_cohort": "public",
+        "target_cohort": "candidate",
+        "line": 340,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 3,
+        "target_slot": 4,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 360,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 2,
+        "target_slot": 0,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 361,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 5,
+        "target_slot": 2,
+        "source_cohort": "candidate",
+        "target_cohort": "public",
+        "line": 370,
+        "kind": "killed"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 5,
+        "source_cohort": "public",
+        "target_cohort": "candidate",
+        "line": 375,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 2,
+        "target_slot": 6,
+        "source_cohort": "public",
+        "target_cohort": "candidate",
+        "line": 384,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 0,
+        "target_slot": 4,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 411,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 8,
+        "target_slot": 5,
+        "source_cohort": "candidate",
+        "target_cohort": "candidate",
+        "line": 438,
+        "kind": "blew"
+      },
+      {
+        "source_slot": 7,
+        "target_slot": 3,
+        "source_cohort": "candidate",
+        "target_cohort": "public",
+        "line": 441,
+        "kind": "blew"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 2,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 442,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 8,
+        "target_slot": 0,
+        "source_cohort": "candidate",
+        "target_cohort": "public",
+        "line": 447,
+        "kind": "blew"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 3,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 460,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 2,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 469,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 3,
+        "target_slot": 4,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 477,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 5,
+        "target_slot": 0,
+        "source_cohort": "candidate",
+        "target_cohort": "public",
+        "line": 498,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 0,
+        "target_slot": 3,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 536,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 2,
+        "target_slot": 6,
+        "source_cohort": "public",
+        "target_cohort": "candidate",
+        "line": 539,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 3,
+        "target_slot": 2,
+        "source_cohort": "public",
+        "target_cohort": "public",
+        "line": 554,
+        "kind": "poured lead into"
+      },
+      {
+        "source_slot": 4,
+        "target_slot": 5,
+        "source_cohort": "public",
+        "target_cohort": "candidate",
+        "line": 562,
+        "kind": "poured lead into"
+      }
+    ],
+    "full_coverage": true,
+    "original_bodies_restored": true
+  },
+  "host": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 116,
+    "cpu_busy_max_measured_percent": 60.879120879120876,
+    "mem_available_min_bytes": 1977397248,
+    "disk_free_min_bytes": 20519337984,
+    "max_sample_gap_seconds": 47.22226268611848,
+    "budget_pass_claim": false,
+    "gameplay_max_sample_gap_seconds": 1.760270721046254
+  },
+  "costs": {
+    "scope": "measured process totals, no matched uninstrumented causal overhead claim",
+    "controller_cpu_seconds": 25.404179999999997,
+    "controller_max_rss_kib": 166964,
+    "roles": {
+      "server": {
+        "cpu_seconds": 4.74,
+        "final_rss_bytes": 106426368
+      },
+      "botA": {
+        "cpu_seconds": 4.56,
+        "final_rss_bytes": 187658240
+      },
+      "vanilla": {
+        "cpu_seconds": 74.51,
+        "final_rss_bytes": 214175744
+      },
+      "botB": {
+        "cpu_seconds": 4.22,
+        "final_rss_bytes": 189071360
+      }
+    }
+  },
+  "inventory": {
+    "enabled": true,
+    "tool_sha256": "920613df96771c14d3600f7f15fbbf5ae44254365774a9168fe16dbcee735cbb",
+    "valid_samples": 2500,
+    "discarded_changed": 65,
+    "sample_seconds_total": 10.659522312227637,
+    "sample_seconds_max": 0.012536879861727357,
+    "setup_seconds": 0.0072411238215863705,
+    "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+  },
+  "query_count": 58,
+  "last_query_elapsed": 118.88249142607674,
+  "closed_logs": {
+    "server": {
+      "bytes": 23368,
+      "sha256": "8c35d6b1afcc5f98de7c96d695df14cf9108004d9db8fa1b9858b00237c5a969"
+    },
+    "botA": {
+      "bytes": 110664,
+      "sha256": "e1cbcc1a1480afc97fbf0efb669ec263bf17956e3e61c97264750c5f21f0e817"
+    },
+    "botB": {
+      "bytes": 793770,
+      "sha256": "0930d05b6455b54bde7c9a436c0973648f6e270da49a715c4005089c9e148e61"
+    },
+    "vanilla": {
+      "bytes": 8844,
+      "sha256": "c0d4263bd5aa3778ec9de70c3bbe1d2dadfa190f2dab0bd8d5c7a74748d5343c"
+    }
+  },
+  "source_hashes": {
+    "result.json": "29fd6378140a29af59b9755e6d7cb933795c0502a877f61c9b1997006daff132",
+    "inventory.jsonl": "c96e23a7e2b2818cff6ee836d27807ab470946126700a0ba392ea2e1961591a6",
+    "frida-damage.jsonl": "63038c47cedb415f76027b6ee684f7404e02d68a3d0ca6f31c574a3bea3f9201",
+    "damage-cohort-registry.json": "29bdd6dfdf562fbfcc38cbcf9df7bc9d218c2aac42a62e0290e6f912eafbbf01",
+    "damage-attribution.json": "ed7b697455b15542afc4e532e3ffb5fca4ddf0043dc984d54e66aea5dcacd926",
+    "server-closed.log": "8c35d6b1afcc5f98de7c96d695df14cf9108004d9db8fa1b9858b00237c5a969",
+    "server.log": "5e0de30be70b630e3cd2676c07309d90d924978be356e03bc2873021f527fce2",
+    "queries.json": "da04b0fc845b8738c784cb0ac2093fec5e6515d0c989c090627b26a302f31b28",
+    "controller-source.py": "e8e7299db776f5943c7d2fb399a8b12bd6a0e33522f683a0fe475d1d4f3e705e",
+    "controller_policy.py": "50812a992ac35e6e5603330b6a63d9db4ef91400b2757eb6fe2a84580151602f",
+    "analyze.py": "e53576970b60d2b4d636942c5fa9437ab06ac88d1bbce966d97c16ba1fca5592"
+  },
+  "scope": "Single completed013 MITTEL Swap0: unfavorable damage result preserved, no causal tuning/fix or overall qualification",
+  "behavior": {
+    "per_local": {
+      "0": {
+        "human_rows": 11,
+        "visible_rows": 3,
+        "visible_desired_useful_rows": 1,
+        "visible_error_above1_5": 3,
+        "visible_error_median": 11.74,
+        "visible_desired_useful_error_median": 11.83,
+        "visible_within1_5_no_humanfire": 0,
+        "human_fire_rows": 0,
+        "visible_useful_humanfire_rows": 0,
+        "alive_state_rows": 113,
+        "alive_useful_owned_state_rows": 51,
+        "alive_final_fire_rows": 3,
+        "fire_action_counter_delta": 31,
+        "state_player_state_counts": {
+          "0": 93,
+          "4": 20
+        },
+        "switches_last": 27,
+        "overshoots_last": 2,
+        "same_tick_human_final_rows": 11,
+        "humanfire_but_final_no_fire": 0,
+        "visible_useful_current_error_over_tol_no_fire": 1
+      },
+      "1": {
+        "human_rows": 12,
+        "visible_rows": 2,
+        "visible_desired_useful_rows": 2,
+        "visible_error_above1_5": 2,
+        "visible_error_median": 12.754999999999999,
+        "visible_desired_useful_error_median": 12.754999999999999,
+        "visible_within1_5_no_humanfire": 0,
+        "human_fire_rows": 0,
+        "visible_useful_humanfire_rows": 0,
+        "alive_state_rows": 116,
+        "alive_useful_owned_state_rows": 90,
+        "alive_final_fire_rows": 0,
+        "fire_action_counter_delta": 20,
+        "state_player_state_counts": {
+          "0": 90,
+          "4": 26
+        },
+        "switches_last": 35,
+        "overshoots_last": 0,
+        "same_tick_human_final_rows": 12,
+        "humanfire_but_final_no_fire": 0,
+        "visible_useful_current_error_over_tol_no_fire": 2
+      },
+      "2": {
+        "human_rows": 12,
+        "visible_rows": 3,
+        "visible_desired_useful_rows": 3,
+        "visible_error_above1_5": 2,
+        "visible_error_median": 3.44,
+        "visible_desired_useful_error_median": 3.44,
+        "visible_within1_5_no_humanfire": 0,
+        "human_fire_rows": 1,
+        "visible_useful_humanfire_rows": 1,
+        "alive_state_rows": 118,
+        "alive_useful_owned_state_rows": 95,
+        "alive_final_fire_rows": 2,
+        "fire_action_counter_delta": 49,
+        "state_player_state_counts": {
+          "4": 23,
+          "0": 95
+        },
+        "switches_last": 54,
+        "overshoots_last": 19,
+        "same_tick_human_final_rows": 12,
+        "humanfire_but_final_no_fire": 0,
+        "visible_useful_current_error_over_tol_no_fire": 2
+      },
+      "3": {
+        "human_rows": 12,
+        "visible_rows": 3,
+        "visible_desired_useful_rows": 0,
+        "visible_error_above1_5": 3,
+        "visible_error_median": 24.39,
+        "visible_desired_useful_error_median": null,
+        "visible_within1_5_no_humanfire": 0,
+        "human_fire_rows": 0,
+        "visible_useful_humanfire_rows": 0,
+        "alive_state_rows": 115,
+        "alive_useful_owned_state_rows": 80,
+        "alive_final_fire_rows": 3,
+        "fire_action_counter_delta": 93,
+        "state_player_state_counts": {
+          "0": 99,
+          "4": 16
+        },
+        "switches_last": 64,
+        "overshoots_last": 12,
+        "same_tick_human_final_rows": 12,
+        "humanfire_but_final_no_fire": 0,
+        "visible_useful_current_error_over_tol_no_fire": 0
+      }
+    },
+    "inventory_lives": [
+      {
+        "slot": 0,
+        "entity_id": 565,
+        "spawn_clock": 0.8000001311302185,
+        "role": "botA",
+        "alive_sample_count": 58,
+        "max_alive_sample_gap": 0.19999980926513672,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.500002384185791,
+          "from_line": 132,
+          "to_line": 164,
+          "from_tick": 3.3499979972839355,
+          "to_tick": 4.850000381469727
+        },
+        "covered_alive_seconds": 4.050000250339508,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 2,
+        "entity_id": 566,
+        "spawn_clock": 0.8000001311302185,
+        "role": "botA",
+        "alive_sample_count": 213,
+        "max_alive_sample_gap": 1.7499732971191406,
+        "max_anchored_one_meter_residence": {
+          "seconds": 5.250019073486328,
+          "from_line": 143,
+          "to_line": 249,
+          "from_tick": 3.8499975204467773,
+          "to_tick": 9.100016593933105
+        },
+        "covered_alive_seconds": 23.349917471408844,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 3,
+        "entity_id": 567,
+        "spawn_clock": 0.8000001311302185,
+        "role": "botA",
+        "alive_sample_count": 48,
+        "max_alive_sample_gap": 0.19999980926513672,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.9499992728233337,
+          "from_line": 8,
+          "to_line": 65,
+          "from_tick": 0.8000001311302185,
+          "to_tick": 1.7499994039535522
+        },
+        "covered_alive_seconds": 2.8999975323677063,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 4,
+        "entity_id": 568,
+        "spawn_clock": 0.8000001311302185,
+        "role": "botA",
+        "alive_sample_count": 93,
+        "max_alive_sample_gap": 0.3000011444091797,
+        "max_anchored_one_meter_residence": {
+          "seconds": 3.250009059906006,
+          "from_line": 130,
+          "to_line": 197,
+          "from_tick": 3.3499979972839355,
+          "to_tick": 6.600007057189941
+        },
+        "covered_alive_seconds": 10.150023519992828,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 5,
+        "entity_id": 569,
+        "spawn_clock": 0.8000001311302185,
+        "role": "botB",
+        "alive_sample_count": 77,
+        "max_alive_sample_gap": 0.3000011444091797,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.20000076293945312,
+          "from_line": 228,
+          "to_line": 231,
+          "from_tick": 8.050012588500977,
+          "to_tick": 8.25001335144043
+        },
+        "covered_alive_seconds": 7.700014173984528,
+        "covered_useful_owned_seconds": 3.400012969970703,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 6,
+        "entity_id": 570,
+        "spawn_clock": 0.8000001311302185,
+        "role": "botB",
+        "alive_sample_count": 494,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.5999908447265625,
+          "from_line": 455,
+          "to_line": 467,
+          "from_tick": 19.39999008178711,
+          "to_tick": 19.999980926513672
+        },
+        "covered_alive_seconds": 69.8497114777565,
+        "covered_useful_owned_seconds": 66.34971332550049,
+        "covered_useful_current_fire_request_seconds": 0.4499988555908203
+      },
+      {
+        "slot": 7,
+        "entity_id": 571,
+        "spawn_clock": 0.8000001311302185,
+        "role": "botB",
+        "alive_sample_count": 419,
+        "max_alive_sample_gap": 0.3000011444091797,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.3999786376953125,
+          "from_line": 503,
+          "to_line": 530,
+          "from_tick": 21.749954223632812,
+          "to_tick": 23.149932861328125
+        },
+        "covered_alive_seconds": 58.549380362033844,
+        "covered_useful_owned_seconds": 47.1993522644043,
+        "covered_useful_current_fire_request_seconds": 1.3999786376953125
+      },
+      {
+        "slot": 8,
+        "entity_id": 572,
+        "spawn_clock": 0.8000001311302185,
+        "role": "botB",
+        "alive_sample_count": 318,
+        "max_alive_sample_gap": 0.3000011444091797,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.0999832153320312,
+          "from_line": 923,
+          "to_line": 947,
+          "from_tick": 42.649635314941406,
+          "to_tick": 43.74961853027344
+        },
+        "covered_alive_seconds": 43.39961153268814,
+        "covered_useful_owned_seconds": 33.04958724975586,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 1,
+        "entity_id": 563,
+        "spawn_clock": 0.8000001311302185,
+        "role": "vanilla",
+        "alive_sample_count": 98,
+        "max_alive_sample_gap": 0.2500009536743164,
+        "max_anchored_one_meter_residence": {
+          "seconds": 6.700010359287262,
+          "from_line": 8,
+          "to_line": 217,
+          "from_tick": 0.8000001311302185,
+          "to_tick": 7.5000104904174805
+        },
+        "covered_alive_seconds": 10.800025999546051,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 3,
+        "entity_id": 567,
+        "spawn_clock": 5.650003433227539,
+        "role": "botA",
+        "alive_sample_count": 286,
+        "max_alive_sample_gap": 0.20000076293945312,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.899989128112793,
+          "from_line": 317,
+          "to_line": 418,
+          "from_tick": 12.600029945373535,
+          "to_tick": 17.500019073486328
+        },
+        "covered_alive_seconds": 35.94964790344238,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 0,
+        "entity_id": 565,
+        "spawn_clock": 7.1500091552734375,
+        "role": "botA",
+        "alive_sample_count": 62,
+        "max_alive_sample_gap": 0.20000076293945312,
+        "max_anchored_one_meter_residence": {
+          "seconds": 2.7500104904174805,
+          "from_line": 257,
+          "to_line": 312,
+          "from_tick": 9.550018310546875,
+          "to_tick": 12.300028800964355
+        },
+        "covered_alive_seconds": 7.350028038024902,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 5,
+        "entity_id": 569,
+        "spawn_clock": 10.250020980834961,
+        "role": "botB",
+        "alive_sample_count": 398,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.3499946594238281,
+          "from_line": 1195,
+          "to_line": 1201,
+          "from_tick": 55.84943389892578,
+          "to_tick": 56.19942855834961
+        },
+        "covered_alive_seconds": 58.84959602355957,
+        "covered_useful_owned_seconds": 40.09977340698242,
+        "covered_useful_current_fire_request_seconds": 0.1500091552734375
+      },
+      {
+        "slot": 4,
+        "entity_id": 568,
+        "spawn_clock": 13.400032997131348,
+        "role": "botA",
+        "alive_sample_count": 190,
+        "max_alive_sample_gap": 0.29999542236328125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.849925994873047,
+          "from_line": 721,
+          "to_line": 820,
+          "from_tick": 32.54978942871094,
+          "to_tick": 37.399715423583984
+        },
+        "covered_alive_seconds": 27.949620246887207,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 0,
+        "entity_id": 565,
+        "spawn_clock": 17.1500244140625,
+        "role": "botA",
+        "alive_sample_count": 71,
+        "max_alive_sample_gap": 0.1999969482421875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.1499824523925781,
+          "from_line": 447,
+          "to_line": 471,
+          "from_tick": 18.949996948242188,
+          "to_tick": 20.099979400634766
+        },
+        "covered_alive_seconds": 9.199859619140625,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 2,
+        "entity_id": 566,
+        "spawn_clock": 25.899890899658203,
+        "role": "botA",
+        "alive_sample_count": 57,
+        "max_alive_sample_gap": 0.1999969482421875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 2.9999542236328125,
+          "from_line": 637,
+          "to_line": 700,
+          "from_tick": 28.349853515625,
+          "to_tick": 31.349807739257812
+        },
+        "covered_alive_seconds": 7.049892425537109,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 0,
+        "entity_id": 565,
+        "spawn_clock": 28.149856567382812,
+        "role": "botA",
+        "alive_sample_count": 94,
+        "max_alive_sample_gap": 0.1999969482421875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 3.3499488830566406,
+          "from_line": 810,
+          "to_line": 877,
+          "from_tick": 36.84972381591797,
+          "to_tick": 40.19967269897461
+        },
+        "covered_alive_seconds": 11.99981689453125,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 2,
+        "entity_id": 566,
+        "spawn_clock": 34.89975357055664,
+        "role": "botA",
+        "alive_sample_count": 134,
+        "max_alive_sample_gap": 0.29999542236328125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.349933624267578,
+          "from_line": 997,
+          "to_line": 1085,
+          "from_tick": 46.199581146240234,
+          "to_tick": 50.54951477050781
+        },
+        "covered_alive_seconds": 17.149738311767578,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 0,
+        "entity_id": 565,
+        "spawn_clock": 42.14964294433594,
+        "role": "botA",
+        "alive_sample_count": 194,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 7.649883270263672,
+          "from_line": 1014,
+          "to_line": 1172,
+          "from_tick": 47.09956741333008,
+          "to_tick": 54.74945068359375
+        },
+        "covered_alive_seconds": 23.399761199951172,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 4,
+        "entity_id": 568,
+        "spawn_clock": 43.39962387084961,
+        "role": "botA",
+        "alive_sample_count": 150,
+        "max_alive_sample_gap": 0.29999542236328125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.849925994873047,
+          "from_line": 1194,
+          "to_line": 1292,
+          "from_tick": 55.84943389892578,
+          "to_tick": 60.69935989379883
+        },
+        "covered_alive_seconds": 21.949771881103516,
+        "covered_useful_owned_seconds": 15.749866485595703,
+        "covered_useful_current_fire_request_seconds": 0.29999542236328125
+      },
+      {
+        "slot": 3,
+        "entity_id": 567,
+        "spawn_clock": 43.649620056152344,
+        "role": "botA",
+        "alive_sample_count": 87,
+        "max_alive_sample_gap": 0.1999969482421875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.8999710083007812,
+          "from_line": 1037,
+          "to_line": 1076,
+          "from_tick": 48.249549865722656,
+          "to_tick": 50.14952087402344
+        },
+        "covered_alive_seconds": 10.54983901977539,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 8,
+        "entity_id": 572,
+        "spawn_clock": 45.849586486816406,
+        "role": "botB",
+        "alive_sample_count": 21,
+        "max_alive_sample_gap": 0.29999542236328125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.3499946594238281,
+          "from_line": 1042,
+          "to_line": 1048,
+          "from_tick": 48.49954605102539,
+          "to_tick": 48.84954071044922
+        },
+        "covered_alive_seconds": 3.149951934814453,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 8,
+        "entity_id": 572,
+        "spawn_clock": 51.04950714111328,
+        "role": "botB",
+        "alive_sample_count": 60,
+        "max_alive_sample_gap": 0.24999618530273438,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.29999542236328125,
+          "from_line": 1150,
+          "to_line": 1156,
+          "from_tick": 53.699466705322266,
+          "to_tick": 53.99946212768555
+        },
+        "covered_alive_seconds": 8.64986801147461,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 2,
+        "entity_id": 566,
+        "spawn_clock": 53.89946365356445,
+        "role": "botA",
+        "alive_sample_count": 114,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 3.8999404907226562,
+          "from_line": 1187,
+          "to_line": 1267,
+          "from_tick": 55.449440002441406,
+          "to_tick": 59.34938049316406
+        },
+        "covered_alive_seconds": 13.700061798095703,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 3,
+        "entity_id": 567,
+        "spawn_clock": 56.64942169189453,
+        "role": "botA",
+        "alive_sample_count": 236,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 2.5501556396484375,
+          "from_line": 1680,
+          "to_line": 1732,
+          "from_tick": 79.90027618408203,
+          "to_tick": 82.45043182373047
+        },
+        "covered_alive_seconds": 29.85125732421875,
+        "covered_useful_owned_seconds": 20.901275634765625,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 7,
+        "entity_id": 571,
+        "spawn_clock": 61.049354553222656,
+        "role": "botB",
+        "alive_sample_count": 400,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.4500885009765625,
+          "from_line": 1698,
+          "to_line": 1727,
+          "from_tick": 80.75032806396484,
+          "to_tick": 82.2004165649414
+        },
+        "covered_alive_seconds": 59.40340042114258,
+        "covered_useful_owned_seconds": 47.25288391113281,
+        "covered_useful_current_fire_request_seconds": 0.7500457763671875
+      },
+      {
+        "slot": 8,
+        "entity_id": 572,
+        "spawn_clock": 61.44934844970703,
+        "role": "botB",
+        "alive_sample_count": 398,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.4500885009765625,
+          "from_line": 2242,
+          "to_line": 2272,
+          "from_tick": 107.8019790649414,
+          "to_tick": 109.25206756591797
+        },
+        "covered_alive_seconds": 58.953407287597656,
+        "covered_useful_owned_seconds": 45.80279541015625,
+        "covered_useful_current_fire_request_seconds": 4.4502716064453125
+      },
+      {
+        "slot": 4,
+        "entity_id": 568,
+        "spawn_clock": 67.3995132446289,
+        "role": "botA",
+        "alive_sample_count": 71,
+        "max_alive_sample_gap": 0.3500213623046875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.4500885009765625,
+          "from_line": 1526,
+          "to_line": 1555,
+          "from_tick": 72.24980926513672,
+          "to_tick": 73.69989776611328
+        },
+        "covered_alive_seconds": 10.450637817382812,
+        "covered_useful_owned_seconds": 6.20037841796875,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 0,
+        "entity_id": 565,
+        "spawn_clock": 68.1495590209961,
+        "role": "botA",
+        "alive_sample_count": 154,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.900299072265625,
+          "from_line": 1597,
+          "to_line": 1696,
+          "from_tick": 75.7500228881836,
+          "to_tick": 80.65032196044922
+        },
+        "covered_alive_seconds": 19.851211547851562,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 2,
+        "entity_id": 566,
+        "spawn_clock": 69.89966583251953,
+        "role": "botA",
+        "alive_sample_count": 133,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.7502899169921875,
+          "from_line": 1693,
+          "to_line": 1786,
+          "from_tick": 80.45030975341797,
+          "to_tick": 85.20059967041016
+        },
+        "covered_alive_seconds": 17.151046752929688,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 5,
+        "entity_id": 569,
+        "spawn_clock": 71.04973602294922,
+        "role": "botB",
+        "alive_sample_count": 103,
+        "max_alive_sample_gap": 0.2500152587890625,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.300018310546875,
+          "from_line": 1675,
+          "to_line": 1681,
+          "from_tick": 79.60025787353516,
+          "to_tick": 79.90027618408203
+        },
+        "covered_alive_seconds": 15.250930786132812,
+        "covered_useful_owned_seconds": 7.900482177734375,
+        "covered_useful_current_fire_request_seconds": 0.2500152587890625
+      },
+      {
+        "slot": 6,
+        "entity_id": 570,
+        "spawn_clock": 72.24980926513672,
+        "role": "botB",
+        "alive_sample_count": 279,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.60003662109375,
+          "from_line": 2269,
+          "to_line": 2281,
+          "from_tick": 109.10205841064453,
+          "to_tick": 109.70209503173828
+        },
+        "covered_alive_seconds": 41.40252685546875,
+        "covered_useful_owned_seconds": 23.851455688476562,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 4,
+        "entity_id": 568,
+        "spawn_clock": 80.40030670166016,
+        "role": "botA",
+        "alive_sample_count": 94,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.000244140625,
+          "from_line": 1817,
+          "to_line": 1897,
+          "from_tick": 86.80069732666016,
+          "to_tick": 90.80094146728516
+        },
+        "covered_alive_seconds": 13.80084228515625,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 5,
+        "entity_id": 569,
+        "spawn_clock": 88.25078582763672,
+        "role": "botB",
+        "alive_sample_count": 217,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.500030517578125,
+          "from_line": 2062,
+          "to_line": 2074,
+          "from_tick": 99.10144805908203,
+          "to_tick": 99.60147857666016
+        },
+        "covered_alive_seconds": 31.851943969726562,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 3,
+        "entity_id": 567,
+        "spawn_clock": 88.65081024169922,
+        "role": "botA",
+        "alive_sample_count": 21,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.300079345703125,
+          "from_line": 1855,
+          "to_line": 1882,
+          "from_tick": 88.65081024169922,
+          "to_tick": 89.95088958740234
+        },
+        "covered_alive_seconds": 2.4501495361328125,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 2,
+        "entity_id": 566,
+        "spawn_clock": 88.90082550048828,
+        "role": "botA",
+        "alive_sample_count": 34,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.3500823974609375,
+          "from_line": 1859,
+          "to_line": 1888,
+          "from_tick": 88.90082550048828,
+          "to_tick": 90.25090789794922
+        },
+        "covered_alive_seconds": 4.20025634765625,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 0,
+        "entity_id": 565,
+        "spawn_clock": 90.1509017944336,
+        "role": "botA",
+        "alive_sample_count": 80,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 2.8501739501953125,
+          "from_line": 1888,
+          "to_line": 1945,
+          "from_tick": 90.25090789794922,
+          "to_tick": 93.10108184814453
+        },
+        "covered_alive_seconds": 10.500640869140625,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 3,
+        "entity_id": 567,
+        "spawn_clock": 93.65111541748047,
+        "role": "botA",
+        "alive_sample_count": 151,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.000244140625,
+          "from_line": 2244,
+          "to_line": 2326,
+          "from_tick": 107.90198516845703,
+          "to_tick": 111.90222930908203
+        },
+        "covered_alive_seconds": 19.201171875,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 2,
+        "entity_id": 566,
+        "spawn_clock": 94.90119171142578,
+        "role": "botA",
+        "alive_sample_count": 183,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 3.6002197265625,
+          "from_line": 2365,
+          "to_line": 2439,
+          "from_tick": 113.8023452758789,
+          "to_tick": 117.4025650024414
+        },
+        "covered_alive_seconds": 23.451431274414062,
+        "covered_useful_owned_seconds": 22.451370239257812,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 4,
+        "entity_id": 568,
+        "spawn_clock": 96.40128326416016,
+        "role": "botA",
+        "alive_sample_count": 164,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.20025634765625,
+          "from_line": 2032,
+          "to_line": 2118,
+          "from_tick": 97.60135650634766,
+          "to_tick": 101.8016128540039
+        },
+        "covered_alive_seconds": 24.20147705078125,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 0,
+        "entity_id": 565,
+        "spawn_clock": 103.15169525146484,
+        "role": "botA",
+        "alive_sample_count": 136,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.100250244140625,
+          "from_line": 2255,
+          "to_line": 2338,
+          "from_tick": 108.40201568603516,
+          "to_tick": 112.50226593017578
+        },
+        "covered_alive_seconds": 17.40106201171875,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 3,
+        "entity_id": 567,
+        "spawn_clock": 114.65239715576172,
+        "role": "botA",
+        "alive_sample_count": 46,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 2.100128173828125,
+          "from_line": 2462,
+          "to_line": 2503,
+          "from_tick": 118.5526351928711,
+          "to_tick": 120.65276336669922
+        },
+        "covered_alive_seconds": 5.9503631591796875,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      {
+        "slot": 6,
+        "entity_id": 570,
+        "spawn_clock": 115.45244598388672,
+        "role": "botB",
+        "alive_sample_count": 35,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.0500030517578125,
+          "from_line": 2488,
+          "to_line": 2491,
+          "from_tick": 119.95272064208984,
+          "to_tick": 120.00272369384766
+        },
+        "covered_alive_seconds": 4.9503021240234375,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      }
+    ],
+    "longest_per_slot": {
+      "0": {
+        "slot": 0,
+        "entity_id": 565,
+        "spawn_clock": 42.14964294433594,
+        "role": "botA",
+        "alive_sample_count": 194,
+        "max_alive_sample_gap": 0.20001220703125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 7.649883270263672,
+          "from_line": 1014,
+          "to_line": 1172,
+          "from_tick": 47.09956741333008,
+          "to_tick": 54.74945068359375
+        },
+        "covered_alive_seconds": 23.399761199951172,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      "2": {
+        "slot": 2,
+        "entity_id": 566,
+        "spawn_clock": 0.8000001311302185,
+        "role": "botA",
+        "alive_sample_count": 213,
+        "max_alive_sample_gap": 1.7499732971191406,
+        "max_anchored_one_meter_residence": {
+          "seconds": 5.250019073486328,
+          "from_line": 143,
+          "to_line": 249,
+          "from_tick": 3.8499975204467773,
+          "to_tick": 9.100016593933105
+        },
+        "covered_alive_seconds": 23.349917471408844,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      "3": {
+        "slot": 3,
+        "entity_id": 567,
+        "spawn_clock": 5.650003433227539,
+        "role": "botA",
+        "alive_sample_count": 286,
+        "max_alive_sample_gap": 0.20000076293945312,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.899989128112793,
+          "from_line": 317,
+          "to_line": 418,
+          "from_tick": 12.600029945373535,
+          "to_tick": 17.500019073486328
+        },
+        "covered_alive_seconds": 35.94964790344238,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      "4": {
+        "slot": 4,
+        "entity_id": 568,
+        "spawn_clock": 13.400032997131348,
+        "role": "botA",
+        "alive_sample_count": 190,
+        "max_alive_sample_gap": 0.29999542236328125,
+        "max_anchored_one_meter_residence": {
+          "seconds": 4.849925994873047,
+          "from_line": 721,
+          "to_line": 820,
+          "from_tick": 32.54978942871094,
+          "to_tick": 37.399715423583984
+        },
+        "covered_alive_seconds": 27.949620246887207,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      "5": {
+        "slot": 5,
+        "entity_id": 569,
+        "spawn_clock": 88.25078582763672,
+        "role": "botB",
+        "alive_sample_count": 217,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.500030517578125,
+          "from_line": 2062,
+          "to_line": 2074,
+          "from_tick": 99.10144805908203,
+          "to_tick": 99.60147857666016
+        },
+        "covered_alive_seconds": 31.851943969726562,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      "6": {
+        "slot": 6,
+        "entity_id": 570,
+        "spawn_clock": 72.24980926513672,
+        "role": "botB",
+        "alive_sample_count": 279,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 0.60003662109375,
+          "from_line": 2269,
+          "to_line": 2281,
+          "from_tick": 109.10205841064453,
+          "to_tick": 109.70209503173828
+        },
+        "covered_alive_seconds": 41.40252685546875,
+        "covered_useful_owned_seconds": 23.851455688476562,
+        "covered_useful_current_fire_request_seconds": 0
+      },
+      "7": {
+        "slot": 7,
+        "entity_id": 571,
+        "spawn_clock": 61.049354553222656,
+        "role": "botB",
+        "alive_sample_count": 400,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.4500885009765625,
+          "from_line": 1698,
+          "to_line": 1727,
+          "from_tick": 80.75032806396484,
+          "to_tick": 82.2004165649414
+        },
+        "covered_alive_seconds": 59.40340042114258,
+        "covered_useful_owned_seconds": 47.25288391113281,
+        "covered_useful_current_fire_request_seconds": 0.7500457763671875
+      },
+      "8": {
+        "slot": 8,
+        "entity_id": 572,
+        "spawn_clock": 61.44934844970703,
+        "role": "botB",
+        "alive_sample_count": 398,
+        "max_alive_sample_gap": 0.300018310546875,
+        "max_anchored_one_meter_residence": {
+          "seconds": 1.4500885009765625,
+          "from_line": 2242,
+          "to_line": 2272,
+          "from_tick": 107.8019790649414,
+          "to_tick": 109.25206756591797
+        },
+        "covered_alive_seconds": 58.953407287597656,
+        "covered_useful_owned_seconds": 45.80279541015625,
+        "covered_useful_current_fire_request_seconds": 4.4502716064453125
+      },
+      "1": {
+        "slot": 1,
+        "entity_id": 563,
+        "spawn_clock": 0.8000001311302185,
+        "role": "vanilla",
+        "alive_sample_count": 98,
+        "max_alive_sample_gap": 0.2500009536743164,
+        "max_anchored_one_meter_residence": {
+          "seconds": 6.700010359287262,
+          "from_line": 8,
+          "to_line": 217,
+          "from_tick": 0.8000001311302185,
+          "to_tick": 7.5000104904174805
+        },
+        "covered_alive_seconds": 10.800025999546051,
+        "covered_useful_owned_seconds": 0,
+        "covered_useful_current_fire_request_seconds": 0
+      }
+    },
+    "goal_end_counts": {
+      "death": 7,
+      "unavailable": 26,
+      "timeout": 4,
+      "connector": 4
+    }
+  },
+  "selected_weapon_transitions": [
+    {
+      "local": 0,
+      "generation": 7,
+      "life": 2,
+      "transitions": [
+        {
+          "line": 270,
+          "age": 0.0,
+          "owned": 3,
+          "current": 2,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 273,
+          "age": 0.15000057220458984,
+          "owned": 3,
+          "current": 2,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 279,
+          "age": 0.45000171661376953,
+          "owned": 3,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 651,
+          "age": 18.74982261657715,
+          "owned": 259,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 1150,
+          "age": 43.449445724487305,
+          "owned": 1283,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 1171,
+          "age": 44.49942970275879,
+          "owned": 1283,
+          "current": 1,
+          "wanted": 9,
+          "has_ammo": 1
+        },
+        {
+          "line": 1174,
+          "age": 44.69942665100098,
+          "owned": 1283,
+          "current": 9,
+          "wanted": 9,
+          "has_ammo": 1
+        },
+        {
+          "line": 1228,
+          "age": 47.24938774108887,
+          "owned": 1283,
+          "current": 9,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 1240,
+          "age": 47.749380111694336,
+          "owned": 1283,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 1281,
+          "age": 49.79934883117676,
+          "owned": 1283,
+          "current": 1,
+          "wanted": 9,
+          "has_ammo": 1
+        },
+        {
+          "line": 1284,
+          "age": 49.9493465423584,
+          "owned": 1283,
+          "current": 9,
+          "wanted": 9,
+          "has_ammo": 1
+        },
+        {
+          "line": 1321,
+          "age": 51.84931755065918,
+          "owned": 1283,
+          "current": 9,
+          "wanted": 11,
+          "has_ammo": 1
+        },
+        {
+          "line": 1330,
+          "age": 52.2993106842041,
+          "owned": 1283,
+          "current": 11,
+          "wanted": 11,
+          "has_ammo": 1
+        },
+        {
+          "line": 1397,
+          "age": 55.64940071105957,
+          "owned": 1283,
+          "current": 11,
+          "wanted": 9,
+          "has_ammo": 1
+        },
+        {
+          "line": 1403,
+          "age": 55.89941596984863,
+          "owned": 1283,
+          "current": 9,
+          "wanted": 9,
+          "has_ammo": 1
+        }
+      ]
+    },
+    {
+      "local": 1,
+      "generation": 7,
+      "life": 2,
+      "transitions": [
+        {
+          "line": 1527,
+          "age": 0.0,
+          "owned": 3,
+          "current": 2,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 1530,
+          "age": 0.1500091552734375,
+          "owned": 3,
+          "current": 2,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 1536,
+          "age": 0.4000244140625,
+          "owned": 3,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 1587,
+          "age": 3.0501861572265625,
+          "owned": 3,
+          "current": 1,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 1590,
+          "age": 3.2001953125,
+          "owned": 3,
+          "current": 2,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 1634,
+          "age": 5.3503265380859375,
+          "owned": 3,
+          "current": 2,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 1640,
+          "age": 5.6503448486328125,
+          "owned": 3,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 1878,
+          "age": 17.551071166992188,
+          "owned": 4099,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 2048,
+          "age": 26.051589965820312,
+          "owned": 4099,
+          "current": 1,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 2054,
+          "age": 26.351608276367188,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 2095,
+          "age": 28.351730346679688,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 2101,
+          "age": 28.701751708984375,
+          "owned": 4099,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 2203,
+          "age": 33.65205383300781,
+          "owned": 4099,
+          "current": 1,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 2209,
+          "age": 33.95207214355469,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 2328,
+          "age": 39.80242919921875,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 2337,
+          "age": 40.25245666503906,
+          "owned": 4099,
+          "current": 2,
+          "wanted": 2,
+          "has_ammo": 1
+        }
+      ]
+    },
+    {
+      "local": 2,
+      "generation": 6,
+      "life": 1,
+      "transitions": [
+        {
+          "line": 7,
+          "age": 0.0,
+          "owned": 3,
+          "current": 2,
+          "wanted": 2,
+          "has_ammo": 0
+        },
+        {
+          "line": 10,
+          "age": 0.050000011920928955,
+          "owned": 3,
+          "current": 2,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 13,
+          "age": 0.10000002384185791,
+          "owned": 3,
+          "current": 2,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 58,
+          "age": 0.8499993681907654,
+          "owned": 3,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 308,
+          "age": 11.350028097629547,
+          "owned": 8195,
+          "current": 1,
+          "wanted": 14,
+          "has_ammo": 1
+        },
+        {
+          "line": 311,
+          "age": 11.450028479099274,
+          "owned": 8195,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 319,
+          "age": 11.900030195713043,
+          "owned": 8195,
+          "current": 1,
+          "wanted": 14,
+          "has_ammo": 1
+        },
+        {
+          "line": 325,
+          "age": 12.200031340122223,
+          "owned": 8195,
+          "current": 14,
+          "wanted": 14,
+          "has_ammo": 1
+        },
+        {
+          "line": 449,
+          "age": 18.29999452829361,
+          "owned": 8195,
+          "current": 14,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 458,
+          "age": 18.74998766183853,
+          "owned": 8195,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 588,
+          "age": 25.249888479709625,
+          "owned": 8195,
+          "current": 1,
+          "wanted": 14,
+          "has_ammo": 1
+        },
+        {
+          "line": 591,
+          "age": 25.399886190891266,
+          "owned": 8195,
+          "current": 14,
+          "wanted": 14,
+          "has_ammo": 1
+        },
+        {
+          "line": 639,
+          "age": 27.649851858615875,
+          "owned": 8195,
+          "current": 14,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 651,
+          "age": 28.19984346628189,
+          "owned": 8195,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 663,
+          "age": 28.849833548069,
+          "owned": 8195,
+          "current": 1,
+          "wanted": 14,
+          "has_ammo": 1
+        },
+        {
+          "line": 666,
+          "age": 28.99983125925064,
+          "owned": 8195,
+          "current": 14,
+          "wanted": 14,
+          "has_ammo": 1
+        },
+        {
+          "line": 716,
+          "age": 31.449793875217438,
+          "owned": 8195,
+          "current": 14,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 728,
+          "age": 32.049784719944,
+          "owned": 8195,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 734,
+          "age": 32.299780905246735,
+          "owned": 8195,
+          "current": 1,
+          "wanted": 14,
+          "has_ammo": 1
+        },
+        {
+          "line": 742,
+          "age": 32.69977480173111,
+          "owned": 8195,
+          "current": 14,
+          "wanted": 14,
+          "has_ammo": 1
+        },
+        {
+          "line": 1048,
+          "age": 48.049540579319,
+          "owned": 8211,
+          "current": 14,
+          "wanted": 5,
+          "has_ammo": 1
+        },
+        {
+          "line": 1060,
+          "age": 48.599532186985016,
+          "owned": 8211,
+          "current": 5,
+          "wanted": 5,
+          "has_ammo": 1
+        },
+        {
+          "line": 1084,
+          "age": 49.749514639377594,
+          "owned": 8211,
+          "current": 5,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 1087,
+          "age": 49.94951158761978,
+          "owned": 8211,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 1180,
+          "age": 54.39944368600845,
+          "owned": 8211,
+          "current": 1,
+          "wanted": 14,
+          "has_ammo": 1
+        },
+        {
+          "line": 1186,
+          "age": 54.64943987131119,
+          "owned": 8211,
+          "current": 14,
+          "wanted": 14,
+          "has_ammo": 1
+        }
+      ]
+    },
+    {
+      "local": 3,
+      "generation": 6,
+      "life": 1,
+      "transitions": [
+        {
+          "line": 7,
+          "age": 0.0,
+          "owned": 3,
+          "current": 2,
+          "wanted": 2,
+          "has_ammo": 0
+        },
+        {
+          "line": 10,
+          "age": 0.050000011920928955,
+          "owned": 3,
+          "current": 2,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 13,
+          "age": 0.10000002384185791,
+          "owned": 3,
+          "current": 2,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 58,
+          "age": 0.8499993681907654,
+          "owned": 3,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 288,
+          "age": 10.350024282932281,
+          "owned": 4099,
+          "current": 1,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 291,
+          "age": 10.450024664402008,
+          "owned": 4099,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 510,
+          "age": 21.34994798898697,
+          "owned": 4099,
+          "current": 1,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 515,
+          "age": 21.599944174289703,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 562,
+          "age": 23.89990907907486,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 567,
+          "age": 24.19990450143814,
+          "owned": 4099,
+          "current": 1,
+          "wanted": 1,
+          "has_ammo": 1
+        },
+        {
+          "line": 570,
+          "age": 24.34990221261978,
+          "owned": 4099,
+          "current": 1,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 582,
+          "age": 24.949893057346344,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 675,
+          "age": 29.399825155735016,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 684,
+          "age": 29.849818289279938,
+          "owned": 4099,
+          "current": 2,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 705,
+          "age": 30.849803030490875,
+          "owned": 4099,
+          "current": 2,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 711,
+          "age": 31.149798452854156,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 750,
+          "age": 33.19976717233658,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 758,
+          "age": 33.59976106882095,
+          "owned": 4099,
+          "current": 2,
+          "wanted": 2,
+          "has_ammo": 1
+        },
+        {
+          "line": 871,
+          "age": 39.09967714548111,
+          "owned": 4099,
+          "current": 2,
+          "wanted": 13,
+          "has_ammo": 1
+        },
+        {
+          "line": 874,
+          "age": 39.1996756196022,
+          "owned": 4099,
+          "current": 13,
+          "wanted": 13,
+          "has_ammo": 1
+        }
+      ]
+    }
+  ],
+  "knife_context": [
+    {
+      "local": 0,
+      "generation": 7,
+      "useful_state_rows": 40,
+      "knife_rows": 28,
+      "knife_visible": 0,
+      "knife_supplyactive": 28,
+      "visible_useful_rows": 9,
+      "visible_final_fire": 0,
+      "knife_line_bounds": [
+        756,
+        1349
+      ],
+      "knife_nav_sources": {
+        "175": 2,
+        "-1": 1,
+        "112": 3,
+        "102": 2,
+        "5": 3,
+        "4": 1,
+        "155": 2,
+        "154": 1,
+        "111": 2,
+        "103": 2,
+        "104": 2,
+        "121": 2,
+        "129": 1,
+        "128": 1,
+        "127": 1,
+        "125": 1,
+        "92": 1
+      }
+    },
+    {
+      "local": 1,
+      "generation": 7,
+      "useful_state_rows": 24,
+      "knife_rows": 14,
+      "knife_visible": 1,
+      "knife_supplyactive": 13,
+      "visible_useful_rows": 4,
+      "visible_final_fire": 0,
+      "knife_line_bounds": [
+        1857,
+        2078
+      ],
+      "knife_nav_sources": {
+        "138": 2,
+        "182": 1,
+        "141": 4,
+        "183": 2,
+        "142": 3,
+        "18": 1,
+        "-1": 1
+      }
+    },
+    {
+      "local": 2,
+      "generation": 6,
+      "useful_state_rows": 47,
+      "knife_rows": 15,
+      "knife_visible": 2,
+      "knife_supplyactive": 13,
+      "visible_useful_rows": 22,
+      "visible_final_fire": 1,
+      "knife_line_bounds": [
+        487,
+        1254
+      ],
+      "knife_nav_sources": {
+        "-1": 3,
+        "69": 5,
+        "68": 1,
+        "44": 1,
+        "46": 1,
+        "48": 4
+      }
+    },
+    {
+      "local": 3,
+      "generation": 6,
+      "useful_state_rows": 33,
+      "knife_rows": 11,
+      "knife_visible": 0,
+      "knife_supplyactive": 11,
+      "visible_useful_rows": 15,
+      "visible_final_fire": 0,
+      "knife_line_bounds": [
+        464,
+        621
+      ],
+      "knife_nav_sources": {
+        "138": 1,
+        "182": 1,
+        "141": 3,
+        "183": 2,
+        "-1": 1,
+        "184": 1,
+        "142": 2
+      }
+    }
+  ],
+  "source_pins": {
+    "BotDriver.cpp": "2cee6c61197f6894532ef0181713d02c7bb66287277a3c7a7f29a488e02eadd5",
+    "bot_profile.h": "e041f7e93633d70d8ea349338fd900228151a0a32d95353070ea3b5e5564b80e",
+    "bot_human.h": "03fc978628e7cda8abefd5cbbf63087499b569835273f62af4e0a514a60c86e5",
+    "bot_aim.h": "2989d9ad714233946a9ab9f333c77c829d6e65592da977104f03a43b03723d85",
+    "bot_loadout.h": "d4b27889a250bfc2b722965e25a0942585bb10b202b6dd1b05920a8063f6ba13",
+    "bot_supply_navigation.h": "b8188f750dd82c8cca046688c6257cfb08b3a692dec05709be70effcf137cbbc"
+  },
+  "source_commit": "5ce974c296240be4ece76386654ecd7e666d1aa4",
+  "active_tier_parameters": {
+    "MITTEL": {
+      "reaction_seconds": 0.2,
+      "aim_sigma_degrees": 0.9,
+      "turn_rate_degrees_s": 300,
+      "turn_accel_degrees_s2": 1000,
+      "tracking_gain_s": 10,
+      "settle_seconds": 0.1,
+      "prediction_gain": 0.75
+    },
+    "STARK": {
+      "reaction_seconds": 0.1,
+      "aim_sigma_degrees": 0.45,
+      "turn_rate_degrees_s": 420,
+      "turn_accel_degrees_s2": 1600,
+      "tracking_gain_s": 14,
+      "settle_seconds": 0.05,
+      "prediction_gain": 0.9
+    },
+    "common_fire_tolerance_degrees": 1.5
+  },
+  "comparison_same_physical_stark": {
+    "window": "arena013public-damage-checked-swap0-trial-2-030506",
+    "per_local": {
+      "0": {
+        "human_rows": 11,
+        "visible_rows": 2,
+        "visible_desired_useful_rows": 1,
+        "visible_error_above1_5": 1,
+        "visible_error_median": 1.8350000000000002,
+        "visible_desired_useful_error_median": 0.18,
+        "visible_within1_5_no_humanfire": 0,
+        "human_fire_rows": 1,
+        "visible_useful_humanfire_rows": 1,
+        "alive_state_rows": 113,
+        "alive_useful_owned_state_rows": 66,
+        "alive_final_fire_rows": 4,
+        "fire_action_counter_delta": 96,
+        "state_player_state_counts": {
+          "0": 101,
+          "4": 12
+        },
+        "switches_last": 31,
+        "overshoots_last": 6,
+        "same_tick_human_final_rows": 11,
+        "humanfire_but_final_no_fire": 0,
+        "visible_useful_current_error_over_tol_no_fire": 0
+      },
+      "1": {
+        "human_rows": 12,
+        "visible_rows": 4,
+        "visible_desired_useful_rows": 3,
+        "visible_error_above1_5": 3,
+        "visible_error_median": 1.645,
+        "visible_desired_useful_error_median": 1.66,
+        "visible_within1_5_no_humanfire": 0,
+        "human_fire_rows": 1,
+        "visible_useful_humanfire_rows": 1,
+        "alive_state_rows": 112,
+        "alive_useful_owned_state_rows": 73,
+        "alive_final_fire_rows": 12,
+        "fire_action_counter_delta": 256,
+        "state_player_state_counts": {
+          "0": 89,
+          "4": 23
+        },
+        "switches_last": 47,
+        "overshoots_last": 1,
+        "same_tick_human_final_rows": 12,
+        "humanfire_but_final_no_fire": 0,
+        "visible_useful_current_error_over_tol_no_fire": 1
+      },
+      "2": {
+        "human_rows": 12,
+        "visible_rows": 3,
+        "visible_desired_useful_rows": 3,
+        "visible_error_above1_5": 1,
+        "visible_error_median": 1.37,
+        "visible_desired_useful_error_median": 1.37,
+        "visible_within1_5_no_humanfire": 1,
+        "human_fire_rows": 1,
+        "visible_useful_humanfire_rows": 1,
+        "alive_state_rows": 118,
+        "alive_useful_owned_state_rows": 105,
+        "alive_final_fire_rows": 12,
+        "fire_action_counter_delta": 170,
+        "state_player_state_counts": {
+          "0": 82,
+          "4": 36
+        },
+        "switches_last": 47,
+        "overshoots_last": 7,
+        "same_tick_human_final_rows": 12,
+        "humanfire_but_final_no_fire": 0,
+        "visible_useful_current_error_over_tol_no_fire": 1
+      },
+      "3": {
+        "human_rows": 12,
+        "visible_rows": 5,
+        "visible_desired_useful_rows": 4,
+        "visible_error_above1_5": 4,
+        "visible_error_median": 30.85,
+        "visible_desired_useful_error_median": 40.745000000000005,
+        "visible_within1_5_no_humanfire": 0,
+        "human_fire_rows": 1,
+        "visible_useful_humanfire_rows": 0,
+        "alive_state_rows": 118,
+        "alive_useful_owned_state_rows": 95,
+        "alive_final_fire_rows": 6,
+        "fire_action_counter_delta": 67,
+        "state_player_state_counts": {
+          "0": 108,
+          "4": 10
+        },
+        "switches_last": 57,
+        "overshoots_last": 8,
+        "same_tick_human_final_rows": 12,
+        "humanfire_but_final_no_fire": 0,
+        "visible_useful_current_error_over_tol_no_fire": 3
+      }
+    },
+    "covered_seconds": {
+      "covered_alive_seconds": 459.0607011318207,
+      "covered_useful_owned_seconds": 338.0072374343872,
+      "covered_useful_current_fire_request_seconds": 26.900537490844727
+    }
+  },
+  "limits": [
+    "This single unfavorable MITTEL window is not replaced by better STARK results; opposite physical start direction remains separate.",
+    "Full42 observed lives include failed/censored outcomes and Vanilla; no corpse-only acquisition credited.",
+    "ReceiveDamage events are actual attributed HP changes; requested damage/fire inputs are not hit accuracy.",
+    "CecilState is nominal1Hz; detailed BotHuman logs every200 driver ticks provide47 samples/11visible only, not a continuous20Hz trigger trace.",
+    "No >1.45s alive anchored1m residence observed for candidate with<=.5s gaps; this does not prove absence of all route inefficiency.",
+    "Travel-knife delays with no visible target are documented; absence of continuous visibility/angle/settling records prevents unique attribution to tracking versus other fire gates.",
+    "Existing tier values are calibration parameters, not proof of intended native performance ordering.",
+    "No new hook, tuning or runtime performed; FirstStatefalse and SameSpawnTickHP0."
+  ]
+}

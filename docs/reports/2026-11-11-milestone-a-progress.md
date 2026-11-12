@@ -1,5 +1,16 @@
 # Meilenstein A: implementierter Zwischenstand, keine Gesamtfreigabe
 
+## Fortsetzung 12.11.2026, 03:19 UTC
+
+Frische Flottenprüfung03:14:41: sechs mal acht eigene Bots; Dev zusätzlichUNKNOWN1, alle übrigen0. Effektive native Spawnwerte und Vorlagen überall0. Publics unverändert0BAD/0SyncDisconnect; bestehender Devstand jetzt37BAD/3Disconnect statt21/2. Unverändert alte048-Botclients und fe4-Server, keine013/Namensumstellung. Drei aktuelle eigene Devlogs samt Prozess-/Modulidentitäten privat lesend gesichert; keine Hook-/Input-/Restartaktion mit dem zusätzlichen Teilnehmer. Ursache der neuen Dev-Syncdifferenzen offen. Host während privater Probe:1,77GiB verfügbar,19,37GiB Disk; Stichprobe, keine Dauerabnahme.
+
+Beide013-STARK-Schadensfenster vollständig geschlossen:120,117857s und120,029329s,242/242 bzw179/179 vollständige bekannte Calls, Original22+1395Bytes/Dateien restauriert, vier normale Close/akzeptierte Closed-Logs/errorsleer. CappedHP-Schaden Kandidat2418,83/2432,06 gegenüberPublic2049,17/1798,89; Corpse-/Selbst-/unattributierte Calls getrennt. Vollständige Lebensauswertung und weitereTierfenster erforderlich; keinA3-/FirstState-PASS. MITTEL/Swap0 läuft.
+
+Der passive Mapreset-Capture belegt nun tatsächlich{} während normalemNeustart bei79,118843s und unverändertenGuardabbruch. Neuer einzeiliger Wartezustand-None-Entwurf bestehtRoot66Tests/engen Gegenreview, feste50sDeadline und alle Phasenbedingungen erhalten. Noch keine erfolgreiche Runtime dieser Korrektur. Bericht2026-11-12-mapreset-query-gap.md. NamensstagingRoot20Tests bestanden;48PLC4-Namensänderungen plus2RedLauncher/1Roster nurprivatvorbereitet, keineLiveänderung.
+
+GitHub Remotea331e200b51dc7a96e6a074641b2284c1244ebb1 gefetcht/exakterBaumdbfffb4174da538435dacb065492fac8c8a04bc6 zu lokald716906. DriveDelta016:47.260.376Bytes/SHA2565c6db38c27f93cdb12a86dc5b27854b5350342cf841128375a6d6a26ef55e32a, Datei1FdoXNA0RUXAcEKAdgISOwB76Ro1fzN3l. Rückdownloadidentisch;9555reguläreDateien/445.102.118Bytes separatrestauriert+nachgehasht,zweiLinksindexiert,keinnativerRestorestart. Enthält geschlosseneSTARK-Paare/erstenMapresetFAIL/vorbereitetesNamesstaging; spätererCaptureversuch und neuePendingPolicy/Devlogs noch nicht enthalten. A unvollständig,Bunbegonnen,Formalgates/Flottenrolloutoffen.
+
+
 ## Fortsetzung 12.11.2026, 02:38 UTC
 
 Skulls013 lief 600,116968 s ohne beobachtete Sync-/Crashfehler; alle acht Mindestaktivitäten belegt, vier Rollen normal geschlossen, Closed-Logs akzeptiert, kompletter Restore. CPUmax62,162 %, RAMmin1,736GiB. Dennoch konkreter funktionaler FAIL: zwei Leben bleiben rund223,706s bis Tod bzw262,886s bis Fensterende ohne nützliche Waffe. 205 lebend beobachtete Leben,91 mit Besitz und110 Tote+4 Zensierungen ohne. Ein Fall verliert Ziel und zirkelt in Reacquire137/148, der andere bleibt nach Itemtimeout ohne Ziel auf unbekannter Supportklasse. Keine pauschale129→248- oder Drowningursache. Skulls ist für die spätere Produktions-Whitelist gesperrt; vorübergehender Ersatz durch eine tatsächlich bestandene Cecil-Karte ist gemäß Auftrag vorgesehen, noch keine Änderung am Live-Server. Bericht wird fertiggestellt.

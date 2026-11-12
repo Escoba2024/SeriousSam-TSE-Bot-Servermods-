@@ -1,0 +1,11 @@
+# Native013: Statuslücke beim normalen Dedicated-Kartenwechsel
+
+Zwei isolierte Red→Yodeller→Red-Versuche bleiben FAIL, keine Mapresetabnahme. Beide endeten mit vier regulär geschlossenen Rollen und vollständiger Dateiwiederherstellung; Vanilla-Closed-Logs enthalten einen Join-Timeout und bleiben abgelehnt.
+
+Im ersten Versuch025215 fehlt der auslösende Querywert. Server und beide Botkohorten luden Yodeller tatsächlich; Vanilla war laut vor Close gesichertem Log noch im Joinversuch. Die Timeoutmeldung erschien erst im nach Close gesicherten Log. Daraus ist kein bereits vor dem primären Statusfehler abgeschlossener Timeout und keine Timeoutursache ableitbar.
+
+Der zweite Versuch031247 ergänzt ausschließlich sofortige append+flush-Archivierung der vorhandenen Queryantworten vor unveränderten Prüfungen. Reguläres Rundenende bei60,215132s; letzte gültige Red-Station/debriefing-Antwort77,996294s, danach bei79,118843s tatsächlich leere Antwort `{}`. `Rotation.ready` behandelte fehlenden Kartennamen während des normalen Neustarts als fremde Karte und brach ab. Kein falscher nichtleerer Kartenname ist in diesem Versuch belegt. Der historische FAIL wird nicht umgewertet.
+
+Ein separater enger Entwurf lässt ausschließlich `name is None` im bereits bestehenden Wartezustand unakzeptiert warten. Die ursprüngliche50-s-Grenze wird vorher geprüft und nie verlängert. Im aktiven Spiel bleiben fehlende Namen Fehler, ebenso leere Zeichenfolgen/fremde Karten. Neue Phase benötigt unverändert tatsächliche Karten-/NAV-Bindung, neun Spieler, aktuelle eindeutige Slots/Entities, gleiche native Sessions und alle vier ursprünglichen Prozesse. Kein Registry-, Timer- oder Phasenfortschritt durch eine leere Antwort.
+
+Die tatsächliche Aufnahme wurde als fehlschlagender Test gegen den alten Code reproduziert; danach bestehen66 Offlineprüfungen. Unabhängiger Gegenreview bestätigte den einzeiligen Policy-Diff und sieben gezielte Tests. Controllerbytefolge bleibt gleich zum Captureentwurf, keine weitere Query, Hookstelle oder Spieleingabe. Root-Freeze: Controller `fca644f10f2661a08de41186b359fa93c4ba4fcdba5c94f79c469987cbfcadc3`, Manifest `b64ddd7dcd099c1b81c7fb603d4a4bab9a437ff36683b8e4f55fa16874572376`. Laufzeitprüfung dieser Änderung steht noch aus; A4, Vanilla-Rejoin und A insgesamt sind nicht freigegeben.
