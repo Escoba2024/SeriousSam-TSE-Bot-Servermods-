@@ -1,8 +1,8 @@
 # Codex-Fortsetzung: Umsetzung, Betrieb und offene Abnahme
 
-Stand: 2026-11-12T11:53:14.504297+00:00
+Stand: 12.11.2026 14:43:28 CET
 
-**Die Namensaufgabe A2 ist abgeschlossen und auf allen sechs Instanzen wirksam. Meilenstein A ist insgesamt weiterhin nicht abgenommen; B wurde entsprechend der vorgegebenen Reihenfolge nicht begonnen.** Neue Kampf-/Navigationskorrekturen sind gebaut und teilweise nativ nachgewiesen. Offene Funktions- und Stabilitätsgates sowie die fehlende Übertragung der neuesten privaten Sicherung verhindern die Releasefreigabe.
+**Die Namensaufgabe A2 ist abgeschlossen und auf allen sechs Instanzen wirksam. Meilenstein A ist insgesamt weiterhin nicht abgenommen; B wurde entsprechend der vorgegebenen Reihenfolge nicht begonnen.** Neue Kampf-/Navigationskorrekturen sind gebaut und teilweise nativ nachgewiesen. Offene Funktions- und Stabilitätsgates verhindern weiterhin die Releasefreigabe. Der zuvor blockierte Sicherungsnachtrag Delta020 wurde inzwischen vollständig auf Drive hochgeladen und zurückgeprüft.
 
 ## 1. Was tatsächlich umgesetzt und aktiv ist
 
@@ -42,6 +42,8 @@ Die letzte zusätzliche Aktivitätsprüfung endete am **12.11.2026 um 11:12:56 U
 Hostweite CPU-Intervallwerte: **30.94–35.35%**. Mindestens **2.790GiB verfügbarer RAM** und **15.990GiB freier Datenträger**. Diese 30-Sekunden-Messung ersetzt kein Stabilitätsgate und keine Messung von Einzelkern-/Tickspitzen.
 
 Der aktuelle Logcheck um 11:03 UTC zeigt auf den fünf öffentlichen Instanzen 0 BAD-/0 Disconnectereignisse. Dev enthält weiterhin die bereits vorher dokumentierten kumulativen **37 BAD-/3 Disconnectereignisse**. Ein Syncfix wurde nicht behauptet. Quellen: [Aktivitätsbeleg](milestone-a-20261112/fleet-current-activity.json), [Snapshot](milestone-a-20261112/fleet-completion-final.json), [Namensrollout](2026-11-12-names-sequential-live-completion.md).
+
+Eine zusätzliche Bestandsprüfung am 12.11.2026 um **14:43:31 MEZ** bestätigt weiterhin sechs Instanzen mit je acht eigenen Bots und null zusätzlichen UNKNOWN. Die Logzähler bleiben öffentlich 0/0 und auf Dev 37 BAD/3 Disconnects. Verfügbar waren 2,67 GiB RAM und 14,30 GiB Datenträger. Dieser [neue Bestandsbeleg](milestone-a-20261112/fleet-resume1-before-native.json) enthält keinen neuen Schadens- oder Langzeittest.
 
 ## 4. Spawn, Namen und Kampf
 
@@ -93,11 +95,13 @@ Der neue private Nachtrag **Delta020 wurde auf Ubuntu erzeugt und separat restau
 
 Der unabhängige Dateirestore schrieb und prüfte **14.707 reguläre Dateien / 999.970.861 Byte**, einschließlich SHA256, Eigentümer, Modus und Nanosekunden-Zeitstempel. 2 Symlinks sind indexiert, nicht materialisiert. Restoreverzeichnis: `/srv/tse-milestone-a-backup-completion-20261112/restore-delta020-build016-114326`. Kein Spielstart aus dem Restore und keine Betriebsfreigabe daraus. Als inkrementeller Nachtrag benötigt Delta020 den verifizierten Ausgangsstand und die bisherigen Deltas bis 019.
 
-**Delta020 ist noch nicht auf Drive hochgeladen.** Die Übertragung scheitert an der nicht verfügbaren lokalen ChatGPT-Ausführungsumgebung, die der vorhandene Uploader für lokale Dateien benötigt. Ubuntu/RDC und GitHub funktionieren weiter. Auf Ubuntu existiert kein eingerichteter rclone-/gdrive-/drive-/gsutil-Übertragungsweg. Es wurde weder ein Upload noch ein Rückdownload vorgetäuscht. Der abschließende Bericht und die Backupquittung entstehen nach dem Archiv; das Archiv benennt seinen exakten Quellstand oben.
+**Delta020 ist vollständig auf Drive hochgeladen und durch echten Rückdownload verifiziert.** Beide Teile wurden am 12.11.2026 um 14:38:58 MEZ erneut heruntergeladen. Größen, Einzel-SHA256 und der Hash der geordneten Zusammensetzung entsprechen exakt dem bereits separat restaurierten Ubuntu-Archiv. Auch der Inhalt des Wiederherstellungsmanifests wurde nach dem Upload zurückgelesen und exakt verglichen. Der frühere Ausfall der lokalen Ausführungsumgebung ist behoben.
 
-Die Übertragung ist in **zwei geordnete Teile** zu 100.663.296 und 14.169.736 Byte vorbereitet. Beide Teilhashes und der SHA256 des wieder zusammengesetzten Archivs wurden unabhängig eingelesen und geprüft. Das ist ein lokaler Übertragungsnachweis, kein Drive-Upload. Die [Archiv-/Restorequittung](milestone-a-20261112/backup020.json) und das [Übertragungsmanifest](milestone-a-20261112/backup020-transfer-parts.json) enthalten die exakten Pfade, Größen und Prüfsummen. Nach dem Aufteilen blieben 15.818.780.672 Byte frei; die geforderte Reserve von 8 GiB blieb eingehalten.
+Drive: [Teil 1](https://drive.google.com/file/d/1J2tomfoi2axX2S3NJndr9-L_IvYv9iFc/view), [Teil 2](https://drive.google.com/file/d/1zEHBb5Jc78i4cfFIGO5O2sCfahT5td4B/view), [Wiederherstellungsmanifest](https://drive.google.com/file/d/1PK7hqH4RWAO1KIH_4pX_6E3TMEWvTB74/view). Der [vollständige Rückdownloadbeleg](milestone-a-20261112/backup020-drive-roundtrip.json) nennt IDs, Reihenfolge, Größen, Prüfsummen und Restoreumfang. Der exakte Archivquellstand bleibt unverändert; spätere Berichts- und Fortsetzungsarbeiten benötigen ihren eigenen folgenden Sicherungsnachtrag.
 
-Letzter vollständig hochgeladener und zurückgeladener privater Stand bleibt [Drive-Delta019](https://drive.google.com/file/d/1MAHfGkschhrtPJivuJxvlza3l83CsTvP/view) im [bestehenden Projektordner](https://drive.google.com/drive/folders/14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2): 45.078.384 Byte, SHA256 `0342390c65ae7759d0e6838d6696b4f28eadb3a27364d44d71a4f14b4309ba3b`. Separater Restore: 11.858 reguläre Dateien/297.185.813 Byte. Dieser Stand liegt zeitlich vor der endgültigen Namensumstellung und Build016; er wird ausdrücklich nicht als Sicherung der neuesten Änderungen ausgegeben. Lizenzierte Dateien und private Rohlogs bleiben außerhalb des öffentlichen Git-Projekts.
+Die Übertragung ist in **zwei geordnete Teile** zu 100.663.296 und 14.169.736 Byte vorbereitet. Beide Teilhashes und der SHA256 des wieder zusammengesetzten Archivs wurden unabhängig eingelesen und geprüft. Diese lokalen Prüfnachweise wurden inzwischen durch die oben belegte Drive-Rückprüfung ergänzt. Die [Archiv-/Restorequittung](milestone-a-20261112/backup020.json) und das [Übertragungsmanifest](milestone-a-20261112/backup020-transfer-parts.json) enthalten die exakten Pfade, Größen und Prüfsummen. Nach dem Aufteilen blieben 15.818.780.672 Byte frei; die geforderte Reserve von 8 GiB blieb eingehalten.
+
+Der vorherige [Drive-Nachtrag Delta019](https://drive.google.com/file/d/1MAHfGkschhrtPJivuJxvlza3l83CsTvP/view) bleibt im bestehenden Projektordner erhalten: 45.078.384 Byte, SHA256 `0342390c65ae7759d0e6838d6696b4f28eadb3a27364d44d71a4f14b4309ba3b`, separater Restore mit 11.858 regulären Dateien / 297.185.813 Byte. Zur Wiederherstellung von Delta020 werden weiterhin das verifizierte Basisbackup und die Deltas bis 019 benötigt. Lizenzierte Dateien und private Rohlogs bleiben außerhalb des öffentlichen Git-Projekts.
 
 ## 7. Abnahmestatus
 
@@ -108,13 +112,13 @@ Letzter vollständig hochgeladener und zurückgeladener privater Stand bleibt [D
 | A3 Kampf | Teilweise umgesetzt und nativ verglichen; aktuelle vollständige Vergleichs-/Leistungsabnahme offen. |
 | A4 Navigation | Reproduzierbarer Rotationsfehler korrigiert und begrenzt nativ bestätigt; funktionale Karten-/Aktivitätsabnahme offen. |
 | Stabilität | Weiterhin gültige 1/4/8-Bot-Gates über 3600/3600/7200 s nicht bestanden bzw. nicht abgeschlossen. |
-| A5 / Gesamt-A | **Nicht abgenommen.** Neue Release-DLL nicht flottenweit aktiv; neuester Drive-Nachtrag fehlt. |
+| A5 / Gesamt-A | **Nicht abgenommen.** Neue Release-DLL nicht flottenweit aktiv; Spiel-, Stabilitäts- und Releaseabnahme bleiben offen. |
 | B-Dev | **Nicht begonnen**, da A nicht vollständig abgenommen. |
 | B-Flotte | **Nicht begonnen.** |
 
 ## 8. Konkrete Fortsetzung
 
-1. Den vorhandenen Uploadweg nach Wiederverfügbarkeit der lokalen Ausführungsumgebung nutzen; unverändertes Delta020 hochladen und Größe/SHA256 per Rückdownload verifizieren.
+1. **Erledigt:** Unverändertes Delta020 auf Drive hochgeladen, beide Teile zurückgeladen sowie Einzel- und Gesamthash verifiziert. Die Fortsetzung arbeitet jetzt an A1 und A4; spätere Änderungen bleiben separat zu sichern.
 2. Den nativ belegten Approach-/Flugübergang des Original-Testclients anhand seiner vorhandenen Rohzustände korrigieren und anschließend A1-Schadens-/Erstzustandsnachweise erbringen. Keine blind wiederholte Probe und keine Korridorerweiterung als Ersatz für eine Ursache.
 3. Die verbleibende Waffenversorgung und Map-/Reloadaktivität für den aktuellen Kandidaten beheben, volle Vergleichspaare und die gültigen Stabilitätsgates abschließen.
 4. Erst danach den qualifizierten und vollständig gesicherten A-Stand auf Dev und kontrolliert jede öffentliche Instanz ausrollen. B bleibt bis zur vollständigen A-Abnahme gesperrt.

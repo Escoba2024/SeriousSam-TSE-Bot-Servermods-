@@ -1,0 +1,50 @@
+{
+  "scope": "DELTA020_ACTUAL_DRIVE_UPLOAD_DOWNLOAD_ORDERED_REASSEMBLY_VERIFIED",
+  "verified_utc": "2026-11-12T13:38:58.367860+00:00",
+  "archive_bytes": 114833032,
+  "archive_sha256": "82a661bb52ae8d6b08232aba3f70577ebdaa594e52ddf8dfe9edee147cb7c132",
+  "parts": [
+    {
+      "part": 1,
+      "name": "runtime-evidence-delta020-build016-114326.tar.gz.part001",
+      "bytes": 100663296,
+      "sha256": "2cef9a0922e3f0ad6b876ca92894bce10f6ff0f74135f9030b3c138891c3b876",
+      "drive_file_id": "1J2tomfoi2axX2S3NJndr9-L_IvYv9iFc",
+      "drive_url": "https://drive.google.com/file/d/1J2tomfoi2axX2S3NJndr9-L_IvYv9iFc/view?usp=drivesdk",
+      "roundtrip_verified": true
+    },
+    {
+      "part": 2,
+      "name": "runtime-evidence-delta020-build016-114326.tar.gz.part002",
+      "bytes": 14169736,
+      "sha256": "8c692a1e2dc7cb8698b0959a76e01fb50efc9f1d07c85ed7c7774ed616da4ff4",
+      "drive_file_id": "1zEHBb5Jc78i4cfFIGO5O2sCfahT5td4B",
+      "drive_url": "https://drive.google.com/file/d/1zEHBb5Jc78i4cfFIGO5O2sCfahT5td4B/view?usp=drivesdk",
+      "roundtrip_verified": true
+    }
+  ],
+  "drive_uploaded": true,
+  "all_parts_roundtrip_verified": true,
+  "ordered_reassembly_sha256_verified": true,
+  "archived_source_commit": "cd7a4a639191a2033390f39f0681e8b64b3d6b6c",
+  "native_launch_from_restore": false,
+  "baseline_and_deltas_through_019_required": true,
+  "parent_folder_id": "14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2",
+  "restore_verified_regular_files": 14707,
+  "restore_verified_bytes": 999970861,
+  "restore_metadata_verified": true,
+  "symlinks_indexed_not_materialized": 2,
+  "restore_source_archive_sha256": "82a661bb52ae8d6b08232aba3f70577ebdaa594e52ddf8dfe9edee147cb7c132",
+  "restore_instructions": "Download parts in the numbered order, concatenate part 1 then part 2 without modification, and verify the combined SHA256. This incremental archive requires the existing verified baseline and deltas through 019. Do not restore into a running game instance.",
+  "previous_verified_delta019": {
+    "drive_file_id": "1MAHfGkschhrtPJivuJxvlza3l83CsTvP",
+    "bytes": 45078384,
+    "sha256": "0342390c65ae7759d0e6838d6696b4f28eadb3a27364d44d71a4f14b4309ba3b"
+  },
+  "milestone_A_complete": false,
+  "milestone_B_started": false,
+  "restore_manifest_drive_file_id": "1PK7hqH4RWAO1KIH_4pX_6E3TMEWvTB74",
+  "restore_manifest_drive_url": "https://drive.google.com/file/d/1PK7hqH4RWAO1KIH_4pX_6E3TMEWvTB74/view?usp=drivesdk",
+  "restore_manifest_download_content_verified": true,
+  "previous_upload_blocker_resolved": true
+}

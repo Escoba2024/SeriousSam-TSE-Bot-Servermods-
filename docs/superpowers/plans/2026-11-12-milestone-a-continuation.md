@@ -136,3 +136,20 @@ Files: poc/candidates/redstation-supply-20261107/{BotDriver.cpp,bot_human.h,bot_
 - Delta020 is complete: 114833032 bytes, SHA256 `82a661bb52ae8d6b08232aba3f70577ebdaa594e52ddf8dfe9edee147cb7c132`, exact clean archived source `cd7a4a639191a2033390f39f0681e8b64b3d6b6c`. Separate restore wrote/rehashed 14707 regular files and 999970861 bytes with verified uid/gid/mode/mtime; two symlinks indexed only. Eight closed native windows are retained with their original outcomes. No native startup from restore.
 - Two ordered transfer parts and their reassembled archive hash are verified. Delta020 remains NOT uploaded; Delta019 remains the last verified Drive roundtrip. Final report/receipt metadata postdates the archive and is published separately in Git.
 - All workers are idle. No native test, build or archive process remains active. Root owns final documentation/publication and its actual fetch/tree check. Global Task4 and all outstanding A1/A3/A4/stability gates remain unchecked; B remains unstarted.
+
+
+## Resume after local environment restoration — 2026-11-12T13:21:15.395147+00:00
+
+- Original end-to-end authorization remains in force. Local execution works again; actual root HEAD c5e36ed was clean at resume. Ubuntu and the saved Delta020 archive/receipts are intact. No newer Delta020 object was found in the existing Drive folder.
+- Root owns transfer of the unchanged prepared Delta020 parts, exact local hash verification, upload, and independent download/reassembly verification. A later evidence delta must preserve all subsequent source/controller work.
+- review_names_transaction owns a NEW isolated A1 flight-transition V4 source/disabled-controller correction, based on the already analyzed real111716 failure. No native operations.
+- identify_latest_codex owns a NEW isolated A4 useful-weapon/fire diagnosis and any causally justified tested correction from the already analyzed104821 evidence. No native operations.
+- Maximum two active workers; finish_names_transaction remains idle for independent review. Root alone integrates/builds/executes native or live work. Existing original gates and FAIL records remain intact.
+- Next gates: [x] Delta020 Drive roundtrip; [ ] independent review of each new correction; [ ] bounded actual native verification; [ ] complete A1/A3/A4/stability/A5; B only after full A.
+
+
+## Delta020 Drive verification completed — 2026-11-12T13:43:28.243480+00:00
+
+- Both prepared parts uploaded to the existing private folder, downloaded again, individual sizes/hashes verified, combined archive SHA256 exactly82a661bb52ae8d6b08232aba3f70577ebdaa594e52ddf8dfe9edee147cb7c132. Manifest upload/readback also verified. See docs/reports/milestone-a-20261112/backup020-drive-roundtrip.json.
+- Previous external local-execution/upload blocker is resolved. A1/A3/A4/stability/release and B dependency remain unchanged. Subsequent source/evidence work requires a later incremental backup.
+- A4 supply analysis found genuine competing pickups and insufficient intermediate motion evidence; new bounded passive observer is under implementation. A1 V4 targeted real-recording RED/GREEN is demonstrated; independent review/native execution still pending.
