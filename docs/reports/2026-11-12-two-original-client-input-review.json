@@ -1,0 +1,537 @@
+{
+  "scope": "FOUR_ACTUAL_ORIGINAL_CLIENT_INPUT_CONTROLLER_ATTEMPTS_NOT_A1_ACCEPTANCE",
+  "windows": [
+    {
+      "window": "a1-dual-original-20261112-035323",
+      "status": "FAIL",
+      "errors": [
+        "AssertionError()",
+        "post-close:RuntimeError('roles_mismatch:cleanup')"
+      ],
+      "controller_sha256": "1de4cdac2448d6ef8d56b535e601bb1954c1bdfa95b12e16a7e711de60364bc6",
+      "observed_seconds": null,
+      "completed_steps": 0,
+      "input_phase_timings": [],
+      "native_summary": {},
+      "normal_closed_roles": {},
+      "displays_normally_closed": {},
+      "post_close_logs_accepted": false,
+      "files_restored": null,
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 2,
+        "cpu_busy_max_measured_percent": 39.425587467362924,
+        "mem_available_min_bytes": 2878910464,
+        "disk_free_min_bytes": 19306811392,
+        "max_sample_gap_seconds": 1.0008719980251044,
+        "budget_pass_claim": false
+      },
+      "qualified": false,
+      "first_processed_state_proven": false,
+      "result_schema_has_finished_utc": false
+    },
+    {
+      "window": "a1-dual-original-20261112-040229",
+      "status": "FAIL",
+      "errors": [
+        "RuntimeError(\"RuntimeError('input clock/host overrun')\")"
+      ],
+      "controller_sha256": "7e7098f56766103bc5eba4e7b17c1b7503d8efbcddf0195447bd744e6c97b8df",
+      "observed_seconds": null,
+      "completed_steps": 0,
+      "input_phase_timings": [],
+      "native_summary": {},
+      "normal_closed_roles": {
+        "server": true,
+        "vanilla": true,
+        "botA": true
+      },
+      "displays_normally_closed": {
+        "154": true,
+        "155": true
+      },
+      "post_close_logs_accepted": true,
+      "files_restored": true,
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 3,
+        "cpu_busy_max_measured_percent": 48.87699412258606,
+        "mem_available_min_bytes": 2309525504,
+        "disk_free_min_bytes": 19171725312,
+        "max_sample_gap_seconds": 24.57060310197994,
+        "budget_pass_claim": false
+      },
+      "qualified": false,
+      "first_processed_state_proven": false,
+      "result_schema_has_finished_utc": false
+    },
+    {
+      "window": "a1-dual-original-20261112-041628",
+      "status": "FAIL",
+      "errors": [
+        "RuntimeError('input through release host overrun')"
+      ],
+      "controller_sha256": "cf46de3fc9492f6abbac9d898d5f6eccf21e895c9c5fb332302118582c5d1068",
+      "observed_seconds": null,
+      "completed_steps": 5,
+      "input_phase_timings": [
+        {
+          "index": 0,
+          "actions": {
+            "vanilla": "fire",
+            "botA": "fire"
+          },
+          "elapsed_start": 0.004904760979115963,
+          "status": "PASS",
+          "requested_seconds": 0.1,
+          "preparation_started": 1083412.915694691,
+          "held_started": 1083413.187712052,
+          "preparation_seconds": 0.27201736089773476,
+          "release_started": 1083413.391475221,
+          "held_seconds": 0.20376316900365055,
+          "finished": 1083413.449989267,
+          "release_seconds": 0.058514046017080545,
+          "total_seconds": 0.5342945759184659,
+          "input_to_release_seconds": 0.2622772150207311,
+          "errors": []
+        },
+        {
+          "index": 1,
+          "actions": {
+            "vanilla": "forward"
+          },
+          "elapsed_start": 2.1230055019259453,
+          "status": "PASS",
+          "requested_seconds": 1.0,
+          "preparation_started": 1083415.033797856,
+          "held_started": 1083415.265933984,
+          "preparation_seconds": 0.23213612800464034,
+          "release_started": 1083416.334317156,
+          "held_seconds": 1.0683831721544266,
+          "finished": 1083416.357239029,
+          "release_seconds": 0.022921872790902853,
+          "total_seconds": 1.3234411729499698,
+          "input_to_release_seconds": 1.0913050449453294,
+          "errors": []
+        },
+        {
+          "index": 2,
+          "actions": {
+            "botA": "forward"
+          },
+          "elapsed_start": 4.009687165962532,
+          "status": "PASS",
+          "requested_seconds": 1.0,
+          "preparation_started": 1083416.920476956,
+          "held_started": 1083417.167696171,
+          "preparation_seconds": 0.2472192149143666,
+          "release_started": 1083418.371640399,
+          "held_seconds": 1.2039442281238735,
+          "finished": 1083418.397983024,
+          "release_seconds": 0.02634262479841709,
+          "total_seconds": 1.4775060678366572,
+          "input_to_release_seconds": 1.2302868529222906,
+          "errors": []
+        },
+        {
+          "index": 3,
+          "actions": {
+            "vanilla": "look_right"
+          },
+          "elapsed_start": 6.006859218934551,
+          "status": "PASS",
+          "requested_seconds": 0.1,
+          "preparation_started": 1083418.917654106,
+          "held_started": 1083419.189254689,
+          "preparation_seconds": 0.2716005831025541,
+          "release_started": 1083419.497724159,
+          "held_seconds": 0.3084694698918611,
+          "finished": 1083419.497725061,
+          "release_seconds": 9.019859135150909e-07,
+          "total_seconds": 0.5800709549803287,
+          "input_to_release_seconds": 0.3084703718777746,
+          "errors": []
+        },
+        {
+          "index": 4,
+          "actions": {
+            "botA": "look_left"
+          },
+          "elapsed_start": 7.005460954038426,
+          "status": "PASS",
+          "requested_seconds": 0.1,
+          "preparation_started": 1083419.916257895,
+          "held_started": 1083420.201428842,
+          "preparation_seconds": 0.28517094696871936,
+          "release_started": 1083420.531833288,
+          "held_seconds": 0.33040444599464536,
+          "finished": 1083420.531834169,
+          "release_seconds": 8.810311555862427e-07,
+          "total_seconds": 0.6155762739945203,
+          "input_to_release_seconds": 0.33040532702580094,
+          "errors": []
+        },
+        {
+          "index": 5,
+          "actions": {
+            "vanilla": "knife",
+            "botA": "knife"
+          },
+          "elapsed_start": 8.007339233066887,
+          "status": "FAIL",
+          "requested_seconds": 0.1,
+          "preparation_started": 1083420.918133169,
+          "held_started": 1083421.191053883,
+          "preparation_seconds": 0.2729207139927894,
+          "release_started": 1083421.499950908,
+          "held_seconds": 0.3088970249518752,
+          "finished": 1083421.562158157,
+          "release_seconds": 0.062207248993217945,
+          "total_seconds": 0.6440249879378825,
+          "input_to_release_seconds": 0.37110427394509315,
+          "failed_phase": "release",
+          "errors": [
+            "input through release host overrun"
+          ]
+        }
+      ],
+      "native_summary": {},
+      "normal_closed_roles": {
+        "server": true,
+        "vanilla": true,
+        "botA": true
+      },
+      "displays_normally_closed": {
+        "154": true,
+        "155": true
+      },
+      "post_close_logs_accepted": true,
+      "files_restored": true,
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 11,
+        "cpu_busy_max_measured_percent": 68.18181818181819,
+        "mem_available_min_bytes": 2193833984,
+        "disk_free_min_bytes": 19096977408,
+        "max_sample_gap_seconds": 25.25279483315535,
+        "budget_pass_claim": false
+      },
+      "qualified": false,
+      "first_processed_state_proven": false,
+      "result_schema_has_finished_utc": false
+    },
+    {
+      "window": "a1-dual-original-20261112-041938",
+      "status": "PASS_LIMITED_NORMAL_INPUT_WINDOW_REVIEW_REQUIRED",
+      "errors": [],
+      "controller_sha256": "a1d2e62f89c8d47bb0b9f9d0f790c5712963b458e89a509d37a4b161e053c5bd",
+      "observed_seconds": 30.051926116924733,
+      "completed_steps": 11,
+      "input_phase_timings": [
+        {
+          "index": 0,
+          "actions": {
+            "vanilla": "fire",
+            "botA": "fire"
+          },
+          "elapsed_start": 0.0058032560627907515,
+          "status": "PASS",
+          "requested_seconds": 0.1,
+          "preparation_started": 1083602.536761498,
+          "held_started": 1083602.782104633,
+          "preparation_seconds": 0.24534313497133553,
+          "release_started": 1083602.911464572,
+          "held_seconds": 0.1293599389027804,
+          "finished": 1083602.964261782,
+          "release_seconds": 0.052797209937125444,
+          "total_seconds": 0.4275002838112414,
+          "input_to_release_seconds": 0.18215714883990586,
+          "errors": []
+        },
+        {
+          "index": 1,
+          "actions": {
+            "vanilla": "forward"
+          },
+          "elapsed_start": 2.001098481938243,
+          "status": "PASS",
+          "requested_seconds": 1.0,
+          "preparation_started": 1083604.532057216,
+          "held_started": 1083604.783650591,
+          "preparation_seconds": 0.2515933751128614,
+          "release_started": 1083605.794818223,
+          "held_seconds": 1.0111676319502294,
+          "finished": 1083605.822063682,
+          "release_seconds": 0.027245458913967013,
+          "total_seconds": 1.2900064659770578,
+          "input_to_release_seconds": 1.0384130908641964,
+          "errors": []
+        },
+        {
+          "index": 2,
+          "actions": {
+            "botA": "forward"
+          },
+          "elapsed_start": 4.004423103993759,
+          "status": "PASS",
+          "requested_seconds": 1.0,
+          "preparation_started": 1083606.535387947,
+          "held_started": 1083606.800057191,
+          "preparation_seconds": 0.26466924394480884,
+          "release_started": 1083607.851179207,
+          "held_seconds": 1.0511220160406083,
+          "finished": 1083607.875665612,
+          "release_seconds": 0.02448640507645905,
+          "total_seconds": 1.3402776650618762,
+          "input_to_release_seconds": 1.0756084211170673,
+          "errors": []
+        },
+        {
+          "index": 3,
+          "actions": {
+            "vanilla": "look_right"
+          },
+          "elapsed_start": 6.000480701914057,
+          "status": "PASS",
+          "requested_seconds": 0.1,
+          "preparation_started": 1083608.531445645,
+          "held_started": 1083608.824461618,
+          "preparation_seconds": 0.2930159729439765,
+          "release_started": 1083608.979341141,
+          "held_seconds": 0.1548795229755342,
+          "finished": 1083608.979342533,
+          "release_seconds": 1.3920944184064865e-06,
+          "total_seconds": 0.44789688801392913,
+          "input_to_release_seconds": 0.1548809150699526,
+          "errors": []
+        },
+        {
+          "index": 4,
+          "actions": {
+            "botA": "look_left"
+          },
+          "elapsed_start": 7.0002773380838335,
+          "status": "PASS",
+          "requested_seconds": 0.1,
+          "preparation_started": 1083609.531244544,
+          "held_started": 1083609.776174224,
+          "preparation_seconds": 0.24492967990227044,
+          "release_started": 1083609.898980945,
+          "held_seconds": 0.12280672113411129,
+          "finished": 1083609.898981937,
+          "release_seconds": 9.918585419654846e-07,
+          "total_seconds": 0.3677373928949237,
+          "input_to_release_seconds": 0.12280771299265325,
+          "errors": []
+        },
+        {
+          "index": 5,
+          "actions": {
+            "vanilla": "knife",
+            "botA": "knife"
+          },
+          "elapsed_start": 8.016321196919307,
+          "status": "PASS",
+          "requested_seconds": 0.1,
+          "preparation_started": 1083610.547280692,
+          "held_started": 1083610.792151754,
+          "preparation_seconds": 0.24487106199376285,
+          "release_started": 1083610.917814655,
+          "held_seconds": 0.1256629009731114,
+          "finished": 1083610.965201091,
+          "release_seconds": 0.047386436024680734,
+          "total_seconds": 0.417920398991555,
+          "input_to_release_seconds": 0.17304933699779212,
+          "errors": []
+        },
+        {
+          "index": 6,
+          "actions": {
+            "vanilla": "colt",
+            "botA": "colt"
+          },
+          "elapsed_start": 10.012958919862285,
+          "status": "PASS",
+          "requested_seconds": 0.1,
+          "preparation_started": 1083612.543916592,
+          "held_started": 1083612.772899892,
+          "preparation_seconds": 0.2289833000395447,
+          "release_started": 1083612.905074538,
+          "held_seconds": 0.13217464601621032,
+          "finished": 1083612.957193795,
+          "release_seconds": 0.05211925692856312,
+          "total_seconds": 0.41327720298431814,
+          "input_to_release_seconds": 0.18429390294477344,
+          "errors": []
+        },
+        {
+          "index": 7,
+          "actions": {
+            "vanilla": "fire"
+          },
+          "elapsed_start": 12.004167841980234,
+          "status": "PASS",
+          "requested_seconds": 1.0,
+          "preparation_started": 1083614.535134096,
+          "held_started": 1083614.776640342,
+          "preparation_seconds": 0.2415062461514026,
+          "release_started": 1083615.908646305,
+          "held_seconds": 1.1320059630088508,
+          "finished": 1083615.938952341,
+          "release_seconds": 0.030306035885587335,
+          "total_seconds": 1.4038182450458407,
+          "input_to_release_seconds": 1.1623119988944381,
+          "errors": []
+        },
+        {
+          "index": 8,
+          "actions": {
+            "botA": "fire"
+          },
+          "elapsed_start": 14.002112655900419,
+          "status": "PASS",
+          "requested_seconds": 1.0,
+          "preparation_started": 1083616.533070869,
+          "held_started": 1083616.794261855,
+          "preparation_seconds": 0.2611909860279411,
+          "release_started": 1083617.914271858,
+          "held_seconds": 1.1200100029818714,
+          "finished": 1083617.938336757,
+          "release_seconds": 0.02406489895656705,
+          "total_seconds": 1.4052658879663795,
+          "input_to_release_seconds": 1.1440749019384384,
+          "errors": []
+        },
+        {
+          "index": 9,
+          "actions": {
+            "vanilla": "fire",
+            "botA": "forward"
+          },
+          "elapsed_start": 16.007846622960642,
+          "status": "PASS",
+          "requested_seconds": 1.0,
+          "preparation_started": 1083618.538811285,
+          "held_started": 1083618.759335162,
+          "preparation_seconds": 0.2205238768365234,
+          "release_started": 1083619.865440317,
+          "held_seconds": 1.1061051550786942,
+          "finished": 1083619.91808708,
+          "release_seconds": 0.05264676292426884,
+          "total_seconds": 1.3792757948394865,
+          "input_to_release_seconds": 1.158751918002963,
+          "errors": []
+        },
+        {
+          "index": 10,
+          "actions": {
+            "botA": "fire",
+            "vanilla": "forward"
+          },
+          "elapsed_start": 18.005624214885756,
+          "status": "PASS",
+          "requested_seconds": 1.0,
+          "preparation_started": 1083620.536589869,
+          "held_started": 1083620.794087903,
+          "preparation_seconds": 0.25749803404323757,
+          "release_started": 1083621.884884019,
+          "held_seconds": 1.090796115808189,
+          "finished": 1083621.937676442,
+          "release_seconds": 0.052792423171922565,
+          "total_seconds": 1.401086573023349,
+          "input_to_release_seconds": 1.1435885389801115,
+          "errors": []
+        }
+      ],
+      "native_summary": {
+        "vanilla": {
+          "alive_samples": 434,
+          "same_life_position_change": true,
+          "same_life_orientation_change": true,
+          "same_life_current_weapon_change": true,
+          "pickup_observed": false,
+          "fire_requested_samples": 27,
+          "actual_shot_proven": false,
+          "motion_attribution_proven": false,
+          "scope": "observed state changes; action isolation and screenshots require review"
+        },
+        "botA": {
+          "alive_samples": 434,
+          "same_life_position_change": true,
+          "same_life_orientation_change": true,
+          "same_life_current_weapon_change": true,
+          "pickup_observed": false,
+          "fire_requested_samples": 24,
+          "actual_shot_proven": false,
+          "motion_attribution_proven": false,
+          "scope": "observed state changes; action isolation and screenshots require review"
+        }
+      },
+      "normal_closed_roles": {
+        "server": true,
+        "vanilla": true,
+        "botA": true
+      },
+      "displays_normally_closed": {
+        "154": true,
+        "155": true
+      },
+      "post_close_logs_accepted": true,
+      "files_restored": true,
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 33,
+        "cpu_busy_max_measured_percent": 65.59633027522936,
+        "mem_available_min_bytes": 2231705600,
+        "disk_free_min_bytes": 19066617856,
+        "max_sample_gap_seconds": 25.065492217894644,
+        "budget_pass_claim": false
+      },
+      "qualified": false,
+      "first_processed_state_proven": false,
+      "result_schema_has_finished_utc": false
+    }
+  ],
+  "visual_review": {
+    "artifact": "017-botA-held-fire.png",
+    "scope": "PRIVATE_SCREENSHOT_ROOT_AND_COMBAT_INDEPENDENTLY_VIEWED",
+    "colt_muzzle_flash_observed": true,
+    "visible_hit_proven": false,
+    "vanilla_muzzle_flash_proven": false,
+    "screenshot_is_not_damage_or_first_state_proof": true
+  },
+  "notes": [
+    "V1 original Dedicated hash literal had61hex digits; actual unchanged Original64hex pin independently confirmed; prestart rejected before process/mutation.",
+    "V2 hold timer counted input-free preparation; actual failure had no phase costs recorded.",
+    "V3 moved timer immediately before first press. Five actions passed; knife0.1s step took0.371104s through release vs0.35s bound and correctly failed.",
+    "V4 refreshes now from existing post-observation bounded clock; stale now formerly caused needless callback/sleep. Same bound and every release check retained. Root63offline tests and independent narrow review passed.",
+    "Observed position/body-angle/weapon state changes require context: normal forward can trigger a map launcher; body orientation is not the separate head/view orientation.",
+    "Native shots/target damage/first processed respawn-state acceptance remain open. All raw logs/profile/GUID/screenshots remain private.",
+    "Wine restore covers explicit game configuration trees and registry/timestamps, not a byte-identical entire symlinked prefix cache.",
+    "Host CPU is interval average and startup has approximately25s sampling gaps; no continuous peak or whole-startup coverage claim."
+  ]
+}

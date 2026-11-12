@@ -43,6 +43,14 @@ struct WorldView {
   uint32_t usable_weapons = 0;  // after ammo filtering
   int current_weapon = 1;
   bool deathmatch = true;
+  // Original pre-action sniper zoom scaling; intent itself stays unchanged.
+  double rotation_damping = 1.0;
+};
+
+struct HumanAimTrace {
+  AimTrace aim; TrackState track;
+  bool arena_aligned=false;
+  double settled_before=-1,settled_after=-1;
 };
 
 struct BotCommand {
@@ -58,6 +66,24 @@ struct BotCommand {
   double preferred_range_m = 12.0;
   double distance_m = 0.0;
 };
+
+// Same body-frame point and bounded action as AimController, with the original
+// ApplyAction zoom factor. Never compensate by increasing the command rotation.
+inline bool ArenaRotationScaleValid(double scale) {
+  return std::isfinite(scale) && scale>0 && scale<=1;
+}
+inline double ArenaRotationResidual(const AimPose& pose,const AimPoint& point,
+                                    double yaw,double pitch,double scale) {
+  if(!ArenaRotationScaleValid(scale)||!pose.Valid()||!point.valid||
+     !std::isfinite(point.x)||!std::isfinite(point.y)||!std::isfinite(point.z)||
+     !std::isfinite(yaw)||!std::isfinite(pitch)) return 90;
+  const auto local=pose.frame.ToLocal(point.x-pose.x,point.y-pose.y,point.z-pose.z);
+  const double desiredYaw=std::atan2(-local.x,-local.z)*kRadToDeg;
+  const double desiredPitch=std::atan2(local.y,std::sqrt(local.x*local.x+local.z*local.z))*kRadToDeg;
+  const double ry=AimController::WrapDeg(desiredYaw-pose.yaw_deg-yaw*scale);
+  const double rp=desiredPitch-pose.pitch_deg-pitch*scale;
+  return std::sqrt(ry*ry+rp*rp);
+}
 
 inline int IntMax(int a, int b) { return a > b ? a : b; }
 inline double ClampUnit(double v) { return v < -1.0 ? -1.0 : (v > 1.0 ? 1.0 : v); }
@@ -203,7 +229,8 @@ class HumanBotPolicy {
   }
 
   BotCommand Step(const WorldView& w, const SenseInput* sensed, const bool* los, int count,
-                  double dt) {
+                  double dt, HumanAimTrace* trace=nullptr) {
+    if(trace)*trace=HumanAimTrace();
     BotCommand cmd;
     cmd.weapon = w.current_weapon > 0 ? w.current_weapon : 1;
     if(!w.pose.Valid() || !std::isfinite(dt)) { ResetArenaTrigger();return cmd; }
@@ -295,7 +322,8 @@ class HumanBotPolicy {
       aim_point.z += tr->vz * lead_time;
     }
 
-    const AimOutput aim = aim_.Step(w.pose, aim_point, dt);
+    if(trace){trace->track=*tr;trace->settled_before=arena_settled_s_;}
+    const AimOutput aim = aim_.Step(w.pose, aim_point, dt,trace?&trace->aim:nullptr);
     cmd.yaw_delta_deg = aim.yaw_delta_deg;
     cmd.pitch_delta_deg = aim.pitch_delta_deg;
     cmd.aim_error_deg = aim.residual_error_deg;
@@ -305,10 +333,17 @@ class HumanBotPolicy {
       // error. Otherwise a steadily moving target can starve the trigger even
       // while the crosshair tracks inside tolerance. Fresh LOS and consecutive
       // aligned samples are required; a weapon switch restarts settling.
-      const bool aligned=visible && (!cecil || cecil_.bShooting) &&
+      // Default 1 preserves the former calculation bit-for-bit. A scoped
+      // original weapon can execute less rotation than the requested delta.
+      const bool scaleValid=ArenaRotationScaleValid(w.rotation_damping);
+      if(w.rotation_damping!=1)
+        cmd.aim_error_deg=ArenaRotationResidual(w.pose,aim_point,
+          cmd.yaw_delta_deg,cmd.pitch_delta_deg,w.rotation_damping);
+      const bool aligned=scaleValid && visible && (!cecil || cecil_.bShooting) &&
         w.current_weapon==cmd.weapon && ArenaWeaponRangeSafe(cmd.weapon,distance) &&
         std::isfinite(aim_point.x) && std::isfinite(aim_point.y) && std::isfinite(aim_point.z) &&
-        std::isfinite(aim.residual_error_deg) && aim.residual_error_deg<=profile_.skill.fire_tol_deg;
+        std::isfinite(cmd.aim_error_deg) && cmd.aim_error_deg<=profile_.skill.fire_tol_deg;
+      if(trace)trace->arena_aligned=aligned;
       cmd.fire=false;
       if (!aligned) ResetArenaTrigger();
       else {
@@ -344,6 +379,7 @@ class HumanBotPolicy {
       if (limited && cmd.aim_error_deg>profile_.skill.fire_tol_deg) cmd.fire=false;
     }
 
+    if(trace)trace->settled_after=arena_settled_s_;
     MoveIntent(w, visible, distance, cmd);
     if (cecil) {
       cmd.forward = ClampUnit(cmd.forward * cecil_.fSpeedMul);

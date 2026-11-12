@@ -49,6 +49,15 @@ struct AimPoint {
   int target_key = -1;       // stable target identity, for the per-target offset
 };
 
+// Optional passive trace of values already used by Step; never a policy input.
+struct AimTrace {
+  bool valid=false, target_changed=false;
+  AimPose pose; AimPoint point;
+  double dt=0, desired[2]={0,0}, bias[2]={0,0}, offset[2]={0,0};
+  double error[2]={0,0}, rate_before[2]={0,0}, command_rate[2]={0,0};
+  double rate_after[2]={0,0}, residual[2]={0,0};
+};
+
 struct AimOutput {
   double yaw_delta_deg = 0.0;    // add this to the accumulated heading
   double pitch_delta_deg = 0.0;
@@ -86,7 +95,8 @@ class AimController {
   }
 
   // dt in seconds (one tick = 0.05 s). Safe to call with the same pose twice.
-  AimOutput Step(const AimPose& pose, const AimPoint& pt, double dt) {
+  AimOutput Step(const AimPose& pose, const AimPoint& pt, double dt, AimTrace* trace=nullptr) {
+    if(trace)*trace=AimTrace();
     AimOutput out;
     if (!(dt > 0.0) || !std::isfinite(dt) || !pose.Valid()) return out;
 
@@ -98,6 +108,9 @@ class AimController {
       return out;
     }
 
+    if(trace){trace->pose=pose;trace->point=pt;trace->dt=dt;
+      trace->target_changed=pt.target_key!=last_target_key_;
+      trace->rate_before[0]=yaw_rate_;trace->rate_before[1]=pitch_rate_;}
     if (pt.target_key != last_target_key_) {
       last_target_key_ = pt.target_key;
       // Fresh target: draw a new fixed misjudgement and restart the trigger
@@ -153,6 +166,16 @@ class AimController {
     const double real_pitch = desired_pitch - (pose.pitch_deg + out.pitch_delta_deg);
     out.residual_error_deg =
         std::sqrt(real_yaw * real_yaw + real_pitch * real_pitch);
+
+    if(trace){
+      trace->valid=true;trace->desired[0]=desired_yaw;trace->desired[1]=desired_pitch;
+      trace->bias[0]=bias_yaw_;trace->bias[1]=bias_pitch_;
+      trace->offset[0]=offset_yaw_;trace->offset[1]=offset_pitch_;
+      trace->error[0]=err_yaw;trace->error[1]=err_pitch;
+      trace->command_rate[0]=cmd_yaw;trace->command_rate[1]=cmd_pitch;
+      trace->rate_after[0]=yaw_rate_;trace->rate_after[1]=pitch_rate_;
+      trace->residual[0]=real_yaw;trace->residual[1]=real_pitch;
+    }
 
     // The bot perceives its own crosshair, not the true target position. An
     // overshoot is therefore "the crosshair passed the target while still

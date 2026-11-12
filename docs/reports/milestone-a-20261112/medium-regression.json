@@ -1,0 +1,40 @@
+{
+  "utc": "2026-11-12T07:28:24.872412+00:00",
+  "scope": "PORTABLE_SOURCE_REGRESSION_NOT_NATIVE_OR_RELEASE",
+  "red": "MITTEL low-motion524/1100 violates75percent aligned-fire floor",
+  "green_cases": "887\u20131025/1100 across3seeds2weapons",
+  "checks": [
+    {
+      "test": "test_arena_combat",
+      "exit": 0
+    },
+    {
+      "test": "test_arena_rotation",
+      "exit": 0
+    },
+    {
+      "test": "test_cecil_human",
+      "exit": 0
+    },
+    {
+      "test": "test_aim_trace",
+      "exit": 0
+    },
+    {
+      "test": "python-tools",
+      "exit": 0
+    },
+    {
+      "test": "sdk107-native-bridge",
+      "exit": 0
+    },
+    {
+      "test": "driver-action",
+      "exit": 0
+    }
+  ],
+  "native_bridge_checks": 2687,
+  "python_tool_tests": 250,
+  "native_qualification": false,
+  "adverse_synthetic_result": "60deg/s MITTEL FIRE72\u219224/2097; tracking lag remains, retain result and evaluate natively"
+}

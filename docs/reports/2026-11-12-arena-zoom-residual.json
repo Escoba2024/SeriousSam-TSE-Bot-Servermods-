@@ -1,0 +1,48 @@
+{
+  "scope": "ORIGINAL_ZOOM_RESIDUAL_FIX_PORTABLE_VERIFIED_NATIVE_PENDING",
+  "source_window": "arena014aim-dense-checked-swap0-trial-1-043831",
+  "matched_trace_pairs": 2298,
+  "valid_non_nav_consecutive_policy_actions": 838,
+  "max_request_intent_error_deg": 1.5712e-05,
+  "sniper_eligible_pairs": 116,
+  "sniper_pairs_ratio_near_28_over_90": 107,
+  "sniper_ratio_tolerance": 0.001,
+  "false_permits": [
+    {
+      "local": 3,
+      "generation": 5,
+      "tick": 572,
+      "weapon": 13,
+      "before_residual": 1.186016183,
+      "scaled_residual": 1.848205081
+    },
+    {
+      "local": 3,
+      "generation": 5,
+      "tick": 576,
+      "weapon": 13,
+      "before_residual": 1.482131315,
+      "scaled_residual": 1.723773356
+    },
+    {
+      "local": 3,
+      "generation": 5,
+      "tick": 577,
+      "weapon": 13,
+      "before_residual": 1.290011122,
+      "scaled_residual": 1.720346828
+    }
+  ],
+  "tolerance_unchanged_deg": 1.5,
+  "behavioral_red": {
+    "tick": 4,
+    "before": 2.075686183,
+    "expected": 3.357525066
+  },
+  "portable_verified": true,
+  "native_fix_verified": false,
+  "a3_accepted": false,
+  "old013_oscillation_explained": false,
+  "rate_noise_tolerance_changed": false,
+  "raw_actions_amplified": false
+}

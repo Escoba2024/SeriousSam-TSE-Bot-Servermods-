@@ -342,5 +342,22 @@
     "roundtrip_verified": true,
     "verified_utc": "2026-11-12T04:01:36.671322+00:00",
     "covers": "Unqualified013 build and source bundle3df3bd0, six completed MITTEL/STARK/DEMON comparison windows plus preserved initial-phase failures; four closed normal-mapreset failure windows, private passivePCAP/socket evidence, existingDev37/3 logs, frozen sample-first and prepared original-dual/observer/dense drafts. Later first dual prestart failure, corrected V2 and actual dense30s excluded. Earlier baseline/fixture/toolchain backups remain prerequisites. No native restore launch/qualification/deployment."
+  },
+  "runtime_evidence_delta018_for_build013": {
+    "scope": "RUNTIME_EVIDENCE_DELTA018_FOR_BUILD013_NOT_RELEASE",
+    "archive": "/srv/tse-milestone-a-evidence-20261111/runtime-evidence-delta018-build013-042530.tar.gz",
+    "bytes": 28564013,
+    "sha256": "acea6bac821f00b34d73415e8bdbc7defa94c6e3bded7167778d5d0c6a709cda",
+    "repo_head": "b1eb5292f0e115eb2b09d7abdc40d5c41e960cf9",
+    "restore": "/srv/tse-milestone-a-evidence-20261111/restore-delta018-build013-042530",
+    "regular_files_written_rehashed": 4907,
+    "restored_bytes": 112493222,
+    "symlinks_indexed_not_materialized": 0,
+    "native_launch_from_restore": false,
+    "drive_uploaded": true,
+    "drive_id": "1nvGebY1grXkF1FoPKNyra8W3Ylpp6tmu",
+    "drive_url": "https://drive.google.com/file/d/1nvGebY1grXkF1FoPKNyra8W3Ylpp6tmu/view",
+    "roundtrip_verified": true,
+    "roundtrip_verified_utc": "2026-11-12T04:27:18.974134+00:00"
   }
 }

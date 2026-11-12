@@ -155,6 +155,34 @@ static void MovingTargetFire() {
     speed,totals[0],totals[1],totals[2],errors[0]/2097,errors[1]/2097,errors[2]/2097);
   }
 }
+
+static void LowMotionAimReliability() {
+  // Native014's persistent Laser target exposed self-blocking: intentional
+  // correlated aim drift stayed outside the unchanged 1.5-degree fire gate.
+  // A visible target moving only0.2deg/s should not starve the weakest tier.
+  for(unsigned seed:{123u,77123u,20261111u})for(int weapon:{6,12}){
+    BotProfile p;assert(BuildRosterProfile(0,0,seed,&p,1));
+    HumanBotPolicy h;auto settings=CecilPreset(2);h.Configure(&p,&settings);
+    WorldView w;w.cecil=true;w.alive=true;w.health=100;
+    w.current_weapon=weapon;w.usable_weapons=CecilWeaponMask(weapon);
+    SenseInput target{};target.index=1;target.entity_id=1;
+    target.alive=true;target.health=100;bool visible=true;int fired=0,observed=0;
+    for(int tick=0;tick<1200;++tick){
+      const double angle=tick*.05*.2*kDegToRad;
+      target.x=-30*std::sin(angle);target.z=-30*std::cos(angle);
+      const auto cmd=Run(h,w,&target,&visible,tick,1);
+      assert(!cmd.fire||(cmd.aim_error_deg<=p.skill.fire_tol_deg&&cmd.weapon==weapon));
+      assert(std::fabs(cmd.yaw_delta_deg)<=p.skill.turn_rate_deg_s*.05+1e-9);
+      assert(std::fabs(cmd.pitch_delta_deg)<=p.skill.turn_rate_deg_s*.05+1e-9);
+      w.pose.yaw_deg+=cmd.yaw_delta_deg;w.pose.pitch_deg+=cmd.pitch_delta_deg;
+      if(tick>=100){++observed;fired+=cmd.fire;}
+    }
+    std::printf("MITTEL low-motion seed=%u weapon=%d aligned fire=%d/%d\n",seed,weapon,fired,observed);
+    std::fflush(stdout);
+    assert(fired*4>=observed*3); // >=75% after warmup, with original settling and tolerance
+  }
+}
+
 static void TriggerLifetime() {
   auto settings=CecilPreset(2);
   for(int tier=1;tier<=3;++tier){
@@ -200,4 +228,4 @@ static void TriggerIsolation() {
     if(tick>=10)assert(cmd.fire==(i==1||tick<20));
   }
 }
-int main(){MigrationAndConfiguration();ShortColtsAndOwnership();ReactionIsolationAndLifetime();HumanOnlyArenaLoadout();TrackingAndBounds();MovingTargetFire();TriggerLifetime();TriggerIsolation();puts("Arena migration, tier and short-Colt contracts PASS");}
+int main(){MigrationAndConfiguration();ShortColtsAndOwnership();ReactionIsolationAndLifetime();HumanOnlyArenaLoadout();TrackingAndBounds();MovingTargetFire();LowMotionAimReliability();TriggerLifetime();TriggerIsolation();puts("Arena migration, tier and short-Colt contracts PASS");}

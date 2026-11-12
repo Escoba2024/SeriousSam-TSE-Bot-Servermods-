@@ -50,6 +50,17 @@ template<class T>int BotCecilSafeMotion(CPlayer*,SafetyState&,double,T&,T&,T&,do
 TEST = r'''
 int main(){
  CPlayer p;CPlayerWeapons w;p.m_penWeapons=&w;p.en_plViewpoint.pl_OrientationAngle(1)=30;
+ assert(BotHumanRotationDamping(&p,&w)==1);
+ p.m_ulFlags=SDK_ZOOM;assert(BotHumanRotationDamping(&p,&w)==.25);
+ w.m_fSniperFOV=28;w.m_fSniperMaxFOV=90;
+ assert(BotHumanRotationDamping(&p,&w)==double(float(28)/float(90)));
+ assert(std::isnan(BotHumanRotationDamping(nullptr,&w)));
+ assert(std::isnan(BotHumanRotationDamping(&p,nullptr)));
+ for(float bad:{0.f,-1.f,NAN,INFINITY}){w.m_fSniperFOV=bad;assert(std::isnan(BotHumanRotationDamping(&p,&w)));}
+ w.m_fSniperFOV=20;
+ for(float bad:{0.f,-1.f,NAN,INFINITY}){w.m_fSniperMaxFOV=bad;assert(std::isnan(BotHumanRotationDamping(&p,&w)));}
+ p.m_ulFlags=0;assert(BotHumanRotationDamping(&p,nullptr)==1);
+ w.m_fSniperMaxFOV=80;
  assert(BotCecilFinalBodyYaw(&p,8)==38);
  p.m_ulFlags=SDK_ZOOM;assert(BotCecilFinalBodyYaw(&p,8)==32);
  assert(std::isnan(BotCecilFinalBodyYaw(nullptr,8)));
@@ -80,7 +91,10 @@ def main():
     a=p.parse_args();sdk=a.sdk_player.read_bytes();source=a.driver.read_text()
     flag=re.search(rb"^#define\s+PLF_ISZOOMING\s+\(1UL\s*<<\s*(\d+)\)",sdk,re.M)
     if not flag: raise ValueError("SDK zoom flag missing")
-    bodies="\n".join(function(source,n) for n in ("BotCecilFinalBodyYaw","BotCecilActionFinite"))
+    wiring=re.search(r'world\.rotation_damping\s*=\s*BotHumanRotationDamping\(player,hw\);',source)
+    if not wiring:raise ValueError("actual Human WorldView damping binding missing")
+    if source.index(wiring[0])>source.index("human.BeginTick(world)"):raise ValueError("damping captured too late")
+    bodies="\n".join(function(source,n) for n in ("BotHumanRotationDamping","BotCecilFinalBodyYaw","BotCecilActionFinite"))
     native_source=(a.driver.parent/'BotSupplyNative.h').read_text()
     bodies+="\n"+function(native_source,"BotCecilUrgentItem")
     if "static void BotCecilNeutralAction(" in source:

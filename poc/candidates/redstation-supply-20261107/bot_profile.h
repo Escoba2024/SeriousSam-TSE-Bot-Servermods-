@@ -428,7 +428,7 @@ inline SkillParams ArenaSkill(int tier) {
   s.weapon_dwell_s=.6;s.switch_margin=1.15;s.preferred_range_m=16;
   s.aim_corr_s=.2;s.fire_tol_deg=1.5;s.overshoot=.08;
   s.reaction_s=tier==3?.05:(tier==2?.10:.20);
-  s.aim_sigma_deg=tier==3?.15:(tier==2?.45:.9);
+  s.aim_sigma_deg=tier==3?.15:(tier==2?.45:.6);
   s.turn_rate_deg_s=tier==3?540:(tier==2?420:300);
   s.turn_accel_deg_s2=tier==3?2400:(tier==2?1600:1000);
   s.tracking_gain_s=tier==3?20:(tier==2?14:10);

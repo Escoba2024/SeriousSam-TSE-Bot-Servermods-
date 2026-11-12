@@ -923,6 +923,16 @@ static FLOAT BotObstacleDistance(CPlayer *player, FLOAT yaw, INDEX *hitType=NULL
 /* ------------------------------------------------------------------------ */
 
 #include "BotSupplyNative.h"
+// Original7f595 ApplyAction603fe980..603fea27: bit10, FOV/MaxFOV.
+// The Human gate observes this factor; it never rescales the action intent.
+static double BotHumanRotationDamping(const CPlayer* player,const CPlayerWeapons* weapon){
+  const double invalid=std::numeric_limits<double>::quiet_NaN();
+  if(!player)return invalid;
+  if(!(player->m_ulFlags&(1UL<<10)))return 1;
+  if(!weapon||!std::isfinite(weapon->m_fSniperFOV)||!std::isfinite(weapon->m_fSniperMaxFOV)||
+     weapon->m_fSniperFOV<=0||weapon->m_fSniperMaxFOV<=0)return invalid;
+  return weapon->m_fSniperFOV/weapon->m_fSniperMaxFOV;
+}
 // Player.es ApplyAction damps rotations using the pre-action zoom flag/FOV.
 static double BotCecilFinalBodyYaw(CPlayer* player,double actionDelta){
   const double invalid=std::numeric_limits<double>::quiet_NaN();
@@ -1134,6 +1144,12 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     FLOAT humanStrafe=0.0f;    // -1..1, applied only when bot_fStrafeScale > 0
     FLOAT humanScanYaw=0.0f;   // scan delta while no opponent is perceived
     FLOAT humanTargetDistance=0.0f; // frozen last-seen distance from the policy
+    // Existing diagnostics/cadence only; stack snapshots never feed decisions.
+    const bool aimTraceEnabled=bot_bDiagnostics && bot_iLogEvery>0 && bs.bs_iTick%bot_iLogEvery==0;
+    botcore::HumanAimTrace aimTrace;
+    botcore::BotCommand aimTraceCommand;
+    bool aimTraceCaptured=false;
+    INDEX aimCurrent=0,aimWanted=0;
     if (automatic) {
       testAimReady=FALSE;
       const CSessionProperties *session=(const CSessionProperties *)_pNetwork->GetSessionProperties();
@@ -1172,6 +1188,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           world.deathmatch=deathmatch!=FALSE;
           world.usable_weapons=BotCombatUsableWeapons(hw);
           world.current_weapon=hw->m_iCurrentWeapon;
+          world.rotation_damping=BotHumanRotationDamping(player,hw);
 
           if (bs.bs_lastHealth>0.0f && world.health<bs.bs_lastHealth) {
             human.NotifyDamage(bs.bs_lastHealth,world.health);
@@ -1215,7 +1232,9 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
             if (hasLos[i]) ++visible;
           }
 
-          const botcore::BotCommand command=human.Step(world,sensed,hasLos,count,fTick);
+          const botcore::BotCommand command=human.Step(world,sensed,hasLos,count,fTick,
+            aimTraceEnabled?&aimTrace:NULL);
+          if(aimTraceEnabled){aimTraceCommand=command;aimTraceCaptured=true;aimCurrent=hw->m_iCurrentWeapon;aimWanted=hw->m_iWantedWeapon;}
 
           decision.target=command.target;
           decision.weapon=command.weapon;
@@ -1507,6 +1526,9 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     pa.pa_aRotation(2) = bs.bs_aPitch - localInput->m_aLocalRotation(2);
     pa.pa_aViewRotation(1) = 0.0f;            // no freelook
 
+    ANGLE3D aimInputBefore,aimPacketBefore;
+    if(aimTraceCaptured){aimInputBefore=localInput->m_aLocalRotation;aimPacketBefore=pa.pa_aRotation;}
+
     // Use vanilla speed conversion and local input accumulation. Human buttons
     // must not leak into this synthetic action; preserve the shared control buffer.
     if(!BotCecilActionFinite(pa)){
@@ -1534,6 +1556,30 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     }
     // 4) hand it to the network player source (stamps pa_llCreated internally)
     ppls->SetAction(pa);
+    if(aimTraceCaptured && player){
+      const botcore::AimTrace& a=aimTrace.aim;
+      const botcore::TrackState& t=aimTrace.track;
+      BotLog("[BotAimTrace] local=%d tick=%d entity=%lu generation=%lu valid=%d target=%d target_entity=%lu target_generation=%lu visible=%d changed=%d dt=%.9f eye=(%.9g,%.9g,%.9g) pose=(%.9g,%.9g) frame=(%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g) track=(%.9g,%.9g,%.9g) velocity=(%.9g,%.9g,%.9g) seen=(%d,%d) point=(%.9g,%.9g,%.9g) desired=(%.9g,%.9g) bias=(%.9g,%.9g) offset=(%.9g,%.9g) error=(%.9g,%.9g) rate_before=(%.9g,%.9g) rate_command=(%.9g,%.9g) rate_after=(%.9g,%.9g) intent=(%.9g,%.9g) residual=(%.9g,%.9g) aligned=%d settled=(%.9f,%.9f) human_fire=%d weapon=%d\n",
+        iLP,bs.bs_iTick,(unsigned long)entityId,(unsigned long)BotSupplyState(iLP).generation,
+        a.valid,aimTraceCommand.target,(unsigned long)t.entity_id,(unsigned long)t.generation,
+        aimTraceCommand.target_visible,a.target_changed,a.dt,a.pose.x,a.pose.y,a.pose.z,a.pose.yaw_deg,a.pose.pitch_deg,
+        a.pose.frame.right[0],a.pose.frame.right[1],a.pose.frame.right[2],a.pose.frame.up[0],a.pose.frame.up[1],a.pose.frame.up[2],a.pose.frame.back[0],a.pose.frame.back[1],a.pose.frame.back[2],
+        t.x,t.y,t.z,t.vx,t.vy,t.vz,t.first_seen_tick,t.last_seen_tick,a.point.x,a.point.y,a.point.z,
+        a.desired[0],a.desired[1],a.bias[0],a.bias[1],a.offset[0],a.offset[1],a.error[0],a.error[1],
+        a.rate_before[0],a.rate_before[1],a.command_rate[0],a.command_rate[1],a.rate_after[0],a.rate_after[1],
+        aimTraceCommand.yaw_delta_deg,aimTraceCommand.pitch_delta_deg,a.residual[0],a.residual[1],
+        aimTrace.arena_aligned,aimTrace.settled_before,aimTrace.settled_after,aimTraceCommand.fire,aimTraceCommand.weapon);
+      BotLog("[BotAimTransport] local=%d tick=%d entity=%lu input_entity=%lu same_entity=%d body=(%.9g,%.9g,%.9g) view=(%.9g,%.9g) input_body=(%.9g,%.9g,%.9g) input_view=(%.9g,%.9g) last=(%.9g,%.9g) input_last=(%.9g,%.9g) local_before=(%.9g,%.9g) requested=(%.9g,%.9g) precompose=(%.9g,%.9g) local_after=(%.9g,%.9g) composed=(%.9g,%.9g) nav=%d floor=%d human_fire=%d final_fire=%d current=%d wanted=%d\n",
+        iLP,bs.bs_iTick,(unsigned long)entityId,(unsigned long)localInput->en_ulID,player==localInput,
+        player->en_plPlacement.pl_OrientationAngle(1),player->en_plPlacement.pl_OrientationAngle(2),player->en_plPlacement.pl_OrientationAngle(3),
+        player->en_plViewpoint.pl_OrientationAngle(1),player->en_plViewpoint.pl_OrientationAngle(2),
+        localInput->en_plPlacement.pl_OrientationAngle(1),localInput->en_plPlacement.pl_OrientationAngle(2),localInput->en_plPlacement.pl_OrientationAngle(3),
+        localInput->en_plViewpoint.pl_OrientationAngle(1),localInput->en_plViewpoint.pl_OrientationAngle(2),
+        player->m_aLastRotation(1),player->m_aLastRotation(2),localInput->m_aLastRotation(1),localInput->m_aLastRotation(2),
+        aimInputBefore(1),aimInputBefore(2),bs.bs_aHeading,bs.bs_aPitch,aimPacketBefore(1),aimPacketBefore(2),
+        localInput->m_aLocalRotation(1),localInput->m_aLocalRotation(2),pa.pa_aRotation(1),pa.pa_aRotation(2),
+        supplyActive,cecilFloorStatus,aimTraceCommand.fire,(pa.pa_ulButtons&BOT_PLACT_FIRE)!=0,aimCurrent,aimWanted);
+    }
     if(bot_bDiagnostics&&bot_bSupplyNavigation&&player)
       BotCecilApproachFinal(player,BotSupplyState(iLP),iLP,bs.bs_iTick,bs.bs_iTick*fTick,
         supplyActive!=FALSE,cecilFloorStatus,targetVisible!=FALSE,pa.pa_vTranslation,pa.pa_aRotation,pa.pa_ulButtons);
