@@ -1,0 +1,161 @@
+{
+  "status": "PASS_LIMITED_DAMAGE_OBSERVATION_NOT_FIRST_STATE_PROOF",
+  "errors": [],
+  "started_utc": "2026-11-12T00:10:58.163029+00:00",
+  "finished_utc": "2026-11-12T00:12:30.601224+00:00",
+  "observed_seconds": 30.087011678144336,
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "post_close_logs": {
+    "accepted": true,
+    "reasons": [],
+    "logs": {
+      "server": {
+        "sha256": "6f94b0c3a442e22350e0e017380ea18726e20a2f793930c3cb3313d64808abfe",
+        "bytes": 9303,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botA": {
+        "sha256": "08152630565491931345987902c54fee167cc7b9290ebaef6bf33594ab5b99f8",
+        "bytes": 239924,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botB": {
+        "sha256": "a1db8afb326f14d9c482ec08bf69cc9c61b6517cd71e75e65e5d943088e893a6",
+        "bytes": 210081,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "vanilla": {
+        "sha256": "079292536becde90c4dcd6f643fae19bb9e5e83048572a05d30f8d69ebfe971e",
+        "bytes": 7394,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      }
+    }
+  },
+  "controller_sha256": "904976d03bee35295bffc6dca626cacd571697afca542b34098bfdb4567a2a98",
+  "window": "a1-damage-spawn0-trial-1-001058",
+  "all_roles_normally_closed": true,
+  "a1_accepted": false,
+  "first_processed_state_proven": false,
+  "normal_foreign_hit_proven": false,
+  "frida": {
+    "version": "17.26.2",
+    "hook_source_sha256": "767a013ae896aa507d536e16f34ee3ed9bcc73121b41970ea329478f59381787",
+    "host_source_sha256": "db411bb6757abdc6e6b0ca124f948234fff656a71d8ec7659bb4322cbc18caa8",
+    "guard_source_sha256": "3f7142734eb26eb5d6277671b04299bbd0d167be085da14082726feff95274bf",
+    "records_received": 52,
+    "matched_calls": 52,
+    "same_spawn_tick_health_decrease_count": 0,
+    "first_processed_state_proven": false,
+    "dropped": 0,
+    "faults": 0,
+    "game_state_writes": 0,
+    "world_crc32": "ff3776e0",
+    "cecil_path_hash": "5af1a276",
+    "ttl_ms": 125000,
+    "qualified": false,
+    "original_getter_restored": true,
+    "original_damage_restored": true,
+    "pre_arm_original_bodies_verified": true,
+    "setup_seconds": 0.3221897741314024,
+    "armed": true,
+    "release_requested_ms": 1794442303847.1167,
+    "release_completed_ms": 1794442304520.8853,
+    "gameplay_window_start_ms": 1794442305876.0305,
+    "total_calls": 52,
+    "unknown_victim_calls": 0,
+    "non_main_calls": 0,
+    "getter_calls": 1,
+    "getter_other_threads": 0,
+    "in_flight": 0,
+    "detach_errors": [],
+    "enabled": false,
+    "stop_reason": "host requested",
+    "tls_bound": true,
+    "tls_index": 0,
+    "tls_bound_ms": 1794442304523,
+    "getter_restored": true,
+    "damage_restored": true,
+    "armed_ms": 1794442303832,
+    "expires_ms": 1794442428832,
+    "binding_expires_ms": 1794442305832,
+    "stopped_ms": 1794442336021,
+    "observed_ms": 1794442336042,
+    "native_qualified": false,
+    "gameplay_window_end_ms": 1794442335962.0234,
+    "stop_result": {
+      "stopped": true,
+      "detach_errors": []
+    },
+    "detached": true,
+    "coverage": {
+      "armed_ms": 1794442303832,
+      "expires_ms": 1794442428832,
+      "stopped_ms": 1794442336021,
+      "last_observed_ms": 1794442336042,
+      "gameplay_window_start_ms": 1794442305876.0305,
+      "gameplay_window_end_ms": 1794442335962.0234,
+      "observed_overlap_ms": 30085.992919921875,
+      "entire_gameplay_window_covered": true,
+      "meaning": "observed listener lifetime overlap; not complete gameplay/event proof"
+    },
+    "trace_status": "OBSERVED_MATCHED_EVENTS",
+    "tls_binding_thread_matches_server": true
+  },
+  "observational_costs": {
+    "scope": "nonidentical natural matches; four game processes only, excludes host controller; not causal hook overhead",
+    "uninstrumented_server_one_cpu_percent": 3.525,
+    "instrumented_server_one_cpu_percent": 3.889,
+    "uninstrumented_server_end_rss_mib": 48.97,
+    "instrumented_server_end_rss_mib": 101.18,
+    "frida_setup_seconds": 0.3221897741314024
+  }
+}

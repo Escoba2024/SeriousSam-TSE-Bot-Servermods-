@@ -1,0 +1,41 @@
+{
+  "scope": "FAILED_PRE_GAMEPLAY_LAUNCH_WITH_SEPARATE_NORMAL_RECOVERY",
+  "window": "arena012public-v3-checked-swap0-trial-1-002450",
+  "status": "FAIL",
+  "errors": [
+    "AssertionError()",
+    "cleanup botB:AssertionError()",
+    "post-close:not_normally_closed:botB"
+  ],
+  "original_cleanup": {
+    "server": {
+      "identified": true,
+      "closed": true
+    },
+    "botA": {
+      "identified": true,
+      "closed": true
+    },
+    "vanilla": {
+      "identified": true,
+      "closed": true
+    },
+    "botB": {
+      "identified": false,
+      "closed": false
+    }
+  },
+  "recovery": {
+    "utc": "2026-11-12T00:28:30.816801+00:00",
+    "finished_utc": "2026-11-12T00:28:34.558660+00:00",
+    "method": "PID/start/module/inode/cwd/cgroup/Wineprefix bound regular WM_DELETE_WINDOW, no force",
+    "botB_normally_closed": true,
+    "all_roles_quiescent": true,
+    "display_closed": true,
+    "botB_closed_log_bytes": 675500,
+    "botB_closed_log_sha256": "876c722193e7904930524a0b63c16e44cb03045361f2a1e49e9dc3374b2254c0",
+    "original_result_remains": "FAIL",
+    "comparison_accepted": false
+  },
+  "automatic_comparison_or_release_acceptance": false
+}

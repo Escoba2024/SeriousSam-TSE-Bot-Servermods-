@@ -1067,24 +1067,37 @@ static bool BotCecilPatrolStatic(CPlayer* player){
     ref&&!(ref->GetFlags()&ENF_DELETED)&&ref->GetRenderType()==CEntity::RT_BRUSH&&
     !(ref->GetPhysicsFlags()&EPF_MOVABLE)&&ref->en_pwoWorld==player->GetWorld()&&BotCecilIsClass(ref,"WorldBase","World Base");
 }
-static void BotCecilBouncerApproach(CPlayer* player,const SSupplyState& s,botcore::CecilMotion& move){
-  const int source=s.navigator.SourceSlot(s.goal);
-  if(!BotCecilBouncerBindingValid()||!BotCecilBouncerMetadata()||!move.active||move.arrived||move.stuck||move.relocated||
-     !std::isfinite(move.up)||move.up<=0||move.up>1||move.flags!=42||move.hop!=12||s.hop!=12||
-     (source!=8&&source!=11)||s.blocked.size()!=193||s.blocked[source]||s.blocked[12]||
+static bool BotCecilBouncerContext(CPlayer* player,const SSupplyState& s){
+  if(!BotCecilBouncerBindingValid()||!BotCecilBouncerMetadata()||s.blocked.size()!=193||
      !s.playable||!BotCecilFrameReady(player)||!player->GetWorld()||!std::isfinite(player->GetHealth())||player->GetHealth()<=0||!player->m_penWeapons||
      (player->GetFlags()&ENF_DELETED)||player->en_ulID!=s.entity||
      (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH)||
-     player->en_vGravityDir(1)!=0||player->en_vGravityDir(2)!=-1||player->en_vGravityDir(3)!=0)return;
+     player->en_vGravityDir(1)!=0||player->en_vGravityDir(2)!=-1||player->en_vGravityDir(3)!=0)return false;
   CEntity* ref=player->en_penReference;
   if(ref&&((ref->GetFlags()&ENF_DELETED)||ref->en_pwoWorld!=player->GetWorld()||
-     ref->GetRenderType()!=CEntity::RT_BRUSH||(ref->GetPhysicsFlags()&EPF_MOVABLE)))return;
-  for(int axis=1;axis<=3;++axis)if(!std::isfinite(player->en_vCurrentTranslationAbsolute(axis)))return;
-  // A brief missing reference during STAND/CROUCH does not prevent a queued
-  // ordinary up action from jumping at later contact (native009). Native010
-  // also records an ordinary jump before contact on11-to12. Remove only that
-  // request on these bound approaches; no support/arrival/air authority is
-  // synthesized. Flags, radius, navigator jump clock and later edges stay intact.
+     ref->GetRenderType()!=CEntity::RT_BRUSH||(ref->GetPhysicsFlags()&EPF_MOVABLE)))return false;
+  for(int axis=1;axis<=3;++axis)if(!std::isfinite(player->en_vCurrentTranslationAbsolute(axis)))return false;
+  return true;
+}
+static bool BotCecilBouncerApproaching(CPlayer* player,const SSupplyState& s){
+  const int source=s.navigator.SourceSlot(s.goal);
+  return (source==8||source==11)&&s.hop==12&&BotCecilBouncerContext(player,s)&&
+    !s.blocked[source]&&!s.blocked[12];
+}
+static void BotCecilBouncerApproach(CPlayer* player,const SSupplyState& s,botcore::CecilMotion& move,
+    bool reachedApproach=false){
+  if(!move.active||move.arrived||move.stuck||move.relocated||!std::isfinite(move.up)||
+     move.up<=0||move.up>1||move.flags!=42||!BotCecilBouncerContext(player,s))return;
+  const int source=s.navigator.SourceSlot(s.goal);
+  const bool approach=(source==8||source==11)&&move.hop==12&&s.hop==12&&
+    !s.blocked[source]&&!s.blocked[12];
+  const bool departure=reachedApproach&&source==12&&move.hop==34&&s.hop==34&&
+    !s.blocked[12]&&!s.blocked[34];
+  if(!approach&&!departure)return;
+  // Native011 can advance a reached8/11-to12 approach before actual pad contact
+  // and emit ordinary UP on that same Update. Retain only this stack-local
+  // qualified transition; later12-to34 updates keep the authored jump behavior.
+  // No support, velocity, radius, flag, deadline or navigator clock is changed.
   move.up=0;
 }
 static bool BotCecilAtNode(CPlayer* player,int node){
@@ -1353,9 +1366,10 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   const bool flightCarried=BotCecilFlightFresh(player,s,now)&&BotCecilFlightEdge(s);
   const int previousSource=s.navigator.SourceSlot(s.goal),previousHop=s.hop;
   const bool reachedHop=BotCecilAtNode(player,previousHop);
+  const bool reachedBouncerApproach=reachedHop&&BotCecilBouncerApproaching(player,s);
   auto move=s.navigator.Update(BotSupplyGraph(),s.blocked.data(),s.blocked.size(),in);s.hop=move.hop;
   BotCecilApproachCapture(s,tick,now,previousSource,previousHop,reachedHop,move);
-  BotCecilBouncerApproach(player,s,move);
+  BotCecilBouncerApproach(player,s,move,reachedBouncerApproach);
   if(s.flightFinishing){
     if(!flightCarried||!move.active||move.arrived||move.stuck||move.relocated||!BotCecilFlightEdge(s)){
       BotCecilFlightEnd(s,slot,tick,now,"edge_changed");return result;

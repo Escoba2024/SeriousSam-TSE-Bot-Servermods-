@@ -2399,6 +2399,189 @@ void bouncer009Fixture(int run=0){
 }
 
 
+
+
+void bouncer012RecordedArrivals(){
+ // Twenty actual action/state observations from each completed011 repeat
+ // approach: 567(874..893),566(1245..1264),568(1227..1246). They are replay
+ // inputs, never a simulated claim that altered actions produce these states.
+ const float rows[3][20][10]={{{-35.945057f,23.888506f,63.125618f,-17.151722f,2.613635f,0.020367f,54,0,1.000000f,0.000000f},
+{-36.802643f,24.019188f,63.126625f,-17.151722f,2.613636f,0.020169f,54,0,0.000000f,0.000000f},
+{-37.660194f,24.149864f,63.123463f,-17.151037f,2.613532f,-0.063247f,0,0,0.000000f,0.000000f},
+{-38.517746f,24.205542f,63.120300f,-17.151037f,1.113532f,-0.063247f,0,0,0.000000f,0.000000f},
+{-39.375298f,24.186218f,63.117138f,-17.151037f,-0.386468f,-0.063247f,0,0,1.000000f,0.000000f},
+{-40.232849f,24.091894f,63.113976f,-17.151037f,-1.886469f,-0.063247f,0,0,0.000000f,0.000000f},
+{-41.081093f,24.006838f,63.110847f,-16.964874f,-1.701130f,-0.062560f,193,0,0.000000f,0.000000f},
+{-41.958542f,24.006838f,63.101589f,-17.549017f,0.000000f,-0.185146f,193,0,0.000000f,0.000000f},
+{-42.835987f,24.006838f,63.091820f,-17.548903f,0.000000f,-0.195399f,193,0,1.000000f,0.000000f},
+{-43.713428f,24.006838f,63.081730f,-17.548840f,0.000000f,-0.201816f,193,0,0.000000f,0.000000f},
+{-44.590874f,24.006838f,63.071838f,-17.548885f,0.000000f,-0.197798f,193,0,0.000000f,0.000000f},
+{-45.468319f,24.006838f,63.061977f,-17.548893f,0.000000f,-0.197194f,193,0,0.000000f,0.000000f},
+{-46.345764f,24.006838f,63.052151f,-17.548901f,0.000000f,-0.196498f,193,0,0.000000f,0.000000f},
+{-47.223209f,24.006838f,63.042320f,-17.548901f,0.000000f,-0.196591f,193,0,1.000000f,11.000000f},
+{-47.723179f,24.121937f,63.036720f,53.062492f,73.184364f,-77.255417f,0,0,0.000000f,0.000000f},
+{-45.108070f,28.421154f,59.238602f,52.302174f,85.984360f,-75.962387f,0,0,0.000000f,0.000000f},
+{-42.529591f,32.645370f,55.505932f,51.569626f,84.484367f,-74.653427f,0,0,0.000000f,0.000000f},
+{-39.989609f,36.794590f,51.837624f,50.799618f,82.984375f,-73.366158f,0,0,0.000000f,0.000000f},
+{-37.486835f,40.868809f,48.234436f,50.055431f,81.484383f,-72.063782f,0,0,1.000000f,11.000000f},
+{-35.023304f,44.868027f,44.695164f,49.270634f,79.984383f,-70.785461f,0,0,0.000000f,0.000000f}},
+{{-50.963764f,23.917864f,54.056622f,0.069690f,1.868470f,14.130307f,194,0,1.000000f,0.000000f},
+{-50.960545f,24.005585f,54.720013f,0.064421f,1.754427f,13.267855f,194,0,0.000000f,0.000000f},
+{-50.960323f,24.093304f,55.383392f,0.004413f,1.754396f,13.267616f,0,0,0.000000f,0.000000f},
+{-50.960102f,24.106024f,56.046772f,0.004413f,0.254396f,13.267616f,0,0,0.000000f,0.000000f},
+{-50.959881f,24.043743f,56.710152f,0.004413f,-1.245604f,13.267616f,0,0,1.000000f,0.000000f},
+{-50.959663f,24.005875f,57.369305f,0.004385f,-0.757370f,13.183064f,193,0,0.000000f,0.000000f},
+{-50.963932f,24.005875f,58.044292f,-0.085350f,0.000000f,13.499725f,193,0,0.000000f,0.000000f},
+{-50.968719f,24.005875f,58.719276f,-0.095715f,0.000000f,13.499650f,193,0,0.000000f,0.000000f},
+{-50.973858f,24.005875f,59.394257f,-0.102770f,0.000000f,13.499605f,193,0,1.000000f,11.000000f},
+{-50.977531f,24.192781f,59.894241f,69.743164f,72.391014f,-62.723866f,0,0,0.000000f,0.000000f},
+{-47.548618f,27.737331f,56.805298f,68.578247f,70.891014f,-61.778900f,0,0,0.000000f,0.000000f},
+{-44.178795f,31.206882f,53.762543f,67.396454f,69.391014f,-60.855133f,0,0,0.000000f,0.000000f},
+{-40.867104f,34.601433f,50.767174f,66.233810f,67.891014f,-59.907364f,0,0,1.000000f,11.000000f},
+{-37.614326f,37.920982f,47.818218f,65.055511f,66.391014f,-58.979134f,0,0,0.000000f,0.000000f},
+{-34.419395f,41.165535f,44.917000f,63.898643f,64.891014f,-58.024330f,0,0,0.000000f,0.000000f},
+{-31.283041f,44.335087f,42.062618f,62.727089f,63.391014f,-57.087601f,0,0,0.000000f,0.000000f},
+{-28.204081f,47.429638f,39.256516f,61.579193f,61.891014f,-56.122025f,0,0,0.000000f,0.000000f},
+{-25.183224f,50.449188f,36.497841f,60.417145f,60.391014f,-55.173531f,0,0,1.000000f,11.000000f},
+{-22.219181f,53.393738f,33.788124f,59.280846f,58.891014f,-54.194340f,0,0,0.000000f,0.000000f},
+{-19.312664f,56.263290f,31.126532f,58.130360f,57.391014f,-53.231857f,0,4,0.000000f,0.000000f}},
+{{-36.433613f,23.964180f,63.126343f,-17.151722f,2.613642f,0.018246f,54,0,1.000000f,0.000000f},
+{-37.291199f,24.094862f,63.127243f,-17.151722f,2.613643f,0.018034f,54,0,0.000000f,0.000000f},
+{-38.148750f,24.225538f,63.123882f,-17.150997f,2.613533f,-0.067232f,0,0,0.000000f,0.000000f},
+{-39.006302f,24.281216f,63.120522f,-17.150997f,1.113533f,-0.067232f,0,0,0.000000f,0.000000f},
+{-39.863853f,24.261892f,63.117161f,-17.150997f,-0.386467f,-0.067232f,0,0,0.000000f,0.000000f},
+{-40.721405f,24.167568f,63.113800f,-17.150997f,-1.886467f,-0.067232f,0,0,1.000000f,0.000000f},
+{-41.561981f,24.008350f,63.110504f,-16.811531f,-3.184344f,-0.065901f,193,0,0.000000f,0.000000f},
+{-42.439426f,24.008350f,63.100826f,-17.548923f,0.000000f,-0.193595f,193,0,0.000000f,0.000000f},
+{-43.316868f,24.008350f,63.090591f,-17.548794f,0.000000f,-0.204703f,193,0,0.000000f,0.000000f},
+{-44.194305f,24.008350f,63.080009f,-17.548721f,0.000000f,-0.211670f,193,0,0.000000f,0.000000f},
+{-45.071743f,24.008350f,63.069637f,-17.548777f,0.000000f,-0.207412f,193,0,1.000000f,0.000000f},
+{-45.949181f,24.008350f,63.059303f,-17.548784f,0.000000f,-0.206717f,193,0,0.000000f,0.000000f},
+{-46.826622f,24.008350f,63.049007f,-17.548792f,0.000000f,-0.205920f,193,0,0.000000f,0.000000f},
+{-47.326588f,24.008350f,63.043137f,53.059448f,73.181099f,-77.261307f,0,0,0.000000f,0.000000f},
+{-44.724285f,27.592405f,59.235367f,52.046066f,71.681099f,-76.155396f,0,0,0.000000f,0.000000f},
+{-42.159737f,31.101460f,55.492401f,51.290947f,70.181099f,-74.859322f,0,0,1.000000f,11.000000f},
+{-39.631519f,34.535515f,51.815048f,50.564342f,68.681099f,-73.547058f,0,0,0.000000f,0.000000f},
+{-37.141541f,37.894569f,48.202213f,49.799545f,67.181099f,-72.256676f,0,0,0.000000f,0.000000f},
+{-34.689934f,41.178623f,44.653820f,49.032154f,65.681099f,-70.967834f,0,0,0.000000f,0.000000f},
+{-32.278229f,44.387680f,41.168934f,48.234093f,64.181099f,-69.697754f,0,0,0.000000f,0.000000f}}};
+ const int starts[]={874,1245,1227};
+ for(int run=0;run<3;++run)for(int diagnostics=0;diagnostics<2;++diagnostics){
+  bouncer009Fixture();bot_bDiagnostics=diagnostics;auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();
+  if(run==1){s.navigator.Reset();s.anchor=10;s.hop=11;
+   g.points[10].x=g.points[11].x;g.points[10].y=g.points[11].y;g.points[10].z=40;g.points[10].links={11};
+   botcore::CecilMotionInput prime;prime.alive=true;prime.anchor=10;prime.goal=34;
+   prime.x=g.points[10].x;prime.y=g.points[10].y;prime.z=g.points[10].z;s.navigator.Update(g,nullptr,0,prime);
+  }
+  auto baseline=s.navigator;const auto rng=s.rng;const auto generation=s.generation;
+  const int rays=rayCount,lookups=worldLookups;
+  for(int i=0;i<20;++i){
+   const auto& row=rows[run][i];const int tick=starts[run]+i;
+   player.pl.pl_PositionVector=FLOAT3D(row[0],row[1],row[2]);player.en_vCurrentTranslationAbsolute=FLOAT3D(row[3],row[4],row[5]);
+   floorEntity.en_ulID=(int)row[6];player.en_penReference=row[6]?&floorEntity:nullptr;player.m_pstState=static_cast<decltype(player.m_pstState)>((int)row[7]);
+   botcore::CecilMotionInput in;in.alive=true;in.anchor=run==1?10:7;in.goal=34;in.now=static_cast<float>(tick*.05f);
+   in.x=row[0];in.y=row[1];in.z=row[2];
+   const int source=s.navigator.SourceSlot(34),hop=s.hop;const bool reached=BotCecilAtNode(&player,hop);
+   const bool departure=reached&&BotCecilBouncerApproaching(&player,s);
+   const auto original=baseline.Update(g,s.blocked.data(),s.blocked.size(),in);
+   auto move=s.navigator.Update(g,s.blocked.data(),s.blocked.size(),in);s.hop=move.hop;
+   BotCecilApproachCapture(s,tick,in.now,source,hop,reached,move);
+   BotCecilBouncerApproach(&player,s,move,departure);
+   check(original.up==row[8],"012 actual011 requested pulse clocks match real navigator replay");
+   const double expected=(tick==887||tick==1253)?0:row[9]/11.;
+   check(std::fabs(move.up-expected)<1e-6,"012 suppresses only recorded arrival escape; zero and subsequent flight pulses unchanged");
+   if(diagnostics)check(s.approach.move.up==original.up,"012 raw capture retains all original UP pulses");
+   check(move.forward==original.forward&&move.strafe==original.strafe&&move.yaw_delta==original.yaw_delta&&
+    move.flags==original.flags&&move.hop==original.hop&&s.navigator.SourceSlot(34)==baseline.SourceSlot(34),
+    "012 original route geometry flags and navigator jump clock remain unchanged");
+   check(s.goalEntity==243&&s.goal==34&&s.goalDeadline==999&&s.rng==rng&&s.generation==generation&&
+    rayCount==rays&&worldLookups==lookups&&player.en_penReference==(row[6]?&floorEntity:nullptr)&&
+    player.en_vCurrentTranslationAbsolute(2)==row[4],"012 replay is passive for entity physics identity deadlines RNG and queries");
+  }
+ }
+ bot_bDiagnostics=false;
+}
+void bouncer012ArrivalGuards(){
+ for(int bad=0;bad<27;++bad){
+  bouncer009Fixture();auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();s.navigator.Reset();s.anchor=8;s.hop=12;
+  botcore::CecilMotionInput in;in.alive=true;in.anchor=8;in.goal=34;in.now=1;
+  in.x=g.points[8].x;in.y=g.points[8].y;in.z=g.points[8].z;s.navigator.Update(g,s.blocked.data(),s.blocked.size(),in);
+  player.pl.pl_PositionVector=FLOAT3D(-47.223209f,24.006838f,63.042320f);player.en_vCurrentTranslationAbsolute=FLOAT3D(-17,0,0);
+  if(bad==0)player.m_pstState=PST_FALL;
+  if(bad==1)s.blocked[8]=1;
+  const bool reached=BotCecilAtNode(&player,s.hop);
+  const bool captured=reached&&BotCecilBouncerApproaching(&player,s);
+  if(bad==0)player.m_pstState=PST_STAND;
+  if(bad==1)s.blocked[8]=0;
+  in.x=player.pl.pl_PositionVector(1);in.y=player.pl.pl_PositionVector(2);in.z=player.pl.pl_PositionVector(3);in.now=1.25;
+  auto move=s.navigator.Update(g,s.blocked.data(),s.blocked.size(),in);s.hop=move.hop;
+  check(move.up==1&&s.navigator.SourceSlot(34)==12&&s.hop==34,"012 guard starts with actual positive reached transition");
+  if(bad==2)player.m_pstState=PST_FALL;
+  if(bad==3)player.m_pstState=PST_SWIM;
+  if(bad==4)player.m_pstState=PST_DIVE;
+  if(bad==5)player.en_vGravityDir=FLOAT3D(0,1,0);
+  if(bad==6)floorEntity.flags=ENF_DELETED;
+  if(bad==7)floorEntity.entityPhysicsFlags=EPF_MOVABLE;
+  if(bad==8)floorEntity.en_pwoWorld=nullptr;
+  if(bad==9)floorEntity.type=CEntity::RT_MODEL;
+  if(bad==10)player.health=0;
+  if(bad==11)player.flags=ENF_DELETED;
+  if(bad==12)player.en_vCurrentTranslationAbsolute(1)=NAN;
+  if(bad==13)++_botSupplyMapSerial;
+  if(bad==14)_botSupplyMapReady=0;
+  if(bad==15)s.blocked[12]=1;
+  if(bad==16)s.blocked[34]=1;
+  if(bad==17)s.goal=33;
+  if(bad==18)move.hop=33;
+  if(bad==19)move.relocated=true;
+  if(bad==20)move.stuck=true;
+  if(bad==21)move.arrived=true;
+  if(bad==22)move.active=false;
+  if(bad==23)move.flags=2;
+  if(bad==24)s.entity++;
+  if(bad==25)g.points[12].links[0]=33;
+  //26: merely being on12-to34 has no previous qualified approach token.
+  const auto original=move;BotCecilBouncerApproach(&player,s,move,bad==26?false:captured);
+  check(move.up==original.up,"012 invalid pre/post context or unqualified later edge preserves UP");
+ }
+ for(int crouch=0;crouch<2;++crouch){
+  bouncer009Fixture();auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();s.navigator.Reset();s.anchor=8;s.hop=12;
+  botcore::CecilMotionInput in;in.alive=true;in.anchor=8;in.goal=34;in.now=1;in.x=g.points[8].x;in.y=g.points[8].y;in.z=g.points[8].z;s.navigator.Update(g,nullptr,0,in);
+  player.pl.pl_PositionVector=FLOAT3D(-47.223209f,24.006838f,63.042320f);player.m_pstState=crouch?PST_CROUCH:PST_STAND;player.en_penReference=nullptr;
+  const bool captured=BotCecilAtNode(&player,s.hop)&&BotCecilBouncerApproaching(&player,s);
+  in.x=player.pl.pl_PositionVector(1);in.y=player.pl.pl_PositionVector(2);in.z=player.pl.pl_PositionVector(3);in.now=1.25;
+  auto move=s.navigator.Update(g,nullptr,0,in);s.hop=move.hop;BotCecilBouncerApproach(&player,s,move,captured);
+  check(captured&&move.up==0&&player.en_penReference==nullptr,"012 valid STAND/CROUCH nullref transition only removes UP");
+  in.now=1.5;auto next=s.navigator.Update(g,nullptr,0,in);s.hop=next.hop;BotCecilBouncerApproach(&player,s,next);
+  check(next.up==1,"012 next12-to34 pulse remains authored after one-call token expires");
+ }
+}
+
+void bouncer012Native011Arrival(){
+ // Actual011 repeated-run arrival positions: local2/g5 tick887 and
+ // local1/g6 tick1253. Real Tick/Update pipeline; no simulated physics.
+ for(int source:{8,11})for(int diagnostics=0;diagnostics<2;++diagnostics){
+  bouncer009Fixture();bot_bDiagnostics=diagnostics;auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();
+  s.navigator.Reset();s.anchor=source;s.hop=12;s.goalSince=1;s.goalDeadline=999;s.mappedWeaponGoal=true;items.back().item.weapon=7;
+  const int tick=source==8?887:1253;
+  botcore::CecilMotionInput in;in.alive=true;in.anchor=source;in.goal=34;in.now=static_cast<float>((tick-5)*.05f);
+  in.x=g.points[source].x;in.y=g.points[source].y;in.z=g.points[source].z;
+  const auto initial=s.navigator.Update(g,s.blocked.data(),s.blocked.size(),in);
+  BotCecilApproachCapture(s,tick-5,in.now,source,12,false,initial);
+  player.pl.pl_PositionVector=source==8?FLOAT3D(-47.223209f,24.006838f,63.042320f):FLOAT3D(-50.973858f,24.005875f,59.394257f);
+  player.en_vCurrentTranslationAbsolute=source==8?FLOAT3D(-17.548901f,0,-.196591f):FLOAT3D(-.102770f,0,13.499605f);
+  floorEntity.en_ulID=193;player.en_penReference=&floorEntity;const auto rng=s.rng;
+  const auto out=BotSupplyTick(&player,0,tick,1000);
+  check(out.active&&out.up==0&&out.flags==42&&s.navigator.SourceSlot(34)==12&&s.hop==34,
+    "012 actual011 same-Update approach arrival cannot emit ordinary UP onto12-to34");
+  if(diagnostics)check(s.approach.move.up==1&&s.approach.reached,
+    "012 raw arrival diagnostic still records original positive UP and reached hop");
+  check(s.goalEntity==243&&s.goal==34&&s.goalDeadline==999&&s.rng==rng&&player.en_penReference==&floorEntity&&
+    player.en_vCurrentTranslationAbsolute(2)==0,"012 arrival suppression does not modify live support velocity goal deadline or RNG");
+ }
+ bot_bDiagnostics=false;
+}
+
 void bouncer011Native010Replay(){
  // Actual010 local2/gen7 ticks1025..1035. Recorded trajectory is input only;
  // this checks native decision outputs, not an Engine physics simulation.
@@ -3033,7 +3216,7 @@ void flightVisibleOwnership(){
 }
 int main(){
  flightVisibleOwnership();flightLossRegression();flightLossGuards();
- boundedSupplySegment(); approachArrivalGeometry();approach008Transitions();bouncer009Transitions();bouncer010Native009Replay();bouncer011Native010Replay();approachElevenDiagnostics();approachDiagnostics();approachDeathRespawnDiagnostics();supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
+ boundedSupplySegment(); approachArrivalGeometry();approach008Transitions();bouncer009Transitions();bouncer010Native009Replay();bouncer011Native010Replay();bouncer012Native011Arrival();bouncer012RecordedArrivals();bouncer012ArrivalGuards();approachElevenDiagnostics();approachDiagnostics();approachDeathRespawnDiagnostics();supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
  itemTransit49();itemTransit49Guards();
  liquidProjection48();
  importantTransit48();importantPatrol48();

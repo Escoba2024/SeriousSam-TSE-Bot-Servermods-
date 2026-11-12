@@ -1,0 +1,2903 @@
+{
+  "scope": "Read-only causal audit of completed012 diagnostic; no controlled efficacy or release claim",
+  "qualified": false,
+  "window": "arena012hook2-checked-swap1-trial-1-001915",
+  "observed_wall_seconds": 120.10664893710054,
+  "candidate_dll_sha256": "e049557795e85a5b6676612500ee93c23f4d61233eead757f43b4e8d6bff43c0",
+  "ranged_mask": "0x3df8",
+  "time_semantics": "Ages are original native game clock minus spawn clock from audited inventory. Driver tick and diagnostic time identify ordering only, not general wall time. Censored route summaries stop at loggedtick2600; native denominator uses the source report final snapshot clocks.",
+  "source_report_sha256": "76d74d7b64aca4e76ff9429557cb42b8c97b79df0c0a7b536f536c80715de661",
+  "raw_sha256": {
+    "botA.log": "5c22b4e4aa18a5ecef8d37f1f7c6e71c48859edb4fb3ee80ab0f38f85e90105c",
+    "inventory.jsonl": "d2f14f21029d95b17ac849629484aa551b840fe52d024fa74feec5ac4d343c2f",
+    "result.json": "4d240294d80cd01a5f295f8b655ea4ba5880e19159f50094f7c20279d7b44443"
+  },
+  "denominator": {
+    "lives": 13,
+    "acquired": 10,
+    "completed_without": 1,
+    "censored_without": 2
+  },
+  "weapon_ids": {
+    "4": "SingleShotgun",
+    "5": "DoubleShotgun",
+    "7": "Minigun",
+    "8": "Rocket",
+    "9": "Grenade",
+    "11": "Flamer",
+    "12": "Laser",
+    "13": "Sniper",
+    "14": "IronCannon"
+  },
+  "lives": [
+    {
+      "local": 0,
+      "global_slot": 0,
+      "entity": 565,
+      "generation": 6,
+      "spawn_driver_tick": 206,
+      "death_driver_tick": 504,
+      "first_ranged_pickup_driver_tick": 257,
+      "spawn_clock": 0.8500001430511475,
+      "first_ranged_sample_clock": 3.3999979496002197,
+      "first_ranged_sample_age_seconds": 2.549998,
+      "observed_life_seconds": 14.950042,
+      "right_censored": false,
+      "inventory_samples": 163,
+      "first_inventory_line": 6,
+      "last_inventory_line": 492,
+      "note": "Shorter successful life; full denominator retained, detailed causal claim not made.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 282,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 206,
+          "weapon": 11,
+          "anchor": 128,
+          "attempt": 0,
+          "eligible": 6,
+          "chosen": 248,
+          "path_distance": 97.049558,
+          "score": 134.185706
+        },
+        {
+          "log_line": 283,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 206,
+          "entity": 248,
+          "anchor": 128,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.558168,
+          "distance": 0.658168
+        },
+        {
+          "log_line": 284,
+          "tag": "CecilGoal",
+          "tick": 206,
+          "entity": 248,
+          "kind": 0,
+          "weapon": 11,
+          "anchor": 128,
+          "mapped": 1,
+          "deadline": 31.649
+        },
+        {
+          "log_line": 361,
+          "tag": "CecilPickup",
+          "tick": 257,
+          "old": 3,
+          "owned": 11,
+          "goal_entity": 248
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 330,
+          "tick": 220,
+          "source": 89,
+          "hop": 90,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 343,
+          "tick": 240,
+          "source": 90,
+          "hop": 54,
+          "nav": 1,
+          "support": 0
+        }
+      ],
+      "pre_acquisition_state_samples": 2,
+      "sampled_nav0_visible1_count": 0,
+      "first_goal": {
+        "log_line": 284,
+        "tag": "CecilGoal",
+        "tick": 206,
+        "entity": 248,
+        "kind": 0,
+        "weapon": 11,
+        "anchor": 128,
+        "mapped": 1,
+        "deadline": 31.649
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {}
+    },
+    {
+      "local": 1,
+      "global_slot": 2,
+      "entity": 566,
+      "generation": 6,
+      "spawn_driver_tick": 206,
+      "death_driver_tick": 1060,
+      "first_ranged_pickup_driver_tick": 449,
+      "spawn_clock": 0.8500001430511475,
+      "first_ranged_sample_clock": 13.000031471252441,
+      "first_ranged_sample_age_seconds": 12.150031,
+      "observed_life_seconds": 42.699621,
+      "right_censored": false,
+      "inventory_samples": 762,
+      "first_inventory_line": 4,
+      "last_inventory_line": 1144,
+      "note": "Shorter successful life; full denominator retained, detailed causal claim not made.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 294,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 206,
+          "weapon": 9,
+          "anchor": 175,
+          "attempt": 0,
+          "eligible": 6,
+          "chosen": 544,
+          "path_distance": 176.560713,
+          "score": 196.548788
+        },
+        {
+          "log_line": 295,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 206,
+          "entity": 544,
+          "anchor": 175,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 1.36896,
+          "distance": 1.46896
+        },
+        {
+          "log_line": 296,
+          "tag": "CecilGoal",
+          "tick": 206,
+          "entity": 544,
+          "kind": 0,
+          "weapon": 9,
+          "anchor": 175,
+          "mapped": 1,
+          "deadline": 45.042
+        },
+        {
+          "log_line": 512,
+          "tag": "CecilPickup",
+          "tick": 449,
+          "old": 3,
+          "owned": 259,
+          "goal_entity": 544
+        },
+        {
+          "log_line": 513,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 449,
+          "entity": 544,
+          "mapped": 1,
+          "deadline": 45.042,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 10.3,
+          "owned": 259
+        },
+        {
+          "log_line": 514,
+          "tag": "CecilGoalEnd",
+          "tick": 449,
+          "entity": 544,
+          "reason": "unavailable"
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 331,
+          "tick": 220,
+          "source": 75,
+          "hop": 99,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 365,
+          "tick": 260,
+          "source": 99,
+          "hop": 58,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 383,
+          "tick": 300,
+          "source": 163,
+          "hop": 58,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 390,
+          "tick": 320,
+          "source": 0,
+          "hop": 4,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 416,
+          "tick": 360,
+          "source": 5,
+          "hop": 102,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 467,
+          "tick": 400,
+          "source": 102,
+          "hop": 112,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 497,
+          "tick": 420,
+          "source": 112,
+          "hop": 111,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 504,
+          "tick": 440,
+          "source": 111,
+          "hop": 175,
+          "nav": 1,
+          "support": 1
+        }
+      ],
+      "pre_acquisition_state_samples": 12,
+      "sampled_nav0_visible1_count": 0,
+      "first_goal": {
+        "log_line": 296,
+        "tag": "CecilGoal",
+        "tick": 206,
+        "entity": 544,
+        "kind": 0,
+        "weapon": 9,
+        "anchor": 175,
+        "mapped": 1,
+        "deadline": 45.042
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 1
+      }
+    },
+    {
+      "local": 2,
+      "global_slot": 3,
+      "entity": 567,
+      "generation": 6,
+      "spawn_driver_tick": 206,
+      "death_driver_tick": 583,
+      "first_ranged_pickup_driver_tick": 375,
+      "spawn_clock": 0.8500001430511475,
+      "first_ranged_sample_clock": 9.350017547607422,
+      "first_ranged_sample_age_seconds": 8.500017,
+      "observed_life_seconds": 18.949984,
+      "right_censored": false,
+      "inventory_samples": 390,
+      "first_inventory_line": 4,
+      "last_inventory_line": 588,
+      "note": "Shorter successful life; full denominator retained, detailed causal claim not made.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 306,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 206,
+          "weapon": 11,
+          "anchor": 128,
+          "attempt": 0,
+          "eligible": 6,
+          "chosen": 248,
+          "path_distance": 107.991466,
+          "score": 149.502185
+        },
+        {
+          "log_line": 307,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 206,
+          "entity": 248,
+          "anchor": 128,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.558168,
+          "distance": 0.658168
+        },
+        {
+          "log_line": 308,
+          "tag": "CecilGoal",
+          "tick": 206,
+          "entity": 248,
+          "kind": 0,
+          "weapon": 11,
+          "anchor": 128,
+          "mapped": 1,
+          "deadline": 34.108
+        },
+        {
+          "log_line": 427,
+          "tag": "CecilPickup",
+          "tick": 375,
+          "old": 3,
+          "owned": 1027,
+          "goal_entity": 248
+        },
+        {
+          "log_line": 428,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 375,
+          "entity": 248,
+          "mapped": 1,
+          "deadline": 34.108,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 10.3,
+          "owned": 1027
+        },
+        {
+          "log_line": 429,
+          "tag": "CecilGoalEnd",
+          "tick": 375,
+          "entity": 248,
+          "reason": "unavailable"
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 332,
+          "tick": 220,
+          "source": 93,
+          "hop": 91,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 366,
+          "tick": 260,
+          "source": 91,
+          "hop": 54,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 378,
+          "tick": 280,
+          "source": 54,
+          "hop": 113,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 403,
+          "tick": 340,
+          "source": 113,
+          "hop": 128,
+          "nav": 1,
+          "support": 1
+        }
+      ],
+      "pre_acquisition_state_samples": 8,
+      "sampled_nav0_visible1_count": 0,
+      "first_goal": {
+        "log_line": 308,
+        "tag": "CecilGoal",
+        "tick": 206,
+        "entity": 248,
+        "kind": 0,
+        "weapon": 11,
+        "anchor": 128,
+        "mapped": 1,
+        "deadline": 34.108
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 1
+      }
+    },
+    {
+      "local": 3,
+      "global_slot": 4,
+      "entity": 568,
+      "generation": 6,
+      "spawn_driver_tick": 206,
+      "death_driver_tick": 2037,
+      "first_ranged_pickup_driver_tick": 1758,
+      "spawn_clock": 0.8500001430511475,
+      "first_ranged_sample_clock": 78.45018768310547,
+      "first_ranged_sample_age_seconds": 77.600188,
+      "observed_life_seconds": 91.601042,
+      "right_censored": false,
+      "inventory_samples": 758,
+      "first_inventory_line": 4,
+      "last_inventory_line": 2286,
+      "note": "77.600s: initial Flamer/Grenade contention, failed Laser86\u2192176 endcontact; subsequent Minigun goal while physically cycling near Laser launch/reacquire84/86/176 with source\u22121, then Minigun lost1413. Laser selected1453, later acquired1758. No12\u219234 approach in this life before acquisition.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 318,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 206,
+          "weapon": 11,
+          "anchor": 128,
+          "attempt": 0,
+          "eligible": 6,
+          "chosen": 248,
+          "path_distance": 147.2722,
+          "score": 185.071874
+        },
+        {
+          "log_line": 319,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 206,
+          "entity": 248,
+          "anchor": 128,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.558168,
+          "distance": 0.658168
+        },
+        {
+          "log_line": 320,
+          "tag": "CecilGoal",
+          "tick": 206,
+          "entity": 248,
+          "kind": 0,
+          "weapon": 11,
+          "anchor": 128,
+          "mapped": 1,
+          "deadline": 40.036
+        },
+        {
+          "log_line": 431,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 375,
+          "entity": 248,
+          "mapped": 1,
+          "deadline": 40.036,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 10.3,
+          "owned": 3
+        },
+        {
+          "log_line": 432,
+          "tag": "CecilGoalEnd",
+          "tick": 375,
+          "entity": 248,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 491,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 415,
+          "weapon": 9,
+          "anchor": 175,
+          "attempt": 0,
+          "eligible": 4,
+          "chosen": 544,
+          "path_distance": 170.18676,
+          "score": 180.357222
+        },
+        {
+          "log_line": 492,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 415,
+          "entity": 544,
+          "anchor": 175,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 1.36896,
+          "distance": 1.46896
+        },
+        {
+          "log_line": 493,
+          "tag": "CecilGoal",
+          "tick": 415,
+          "entity": 544,
+          "kind": 0,
+          "weapon": 9,
+          "anchor": 175,
+          "mapped": 1,
+          "deadline": 55.808
+        },
+        {
+          "log_line": 516,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 449,
+          "entity": 544,
+          "mapped": 1,
+          "deadline": 55.808,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 20.75,
+          "owned": 3
+        },
+        {
+          "log_line": 517,
+          "tag": "CecilGoalEnd",
+          "tick": 449,
+          "entity": 544,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 520,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 449,
+          "weapon": 12,
+          "anchor": 176,
+          "attempt": 0,
+          "eligible": 2,
+          "chosen": 267,
+          "path_distance": 147.585246,
+          "score": 285.186717
+        },
+        {
+          "log_line": 521,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 449,
+          "entity": 267,
+          "anchor": 176,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.498947,
+          "distance": 0.598947
+        },
+        {
+          "log_line": 522,
+          "tag": "CecilGoal",
+          "tick": 449,
+          "entity": 267,
+          "kind": 0,
+          "weapon": 12,
+          "anchor": 176,
+          "mapped": 1,
+          "deadline": 53.608
+        },
+        {
+          "log_line": 837,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 845,
+          "entity": 267,
+          "mapped": 1,
+          "deadline": 53.608,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 22.45,
+          "owned": 3
+        },
+        {
+          "log_line": 838,
+          "tag": "CecilGoalEnd",
+          "tick": 845,
+          "entity": 267,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 840,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 845,
+          "weapon": 7,
+          "anchor": 34,
+          "attempt": 0,
+          "eligible": 1,
+          "chosen": 243,
+          "path_distance": 220.033058,
+          "score": 376.157593
+        },
+        {
+          "log_line": 841,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 845,
+          "entity": 243,
+          "anchor": 34,
+          "render": 4,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 373,
+          "length": 1.258371,
+          "distance": 1.309612
+        },
+        {
+          "log_line": 842,
+          "tag": "CecilGoal",
+          "tick": 845,
+          "entity": 243,
+          "kind": 0,
+          "weapon": 7,
+          "anchor": 34,
+          "mapped": 1,
+          "deadline": 85.572
+        },
+        {
+          "log_line": 1404,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 1413,
+          "entity": 243,
+          "mapped": 1,
+          "deadline": 85.572,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 42.25,
+          "owned": 3
+        },
+        {
+          "log_line": 1405,
+          "tag": "CecilGoalEnd",
+          "tick": 1413,
+          "entity": 243,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 1406,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1413,
+          "weapon": 0,
+          "anchor": -1,
+          "attempt": 0,
+          "eligible": 0,
+          "chosen": 0,
+          "path_distance": "inf",
+          "score": "inf"
+        },
+        {
+          "log_line": 1435,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1433,
+          "weapon": 0,
+          "anchor": -1,
+          "attempt": 0,
+          "eligible": 0,
+          "chosen": 0,
+          "path_distance": "inf",
+          "score": "inf"
+        },
+        {
+          "log_line": 1456,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1453,
+          "weapon": 12,
+          "anchor": 176,
+          "attempt": 0,
+          "eligible": 1,
+          "chosen": 267,
+          "path_distance": 4.562072,
+          "score": 123.601933
+        },
+        {
+          "log_line": 1457,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 1453,
+          "entity": 267,
+          "anchor": 176,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.498947,
+          "distance": 0.598947
+        },
+        {
+          "log_line": 1458,
+          "tag": "CecilGoal",
+          "tick": 1453,
+          "entity": 267,
+          "kind": 0,
+          "weapon": 12,
+          "anchor": 176,
+          "mapped": 1,
+          "deadline": 92.65
+        },
+        {
+          "log_line": 1727,
+          "tag": "CecilPickup",
+          "tick": 1758,
+          "old": 3,
+          "owned": 2051,
+          "goal_entity": 267
+        },
+        {
+          "log_line": 1728,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 1758,
+          "entity": 267,
+          "mapped": 1,
+          "deadline": 92.65,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 72.65,
+          "owned": 2051
+        },
+        {
+          "log_line": 1729,
+          "tag": "CecilGoalEnd",
+          "tick": 1758,
+          "entity": 267,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 1730,
+          "tag": "CecilFlightFinish",
+          "tick": 1758,
+          "deadline": 92.65,
+          "action": "begin",
+          "source": 86,
+          "hop": 176
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 333,
+          "tick": 220,
+          "source": 151,
+          "hop": 95,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 380,
+          "tick": 280,
+          "source": 95,
+          "hop": 88,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 404,
+          "tick": 340,
+          "source": 88,
+          "hop": 46,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 421,
+          "tick": 360,
+          "source": 46,
+          "hop": 114,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 439,
+          "tick": 380,
+          "source": -1,
+          "hop": -1,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 499,
+          "tick": 420,
+          "source": -1,
+          "hop": 46,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 507,
+          "tick": 440,
+          "source": 46,
+          "hop": 114,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 529,
+          "tick": 460,
+          "source": -1,
+          "hop": 46,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 535,
+          "tick": 480,
+          "source": 46,
+          "hop": 47,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 561,
+          "tick": 520,
+          "source": 48,
+          "hop": 49,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 650,
+          "tick": 620,
+          "source": 97,
+          "hop": 94,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 681,
+          "tick": 660,
+          "source": 94,
+          "hop": 84,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 711,
+          "tick": 700,
+          "source": 84,
+          "hop": 86,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 747,
+          "tick": 760,
+          "source": 86,
+          "hop": 176,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 862,
+          "tick": 860,
+          "source": -1,
+          "hop": 84,
+          "nav": 0,
+          "support": 0
+        },
+        {
+          "log_line": 887,
+          "tick": 900,
+          "source": -1,
+          "hop": 86,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1421,
+          "tick": 1420,
+          "source": 86,
+          "hop": 95,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1462,
+          "tick": 1460,
+          "source": -1,
+          "hop": 86,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1492,
+          "tick": 1500,
+          "source": 95,
+          "hop": 84,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1681,
+          "tick": 1700,
+          "source": 84,
+          "hop": 86,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1696,
+          "tick": 1720,
+          "source": 86,
+          "hop": 176,
+          "nav": 1,
+          "support": 0
+        }
+      ],
+      "pre_acquisition_state_samples": 77,
+      "sampled_nav0_visible1_count": 9,
+      "first_goal": {
+        "log_line": 320,
+        "tag": "CecilGoal",
+        "tick": 206,
+        "entity": 248,
+        "kind": 0,
+        "weapon": 11,
+        "anchor": 128,
+        "mapped": 1,
+        "deadline": 40.036
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 5
+      }
+    },
+    {
+      "local": 0,
+      "global_slot": 0,
+      "entity": 565,
+      "generation": 7,
+      "spawn_driver_tick": 534,
+      "death_driver_tick": 2337,
+      "first_ranged_pickup_driver_tick": 1413,
+      "spawn_clock": 17.250022888183594,
+      "first_ranged_sample_clock": 61.1993522644043,
+      "first_ranged_sample_age_seconds": 43.949329,
+      "observed_life_seconds": 90.151932,
+      "right_censored": false,
+      "inventory_samples": 725,
+      "first_inventory_line": 495,
+      "last_inventory_line": 2651,
+      "note": "43.949s: Laser534 lost845; boundedFlightFinish to859. Minigun860 then progressing route with68\u21926 backtrack. Real234 launch afterarrival1324 rawUP0; pickup1413. New012 positivearrivalUP filter not exercised.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 567,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 534,
+          "weapon": 12,
+          "anchor": 176,
+          "attempt": 0,
+          "eligible": 2,
+          "chosen": 267,
+          "path_distance": 153.246384,
+          "score": 236.558774
+        },
+        {
+          "log_line": 568,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 534,
+          "entity": 267,
+          "anchor": 176,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.498947,
+          "distance": 0.598947
+        },
+        {
+          "log_line": 569,
+          "tag": "CecilGoal",
+          "tick": 534,
+          "entity": 267,
+          "kind": 0,
+          "weapon": 12,
+          "anchor": 176,
+          "mapped": 1,
+          "deadline": 58.767
+        },
+        {
+          "log_line": 827,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 845,
+          "entity": 267,
+          "mapped": 1,
+          "deadline": 58.767,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 26.7,
+          "owned": 3
+        },
+        {
+          "log_line": 828,
+          "tag": "CecilGoalEnd",
+          "tick": 845,
+          "entity": 267,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 829,
+          "tag": "CecilFlightFinish",
+          "tick": 845,
+          "deadline": 58.767,
+          "action": "begin",
+          "source": 86,
+          "hop": 176
+        },
+        {
+          "log_line": 853,
+          "tag": "CecilFlightFinish",
+          "tick": 859,
+          "deadline": 58.767,
+          "reason": "context",
+          "action": "end",
+          "source": 86,
+          "hop": 176
+        },
+        {
+          "log_line": 855,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 860,
+          "weapon": 7,
+          "anchor": 34,
+          "attempt": 0,
+          "eligible": 1,
+          "chosen": 243,
+          "path_distance": 220.033058,
+          "score": 369.931406
+        },
+        {
+          "log_line": 856,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 860,
+          "entity": 243,
+          "anchor": 34,
+          "render": 4,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 373,
+          "length": 1.258371,
+          "distance": 1.309612
+        },
+        {
+          "log_line": 857,
+          "tag": "CecilGoal",
+          "tick": 860,
+          "entity": 243,
+          "kind": 0,
+          "weapon": 7,
+          "anchor": 34,
+          "mapped": 1,
+          "deadline": 85.751
+        },
+        {
+          "log_line": 1395,
+          "tag": "CecilPickup",
+          "tick": 1413,
+          "old": 3,
+          "owned": 67,
+          "goal_entity": 243
+        },
+        {
+          "log_line": 1396,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 1413,
+          "entity": 243,
+          "mapped": 1,
+          "deadline": 85.751,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 43.0,
+          "owned": 67
+        },
+        {
+          "log_line": 1397,
+          "tag": "CecilGoalEnd",
+          "tick": 1413,
+          "entity": 243,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 1398,
+          "tag": "CecilFlightFinish",
+          "tick": 1413,
+          "deadline": 85.751,
+          "action": "begin",
+          "source": 12,
+          "hop": 34
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 572,
+          "tick": 540,
+          "source": -1,
+          "hop": 16,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 580,
+          "tick": 560,
+          "source": 16,
+          "hop": 152,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 595,
+          "tick": 580,
+          "source": 152,
+          "hop": 14,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 609,
+          "tick": 600,
+          "source": 14,
+          "hop": 98,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 675,
+          "tick": 660,
+          "source": 98,
+          "hop": 93,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 685,
+          "tick": 680,
+          "source": 93,
+          "hop": 84,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 749,
+          "tick": 780,
+          "source": 84,
+          "hop": 86,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 858,
+          "tick": 860,
+          "source": -1,
+          "hop": 84,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 869,
+          "tick": 880,
+          "source": 84,
+          "hop": 95,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 918,
+          "tick": 940,
+          "source": 95,
+          "hop": 161,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 925,
+          "tick": 960,
+          "source": 161,
+          "hop": 76,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 935,
+          "tick": 980,
+          "source": 76,
+          "hop": 43,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 990,
+          "tick": 1020,
+          "source": 43,
+          "hop": 170,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1007,
+          "tick": 1040,
+          "source": 67,
+          "hop": 68,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1018,
+          "tick": 1060,
+          "source": 68,
+          "hop": 6,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1066,
+          "tick": 1120,
+          "source": 67,
+          "hop": 68,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1098,
+          "tick": 1180,
+          "source": 68,
+          "hop": 6,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1144,
+          "tick": 1220,
+          "source": 6,
+          "hop": 7,
+          "nav": 1,
+          "support": 54
+        },
+        {
+          "log_line": 1178,
+          "tick": 1280,
+          "source": 7,
+          "hop": 8,
+          "nav": 1,
+          "support": 54
+        },
+        {
+          "log_line": 1208,
+          "tick": 1320,
+          "source": 8,
+          "hop": 12,
+          "nav": 1,
+          "support": 193
+        },
+        {
+          "log_line": 1256,
+          "tick": 1340,
+          "source": 12,
+          "hop": 34,
+          "nav": 1,
+          "support": 0
+        }
+      ],
+      "pre_acquisition_state_samples": 44,
+      "sampled_nav0_visible1_count": 3,
+      "first_goal": {
+        "log_line": 569,
+        "tag": "CecilGoal",
+        "tick": 534,
+        "entity": 267,
+        "kind": 0,
+        "weapon": 12,
+        "anchor": 176,
+        "mapped": 1,
+        "deadline": 58.767
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 2
+      }
+    },
+    {
+      "local": 2,
+      "global_slot": 3,
+      "entity": 567,
+      "generation": 7,
+      "spawn_driver_tick": 614,
+      "death_driver_tick": 1240,
+      "first_ranged_pickup_driver_tick": 845,
+      "spawn_clock": 21.249961853027344,
+      "first_ranged_sample_clock": 32.79978561401367,
+      "first_ranged_sample_age_seconds": 11.549824,
+      "observed_life_seconds": 31.349522,
+      "right_censored": false,
+      "inventory_samples": 511,
+      "first_inventory_line": 589,
+      "last_inventory_line": 1350,
+      "note": "Shorter successful life; full denominator retained, detailed causal claim not made.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 642,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 614,
+          "weapon": 12,
+          "anchor": 176,
+          "attempt": 0,
+          "eligible": 2,
+          "chosen": 267,
+          "path_distance": 122.764747,
+          "score": 233.943814
+        },
+        {
+          "log_line": 643,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 614,
+          "entity": 267,
+          "anchor": 176,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.498947,
+          "distance": 0.598947
+        },
+        {
+          "log_line": 644,
+          "tag": "CecilGoal",
+          "tick": 614,
+          "entity": 267,
+          "kind": 0,
+          "weapon": 12,
+          "anchor": 176,
+          "mapped": 1,
+          "deadline": 56.331
+        },
+        {
+          "log_line": 832,
+          "tag": "CecilPickup",
+          "tick": 845,
+          "old": 3,
+          "owned": 2051,
+          "goal_entity": 267
+        },
+        {
+          "log_line": 833,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 845,
+          "entity": 267,
+          "mapped": 1,
+          "deadline": 56.331,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 30.7,
+          "owned": 2051
+        },
+        {
+          "log_line": 834,
+          "tag": "CecilGoalEnd",
+          "tick": 845,
+          "entity": 267,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 835,
+          "tag": "CecilFlightFinish",
+          "tick": 845,
+          "deadline": 56.331,
+          "action": "begin",
+          "source": 86,
+          "hop": 176
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 649,
+          "tick": 620,
+          "source": 75,
+          "hop": 99,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 679,
+          "tick": 660,
+          "source": 99,
+          "hop": 156,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 710,
+          "tick": 700,
+          "source": 156,
+          "hop": 84,
+          "nav": 0,
+          "support": 0
+        },
+        {
+          "log_line": 785,
+          "tick": 800,
+          "source": 84,
+          "hop": 86,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 804,
+          "tick": 820,
+          "source": 86,
+          "hop": 176,
+          "nav": 1,
+          "support": 0
+        }
+      ],
+      "pre_acquisition_state_samples": 12,
+      "sampled_nav0_visible1_count": 3,
+      "first_goal": {
+        "log_line": 644,
+        "tag": "CecilGoal",
+        "tick": 614,
+        "entity": 267,
+        "kind": 0,
+        "weapon": 12,
+        "anchor": 176,
+        "mapped": 1,
+        "deadline": 56.331
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 1
+      }
+    },
+    {
+      "local": 1,
+      "global_slot": 2,
+      "entity": 566,
+      "generation": 7,
+      "spawn_driver_tick": 1094,
+      "death_driver_tick": 1590,
+      "first_ranged_pickup_driver_tick": 1327,
+      "spawn_clock": 45.249595642089844,
+      "first_ranged_sample_clock": 56.94941711425781,
+      "first_ranged_sample_age_seconds": 11.699821,
+      "observed_life_seconds": 24.850082,
+      "right_censored": false,
+      "inventory_samples": 417,
+      "first_inventory_line": 1146,
+      "last_inventory_line": 1764,
+      "note": "Shorter successful life; full denominator retained, detailed causal claim not made.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 1045,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1094,
+          "weapon": 9,
+          "anchor": 175,
+          "attempt": 0,
+          "eligible": 2,
+          "chosen": 544,
+          "path_distance": 160.45612,
+          "score": 180.403059
+        },
+        {
+          "log_line": 1046,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 1094,
+          "entity": 544,
+          "anchor": 175,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 1.36896,
+          "distance": 1.46896
+        },
+        {
+          "log_line": 1047,
+          "tag": "CecilGoal",
+          "tick": 1094,
+          "entity": 544,
+          "kind": 0,
+          "weapon": 9,
+          "anchor": 175,
+          "mapped": 1,
+          "deadline": 86.751
+        },
+        {
+          "log_line": 1227,
+          "tag": "CecilPickup",
+          "tick": 1327,
+          "old": 3,
+          "owned": 259,
+          "goal_entity": 544
+        },
+        {
+          "log_line": 1228,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 1327,
+          "entity": 544,
+          "mapped": 1,
+          "deadline": 86.751,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 54.7,
+          "owned": 259
+        },
+        {
+          "log_line": 1229,
+          "tag": "CecilGoalEnd",
+          "tick": 1327,
+          "entity": 544,
+          "reason": "unavailable"
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 1051,
+          "tick": 1100,
+          "source": 89,
+          "hop": 157,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1099,
+          "tick": 1180,
+          "source": 157,
+          "hop": 58,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1126,
+          "tick": 1200,
+          "source": 0,
+          "hop": 4,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1145,
+          "tick": 1220,
+          "source": 4,
+          "hop": 5,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1152,
+          "tick": 1240,
+          "source": 5,
+          "hop": 102,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1180,
+          "tick": 1280,
+          "source": 102,
+          "hop": 112,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1189,
+          "tick": 1300,
+          "source": 112,
+          "hop": 111,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1210,
+          "tick": 1320,
+          "source": 111,
+          "hop": 175,
+          "nav": 1,
+          "support": 1
+        }
+      ],
+      "pre_acquisition_state_samples": 12,
+      "sampled_nav0_visible1_count": 0,
+      "first_goal": {
+        "log_line": 1047,
+        "tag": "CecilGoal",
+        "tick": 1094,
+        "entity": 544,
+        "kind": 0,
+        "weapon": 9,
+        "anchor": 175,
+        "mapped": 1,
+        "deadline": 86.751
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 1
+      }
+    },
+    {
+      "local": 2,
+      "global_slot": 3,
+      "entity": 567,
+      "generation": 8,
+      "spawn_driver_tick": 1270,
+      "death_driver_tick": 1917,
+      "first_ranged_pickup_driver_tick": null,
+      "spawn_clock": 54.049461364746094,
+      "first_ranged_sample_clock": null,
+      "first_ranged_sample_age_seconds": null,
+      "observed_life_seconds": 32.401215,
+      "right_censored": false,
+      "inventory_samples": 534,
+      "first_inventory_line": 1351,
+      "last_inventory_line": 2150,
+      "note": "32.401s endedwithout: Grenade1270 lost1327 tolocal1; Minigun1327 lost1413 tolocal0; noeligible1413/1433. Laser1453 with repeatedvisiblecombatyield enroute165\u219284, lost1758 tolocal3; FlightFinish until1785; IronCannon1786, death1917.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 1168,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1270,
+          "weapon": 9,
+          "anchor": 175,
+          "attempt": 0,
+          "eligible": 2,
+          "chosen": 544,
+          "path_distance": 183.518623,
+          "score": 204.129088
+        },
+        {
+          "log_line": 1169,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 1270,
+          "entity": 544,
+          "anchor": 175,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 1.36896,
+          "distance": 1.46896
+        },
+        {
+          "log_line": 1170,
+          "tag": "CecilGoal",
+          "tick": 1270,
+          "entity": 544,
+          "kind": 0,
+          "weapon": 9,
+          "anchor": 175,
+          "mapped": 1,
+          "deadline": 99.412
+        },
+        {
+          "log_line": 1231,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 1327,
+          "entity": 544,
+          "mapped": 1,
+          "deadline": 99.412,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 63.5,
+          "owned": 3
+        },
+        {
+          "log_line": 1232,
+          "tag": "CecilGoalEnd",
+          "tick": 1327,
+          "entity": 544,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 1234,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1327,
+          "weapon": 7,
+          "anchor": 34,
+          "attempt": 0,
+          "eligible": 1,
+          "chosen": 243,
+          "path_distance": 234.925039,
+          "score": 386.720526
+        },
+        {
+          "log_line": 1235,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 1327,
+          "entity": 243,
+          "anchor": 34,
+          "render": 4,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 373,
+          "length": 1.258371,
+          "distance": 1.309612
+        },
+        {
+          "log_line": 1236,
+          "tag": "CecilGoal",
+          "tick": 1327,
+          "entity": 243,
+          "kind": 0,
+          "weapon": 7,
+          "anchor": 34,
+          "mapped": 1,
+          "deadline": 111.35
+        },
+        {
+          "log_line": 1401,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 1413,
+          "entity": 243,
+          "mapped": 1,
+          "deadline": 111.35,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 66.35,
+          "owned": 3
+        },
+        {
+          "log_line": 1402,
+          "tag": "CecilGoalEnd",
+          "tick": 1413,
+          "entity": 243,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 1403,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1413,
+          "weapon": 0,
+          "anchor": -1,
+          "attempt": 0,
+          "eligible": 0,
+          "chosen": 0,
+          "path_distance": "inf",
+          "score": "inf"
+        },
+        {
+          "log_line": 1434,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1433,
+          "weapon": 0,
+          "anchor": -1,
+          "attempt": 0,
+          "eligible": 0,
+          "chosen": 0,
+          "path_distance": "inf",
+          "score": "inf"
+        },
+        {
+          "log_line": 1452,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1453,
+          "weapon": 12,
+          "anchor": 176,
+          "attempt": 0,
+          "eligible": 1,
+          "chosen": 267,
+          "path_distance": 77.570708,
+          "score": 198.148554
+        },
+        {
+          "log_line": 1453,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 1453,
+          "entity": 267,
+          "anchor": 176,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.498947,
+          "distance": 0.598947
+        },
+        {
+          "log_line": 1454,
+          "tag": "CecilGoal",
+          "tick": 1453,
+          "entity": 267,
+          "kind": 0,
+          "weapon": 12,
+          "anchor": 176,
+          "mapped": 1,
+          "deadline": 92.65
+        },
+        {
+          "log_line": 1723,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 1758,
+          "entity": 267,
+          "mapped": 1,
+          "deadline": 92.65,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 72.65,
+          "owned": 3
+        },
+        {
+          "log_line": 1724,
+          "tag": "CecilGoalEnd",
+          "tick": 1758,
+          "entity": 267,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 1725,
+          "tag": "CecilFlightFinish",
+          "tick": 1758,
+          "deadline": 92.65,
+          "action": "begin",
+          "source": 84,
+          "hop": 86
+        },
+        {
+          "log_line": 1758,
+          "tag": "CecilFlightFinish",
+          "tick": 1785,
+          "deadline": 92.65,
+          "reason": "arrived",
+          "action": "end",
+          "source": 84,
+          "hop": 86
+        },
+        {
+          "log_line": 1762,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1786,
+          "weapon": 14,
+          "anchor": 71,
+          "attempt": 0,
+          "eligible": 3,
+          "chosen": 311,
+          "path_distance": 165.112891,
+          "score": 176.833818
+        },
+        {
+          "log_line": 1763,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 1786,
+          "entity": 311,
+          "anchor": 71,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.558079,
+          "distance": 0.658079
+        },
+        {
+          "log_line": 1764,
+          "tag": "CecilGoal",
+          "tick": 1786,
+          "entity": 311,
+          "kind": 0,
+          "weapon": 14,
+          "anchor": 71,
+          "mapped": 1,
+          "deadline": 122.138
+        },
+        {
+          "log_line": 1865,
+          "tag": "CecilGoalEnd",
+          "tick": 1917,
+          "entity": 311,
+          "reason": "death"
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 1182,
+          "tick": 1280,
+          "source": 151,
+          "hop": 92,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1190,
+          "tick": 1300,
+          "source": 92,
+          "hop": 93,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1212,
+          "tick": 1320,
+          "source": 156,
+          "hop": 93,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1258,
+          "tick": 1340,
+          "source": 156,
+          "hop": 92,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1373,
+          "tick": 1400,
+          "source": 92,
+          "hop": 161,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1420,
+          "tick": 1420,
+          "source": -1,
+          "hop": 92,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1442,
+          "tick": 1440,
+          "source": 92,
+          "hop": 161,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1461,
+          "tick": 1460,
+          "source": -1,
+          "hop": 165,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1472,
+          "tick": 1480,
+          "source": 165,
+          "hop": 84,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1680,
+          "tick": 1700,
+          "source": 84,
+          "hop": 86,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1800,
+          "tick": 1800,
+          "source": 86,
+          "hop": 95,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1839,
+          "tick": 1860,
+          "source": 95,
+          "hop": 161,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1851,
+          "tick": 1880,
+          "source": 161,
+          "hop": 76,
+          "nav": 1,
+          "support": 1
+        }
+      ],
+      "pre_acquisition_state_samples": 32,
+      "sampled_nav0_visible1_count": 7,
+      "first_goal": {
+        "log_line": 1170,
+        "tag": "CecilGoal",
+        "tick": 1270,
+        "entity": 544,
+        "kind": 0,
+        "weapon": 9,
+        "anchor": 175,
+        "mapped": 1,
+        "deadline": 99.412
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 3,
+        "death": 1
+      }
+    },
+    {
+      "local": 1,
+      "global_slot": 2,
+      "entity": 566,
+      "generation": 8,
+      "spawn_driver_tick": 1622,
+      "death_driver_tick": 2275,
+      "first_ranged_pickup_driver_tick": 1973,
+      "spawn_clock": 71.64977264404297,
+      "first_ranged_sample_clock": 89.20084381103516,
+      "first_ranged_sample_age_seconds": 17.551071,
+      "observed_life_seconds": 32.701996,
+      "right_censored": false,
+      "inventory_samples": 539,
+      "first_inventory_line": 1765,
+      "last_inventory_line": 2577,
+      "note": "17.551s: Laser1622 lost1758; reacquisition, Flamer1820; incidentalDoubleShotgun1973 owned3\u219219. No12\u219234 approach or observedcombatyield beforepickup.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 1625,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1622,
+          "weapon": 12,
+          "anchor": 176,
+          "attempt": 0,
+          "eligible": 3,
+          "chosen": 267,
+          "path_distance": 112.160462,
+          "score": 223.286496
+        },
+        {
+          "log_line": 1626,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 1622,
+          "entity": 267,
+          "anchor": 176,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.498947,
+          "distance": 0.598947
+        },
+        {
+          "log_line": 1627,
+          "tag": "CecilGoal",
+          "tick": 1622,
+          "entity": 267,
+          "kind": 0,
+          "weapon": 12,
+          "anchor": 176,
+          "mapped": 1,
+          "deadline": 104.955
+        },
+        {
+          "log_line": 1721,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 1758,
+          "entity": 267,
+          "mapped": 1,
+          "deadline": 104.955,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 81.1,
+          "owned": 3
+        },
+        {
+          "log_line": 1722,
+          "tag": "CecilGoalEnd",
+          "tick": 1758,
+          "entity": 267,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 1817,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1820,
+          "weapon": 11,
+          "anchor": 128,
+          "attempt": 0,
+          "eligible": 3,
+          "chosen": 248,
+          "path_distance": 124.560078,
+          "score": 168.714086
+        },
+        {
+          "log_line": 1818,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 1820,
+          "entity": 248,
+          "anchor": 128,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.558168,
+          "distance": 0.658168
+        },
+        {
+          "log_line": 1819,
+          "tag": "CecilGoal",
+          "tick": 1820,
+          "entity": 248,
+          "kind": 0,
+          "weapon": 11,
+          "anchor": 128,
+          "mapped": 1,
+          "deadline": 118.492
+        },
+        {
+          "log_line": 1903,
+          "tag": "CecilPickup",
+          "tick": 1973,
+          "old": 3,
+          "owned": 19,
+          "goal_entity": 248
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 1645,
+          "tick": 1640,
+          "source": 83,
+          "hop": 87,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1663,
+          "tick": 1660,
+          "source": 87,
+          "hop": 88,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1679,
+          "tick": 1700,
+          "source": 88,
+          "hop": 160,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1703,
+          "tick": 1740,
+          "source": 160,
+          "hop": 84,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1738,
+          "tick": 1760,
+          "source": -1,
+          "hop": -1,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1820,
+          "tick": 1820,
+          "source": -1,
+          "hop": 84,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1831,
+          "tick": 1840,
+          "source": 84,
+          "hop": 160,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1871,
+          "tick": 1920,
+          "source": 160,
+          "hop": 88,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1894,
+          "tick": 1960,
+          "source": 88,
+          "hop": 46,
+          "nav": 1,
+          "support": 0
+        }
+      ],
+      "pre_acquisition_state_samples": 17,
+      "sampled_nav0_visible1_count": 0,
+      "first_goal": {
+        "log_line": 1627,
+        "tag": "CecilGoal",
+        "tick": 1622,
+        "entity": 267,
+        "kind": 0,
+        "weapon": 12,
+        "anchor": 176,
+        "mapped": 1,
+        "deadline": 104.955
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 1
+      }
+    },
+    {
+      "local": 2,
+      "global_slot": 3,
+      "entity": 567,
+      "generation": 9,
+      "spawn_driver_tick": 1950,
+      "death_driver_tick": null,
+      "first_ranged_pickup_driver_tick": 2153,
+      "spawn_clock": 88.05077362060547,
+      "first_ranged_sample_clock": 98.25139617919922,
+      "first_ranged_sample_age_seconds": 10.200623,
+      "observed_life_seconds": 33.302032,
+      "right_censored": true,
+      "inventory_samples": 520,
+      "first_inventory_line": 2151,
+      "last_inventory_line": 2935,
+      "note": "Shorter successful life; full denominator retained, detailed causal claim not made.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 1885,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 1950,
+          "weapon": 13,
+          "anchor": 138,
+          "attempt": 0,
+          "eligible": 4,
+          "chosen": 401,
+          "path_distance": 149.995646,
+          "score": 194.246734
+        },
+        {
+          "log_line": 1886,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 1950,
+          "entity": 401,
+          "anchor": 138,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.62395,
+          "distance": 0.72395
+        },
+        {
+          "log_line": 1887,
+          "tag": "CecilGoal",
+          "tick": 1950,
+          "entity": 401,
+          "kind": 0,
+          "weapon": 13,
+          "anchor": 138,
+          "mapped": 1,
+          "deadline": 129.046
+        },
+        {
+          "log_line": 2022,
+          "tag": "CecilPickup",
+          "tick": 2153,
+          "old": 3,
+          "owned": 4099,
+          "goal_entity": 401
+        },
+        {
+          "log_line": 2023,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 2153,
+          "entity": 401,
+          "mapped": 1,
+          "deadline": 129.046,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 97.5,
+          "owned": 4099
+        },
+        {
+          "log_line": 2024,
+          "tag": "CecilGoalEnd",
+          "tick": 2153,
+          "entity": 401,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 2025,
+          "tag": "CecilGoal",
+          "tick": 2153,
+          "entity": 260,
+          "kind": 3,
+          "weapon": 0,
+          "anchor": 182
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 1896,
+          "tick": 1960,
+          "source": 16,
+          "hop": 17,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1938,
+          "tick": 2000,
+          "source": 17,
+          "hop": 20,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 1956,
+          "tick": 2020,
+          "source": 20,
+          "hop": 21,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 1976,
+          "tick": 2060,
+          "source": 21,
+          "hop": 19,
+          "nav": 1,
+          "support": 5
+        },
+        {
+          "log_line": 2001,
+          "tick": 2100,
+          "source": 19,
+          "hop": 18,
+          "nav": 1,
+          "support": 5
+        },
+        {
+          "log_line": 2013,
+          "tick": 2120,
+          "source": 18,
+          "hop": 138,
+          "nav": 1,
+          "support": 0
+        }
+      ],
+      "pre_acquisition_state_samples": 10,
+      "sampled_nav0_visible1_count": 0,
+      "first_goal": {
+        "log_line": 1887,
+        "tag": "CecilGoal",
+        "tick": 1950,
+        "entity": 401,
+        "kind": 0,
+        "weapon": 13,
+        "anchor": 138,
+        "mapped": 1,
+        "deadline": 129.046
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 1
+      }
+    },
+    {
+      "local": 3,
+      "global_slot": 4,
+      "entity": 568,
+      "generation": 7,
+      "spawn_driver_tick": 2070,
+      "death_driver_tick": null,
+      "first_ranged_pickup_driver_tick": 2223,
+      "spawn_clock": 94.05113983154297,
+      "first_ranged_sample_clock": 101.7516098022461,
+      "first_ranged_sample_age_seconds": 7.70047,
+      "observed_life_seconds": 27.301666,
+      "right_censored": true,
+      "inventory_samples": 218,
+      "first_inventory_line": 2289,
+      "last_inventory_line": 2933,
+      "note": "Shorter successful life; full denominator retained, detailed causal claim not made.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 1985,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 2070,
+          "weapon": 11,
+          "anchor": 128,
+          "attempt": 0,
+          "eligible": 4,
+          "chosen": 248,
+          "path_distance": 92.505599,
+          "score": 129.62985
+        },
+        {
+          "log_line": 1986,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 2070,
+          "entity": 248,
+          "anchor": 128,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.558168,
+          "distance": 0.658168
+        },
+        {
+          "log_line": 1987,
+          "tag": "CecilGoal",
+          "tick": 2070,
+          "entity": 248,
+          "kind": 0,
+          "weapon": 11,
+          "anchor": 128,
+          "mapped": 1,
+          "deadline": 124.089
+        },
+        {
+          "log_line": 2096,
+          "tag": "CecilPickup",
+          "tick": 2223,
+          "old": 3,
+          "owned": 1027,
+          "goal_entity": 248
+        },
+        {
+          "log_line": 2097,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 2223,
+          "entity": 248,
+          "mapped": 1,
+          "deadline": 124.089,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 103.5,
+          "owned": 1027
+        },
+        {
+          "log_line": 2098,
+          "tag": "CecilGoalEnd",
+          "tick": 2223,
+          "entity": 248,
+          "reason": "unavailable"
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 1997,
+          "tick": 2080,
+          "source": 83,
+          "hop": 87,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 2002,
+          "tick": 2100,
+          "source": 87,
+          "hop": 46,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 2015,
+          "tick": 2120,
+          "source": 46,
+          "hop": 114,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 2047,
+          "tick": 2180,
+          "source": 114,
+          "hop": 128,
+          "nav": 0,
+          "support": 1
+        }
+      ],
+      "pre_acquisition_state_samples": 8,
+      "sampled_nav0_visible1_count": 1,
+      "first_goal": {
+        "log_line": 1987,
+        "tag": "CecilGoal",
+        "tick": 2070,
+        "entity": 248,
+        "kind": 0,
+        "weapon": 11,
+        "anchor": 128,
+        "mapped": 1,
+        "deadline": 124.089
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 1
+      }
+    },
+    {
+      "local": 1,
+      "global_slot": 2,
+      "entity": 566,
+      "generation": 9,
+      "spawn_driver_tick": 2310,
+      "death_driver_tick": null,
+      "first_ranged_pickup_driver_tick": null,
+      "spawn_clock": 106.05187225341797,
+      "first_ranged_sample_clock": null,
+      "first_ranged_sample_age_seconds": null,
+      "observed_life_seconds": 15.300934,
+      "right_censored": true,
+      "inventory_samples": 237,
+      "first_inventory_line": 2578,
+      "last_inventory_line": 2935,
+      "note": "15.301s censoredwithout: Grenade2310 lost2342; Laser2382 via90/54/53/52/51\u219250; no12\u219234. Stillopen.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 2148,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 2310,
+          "weapon": 9,
+          "anchor": 175,
+          "attempt": 0,
+          "eligible": 2,
+          "chosen": 544,
+          "path_distance": 160.45612,
+          "score": 180.403059
+        },
+        {
+          "log_line": 2149,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 2310,
+          "entity": 544,
+          "anchor": 175,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 1.36896,
+          "distance": 1.46896
+        },
+        {
+          "log_line": 2150,
+          "tag": "CecilGoal",
+          "tick": 2310,
+          "entity": 544,
+          "kind": 0,
+          "weapon": 9,
+          "anchor": 175,
+          "mapped": 1,
+          "deadline": 147.551
+        },
+        {
+          "log_line": 2182,
+          "tag": "CecilSupplyDiagUnavailable",
+          "tick": 2342,
+          "entity": 544,
+          "mapped": 1,
+          "deadline": 147.551,
+          "reason": "render_type",
+          "render": 5,
+          "weapons_stay": 0,
+          "picked_mask": 0,
+          "since": 115.5,
+          "owned": 3
+        },
+        {
+          "log_line": 2183,
+          "tag": "CecilGoalEnd",
+          "tick": 2342,
+          "entity": 544,
+          "reason": "unavailable"
+        },
+        {
+          "log_line": 2210,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 2382,
+          "weapon": 12,
+          "anchor": 176,
+          "attempt": 0,
+          "eligible": 2,
+          "chosen": 267,
+          "path_distance": 109.841195,
+          "score": 232.032913
+        },
+        {
+          "log_line": 2211,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 2382,
+          "entity": 267,
+          "anchor": 176,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.498947,
+          "distance": 0.598947
+        },
+        {
+          "log_line": 2212,
+          "tag": "CecilGoal",
+          "tick": 2382,
+          "entity": 267,
+          "kind": 0,
+          "weapon": 12,
+          "anchor": 176,
+          "mapped": 1,
+          "deadline": 144.397
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 2159,
+          "tick": 2320,
+          "source": 89,
+          "hop": 157,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 2186,
+          "tick": 2360,
+          "source": -1,
+          "hop": -1,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 2234,
+          "tick": 2400,
+          "source": -1,
+          "hop": 90,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 2266,
+          "tick": 2440,
+          "source": -1,
+          "hop": 54,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 2272,
+          "tick": 2460,
+          "source": 54,
+          "hop": 53,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 2292,
+          "tick": 2480,
+          "source": 53,
+          "hop": 52,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 2307,
+          "tick": 2500,
+          "source": 52,
+          "hop": 51,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 2318,
+          "tick": 2520,
+          "source": 51,
+          "hop": 50,
+          "nav": 1,
+          "support": 1
+        }
+      ],
+      "pre_acquisition_state_samples": 15,
+      "sampled_nav0_visible1_count": 0,
+      "first_goal": {
+        "log_line": 2150,
+        "tag": "CecilGoal",
+        "tick": 2310,
+        "entity": 544,
+        "kind": 0,
+        "weapon": 9,
+        "anchor": 175,
+        "mapped": 1,
+        "deadline": 147.551
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {
+        "unavailable": 1
+      }
+    },
+    {
+      "local": 0,
+      "global_slot": 0,
+      "entity": 565,
+      "generation": 8,
+      "spawn_driver_tick": 2374,
+      "death_driver_tick": null,
+      "first_ranged_pickup_driver_tick": null,
+      "spawn_clock": 109.25206756591797,
+      "first_ranged_sample_clock": null,
+      "first_ranged_sample_age_seconds": null,
+      "observed_life_seconds": 12.100739,
+      "right_censored": true,
+      "inventory_samples": 91,
+      "first_inventory_line": 2654,
+      "last_inventory_line": 2935,
+      "note": "12.101s censoredwithout: Laser2374 via63/68/6/27/95/84/86. Stillopen.",
+      "events_until_first_acquisition_or_death": [
+        {
+          "log_line": 2197,
+          "tag": "CecilSupplyDiagSelection",
+          "tick": 2374,
+          "weapon": 12,
+          "anchor": 176,
+          "attempt": 0,
+          "eligible": 2,
+          "chosen": 267,
+          "path_distance": 143.601452,
+          "score": 253.736596
+        },
+        {
+          "log_line": 2198,
+          "tag": "CecilSupplyDiagConnector",
+          "tick": 2374,
+          "entity": 267,
+          "anchor": 176,
+          "render": -1,
+          "attempt": 0,
+          "valid": 1,
+          "clear": 1,
+          "hit": 0,
+          "length": 0.498947,
+          "distance": 0.598947
+        },
+        {
+          "log_line": 2199,
+          "tag": "CecilGoal",
+          "tick": 2374,
+          "entity": 267,
+          "kind": 0,
+          "weapon": 12,
+          "anchor": 176,
+          "mapped": 1,
+          "deadline": 147.818
+        }
+      ],
+      "sampled_route_transitions": [
+        {
+          "log_line": 2202,
+          "tick": 2380,
+          "source": 63,
+          "hop": 68,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 2218,
+          "tick": 2400,
+          "source": 68,
+          "hop": 6,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 2271,
+          "tick": 2460,
+          "source": 6,
+          "hop": 27,
+          "nav": 1,
+          "support": 1
+        },
+        {
+          "log_line": 2290,
+          "tick": 2480,
+          "source": 27,
+          "hop": 95,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 2306,
+          "tick": 2500,
+          "source": 95,
+          "hop": 84,
+          "nav": 1,
+          "support": 0
+        },
+        {
+          "log_line": 2327,
+          "tick": 2540,
+          "source": 84,
+          "hop": 86,
+          "nav": 1,
+          "support": 0
+        }
+      ],
+      "pre_acquisition_state_samples": 12,
+      "sampled_nav0_visible1_count": 0,
+      "first_goal": {
+        "log_line": 2199,
+        "tag": "CecilGoal",
+        "tick": 2374,
+        "entity": 267,
+        "kind": 0,
+        "weapon": 12,
+        "anchor": 176,
+        "mapped": 1,
+        "deadline": 147.818
+      },
+      "connector_rejections_observed": 0,
+      "goal_end_reasons": {}
+    }
+  ],
+  "limitations": [
+    "Sampled nav0/vis1 is an observed arbitration output, not a measured continuous duration or causal attribution.",
+    "Selection diagnostics report eligible candidates only; reasons excluding other entities are not fully observable.",
+    "Ordinary candidate visibility rejection/backoff is not exhaustively logged. No observed rejection does not prove no internal reject occurred.",
+    "Acquisition is owned-mask observation, not firing-ready/ammo/first-processed-state proof.",
+    "Available mapped item and clear endpoint connector do not prove successful physical traversal/contact."
+  ]
+}

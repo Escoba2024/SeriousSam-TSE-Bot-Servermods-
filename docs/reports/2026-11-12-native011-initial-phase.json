@@ -1,0 +1,1013 @@
+{
+  "scope": "READONLY_RETAINED_NATIVE_PHASE_FINDING_AND_OFFLINE_POLICY_REPLAY",
+  "native011_status_remains": "FAIL",
+  "new_runtime_performed": false,
+  "first_simulation_state_proven": false,
+  "windows": [
+    {
+      "window": "arena011public-checked-swap0-trial-1-000606",
+      "inventory_sha256": "849eb6fb7d527c1ce6ea6bceaa26eaae399da3c15882aa67ef87311b682910bb",
+      "samples": [
+        {
+          "line": 8,
+          "elapsed": 0.07571882591582835,
+          "game_tick": 0.9000001549720764,
+          "players": [
+            {
+              "slot": 5,
+              "present": true,
+              "spawned_tick": 0.0,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742471,
+              "render_type": 3,
+              "placement": [
+                18.0,
+                0.4749999940395355,
+                28.5,
+                30.0,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 6,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742471,
+              "render_type": 3,
+              "placement": [
+                -20.25,
+                0.4749999940395355,
+                32.25,
+                -60.0,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 7,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742471,
+              "render_type": 3,
+              "placement": [
+                70.875,
+                0.48249998688697815,
+                63.0,
+                90.0,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 8,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742471,
+              "render_type": 3,
+              "placement": [
+                -65.25,
+                12.107500076293945,
+                -69.75,
+                -135.0,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            }
+          ]
+        },
+        {
+          "line": 10,
+          "elapsed": 0.1165362629108131,
+          "game_tick": 0.9000001549720764,
+          "players": [
+            {
+              "slot": 0,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -75.75,
+                0.032499998807907104,
+                23.25,
+                -90.00000762939453,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 2,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                18.0,
+                0.032499998807907104,
+                -63.75,
+                179.99998474121094,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 3,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -21.0,
+                0.2199999839067459,
+                -9.75,
+                -137.5,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 4,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                32.25,
+                0.2199999839067459,
+                -3.0,
+                102.50000762939453,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            }
+          ]
+        },
+        {
+          "line": 11,
+          "elapsed": 0.1165362629108131,
+          "game_tick": 0.9000001549720764,
+          "players": [
+            {
+              "slot": 5,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                18.0,
+                0.3999999761581421,
+                28.5,
+                30.000001907348633,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 6,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -20.25,
+                0.3999999761581421,
+                32.25,
+                -60.00000762939453,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 7,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                70.875,
+                0.4074999690055847,
+                63.0,
+                90.00000762939453,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 8,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -65.25,
+                12.032500267028809,
+                -69.75,
+                -135.00001525878906,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            }
+          ]
+        },
+        {
+          "line": 12,
+          "elapsed": 0.1165362629108131,
+          "game_tick": 0.9000001549720764,
+          "players": [
+            {
+              "slot": 1,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -6.375,
+                0.032499998807907104,
+                80.625,
+                0.0,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 0,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -75.75,
+                0.032499998807907104,
+                23.25,
+                -90.00000762939453,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 2,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                18.0,
+                0.032499998807907104,
+                -63.75,
+                179.99998474121094,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 3,
+              "present": true,
+              "spawned_tick": 0.9000001549720764,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -21.0,
+                0.2199999839067459,
+                -9.75,
+                -137.5,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "window": "arena008public-checked-swap0-trial-1-225500",
+      "inventory_sha256": "70730ba843069654a21c6f26fb117c53840226bd7584a1714d7074bf563c3d15",
+      "samples": [
+        {
+          "line": 12,
+          "elapsed": 0.1249637040309608,
+          "game_tick": 0.7500001192092896,
+          "players": [
+            {
+              "slot": 5,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                18.0,
+                0.3999999761581421,
+                28.5,
+                30.000001907348633,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 6,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -20.25,
+                0.3999999761581421,
+                32.25,
+                -60.00000762939453,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 7,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                70.875,
+                0.4074999690055847,
+                63.0,
+                90.00000762939453,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 8,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -65.25,
+                12.032500267028809,
+                -69.75,
+                -135.00001525878906,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            }
+          ]
+        },
+        {
+          "line": 13,
+          "elapsed": 0.1249637040309608,
+          "game_tick": 0.7500001192092896,
+          "players": [
+            {
+              "slot": 0,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -75.75,
+                0.032499998807907104,
+                23.25,
+                -90.00000762939453,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 1,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -6.375,
+                0.032499998807907104,
+                80.625,
+                0.0,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 2,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                18.0,
+                0.032499998807907104,
+                -63.75,
+                179.99998474121094,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 3,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -21.0,
+                0.2199999839067459,
+                -9.75,
+                -137.5,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            }
+          ]
+        },
+        {
+          "line": 15,
+          "elapsed": 0.15734421997331083,
+          "game_tick": 0.7500001192092896,
+          "players": [
+            {
+              "slot": 5,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                18.0,
+                0.3999999761581421,
+                28.5,
+                30.000001907348633,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 6,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -20.25,
+                0.3999999761581421,
+                32.25,
+                -60.00000762939453,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 7,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                70.875,
+                0.4074999690055847,
+                63.0,
+                90.00000762939453,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 8,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742468,
+              "render_type": 3,
+              "placement": [
+                -65.25,
+                12.032500267028809,
+                -69.75,
+                -135.00001525878906,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            }
+          ]
+        },
+        {
+          "line": 17,
+          "elapsed": 0.18914965796284378,
+          "game_tick": 0.8000001311302185,
+          "players": [
+            {
+              "slot": 5,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742471,
+              "render_type": 3,
+              "placement": [
+                18.0,
+                0.32499998807907104,
+                28.5,
+                30.000001907348633,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                -1.5,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 6,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742471,
+              "render_type": 3,
+              "placement": [
+                -20.25,
+                0.32499998807907104,
+                32.25,
+                -60.0000114440918,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                -1.5,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": true,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 7,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742471,
+              "render_type": 3,
+              "placement": [
+                70.875,
+                0.3763999938964844,
+                63.0,
+                90.00000762939453,
+                -0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                -0.6219995617866516,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": false,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            },
+            {
+              "slot": 8,
+              "present": true,
+              "spawned_tick": 0.7500001192092896,
+              "health": 100.0,
+              "armor": 0.0,
+              "physics_flags": 1073742471,
+              "render_type": 3,
+              "placement": [
+                -65.25,
+                12.001399993896484,
+                -69.75,
+                -135.0000457763672,
+                0.0,
+                0.0
+              ],
+              "current_translation_absolute": [
+                0.0,
+                -0.622006893157959,
+                0.0
+              ],
+              "last_buttons": 0,
+              "support_is_null": false,
+              "weapons": {
+                "owned": 3,
+                "current": 2,
+                "wanted": 2
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "reference_sha256": "073f4d9af0c3a1075462716aef09f628913597b5c80c5670cc4578df9861e66c",
+  "original_entities_sha256": "7f595f2a7fc96a978b3467983e8f17c70d827f17a5f4ee887f9c7a1f20b1d350",
+  "original_instruction_evidence": {
+    "InitializePlayer": "60402d72 push 0x40000287; imported SetPhysicsFlags call",
+    "PostMoving": "603fc45f tests PLF_APPLIEDACTION at Player+0x380; absent path603fc46a calls SetUnconnected603fc490",
+    "SetUnconnected": "603fc4b2 ForceFullStop; 603fc4b8 reads physics+8;603fc4bd and al,0xfc;603fc4c0 SetPhysicsFlags",
+    "SetConnected": "603fc557 reads physics+8;603fc55a or al,3; setter follows",
+    "ApplyAction": "603fe92c tests PLF_NOTCONNECTED0x100;603fe931 calls SetConnected;603fe941 sets PLF_APPLIEDACTION0x80"
+  }
+}

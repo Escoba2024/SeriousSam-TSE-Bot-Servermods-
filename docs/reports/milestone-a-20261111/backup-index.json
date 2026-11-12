@@ -233,5 +233,22 @@
     "scope": "PROGRESS_NOT_RELEASE_ACCEPTANCE",
     "covers": "Build009 unqualified and closed failed-functional approach diagnostic; actual Public008 comparison; privately preserved Dev sync failure, static A1 export/disassembly, source bundle through3afde4f and publication010 receipt. Requires earlier original baseline, fixture and005006/007/008 deltas. Future010 fix and PublicController draft not included.",
     "drive_url": "https://drive.google.com/file/d/1wdJTpKufnbx9euMRJhr1vJW4Atgr7xn3/view"
+  },
+  "build011_native_damage_progress": {
+    "bytes": 25155401,
+    "sha256": "d7828bdaa1b8807cd88f76785b5d69235cf8cab331404f811d9378fbb282b174",
+    "repo_head": "f51436a0f458ca53799f84c5cff748fc15ec995c",
+    "regular_files_written_rehashed": 588,
+    "restored_bytes": 232152559,
+    "symlinks_indexed_not_materialized": 4,
+    "native_launch_from_restore": false,
+    "drive_uploaded": true,
+    "drive_id": "1nS6XNO2bfXi1R85WXA22qa8kMUNOiNNV",
+    "roundtrip_bytes": 25155401,
+    "roundtrip_sha256": "d7828bdaa1b8807cd88f76785b5d69235cf8cab331404f811d9378fbb282b174",
+    "roundtrip_verified": true,
+    "drive_url": "https://drive.google.com/file/d/1nS6XNO2bfXi1R85WXA22qa8kMUNOiNNV/view",
+    "scope": "PROGRESS_NOT_RELEASE_ACCEPTANCE",
+    "covers": "Unqualified010/011 builds, closed011 diagnostics, full life-denominator reports, failed Public011 initial-state guard, existing Dev local control, closed uninstrumented A1 control, immutable private A1v2/controller/x87 selftest, actual private Dev21BAD/2Disconnect logs, source bundle through f51436a. Does not include the subsequent first instrumented A1 window,012 fix or a final release. Requires original baseline and fixture backups."
   }
 }

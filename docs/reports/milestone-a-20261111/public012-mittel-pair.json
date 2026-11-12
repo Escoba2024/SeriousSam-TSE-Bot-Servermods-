@@ -1,0 +1,159 @@
+{
+  "scope": "TWO_ACTUAL_PRIVATE_UNINSTRUMENTED_WINE_WINDOWS_NOT_A3_ACCEPTANCE",
+  "windows": [
+    {
+      "window": "arena012public-v4-checked-swap0-trial-1-003511",
+      "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+      "seconds": 240.05832363199443,
+      "tier": 1,
+      "swap": false,
+      "controller_sha256": "32cba5a68ffb38004686f4ad742f1edcd3d4d7bddc4cbb96065a5c9167cabe3b",
+      "candidate_dll_sha256": "e049557795e85a5b6676612500ee93c23f4d61233eead757f43b4e8d6bff43c0",
+      "old_dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+      "all_roles_normally_closed": true,
+      "post_close_logs": {
+        "accepted": true,
+        "reasons": [],
+        "logs": {
+          "server": {
+            "sha256": "c5c70e3b8bee331134dbdcc14e73f7ef87ec9a6174110ec10eefbf5ece26c4ba",
+            "bytes": 45923,
+            "events": {
+              "bad_sync": [],
+              "sync_disconnect": [],
+              "crc_failure": [],
+              "crash": [],
+              "invalid_action": [],
+              "join_failure": []
+            },
+            "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+          },
+          "botA": {
+            "sha256": "b3a1cd305cf177243fda0b6e4b863af90bd6370d917252e1423183bfff158b1f",
+            "bytes": 211990,
+            "events": {
+              "bad_sync": [],
+              "sync_disconnect": [],
+              "crc_failure": [],
+              "crash": [],
+              "invalid_action": [],
+              "join_failure": []
+            },
+            "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+          },
+          "botB": {
+            "sha256": "4cd0174be47203ea564cbce7941e926fa230bcd92e9550731d598c206338345c",
+            "bytes": 1438792,
+            "events": {
+              "bad_sync": [],
+              "sync_disconnect": [],
+              "crc_failure": [],
+              "crash": [],
+              "invalid_action": [],
+              "join_failure": []
+            },
+            "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+          },
+          "vanilla": {
+            "sha256": "c2092b23d73bb8aed17807cca1e1fa4bf0dcb7467aee38085f5b9ad1460bef57",
+            "bytes": 9720,
+            "events": {
+              "bad_sync": [],
+              "sync_disconnect": [],
+              "crc_failure": [],
+              "crash": [],
+              "invalid_action": [],
+              "join_failure": []
+            },
+            "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+          }
+        }
+      },
+      "initial_reference_matches": true,
+      "common_spawn_tick": 0.9000001549720764,
+      "first_simulation_state_proven": false,
+      "errors": [],
+      "gameplay_qualified": false
+    },
+    {
+      "window": "arena012public-v4-checked-swap1-trial-1-004059",
+      "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+      "seconds": 240.03747053816915,
+      "tier": 1,
+      "swap": true,
+      "controller_sha256": "32cba5a68ffb38004686f4ad742f1edcd3d4d7bddc4cbb96065a5c9167cabe3b",
+      "candidate_dll_sha256": "e049557795e85a5b6676612500ee93c23f4d61233eead757f43b4e8d6bff43c0",
+      "old_dll_sha256": "7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835",
+      "all_roles_normally_closed": true,
+      "post_close_logs": {
+        "accepted": true,
+        "reasons": [],
+        "logs": {
+          "server": {
+            "sha256": "4e080058c5ab698bc71312ab1d3f8724eff77f28f766c67502598df65e4c5f33",
+            "bytes": 43459,
+            "events": {
+              "bad_sync": [],
+              "sync_disconnect": [],
+              "crc_failure": [],
+              "crash": [],
+              "invalid_action": [],
+              "join_failure": []
+            },
+            "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+          },
+          "botA": {
+            "sha256": "ef98a01c701c0e107011720e642876d64b3f14c6825759938f67afe19672f5cc",
+            "bytes": 1541036,
+            "events": {
+              "bad_sync": [],
+              "sync_disconnect": [],
+              "crc_failure": [],
+              "crash": [],
+              "invalid_action": [],
+              "join_failure": []
+            },
+            "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+          },
+          "botB": {
+            "sha256": "a6b409c654dbc72c7fb8c72612c96ee931b0c261e89d7ec0b0c025c01e0c43e9",
+            "bytes": 217702,
+            "events": {
+              "bad_sync": [],
+              "sync_disconnect": [],
+              "crc_failure": [],
+              "crash": [],
+              "invalid_action": [],
+              "join_failure": []
+            },
+            "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+          },
+          "vanilla": {
+            "sha256": "bd79fd44cf7b883c61d6b4c21a6e157dc6f4cbb557d2553c58c86094af09499e",
+            "bytes": 10126,
+            "events": {
+              "bad_sync": [],
+              "sync_disconnect": [],
+              "crc_failure": [],
+              "crash": [],
+              "invalid_action": [],
+              "join_failure": []
+            },
+            "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+          }
+        }
+      },
+      "initial_reference_matches": true,
+      "common_spawn_tick": 0.8000001311302185,
+      "first_simulation_state_proven": false,
+      "errors": [],
+      "gameplay_qualified": false
+    }
+  ],
+  "limitations": [
+    "Lifecycle and score analysis pending independent review",
+    "No causal damage attribution from inventory samples",
+    "No human difficulty verdict",
+    "No release or external WAN qualification"
+  ]
+}
