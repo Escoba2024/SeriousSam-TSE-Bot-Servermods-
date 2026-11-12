@@ -1,0 +1,48 @@
+{
+  "active_evidence_missing": null,
+  "all_four_lab_roots_quiescent": true,
+  "automatic_retry": false,
+  "both_displays_absent": true,
+  "candidate_source_commit": "b35397f024b8a8722a01178a08c06d3d40802f65",
+  "closed_logs_accepted": true,
+  "closed_logs_independently_rehashed": 4,
+  "errors": [],
+  "final_evidence_reasons": [],
+  "host_budget": {
+    "budget_pass_claim": false,
+    "cpu_busy_max_measured_percent": 54.80984340044743,
+    "disk_free_min_bytes": 14877208576,
+    "gameplay_max_sample_gap_seconds": 1.7419866758864373,
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_disk_free_bytes": 8589934592,
+      "min_mem_available_bytes": 1610612736,
+      "target_sample_interval_seconds": 1.0
+    },
+    "max_sample_gap_seconds": 46.80874357116409,
+    "mem_available_min_bytes": 1922699264,
+    "samples": 117,
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks"
+  },
+  "host_resources_sha256": "d9fc2a3bf60b26a8de72991b2160e83c5b9e3466c3068a5b25724470b1d82c20",
+  "initial_observed_state_matches_reference": true,
+  "instrumentation_requested": false,
+  "normal_roles_closed": [
+    "botA",
+    "botB",
+    "server",
+    "vanilla"
+  ],
+  "observed_seconds": 120.10978835891001,
+  "phases_count": 0,
+  "qualified": false,
+  "restoration_pass": true,
+  "restored_absent_paths_independently_checked": 0,
+  "restored_regular_files_independently_hashed": 640,
+  "result_sha256": "3bb37a8234830aed52fc815743879f16cf801807d2f65502682d62c55cc03c12",
+  "schedule_index": 0,
+  "scope": "UNINSTRUMENTED_CONTROL_ONLY_NOT_A3_ACCEPTANCE",
+  "status": "PASS_LIMITED_A3_DAMAGE_OBSERVATION_REVIEW_REQUIRED",
+  "utc": "2026-11-12T17:09:21.965875+00:00",
+  "window": "arena017public-damage-checked-swap0-trial-1-170346"
+}

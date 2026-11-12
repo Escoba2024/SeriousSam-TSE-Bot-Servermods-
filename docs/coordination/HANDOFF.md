@@ -1,39 +1,19 @@
 <!-- CURRENT_COMPLETION_BEGIN -->
-# Aktueller Fortsetzungsstand — 2026-11-12T15:58:19.551702+00:00
+# Aktuelle Fortsetzung — 2026-11-12T17:19:31.448044+00:00
 
-**A ist nicht abgeschlossen. B ist unbegonnen.** Dieser Abschnitt ersetzt frühere Statusaussagen weiter unten. Maßgeblich bleibt der Originalauftrag in /srv/tse-milestone-a-evidence-20261111/request.md; die vorhandenen Abnahmekriterien werden nicht abgeschwächt.
+**A ist nicht abgeschlossen; B unbegonnen. A2 ist live abgeschlossen.**
 
-## Erledigt und erhalten
+- A4-Fenster 165124: begrenzt bestanden, 423,836349 s und 24/24 Slotphasen; zwei Red-Neustarts. Vier Rollen normal geschlossen, vier Closed-Logs nachgehasht, 643 Dateien plus fünf Abwesenheiten unabhängig wiederhergestellt. Ergebnis-SHA256 5f87a9046d581d86db830c3db235a8d940278531ff963a1c45d68185b499c971. Vollständige Auswertung der 178 Leben und übrige Karten-/NAV-/Gefahrenabnahmen offen; alte FAILs erhalten.
+- Build017 bleibt unverändert b35397f / DLL a5a379aa, qualified=false, keine Produktionseinführung.
+- A3-Controller unabhängig READY und Root-Freeze 74b0465324c29fe94d99fe20ef4730dda2ef17461e3094ff02e5a3d3a2687505. Kontrolllauf 170346 ist nach 120,109788 s begrenzt bestanden und unabhängig restauriert; sechs instrumentierte Fenster stehen aus. Genau sieben vorab geplante einzelne Fenster, keine automatische Serie oder Wiederholung. Nach jedem Lauf tatsächlichen Close/Restore prüfen.
+- Colt-Fenster 171044 tatsächlich FAIL bei der Pitch-Gegenkalibrierung (−0,25 gegenüber −0,5 Grad/Pixel), noch vor Fire. PID1220467 exit1 nach43,88s; Original-FAIL erhalten, kein automatischer Wiederholungsversuch. Rootpostflight17:18:04UTC bestätigt3normaleCloses/4ruhendeLabroots/3ClosedLogs/664Dateien+9Abwesenheiten. Ergebnis-SHA256 e395aaf98377489c39442531969cc754bdec3190fe46a2050610d8f5e563f90e. Ursachenanalyse erforderlich; A1 bleibt offen.
+- Nach frischem Preflight17:18:16UTC läuft genau A3Index1 (Tier1, Swap0, Instrumentation1), Root-PID1221535. Index0 ist verbraucht; übrige Indizes2–6 unbegonnen. Ergebnis/Close/Restore dieses Fensters vor jedem Nachfolger prüfen.
+- Worker identify_latest_codex: ausschließlich geschlossene A4-Leben-/Navigationsanalyse. Worker finish_names_transaction: ausschließlich statischer Original-First-State-Vertrag und anschließbarer Versuchsplan. Beide eigene Claims; höchstens zwei aktive Worker. review_names_transaction idle.
+- Lokale Ausführung ist wieder tatsächlich verfügbar; Beleg environment-restored-resume3.json. Delta020-Drive-Nachweis bleibt vollständig. Delta021-Archiv, separate Wiederherstellung, neue lokale Übertragung und Drive-Rückdownload stehen aus. Keine Sicherung aus einem Entwurf ableiten.
+- Letzte tatsächliche GitHub-Veröffentlichung 973141bd entspricht lokal 4a485bf; spätere Dokumentation separat veröffentlichen und fetchen. Neuer Root-Doku-Quellstand d8189a8 vor diesem Checkpoint.
+- Weiterhin offen: A1, vollständiges A3/A4, Dauerprüfungen 3600/3600/7200 s für 1/4/8 Bots, vollständiger A5-Rollout. Originalauftrag und alle bestehenden Abnahmekriterien behalten Vorrang.
 
-A2 ist abgeschlossen: 458 Namen, davon unveränderte 208 plus genau 250 neue. Alle sechs Instanzen wurden zuerst auf Dev und anschließend einzeln umgestellt. Die abgeschlossene Transaktion belegt 48 global eindeutige eigene Botidentitäten, zwölf normal neu gestartete Clients und 51 geprüfte Nutzdateien. Den verbrauchten Namen-Stage nicht erneut anwenden.
-
-Der neue Kandidat ist weiterhin nicht produktiv verteilt. Public-Bots behalten DLL 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835, Dev behält 048/ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530. Die zuletzt geprüften effektiven und gespeicherten Spawn-Schutzwerte sind null. Frischer rein lesender Check am 12.11.2026 um 15:56:33 UTC bestätigt sechs Instanzen mit jeweils acht eigenen Bots, effektiven und gespeicherten Spawnwerten null und unveränderten DLLs. Hole hat zusätzlich einen nicht als eigener Bot zugeordneten UNKNOWN-Slot; keine Identitätsdeutung. Public-Logzähler bleiben 0/0, Dev 37 BAD / 3 Disconnects. Quittung: docs/reports/milestone-a-20261112/fleet-after-build017-observer.json. Ein Momentbild ersetzt keine Langzeit- oder Einzelbot-Aktivitätsprüfung.
-
-## Neueste tatsächliche Ergebnisse
-
-Build017 wurde erfolgreich aus b35397f024b8a8722a01178a08c06d3d40802f65 gebaut. DLL a5a379aadfd0cc376ad15a8368dd6814518e3f2da1fde22fdde9bd86f02abc5d, 428032 Bytes, Buildmanifest b4905cf1c279c6461ea892f159c16d3e92196901c6aa8d255bf62311a8e0e32f. Er ergänzt den unabhängig geprüften passiven Supply-Beobachter. Build allein ist keine Qualifikation.
-
-A4-Fenster 154453 bleibt FAIL nach drei Red-Station-Phasen und 246,391839 beobachteten Sekunden. 21/24 Slotphasen erfüllen alle vorhandenen Aktivitätsfelder; P0 A2, P1 B2 und P2 A2 haben die im Bericht benannten Waffen-/Feuerlücken. 437 dichte Zeilen erfassen sieben north68_6-Fenster; source87 wurde nicht erfasst. Root hat alle vier Rollen, Schlusslogs und 648 Wiederherstellungspfade unabhängig geschlossen bzw. geprüft. Ergebnis-SHA 7fa65885a2bf3e5a877d53cb09801aad3b4d7874df633fd0a31925cbe799813b. Bericht: docs/reports/2026-11-12-a4-build017-native-supply-observer.md. Kein nativer Test oder Build läuft nach diesem Abschluss.
-
-A1-Fenster 151250 bleibt als CPU-FAIL erhalten. Root identifizierte und beendete ausschließlich eine festhängende RDC-Quelltextsuche, die etwa einen CPU-Kern beanspruchte. Gleiche Zehnsekundenmessung: Host-CPU 57,5297 % vor und 37,0390 % nach der Bereinigung. Keine Spiel-, Renderer- oder Grenzänderung. Der genaue Prozessanteil am früheren 82,2857-%-Abbruch ist unbekannt.
-
-Der separat begründete einmalige unveränderte A1-V5-Folgeversuch 153533 scheiterte an der Achtsekunden-Flugfrist nach 16 bestätigten Eingaben. Kein Pickup, Schuss oder First-State-Nachweis. Maximaler gemessener CPU-Intervallwert 68,75 %. Alle drei Rollen, zwei Displays und 673 Wiederherstellungspfade sind geschlossen bzw. unabhängig geprüft. Ergebnis-SHA 814ea8b5ff9536cc1b5c63b0b999be3d018de1eda82c853b8be2a0a3ad5c28e7. Bericht: docs/reports/2026-11-12-a1-v5-cpu-correction-flight-followup.md.
-
-Die tatsächliche Flugspur landet vor dem Waffenpunkt. Originalauftrag A1 verlangt weder Bouncer noch Minigunroute; diese waren Entscheidungen der späteren Preparation-Spezifikation. Die unveränderten Retail-Routinen bestätigen den benutzbaren Start-Colt. Eine separate kurze Vorbereitung mit normalen Eingaben wird erstellt. Freie Schusslinie, tatsächlicher Schuss/Fremdschaden und die strenge First-State-Zuordnung sind weiterhin nachzuweisen.
-
-## Offene Abnahme und Zuständigkeit
-
-Offen bleiben A1 mit Wiederholung/Mapwechsel/Neustart, vollständige aktuelle A3-Kreuzvergleiche, A4-Karten- und Aktivitätsfreigaben, die 1/4/8-Bot-Zeiten von 3600/3600/7200 Sekunden und A5 mit vollständiger Sicherung sowie Dev-zuerst-/Einzelserver-Kandidatenrollout. Build015 MITTEL war gemischt und ein STARK-Fenster positiv; daraus folgt keine vollständige Build017-Abnahme. Nur ein vollständig angenommenes A erlaubt B.
-
-Root allein besitzt Integration, Build und native/produktive Änderungen. Maximal zwei aktive Worker: review_names_transaction schließt die Flugursachenanalyse ab und erstellt die deaktivierte kurze Colt-Vorbereitung in isoliertem Worktree; finish_names_transaction sichert den deaktivierten Delta021-Entwurf und analysiert anschließend die geschlossene A4-Spur. identify_latest_codex ist idle. Bestehende Quellen, Reviewpakete und FAILs bleiben unverändert.
-
-Private aktuelle Root-Evidenz: /srv/tse-milestone-a-continuation-evidence-20261112. Vor einem neuen Lauf tatsächliche Quieszenz, Ressourcen, Pins und exklusive Lab-Sperre prüfen. Nie eine noch offene asynchrone Mutation erneut ausführen; verbrauchte Wrapper/Logs nicht überschreiben. Kein automatischer Native-Retry.
-
-## Sicherung und Veröffentlichung
-
-Delta020 ist vollständig übertragen, aus Drive tatsächlich zurückgeladen und geordnet zusammengesetzt: 114833032 Bytes, SHA 82a661bb52ae8d6b08232aba3f70577ebdaa594e52ddf8dfe9edee147cb7c132. Der separate Restore prüfte 14707 reguläre Dateien einschließlich Metadaten und Hashes; zwei Symlinks wurden nur indexiert. Quittung: delta020-drive-complete-resume1.json. Der frühere lokale Uploadblocker ist behoben. Delta020 erfasst Quelle cd7a4a639191a2033390f39f0681e8b64b3d6b6c; neue Arbeit benötigt Delta021. Der neue Entwurf ist noch keine ausgeführte Sicherung.
-
-Letzte tatsächlich gefetchte Veröffentlichung: API ff138402af0d0037d7dab6734c4d8e5ccfa69246, Tree 1f06a8802309029e0b569a5a384d167b1332356b, exakt zu lokal 47a819ab9b48244847fd43f401c7902c1b059d27, geprüft am 12.11.2026 um 15:42:38 UTC. Branch codex/20261112-milestone-a-completion; kein Force-Push, kein Main-Merge. Quittung: github-cpu-correction-checkpoint-publication.json. Die neuesten A4-Berichte sind danach entstanden und benötigen die nächste Veröffentlichung.
+Siehe docs/reports/2026-11-12-a4-build017-extended-reset.md und den aktuellen Fortsetzungsbericht.
 <!-- CURRENT_COMPLETION_END -->
 
 ---

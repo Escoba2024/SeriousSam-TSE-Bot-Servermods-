@@ -1,30 +1,28 @@
 # Codex-Fortsetzung: Umsetzung, Betrieb und offene Abnahme
 
-Stand: 12.11.2026 17:00:58 MEZ
+Stand: 12.11.2026 18:19:31 MEZ.
 
 ## Aktueller Fortschritt
 
-**A2 ist abgeschlossen. A bleibt insgesamt offen; B ist unbegonnen.** Die folgenden aktuellen Befunde ersetzen ältere Statusformulierungen in den historischen Detailabschnitten.
+**A2 ist abgeschlossen. A bleibt insgesamt offen; B ist unbegonnen.**
 
 | Teil | Tatsächlich erreicht | Noch offen |
 | --- | --- | --- |
-| A1 | Spawnparameter effektiv und als Neustartvorlage null; Originalwaffen- und Steuerungsbelege, geschlossene Tests | Wiederholter tatsächlicher Schaden ab dem ersten serververarbeiteten Respawnzustand für Bot und Vanilla einschließlich Mapwechsel/Neustart |
-| A2 | 458 Namen, 208 erhalten plus 250 neu; kontrollierter Rollout auf sechs Instanzen, 48 eindeutige eigene Identitäten | abgeschlossen |
-| A3 | Gezielte Aimkorrektur und begrenzte native Vergleichsbelege | vollständige aktuelle Kreuzvergleiche für MITTEL/STARK/DEMON mit allen Leben und Fehlfällen |
-| A4 | Drei neue Red-Station-Phasen, beide Neustarts, 21/24 vollständige Aktivitätskombinationen, 437 dichte Diagnosezeilen | drei Waffen-/Feuerlücken, ursächliche Auswertung und gültige Kartenfreigaben |
-| A5 / Abschluss | Build017 reproduzierbar gebaut, Delta020 einschließlich tatsächlichem Drive-Rückdownload geprüft; aktive Flotte kontrolliert | neue Evidenzsicherung, 3600/3600/7200-s-Gates für 1/4/8 Bots, vollständiger qualifizierter Dev-zuerst-Kandidatenrollout |
+| A1 | Spawnparameter und Vorlagen effektiv null; Colt-Vorbereitung tatsächlich versucht und exakt restauriert | Pitchkalibrierung fehlgeschlagen; Kontrolltreffer und wiederholter erster gültiger Respawnzustand mit Fremdschaden, Bot/Vanilla, Mapwechsel und Neustart |
+| A2 | 458 Namen, 208 erhalten plus 250 neu; sechs Instanzen und 48 eindeutige eigene Botidentitäten geprüft | abgeschlossen |
+| A3 | gezielte Aimkorrektur, frühere begrenzte Vergleiche; aktueller Build017-Vergleich separat eingefroren | laufende aktuelle Kontroll-/Kreuzvergleiche und Bewertung aller Leben für MITTEL/STARK/DEMON |
+| A4 | neuer fester längerer Red-Test mit 24/24 Slotphasen, beiden Neustarts, 423,836 s und exakt geprüftem Restore | Waffenqualität, vollständige Navigation/Gefahren, andere Karten und gültige Produktions-Whitelist |
+| A5 | Build017 gebaut; GitHub-Checkpoint und Delta020-Drive-Rückdownload verifiziert | Delta021, 1/4/8-Bot-Gates mit 3600/3600/7200 s, qualifizierter Dev-zuerst-Rollout |
 
-**Letzte native A4-Prüfung:** Fenster 154453 ist FAIL nach 246,391839 beobachteten Sekunden. Bei P0 botA:2, P1 botB:2 und P2 botA:2 fehlen bestehende Waffen-/Feuerkriterien. Alle vier Rollen wurden normal geschlossen; Schlusslogs und 643 Dateihashes plus fünf Abwesenheiten sind unabhängig geprüft. Die tatsächliche Zeilenerfassung umfasst sieben north68_6-Fenster; source87 wurde nicht erfasst. Höchster gemessener CPU-Intervallwert 60,2978 %, mit ausdrücklich erhaltenen Messlücken. [Bericht und Belege](2026-11-12-a4-build017-native-supply-observer.md)
+**Neuester abgeschlossener A4-Test:** `165124` ist `PASS_LIMITED_BOT_RESET_FRESH_OBSERVER_REVIEW_REQUIRED`. Alle 178 Botleben bleiben im Nenner. Die längere Beobachtung beweist keine Gameplayverbesserung; die früheren FAILs bleiben erhalten. [Ergebnis und Grenzen](2026-11-12-a4-build017-extended-reset.md).
 
-**Letzte native A1-Prüfung:** Eine nachgewiesen festhängende RDC-Suche wurde gezielt beendet. Die Hostlast sank in zwei gleich aufgebauten Zehnsekundenmessungen von 57,5297 % auf 37,0390 %. Der separat begründete unveränderte Folgetest 153533 scheiterte anschließend an der Achtsekunden-Flugfrist, nicht an einer CPU-Abweisung. 16 Eingaben sind bestätigt; Pickup, Schuss und First-State-Schaden fehlen. Alle Rollen, Displays und 673 Wiederherstellungspfade sind geprüft. [Bericht und Belege](2026-11-12-a1-v5-cpu-correction-flight-followup.md)
+**Aktueller nativer Stand:** Der uninstrumentierte Build017-Kontrolllauf 170346 ist nach 120,109788 s begrenzt bestanden; erste neutrale Anfangszustände und alle vier normalen Closes sind bestätigt, 640 Dateien unabhängig wiederhergestellt. Die Colt-Vorbereitung 171044 endete mit FAIL vor jedem Fire: +12 Pixel ergaben −3°, −12 Pixel ergaben +6°. Der unveränderte Gegenprobenwächter brach ab. Alle drei Rollen wurden normal geschlossen; 664 Dateien und neun Abwesenheiten sind unabhängig wiederhergestellt. Der erste instrumentierte Build017-Kreuzvergleich (Index1, Tier1, Swap0) läuft unter Root; sein Ergebnis ist noch offen. [Colt-Beleg](milestone-a-20261112/a1-colt-preparation-failed.json). [Kontrollbeleg](milestone-a-20261112/a3-build017-control.json).
 
-Der Originalauftrag verlangt für A1 keinen Bouncer oder Minigunpickup. Statische Gegenprüfung der unveränderten Retail-Routinen bestätigt den nutzbaren Start-Colt. Deshalb wird eine separate kürzere Vorbereitung mit normalen Eingaben erstellt. Freie Schusslinie, korrekte Original-Zielgeometrie, tatsächlicher Schaden und die vollständige First-State-Zuordnung bleiben zwingend. Die alten FAILs bleiben erhalten.
+**Flottenstand:** letzte eigene vollständige Prüfung am 12.11.2026, 16:56:33 MEZ: sechs Instanzen mit jeweils acht eigenen Bots, zusätzlich ein UNKNOWN auf Hole ohne Identitätsannahme. Der bisherige Public-/Dev-DLL-Stand ist unverändert; kein Build017-Rollout. Dieses Bestandsbild ist keine neue Aktivitäts- oder Langzeitabnahme.
 
-**Frischer Flottenstand vom 12.11.2026, 16:56:33 MEZ:** sechs Instanzen mit jeweils acht eigenen Bots. Zusätzlich ein UNKNOWN-Slot auf Hole, ohne Identitätsannahme. Effektive und gespeicherte Spawnwerte sind null, aktive DLLs entsprechen dem bisherigen Public-/Dev-Stand. Public-Logzähler 0 BAD / 0 Disconnects; Dev unverändert 37 / 3. Das ist ein Bestandsbild und keine neue Einzelbot- oder Langzeitabnahme. [Aktuelle Quittung](milestone-a-20261112/fleet-after-build017-observer.json)
+**Persistenz:** zuletzt tatsächlich gefetchter GitHub-Checkpoint 973141bd564f3b12d130f7f9c824c930c5f411bd mit exakt dem lokalen Baum von 4a485bf5c1515e9e794c5c9f5a50b129758ba1b0. Neuere Dokumentation benötigt noch Veröffentlichung. Delta020 ist vollständig hochgeladen und zurückgeprüft; Delta021 ist noch nicht ausgeführt. Die lokale ChatGPT-Ausführung ist seit tatsächlich erfolgreicher Prüfung wieder verfügbar. Neue Übertragung/Upload/Rückdownload werden erst nach erfolgreicher Ausführung bestätigt.
 
-**Persistenz:** Letzter tatsächlich gefetchter GitHub-Stand ist ff138402af0d0037d7dab6734c4d8e5ccfa69246 mit exakt dem Baum des lokalen 47a819ab9b48244847fd43f401c7902c1b059d27. Neueste A4-Dokumentation benötigt die nächste Veröffentlichung. Delta020 ist vollständig gesichert und zurückgeprüft; Delta021 ist bislang nur ein deaktivierter Entwurf. Ein Plan oder Entwurf zählt nicht als ausgeführte Sicherung.
-
-Nächste konkrete Arbeit: kurzer Original-Colt-Vorbereitungsentwurf und kausale A4-Auswertung. Root führt Integration, Builds, native Tests und Sicherungen aus; höchstens zwei Worker arbeiten in getrennten Zuständigkeiten. Keine neue Kandidaten-DLL wurde produktiv verteilt.
+Die zwei Worker werten das geschlossene A4-Fenster aus und klären den Originalvertrag für den ersten gültigen Respawnzustand. A3-Vergleiche, Colt-Versuch, danach weitere belegte Korrekturen und Abnahmen folgen ohne Routinefreigaben.
 
 ---
 

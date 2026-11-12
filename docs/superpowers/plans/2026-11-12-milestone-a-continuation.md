@@ -201,3 +201,26 @@ Files: poc/candidates/redstation-supply-20261107/{BotDriver.cpp,bot_human.h,bot_
 - Host maximum measured interval 60.2978 %, minimum available RAM 2101719040 bytes; startup gap 47.2887 s and gameplay gap 2.3667 s retained. No duration resource gate claimed.
 - Original A1 request does not require a Bouncer or Minigun pickup. Actual Retail HasAmmo/ClearWeapons/FireColt evidence supports investigating a shorter original start-Colt preparation; LOS and first-state damage remain unproven. Author prepares a separate disabled draft, preserving runtime/First-State gates.
 - The other worker checkpoints the disabled Delta021 backup draft and then analyses the closed A4 dense trace. Root alone integrates, runs native windows and executes backups. At most two active workers.
+
+
+## Laufende Fortsetzung 2026-11-12T16:24:25.140315+00:00
+
+Die lokale ChatGPT-Ausführung ist nach direkter Prüfung nicht verfügbar; Ubuntu/RDC und Projekt sind weiterhin erreichbar. Der bisherige lokale Dateitransport für eine neue Drive-Sicherung ist damit derzeit blockiert. Delta020 bleibt tatsächlich hochgeladen und zurückgeprüft. Neue Archive/Uploads werden nicht als erledigt geführt. Alle erreichbaren Server-, Entwicklungs- und Prüfaufgaben werden fortgesetzt.
+
+Die A4-Analyse ist abgeschlossen: 18 konkurrierende Waffenaufnahmen passen zu den untersuchten Zielverlusten; ein konkreter Quellcode- oder Navigationsdefekt wurde nicht isoliert. Alte FAILs bleiben bestehen. Derselbe Worker erstellt den separat deaktivierten Folgecontroller mit Red → Red → Red, 2/2/0 Minuten, Phase 3 mindestens 120 s Echtzeit und Spielzeit sowie einer vorab festgelegten Grenze von 480 s. Alle 24 Slotphasen behalten dieselben fünf Aktivitätsanforderungen und vollständige Lebensnenner. Der andere Worker erstellt die kurze Original-Colt-Vorbereitung. Root allein führt native Tests aus; derzeit ist kein solcher Test aktiv.
+
+Der neueste GitHub-Checkpoint ist nach tatsächlichem Fetch 973141bd564f3b12d130f7f9c824c930c5f411bd. Sein Baum a3cc44850287891d3d668bcd9ff5d291c71585ff entspricht exakt dem lokalen Commit 4a485bf5c1515e9e794c5c9f5a50b129758ba1b0. Der neue private Wiederherstellungskatalog restore-chain-through020.json löst die tatsächlichen 19 geordneten Overlayarchive sowie die achtteilige Basis und ihren Companion auf. Eine neue zusammengesetzte Wiederherstellung wurde noch nicht ausgeführt.
+
+
+## Checkpoint 2026-11-12T17:11:36.547035+00:00
+
+A4-Extended ist begrenzt bestanden: 24/24 Slotphasen, 423,836349 s, beide Red-Neustarts, alle 178 Leben erhalten, vier normale Closes und unabhängiger Restore von 643 Dateien und fünf Abwesenheiten. Die alten FAILs werden nicht umgewertet. Restliche Waffen-/NAV-/Kartenqualität bleibt offen.
+
+A3 ist unabhängig geprüft und eingefroren; Root führt die vorab geplanten sieben Einzelversuche aus. Colt ist unabhängig geprüft, Native folgt nach bestätigtem aktuellem Close/Restore. identify_latest_codex analysiert ausschließlich das geschlossene A4-Fenster; finish_names_transaction klärt statisch den Original-First-State-Vertrag. Keine zweite native Ausführung parallel, keine Sourceänderung auf Verdacht.
+
+Lokale Ausführung wieder tatsächlich verfügbar. Delta020 bleibt vollständig auf Drive verifiziert; Delta021 und dessen neuer Rückdownload sind weiter ausstehend. Alle globalen A1/A3/A4/Stabilitäts-/A5-Gates bleiben offen, B unbegonnen.
+
+
+## Colt-Abbruch und aktueller Vergleich — 2026-11-12T17:19:31.448044+00:00
+
+Colt171044 ist tatsächlich FAIL vor Fire: die Pitch-Gegenkalibrierung misst −0,25 und −0,5Grad/Pixel. Root bestätigte drei normale Closes, vier ruhende Labroots, drei geschlossene Loghashes und exakte664Dateien/9Abwesenheiten. Keine künstliche Toleranzaufweitung oder Wiederholung. Root führt nach frischem Preflight genau A3Index1 aus; Ergebnis und Restore offen. Die zwei bestehenden Worker bleiben bei A4-Lebensauswertung und Original-First-State-Vertrag, ohne Native-/Lab-/Quellmutationen. Alle globalen Abnahmen bleiben bestehen.

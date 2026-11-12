@@ -1,0 +1,91 @@
+{
+  "acceptance_scope": "Limited Red-only reset and activity observation; no all-map, weapon-quality, A1, A3, long-term or release acceptance; earlier300-second FAILs retained.",
+  "all_24_slotphases_complete": true,
+  "candidate_dll_sha256": "a5a379aadfd0cc376ad15a8368dd6814518e3f2da1fde22fdde9bd86f02abc5d",
+  "candidate_source_commit": "b35397f024b8a8722a01178a08c06d3d40802f65",
+  "closed_logs_independently_rehashed": 4,
+  "controller_sha256": "744508f7216e21421d27d0e8f64ae8bdce829cc86c6d8f6534c3c76893ce63ac",
+  "errors": [],
+  "final_evidence_reasons": [],
+  "fixed_rounds": [
+    "redstation",
+    "redstation",
+    "redstation"
+  ],
+  "functional_pass": false,
+  "host_budget": {
+    "budget_pass_claim": false,
+    "cpu_busy_max_measured_percent": 57.32009925558312,
+    "disk_free_min_bytes": 14925201408,
+    "gameplay_max_sample_gap_seconds": 2.370255613932386,
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_disk_free_bytes": 8589934592,
+      "min_mem_available_bytes": 1610612736,
+      "target_sample_interval_seconds": 1.0
+    },
+    "max_sample_gap_seconds": 47.49608079204336,
+    "mem_available_min_bytes": 1894895616,
+    "samples": 400,
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks"
+  },
+  "host_resources_sha256": "8274ea63b1257f209bf95dedab5d4a3be713d1f5679d71abf20042a209b6d18f",
+  "map_reset_proven": false,
+  "normal_roles_closed": [
+    "botA",
+    "botB",
+    "server",
+    "vanilla"
+  ],
+  "observation_cap_seconds": 480,
+  "observed_seconds": 423.83634918392636,
+  "original_auto_rejoin_proven": false,
+  "phases": [
+    {
+      "max_observed_stationary_alive_seconds": 2.0500078201293945,
+      "native_ranged_fire_samples": 580,
+      "observed_hp_deaths": 46,
+      "observed_lives": 54,
+      "observed_useful_pickup_lives": 19,
+      "phase": 0,
+      "server_foreign_kill_log_events_including_observer": 43,
+      "slotphases_complete": 8
+    },
+    {
+      "max_observed_stationary_alive_seconds": 2.0001220703125,
+      "native_ranged_fire_samples": 468,
+      "observed_hp_deaths": 53,
+      "observed_lives": 61,
+      "observed_useful_pickup_lives": 16,
+      "phase": 1,
+      "server_foreign_kill_log_events_including_observer": 52,
+      "slotphases_complete": 8
+    },
+    {
+      "max_observed_stationary_alive_seconds": 1.0999832153320312,
+      "native_ranged_fire_samples": 515,
+      "observed_hp_deaths": 56,
+      "observed_lives": 63,
+      "observed_useful_pickup_lives": 20,
+      "phase": 2,
+      "server_foreign_kill_log_events_including_observer": 57,
+      "slotphases_complete": 8
+    }
+  ],
+  "qualified": false,
+  "recorded_utc": "2026-11-12T17:11:36.547035+00:00",
+  "restoration_pass": true,
+  "restored_absent_paths": 5,
+  "restored_files": 643,
+  "result_sha256": "5f87a9046d581d86db830c3db235a8d940278531ff963a1c45d68185b499c971",
+  "root_postflight_sha256": "98e15985fca3927ca6640be5c875946544c8ffc2fa095b9d2fa7f1c8404a2e35",
+  "status": "PASS_LIMITED_BOT_RESET_FRESH_OBSERVER_REVIEW_REQUIRED",
+  "third_phase_minimum_wall_and_game_seconds": 120,
+  "time_limit_minutes": [
+    2,
+    2,
+    0
+  ],
+  "total_observed_lives": 178,
+  "window": "a4-reset017-extended-20261112-165124"
+}

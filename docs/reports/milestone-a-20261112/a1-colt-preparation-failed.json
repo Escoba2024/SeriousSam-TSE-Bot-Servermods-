@@ -1,0 +1,75 @@
+{
+  "utc": "2026-11-12T17:18:04.191782+00:00",
+  "status": "FAIL",
+  "result_sha256": "e395aaf98377489c39442531969cc754bdec3190fe46a2050610d8f5e563f90e",
+  "host_resources_sha256": "21ba80bfd6b254fc9085ecb199fc8fae56c30ef8527a1c8286525d769a2d6d59",
+  "errors": [
+    "ValueError('opposite pitch gain does not reproduce')"
+  ],
+  "final_evidence_reasons": [
+    "window_not_passed",
+    "recorded_errors"
+  ],
+  "all_four_lab_roots_quiescent": true,
+  "both_displays_absent": true,
+  "normal_roles_closed": [
+    "botA",
+    "server",
+    "vanilla"
+  ],
+  "closed_logs_accepted": true,
+  "closed_logs_independently_rehashed": 3,
+  "restored_regular_files_independently_hashed": 664,
+  "restored_absent_paths_independently_checked": 9,
+  "restoration_pass": true,
+  "host_budget": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 7,
+    "cpu_busy_max_measured_percent": 67.92079207920793,
+    "mem_available_min_bytes": 2080858112,
+    "disk_free_min_bytes": 14823088128,
+    "max_sample_gap_seconds": 25.043462741188705,
+    "budget_pass_claim": false
+  },
+  "qualified": false,
+  "automatic_retry": false,
+  "preparation_status": "FAIL",
+  "preparation_stage": "pitch",
+  "preparation_elapsed_seconds": 5.345687224064022,
+  "actual_shot_proven": false,
+  "foreign_hit_proven": false,
+  "first_processed_state_proven": false,
+  "window_label": "a1-colt-preparation-20261112-171044",
+  "pitch_calibration": [
+    {
+      "axis": "y",
+      "pixels": 12,
+      "delta_deg": -3.0,
+      "gain_deg_per_pixel": -0.25,
+      "physical_delta_deg_raw": [
+        -3.0,
+        -3.0
+      ]
+    },
+    {
+      "axis": "y",
+      "pixels": -12,
+      "delta_deg": 6.0,
+      "gain_deg_per_pixel": -0.5,
+      "physical_delta_deg_raw": [
+        6.0,
+        6.0
+      ]
+    }
+  ],
+  "actions_attempted": 6,
+  "role_observations_count": 28,
+  "scope": "FAILED_NORMAL_INPUT_PREPARATION_NO_SHOT_NO_A1_QUALIFICATION",
+  "dll_or_gameplay_changed": false
+}
