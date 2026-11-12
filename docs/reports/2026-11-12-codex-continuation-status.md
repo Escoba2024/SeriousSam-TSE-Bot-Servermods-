@@ -1,5 +1,38 @@
 # Codex-Fortsetzung: Umsetzung, Betrieb und offene Abnahme
 
+Stand: 12.11.2026 17:00:58 MEZ
+
+## Aktueller Fortschritt
+
+**A2 ist abgeschlossen. A bleibt insgesamt offen; B ist unbegonnen.** Die folgenden aktuellen Befunde ersetzen ältere Statusformulierungen in den historischen Detailabschnitten.
+
+| Teil | Tatsächlich erreicht | Noch offen |
+| --- | --- | --- |
+| A1 | Spawnparameter effektiv und als Neustartvorlage null; Originalwaffen- und Steuerungsbelege, geschlossene Tests | Wiederholter tatsächlicher Schaden ab dem ersten serververarbeiteten Respawnzustand für Bot und Vanilla einschließlich Mapwechsel/Neustart |
+| A2 | 458 Namen, 208 erhalten plus 250 neu; kontrollierter Rollout auf sechs Instanzen, 48 eindeutige eigene Identitäten | abgeschlossen |
+| A3 | Gezielte Aimkorrektur und begrenzte native Vergleichsbelege | vollständige aktuelle Kreuzvergleiche für MITTEL/STARK/DEMON mit allen Leben und Fehlfällen |
+| A4 | Drei neue Red-Station-Phasen, beide Neustarts, 21/24 vollständige Aktivitätskombinationen, 437 dichte Diagnosezeilen | drei Waffen-/Feuerlücken, ursächliche Auswertung und gültige Kartenfreigaben |
+| A5 / Abschluss | Build017 reproduzierbar gebaut, Delta020 einschließlich tatsächlichem Drive-Rückdownload geprüft; aktive Flotte kontrolliert | neue Evidenzsicherung, 3600/3600/7200-s-Gates für 1/4/8 Bots, vollständiger qualifizierter Dev-zuerst-Kandidatenrollout |
+
+**Letzte native A4-Prüfung:** Fenster 154453 ist FAIL nach 246,391839 beobachteten Sekunden. Bei P0 botA:2, P1 botB:2 und P2 botA:2 fehlen bestehende Waffen-/Feuerkriterien. Alle vier Rollen wurden normal geschlossen; Schlusslogs und 643 Dateihashes plus fünf Abwesenheiten sind unabhängig geprüft. Die tatsächliche Zeilenerfassung umfasst sieben north68_6-Fenster; source87 wurde nicht erfasst. Höchster gemessener CPU-Intervallwert 60,2978 %, mit ausdrücklich erhaltenen Messlücken. [Bericht und Belege](2026-11-12-a4-build017-native-supply-observer.md)
+
+**Letzte native A1-Prüfung:** Eine nachgewiesen festhängende RDC-Suche wurde gezielt beendet. Die Hostlast sank in zwei gleich aufgebauten Zehnsekundenmessungen von 57,5297 % auf 37,0390 %. Der separat begründete unveränderte Folgetest 153533 scheiterte anschließend an der Achtsekunden-Flugfrist, nicht an einer CPU-Abweisung. 16 Eingaben sind bestätigt; Pickup, Schuss und First-State-Schaden fehlen. Alle Rollen, Displays und 673 Wiederherstellungspfade sind geprüft. [Bericht und Belege](2026-11-12-a1-v5-cpu-correction-flight-followup.md)
+
+Der Originalauftrag verlangt für A1 keinen Bouncer oder Minigunpickup. Statische Gegenprüfung der unveränderten Retail-Routinen bestätigt den nutzbaren Start-Colt. Deshalb wird eine separate kürzere Vorbereitung mit normalen Eingaben erstellt. Freie Schusslinie, korrekte Original-Zielgeometrie, tatsächlicher Schaden und die vollständige First-State-Zuordnung bleiben zwingend. Die alten FAILs bleiben erhalten.
+
+**Frischer Flottenstand vom 12.11.2026, 16:56:33 MEZ:** sechs Instanzen mit jeweils acht eigenen Bots. Zusätzlich ein UNKNOWN-Slot auf Hole, ohne Identitätsannahme. Effektive und gespeicherte Spawnwerte sind null, aktive DLLs entsprechen dem bisherigen Public-/Dev-Stand. Public-Logzähler 0 BAD / 0 Disconnects; Dev unverändert 37 / 3. Das ist ein Bestandsbild und keine neue Einzelbot- oder Langzeitabnahme. [Aktuelle Quittung](milestone-a-20261112/fleet-after-build017-observer.json)
+
+**Persistenz:** Letzter tatsächlich gefetchter GitHub-Stand ist ff138402af0d0037d7dab6734c4d8e5ccfa69246 mit exakt dem Baum des lokalen 47a819ab9b48244847fd43f401c7902c1b059d27. Neueste A4-Dokumentation benötigt die nächste Veröffentlichung. Delta020 ist vollständig gesichert und zurückgeprüft; Delta021 ist bislang nur ein deaktivierter Entwurf. Ein Plan oder Entwurf zählt nicht als ausgeführte Sicherung.
+
+Nächste konkrete Arbeit: kurzer Original-Colt-Vorbereitungsentwurf und kausale A4-Auswertung. Root führt Integration, Builds, native Tests und Sicherungen aus; höchstens zwei Worker arbeiten in getrennten Zuständigkeiten. Keine neue Kandidaten-DLL wurde produktiv verteilt.
+
+---
+
+## Historische Detailbefunde vor diesem Fortschrittsstand
+
+Die folgenden Einzelbelege bleiben nachvollziehbar erhalten. Für den aktuellen Gesamtstatus gelten die Aussagen oben und der aktuelle Handoff.
+
+
 Stand: 12.11.2026 15:59:33 MEZ
 
 **Die Namensaufgabe A2 ist abgeschlossen und auf allen sechs Instanzen wirksam. Meilenstein A ist insgesamt weiterhin nicht abgenommen; B wurde entsprechend der vorgegebenen Reihenfolge nicht begonnen.** Neue Kampf-/Navigationskorrekturen sind gebaut und teilweise nativ nachgewiesen. Offene Funktions- und Stabilitätsgates verhindern weiterhin die Releasefreigabe. Der zuvor blockierte Sicherungsnachtrag Delta020 wurde inzwischen vollständig auf Drive hochgeladen und zurückgeprüft.

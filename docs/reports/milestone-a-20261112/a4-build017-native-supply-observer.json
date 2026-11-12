@@ -1,0 +1,73 @@
+{
+  "utc": "2026-11-12T15:50:55.358377+00:00",
+  "status": "FAIL",
+  "result_sha256": "7fa65885a2bf3e5a877d53cb09801aad3b4d7874df633fd0a31925cbe799813b",
+  "host_resources_sha256": "585e7c8f083666afa485c32d68be97af718524c5b33e75d6bd6dcd2c36d0701f",
+  "errors": [
+    "RuntimeError('reset observed but required per-phase active evidence incomplete')"
+  ],
+  "final_evidence_reasons": [
+    "window_not_passed",
+    "recorded_errors"
+  ],
+  "all_four_lab_roots_quiescent": true,
+  "both_displays_absent": true,
+  "normal_roles_closed": [
+    "server",
+    "botA",
+    "vanilla",
+    "botB"
+  ],
+  "closed_logs_accepted": true,
+  "restored_regular_files_independently_hashed": 643,
+  "restored_absent_paths_independently_checked": 5,
+  "restoration_pass": true,
+  "observed_seconds": 246.3918389750179,
+  "phases_count": 3,
+  "active_evidence_missing": {
+    "0": [
+      "botA:2:observed_useful_pickup_lives",
+      "botA:2:native_ranged_fire_samples"
+    ],
+    "1": [
+      "botB:2:fire_action_rows",
+      "botB:2:observed_useful_pickup_lives",
+      "botB:2:native_ranged_fire_samples"
+    ],
+    "2": [
+      "botA:2:fire_action_rows",
+      "botA:2:observed_useful_pickup_lives",
+      "botA:2:native_ranged_fire_samples"
+    ]
+  },
+  "host_budget": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "samples": 231,
+    "cpu_busy_max_measured_percent": 60.297766749379655,
+    "mem_available_min_bytes": 2101719040,
+    "disk_free_min_bytes": 15108591616,
+    "max_sample_gap_seconds": 47.28869638289325,
+    "budget_pass_claim": false,
+    "gameplay_max_sample_gap_seconds": 2.366670733084902
+  },
+  "qualified": false,
+  "automatic_retry": false,
+  "recorded_utc": "2026-11-12T15:58:19.551702+00:00",
+  "controller_wall_seconds": 310.18,
+  "wrapper_exit_code": 1,
+  "slot_phases": 24,
+  "complete_activity_slot_phases": 21,
+  "incomplete_activity_slot_phases": 3,
+  "diagnostic_rows": 437,
+  "diagnostic_groups": 7,
+  "diagnostic_classes_observed": [
+    "north68_6"
+  ],
+  "cause_determined": false,
+  "candidate_dll_sha256": "a5a379aadfd0cc376ad15a8368dd6814518e3f2da1fde22fdde9bd86f02abc5d",
+  "source_commit": "b35397f024b8a8722a01178a08c06d3d40802f65",
+  "root_frozen_manifest_sha256": "150a43b4966eba34f8b91056ebda1e7e33c7fa444f364485dab8b006bb95d779",
+  "private_postflight_sha256": "18cfe153a70beb1e20253784b74d550f5f40dbe631dada48e326ff6a4c5ed6d9",
+  "milestone_a_complete": false,
+  "milestone_b_started": false
+}

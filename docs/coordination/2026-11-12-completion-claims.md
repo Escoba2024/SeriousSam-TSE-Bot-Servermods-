@@ -50,3 +50,13 @@ Root has closed and independently restored the V5 CPU-aborted window. review_nam
 - Root independently confirmed all four lab roots quiescent, both displays absent, 664 restored file hashes and nine absent paths. No native process remains from this window.
 - The CPU analyst moves to read-only flight-cause analysis; the second worker completes the independent Build017 controller review. Root alone freezes and runs the next bounded A4 diagnostic. Maximum two workers.
 - New evidence requires Delta021 and a new exact-tree GitHub publication. A remains incomplete; B is unstarted. See a1-v5-cpu-correction-flight-followup report.
+
+
+## Continuation checkpoint 2026-11-12T15:58:19.551702+00:00
+
+- Build017 native window 154453 completed three Red Station phases and 246.391839 observed seconds. FAIL remains: phase 0 botA:2 lacks useful pickup/native fire; phase 1 botB:2 and phase 2 botA:2 also lack Fire action evidence. 21/24 slot phases satisfy all existing activity fields.
+- There are 437 independently hash-bound dense supply rows in seven north68_6 groups; no source87 group was captured. Cause analysis is pending. No speculative navigation or acceptance change.
+- Wrapper Exit 1 after 310.18 s. Root independently verified four normally closed roles, accepted closed logs, all four lab roots quiescent, both displays absent, 643 restored hashes and five absent paths. No native test remains active.
+- Host maximum measured interval 60.2978 %, minimum available RAM 2101719040 bytes; startup gap 47.2887 s and gameplay gap 2.3667 s retained. No duration resource gate claimed.
+- Original A1 request does not require a Bouncer or Minigun pickup. Actual Retail HasAmmo/ClearWeapons/FireColt evidence supports investigating a shorter original start-Colt preparation; LOS and first-state damage remain unproven. Author prepares a separate disabled draft, preserving runtime/First-State gates.
+- The other worker checkpoints the disabled Delta021 backup draft and then analyses the closed A4 dense trace. Root alone integrates, runs native windows and executes backups. At most two active workers.
