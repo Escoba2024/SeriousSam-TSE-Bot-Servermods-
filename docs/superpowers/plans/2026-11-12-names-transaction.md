@@ -50,3 +50,14 @@ The root agent requested no heavy compile/IO work while the native comparison ra
 - [x] Run the complete current focused suite after the native window: 89/89 passed in 125.552 seconds. Offline private closure regression and package check passed; runtime gate remains false.
 
 The initial full-suite deferral above is now resolved. No native action was executed by this worker.
+
+## Bounded launcher-preflight fix
+
+- [x] Inspect the saved 12-service command output and all five complete wait helpers; preserve runtime files unchanged.
+- [x] RED: demonstrate the adapter's lost-first-command bug and missing exact pinned helper support.
+- [x] GREEN: parse all ordered ExecStart/ExecStartPre/ExecStop records; reject duplicate scalars and unparsed data.
+- [x] Bind exact assigned wait-helper argv/hash; reject substitutions, extra arguments, ignored errors, order drift and helper drift before first close.
+- [x] Replay all 12 saved service policies offline; preserve both commands for the two repeated-row services.
+- [x] Create a new disabled private package with five additional immutable helper dependencies and independent reviewed hash literals. Preserve earlier frozen packages.
+- [x] Check three private bootstrap failure boundaries without native imports.
+- [x] Run the complete updated focused suite: 102/102 passed in 129.721 seconds, exit 0. Record the tested change for the commit and root-owned review/runtime handoff.

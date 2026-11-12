@@ -19,6 +19,9 @@ import uuid
 import fleet_names_apply_policy as P
 import names_staging as N
 from native_closed_log_evidence import archive_closed_role_logs, scan_log_errors
+from fleet_names_service_policy import (
+    SERVICE_POLICY_FIELDS, parse_service_policy, validate_launch_policy,
+)
 
 sha = lambda data: hashlib.sha256(data).hexdigest()
 SCOPE = "NAMES_ONLY_NO_DLL_PROMOTION"
@@ -254,13 +257,21 @@ def log_bytes(target, adapter):
 
 
 class Backend:
-    def __init__(self, m, out, stage, *, roots, stage_dir, lock_guard=None, source_fingerprint=None):
+    def __init__(self, m, out, stage, *, roots, stage_dir, lock_guard=None,
+                 source_fingerprint=None, launch_helper_pins=None):
         self.m, self.out, self.stage = m, canonical(out), copy.deepcopy(stage)
         self.roots = {i: str(canonical(roots[i])) for i in P.INSTANCES}
         P.require(set(roots) == set(P.INSTANCES) and len(set(self.roots.values())) == 6, "six roots")
         self.stage_dir = canonical(stage_dir)
         self.lock_guard = lock_guard
         self.source_fingerprint = source_fingerprint
+        self.launch_helper_pins = dict(launch_helper_pins or {})
+        allowed_helpers = {str(Path(root)/"wait-server.py")
+                           for key, root in self.roots.items() if key != "redstation"}
+        P.require(set(self.launch_helper_pins) <= allowed_helpers and all(
+            isinstance(digest, str) and re.fullmatch("[0-9a-f]{64}", digest)
+            for digest in self.launch_helper_pins.values()), "reviewed launch helper scope")
+        self.guard_launch_helpers()
         validate_stage(self.stage, self.roots, self.stage_dir)
         self.fleet = json.loads(read(m.MATRIX)[0])["instances"]
         P.require(len(self.fleet) == 6 and {x["id"] for x in self.fleet} == set(P.INSTANCES),
@@ -277,7 +288,8 @@ class Backend:
         self.rows = self.stage["receipts"]
         self.state = dict(schema=3, scope=SCOPE, status="PREPARED", events=[],
                           roots=self.roots, stage_sha256=stage_fingerprint(self.stage),
-                          source_fingerprint=source_fingerprint, boot_id=m.boot_id(),
+                          source_fingerprint=source_fingerprint,
+                          launch_helper_pins=self.launch_helper_pins.copy(), boot_id=m.boot_id(),
                           before={}, server_log_baselines={}, backups={}, started={}, start_intents={}, stop_intents={},
                           stop_acks={}, mutated=[], qualified=False)
         self._journal_digest = None
@@ -300,25 +312,20 @@ class Backend:
         P.require(re.fullmatch("[0-9a-f]{32}", value) and int(value, 16), "service invocation missing")
         return value
 
+    def guard_launch_helpers(self):
+        for path, digest in self.launch_helper_pins.items():
+            P.require(sha(read(path)[0]) == digest, "reviewed launch helper drift: " + path)
+
     def stop_policy(self, unit):
-        policy = self.m.ops['properties'](unit, *STOP_POLICY, 'ExecStart', 'ExecStartPre')
-        # systemctl show includes volatile PID/timestamps; pin only command config.
-        for key in ('ExecStart', 'ExecStartPre'):
-            value = policy[key]
-            matches = re.findall(r'\{\s*path=([^;]+?)\s*;\s*argv\[\]=([^;]*?)\s*;\s*ignore_errors=(yes|no)\s*;', value)
-            P.require(len(matches) == value.count('{'), 'unrecognized service launcher policy')
-            policy[key] = [dict(path=p.strip(), argv=a.strip(), ignore_errors=e) for p, a, e in matches]
-        client = next(c for _, _, c in self.clients() if c['unit'] == unit)
-        role = Path(client['root']).name
-        launcher = str(Path(client['root']).parent/('launch-'+role+'.sh'))
-        command = policy['ExecStart']
-        P.require(len(command) == 1 and command[0]['path'] in ('/bin/bash', '/usr/bin/bash') and
-                  command[0]['argv'] == command[0]['path']+' '+launcher and command[0]['ignore_errors'] == 'no',
-                  'service launcher does not execute exact reviewed launcher')
-        for pre in policy['ExecStartPre']:
-            P.require(pre['path'] in ('/bin/sleep', '/usr/bin/sleep') and
-                      re.fullmatch(re.escape(pre['path'])+r' [0-9]+(?:\.[0-9]+)?', pre['argv']),
-                      'unreviewed pre-start launcher policy')
+        # properties() is last-row-wins; raw show preserves repeated pre/stop commands.
+        raw = self.m.command("systemctl", "show", "--all", unit,
+                             *("-p"+key for key in SERVICE_POLICY_FIELDS))
+        policy = parse_service_policy(raw)
+        P.require(set(STOP_POLICY) <= policy.keys(), "incomplete service stop policy")
+        client = next(c for _, _, c in self.clients() if c["unit"] == unit)
+        validate_launch_policy(policy, client_root=client["root"],
+                               launch_helper_pins=self.launch_helper_pins,
+                               read_bytes=lambda path: read(path)[0])
         return policy
 
     def public_query(self, inst):
@@ -339,6 +346,7 @@ class Backend:
         return target
 
     def guard_servers(self):
+        self.guard_launch_helpers()
         if self.lock_guard:
             self.lock_guard()
         P.require(self.m.boot_id() == self.state["boot_id"], "host rebooted since transaction")
@@ -783,6 +791,7 @@ class Backend:
                   "recovery state not eligible")
         P.require(state.get("roots") == self.roots and state.get("stage_sha256") == stage_fingerprint(self.stage) and
                   state.get("source_fingerprint") == self.source_fingerprint and
+                  state.get("launch_helper_pins") == self.launch_helper_pins and
                   state.get("boot_id") == self.m.boot_id(), "recovery source/root/boot mismatch")
         P.require(set(state.get("before", {})) == set(P.INSTANCES) and
                   "preclose" in state.get("backups", {}), "recovery lacks complete preclose evidence")

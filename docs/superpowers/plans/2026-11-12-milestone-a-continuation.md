@@ -76,3 +76,14 @@ Files: poc/candidates/redstation-supply-20261107/{BotDriver.cpp,bot_human.h,bot_
 
 - Native015 progress08:01UTC: uninstrumented control plus two crossed120s MITTEL damage windows completed with normal cleanup/restoration. Mixed metrics35:21query frags but2910.817:3407.339capped HP. One rejected Vanilla initial capture and one explicit end-boundary lifecycle gap retained. See build015-mittel-progress report. No release acceptance.
 - Source checkpoint published via connected GitHub API as6ba7391 with exact localb6b776d tree4a60cdad, independently fetched and compared. Drive checkpoint1GRJGaxXB4nevpWyTUL9OBf6PYZ3PkC59 roundtrip verified; full new evidence backup still pending.
+
+
+## Continuation checkpoint 2026-11-12T09:16:31.484057+00:00
+
+- A1 V3 native window `a1-input-diagnostics-completion-v3-20261112-090901`: complete acknowledged opposite-look diagnostic, errors=[], all three roles/two displays normally closed, 673-file restoration verified. Gains -0.25/-0.25 from cumulative action and body return error 0.000106812 degrees. This is not route/fire/first-state acceptance; see `docs/reports/2026-11-12-a1-v3-native-capture.md`.
+- A3 STARK first attempted Build015 comparison `arena015public-damage-checked-swap0-trial-2-085731` remains FAIL at first-neutral capture (slots 4-8); native physics/polling advanced before the narrow phase was captured. No difficulty conclusion follows. All four roles closed normally and restoration passed. Do not hide this attempt or retry until the causal capture design is addressed.
+- A4 unreadable round scripts reproduced under umask 0077 with actual UID/GID 65534: four newly created root-owned mode-0600 files denied. New disabled readability package has 113 passing tests and manifest `832e3ec244262f74547bc787aa2f017e3d00542f1bea93a898e036f9200be9d1`. Independent review is underway; native execution remains pending.
+- Names full current read-only preflight passed all six instances at 08:50. NO live names were changed. The global all-clients apply is superseded by the required Dev-first, server-by-server controller under development; consult `docs/superpowers/plans/2026-11-12-names-sequential-rollout.md`.
+- Private delta019 backup is complete, restored and fully downloaded back from Drive with matching 45078384 bytes and SHA256 `0342390c65ae7759d0e6838d6696b4f28eadb3a27364d44d71a4f14b4309ba3b`. Separate restore verified 11858 regular files and 297185813 bytes. Drive object `1MAHfGkschhrtPJivuJxvlza3l83CsTvP` in the existing project folder. It captures source through 5a44b29 and evidence through the 08:27 A4 attempt; later work requires delta020.
+- GitHub branch last published API commit `b02b056856243fb6fabcc0c6a470ca108fc333e0` has the exact tree of local 5a44b29. Later commits are local, pending publication.
+- A acceptance and existing 1/4/8-bot duration gates remain open; B is unstarted. Root alone owns native execution; at most two workers remain active.

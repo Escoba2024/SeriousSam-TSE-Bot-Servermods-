@@ -55,7 +55,7 @@ Zusätzliche opt-in Byteguards wurden gegen die tatsächliche Originaldatei gepr
 
 Der vorhandene APPLIEDACTION-Flag ist weiterhin kein eindeutiger Zustandscounter; siehe `2026-11-12-a1-first-processed-state-boundary.md`. Diese Erweiterung behauptet aus dem Flag keinen First-State-Nachweis.
 
-## Privates Testpaket
+## Privates Testpaket V1 (Reviewbasis)
 
 Das neue Paket liegt unter `/srv/tse-a1-input-diagnostics-completion-20261112`. `run_dual.RUNTIME_REVIEWED` und `source-manifest.json.runtime_reviewed` sind beide `False`; `runtime_performed` ist ebenfalls `False`.
 
@@ -87,3 +87,59 @@ Die finalen Logs und Hashes liegen ausschließlich im privaten Paket. Das Manife
 ## Nächster Schritt
 
 Root prüft die tatsächliche Änderung und die Pins unabhängig, erstellt gegebenenfalls eine separate Frozen-Kopie mit dokumentierter Gate-Umstellung und führt erst danach ein einziges begrenztes Diagnosefenster aus. Die zusätzliche Reader-Last und die native Quittungsfolge sind noch nicht gemessen. Eine neue Messung muss gemeinsam mit normalem Shutdown, geschlossenen Logs und exakter Wiederherstellung ausgewertet werden. Erst daraus folgt gegebenenfalls eine Eingabekorrektur. Diese Offline-Arbeit rechtfertigt weder eine Toleranzänderung noch eine XTest-Änderung oder A1-Erfolgsaussage.
+
+## Review-Nachtrag: V2 mit zwei begrenzten Korrekturen
+
+Root hat den Reader-Commit unverändert bei `ddd65b7` integriert. Die unabhängige Prüfung fand zwei zusätzliche Fehler ausschließlich im privaten Controller. Für jede spätere Freigabe ist jetzt `/srv/tse-a1-input-diagnostics-completion-v2-20261112` maßgeblich; das alte V1-Paket und die Frozen-Basen bleiben unverändert.
+
+**Transitive Close-Abhängigkeit:** Der ursprüngliche Helfer `/srv/tse-development-live-20261107/graceful-stop-bot.py` ist nun Teil der Runtime-Closure mit SHA-256 `9e572c15dd6191c1ca6022f3c713037c8c143180182954c59b8b587afb26840f`. Der ebenfalls gepinnte Wrapper `/srv/tse-cecil-rules-20261107/.codex/evidence/cecil_close_window.py` behält SHA-256 `68edd45db16eae91c32be99662d530c51222f68e0eaaa071ccb40ff355483011`. Vor nativen Imports, Backend-Erzeugung oder Starts werden beide Datei-Hashes und der AST-Vertrag des Wrappers geprüft: genau der erwartete literale `ORIGINAL=Path(...)`-Pfad und `ORIGINAL_SHA`. Die Prüfung importiert oder führt keinen der Helfer aus. Fehlende Pins, Dateidrift, abweichende/dynamische Literale und doppelte Vertragszuweisungen werden zurückgewiesen.
+
+**Lokale Zwei-Sekunden-Grenze:** `settled()` und `acknowledged()` konnten zuvor einen erfolgreichen Datenzustand zurückgeben, bevor sie die eigene Deadline überprüften. Zwei neue Regressionstests reproduzierten vier solche Fälle: ansonsten gültige, frisch gelesene Daten bei genau 2.00 und nach 2.01 Sekunden. V2 prüft die lokale Deadline jetzt unmittelbar vor dem erfolgreichen Rückweg. Die zu späte Beobachtung bleibt im Receipt; die Policy bricht ab, ohne einen weiteren Impuls zu senden oder eine erfolgreiche Quittung zu markieren. Die bereits vorhandene strikte Grenze `< deadline` bleibt bestehen.
+
+Beide Korrekturen wurden RED→GREEN geprüft. Die vollständige kleine private Suite besteht nun mit **103 Tests** (95 bisherige plus zwei Deadline- und sechs Close-Closure-Tests). Die Repo-Reader-Dateien wurden nicht geändert; die bereits geprüften 262 Python-/32 Reader-Tests wurden unter dem exklusiven A4-Fenster nicht unnötig wiederholt. Kein nativer Start oder Compile erfolgte durch diesen Worker.
+
+`evidence/v2-normalized-delta.json` belegt: Nach Entfernen genau der zwei neuen Deadline-Prüfungen sowie der Close-Vertragsprüfung und der eigenen V2-Labels entspricht der Controller-/Policy-Quelltext exakt V1. Alle 60 Dateien des alten Pakets und alle privaten Toolkopien blieben unverändert; sämtliche bisherigen externen Abhängigkeitspins wurden übernommen. V2 pinnt **47 Runtime-Abhängigkeiten und 38 eigene Quell-/Test-/Konfigurationsdateien**. Die 85/90-Sekunden-Limits, Hostbudgets, Transport, Restore, Gain-Grenzen und begrenzte Vier-Schritt-Folge sind unverändert.
+
+Beide Review-Gates bleiben `False`, ebenso `runtime_performed`. Der V2-Runplan bleibt: unabhängig prüfen, separate Root-Frozen-Kopie erstellen, erst danach ein exklusives begrenztes Diagnosefenster zulassen. A1 und die Ursache des alten Faktors zwei bleiben offen.
+
+## Review-Nachtrag: V3 mit begrenzter passiver Neuerfassung
+
+### Tatsächlicher V2-Abbruch
+
+Der Root-Lauf `a1-input-diagnostics-completion-v2-20261112-084124` blieb **FAIL**. Genau `look_right` und `forward` wurden ausgeführt; ihre normalen Input-Quittungen waren PASS mit 0.148766 bzw. 0.179711 Sekunden bis zur Freigabe. Die letzten zwei von 16 Paar-Leseversuchen meldeten `EvidenceError('state changed during read')`. Anschließend fehlte das neu angeforderte Paar; der bestehende Frische-Guard brach vor einer linken Eingabe ab.
+
+Die gültigen Paar-Lesungen benötigten im Median etwa 9.57 ms; der bisherige Zähler für erfolgreiche Reader-Zeit lag bei 0.147721 Sekunden. Die drei Spielprozesse wurden normal geschlossen, die geschlossenen Logs akzeptiert und die Dateien wiederhergestellt. Diese Angaben stammen aus dem unveränderten privaten Resultat und den Raw-Receipts; die V3-Arbeit hat keinen nativen Versuch ausgeführt. Insbesondere ist daraus weder die Ursache der früheren doppelten Gegenrotation noch ein erfolgreicher A1-Test abzuleiten.
+
+### Enger V3-Delta
+
+Neue deaktivierte Kopie: `/srv/tse-a1-input-diagnostics-completion-v3-20261112`. Geprüfte Basis ist das V2-Manifest `1df916e64fb2c2575929195e83d52bd258aa3fe931cf95ddd42d5694437d1faa`.
+
+Nur zwei private Controllerfunktionen ändern Verhalten:
+
+- `sample()` verwirft ausschließlich die exakten EvidenceError-Texte `state changed during read` und `tick changed during read`. Andere Fehler werden sofort weitergereicht. Der bestehende finally-Pfad schreibt zuvor jeden fehlgeschlagenen oder partiellen Raw-Versuch.
+- `native_rotation_pair()` erlaubt höchstens acht Paar-Leseversuche pro Anforderung einschließlich eines etwaigen Reads im unveränderten `periodic()`. Nach dessen Rückkehr gilt zusätzlich eine strikte Erfassungsdeadline von 0.2 Sekunden, mit höchstens 10 ms Pause zwischen transienten Fehlschlägen. Ein synchroner Read ist nicht präemptiv abbrechbar; an oder nach der Deadline gelieferte Daten werden gespeichert und vor der Rückgabe abgelehnt.
+
+Ein Paar muss neu zur jeweiligen Anforderung hinzugekommen sein, seinen Leseanfang ab dem Anforderungszeitpunkt haben und weiterhin höchstens 0.2 Sekunden alt sein. Das gilt auch bei gleichbleibendem Testuhrwert. Ein erfolgreich gelesener, aber ungültiger Datensatz führt sofort zum Abbruch; es wird nicht nach günstigeren Werten gesucht. Eingaben werden niemals wiederholt. Die begrenzte Vier-Schritt-Folge, alle Gain-/View-/Return-Prüfungen, die lokalen strikten Zwei-Sekunden-Grenzen sowie die 85/90-Sekunden-Limits bleiben unverändert.
+
+### Reproduzierbare Offline-Prüfung
+
+Die 13 neuen Regressionstests führen die tatsächlichen verschachtelten Funktionen `sample()`, `periodic()` und `native_rotation_pair()` aus. Nur native Reader, Uhr und Hostgrenzen werden durch kontrollierte In-Memory-Fixtures ersetzt. Gegen unveränderten V2-Code waren alle 13 Fälle RED, einschließlich 19 negativer Subfälle; nach dem Fix sind sie GREEN.
+
+Geprüft sind beide transienten Fehlertypen bis zum ersten neuen Paar, Erfolg beim achten Versuch, Ausschluss eines neunten Versuchs, ausgelastete und stehenbleibende Uhr, die strikte Deadline einschließlich ansonsten gültiger Erfolge genau an und nach ihr, alter Cache und vor der Anforderung gestartete Daten, sofortige fatale Fehler mit Teil-Snapshot-Erhalt sowie echte Policy-Integration nach rechts + forward. Erschöpfung und ein anschließend beobachteter Life-Wechsel stoppen dabei vor einer linken Eingabe.
+
+| Prüfung | Beleg |
+|---|---|
+| Unveränderte private Basis nach Umstellung eigener Manifestpfade | 103 Tests / 0.167 s, PASS |
+| Neue Regressionen gegen V2 | 13 Tests, 19 negative Subfälle, RED |
+| Neue Fälle und bestehende Controllerprüfungen nach Fix | 21 Tests / 0.319 s, PASS |
+| Gesamte private Offline-Suite | **116 Tests / 0.456 s, PASS** |
+| Erhalt der V2-Kopie | **Alle 69 Dateien bytegleich; Dateimenge unverändert** |
+| Geschützte Lifecycle-/Guard-Funktionen | **22 AST-identisch**, darunter Input, periodic, Close und Restore |
+| Externe Runtime-Pins | **27 unverändert übernommen** |
+| Repo-Reader, Rotation-Policy und geschützte Transport-/Restore-Dateien | unverändert |
+
+Der erste Baseline-Aufruf der neuen Kopie schlug ausschließlich wegen noch auf V2 gerichteter eigener Manifestpfade in `test_wiring` fehl. Nach deren begrenzter Umstellung bestanden die 103 bisherigen Tests vor jeder Änderung am Laufzeitcode. Beide Baseline-Logs bleiben erhalten. Repository-Tests und Reader-Tests wurden nicht erneut breit ausgeführt; der Reader ist bytegleich. Es gab keinen Compile und keine Runtime-Änderung.
+
+`evidence/v3-normalized-delta.json` hat SHA-256 `868a89e3f1ae1fa287fc86a258c5b1e08699a3ae752ceca10f8e704729da1641`. Nach Rücknahme genau der zwei Funktionsänderungen und Normalisierung der zwei V3-Labels entspricht der gesamte Controllertext exakt V2. Der private Diff, RED/GREEN-Logs, Quellen- und Manifestpins sowie der finale Paketbeleg bleiben im V3-Verzeichnis.
+
+Beide Gates und `runtime_performed` bleiben False. Root übernimmt unabhängiges Review, einen separaten Freeze und gegebenenfalls ein einziges exklusives natives Diagnosefenster. Der alte FAIL bleibt unverändert; diese Änderung ist keine A1-Abnahme.

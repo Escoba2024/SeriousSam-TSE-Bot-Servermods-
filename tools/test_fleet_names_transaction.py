@@ -39,6 +39,7 @@ class Services:
         self.unresolvable = set()
         self.interrupt_command = False
         self.extra_names = []
+        self.raw_policy_rows = {}
         self.ops = {"service_processes": self.service_processes,
                     "properties": self.properties}
         for inst in fleet:
@@ -92,7 +93,14 @@ class Services:
                   "MainPID": str(self.running.get(unit, {}).get("pid", 0)),
                   "InvocationID": self.invocations.get(unit, ""),
                   "ExecStop": "", "KillMode": "control-group",
-                  "SendSIGKILL": "yes", "TimeoutStopUSec": "1min 30s"}
+                  "SendSIGKILL": "yes", "TimeoutStopUSec": "1min 30s",
+                  "FragmentPath": "/fixture/systemd/"+unit, "DropInPaths": ""}
+        # Preserve the original adapter's last-row-wins behavior here. The new
+        # policy reader must use command() raw output instead of this shortcut.
+        for line in self.raw_policy_rows.get(unit, '').splitlines():
+            key, separator, value = line.partition('=')
+            if separator:
+                values[key] = value
         return {key: values[key] for key in keys} if keys else values
 
     def props(self, unit):
@@ -135,6 +143,12 @@ class Services:
         path.write_text(json.dumps({"closed": True, "identity": target["identity"]}))
 
     def command(self, *args, **kwargs):
+        if args[:3] == ('systemctl', 'show', '--all'):
+            unit, keys = args[3], [arg[2:] for arg in args[4:]]
+            values = self.ops['properties'](unit, *keys)
+            raw = self.raw_policy_rows.get(unit, '')
+            supplied = {line.partition('=')[0] for line in raw.splitlines()}
+            return raw + '\n' + '\n'.join(key+'='+values[key] for key in keys if key not in supplied)
         if args[:3] != ("systemctl", "start", "--no-block"):
             raise ValueError("unexpected service operation")
         unit = args[3]
@@ -535,6 +549,68 @@ class BackendTests(unittest.TestCase):
         serverlog.rename(serverlog.with_suffix('.previous'));serverlog.write_bytes(original)
         with self.assertRaisesRegex(ValueError,'server log identity'):
             f.b.verify_applied()
+
+    def policy_command(self, program, argv, ignore='no'):
+        return '{ path='+program+' ; argv[]='+argv+' ; ignore_errors='+ignore+' ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }'
+
+    def setup_wait_helper(self):
+        f=self.f
+        inst=f.m.fleet[4];client=inst['clients'][1]
+        helper=Path(f.roots['hole'])/'wait-server.py'
+        helper.write_bytes(b'import socket, time, sys\n# reviewed offline fixture\n')
+        pins={str(helper):hashlib.sha256(helper.read_bytes()).hexdigest()}
+        f.b=T.Backend(f.m,f.out,f.stage,roots=f.roots,stage_dir=f.stage_dir,launch_helper_pins=pins)
+        wait=self.policy_command('/usr/bin/python3','/usr/bin/python3 '+str(helper))
+        sleep=self.policy_command('/bin/sleep','/bin/sleep 20')
+        f.m.raw_policy_rows[client['unit']]='ExecStartPre='+wait+'\nExecStartPre='+sleep
+        return inst,client,helper,wait,sleep
+
+    def test_first_unreviewed_pre_command_cannot_hide_behind_sleep(self):
+        f=self.f;client=f.m.fleet[4]['clients'][1]
+        bad=self.policy_command('/usr/bin/python3','/usr/bin/python3 /unreviewed.py')
+        sleep=self.policy_command('/bin/sleep','/bin/sleep 20')
+        f.m.raw_policy_rows[client['unit']]='ExecStartPre='+bad+'\nExecStartPre='+sleep
+        with self.assertRaisesRegex(ValueError,'pre-start|helper'):
+            f.b.stop_policy(client['unit'])
+        self.assertFalse(f.m.stop_history)
+
+    def test_exact_pinned_wait_then_sleep_preserves_both_commands(self):
+        inst,client,helper,wait,sleep=self.setup_wait_helper()
+        original=helper.read_bytes()
+        policy=self.f.b.stop_policy(client['unit'])
+        self.assertEqual(policy['ExecStartPre'],[
+            {'path':'/usr/bin/python3','argv':'/usr/bin/python3 '+str(helper),'ignore_errors':'no'},
+            {'path':'/bin/sleep','argv':'/bin/sleep 20','ignore_errors':'no'}])
+        self.assertEqual(helper.read_bytes(),original)
+
+    def test_wait_helper_drift_blocks_before_any_close(self):
+        inst,client,helper,wait,sleep=self.setup_wait_helper()
+        self.f.b.preflight();self.f.b.backup_before_close()
+        helper.write_bytes(helper.read_bytes()+b'# changed\n')
+        with self.assertRaisesRegex(ValueError,'helper.*drift'):
+            self.f.b.close_own_clients()
+        self.assertFalse(self.f.m.stop_history)
+
+    def test_wait_command_substitution_and_arguments_are_rejected(self):
+        inst,client,helper,wait,sleep=self.setup_wait_helper()
+        for program,argv,ignore in [('/bin/python3','/bin/python3 '+str(helper),'no'),
+              ('/usr/bin/python3','/usr/bin/python3 '+str(helper)+' --extra','no'),
+              ('/usr/bin/python3','/usr/bin/python3 '+str(helper),'yes'),
+              ('/usr/bin/python3','/usr/bin/python3 '+str(helper.parent.parent/'trouble/wait-server.py'),'no')]:
+            with self.subTest(program=program,argv=argv,ignore=ignore):
+                raw=self.policy_command(program,argv,ignore)
+                self.f.m.raw_policy_rows[client['unit']]='ExecStartPre='+raw+'\nExecStartPre='+sleep
+                with self.assertRaisesRegex(ValueError,'pre-start|helper'):
+                    self.f.b.stop_policy(client['unit'])
+        self.assertFalse(self.f.m.start_history)
+
+    def test_pre_command_order_drift_blocks_before_restart(self):
+        inst,client,helper,wait,sleep=self.setup_wait_helper()
+        self.f.prepare_applied()
+        self.f.m.raw_policy_rows[client['unit']]='ExecStartPre='+sleep+'\nExecStartPre='+wait
+        with self.assertRaisesRegex(ValueError,'policy'):
+            self.f.b.start_one(inst,'botB',client)
+        self.assertFalse(self.f.m.start_history)
 
     def test_backend_rejects_binary_write_outside_51_paths(self):
         f=self.f;f.b.preflight()

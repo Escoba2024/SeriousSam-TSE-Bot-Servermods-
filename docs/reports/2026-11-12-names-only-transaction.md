@@ -19,7 +19,9 @@ a correct payload hash alone cannot authorize a non-name change.
 - `tools/names_staging.py`: existing offline PLC4, launcher and roster byte planner.
 - `tools/fleet_names_transaction.py`: canonical file IO, exact locks and manifest
   closure, staged payload validation, guarded backend and journal recovery.
-- The corresponding three test modules exercise the planner, policy and backend.
+- `tools/fleet_names_service_policy.py`: lossless ordered systemd command parsing
+  and exact reviewed pre-start command validation.
+- The corresponding test modules exercise the planner, policy and backend.
   Existing pool, native-log, query and identity-wait tests remain applicable.
 
 The runtime-specific entry, original stop helper, dependency manifest, native
@@ -43,10 +45,14 @@ root and pinned modules/config are checked. Only the reviewed normal-close
 adapter is available. Its exact acknowledgement is required before a closed log
 is archived. No force-stop or server-stop callback is added.
 
-Before each start, the saved stop policy and normalized systemd ExecStart /
-ExecStartPre configuration must match. ExecStart must invoke the reviewed Bash
-launcher; pre-start commands are limited to configured sleep commands. Volatile
-systemd PID/timestamp fields are excluded from that comparison.
+Before each start, the saved stop policy and normalized systemd ExecStart,
+ExecStartPre and ExecStop configuration must match. ExecStart must invoke the
+reviewed Bash launcher. Pre-start commands are limited to configured numeric
+sleeps and the exact assigned Python wait helper whose complete bytes have a
+separate reviewed hash. Extra arguments, another interpreter, another instance's
+helper, or ignored failures reject. Volatile execution timestamps/PIDs/status are
+excluded; command order, stop arguments, fragment path and drop-in paths remain
+part of the comparison.
 
 Start intent and service invocation are journaled before native identification.
 An interrupted native-identification wait can recover only the same durable
@@ -116,7 +122,7 @@ Reproduction command (from the repository root):
 
 ```bash
 cd tools
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest   test_gaming_names test_names_staging test_fleet_names_apply_policy   test_fleet_names_transaction test_native_closed_log_evidence   test_gamespy_query test_native_identity_wait -v
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest   test_gaming_names test_names_staging test_fleet_names_apply_policy   test_fleet_names_transaction test_fleet_names_service_policy test_native_closed_log_evidence   test_gamespy_query test_native_identity_wait -v
 ```
 
 This is a focused Python suite, not the entire project's C++/native acceptance.
@@ -163,6 +169,36 @@ The private source closure now includes the original graceful-close helper behin
 the wrapper. Its expected path and the wrapper's ORIGINAL_SHA are checked before
 native imports or the first stop; a missing transitive dependency is rejected by
 the offline bootstrap.
+
+## Bounded launcher-policy correction
+
+The native preflight exposed an existing wait-helper command that the initial
+sleep-only policy did not support. Investigation also confirmed that the supplied
+adapter converted repeated systemctl property rows to a dictionary, silently
+losing an earlier pre-start command. A failing regression demonstrated that an
+unreviewed first command could hide behind a later sleep command.
+
+The backend now reads raw `systemctl show --all` output and preserves every
+ExecStart, ExecStartPre and ExecStop record in order, including repeated rows and
+multiple records in one row. It rejects duplicate scalar fields, unknown record
+fields and any unparsed command fragment. The external adapter is unchanged.
+
+The five existing wait helpers were reviewed in full. They use only standard
+library socket/time/sys imports for a bounded UDP readiness check. Their original
+bytes remain unchanged; the private package contains independently reviewed
+literal hashes and lists all five helpers as immutable dependencies. They are
+outside the 51-file names write set. Constructor and mutation/start guards check
+all helper hashes; recovery also binds the reviewed helper map. Re-freezing a
+manifest containing substituted helper bytes does not authorize the substitute.
+
+The 13 targeted regressions passed after their initial failures were captured.
+A private offline replay accepted all 12 saved actual service configurations and
+preserved both commands in the two services with repeated pre-start rows. Three
+private bootstrap boundary tests passed: omitted helper dependency, substituted
+helper with a re-frozen hash, and disabled runtime gate. The complete focused
+suite passed **102/102 tests in 129.721 seconds, exit 0**. The new disabled
+private package validated with 8 source files, 11 immutable dependencies and
+2063 stage-data files. No live operation or native acceptance test was performed.
 
 ## Remaining root-owned work
 

@@ -63,3 +63,17 @@ Files: private rotation_diagnostics.py, shooter_policy.py, run_dual.py and tests
 - Integrity: seven optional Retail byteguards checked against the exact original DLL; six lifecycle/transport files byte-identical and 17 critical controller functions AST-identical to the frozen parent.
 - Package: /srv/tse-a1-input-diagnostics-completion-20261112; 46 runtime pins, 37 own source/config/test pins; both runtime review gates false. No runtime performed.
 - Handoff: docs/reports/2026-11-12-a1-input-diagnostics.md and the private README provide findings and the Root-only run plan. Root must independently review/freeze before any native use. A1 acceptance and the input factor-two cause remain open.
+
+## Bounded review follow-up: v2 private package
+
+Root independently reviewed and integrated the reader commit at ddd65b7. Two private-controller defects remain in scope; no reader, gain, transport, host, restore, 85/90-second window or four-step sequence changes are permitted.
+
+- [x] Pin the original graceful-stop helper in the runtime closure; check the pinned wrapper ORIGINAL/ORIGINAL_SHA AST contract before native imports or starts, without executing imported code. Add negative regressions first.
+- [x] Reject otherwise successful settling/acknowledgement observations when their local two-second deadline has passed; retain the late data. Add RED/GREEN regressions.
+- [x] Verify the small private suite, old-package preservation and normalized delta; update report and hand off new disabled pins.
+
+New private path: /srv/tse-a1-input-diagnostics-completion-v2-20261112. The v1 package and frozen bases remain unchanged. Root owns the current exclusive A4 native window; this worker performs only bounded offline code/file operations.
+
+- V2 RED/GREEN: four otherwise successful observations at 2.00/2.01 seconds now fail before success with receipts retained. Six close-dependency tests cover literal AST, exact pins, drift, duplicate/dynamic contracts and pre-import ordering.
+- V2 verification: private suite 103/103 passed; normalized production delta is only the two requested fixes plus own v2 unit/evidence labels. Sixty original-package files preserved; all prior external pins retained. No native actions/compiles or broad repeated tests.
+- V2 delivery: new private package remains disabled, with 47 runtime / 38 own source pins. The report contains the bounded review follow-up. Root remains exclusive runtime/integration owner.
