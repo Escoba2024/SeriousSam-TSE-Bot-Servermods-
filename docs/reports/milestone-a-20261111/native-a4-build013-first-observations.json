@@ -1,0 +1,365 @@
+{
+  "schema": 1,
+  "scope": "BUILD013_A4_BOUNDED_OBSERVATIONS_NOT_MAP_QUALIFICATION",
+  "candidate_sha256": "3a8d84c9c04e4839ee08d5d8ec879c37f25265df267c03e966ec869754a81f93",
+  "source_commit": "5ce974c296240be4ece76386654ecd7e666d1aa4",
+  "functional_pass": false,
+  "qualified": false,
+  "map_reset_proven": false,
+  "windows": [
+    {
+      "status": "PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED",
+      "errors": [],
+      "controller_sha256": "15f0fcdbf0ebfc0af765d1a32edbc270b9b67d08c42b40e2a5d7b3ff20d6f448",
+      "map_key": "redstation",
+      "started_utc": "2026-11-12T01:57:42.175317+00:00",
+      "finished_utc": "2026-11-12T02:00:45.501853+00:00",
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 118,
+        "cpu_busy_max_measured_percent": 61.004784688995215,
+        "mem_available_min_bytes": 2044563456,
+        "disk_free_min_bytes": 22294249472,
+        "max_sample_gap_seconds": 47.21962590189651,
+        "budget_pass_claim": false,
+        "gameplay_max_sample_gap_seconds": 1.1595184809993953
+      },
+      "evidence_id": "a4-013-redstation-20261112-015742",
+      "requested_seconds": 120,
+      "completed_seconds": 120.04055086406879,
+      "all_four_normally_closed": true,
+      "post_close_accepted": true,
+      "full_file_restoration_verified": true,
+      "closed_logs": {
+        "server": {
+          "sha256": "4ad976806c671c2742357b9ed77ab719dc653ff6d12f59c5b67c1573e9ccda1f",
+          "bytes": 22270,
+          "negative_events": {
+            "bad_sync": [],
+            "sync_disconnect": [],
+            "crc_failure": [],
+            "crash": [],
+            "invalid_action": [],
+            "join_failure": []
+          }
+        },
+        "botA": {
+          "sha256": "2d594df9965452138b6c1b7045c16b4d5b155907f0a40e45467fa256528ab902",
+          "bytes": 953146,
+          "negative_events": {
+            "bad_sync": [],
+            "sync_disconnect": [],
+            "crc_failure": [],
+            "crash": [],
+            "invalid_action": [],
+            "join_failure": []
+          }
+        },
+        "botB": {
+          "sha256": "96f9718e7d4c046014d07e73bad7d195d49f8a0c0f67db2e1762374be9b8c944",
+          "bytes": 861361,
+          "negative_events": {
+            "bad_sync": [],
+            "sync_disconnect": [],
+            "crc_failure": [],
+            "crash": [],
+            "invalid_action": [],
+            "join_failure": []
+          }
+        },
+        "vanilla": {
+          "sha256": "31b95886a66412fce95266a5049d50780f797336a6319a9edad1e46d4f8134db",
+          "bytes": 8682,
+          "negative_events": {
+            "bad_sync": [],
+            "sync_disconnect": [],
+            "crc_failure": [],
+            "crash": [],
+            "invalid_action": [],
+            "join_failure": []
+          }
+        }
+      },
+      "map_reset_proven": false,
+      "first_simulation_state_proven": false,
+      "functional_pass": false,
+      "actual_profile": {
+        "name": "DEMON",
+        "tier": 3,
+        "source": "canonical profile7 migration",
+        "all_eight_local_bots_checked": true
+      },
+      "actual_map_binding_checked": true,
+      "actual_slot_mapping": {
+        "botA": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "botB": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "vanilla": [
+          1
+        ]
+      },
+      "cohort_config_sha256": {
+        "botA": "11a7872c250dd427052fa7b77c327b95c99d270c2a86ebd1568d723c4991a69a",
+        "botB": "2e6444da3f5b9f799e2353bebf66a7cc5e75260486e09531712e680d558eff76"
+      },
+      "slots": {
+        "botA:0": {
+          "state_rows": 129,
+          "ready_rows": 129,
+          "motion_action_rows": 105,
+          "fire_action_rows": 3,
+          "player_state_counts": {
+            "0": 105,
+            "4": 24
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 5,
+          "observed_hp_deaths": 4,
+          "native_ranged_fire_samples": 44,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 1.4499778747558594
+        },
+        "botA:1": {
+          "state_rows": 129,
+          "ready_rows": 129,
+          "motion_action_rows": 102,
+          "fire_action_rows": 3,
+          "player_state_counts": {
+            "0": 117,
+            "4": 12
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 4,
+          "observed_lives": 7,
+          "observed_hp_deaths": 6,
+          "native_ranged_fire_samples": 14,
+          "observed_useful_pickup_lives": 4,
+          "max_stationary_alive_game_seconds": 2.3501434326171875
+        },
+        "botA:2": {
+          "state_rows": 129,
+          "ready_rows": 129,
+          "motion_action_rows": 101,
+          "fire_action_rows": 8,
+          "player_state_counts": {
+            "0": 109,
+            "4": 20
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 7,
+          "observed_hp_deaths": 6,
+          "native_ranged_fire_samples": 67,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 1.8999710083007812
+        },
+        "botA:3": {
+          "state_rows": 129,
+          "ready_rows": 129,
+          "motion_action_rows": 106,
+          "fire_action_rows": 2,
+          "player_state_counts": {
+            "0": 122,
+            "4": 7
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 6,
+          "observed_hp_deaths": 6,
+          "native_ranged_fire_samples": 18,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 0.49999237060546875
+        },
+        "botB:0": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 113,
+          "fire_action_rows": 45,
+          "player_state_counts": {
+            "0": 110,
+            "4": 11
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 2,
+          "observed_hp_deaths": 1,
+          "native_ranged_fire_samples": 337,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 1.6501007080078125
+        },
+        "botB:1": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 106,
+          "fire_action_rows": 9,
+          "player_state_counts": {
+            "0": 93,
+            "4": 28
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 4,
+          "observed_lives": 7,
+          "observed_hp_deaths": 6,
+          "native_ranged_fire_samples": 46,
+          "observed_useful_pickup_lives": 4,
+          "max_stationary_alive_game_seconds": 0.700042724609375
+        },
+        "botB:2": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 105,
+          "fire_action_rows": 20,
+          "player_state_counts": {
+            "0": 101,
+            "4": 20
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 4,
+          "observed_lives": 6,
+          "observed_hp_deaths": 5,
+          "native_ranged_fire_samples": 135,
+          "observed_useful_pickup_lives": 4,
+          "max_stationary_alive_game_seconds": 2.20013427734375
+        },
+        "botB:3": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 104,
+          "fire_action_rows": 15,
+          "player_state_counts": {
+            "0": 98,
+            "4": 23
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 5,
+          "observed_hp_deaths": 4,
+          "native_ranged_fire_samples": 91,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 1.9501190185546875
+        }
+      },
+      "missing_activity": [],
+      "reported_foreign_kill_count": 36,
+      "limits": "All8 observed useful pickup and sampled useful ranged fire. Does not prove every route, arrival, liquid escape, damage attribution or first state."
+    },
+    {
+      "status": "FAIL",
+      "errors": [
+        "ValueError('host CPU delta exceeds75%')"
+      ],
+      "controller_sha256": "15f0fcdbf0ebfc0af765d1a32edbc270b9b67d08c42b40e2a5d7b3ff20d6f448",
+      "map_key": "hole",
+      "started_utc": "2026-11-12T02:01:10.872009+00:00",
+      "finished_utc": "2026-11-12T02:08:50.080914+00:00",
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 378,
+        "cpu_busy_max_measured_percent": 79.85611510791367,
+        "mem_available_min_bytes": 1837383680,
+        "disk_free_min_bytes": 22206717952,
+        "max_sample_gap_seconds": 47.998636045027524,
+        "budget_pass_claim": false,
+        "gameplay_max_sample_gap_seconds": 1.1642431949730963
+      },
+      "evidence_id": "a4-013-hole-20261112-020110",
+      "requested_seconds": 600,
+      "completed_seconds": null,
+      "all_four_normally_closed": true,
+      "post_close_accepted": true,
+      "full_file_restoration_verified": true,
+      "closed_logs": {
+        "server": {
+          "sha256": "0060e14d3e6e4a1d58cad13fc2dc9f8b3868aaeb4eb2b7bfab0e622022f5e063",
+          "bytes": 43550,
+          "negative_events": {
+            "bad_sync": [],
+            "sync_disconnect": [],
+            "crc_failure": [],
+            "crash": [],
+            "invalid_action": [],
+            "join_failure": []
+          }
+        },
+        "botA": {
+          "sha256": "a058d2f887814f21e8200846d5a01974bc3149cf8257f3d52773201d2471eb9f",
+          "bytes": 2505864,
+          "negative_events": {
+            "bad_sync": [],
+            "sync_disconnect": [],
+            "crc_failure": [],
+            "crash": [],
+            "invalid_action": [],
+            "join_failure": []
+          }
+        },
+        "botB": {
+          "sha256": "60ddf5080e49a057273663a0618453628a729fc6a53b52ca99f49879fba89aa3",
+          "bytes": 2447146,
+          "negative_events": {
+            "bad_sync": [],
+            "sync_disconnect": [],
+            "crc_failure": [],
+            "crash": [],
+            "invalid_action": [],
+            "join_failure": []
+          }
+        },
+        "vanilla": {
+          "sha256": "6f8c01d1f611168d762632cf1d090dde84abd315229407b268373922f707cdf1",
+          "bytes": 11573,
+          "negative_events": {
+            "bad_sync": [],
+            "sync_disconnect": [],
+            "crc_failure": [],
+            "crash": [],
+            "invalid_action": [],
+            "join_failure": []
+          }
+        }
+      },
+      "map_reset_proven": false,
+      "first_simulation_state_proven": false,
+      "functional_pass": false,
+      "limits": "FAIL at actual75%hostCPU gate; no600s completion and no functional verdict. No causal attribution to game or other workload. Partial raw life and route evidence retained privately."
+    }
+  ]
+}

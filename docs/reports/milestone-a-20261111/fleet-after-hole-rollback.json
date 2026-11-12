@@ -1,5 +1,5 @@
 {
-  "utc": "2026-11-12T01:02:24.292458+00:00",
+  "utc": "2026-11-12T02:08:16.032103+00:00",
   "scope": "FRESH_QUERY_AND_CURRENT_LOGS_NOT_LONGTERM_SYNC_OR_HUMAN_CLASSIFICATION",
   "fleet": [
     {
@@ -132,7 +132,7 @@
       "port": 25650,
       "map": "Red Station",
       "own_bots": 8,
-      "additional_unknown": 0,
+      "additional_unknown": 1,
       "live_dlls": [
         {
           "role": "server",
@@ -153,6 +153,6 @@
       "live_session_spawn": 0.0
     }
   ],
-  "disk_free_gib": 21.44,
-  "mem_available_gib": 1.84
+  "disk_free_gib": 20.69,
+  "mem_available_gib": 1.73
 }

@@ -1,0 +1,684 @@
+{
+  "qualified": false,
+  "scope": "Retained original-server candidate013-vs048 diagnostic windows; not public7fc comparison or A3/A4 acceptance",
+  "useful_weapon_mask": "0x3df8",
+  "fire_scope": "Observed native fire_requested with a useful current owned weapon; no confirmed discharge or shooter attribution",
+  "windows": [
+    {
+      "window": "arena013brush3p-i0-swap1-trial-1-015034",
+      "instrumentation_enabled": false,
+      "observed_seconds": 120.09886356210336,
+      "slot_mapping": {
+        "botA": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "botB": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "vanilla": [
+          1
+        ]
+      },
+      "cohorts": {
+        "botA": {
+          "dll_sha256": "3a8d84c9c04e4839ee08d5d8ec879c37f25265df267c03e966ec869754a81f93",
+          "slots": [
+            0,
+            2,
+            3,
+            4
+          ],
+          "lives": 18,
+          "observed_deaths": 14,
+          "right_censored": 4,
+          "useful_owned": 12,
+          "completed_without": 4,
+          "censored_without": 2,
+          "useful_current": 12,
+          "useful_fire_request": 8,
+          "success_only_median": 11.125313758850098,
+          "success_only_max": 30.549589157104492,
+          "minigun_lives": 1,
+          "frags_last_delta": 6,
+          "frags_by_local": [
+            2,
+            0,
+            1,
+            3
+          ],
+          "last_query_elapsed": 119.34390850411728,
+          "timeouts": [],
+          "flight_events": [
+            {
+              "local": 3,
+              "tick": 592,
+              "action": "begin",
+              "source": 86,
+              "hop": 176,
+              "deadline": 41.618,
+              "source_line": 652
+            },
+            {
+              "local": 3,
+              "tick": 594,
+              "action": "end",
+              "reason": "arrived",
+              "source": 86,
+              "hop": 176,
+              "deadline": 41.618,
+              "source_line": 654
+            },
+            {
+              "local": 2,
+              "tick": 1039,
+              "action": "begin",
+              "source": 12,
+              "hop": 34,
+              "deadline": 72.659,
+              "source_line": 1105
+            },
+            {
+              "local": 2,
+              "tick": 1041,
+              "action": "end",
+              "reason": "context",
+              "source": 12,
+              "hop": 34,
+              "deadline": 72.659,
+              "source_line": 1120
+            },
+            {
+              "local": 2,
+              "tick": 1521,
+              "action": "begin",
+              "source": 86,
+              "hop": 176,
+              "deadline": 90.901,
+              "source_line": 1696
+            },
+            {
+              "local": 2,
+              "tick": 1524,
+              "action": "end",
+              "reason": "arrived",
+              "source": 86,
+              "hop": 176,
+              "deadline": 90.901,
+              "source_line": 1705
+            },
+            {
+              "local": 0,
+              "tick": 1660,
+              "action": "begin",
+              "source": 84,
+              "hop": 95,
+              "deadline": 114.823,
+              "source_line": 1814
+            },
+            {
+              "local": 0,
+              "tick": 1670,
+              "action": "end",
+              "reason": "arrived",
+              "source": 84,
+              "hop": 95,
+              "deadline": 114.823,
+              "source_line": 1831
+            }
+          ],
+          "max_sampled_one_meter_residence_seconds": 2.20013427734375
+        },
+        "botB": {
+          "dll_sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530",
+          "slots": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "lives": 13,
+          "observed_deaths": 9,
+          "right_censored": 4,
+          "useful_owned": 6,
+          "completed_without": 4,
+          "censored_without": 3,
+          "useful_current": 6,
+          "useful_fire_request": 5,
+          "success_only_median": 6.200235366821289,
+          "success_only_max": 45.651363372802734,
+          "minigun_lives": 0,
+          "frags_last_delta": 16,
+          "frags_by_local": [
+            11,
+            1,
+            3,
+            1
+          ],
+          "last_query_elapsed": 119.34390850411728,
+          "timeouts": [],
+          "flight_events": [],
+          "max_sampled_one_meter_residence_seconds": 1.60009765625
+        }
+      },
+      "lives": {
+        "botA": [
+          {"local":0,"global_slot":0,"life_index":1,"entity_id":565,"cecil_generation":5,"spawn_clock":0.9500001668930054,"observed_life_seconds":28.799831986427307,"right_censored":false,"first_alive_sampling_age":0.549999475479126,"first_useful_owned_age":2.349997878074646,"first_useful_current_age":2.7499974966049194,"first_useful_fire_requested_age":9.450021386146545,"minigun_observed":false,"first_alive_line":6,"death_line":820,"first_useful_owned_line":166,"cecil_spawn_line":249,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2,"death":1},"flight_events":[]},
+          {"local":0,"global_slot":0,"life_index":2,"entity_id":565,"cecil_generation":6,"spawn_clock":31.449806213378906,"observed_life_seconds":49.1505126953125,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":860,"death_line":2042,"first_useful_owned_line":null,"cecil_spawn_line":812,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":5,"death":1},"flight_events":[{"local":0,"tick":1660,"action":"begin","source":84,"hop":95,"deadline":114.823,"source_line":1814},{"local":0,"tick":1670,"action":"end","reason":"arrived","source":84,"hop":95,"deadline":114.823,"source_line":1831}]},
+          {"local":0,"global_slot":0,"life_index":3,"entity_id":565,"cecil_generation":7,"spawn_clock":82.25041961669922,"observed_life_seconds":39.25239562988281,"right_censored":true,"first_alive_sampling_age":0.100006103515625,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2083,"death_line":null,"first_useful_owned_line":null,"cecil_spawn_line":1984,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3},"flight_events":[]},
+          {"local":1,"global_slot":2,"life_index":1,"entity_id":566,"cecil_generation":5,"spawn_clock":0.9500001668930054,"observed_life_seconds":32.44977629184723,"right_censored":false,"first_alive_sampling_age":0.549999475479126,"first_useful_owned_age":10.90002691745758,"first_useful_current_age":17.300007462501526,"first_useful_fire_requested_age":21.649941086769104,"minigun_observed":false,"first_alive_line":4,"death_line":906,"first_useful_owned_line":385,"cecil_spawn_line":261,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1,"death":1},"flight_events":[]},
+          {"local":1,"global_slot":2,"life_index":2,"entity_id":566,"cecil_generation":6,"spawn_clock":35.04975128173828,"observed_life_seconds":19.449703216552734,"right_censored":false,"first_alive_sampling_age":0.09999847412109375,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":948,"death_line":1413,"first_useful_owned_line":null,"cecil_spawn_line":884,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1,"death":1},"flight_events":[]},
+          {"local":1,"global_slot":2,"life_index":3,"entity_id":566,"cecil_generation":7,"spawn_clock":56.249427795410156,"observed_life_seconds":9.099960327148438,"right_censored":false,"first_alive_sampling_age":0.049999237060546875,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":1457,"death_line":1676,"first_useful_owned_line":null,"cecil_spawn_line":1459,"laser_pickup_observed":false,"goal_end_counts":{"death":1},"flight_events":[]},
+          {"local":1,"global_slot":2,"life_index":4,"entity_id":566,"cecil_generation":8,"spawn_clock":67.04949188232422,"observed_life_seconds":16.20098876953125,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"first_useful_owned_age":11.250686645507812,"first_useful_current_age":11.6007080078125,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":1721,"death_line":2105,"first_useful_owned_line":1985,"cecil_spawn_line":1662,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2,"death":1},"flight_events":[]},
+          {"local":1,"global_slot":2,"life_index":5,"entity_id":566,"cecil_generation":9,"spawn_clock":85.05059051513672,"observed_life_seconds":36.45222473144531,"right_censored":true,"first_alive_sampling_age":0.0500030517578125,"first_useful_owned_age":12.60076904296875,"first_useful_current_age":13.600830078125,"first_useful_fire_requested_age":34.35209655761719,"minigun_observed":false,"first_alive_line":2148,"death_line":null,"first_useful_owned_line":2453,"cecil_spawn_line":2023,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3},"flight_events":[]},
+          {"local":2,"global_slot":3,"life_index":1,"entity_id":567,"cecil_generation":5,"spawn_clock":0.9500001668930054,"observed_life_seconds":10.400025010108948,"right_censored":false,"first_alive_sampling_age":0.549999475479126,"first_useful_owned_age":7.85001528263092,"first_useful_current_age":9.200020432472229,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":4,"death_line":374,"first_useful_owned_line":314,"cecil_spawn_line":273,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1,"death":1},"flight_events":[]},
+          {"local":2,"global_slot":3,"life_index":2,"entity_id":567,"cecil_generation":6,"spawn_clock":13.050031661987305,"observed_life_seconds":38.39946937561035,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":30.549589157104492,"first_useful_current_age":32.14956474304199,"first_useful_fire_requested_age":33.29954719543457,"minigun_observed":true,"first_alive_line":417,"death_line":1340,"first_useful_owned_line":1151,"cecil_spawn_line":534,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3,"death":1},"flight_events":[{"local":2,"tick":1039,"action":"begin","source":12,"hop":34,"deadline":72.659,"source_line":1105},{"local":2,"tick":1041,"action":"end","reason":"context","source":12,"hop":34,"deadline":72.659,"source_line":1120}]},
+          {"local":2,"global_slot":3,"life_index":3,"entity_id":567,"cecil_generation":7,"spawn_clock":53.049476623535156,"observed_life_seconds":17.450225830078125,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":14.600051879882812,"first_useful_current_age":15.300094604492188,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":1378,"death_line":1803,"first_useful_owned_line":1733,"cecil_spawn_line":1400,"laser_pickup_observed":true,"goal_end_counts":{"unavailable":2,"death":1},"flight_events":[{"local":2,"tick":1521,"action":"begin","source":86,"hop":176,"deadline":90.901,"source_line":1696},{"local":2,"tick":1524,"action":"end","reason":"arrived","source":86,"hop":176,"deadline":90.901,"source_line":1705}]},
+          {"local":2,"global_slot":3,"life_index":4,"entity_id":567,"cecil_generation":8,"spawn_clock":72.24980926513672,"observed_life_seconds":12.000732421875,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":2.400146484375,"first_useful_current_age":3.2501983642578125,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":1841,"death_line":2128,"first_useful_owned_line":1897,"cecil_spawn_line":1777,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2},"flight_events":[]},
+          {"local":2,"global_slot":3,"life_index":5,"entity_id":567,"cecil_generation":9,"spawn_clock":85.85063934326172,"observed_life_seconds":35.65217590332031,"right_censored":true,"first_alive_sampling_age":0.100006103515625,"first_useful_owned_age":16.350997924804688,"first_useful_current_age":18.401123046875,"first_useful_fire_requested_age":23.751449584960938,"minigun_observed":false,"first_alive_line":2169,"death_line":null,"first_useful_owned_line":2564,"cecil_spawn_line":2045,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3},"flight_events":[]},
+          {"local":3,"global_slot":4,"life_index":1,"entity_id":568,"cecil_generation":5,"spawn_clock":0.9500001668930054,"observed_life_seconds":7.650014519691467,"right_censored":false,"first_alive_sampling_age":0.549999475479126,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":4,"death_line":308,"first_useful_owned_line":null,"cecil_spawn_line":285,"laser_pickup_observed":false,"goal_end_counts":{"death":1},"flight_events":[]},
+          {"local":3,"global_slot":4,"life_index":2,"entity_id":568,"cecil_generation":6,"spawn_clock":10.250020980834961,"observed_life_seconds":33.0996036529541,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":10.999940872192383,"first_useful_current_age":11.499933242797852,"first_useful_fire_requested_age":14.199892044067383,"minigun_observed":false,"first_alive_line":349,"death_line":1146,"first_useful_owned_line":615,"cecil_spawn_line":455,"laser_pickup_observed":true,"goal_end_counts":{"unavailable":2,"death":1},"flight_events":[{"local":3,"tick":592,"action":"begin","source":86,"hop":176,"deadline":41.618,"source_line":652},{"local":3,"tick":594,"action":"end","reason":"arrived","source":86,"hop":176,"deadline":41.618,"source_line":654}]},
+          {"local":3,"global_slot":4,"life_index":3,"entity_id":568,"cecil_generation":7,"spawn_clock":45.049598693847656,"observed_life_seconds":18.24972152709961,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":13.399795532226562,"first_useful_current_age":14.3997802734375,"first_useful_fire_requested_age":15.099769592285156,"minigun_observed":false,"first_alive_line":1185,"death_line":1626,"first_useful_owned_line":1511,"cecil_spawn_line":1182,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1},"flight_events":[]},
+          {"local":3,"global_slot":4,"life_index":4,"entity_id":568,"cecil_generation":8,"spawn_clock":65.04936981201172,"observed_life_seconds":26.501617431640625,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":5.3503265380859375,"first_useful_current_age":9.100555419921875,"first_useful_fire_requested_age":13.700836181640625,"minigun_observed":false,"first_alive_line":1670,"death_line":2304,"first_useful_owned_line":1800,"cecil_spawn_line":1628,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2,"death":1},"flight_events":[]},
+          {"local":3,"global_slot":4,"life_index":5,"entity_id":568,"cecil_generation":9,"spawn_clock":93.05107879638672,"observed_life_seconds":28.4017333984375,"right_censored":true,"first_alive_sampling_age":0.0,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2339,"death_line":null,"first_useful_owned_line":null,"cecil_spawn_line":2207,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1},"flight_events":[]}
+        ],
+        "botB": [
+          {"local":0,"global_slot":5,"life_index":1,"entity_id":569,"cecil_generation":6,"spawn_clock":0.9500001668930054,"observed_life_seconds":88.8508802652359,"right_censored":false,"first_alive_sampling_age":0.549999475479126,"first_useful_owned_age":3.649999260902405,"first_useful_current_age":4.000000596046448,"first_useful_fire_requested_age":7.650014519691467,"minigun_observed":false,"first_alive_line":5,"death_line":2264,"first_useful_owned_line":213,"cecil_spawn_line":217,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3,"death":1},"flight_events":[]},
+          {"local":0,"global_slot":5,"life_index":2,"entity_id":569,"cecil_generation":7,"spawn_clock":91.4009780883789,"observed_life_seconds":30.051834106445312,"right_censored":true,"first_alive_sampling_age":0.0,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2302,"death_line":null,"first_useful_owned_line":null,"cecil_spawn_line":1639,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1},"flight_events":[]},
+          {"local":1,"global_slot":6,"life_index":1,"entity_id":570,"cecil_generation":6,"spawn_clock":0.9500001668930054,"observed_life_seconds":4.750003457069397,"right_censored":false,"first_alive_sampling_age":0.549999475479126,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":5,"death_line":240,"first_useful_owned_line":null,"cecil_spawn_line":221,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2,"death":1},"flight_events":[]},
+          {"local":1,"global_slot":6,"life_index":2,"entity_id":570,"cecil_generation":7,"spawn_clock":7.400010108947754,"observed_life_seconds":27.09974956512451,"right_censored":false,"first_alive_sampling_age":0.10000038146972656,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":284,"death_line":934,"first_useful_owned_line":null,"cecil_spawn_line":352,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3,"connector":2},"flight_events":[]},
+          {"local":1,"global_slot":6,"life_index":3,"entity_id":570,"cecil_generation":8,"spawn_clock":36.19973373413086,"observed_life_seconds":7.549884796142578,"right_censored":false,"first_alive_sampling_age":0.049999237060546875,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":972,"death_line":1154,"first_useful_owned_line":null,"cecil_spawn_line":757,"laser_pickup_observed":false,"goal_end_counts":{"death":1},"flight_events":[]},
+          {"local":1,"global_slot":6,"life_index":4,"entity_id":570,"cecil_generation":9,"spawn_clock":45.399593353271484,"observed_life_seconds":68.80277633666992,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":45.651363372802734,"first_useful_current_age":49.251583099365234,"first_useful_fire_requested_age":57.20206832885742,"minigun_observed":false,"first_alive_line":1195,"death_line":2850,"first_useful_owned_line":2293,"cecil_spawn_line":905,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":8},"flight_events":[]},
+          {"local":1,"global_slot":6,"life_index":5,"entity_id":570,"cecil_generation":10,"spawn_clock":115.8024673461914,"observed_life_seconds":5.6503448486328125,"right_censored":true,"first_alive_sampling_age":0.100006103515625,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2890,"death_line":null,"first_useful_owned_line":null,"cecil_spawn_line":1976,"laser_pickup_observed":false,"goal_end_counts":{},"flight_events":[]},
+          {"local":2,"global_slot":7,"life_index":1,"entity_id":571,"cecil_generation":6,"spawn_clock":0.9500001668930054,"observed_life_seconds":36.74971067905426,"right_censored":false,"first_alive_sampling_age":0.549999475479126,"first_useful_owned_age":2.299997925758362,"first_useful_current_age":4.150001168251038,"first_useful_fire_requested_age":9.700022339820862,"minigun_observed":false,"first_alive_line":5,"death_line":1007,"first_useful_owned_line":162,"cecil_spawn_line":225,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2},"flight_events":[]},
+          {"local":2,"global_slot":7,"life_index":2,"entity_id":571,"cecil_generation":7,"spawn_clock":39.39968490600586,"observed_life_seconds":76.15276718139648,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":3.7499427795410156,"first_useful_current_age":16.399749755859375,"first_useful_fire_requested_age":44.85085678100586,"minigun_observed":false,"first_alive_line":1049,"death_line":2882,"first_useful_owned_line":1141,"cecil_spawn_line":803,"laser_pickup_observed":true,"goal_end_counts":{"unavailable":4,"connector":2},"flight_events":[]},
+          {"local":2,"global_slot":7,"life_index":3,"entity_id":571,"cecil_generation":8,"spawn_clock":117.4025650024414,"observed_life_seconds":4.0502471923828125,"right_censored":true,"first_alive_sampling_age":0.0500030517578125,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2927,"death_line":null,"first_useful_owned_line":null,"cecil_spawn_line":2003,"laser_pickup_observed":false,"goal_end_counts":{},"flight_events":[]},
+          {"local":3,"global_slot":8,"life_index":1,"entity_id":572,"cecil_generation":6,"spawn_clock":0.9500001668930054,"observed_life_seconds":43.99960005283356,"right_censored":false,"first_alive_sampling_age":0.549999475479126,"first_useful_owned_age":10.75002634525299,"first_useful_current_age":20.44995939731598,"first_useful_fire_requested_age":25.39988386631012,"minigun_observed":false,"first_alive_line":5,"death_line":1183,"first_useful_owned_line":383,"cecil_spawn_line":229,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3},"flight_events":[]},
+          {"local":3,"global_slot":8,"life_index":2,"entity_id":572,"cecil_generation":7,"spawn_clock":46.59957504272461,"observed_life_seconds":29.65047836303711,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":1224,"death_line":1936,"first_useful_owned_line":null,"cecil_spawn_line":919,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":6,"connector":1,"death":1},"flight_events":[]},
+          {"local":3,"global_slot":8,"life_index":3,"entity_id":572,"cecil_generation":8,"spawn_clock":77.8001480102539,"observed_life_seconds":43.65266418457031,"right_censored":true,"first_alive_sampling_age":0.0,"first_useful_owned_age":8.650527954101562,"first_useful_current_age":13.250808715820312,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":1975,"death_line":null,"first_useful_owned_line":2181,"cecil_spawn_line":1404,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":5,"connector":3},"flight_events":[]}
+        ]
+      },
+      "resources": {
+        "server": {
+          "cpu_delta_seconds": 4.16,
+          "approx_cpu_percent_one_core": 3.46381295926989,
+          "rss_start_bytes": 51093504,
+          "rss_end_bytes": 51748864,
+          "scope": "usage brackets include pre-window normal observer input; RSS endpoints not peak; approximate CPU denominator observed_seconds"
+        },
+        "botA": {
+          "cpu_delta_seconds": 4.41,
+          "approx_cpu_percent_one_core": 3.671974795764475,
+          "rss_start_bytes": 187039744,
+          "rss_end_bytes": 187039744,
+          "scope": "usage brackets include pre-window normal observer input; RSS endpoints not peak; approximate CPU denominator observed_seconds"
+        },
+        "vanilla": {
+          "cpu_delta_seconds": 75.95,
+          "approx_cpu_percent_one_core": 63.23956592705484,
+          "rss_start_bytes": 192897024,
+          "rss_end_bytes": 214966272,
+          "scope": "usage brackets include pre-window normal observer input; RSS endpoints not peak; approximate CPU denominator observed_seconds"
+        },
+        "botB": {
+          "cpu_delta_seconds": 4.44,
+          "approx_cpu_percent_one_core": 3.6969542161438254,
+          "rss_start_bytes": 189222912,
+          "rss_end_bytes": 189222912,
+          "scope": "usage brackets include pre-window normal observer input; RSS endpoints not peak; approximate CPU denominator observed_seconds"
+        }
+      },
+      "inventory": {
+        "enabled": true,
+        "tool_sha256": "920613df96771c14d3600f7f15fbbf5ae44254365774a9168fe16dbcee735cbb",
+        "valid_samples": 3022,
+        "discarded_changed": 86,
+        "sample_seconds_total": 12.236896986840293,
+        "sample_seconds_max": 0.013697647023946047,
+        "setup_seconds": 0.007506024092435837,
+        "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+      },
+      "closed_logs": {
+        "server": {
+          "sha256": "35cf7977017c156257faf067084ef0541cdbb99c88825d4edf34c5218e024e12",
+          "bytes": 18066,
+          "error_patterns_absent": true,
+          "identity_close_match": true
+        },
+        "botA": {
+          "sha256": "561068a49ab78ef83d26890028932ac08e60de13eb76a72a481c0ee58cfb6015",
+          "bytes": 1139571,
+          "error_patterns_absent": true,
+          "identity_close_match": true
+        },
+        "botB": {
+          "sha256": "ece07b32513b31eafad6f2099994e92546ccb00ceaf5e122db7020198f4f17db",
+          "bytes": 703835,
+          "error_patterns_absent": true,
+          "identity_close_match": true
+        },
+        "vanilla": {
+          "sha256": "e9ff08775ba96b2fef8096b3efa190431cc0ddce4359e386009f35ceb3b9cd2f",
+          "bytes": 8391,
+          "error_patterns_absent": true,
+          "identity_close_match": true
+        }
+      },
+      "source_sha256": {
+        "result.json": "25d4bb382b488a93c603fa7a388026d38e4c8250ab702bc757f94f97a7f9de37",
+        "queries.json": "0067d897b45beaabd8a77bc14d3a66c1bfd49309fea89d2d451c08a3525aed22",
+        "inventory.jsonl": "694d75d72d1c1f9e750ec7fd382a278b3126036ffe2cd49c709cb186a516490d",
+        "botA.log": "19e12a5e01dbcac997f5234b3226db4d5005a59f363e6d2ad798e871e4ca4313",
+        "botB.log": "ac5901dcfad27eff21eacba2f83bec59e8483ccaa8d0349d341d4bed4b6b0425",
+        "botA-cohort.ini": "559977563d79a7c329ff0c7daf065e7f4272089f1b2639ac1f7ba5d091ffdda5",
+        "botB-cohort.ini": "c2ce234a285f7612385ca412275685c0b512f36ee88bb560902fd7315e28edca",
+        "controller-source.py": "da2a27642f455107d8341b0786547c5e2337a9e42227fb2f3954a845e93bcc00",
+        "source-manifest.json": "3239f70252a9ac16a512b4614ef874d7bb202cd4908aab848957789876cc9bfd"
+      }
+    },
+    {
+      "window": "arena013brush3p-i1-swap1-trial-1-015357",
+      "instrumentation_enabled": true,
+      "observed_seconds": 120.10049567511305,
+      "slot_mapping": {
+        "botA": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "botB": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "vanilla": [
+          1
+        ]
+      },
+      "cohorts": {
+        "botA": {
+          "dll_sha256": "3a8d84c9c04e4839ee08d5d8ec879c37f25265df267c03e966ec869754a81f93",
+          "slots": [
+            0,
+            2,
+            3,
+            4
+          ],
+          "lives": 14,
+          "observed_deaths": 10,
+          "right_censored": 4,
+          "useful_owned": 8,
+          "completed_without": 5,
+          "censored_without": 1,
+          "useful_current": 7,
+          "useful_fire_request": 6,
+          "success_only_median": 9.375331610441208,
+          "success_only_max": 19.04970932006836,
+          "minigun_lives": 1,
+          "frags_last_delta": 10,
+          "frags_by_local": [
+            7,
+            1,
+            2,
+            0
+          ],
+          "last_query_elapsed": 119.20034400303848,
+          "timeouts": [
+            {
+              "local": 3,
+              "tick": 1958,
+              "entity": 310,
+              "reason": "timeout",
+              "source_line": 1844
+            }
+          ],
+          "flight_events": [
+            {
+              "local": 2,
+              "tick": 599,
+              "action": "begin",
+              "source": 86,
+              "hop": 176,
+              "deadline": 43.5,
+              "source_line": 632
+            },
+            {
+              "local": 3,
+              "tick": 599,
+              "action": "begin",
+              "source": 84,
+              "hop": 86,
+              "deadline": 48.834,
+              "source_line": 636
+            },
+            {
+              "local": 2,
+              "tick": 601,
+              "action": "end",
+              "reason": "arrived",
+              "source": 86,
+              "hop": 176,
+              "deadline": 43.5,
+              "source_line": 673
+            },
+            {
+              "local": 3,
+              "tick": 646,
+              "action": "continue",
+              "source": 86,
+              "hop": 176,
+              "deadline": 48.834,
+              "source_line": 697
+            },
+            {
+              "local": 3,
+              "tick": 664,
+              "action": "end",
+              "reason": "context",
+              "source": 86,
+              "hop": 176,
+              "deadline": 48.834,
+              "source_line": 711
+            },
+            {
+              "local": 1,
+              "tick": 1314,
+              "action": "begin",
+              "source": 12,
+              "hop": 34,
+              "deadline": 85.051,
+              "source_line": 1277
+            },
+            {
+              "local": 1,
+              "tick": 1316,
+              "action": "end",
+              "reason": "context",
+              "source": 12,
+              "hop": 34,
+              "deadline": 85.051,
+              "source_line": 1281
+            }
+          ],
+          "max_sampled_one_meter_residence_seconds": 2.0999679565429688
+        },
+        "botB": {
+          "dll_sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530",
+          "slots": [
+            5,
+            6,
+            7,
+            8
+          ],
+          "lives": 11,
+          "observed_deaths": 7,
+          "right_censored": 4,
+          "useful_owned": 9,
+          "completed_without": 1,
+          "censored_without": 1,
+          "useful_current": 9,
+          "useful_fire_request": 5,
+          "success_only_median": 10.850026547908783,
+          "success_only_max": 14.20086669921875,
+          "minigun_lives": 0,
+          "frags_last_delta": 6,
+          "frags_by_local": [
+            2,
+            2,
+            2,
+            0
+          ],
+          "last_query_elapsed": 119.20034400303848,
+          "timeouts": [
+            {
+              "local": 0,
+              "tick": 2317,
+              "entity": 78,
+              "reason": "timeout",
+              "source_line": 1924
+            }
+          ],
+          "flight_events": [],
+          "max_sampled_one_meter_residence_seconds": 1.6999740600585938
+        }
+      },
+      "lives": {
+        "botA": [
+          {"local":0,"global_slot":0,"life_index":1,"entity_id":565,"cecil_generation":6,"spawn_clock":0.9000001549720764,"observed_life_seconds":120.4028028845787,"right_censored":true,"first_alive_sampling_age":0.4999995827674866,"first_useful_owned_age":2.5499977469444275,"first_useful_current_age":2.949997365474701,"first_useful_fire_requested_age":17.500005185604095,"minigun_observed":false,"first_alive_line":6,"death_line":null,"first_useful_owned_line":172,"cecil_spawn_line":274,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":5,"connector":1},"flight_events":[]},
+          {"local":1,"global_slot":2,"life_index":1,"entity_id":566,"cecil_generation":6,"spawn_clock":0.9000001549720764,"observed_life_seconds":34.649743497371674,"right_censored":false,"first_alive_sampling_age":0.4999995827674866,"first_useful_owned_age":12.000030934810638,"first_useful_current_age":18.2499937415123,"first_useful_fire_requested_age":18.449990689754486,"minigun_observed":false,"first_alive_line":4,"death_line":922,"first_useful_owned_line":395,"cecil_spawn_line":286,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2},"flight_events":[]},
+          {"local":1,"global_slot":2,"life_index":2,"entity_id":566,"cecil_generation":7,"spawn_clock":37.1997184753418,"observed_life_seconds":46.35078048706055,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":19.04970932006836,"first_useful_current_age":21.549671173095703,"first_useful_fire_requested_age":22.049663543701172,"minigun_observed":true,"first_alive_line":960,"death_line":2048,"first_useful_owned_line":1409,"cecil_spawn_line":884,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2},"flight_events":[{"local":1,"tick":1314,"action":"begin","source":12,"hop":34,"deadline":85.051,"source_line":1277},{"local":1,"tick":1316,"action":"end","reason":"context","source":12,"hop":34,"deadline":85.051,"source_line":1281}]},
+          {"local":1,"global_slot":2,"life_index":3,"entity_id":566,"cecil_generation":8,"spawn_clock":85.20059967041016,"observed_life_seconds":12.900787353515625,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2089,"death_line":2387,"first_useful_owned_line":null,"cecil_spawn_line":1798,"laser_pickup_observed":false,"goal_end_counts":{"death":1},"flight_events":[]},
+          {"local":1,"global_slot":2,"life_index":4,"entity_id":566,"cecil_generation":9,"spawn_clock":99.60147857666016,"observed_life_seconds":21.701324462890625,"right_censored":true,"first_alive_sampling_age":0.0500030517578125,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2426,"death_line":null,"first_useful_owned_line":null,"cecil_spawn_line":2001,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1},"flight_events":[]},
+          {"local":2,"global_slot":3,"life_index":1,"entity_id":567,"cecil_generation":6,"spawn_clock":0.9000001549720764,"observed_life_seconds":11.400028645992279,"right_censored":false,"first_alive_sampling_age":0.4999995827674866,"first_useful_owned_age":8.150016248226166,"first_useful_current_age":9.650021970272064,"first_useful_fire_requested_age":10.850026547908783,"minigun_observed":false,"first_alive_line":4,"death_line":380,"first_useful_owned_line":303,"cecil_spawn_line":298,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1},"flight_events":[]},
+          {"local":2,"global_slot":3,"life_index":2,"entity_id":567,"cecil_generation":7,"spawn_clock":14.000035285949707,"observed_life_seconds":45.499342918395996,"right_censored":false,"first_alive_sampling_age":0.05000019073486328,"first_useful_owned_age":6.499938011169434,"first_useful_current_age":6.749934196472168,"first_useful_fire_requested_age":7.849917411804199,"minigun_observed":false,"first_alive_line":422,"death_line":1486,"first_useful_owned_line":571,"cecil_spawn_line":536,"laser_pickup_observed":true,"goal_end_counts":{"unavailable":1,"death":1},"flight_events":[{"local":2,"tick":599,"action":"begin","source":86,"hop":176,"deadline":43.5,"source_line":632},{"local":2,"tick":601,"action":"end","reason":"arrived","source":86,"hop":176,"deadline":43.5,"source_line":673}]},
+          {"local":2,"global_slot":3,"life_index":3,"entity_id":567,"cecil_generation":8,"spawn_clock":61.1993522644043,"observed_life_seconds":2.049968719482422,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":1526,"death_line":1572,"first_useful_owned_line":null,"cecil_spawn_line":1398,"laser_pickup_observed":false,"goal_end_counts":{"death":1},"flight_events":[]},
+          {"local":2,"global_slot":3,"life_index":4,"entity_id":567,"cecil_generation":9,"spawn_clock":64.79935455322266,"observed_life_seconds":38.75236511230469,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":1610,"death_line":2518,"first_useful_owned_line":null,"cecil_spawn_line":1448,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2,"death":1},"flight_events":[]},
+          {"local":2,"global_slot":3,"life_index":5,"entity_id":567,"cecil_generation":10,"spawn_clock":105.20182037353516,"observed_life_seconds":16.100982666015625,"right_censored":true,"first_alive_sampling_age":0.0,"first_useful_owned_age":10.700653076171875,"first_useful_current_age":15.500946044921875,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2557,"death_line":null,"first_useful_owned_line":2806,"cecil_spawn_line":2102,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2},"flight_events":[]},
+          {"local":3,"global_slot":4,"life_index":1,"entity_id":568,"cecil_generation":6,"spawn_clock":0.9000001549720764,"observed_life_seconds":56.94940322637558,"right_censored":false,"first_alive_sampling_age":0.4999995827674866,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":4,"death_line":1446,"first_useful_owned_line":null,"cecil_spawn_line":310,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":4,"connector":1,"unreachable_hold":1,"death":1},"flight_events":[{"local":3,"tick":599,"action":"begin","source":84,"hop":86,"deadline":48.834,"source_line":636},{"local":3,"tick":646,"action":"continue","source":86,"hop":176,"deadline":48.834,"source_line":697},{"local":3,"tick":664,"action":"end","reason":"context","source":86,"hop":176,"deadline":48.834,"source_line":711}]},
+          {"local":3,"global_slot":4,"life_index":2,"entity_id":568,"cecil_generation":7,"spawn_clock":59.5993766784668,"observed_life_seconds":12.80044174194336,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":1487,"death_line":1786,"first_useful_owned_line":null,"cecil_spawn_line":1349,"laser_pickup_observed":false,"goal_end_counts":{"death":1},"flight_events":[]},
+          {"local":3,"global_slot":4,"life_index":3,"entity_id":568,"cecil_generation":8,"spawn_clock":73.99991607666016,"observed_life_seconds":32.301971435546875,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":2.400146484375,"first_useful_current_age":3.300201416015625,"first_useful_fire_requested_age":30.451858520507812,"minigun_observed":false,"first_alive_line":1825,"death_line":2581,"first_useful_owned_line":1882,"cecil_spawn_line":1607,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1,"timeout":1},"flight_events":[]},
+          {"local":3,"global_slot":4,"life_index":4,"entity_id":568,"cecil_generation":9,"spawn_clock":108.00199127197266,"observed_life_seconds":13.300811767578125,"right_censored":true,"first_alive_sampling_age":0.0,"first_useful_owned_age":10.60064697265625,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2623,"death_line":null,"first_useful_owned_line":2871,"cecil_spawn_line":2138,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1},"flight_events":[]}
+        ],
+        "botB": [
+          {"local":0,"global_slot":5,"life_index":1,"entity_id":569,"cecil_generation":5,"spawn_clock":0.9000001549720764,"observed_life_seconds":17.500005185604095,"right_censored":false,"first_alive_sampling_age":0.4999995827674866,"first_useful_owned_age":3.900000035762787,"first_useful_current_age":4.25000137090683,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":5,"death_line":522,"first_useful_owned_line":202,"cecil_spawn_line":217,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3,"death":1},"flight_events":[]},
+          {"local":0,"global_slot":5,"life_index":2,"entity_id":569,"cecil_generation":6,"spawn_clock":20.249977111816406,"observed_life_seconds":40.099388122558594,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":1.3499794006347656,"first_useful_current_age":4.749927520751953,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":566,"death_line":1506,"first_useful_owned_line":599,"cecil_spawn_line":543,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3},"flight_events":[]},
+          {"local":0,"global_slot":5,"life_index":3,"entity_id":569,"cecil_generation":7,"spawn_clock":61.849342346191406,"observed_life_seconds":59.453460693359375,"right_censored":true,"first_alive_sampling_age":0.0,"first_useful_owned_age":13.050628662109375,"first_useful_current_age":16.300827026367188,"first_useful_fire_requested_age":33.10185241699219,"minigun_observed":false,"first_alive_line":1541,"death_line":null,"first_useful_owned_line":1847,"cecil_spawn_line":1162,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2,"connector":1,"timeout":1},"flight_events":[]},
+          {"local":1,"global_slot":6,"life_index":1,"entity_id":570,"cecil_generation":5,"spawn_clock":0.9000001549720764,"observed_life_seconds":47.749543607234955,"right_censored":false,"first_alive_sampling_age":0.4999995827674866,"first_useful_owned_age":11.650029599666595,"first_useful_current_age":14.500040471553802,"first_useful_fire_requested_age":33.94975417852402,"minigun_observed":false,"first_alive_line":5,"death_line":1232,"first_useful_owned_line":387,"cecil_spawn_line":221,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3},"flight_events":[]},
+          {"local":1,"global_slot":6,"life_index":2,"entity_id":570,"cecil_generation":6,"spawn_clock":50.24951934814453,"observed_life_seconds":15.699905395507812,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":0.6999893188476562,"first_useful_current_age":3.4999465942382812,"first_useful_fire_requested_age":4.5999298095703125,"minigun_observed":false,"first_alive_line":1269,"death_line":1634,"first_useful_owned_line":1287,"cecil_spawn_line":1005,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1},"flight_events":[]},
+          {"local":1,"global_slot":6,"life_index":3,"entity_id":570,"cecil_generation":7,"spawn_clock":67.44951629638672,"observed_life_seconds":21.851333618164062,"right_censored":false,"first_alive_sampling_age":0.0,"first_useful_owned_age":14.20086669921875,"first_useful_current_age":16.451004028320312,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":1669,"death_line":2182,"first_useful_owned_line":2005,"cecil_spawn_line":1248,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2},"flight_events":[]},
+          {"local":1,"global_slot":6,"life_index":4,"entity_id":570,"cecil_generation":8,"spawn_clock":91.05095672607422,"observed_life_seconds":14.250869750976562,"right_censored":false,"first_alive_sampling_age":0.0500030517578125,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2223,"death_line":2559,"first_useful_owned_line":null,"cecil_spawn_line":1592,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":2,"death":1},"flight_events":[]},
+          {"local":1,"global_slot":6,"life_index":5,"entity_id":570,"cecil_generation":9,"spawn_clock":106.65190887451172,"observed_life_seconds":14.650894165039062,"right_censored":true,"first_alive_sampling_age":0.0500030517578125,"first_useful_owned_age":null,"first_useful_current_age":null,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":2591,"death_line":null,"first_useful_owned_line":null,"cecil_spawn_line":1798,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":1},"flight_events":[]},
+          {"local":2,"global_slot":7,"life_index":1,"entity_id":571,"cecil_generation":5,"spawn_clock":0.9000001549720764,"observed_life_seconds":120.4028028845787,"right_censored":true,"first_alive_sampling_age":0.4999995827674866,"first_useful_owned_age":13.000034749507904,"first_useful_current_age":14.00003856420517,"first_useful_fire_requested_age":68.29962295293808,"minigun_observed":false,"first_alive_line":5,"death_line":null,"first_useful_owned_line":420,"cecil_spawn_line":225,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":10},"flight_events":[]},
+          {"local":3,"global_slot":8,"life_index":1,"entity_id":572,"cecil_generation":5,"spawn_clock":0.9000001549720764,"observed_life_seconds":61.94932693243027,"right_censored":false,"first_alive_sampling_age":0.4999995827674866,"first_useful_owned_age":10.850026547908783,"first_useful_current_age":22.099934995174408,"first_useful_fire_requested_age":null,"minigun_observed":false,"first_alive_line":5,"death_line":1564,"first_useful_owned_line":370,"cecil_spawn_line":229,"laser_pickup_observed":false,"goal_end_counts":{"unavailable":3},"flight_events":[]},
+          {"local":3,"global_slot":8,"life_index":2,"entity_id":572,"cecil_generation":6,"spawn_clock":64.24932098388672,"observed_life_seconds":57.05348205566406,"right_censored":true,"first_alive_sampling_age":0.1500091552734375,"first_useful_owned_age":10.250625610351562,"first_useful_current_age":10.500640869140625,"first_useful_fire_requested_age":28.101715087890625,"minigun_observed":false,"first_alive_line":1600,"death_line":null,"first_useful_owned_line":1838,"cecil_spawn_line":1197,"laser_pickup_observed":true,"goal_end_counts":{"unavailable":2,"connector":2},"flight_events":[]}
+        ]
+      },
+      "resources": {
+        "server": {
+          "cpu_delta_seconds": 4.58,
+          "approx_cpu_percent_one_core": 3.8134730204523684,
+          "rss_start_bytes": 105873408,
+          "rss_end_bytes": 106266624,
+          "scope": "usage brackets include pre-window normal observer input; RSS endpoints not peak; approximate CPU denominator observed_seconds"
+        },
+        "botA": {
+          "cpu_delta_seconds": 4.17,
+          "approx_cpu_percent_one_core": 3.4720922478791216,
+          "rss_start_bytes": 189771776,
+          "rss_end_bytes": 189902848,
+          "scope": "usage brackets include pre-window normal observer input; RSS endpoints not peak; approximate CPU denominator observed_seconds"
+        },
+        "vanilla": {
+          "cpu_delta_seconds": 74.77,
+          "approx_cpu_percent_one_core": 62.256196012930914,
+          "rss_start_bytes": 192655360,
+          "rss_end_bytes": 214376448,
+          "scope": "usage brackets include pre-window normal observer input; RSS endpoints not peak; approximate CPU denominator observed_seconds"
+        },
+        "botB": {
+          "cpu_delta_seconds": 4.18,
+          "approx_cpu_percent_one_core": 3.480418608185786,
+          "rss_start_bytes": 189755392,
+          "rss_end_bytes": 189755392,
+          "scope": "usage brackets include pre-window normal observer input; RSS endpoints not peak; approximate CPU denominator observed_seconds"
+        }
+      },
+      "inventory": {
+        "enabled": true,
+        "tool_sha256": "920613df96771c14d3600f7f15fbbf5ae44254365774a9168fe16dbcee735cbb",
+        "valid_samples": 2935,
+        "discarded_changed": 71,
+        "sample_seconds_total": 12.470902937231585,
+        "sample_seconds_max": 0.013052763184532523,
+        "setup_seconds": 0.007113422034308314,
+        "scope": "OWN_ORIGINAL_SERVER_READONLY_NONATOMIC"
+      },
+      "closed_logs": {
+        "server": {
+          "sha256": "f53cfd1cb5315a72fa987dbed358d4714b1998c13fd5e9b584e3004791341e85",
+          "bytes": 23758,
+          "error_patterns_absent": true,
+          "identity_close_match": true
+        },
+        "botA": {
+          "sha256": "80f24001a00e88912126cae637db2512b4c4583ad4a3e682605d254a7347acd7",
+          "bytes": 826432,
+          "error_patterns_absent": true,
+          "identity_close_match": true
+        },
+        "botB": {
+          "sha256": "e40f0a304848734a3fcaf6bfd7734585885529267fead94f969d04bad6d8029d",
+          "bytes": 709016,
+          "error_patterns_absent": true,
+          "identity_close_match": true
+        },
+        "vanilla": {
+          "sha256": "5dcd3986a9f4409ddbc37a24198eab293848651a64e66c09fe4efc02d63e5696",
+          "bytes": 8134,
+          "error_patterns_absent": true,
+          "identity_close_match": true
+        }
+      },
+      "source_sha256": {
+        "result.json": "10378e09fbbceeb403a704c1b16b4388c95137bd187b818d80d0f95c694d0a3c",
+        "queries.json": "a4b95989337c389a8228b96064a20cf5ad2e36df30e6ebfdbec88cca69384801",
+        "inventory.jsonl": "12ea2fd6bb4d9b6cccc39a34a51e9d10c7fffbe521257ead2f6cddd4c09570a6",
+        "botA.log": "972bfade328a086c3ccfa9872bf89a51c2b65f517363bf35d13cfc01c2352d8c",
+        "botB.log": "add8d6e61029cb4a08b94232275045efca3f435942588ffd13d94559979c4495",
+        "botA-cohort.ini": "559977563d79a7c329ff0c7daf065e7f4272089f1b2639ac1f7ba5d091ffdda5",
+        "botB-cohort.ini": "c2ce234a285f7612385ca412275685c0b512f36ee88bb560902fd7315e28edca",
+        "controller-source.py": "da2a27642f455107d8341b0786547c5e2337a9e42227fb2f3954a845e93bcc00",
+        "source-manifest.json": "3239f70252a9ac16a512b4614ef874d7bb202cd4908aab848957789876cc9bfd"
+      }
+    }
+  ],
+  "instrumented_calls": {
+    "scope": "Original JumpFromBouncer known-argument calls; frozen brush registry is not a class test",
+    "total_calls": 45,
+    "calls_inside_gameplay_window": 44,
+    "argument_brush_counts": {
+      "73": 9,
+      "129": 21,
+      "136": 10,
+      "234": 1,
+      "274": 3,
+      "517": 1
+    },
+    "velocity_changed_calls": 45,
+    "launches_proven": false,
+    "bouncer_class_inferred": false,
+    "frozen_brush_count": 46,
+    "full_window_coverage_ms": 120098.3388671875,
+    "coverage_complete": true,
+    "faults": 0,
+    "drops": 0,
+    "unknown_arguments": 0,
+    "unknown_players": 0,
+    "detach_errors": [],
+    "detached": true,
+    "original_body_restored": true,
+    "setup_seconds": 0.30590869789011776,
+    "argument_counts_by_actual_cohort": {
+      "candidate013": {
+        "73": 4,
+        "136": 5,
+        "129": 13,
+        "234": 1
+      },
+      "old048": {
+        "129": 8,
+        "274": 3,
+        "73": 5,
+        "517": 1,
+        "136": 5
+      },
+      "vanilla": {}
+    }
+  },
+  "positive_continuation": {
+    "window": "arena013brush3p-i1-swap1-trial-1-015357",
+    "local": 3,
+    "entity_id": 568,
+    "generation": 6,
+    "lost_item": 267,
+    "other_local_pickup": 2,
+    "begin_tick": 599,
+    "begin_edge": [
+      84,
+      86
+    ],
+    "continue_tick": 646,
+    "continue_edge": [
+      86,
+      176
+    ],
+    "end_tick": 664,
+    "end_reason": "context",
+    "original_deadline_all_markers": 48.834,
+    "new_goal_tick": 665,
+    "new_goal_item": 358,
+    "useful_weapon_in_life": false,
+    "observed_life_seconds": 56.94940322637558,
+    "successful_arrival_proven": false,
+    "exact_first_ascent_crossing_sampled": false,
+    "exact_context_guard_failure_known": false,
+    "hook136_sequences_same_life": [
+      9,
+      12
+    ]
+  },
+  "cleanup_scope": {
+    "i0_measurement_flight_markers": 8,
+    "i0_closed_flight_markers": 12,
+    "i0_extra_cleanup_events": [
+      {
+        "local": 0,
+        "tick": 2644,
+        "action": "begin",
+        "edge": [
+          12,
+          34
+        ],
+        "deadline": 151.0
+      },
+      {
+        "local": 3,
+        "tick": 2644,
+        "action": "begin",
+        "edge": [
+          12,
+          34
+        ],
+        "deadline": 151.0
+      },
+      {
+        "local": 3,
+        "tick": 2646,
+        "action": "end",
+        "reason": "context"
+      },
+      {
+        "local": 0,
+        "tick": 2714,
+        "action": "end",
+        "reason": "arrived"
+      }
+    ],
+    "tail_counted_in_life_metrics": false
+  },
+  "limitations": [
+    "All observed native lives including dead without useful weapons and right-censored lives are retained; transient unsampled lives are not proved absent.",
+    "Inventory two-read verification is not atomic. Raw first state and first damage are not qualified.",
+    "Driver tick/20, server game_tick and wall-clock elapsed are different clocks. The selected continuation has corresponding sampled clock brackets, not an exact per-action server snapshot.",
+    "Registry membership is not a Bouncer-class assertion; actual original function calls and velocity changes are not automatically successful navigation.",
+    "One-meter residence does not detect moving loops; resource endpoints are not peak RSS or causal instrumentation overhead.",
+    "No runtime or hook was launched by this analysis; preserved post-close logs were inspected."
+  ]
+}

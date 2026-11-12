@@ -280,5 +280,20 @@
     "roundtrip_verified": true,
     "drive_url": "https://drive.google.com/file/d/1CRAkgWvOQewMibPLaJBapSCFs3Hrj0NM/view",
     "covers": "Completed controlled v3 brush capture/control, preserved pre-attach FAIL, immutable pinned-package controller, repeated normal-input A1 Spawn0 uninstrumented/damage and Spawn3 damage windows, immutable A1 controller, original source/build012. Source bundle through451978b. No future flight continuation fix, Build013 binary or A4 adapter. Requires earlier baseline/fixture/SDK/include/private deltas. File restore only, no native launch."
+  },
+  "runtime_evidence_delta014_for_build013": {
+    "scope": "RUNTIME_EVIDENCE_DELTA014_FOR_BUILD013_NOT_RELEASE",
+    "bytes": 10562459,
+    "sha256": "ea12dc4e076ef5937026b7a54785e638ddeec8dffe1f8327073adbf18d2e27d9",
+    "repo_head": "e689614dfcfd429bb3cd6d4721cf32187221f1cf",
+    "regular_files_written_rehashed": 1042,
+    "restored_bytes": 63189580,
+    "symlinks_indexed_not_materialized": 2,
+    "native_launch_from_restore": false,
+    "drive_uploaded": true,
+    "drive_id": "1ERvpfeCD-Vk_SwxASoguz2jPQifdbAuB",
+    "roundtrip_verified": true,
+    "drive_url": "https://drive.google.com/file/d/1ERvpfeCD-Vk_SwxASoguz2jPQifdbAuB/view",
+    "covers": "Unqualified build013 DLL and exact source bundle through e689614; closed013 uninstrumented and V3 observation windows; preserved first A4 preflight FAIL; reviewed A4 private drafts and root freezes. Does not contain later corrected A4 gameplay run. Requires earlier baseline, fixture and toolchain backups. File restore only, no native restore launch."
   }
 }

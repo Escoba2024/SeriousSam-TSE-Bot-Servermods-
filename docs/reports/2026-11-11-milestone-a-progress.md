@@ -1,6 +1,26 @@
 # Meilenstein A: implementierter Zwischenstand, keine Gesamtfreigabe
 
-## Fortsetzung 12.11.2026, 01:54 UTC
+## Fortsetzung 12.11.2026, 02:17 UTC
+
+A→B bleibt aktiv. A ist unvollständig; B unbegonnen. Neue A-DLL und Namen sind nicht produktiv. Frische Flottenprüfung 02:08:16 UTC: sechs Instanzen mit je acht verifizierten eigenen Bots; Dev zusätzlich ein UNKNOWN, übrige null. Aktuelle Logs Publics null BAD/SyncDisconnect, Dev unverändert 21/2. Effektiver Session-Respawnschutz überall 0. RAM verfügbar 1,73 GiB während isoliertem Test, Disk frei 20,69 GiB. UNKNOWN nicht instrumentieren, entfernen oder bei einem Neustart verdrängen.
+
+Die beiden geschlossenen 013-Flugfenster sind jetzt mit allen 56 beobachteten Leben ausgewertet. Neue Fortsetzung wurde einmal tatsächlich ausgeführt, 84→86→176 mit identischer Deadline; sie geschah beim Abstieg, erfolgreiche Landung nicht belegt. Der 49-s-Ausreißer ohne nützliche Waffe läuft durch wiederholte konkurrierende Waffenaufnahmen. Die protokollierte Auswahl bevorzugte bereits die belegte gewöhnliche Alternative; kein erfundener besserer erreichbarer Weg und kein spekulativer Fix. Siehe native013-Flug-/49s-Berichte.
+
+A4 RedStation 120,040551 s mit acht Kandidaten013: jeder Bot zeigte lebende nützliche Waffenaufnahme und native nützliche Fernwaffen-Feuerprobe; aktuelle Kills und Respawns belegt. Alle vier Rollen normal geschlossen, danach archivierte Logs geprüft, vollständiger Dateirestore bestätigt. Funktionale Routen-/Mapresetfreigabe bleibt false. Hole wurde nach etwa 394 s korrekt durch das unveränderte Hostbudget abgebrochen: 79,856 % CPU im 1,082-s-Intervall statt maximal 75 %. Vier normale Close, saubere Closed-Logs, vollständiger Restore; historischer FAIL bleibt erhalten, kein 600-s-PASS. Keine kausale Zuschreibung der CPUspitze. Die Teilauswertung belegt drei wirkliche Transit-Watchdog-Enden; 46 Flüssigkeitsepisoden mit 30 Ausstiegen zum Boden im selben Leben, fünf FALL-Austritten, zehn Toden vor Austritt und einer Zensierung. Keine pauschale Drowning- oder Hazardfreigabe. CPUintensive Analysen/Tests künftig außerhalb nativer Budgetfenster oder in eigener begrenzter Analyseunit; keine Produktionsdrosselung.
+
+A3-Damage013-Controller ist nach Root und unabhängigem Nav-Review eingefroren: 54 Offlineprüfungen und 73 Abhängigkeitspins geprüft. Unveränderter passiver Damage-v2-Beobachter, ursprüngliche Public-V4-Startreferenz, Vergleich tatsächlich Public7fc gegen013, ganze Dateitransaktion, laufende CPU-/RAM-/Diskgrenzen. Keine neue Hookstelle. Zunächst läuft STARK/Swap0 120s ohne Fridaimport/-Attach als identische Kontrolle. Instrumentierte Crossvergleiche müssen erst folgen; keine A3-Gesamtfreigabe. Ein normaler Drei-Runden-Mapresetcontroller wird privat vorbereitet, bisher nur statischer Original-Dedicated-Ablauf belegt.
+
+48 stabile Bot-IDs mit flottenweit kollisionsfreien Namen sind als versionierter Vorschlag vorbereitet; aktive Namen aller 49 aktuell abgefragten Spieler wurden ausgeschlossen. Keine Runtimezuweisung. Vor späterer Umstellung frische Abfrage und Identitätsabgleich unter Deploymentlock zwingend. Letzte verifizierte GitHub-/Drive-Veröffentlichung bleibt fea2a26 / Delta014, weitere Berichte folgen separat. Formale 3600/3600/7200-s-Stabilitätsgates, Erstzustand, finale Karten-/Tierabnahme und Flottenrollout bleiben offen.
+
+## Fortsetzung 12.11.2026, 01:58 UTC
+
+013: Kontrollfenster 120,098864 s und instrumentiertes Fenster 120,100496 s vollständig beendet. Beide vier Rollen regulär geschlossen, danach archivierte Logs akzeptiert, errors leer. Beobachter 45/45 vollständige bekannte Brushaufrufe, null unbekannt/Fault/Drop/Detachfehler, volle 120098,3389 ms Spielfensterabdeckung; Originalfunktion nach Detach restauriert. Das beweist noch keine positive Ausübung von FlightContinue oder funktionierenden Waffenerwerb. Vollständige Lebens-/Routenanalyse läuft.
+
+Eng korrigierter A4-Startup besteht den unveränderten frischen GameSpy-Preflight tatsächlich: originaler Vanilla ist beigetreten; beide Kandidatenkohorten starten nun für RedStation120s mit kanonischer Profilmigration zu DEMON. Ergebnis offen. Historischer Preflight-FAIL bleibt unverändert. Neuer Entwurf für fairen A3-Vergleich mit bestehender passiver Damageattribution wird vorbereitet, ohne zusätzlichen Hookpunkt oder Runtime. A1-Vorziellücke ist im Bericht `2026-11-12-a1-targeted-spawn-opportunity.md` konkret abgegrenzt.
+
+GitHub `fea2a26f3aa31340f8981ed9be3962612d715f01` wurde gefetcht; Baum `8a108bb973413049d93de1cecf82ee228fa8a8de` ist exakt lokal ff93559. Späterer A1-Plan folgt separat. Private Drive-Sicherung Delta014 für Build013: 10.562.459 Bytes, SHA256 `ea12dc4e076ef5937026b7a54785e638ddeec8dffe1f8327073adbf18d2e27d9`, Datei `1ERvpfeCD-Vk_SwxASoguz2jPQifdbAuB`. Rückdownload identisch; 1042 reguläre Dateien / 63.189.580 Bytes separat restauriert und gehasht, zwei Links nur indexiert, kein nativer Restorestart. Quellen bis e689614 und geschlossene013-Diagnosen enthalten; späterer korrigierter A4-Lauf noch nicht. A bleibt unvollständig; B unbegonnen, neue A-DLL/Namen nicht produktiv.
+
+## Fortsetzung 12.11.2026, 01:53 UTC
 
 Der Gesamtauftrag A→B bleibt aktiv. A ist unvollständig; B wurde nicht begonnen. Keine neue A-DLL und keine neuen Namen sind produktiv. Letzte Flottenprüfung bleibt 01:02:24 UTC; daraus keine neuere Betriebsbehauptung.
 

@@ -1,0 +1,453 @@
+{
+  "schema": 1,
+  "utc": "2026-11-12T02:07:01.632038+00:00",
+  "scope": "OFFLINE_ASSIGNMENT_PROPOSAL_NOT_DEPLOYMENT",
+  "deployed": false,
+  "seed": 20261111,
+  "pool_sha256": "005cd7bbee01d2b24367f46401d2cf8bf4dae45db311f3cdfa35c789ca8d0dc2",
+  "stable_bot_id_policy": "Instance-local ordinal is persisted independently of display nickname and process grouping; retain IDs through later controller migration. Not an engine player GUID.",
+  "active_names_excluded": 49,
+  "additional_unknown_per_instance": {
+    "redstation": 0,
+    "yodeller": 0,
+    "skulls": 0,
+    "trouble": 0,
+    "hole": 0,
+    "development": 1
+  },
+  "deployment_precondition": "Fresh full fleet query under deployment lock; reject collisions/drift; ensure each prior successfully deployed own assignment is excluded from external-occupied names by verified identity. This proposal authorizes no runtime change.",
+  "assignments": [
+    {
+      "bot_id": "redstation.bot.000",
+      "instance": "redstation",
+      "role": "botA",
+      "local": 0,
+      "name_id": "nickname-5f0d84dfaaf813c29f93b8e4",
+      "nickname": "EspressoEcho",
+      "native_name": "EspressoEcho"
+    },
+    {
+      "bot_id": "redstation.bot.001",
+      "instance": "redstation",
+      "role": "botA",
+      "local": 1,
+      "name_id": "nickname-39b33ad1b77dfbe430ca8218",
+      "nickname": "sTaTiC.exe",
+      "native_name": "sTaTiC.exe"
+    },
+    {
+      "bot_id": "redstation.bot.002",
+      "instance": "redstation",
+      "role": "botA",
+      "local": 2,
+      "name_id": "nickname-20608262ea6ac517c96b18f8",
+      "nickname": "Erynd",
+      "native_name": "Erynd"
+    },
+    {
+      "bot_id": "redstation.bot.003",
+      "instance": "redstation",
+      "role": "botA",
+      "local": 3,
+      "name_id": "nickname-d49d4e97e8411b4195a53cd1",
+      "nickname": "WontonWraith",
+      "native_name": "WontonWraith"
+    },
+    {
+      "bot_id": "redstation.bot.004",
+      "instance": "redstation",
+      "role": "botB",
+      "local": 0,
+      "name_id": "nickname-76cbbef24d80f3da9ba92204",
+      "nickname": "[GG] Ferra",
+      "native_name": "[GG] Ferra"
+    },
+    {
+      "bot_id": "redstation.bot.005",
+      "instance": "redstation",
+      "role": "botB",
+      "local": 1,
+      "name_id": "nickname-168ee09f96df4c38849d14d6",
+      "nickname": "RIFT",
+      "native_name": "RIFT"
+    },
+    {
+      "bot_id": "redstation.bot.006",
+      "instance": "redstation",
+      "role": "botB",
+      "local": 2,
+      "name_id": "nickname-1017d87169ec5708cb596d84",
+      "nickname": "notQuiteNinja",
+      "native_name": "^c66CCFFnotQuiteNinja^r"
+    },
+    {
+      "bot_id": "redstation.bot.007",
+      "instance": "redstation",
+      "role": "botB",
+      "local": 3,
+      "name_id": "nickname-0278be6f79883fdac773d1c5",
+      "nickname": "[RUNE] Elko",
+      "native_name": "^b^cFFCC66[RUNE] Elko^B^r"
+    },
+    {
+      "bot_id": "yodeller.bot.000",
+      "instance": "yodeller",
+      "role": "botA",
+      "local": 0,
+      "name_id": "nickname-33d1e40e9fd11deabd1afd5c",
+      "nickname": "teaTime.Talon",
+      "native_name": "^c33DDCCteaTime.Talon^r"
+    },
+    {
+      "bot_id": "yodeller.bot.001",
+      "instance": "yodeller",
+      "role": "botA",
+      "local": 1,
+      "name_id": "nickname-a57d374337978ca7ff450e4d",
+      "nickname": "FANG",
+      "native_name": "FANG"
+    },
+    {
+      "bot_id": "yodeller.bot.002",
+      "instance": "yodeller",
+      "role": "botA",
+      "local": 2,
+      "name_id": "nickname-59a9aaf54a742faba2b23659",
+      "nickname": "NeonKestrel",
+      "native_name": "NeonKestrel"
+    },
+    {
+      "bot_id": "yodeller.bot.003",
+      "instance": "yodeller",
+      "role": "botA",
+      "local": 3,
+      "name_id": "nickname-0589a733b69d71dbf649f2f8",
+      "nickname": "Avaro",
+      "native_name": "Avaro"
+    },
+    {
+      "bot_id": "yodeller.bot.004",
+      "instance": "yodeller",
+      "role": "botB",
+      "local": 0,
+      "name_id": "nickname-1cbb4339e86f2cce3f25dd38",
+      "nickname": "H3adShot",
+      "native_name": "H3adShot"
+    },
+    {
+      "bot_id": "yodeller.bot.005",
+      "instance": "yodeller",
+      "role": "botB",
+      "local": 1,
+      "name_id": "nickname-77a059250eb52a6a29945726",
+      "nickname": "[RIFT] Tilda",
+      "native_name": "[RIFT] Tilda"
+    },
+    {
+      "bot_id": "yodeller.bot.006",
+      "instance": "yodeller",
+      "role": "botB",
+      "local": 2,
+      "name_id": "nickname-314fdbc6f52bc50ec23a55d5",
+      "nickname": "KRAIT",
+      "native_name": "KRAIT"
+    },
+    {
+      "bot_id": "yodeller.bot.007",
+      "instance": "yodeller",
+      "role": "botB",
+      "local": 3,
+      "name_id": "nickname-ea4ea62a37ba6b0ad3dc2961",
+      "nickname": "offAxis",
+      "native_name": "offAxis"
+    },
+    {
+      "bot_id": "skulls.bot.000",
+      "instance": "skulls",
+      "role": "botA",
+      "local": 0,
+      "name_id": "nickname-5198f3a8abf5cf633a80ce36",
+      "nickname": "CyberJuniper",
+      "native_name": "CyberJuniper"
+    },
+    {
+      "bot_id": "skulls.bot.001",
+      "instance": "skulls",
+      "role": "botA",
+      "local": 1,
+      "name_id": "nickname-260e0a21bcc4af30c0b44ede",
+      "nickname": "[GLHF] Grin",
+      "native_name": "[GLHF] Grin"
+    },
+    {
+      "bot_id": "skulls.bot.002",
+      "instance": "skulls",
+      "role": "botA",
+      "local": 2,
+      "name_id": "nickname-14727b58a127309e3b565454",
+      "nickname": "MagmaLullaby",
+      "native_name": "MagmaLullaby"
+    },
+    {
+      "bot_id": "skulls.bot.003",
+      "instance": "skulls",
+      "role": "botA",
+      "local": 3,
+      "name_id": "nickname-19ec6636de82c0c85aa43056",
+      "nickname": "OrbitHawk",
+      "native_name": "OrbitHawk"
+    },
+    {
+      "bot_id": "skulls.bot.004",
+      "instance": "skulls",
+      "role": "botB",
+      "local": 0,
+      "name_id": "nickname-fe093e0461b16a35c417012d",
+      "nickname": "lunar.lilt",
+      "native_name": "lunar.lilt"
+    },
+    {
+      "bot_id": "skulls.bot.005",
+      "instance": "skulls",
+      "role": "botB",
+      "local": 1,
+      "name_id": "nickname-06b817aa3d50c322b75c273e",
+      "nickname": "ToastTornado",
+      "native_name": "^c66CCFFToastTornado^r"
+    },
+    {
+      "bot_id": "skulls.bot.006",
+      "instance": "skulls",
+      "role": "botB",
+      "local": 2,
+      "name_id": "nickname-f2aa85eac231675b49ed235b",
+      "nickname": "PebbleCorsair",
+      "native_name": "^b^c33DDCCPebbleCorsair^B^r"
+    },
+    {
+      "bot_id": "skulls.bot.007",
+      "instance": "skulls",
+      "role": "botB",
+      "local": 3,
+      "name_id": "nickname-01330c21addc1d97a5f5793f",
+      "nickname": "MustardMage",
+      "native_name": "MustardMage"
+    },
+    {
+      "bot_id": "trouble.bot.000",
+      "instance": "trouble",
+      "role": "botA",
+      "local": 0,
+      "name_id": "nickname-3c892465496e2d092915ff7e",
+      "nickname": "NovaThistle",
+      "native_name": "NovaThistle"
+    },
+    {
+      "bot_id": "trouble.bot.001",
+      "instance": "trouble",
+      "role": "botA",
+      "local": 1,
+      "name_id": "nickname-6c6e50419efb9c38c8dbbe7b",
+      "nickname": "KNOX",
+      "native_name": "KNOX"
+    },
+    {
+      "bot_id": "trouble.bot.002",
+      "instance": "trouble",
+      "role": "botA",
+      "local": 2,
+      "name_id": "nickname-13bd6dca04c0a77a98bfc34c",
+      "nickname": "WickedParallax",
+      "native_name": "WickedParallax"
+    },
+    {
+      "bot_id": "trouble.bot.003",
+      "instance": "trouble",
+      "role": "botA",
+      "local": 3,
+      "name_id": "nickname-ae7fb593c803487e4c9b5767",
+      "nickname": "m3ltD0wn",
+      "native_name": "m3ltD0wn"
+    },
+    {
+      "bot_id": "trouble.bot.004",
+      "instance": "trouble",
+      "role": "botB",
+      "local": 0,
+      "name_id": "nickname-be50741f32f41b6715149790",
+      "nickname": "[ALT] Vega",
+      "native_name": "^b^i^cFF6655[ALT] Vega^I^B^r"
+    },
+    {
+      "bot_id": "trouble.bot.005",
+      "instance": "trouble",
+      "role": "botB",
+      "local": 1,
+      "name_id": "nickname-7c0d8e50363cc2f0c7c31e1e",
+      "nickname": "PolarHex",
+      "native_name": "PolarHex"
+    },
+    {
+      "bot_id": "trouble.bot.006",
+      "instance": "trouble",
+      "role": "botB",
+      "local": 2,
+      "name_id": "nickname-e1a099a2202864c4dd60c4e1",
+      "nickname": "V3ctorWisp",
+      "native_name": "^cCC88FFV3ctorWisp^r"
+    },
+    {
+      "bot_id": "trouble.bot.007",
+      "instance": "trouble",
+      "role": "botB",
+      "local": 3,
+      "name_id": "nickname-f5adecfe5a805c541abfc320",
+      "nickname": "echo.Errant",
+      "native_name": "echo.Errant"
+    },
+    {
+      "bot_id": "hole.bot.000",
+      "instance": "hole",
+      "role": "botA",
+      "local": 0,
+      "name_id": "nickname-8d631270787dd1f538a8b3a5",
+      "nickname": "CedarComet",
+      "native_name": "CedarComet"
+    },
+    {
+      "bot_id": "hole.bot.001",
+      "instance": "hole",
+      "role": "botA",
+      "local": 1,
+      "name_id": "nickname-de2b30c91e6ccd76bcf52da5",
+      "nickname": "RiftPilgrim",
+      "native_name": "RiftPilgrim"
+    },
+    {
+      "bot_id": "hole.bot.002",
+      "instance": "hole",
+      "role": "botA",
+      "local": 2,
+      "name_id": "nickname-89db11109fa198c8e35eb4f3",
+      "nickname": "NeonNettle",
+      "native_name": "^cFFCC66NeonNettle^r"
+    },
+    {
+      "bot_id": "hole.bot.003",
+      "instance": "hole",
+      "role": "botA",
+      "local": 3,
+      "name_id": "nickname-f5e93822d507b2cb481258f7",
+      "nickname": "VelvetCaliber",
+      "native_name": "VelvetCaliber"
+    },
+    {
+      "bot_id": "hole.bot.004",
+      "instance": "hole",
+      "role": "botB",
+      "local": 0,
+      "name_id": "nickname-a5d4fd76cbfe801fa0ef7a52",
+      "nickname": "Miro21",
+      "native_name": "^i^c33DDCCMiro21^I^r"
+    },
+    {
+      "bot_id": "hole.bot.005",
+      "instance": "hole",
+      "role": "botB",
+      "local": 1,
+      "name_id": "nickname-63950a9e236d35c0744873ad",
+      "nickname": "SepiaSabre",
+      "native_name": "SepiaSabre"
+    },
+    {
+      "bot_id": "hole.bot.006",
+      "instance": "hole",
+      "role": "botB",
+      "local": 2,
+      "name_id": "nickname-036d38ff1b0f6c5b3d96c395",
+      "nickname": "UltraViolence",
+      "native_name": "UltraViolence"
+    },
+    {
+      "bot_id": "hole.bot.007",
+      "instance": "hole",
+      "role": "botB",
+      "local": 3,
+      "name_id": "nickname-aff7030a2883fe1c56113538",
+      "nickname": "Briska8",
+      "native_name": "^b^cEEEEEEBriska8^B^r"
+    },
+    {
+      "bot_id": "development.bot.000",
+      "instance": "development",
+      "role": "botA",
+      "local": 0,
+      "name_id": "nickname-446fbfaf7382da9669739ae0",
+      "nickname": "SidewaysOracle",
+      "native_name": "SidewaysOracle"
+    },
+    {
+      "bot_id": "development.bot.001",
+      "instance": "development",
+      "role": "botA",
+      "local": 1,
+      "name_id": "nickname-274808584e668fd878f82ca0",
+      "nickname": "aStral.noise",
+      "native_name": "^cFFCC66aStral.noise^r"
+    },
+    {
+      "bot_id": "development.bot.002",
+      "instance": "development",
+      "role": "botA",
+      "local": 2,
+      "name_id": "nickname-4cb98e3bb9797aac35354218",
+      "nickname": "M0RT4R",
+      "native_name": "M0RT4R"
+    },
+    {
+      "bot_id": "development.bot.003",
+      "instance": "development",
+      "role": "botA",
+      "local": 3,
+      "name_id": "nickname-34a587906c05c3c76c619a8b",
+      "nickname": "GarlicGunner",
+      "native_name": "^i^cA5D66AGarlicGunner^I^r"
+    },
+    {
+      "bot_id": "development.bot.004",
+      "instance": "development",
+      "role": "botB",
+      "local": 0,
+      "name_id": "nickname-e22512740018813afbbdd95d",
+      "nickname": "BinaryBasilisk",
+      "native_name": "^i^cFFCC66BinaryBasilisk^I^r"
+    },
+    {
+      "bot_id": "development.bot.005",
+      "instance": "development",
+      "role": "botB",
+      "local": 1,
+      "name_id": "nickname-64d3602c04da58c64de1cc1d",
+      "nickname": "NoMercy",
+      "native_name": "NoMercy"
+    },
+    {
+      "bot_id": "development.bot.006",
+      "instance": "development",
+      "role": "botB",
+      "local": 2,
+      "name_id": "nickname-b423b8fdee269124de28da11",
+      "nickname": "SorbetSniper",
+      "native_name": "SorbetSniper"
+    },
+    {
+      "bot_id": "development.bot.007",
+      "instance": "development",
+      "role": "botB",
+      "local": 3,
+      "name_id": "nickname-0d8e0d946576c125ac491da7",
+      "nickname": "Cr0ssF4de",
+      "native_name": "Cr0ssF4de"
+    }
+  ]
+}
