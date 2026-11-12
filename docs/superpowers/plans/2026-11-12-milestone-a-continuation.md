@@ -55,8 +55,8 @@ Files: tools/gaming_names.py; existing source name pools; preserve and review pr
 
 Files: poc/candidates/redstation-supply-20261107/{BotDriver.cpp,bot_human.h,bot_profile.h,cecil_rules.h}, existing tests and native controller evidence.
 
-- [ ] Review latest native aim014 evidence against zoom residual fix9c6d5c2 and existing assertions.
-- [ ] Run relevant baseline/source regression checks; build a pinned candidate only after the concrete defect is understood.
+- [x] Review latest native aim014 evidence against zoom residual fix9c6d5c2 and existing assertions.
+- [x] Run relevant baseline/source regression checks; build a pinned candidate only after the concrete defect is understood.
 - [ ] Run bounded native crossed comparisons and required map/lifecycle checks; retain failures, no inferred passes.
 - [ ] Continue only fixes supported by actual failing behavior and reproducible tests.
 
@@ -73,3 +73,6 @@ Files: poc/candidates/redstation-supply-20261107/{BotDriver.cpp,bot_human.h,bot_
 - No existing qualification gate is relaxed by this continuation.
 
 - Task3 progress: actual014 native traces identify MITTEL intentional drift versus exact fire-gate conflict. New low-motion real-policy regression failed524/1100 before modification; only MITTEL sigma0.9→0.6 changed. All six low-motion cases now887–1025/1100; original tolerance and turn bounds intact. SDK1072687 checks,250 tool tests, Driver and four sanitizer suites passed. Faster60deg/s synthetic FIRE falls72→24/2097 because reduced noise no longer sometimes cancels remaining lag; native crossed comparison still required. See design2026-11-12-mittel-aim-calibration.md.
+
+- Native015 progress08:01UTC: uninstrumented control plus two crossed120s MITTEL damage windows completed with normal cleanup/restoration. Mixed metrics35:21query frags but2910.817:3407.339capped HP. One rejected Vanilla initial capture and one explicit end-boundary lifecycle gap retained. See build015-mittel-progress report. No release acceptance.
+- Source checkpoint published via connected GitHub API as6ba7391 with exact localb6b776d tree4a60cdad, independently fetched and compared. Drive checkpoint1GRJGaxXB4nevpWyTUL9OBf6PYZ3PkC59 roundtrip verified; full new evidence backup still pending.

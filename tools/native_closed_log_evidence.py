@@ -16,6 +16,32 @@ class ClosedLogEvidence:
     reasons: tuple[str, ...]
     logs: dict
 
+def scan_log_errors(data: bytes, *, after: int = 0) -> dict:
+    """Return existing error classes, optionally only matches ending after a byte boundary.
+
+    Scan the complete bytes so a marker or disconnect message split across the
+    boundary cannot disappear. Multiple matches on one partial line are checked;
+    event summaries retain line numbers, never player names or raw log text.
+    """
+    if not isinstance(data, bytes) or type(after) is not int or not 0 <= after <= len(data):
+        raise ValueError('log bytes/boundary')
+    patterns={
+        'bad_sync':re.compile(rb'\bSYNCBAD\b',re.I),
+        'sync_disconnect':re.compile(rb'Too many bad syncs|Disconnected:.*(?:sync|CRC)|ordered to disconnect.*sync',re.I),
+        'crc_failure':re.compile(rb'CRC check failed',re.I),
+        'crash':re.compile(rb'Access violation|Fatal Error|Unhandled (?:exception|page fault)|Segmentation fault|SIGSEGV|assertion failed|stack overflow',re.I),
+        'invalid_action':re.compile(rb'\[CecilInvalidAction\]',re.I),
+        'join_failure':re.compile(rb'Cannot join game:',re.I),
+    }
+    events={kind:[] for kind in patterns}
+    offset=0
+    for number,line in enumerate(data.splitlines(keepends=True),1):
+        for kind,pattern in patterns.items():
+            if any(offset+match.end()>after for match in pattern.finditer(line)):
+                events[kind].append(number)
+        offset+=len(line)
+    return events
+
 def archive_closed_role_logs(*,role_roots:Mapping,source_logs:Mapping,archive_logs:Mapping,cleanup:Mapping,expected_roles:Sequence[str],max_log_bytes:int=64*1024*1024)->ClosedLogEvidence:
     """Archive once, then inspect exactly those bytes; never read a live role log.
 
@@ -47,14 +73,6 @@ def archive_closed_role_logs(*,role_roots:Mapping,source_logs:Mapping,archive_lo
             return ClosedLogEvidence(False,('archive_path_alias',),{})
     except (OSError,ValueError,TypeError,RuntimeError) as error:
         return ClosedLogEvidence(False,('invalid_paths:'+type(error).__name__,),{})
-    patterns={
-        'bad_sync':re.compile(r'\bSYNCBAD\b',re.I),
-        'sync_disconnect':re.compile(r'Too many bad syncs|Disconnected:.*(?:sync|CRC)|ordered to disconnect.*sync',re.I),
-        'crc_failure':re.compile(r'CRC check failed',re.I),
-        'crash':re.compile(r'Access violation|Fatal Error|Unhandled (?:exception|page fault)|Segmentation fault|SIGSEGV|assertion failed|stack overflow',re.I),
-        'invalid_action':re.compile(r'\[CecilInvalidAction\]',re.I),
-        'join_failure':re.compile(r'Cannot join game:',re.I),
-    }
     def signature(s):return (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
     seen_sources=set()
     for role in expected_roles:
@@ -93,10 +111,7 @@ def archive_closed_role_logs(*,role_roots:Mapping,source_logs:Mapping,archive_lo
             if archived!=data:raise OSError('archive verification mismatch')
         except (OSError,ValueError,RuntimeError) as error:
             reasons.append('archive_failed:'+role+':'+type(error).__name__);continue
-        events={kind:[] for kind in patterns}
-        for number,line in enumerate(archived.decode('utf-8',errors='replace').splitlines(),1):
-            for kind,pattern in patterns.items():
-                if pattern.search(line):events[kind].append(number)
+        events=scan_log_errors(archived)
         logs[role]={'sha256':hashlib.sha256(archived).hexdigest(),'bytes':len(archived),'events':events,
                     'scope':'RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE'}
         if any(events.values()):reasons.append('log_events:'+role)

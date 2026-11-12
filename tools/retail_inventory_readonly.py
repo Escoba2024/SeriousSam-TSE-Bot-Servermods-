@@ -34,7 +34,8 @@ def unpack(fmt, data, offset=0):
     return struct.unpack_from('<' + fmt, data, offset)
 
 
-def snapshot(read, engine_base, slots):
+def snapshot(read, engine_base, slots, *, rotation_diagnostics=False):
+    require(type(rotation_diagnostics) is bool, 'diagnostic mode must be explicit bool')
     require(len(slots) == 4 and all(type(s) is int and 0 <= s < 16 for s in slots)
             and len(set(slots)) == 4, 'four distinct global slots required')
     observed = []
@@ -83,6 +84,12 @@ def snapshot(read, engine_base, slots):
                    spawned_tick=spawn, last_buttons=buttons, weapons=None,
                    current_translation_absolute=velocity, support_pointer=support,
                    render_type=render, physics_flags=physics)
+        if rotation_diagnostics:
+            row['rotation_diagnostic'] = dict(
+                last_action_yaw_deg=finite(unpack('f', take(entity + 0xca0, 4))[0]),
+                relative_view_yaw_deg=finite(unpack('f', take(entity + 0x344, 4))[0]),
+                local_action_yaw_deg=finite(unpack('f', take(entity + 0xcc4, 4))[0]),
+                player_flags=u(entity + 0x380))
         if weapon:
             weapon_header = take(weapon + 0x10, 16)
             wflags, wid = unpack('I', weapon_header)[0], unpack('I', weapon_header, 12)[0]
@@ -199,14 +206,31 @@ FINGERPRINTS = (
 )
 
 
+# Opt-in only: full module SHA plus relocation-free Retail instruction guards.
+# +CA0 is received cumulative action yaw; +CC4 is local cumulative input yaw.
+# +344 is relative viewpoint yaw, not the body placement heading.
+ROTATION_FINGERPRINTS = (
+    ('EntitiesMP.dll', 0xee956, 'd8a3a00c0000'),
+    ('EntitiesMP.dll', 0xeea2f, '898ba00c0000'),
+    ('EntitiesMP.dll', 0xf03d7, 'd98644030000'),
+    ('EntitiesMP.dll', 0xf049a, '89be44030000'),
+    ('EntitiesMP.dll', 0xe3ced, 'd987c40c0000'),
+    ('EntitiesMP.dll', 0xe3cf6, '8d87c40c0000'),
+    ('EntitiesMP.dll', 0xee91e, '8b8380030000'),
+)
+
+
 class InventoryReader:
     """Bounded observation of one explicitly pinned process in our arena fixture.
 
     Caller supplies the recorded start ticks, not a freshly discovered substitute.
     The private proc-root injection exists for filesystem fixture tests only.
     """
-    def __init__(self, pid, start_ticks, root, game_sha, *, _proc_root=Path('/proc')):
+    def __init__(self, pid, start_ticks, root, game_sha, *, _proc_root=Path('/proc'),
+                 rotation_diagnostics=False):
         self.fd = None
+        require(type(rotation_diagnostics) is bool, 'diagnostic mode must be explicit bool')
+        self.rotation_diagnostics = rotation_diagnostics
         self.root = Path(root).resolve(strict=True)
         require(self.root.parent == FIXTURE.resolve(strict=True)
                 and self.root.name in ('botA', 'botB', 'server', 'vanilla'), 'outside own arena fixture')
@@ -252,7 +276,8 @@ class InventoryReader:
         return value
 
     def _fingerprints(self):
-        for name, offset, expected in FINGERPRINTS:
+        selected = FINGERPRINTS + ROTATION_FINGERPRINTS if self.rotation_diagnostics else FINGERPRINTS
+        for name, offset, expected in selected:
             expected = bytes.fromhex(expected)
             require(self._read(self.bases[name] + offset, len(expected)) == expected,
                     'loaded Retail instructions differ: ' + name)
@@ -262,7 +287,8 @@ class InventoryReader:
         self.maps = self._guard()
         self.bytes_read = 0
         self._fingerprints()
-        result = snapshot(self._read, self.bases['Engine.dll'], slots)
+        result = snapshot(self._read, self.bases['Engine.dll'], slots,
+                          rotation_diagnostics=self.rotation_diagnostics)
         self._guard()
         result.update(process_identity=list(self.identity),
                       hashes={name: pin.sha256 for name, pin in self.pins.items()},

@@ -1,3 +1,13 @@
+# Continuation checkpoint —2026-11-12 08:01UTC
+
+Root completion branch `codex/20261112-milestone-a-completion` continues original9c6d5c2 without modifying the original worktree. Latest full status: docs/reports/2026-11-12-build015-mittel-progress.md and docs/superpowers/plans/2026-11-12-milestone-a-continuation.md. Private continuation evidence `/srv/tse-milestone-a-continuation-evidence-20261112`; Build015 sourceb6b776d/DLL10015f213c... remains unqualified and not live. Publics retain7fc, Dev048.
+
+Names author owns `/srv/tse-milestone-a-names-completion-20261112` with90f31c plus current review fixes; private entry remains disabled. A1 optional reader/receipt author owns `/srv/tse-milestone-a-a1-input-completion-20261112`; no runtime authority. Root alone integrates and runs native/live work. Both assignments are in the completion claims file. Do not overwrite their in-progress changes.
+
+Three completed015 native windows and one rejected initial-capture window are retained; no active native test at this checkpoint. A remains incomplete; B unbegun. Exact-life, map-reset, long-term, backup and deployment gates are not relaxed. GitHub6ba7391 mirrors localb6b776d source tree; later docs/worker commits still need publication and private backup.
+
+---
+
 # TSE-Agenten: Start und Handoff ohne manuelle A00-Freigabe
 
 ## Fortsetzung 12.11.2026, 04:14 UTC

@@ -77,4 +77,20 @@ class ClosedLogs(unittest.TestCase):
         for roles in [(),('server','server'),'server']:
             with self.subTest(roles=roles):self.assertFalse(self.run_audit(expected_roles=roles).accepted)
 
+class ErrorScanBoundary(unittest.TestCase):
+    def test_all_existing_error_classes_remain_detected(self):
+        from native_closed_log_evidence import scan_log_errors
+        data=(b'SYNCBAD\nToo many bad syncs\nCRC check failed\nAccess violation\n'
+              b'[CecilInvalidAction]\nCannot join game:\n')
+        self.assertEqual(scan_log_errors(data), {'bad_sync':[1], 'sync_disconnect':[2],
+            'crc_failure':[3], 'crash':[4], 'invalid_action':[5], 'join_failure':[6]})
+
+    def test_new_occurrence_on_same_partial_line_is_not_hidden_by_old_marker(self):
+        from native_closed_log_evidence import scan_log_errors
+        prefix=b'SYNCBAD old '
+        self.assertEqual(scan_log_errors(prefix+b'SYNCBAD new\n',after=len(prefix))['bad_sync'],[1])
+        self.assertEqual(scan_log_errors(b'[SYNCBAD]\n',after=3)['bad_sync'],[1])
+        self.assertEqual(scan_log_errors(b'Disconnected: Too many bad syncs\n',after=15)['sync_disconnect'],[1])
+        self.assertEqual(scan_log_errors(prefix+b'clean suffix\n',after=len(prefix))['bad_sync'],[])
+
 if __name__=='__main__':unittest.main()
