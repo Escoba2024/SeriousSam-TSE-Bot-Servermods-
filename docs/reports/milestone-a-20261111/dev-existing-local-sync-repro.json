@@ -1,0 +1,84 @@
+{
+  "scope": "PASS_LIMITED_PRIVATE_LOCAL_WINE_EXISTING_DEV_REPRO_NOT_WAN_OR_A3",
+  "window": "arena010devsync-checked-swap0-trial-1-234936",
+  "observed_seconds": 180.08424176997505,
+  "status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+  "errors": [],
+  "cleanup_all_roles_closed": true,
+  "post_close_logs": {
+    "accepted": true,
+    "reasons": [],
+    "logs": {
+      "server": {
+        "sha256": "09a0b9286087280621d43c59e24b1993379ff2ef5abebb97de5e21b99c2d4dcf",
+        "bytes": 30531,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botA": {
+        "sha256": "fedddc9405c944c183d53752f8ded71f2ca7df5f15f4e00cb656c882cc5e76eb",
+        "bytes": 1034074,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botB": {
+        "sha256": "c4df6d1ec20cf9e47848ff42f487f5632771beb04240d70304f52b0d5bdf27d0",
+        "bytes": 1019854,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "vanilla": {
+        "sha256": "b7581b14c8bd8f4a5659703981603a20cd039c73d53a641bab3e2c4a4ce0a4ba",
+        "bytes": 8764,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      }
+    }
+  },
+  "spawn_value": 0,
+  "server_dll_sha256": "fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0",
+  "both_bot_dll_sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530",
+  "vanilla_dll_sha256": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+  "original_dev_powerup_filter_observed": true,
+  "native_vanilla_observations": {
+    "distinct_samples": 1257,
+    "lives": 4,
+    "alive_samples": 1183,
+    "alive_fire_requested_samples": 8,
+    "same_life_planar_position_changes": 18
+  },
+  "limitations": [
+    "private loopback network, no WAN reproduction",
+    "input requests and movement do not prove hits",
+    "not A3 comparison or first processed state evidence",
+    "external Dev sync failure remains unresolved"
+  ]
+}

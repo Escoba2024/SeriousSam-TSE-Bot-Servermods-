@@ -1,0 +1,115 @@
+{
+  "scope": "PASS_LIMITED_BOUND_EDGE8_BOUNCER_LAUNCH_NOT_GENERAL_GAMEPLAY_ACCEPTANCE",
+  "qualified": false,
+  "window": "arena010hook2-checked-swap1-trial-1-232802",
+  "observed_seconds": 120.07987733581103,
+  "candidate_source": "b2f46e1725be49151ac062a565723afff2248c6a",
+  "candidate_dll_sha256": "6e1e244495b43182eff60f1acb8ca61aba178f0638680298255673f5dcf60ef1",
+  "controller_sha256": "b0a8bfebc5b35556f6534b08b1267a439cc90894738774eb01e7716d5040baf5",
+  "hook": {
+    "calls": 2,
+    "total_calls": 41,
+    "other_pad_calls": 39,
+    "unmatched_player_calls": 0,
+    "records_received": 2,
+    "faults": 0,
+    "dropped": 0,
+    "detached": true,
+    "original_body_restored": true,
+    "coverage": {
+      "armed_ms": 1794439728351,
+      "expires_ms": 1794439853351,
+      "stopped_ms": 1794439849925,
+      "last_observed_ms": 1794439849926,
+      "gameplay_window_start_ms": 1794439729769.455,
+      "gameplay_window_end_ms": 1794439849847.2017,
+      "observed_overlap_ms": 120077.74658203125,
+      "entire_gameplay_window_covered": true,
+      "meaning": "observed listener lifetime overlap; not complete gameplay/event proof"
+    }
+  },
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "all_four_roles_closed": true,
+  "post_close_recovered": {
+    "accepted": true,
+    "reasons": [],
+    "logs": {
+      "server": {
+        "sha256": "42a73ccff92eba65cea84b817dcc744cdbad34eb4faf9678ed8883989281f515",
+        "bytes": 16415,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botA": {
+        "sha256": "2ee01984d4b081dd36896ec26ee1d34624a74ec9670db8572b26f78dae3c9aa2",
+        "bytes": 902676,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botB": {
+        "sha256": "4f6bf3b5425609bea367ec0bdafac38535dbbf3181bb5d30cb32f138a55b6a5e",
+        "bytes": 701998,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "vanilla": {
+        "sha256": "537e147036a17c943556b31b9c1ade0a0fd59ef2818007eafd5cfc9e87646d7f",
+        "bytes": 8257,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      }
+    },
+    "scope": "RETROSPECTIVE_LAST_OWN_TRIAL_POST_CLOSE_LOG_RECOVERY_BEFORE_ANY_LATER_FIXTURE_LAUNCH"
+  },
+  "limits": [
+    "Two candidate pad234 launches; only local1/gen7 acquired Minigun.",
+    "An earlier local2/gen7 ordinary jump on11-to12 remains a failed approach;011 is independently built, not qualified.",
+    "The retrospective final logs were recovered while the fixture was still quiescent and before its next launch; each retained source had unchanged prefix and mtime no later than trial finish+1s.",
+    "No first processed respawn state, final tier comparison or general map acceptance."
+  ]
+}

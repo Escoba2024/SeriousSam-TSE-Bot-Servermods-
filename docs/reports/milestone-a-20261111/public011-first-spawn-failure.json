@@ -1,0 +1,73 @@
+{
+  "status": "FAIL",
+  "errors": [
+    "ValueError('initial placement mismatch slot6')"
+  ],
+  "started_utc": "2026-11-12T00:06:06.013571+00:00",
+  "finished_utc": "2026-11-12T00:07:05.570618+00:00",
+  "post_close_logs": {
+    "accepted": true,
+    "reasons": [],
+    "logs": {
+      "server": {
+        "sha256": "b83e23765e605f41612a8a1155ed3640ebc456eb773991826911261f57ac4a46",
+        "bytes": 5856,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botA": {
+        "sha256": "72c34f17c9ceadebf901d6516a9ca128f856cd48a179f958005b0b3af412d4eb",
+        "bytes": 16961,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botB": {
+        "sha256": "f1bacf035f77940499ff15b8a40c2ec2717272d23e23bc8ce862cdbbf10e6482",
+        "bytes": 47204,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "vanilla": {
+        "sha256": "ddee1c8b7c381c82bf8cb127cbea01a4bf10b74fe343373f89020212480011c5",
+        "bytes": 7224,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      }
+    }
+  },
+  "controller_sha256": "f90c3b2ce3d494ddd44a10269c825d9d89495c5ef7d8071897d8e3c286d22a3a",
+  "window": "arena011public-checked-swap0-trial-1-000606",
+  "all_roles_normally_closed": true,
+  "release_accepted": false,
+  "a1_accepted": false,
+  "scope": "PRIVATE_OWN_WINE_CONTROL_NOT_RELEASE_OR_FIRST_PROCESSED_STATE_ACCEPTANCE",
+  "reason": "first observed slot6 initial Y and yaw differed from fixed historical reference; all9 same positive native spawn tick/HP100 armor0 owned3; not counted as comparison"
+}

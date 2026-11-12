@@ -1,0 +1,3039 @@
+{
+  "scope": "NATIVE011_REPEAT_BOUNCER_DIAGNOSTIC_WINDOW_NOT_GENERAL_ACCEPTANCE",
+  "qualified": false,
+  "raw_directory_basename": "arena011hook2-checked-swap1-trial-1-000025",
+  "candidate_dll_sha256": "4184df65d927054470ac37967711236deeec442c4dbf92a9428769458e3ed5db",
+  "baseline_dll_sha256": "ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530",
+  "observed_seconds": 120.04123289394192,
+  "result_status": "PASS_LIMITED_CONTROLLED_WINE_SESSION_FIELD_AND_POPULATION",
+  "errors": [],
+  "all_four_normally_closed": true,
+  "post_close_logs": {
+    "accepted": true,
+    "reasons": [],
+    "logs": {
+      "server": {
+        "sha256": "3bb6c1cd366068dd2de816fa0d39927b76c03cdd0fca5a755c9d9b12825df84a",
+        "bytes": 17795,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botA": {
+        "sha256": "ddbb2f9e6d8725833246c1949d3896d000204f60e7e101d998aedf567b629310",
+        "bytes": 1006318,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "botB": {
+        "sha256": "7626b26348a22fc0106ce47351374f5334ff251fd56edf60b9468e0fdf663fc6",
+        "bytes": 695171,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      },
+      "vanilla": {
+        "sha256": "2a562bd96abee7b4c342d09baab8331427c37653c370620eafa8de1fc071ea51",
+        "bytes": 8230,
+        "events": {
+          "bad_sync": [],
+          "sync_disconnect": [],
+          "crc_failure": [],
+          "crash": [],
+          "invalid_action": [],
+          "join_failure": []
+        },
+        "scope": "RETAINED_LOG_AFTER_CALLER_ATTESTED_NORMAL_CLOSE"
+      }
+    }
+  },
+  "hook": {
+    "records_received": 4,
+    "calls": 4,
+    "dropped": 0,
+    "faults": 0,
+    "total_calls": 39,
+    "other_pad_calls": 35,
+    "unmatched_player_calls": 0,
+    "trace_status": "COMPLETE_MATCHED_EVENTS",
+    "detached": true,
+    "coverage": {
+      "armed_ms": 1794441670696,
+      "expires_ms": 1794441795696,
+      "stopped_ms": 1794441792200,
+      "last_observed_ms": 1794441792201,
+      "gameplay_window_start_ms": 1794441672063.881,
+      "gameplay_window_end_ms": 1794441792102.9807,
+      "observed_overlap_ms": 120039.099609375,
+      "entire_gameplay_window_covered": true,
+      "meaning": "observed listener lifetime overlap; not complete gameplay/event proof"
+    },
+    "original_body_restored": true
+  },
+  "ranged_mask": "0x3df8",
+  "minigun_bit": 64,
+  "cohorts": {
+    "botA": {
+      "build": "011",
+      "actual_local_to_global_slot": {
+        "0": 0,
+        "1": 2,
+        "2": 3,
+        "3": 4
+      },
+      "summary": {
+        "lives": 13,
+        "completed_lives": 10,
+        "right_censored_lives": 3,
+        "ranged_acquired_lives": 8,
+        "completed_without_ranged": 3,
+        "censored_without_ranged": 2,
+        "minigun_acquired_lives": 1,
+        "success_only_median_pickup_seconds": 11.975000000000001,
+        "success_only_max_pickup_seconds": 62.9,
+        "query_first_frags": 0,
+        "query_last_frags": 7
+      },
+      "lives": [
+        {
+          "local": 0,
+          "global_slot": 0,
+          "entity": 565,
+          "generation": 5,
+          "spawn_driver_tick": 194,
+          "spawn_log_line": 249,
+          "spawn_position": [
+            -75.75,
+            0.032,
+            23.25
+          ],
+          "death_driver_tick": 817,
+          "death_log_line": 848,
+          "first_ranged_pickup_driver_tick": 261,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            372,
+            454,
+            774
+          ],
+          "spawn_clock": 0.9500001668930054,
+          "first_alive_sample_clock": 1.4999996423721313,
+          "first_alive_owned": 3,
+          "last_sample_clock": 33.849769592285156,
+          "death_sample_clock": 32.19979476928711,
+          "right_censored": false,
+          "first_ranged_sample_clock": 4.2999982833862305,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 3.349998,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 294,
+          "first_inventory_line": 5,
+          "last_inventory_line": 882,
+          "first_ranged_pickup_delay_seconds": 3.35,
+          "observed_life_seconds": 31.249795
+        },
+        {
+          "local": 1,
+          "global_slot": 2,
+          "entity": 566,
+          "generation": 5,
+          "spawn_driver_tick": 194,
+          "spawn_log_line": 261,
+          "spawn_position": [
+            18.0,
+            0.032,
+            -63.75
+          ],
+          "death_driver_tick": 732,
+          "death_log_line": 762,
+          "first_ranged_pickup_driver_tick": 432,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            507
+          ],
+          "spawn_clock": 0.9500001668930054,
+          "first_alive_sample_clock": 1.4999996423721313,
+          "first_alive_owned": 3,
+          "last_sample_clock": 29.44983673095703,
+          "death_sample_clock": 27.899860382080078,
+          "right_censored": false,
+          "first_ranged_sample_clock": 12.900031089782715,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 11.950031,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 520,
+          "first_inventory_line": 5,
+          "last_inventory_line": 780,
+          "first_ranged_pickup_delay_seconds": 11.9,
+          "observed_life_seconds": 26.94986
+        },
+        {
+          "local": 2,
+          "global_slot": 3,
+          "entity": 567,
+          "generation": 5,
+          "spawn_driver_tick": 194,
+          "spawn_log_line": 273,
+          "spawn_position": [
+            -21.0,
+            0.22,
+            -9.75
+          ],
+          "death_driver_tick": 1272,
+          "death_log_line": 1351,
+          "first_ranged_pickup_driver_tick": null,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [],
+          "spawn_clock": 0.9500001668930054,
+          "first_alive_sample_clock": 1.4999996423721313,
+          "first_alive_owned": 3,
+          "last_sample_clock": 56.2994270324707,
+          "death_sample_clock": 54.89944839477539,
+          "right_censored": false,
+          "first_ranged_sample_clock": null,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": null,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 938,
+          "first_inventory_line": 5,
+          "last_inventory_line": 1401,
+          "first_ranged_pickup_delay_seconds": null,
+          "observed_life_seconds": 53.949448
+        },
+        {
+          "local": 3,
+          "global_slot": 4,
+          "entity": 568,
+          "generation": 5,
+          "spawn_driver_tick": 194,
+          "spawn_log_line": 285,
+          "spawn_position": [
+            32.25,
+            0.22,
+            -3.0
+          ],
+          "death_driver_tick": 900,
+          "death_log_line": 924,
+          "first_ranged_pickup_driver_tick": 435,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            522
+          ],
+          "spawn_clock": 0.9500001668930054,
+          "first_alive_sample_clock": 1.5999995470046997,
+          "first_alive_owned": 3,
+          "last_sample_clock": 37.849708557128906,
+          "death_sample_clock": 36.3497314453125,
+          "right_censored": false,
+          "first_ranged_sample_clock": 13.050031661987305,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 12.100031,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 327,
+          "first_inventory_line": 6,
+          "last_inventory_line": 972,
+          "first_ranged_pickup_delay_seconds": 12.05,
+          "observed_life_seconds": 35.399731
+        },
+        {
+          "local": 1,
+          "global_slot": 2,
+          "entity": 566,
+          "generation": 6,
+          "spawn_driver_tick": 766,
+          "spawn_log_line": 791,
+          "spawn_position": [
+            -75.75,
+            0.032,
+            23.25
+          ],
+          "death_driver_tick": 2418,
+          "death_log_line": 2521,
+          "first_ranged_pickup_driver_tick": 2024,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            2179
+          ],
+          "spawn_clock": 29.549835205078125,
+          "first_alive_sample_clock": 29.549835205078125,
+          "first_alive_owned": 3,
+          "last_sample_clock": 113.90235137939453,
+          "death_sample_clock": 112.1522445678711,
+          "right_censored": false,
+          "first_ranged_sample_clock": 92.45104217529297,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 62.901207,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 1305,
+          "first_inventory_line": 781,
+          "last_inventory_line": 2733,
+          "first_ranged_pickup_delay_seconds": 62.9,
+          "observed_life_seconds": 82.602409
+        },
+        {
+          "local": 0,
+          "global_slot": 0,
+          "entity": 565,
+          "generation": 6,
+          "spawn_driver_tick": 854,
+          "spawn_log_line": 868,
+          "spawn_position": [
+            -6.375,
+            0.032,
+            80.625
+          ],
+          "death_driver_tick": 2034,
+          "death_log_line": 2198,
+          "first_ranged_pickup_driver_tick": 901,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            927,
+            1729
+          ],
+          "spawn_clock": 33.94976806640625,
+          "first_alive_sample_clock": 33.94976806640625,
+          "first_alive_owned": 3,
+          "last_sample_clock": 94.70117950439453,
+          "death_sample_clock": 92.9510726928711,
+          "right_censored": false,
+          "first_ranged_sample_clock": 36.3497314453125,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 2.399963,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 471,
+          "first_inventory_line": 885,
+          "last_inventory_line": 2289,
+          "first_ranged_pickup_delay_seconds": 2.35,
+          "observed_life_seconds": 59.001305
+        },
+        {
+          "local": 3,
+          "global_slot": 4,
+          "entity": 568,
+          "generation": 6,
+          "spawn_driver_tick": 934,
+          "spawn_log_line": 972,
+          "spawn_position": [
+            -20.25,
+            0.4,
+            32.25
+          ],
+          "death_driver_tick": 1659,
+          "death_log_line": 1900,
+          "first_ranged_pickup_driver_tick": 1329,
+          "first_minigun_pickup_driver_tick": 1329,
+          "pickup_log_lines": [
+            1524
+          ],
+          "spawn_clock": 37.94970703125,
+          "first_alive_sample_clock": 37.99970626831055,
+          "first_alive_owned": 3,
+          "last_sample_clock": 75.7500228881836,
+          "death_sample_clock": 74.24993133544922,
+          "right_censored": false,
+          "first_ranged_sample_clock": 57.79940414428711,
+          "first_minigun_sample_clock": 57.79940414428711,
+          "first_ranged_sample_age_seconds": 19.849697,
+          "first_minigun_sample_age_seconds": 19.849697,
+          "inventory_samples": 294,
+          "first_inventory_line": 975,
+          "last_inventory_line": 1846,
+          "first_ranged_pickup_delay_seconds": 19.75,
+          "observed_life_seconds": 36.300224
+        },
+        {
+          "local": 2,
+          "global_slot": 3,
+          "entity": 567,
+          "generation": 6,
+          "spawn_driver_tick": 1302,
+          "spawn_log_line": 1440,
+          "spawn_position": [
+            -20.25,
+            0.4,
+            32.25
+          ],
+          "death_driver_tick": 1575,
+          "death_log_line": 1790,
+          "first_ranged_pickup_driver_tick": null,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [],
+          "spawn_clock": 56.34942626953125,
+          "first_alive_sample_clock": 56.3994255065918,
+          "first_alive_owned": 3,
+          "last_sample_clock": 71.44976043701172,
+          "death_sample_clock": 70.09967803955078,
+          "right_censored": false,
+          "first_ranged_sample_clock": null,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": null,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 234,
+          "first_inventory_line": 1402,
+          "last_inventory_line": 1749,
+          "first_ranged_pickup_delay_seconds": null,
+          "observed_life_seconds": 13.750252
+        },
+        {
+          "local": 2,
+          "global_slot": 3,
+          "entity": 567,
+          "generation": 7,
+          "spawn_driver_tick": 1606,
+          "spawn_log_line": 1838,
+          "spawn_position": [
+            -20.25,
+            0.4,
+            32.25
+          ],
+          "death_driver_tick": 2596,
+          "death_log_line": 2634,
+          "first_ranged_pickup_driver_tick": 1831,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            1859,
+            2032
+          ],
+          "spawn_clock": 71.54976654052734,
+          "first_alive_sample_clock": 71.54976654052734,
+          "first_alive_owned": 3,
+          "last_sample_clock": 121.4028091430664,
+          "death_sample_clock": 121.15279388427734,
+          "right_censored": false,
+          "first_ranged_sample_clock": 82.80045318603516,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 11.250687,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 766,
+          "first_inventory_line": 1750,
+          "last_inventory_line": 2906,
+          "first_ranged_pickup_delay_seconds": 11.25,
+          "observed_life_seconds": 49.603027
+        },
+        {
+          "local": 3,
+          "global_slot": 4,
+          "entity": 568,
+          "generation": 7,
+          "spawn_driver_tick": 1694,
+          "spawn_log_line": 1914,
+          "spawn_position": [
+            -75.75,
+            0.032,
+            23.25
+          ],
+          "death_driver_tick": null,
+          "death_log_line": null,
+          "first_ranged_pickup_driver_tick": 2235,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            2364,
+            2435
+          ],
+          "spawn_clock": 75.95003509521484,
+          "first_alive_sample_clock": 76.00003814697266,
+          "first_alive_owned": 3,
+          "last_sample_clock": 121.4028091430664,
+          "death_sample_clock": null,
+          "right_censored": true,
+          "first_ranged_sample_clock": 103.05168914794922,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 27.101654,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 346,
+          "first_inventory_line": 1851,
+          "last_inventory_line": 2904,
+          "first_ranged_pickup_delay_seconds": 27.05,
+          "observed_life_seconds": 45.452774
+        },
+        {
+          "local": 0,
+          "global_slot": 0,
+          "entity": 565,
+          "generation": 7,
+          "spawn_driver_tick": 2070,
+          "spawn_log_line": 2227,
+          "spawn_position": [
+            -65.25,
+            12.033,
+            -69.75
+          ],
+          "death_driver_tick": 2488,
+          "death_log_line": 2562,
+          "first_ranged_pickup_driver_tick": null,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [],
+          "spawn_clock": 94.75118255615234,
+          "first_alive_sample_clock": 94.80118560791016,
+          "first_alive_owned": 3,
+          "last_sample_clock": 117.05254364013672,
+          "death_sample_clock": 115.70246124267578,
+          "right_censored": false,
+          "first_ranged_sample_clock": null,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": null,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 172,
+          "first_inventory_line": 2292,
+          "last_inventory_line": 2806,
+          "first_ranged_pickup_delay_seconds": null,
+          "observed_life_seconds": 20.951279
+        },
+        {
+          "local": 1,
+          "global_slot": 2,
+          "entity": 566,
+          "generation": 7,
+          "spawn_driver_tick": 2454,
+          "spawn_log_line": 2535,
+          "spawn_position": [
+            -75.75,
+            0.032,
+            23.25
+          ],
+          "death_driver_tick": null,
+          "death_log_line": null,
+          "first_ranged_pickup_driver_tick": null,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [],
+          "spawn_clock": 113.95235443115234,
+          "first_alive_sample_clock": 113.95235443115234,
+          "first_alive_owned": 3,
+          "last_sample_clock": 121.4028091430664,
+          "death_sample_clock": null,
+          "right_censored": true,
+          "first_ranged_sample_clock": null,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": null,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 113,
+          "first_inventory_line": 2735,
+          "last_inventory_line": 2906,
+          "first_ranged_pickup_delay_seconds": null,
+          "observed_life_seconds": 7.450455
+        },
+        {
+          "local": 0,
+          "global_slot": 0,
+          "entity": 565,
+          "generation": 8,
+          "spawn_driver_tick": 2518,
+          "spawn_log_line": 2575,
+          "spawn_position": [
+            -75.75,
+            0.032,
+            23.25
+          ],
+          "death_driver_tick": null,
+          "death_log_line": null,
+          "first_ranged_pickup_driver_tick": null,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [],
+          "spawn_clock": 117.15254974365234,
+          "first_alive_sample_clock": 117.15254974365234,
+          "first_alive_owned": 3,
+          "last_sample_clock": 121.4028091430664,
+          "death_sample_clock": null,
+          "right_censored": true,
+          "first_ranged_sample_clock": null,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": null,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 34,
+          "first_inventory_line": 2809,
+          "last_inventory_line": 2906,
+          "first_ranged_pickup_delay_seconds": null,
+          "observed_life_seconds": 4.250259
+        }
+      ],
+      "goal_timeouts": [],
+      "post_window_events_excluded_from_denominators": {
+        "CecilSpawn": 1,
+        "CecilDeath": 0,
+        "CecilPickup": 1
+      }
+    },
+    "botB": {
+      "build": "048",
+      "actual_local_to_global_slot": {
+        "0": 5,
+        "1": 6,
+        "2": 7,
+        "3": 8
+      },
+      "summary": {
+        "lives": 13,
+        "completed_lives": 9,
+        "right_censored_lives": 4,
+        "ranged_acquired_lives": 10,
+        "completed_without_ranged": 1,
+        "censored_without_ranged": 2,
+        "minigun_acquired_lives": 0,
+        "success_only_median_pickup_seconds": 9.625,
+        "success_only_max_pickup_seconds": 18.6,
+        "query_first_frags": 0,
+        "query_last_frags": 6
+      },
+      "lives": [
+        {
+          "local": 0,
+          "global_slot": 5,
+          "entity": 569,
+          "generation": 6,
+          "spawn_driver_tick": 37,
+          "spawn_log_line": 213,
+          "spawn_position": [
+            18.0,
+            0.4,
+            28.5
+          ],
+          "death_driver_tick": 555,
+          "death_log_line": 637,
+          "first_ranged_pickup_driver_tick": 111,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            289,
+            371
+          ],
+          "spawn_clock": 0.9500001668930054,
+          "first_alive_sample_clock": 1.4999996423721313,
+          "first_alive_owned": 3,
+          "last_sample_clock": 28.449851989746094,
+          "death_sample_clock": 26.949874877929688,
+          "right_censored": false,
+          "first_ranged_sample_clock": 4.649999618530273,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 3.699999,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 249,
+          "first_inventory_line": 4,
+          "last_inventory_line": 755,
+          "first_ranged_pickup_delay_seconds": 3.7,
+          "observed_life_seconds": 25.999875
+        },
+        {
+          "local": 1,
+          "global_slot": 6,
+          "entity": 570,
+          "generation": 6,
+          "spawn_driver_tick": 37,
+          "spawn_log_line": 217,
+          "spawn_position": [
+            -20.25,
+            0.4,
+            32.25
+          ],
+          "death_driver_tick": 202,
+          "death_log_line": 369,
+          "first_ranged_pickup_driver_tick": null,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [],
+          "spawn_clock": 0.9500001668930054,
+          "first_alive_sample_clock": 1.4999996423721313,
+          "first_alive_owned": 3,
+          "last_sample_clock": 10.900023460388184,
+          "death_sample_clock": 9.300017356872559,
+          "right_censored": false,
+          "first_ranged_sample_clock": null,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": null,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 114,
+          "first_inventory_line": 4,
+          "last_inventory_line": 344,
+          "first_ranged_pickup_delay_seconds": null,
+          "observed_life_seconds": 8.350017
+        },
+        {
+          "local": 2,
+          "global_slot": 7,
+          "entity": 571,
+          "generation": 6,
+          "spawn_driver_tick": 37,
+          "spawn_log_line": 221,
+          "spawn_position": [
+            70.875,
+            0.407,
+            63.0
+          ],
+          "death_driver_tick": 829,
+          "death_log_line": 869,
+          "first_ranged_pickup_driver_tick": 84,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            270
+          ],
+          "spawn_clock": 0.9500001668930054,
+          "first_alive_sample_clock": 1.4999996423721313,
+          "first_alive_owned": 3,
+          "last_sample_clock": 41.9996452331543,
+          "death_sample_clock": 40.599666595458984,
+          "right_censored": false,
+          "first_ranged_sample_clock": 3.2999980449676514,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 2.349998,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 351,
+          "first_inventory_line": 4,
+          "last_inventory_line": 1069,
+          "first_ranged_pickup_delay_seconds": 2.35,
+          "observed_life_seconds": 39.649666
+        },
+        {
+          "local": 3,
+          "global_slot": 8,
+          "entity": 572,
+          "generation": 6,
+          "spawn_driver_tick": 37,
+          "spawn_log_line": 225,
+          "spawn_position": [
+            -65.25,
+            12.033,
+            -69.75
+          ],
+          "death_driver_tick": 725,
+          "death_log_line": 762,
+          "first_ranged_pickup_driver_tick": 235,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            386
+          ],
+          "spawn_clock": 0.9500001668930054,
+          "first_alive_sample_clock": 1.4999996423721313,
+          "first_alive_owned": 3,
+          "last_sample_clock": 36.899723052978516,
+          "death_sample_clock": 35.34974670410156,
+          "right_censored": false,
+          "first_ranged_sample_clock": 10.900023460388184,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 9.950023,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 312,
+          "first_inventory_line": 4,
+          "last_inventory_line": 950,
+          "first_ranged_pickup_delay_seconds": 9.9,
+          "observed_life_seconds": 34.399747
+        },
+        {
+          "local": 1,
+          "global_slot": 6,
+          "entity": 570,
+          "generation": 7,
+          "spawn_driver_tick": 237,
+          "spawn_log_line": 391,
+          "spawn_position": [
+            18.0,
+            0.032,
+            -63.75
+          ],
+          "death_driver_tick": null,
+          "death_log_line": null,
+          "first_ranged_pickup_driver_tick": 401,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            520,
+            856
+          ],
+          "spawn_clock": 10.950023651123047,
+          "first_alive_sample_clock": 11.050024032592773,
+          "first_alive_owned": 3,
+          "last_sample_clock": 121.4028091430664,
+          "death_sample_clock": null,
+          "right_censored": true,
+          "first_ranged_sample_clock": 19.149993896484375,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 8.19997,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 851,
+          "first_inventory_line": 347,
+          "last_inventory_line": 2905,
+          "first_ranged_pickup_delay_seconds": 8.2,
+          "observed_life_seconds": 110.452785
+        },
+        {
+          "local": 0,
+          "global_slot": 5,
+          "entity": 569,
+          "generation": 7,
+          "spawn_driver_tick": 589,
+          "spawn_log_line": 657,
+          "spawn_position": [
+            -6.375,
+            0.032,
+            80.625
+          ],
+          "death_driver_tick": 1079,
+          "death_log_line": 1050,
+          "first_ranged_pickup_driver_tick": 788,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            811
+          ],
+          "spawn_clock": 28.549850463867188,
+          "first_alive_sample_clock": 28.549850463867188,
+          "first_alive_owned": 3,
+          "last_sample_clock": 54.39945602416992,
+          "death_sample_clock": 53.14947509765625,
+          "right_censored": false,
+          "first_ranged_sample_clock": 38.59969711303711,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 10.049847,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 197,
+          "first_inventory_line": 758,
+          "last_inventory_line": 1356,
+          "first_ranged_pickup_delay_seconds": 9.95,
+          "observed_life_seconds": 24.599625
+        },
+        {
+          "local": 3,
+          "global_slot": 8,
+          "entity": 572,
+          "generation": 7,
+          "spawn_driver_tick": 757,
+          "spawn_log_line": 780,
+          "spawn_position": [
+            -75.75,
+            0.032,
+            23.25
+          ],
+          "death_driver_tick": 1771,
+          "death_log_line": 1539,
+          "first_ranged_pickup_driver_tick": 944,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            944,
+            1128,
+            1293
+          ],
+          "spawn_clock": 36.94972229003906,
+          "first_alive_sample_clock": 36.99972152709961,
+          "first_alive_owned": 3,
+          "last_sample_clock": 89.30084991455078,
+          "death_sample_clock": 87.65074920654297,
+          "right_censored": false,
+          "first_ranged_sample_clock": 46.349578857421875,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 9.399857,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 401,
+          "first_inventory_line": 953,
+          "last_inventory_line": 2162,
+          "first_ranged_pickup_delay_seconds": 9.35,
+          "observed_life_seconds": 50.701027
+        },
+        {
+          "local": 2,
+          "global_slot": 7,
+          "entity": 571,
+          "generation": 7,
+          "spawn_driver_tick": 861,
+          "spawn_log_line": 897,
+          "spawn_position": [
+            -65.25,
+            12.033,
+            -69.75
+          ],
+          "death_driver_tick": 1965,
+          "death_log_line": 1676,
+          "first_ranged_pickup_driver_tick": 1165,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            1120
+          ],
+          "spawn_clock": 42.14964294433594,
+          "first_alive_sample_clock": 42.24964141845703,
+          "first_alive_owned": 3,
+          "last_sample_clock": 98.9514389038086,
+          "death_sample_clock": 97.45134735107422,
+          "right_censored": false,
+          "first_ranged_sample_clock": 57.399410247802734,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 15.249767,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 439,
+          "first_inventory_line": 1074,
+          "last_inventory_line": 2390,
+          "first_ranged_pickup_delay_seconds": 15.2,
+          "observed_life_seconds": 55.301704
+        },
+        {
+          "local": 0,
+          "global_slot": 5,
+          "entity": 569,
+          "generation": 8,
+          "spawn_driver_tick": 1109,
+          "spawn_log_line": 1069,
+          "spawn_position": [
+            18.0,
+            0.032,
+            -63.75
+          ],
+          "death_driver_tick": 2020,
+          "death_log_line": 1734,
+          "first_ranged_pickup_driver_tick": 1481,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            1325
+          ],
+          "spawn_clock": 54.54945373535156,
+          "first_alive_sample_clock": 54.649452209472656,
+          "first_alive_owned": 3,
+          "last_sample_clock": 101.70160675048828,
+          "death_sample_clock": 100.1515121459961,
+          "right_censored": false,
+          "first_ranged_sample_clock": 73.19986724853516,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 18.650414,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 366,
+          "first_inventory_line": 1361,
+          "last_inventory_line": 2454,
+          "first_ranged_pickup_delay_seconds": 18.6,
+          "observed_life_seconds": 45.602058
+        },
+        {
+          "local": 3,
+          "global_slot": 8,
+          "entity": 572,
+          "generation": 8,
+          "spawn_driver_tick": 1805,
+          "spawn_log_line": 1566,
+          "spawn_position": [
+            -75.75,
+            0.032,
+            23.25
+          ],
+          "death_driver_tick": 2043,
+          "death_log_line": 1756,
+          "first_ranged_pickup_driver_tick": 1868,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            1604,
+            1666
+          ],
+          "spawn_clock": 89.3508529663086,
+          "first_alive_sample_clock": 89.4008560180664,
+          "first_alive_owned": 3,
+          "last_sample_clock": 102.85167694091797,
+          "death_sample_clock": 101.3515853881836,
+          "right_censored": false,
+          "first_ranged_sample_clock": 92.5510482788086,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 3.200195,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 108,
+          "first_inventory_line": 2165,
+          "last_inventory_line": 2480,
+          "first_ranged_pickup_delay_seconds": 3.15,
+          "observed_life_seconds": 12.000732
+        },
+        {
+          "local": 2,
+          "global_slot": 7,
+          "entity": 571,
+          "generation": 8,
+          "spawn_driver_tick": 1997,
+          "spawn_log_line": 1695,
+          "spawn_position": [
+            18.0,
+            0.032,
+            -63.75
+          ],
+          "death_driver_tick": null,
+          "death_log_line": null,
+          "first_ranged_pickup_driver_tick": null,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [],
+          "spawn_clock": 98.9514389038086,
+          "first_alive_sample_clock": 99.05144500732422,
+          "first_alive_owned": 3,
+          "last_sample_clock": 121.4028091430664,
+          "death_sample_clock": null,
+          "right_censored": true,
+          "first_ranged_sample_clock": null,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": null,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 175,
+          "first_inventory_line": 2393,
+          "last_inventory_line": 2905,
+          "first_ranged_pickup_delay_seconds": null,
+          "observed_life_seconds": 22.45137
+        },
+        {
+          "local": 0,
+          "global_slot": 5,
+          "entity": 569,
+          "generation": 9,
+          "spawn_driver_tick": 2053,
+          "spawn_log_line": 1758,
+          "spawn_position": [
+            -20.25,
+            0.4,
+            32.25
+          ],
+          "death_driver_tick": null,
+          "death_log_line": null,
+          "first_ranged_pickup_driver_tick": null,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            2039
+          ],
+          "spawn_clock": 101.7516098022461,
+          "first_alive_sample_clock": 101.8016128540039,
+          "first_alive_owned": 3,
+          "last_sample_clock": 121.4028091430664,
+          "death_sample_clock": null,
+          "right_censored": true,
+          "first_ranged_sample_clock": null,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": null,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 153,
+          "first_inventory_line": 2457,
+          "last_inventory_line": 2905,
+          "first_ranged_pickup_delay_seconds": null,
+          "observed_life_seconds": 19.651199
+        },
+        {
+          "local": 3,
+          "global_slot": 8,
+          "entity": 572,
+          "generation": 9,
+          "spawn_driver_tick": 2077,
+          "spawn_log_line": 1774,
+          "spawn_position": [
+            18.0,
+            0.032,
+            -63.75
+          ],
+          "death_driver_tick": null,
+          "death_log_line": null,
+          "first_ranged_pickup_driver_tick": 2333,
+          "first_minigun_pickup_driver_tick": null,
+          "pickup_log_lines": [
+            1974
+          ],
+          "spawn_clock": 102.9516830444336,
+          "first_alive_sample_clock": 102.9516830444336,
+          "first_alive_owned": 3,
+          "last_sample_clock": 121.4028091430664,
+          "death_sample_clock": null,
+          "right_censored": true,
+          "first_ranged_sample_clock": 115.8024673461914,
+          "first_minigun_sample_clock": null,
+          "first_ranged_sample_age_seconds": 12.850784,
+          "first_minigun_sample_age_seconds": null,
+          "inventory_samples": 144,
+          "first_inventory_line": 2483,
+          "last_inventory_line": 2905,
+          "first_ranged_pickup_delay_seconds": 12.8,
+          "observed_life_seconds": 18.451126
+        }
+      ],
+      "goal_timeouts": [
+        {
+          "end_line": 766,
+          "local": 1,
+          "item_entity": 78,
+          "end_tick": 727,
+          "goal_start_tick": 487,
+          "goal_start_line": 591,
+          "weapon": 0,
+          "mapped": null,
+          "original_deadline": null,
+          "driver_duration_seconds": 12.0
+        },
+        {
+          "end_line": 1063,
+          "local": 1,
+          "item_entity": 293,
+          "end_tick": 1088,
+          "goal_start_tick": 848,
+          "goal_start_line": 888,
+          "weapon": 0,
+          "mapped": null,
+          "original_deadline": null,
+          "driver_duration_seconds": 12.0
+        },
+        {
+          "end_line": 1279,
+          "local": 1,
+          "item_entity": 285,
+          "end_tick": 1423,
+          "goal_start_tick": 1183,
+          "goal_start_line": 1138,
+          "weapon": 0,
+          "mapped": null,
+          "original_deadline": null,
+          "driver_duration_seconds": 12.0
+        },
+        {
+          "end_line": 1492,
+          "local": 1,
+          "item_entity": 287,
+          "end_tick": 1709,
+          "goal_start_tick": 1469,
+          "goal_start_line": 1312,
+          "weapon": 0,
+          "mapped": null,
+          "original_deadline": null,
+          "driver_duration_seconds": 12.0
+        },
+        {
+          "end_line": 1891,
+          "local": 1,
+          "item_entity": 293,
+          "end_tick": 2241,
+          "goal_start_tick": 2001,
+          "goal_start_line": 1723,
+          "weapon": 0,
+          "mapped": null,
+          "original_deadline": null,
+          "driver_duration_seconds": 12.0
+        }
+      ],
+      "post_window_events_excluded_from_denominators": {
+        "CecilSpawn": 1,
+        "CecilDeath": 2,
+        "CecilPickup": 0
+      }
+    }
+  },
+  "flight_events": [
+    {
+      "local": 2,
+      "tick": 558,
+      "action": "begin",
+      "source": 84,
+      "hop": 86,
+      "deadline": 45.869,
+      "role": "botA",
+      "source_line": 604,
+      "entity": 567,
+      "generation": 5
+    },
+    {
+      "local": 2,
+      "tick": 563,
+      "action": "end",
+      "reason": "arrived",
+      "source": 84,
+      "hop": 86,
+      "deadline": 45.869,
+      "role": "botA",
+      "source_line": 610,
+      "entity": 567,
+      "generation": 5
+    },
+    {
+      "local": 1,
+      "tick": 1329,
+      "action": "begin",
+      "source": 12,
+      "hop": 34,
+      "deadline": 83.3,
+      "role": "botA",
+      "source_line": 1522,
+      "entity": 566,
+      "generation": 6
+    },
+    {
+      "local": 1,
+      "tick": 1344,
+      "action": "end",
+      "reason": "context",
+      "source": 12,
+      "hop": 34,
+      "deadline": 83.3,
+      "role": "botA",
+      "source_line": 1570,
+      "entity": 566,
+      "generation": 6
+    }
+  ],
+  "edges": {
+    "botA": {
+      "approach_action_rows": 360,
+      "state_count": 520,
+      "source8_11_12_or_hop12_state_count": 31,
+      "state_examples": [
+        {
+          "source_line": 895,
+          "local": 2,
+          "tick": 880,
+          "entity": 567,
+          "generation": 5,
+          "pos": [
+            -41.081,
+            24.007,
+            63.111
+          ],
+          "health": 100.0,
+          "owned": 3,
+          "goal_entity": 243,
+          "goal": 34,
+          "hop": 12,
+          "nav": 1,
+          "move": 1.0,
+          "strafe": 0.0,
+          "up": 0.0,
+          "fire": 0,
+          "nav_source": 8
+        },
+        {
+          "source_line": 922,
+          "local": 2,
+          "tick": 900,
+          "entity": 567,
+          "generation": 5,
+          "pos": [
+            -18.851,
+            70.763,
+            21.638
+          ],
+          "health": 100.0,
+          "owned": 3,
+          "goal_entity": 243,
+          "goal": 34,
+          "hop": 34,
+          "nav": 1,
+          "move": 0.18,
+          "strafe": 0.49,
+          "up": 0.0,
+          "fire": 0,
+          "nav_source": 12
+        },
+        {
+          "source_line": 955,
+          "local": 2,
+          "tick": 920,
+          "entity": 567,
+          "generation": 5,
+          "pos": [
+            25.603,
+            124.497,
+            -41.548
+          ],
+          "health": 100.0,
+          "owned": 3,
+          "goal_entity": 243,
+          "goal": 34,
+          "hop": 34,
+          "nav": 1,
+          "move": 1.0,
+          "strafe": 0.05,
+          "up": 0.0,
+          "fire": 0,
+          "nav_source": 12
+        },
+        {
+          "source_line": 990,
+          "local": 2,
+          "tick": 940,
+          "entity": 567,
+          "generation": 5,
+          "pos": [
+            70.056,
+            148.231,
+            -104.734
+          ],
+          "health": 100.0,
+          "owned": 3,
+          "goal_entity": 243,
+          "goal": 34,
+          "hop": 34,
+          "nav": 1,
+          "move": 0.59,
+          "strafe": 0.4,
+          "up": 0.0,
+          "fire": 0,
+          "nav_source": 12
+        },
+        {
+          "source_line": 1498,
+          "local": 3,
+          "tick": 1320,
+          "entity": 568,
+          "generation": 6,
+          "pos": [
+            57.879,
+            73.733,
+            -60.753
+          ],
+          "health": 100.0,
+          "owned": 3,
+          "goal_entity": 243,
+          "goal": 34,
+          "hop": 34,
+          "nav": 1,
+          "move": 1.0,
+          "strafe": -0.0,
+          "up": 0.0,
+          "fire": 0,
+          "nav_source": 12
+        },
+        {
+          "source_line": 1559,
+          "local": 1,
+          "tick": 1340,
+          "entity": 566,
+          "generation": 6,
+          "pos": [
+            63.646,
+            54.899,
+            -64.234
+          ],
+          "health": 20.0,
+          "owned": 3,
+          "goal_entity": 0,
+          "goal": 34,
+          "hop": 34,
+          "nav": 1,
+          "move": -1.0,
+          "strafe": -0.0,
+          "up": 0.0,
+          "fire": 0,
+          "nav_source": 12
+        },
+        {
+          "source_line": 1718,
+          "local": 0,
+          "tick": 1460,
+          "entity": 565,
+          "generation": 6,
+          "pos": [
+            -48.18,
+            27.172,
+            58.549
+          ],
+          "health": 21.0,
+          "owned": 19,
+          "goal_entity": 245,
+          "goal": 12,
+          "hop": 12,
+          "nav": 1,
+          "move": 0.39,
+          "strafe": -0.46,
+          "up": 0.0,
+          "fire": 0,
+          "nav_source": 13
+        }
+      ],
+      "source_counts": {
+        "8": 1,
+        "12": 29,
+        "13": 1
+      }
+    },
+    "botB": {
+      "approach_action_rows": 0,
+      "state_count": 488,
+      "source8_11_12_or_hop12_state_count": 0,
+      "state_examples": [],
+      "source_counts": {}
+    }
+  },
+  "query_count": 59,
+  "last_query_elapsed": 119.27071854495443,
+  "raw_sha256": {
+    "result.json": "4e239cbdebcb30eddb3845f80faca1862e82c72dfd49dc8f9a2b204369b023d1",
+    "botA.log": "55276bd952744ce7eb6bf0a4d5c0cfa487bd2533cd61a7da8699ad1194d72af8",
+    "botB.log": "cb3cece43b3577a1ac3be903c1e90c348bfc26c9105aea0c250c373135f6f403",
+    "inventory.jsonl": "8e99b558b59a76c44605ad5a6b3804cb75a275945c25c63ccc7943eb76c4072a",
+    "frida-bouncer.jsonl": "077bff26f05765b3595308888a2b8177ff1aba0b061c98812f39c5edff9e87fe",
+    "queries.json": "de2e3bb4d6b0cdb6ab80dd96798f7df6eb6a7db85579789764a3751be637aa70",
+    "private_analysis_script": "448f5b8133f35d90298050f1662260a59c6476e3334900175801a87dbfd466da",
+    "private_enrichment_script": "efdfc2d364c7230e00fb7669145e1cf0910b19e3b56f2cb44795f1a3c266f48f",
+    "private_action_analysis_script": "4c9896a649a877a54d3a63377abb978f93e37f406c2bb2853eea28313468165c"
+  },
+  "limitations": [
+    "Both8->12 and11->12 candidate approaches were exercised; successful contact is separate from weapon pickup.",
+    "Four matching Bouncer234 calls do not imply four successful weapon acquisitions.",
+    "Inventory groups are storage labels; cohorts derive from actual attach mapping.",
+    "Inventory is repeated-read sampling, not atomic first-state/damage-cause evidence.",
+    "Pickup driver deltas use nominal50ms action ticks; inventory sample ages use original-server game clock.",
+    "Censored lives remain in denominator; success-only medians do not prove all-life rapid acquisition.",
+    "First-spawn clock is before first inventory observation; logged spawn/pickup events provide additional lifecycle evidence.",
+    "No matched public baseline, three-run comparison, hours or general A acceptance."
+  ],
+  "flight_context": [
+    {
+      "event": {
+        "local": 2,
+        "tick": 558,
+        "action": "begin",
+        "source": 84,
+        "hop": 86,
+        "deadline": 45.869,
+        "role": "botA",
+        "source_line": 604,
+        "entity": 567,
+        "generation": 5
+      },
+      "previous_state": {
+        "source_line": 589,
+        "local": 2,
+        "tick": 540,
+        "entity": 567,
+        "generation": 5,
+        "pos": [
+          -1.254,
+          10.076,
+          13.352
+        ],
+        "health": 100.0,
+        "owned": 3,
+        "target": 6,
+        "vis": 0,
+        "goal_entity": 267,
+        "goal": 176,
+        "hop": 84,
+        "nav": 1,
+        "nav_source": 92,
+        "move": -0.99,
+        "strafe": 0.08,
+        "up": 0.0,
+        "fire": 0,
+        "floor": 1,
+        "support_ref": 0
+      },
+      "following_state": {
+        "source_line": 608,
+        "local": 2,
+        "tick": 560,
+        "entity": 567,
+        "generation": 5,
+        "pos": [
+          -0.191,
+          31.827,
+          11.952
+        ],
+        "health": 100.0,
+        "owned": 3,
+        "target": -1,
+        "vis": 0,
+        "goal_entity": 0,
+        "goal": 176,
+        "hop": 86,
+        "nav": 1,
+        "nav_source": 84,
+        "move": 0.0,
+        "strafe": 0.0,
+        "up": 0.0,
+        "fire": 0,
+        "floor": 1,
+        "support_ref": 0
+      }
+    },
+    {
+      "event": {
+        "local": 2,
+        "tick": 563,
+        "action": "end",
+        "reason": "arrived",
+        "source": 84,
+        "hop": 86,
+        "deadline": 45.869,
+        "role": "botA",
+        "source_line": 610,
+        "entity": 567,
+        "generation": 5
+      },
+      "previous_state": {
+        "source_line": 608,
+        "local": 2,
+        "tick": 560,
+        "entity": 567,
+        "generation": 5,
+        "pos": [
+          -0.191,
+          31.827,
+          11.952
+        ],
+        "health": 100.0,
+        "owned": 3,
+        "target": -1,
+        "vis": 0,
+        "goal_entity": 0,
+        "goal": 176,
+        "hop": 86,
+        "nav": 1,
+        "nav_source": 84,
+        "move": 0.0,
+        "strafe": 0.0,
+        "up": 0.0,
+        "fire": 0,
+        "floor": 1,
+        "support_ref": 0
+      },
+      "following_state": {
+        "source_line": 622,
+        "local": 2,
+        "tick": 580,
+        "entity": 567,
+        "generation": 5,
+        "pos": [
+          1.652,
+          55.452,
+          10.732
+        ],
+        "health": 100.0,
+        "owned": 3,
+        "target": -1,
+        "vis": 0,
+        "goal_entity": 243,
+        "goal": 34,
+        "hop": 95,
+        "nav": 1,
+        "nav_source": 86,
+        "move": 0.47,
+        "strafe": -0.44,
+        "up": 0.0,
+        "fire": 0,
+        "floor": 1,
+        "support_ref": 0
+      }
+    },
+    {
+      "event": {
+        "local": 1,
+        "tick": 1329,
+        "action": "begin",
+        "source": 12,
+        "hop": 34,
+        "deadline": 83.3,
+        "role": "botA",
+        "source_line": 1522,
+        "entity": 566,
+        "generation": 6
+      },
+      "previous_state": {
+        "source_line": 1492,
+        "local": 1,
+        "tick": 1320,
+        "entity": 566,
+        "generation": 6,
+        "pos": [
+          56.24,
+          97.258,
+          -48.406
+        ],
+        "health": 20.0,
+        "owned": 3,
+        "target": -1,
+        "vis": 0,
+        "goal_entity": 243,
+        "goal": 34,
+        "hop": 34,
+        "nav": 1,
+        "nav_source": 12,
+        "move": 1.0,
+        "strafe": 0.0,
+        "up": 0.0,
+        "fire": 0,
+        "floor": 1,
+        "support_ref": 0
+      },
+      "following_state": {
+        "source_line": 1559,
+        "local": 1,
+        "tick": 1340,
+        "entity": 566,
+        "generation": 6,
+        "pos": [
+          63.646,
+          54.899,
+          -64.234
+        ],
+        "health": 20.0,
+        "owned": 3,
+        "target": 4,
+        "vis": 1,
+        "goal_entity": 0,
+        "goal": 34,
+        "hop": 34,
+        "nav": 1,
+        "nav_source": 12,
+        "move": -1.0,
+        "strafe": -0.0,
+        "up": 0.0,
+        "fire": 0,
+        "floor": 1,
+        "support_ref": 0
+      }
+    },
+    {
+      "event": {
+        "local": 1,
+        "tick": 1344,
+        "action": "end",
+        "reason": "context",
+        "source": 12,
+        "hop": 34,
+        "deadline": 83.3,
+        "role": "botA",
+        "source_line": 1570,
+        "entity": 566,
+        "generation": 6
+      },
+      "previous_state": {
+        "source_line": 1559,
+        "local": 1,
+        "tick": 1340,
+        "entity": 566,
+        "generation": 6,
+        "pos": [
+          63.646,
+          54.899,
+          -64.234
+        ],
+        "health": 20.0,
+        "owned": 3,
+        "target": 4,
+        "vis": 1,
+        "goal_entity": 0,
+        "goal": 34,
+        "hop": 34,
+        "nav": 1,
+        "nav_source": 12,
+        "move": -1.0,
+        "strafe": -0.0,
+        "up": 0.0,
+        "fire": 0,
+        "floor": 1,
+        "support_ref": 0
+      },
+      "following_state": {
+        "source_line": 1601,
+        "local": 1,
+        "tick": 1360,
+        "entity": 566,
+        "generation": 6,
+        "pos": [
+          66.917,
+          48.006,
+          -65.37
+        ],
+        "health": 45.0,
+        "owned": 3,
+        "target": 4,
+        "vis": 0,
+        "goal_entity": 556,
+        "goal": 41,
+        "hop": 34,
+        "nav": 1,
+        "nav_source": 37,
+        "move": -0.49,
+        "strafe": -0.44,
+        "up": 0.0,
+        "fire": 0,
+        "floor": 1,
+        "support_ref": 1
+      }
+    }
+  ],
+  "bouncer_action_episodes": [
+    {
+      "local": 2,
+      "entity": 567,
+      "generation": 5,
+      "action_rows": 120,
+      "first_tick": 874,
+      "last_tick": 993,
+      "incoming_source": 8,
+      "raw_positive_up_before_arrival": 3,
+      "all_prearrival_positive_up_suppressed": true,
+      "arrival_tick": 887,
+      "arrival_final_up": 11.0,
+      "selected_action_rows": [
+        {
+          "local": 2,
+          "tick": 874,
+          "time": 43.700001,
+          "entity": 567,
+          "generation": 5,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 73.200001,
+          "prev_source": 7,
+          "prev_hop": 8,
+          "reached": 1,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 73.200001,
+          "out_hop": 12,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            0.999955,
+            0.009503,
+            1.0
+          ],
+          "requested_yaw": -0.544496,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            0.047516,
+            0.0,
+            -9.999548
+          ],
+          "rotation": [
+            227.022018,
+            -16.95722,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -35.945057,
+            23.888506,
+            63.125618
+          ],
+          "velocity": [
+            -17.151722,
+            2.613635,
+            0.020367
+          ],
+          "support": 54,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 90.066422,
+          "view_yaw": 0.0,
+          "source_line": 883
+        },
+        {
+          "local": 2,
+          "tick": 878,
+          "time": 43.900002,
+          "entity": 567,
+          "generation": 5,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 73.200001,
+          "prev_source": 8,
+          "prev_hop": 12,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 73.200001,
+          "out_hop": 12,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            1.0,
+            0.000821,
+            1.0
+          ],
+          "requested_yaw": -0.047063,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            0.004107,
+            0.0,
+            -9.999996
+          ],
+          "rotation": [
+            226.922729,
+            -16.95722,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -39.375298,
+            24.186218,
+            63.117138
+          ],
+          "velocity": [
+            -17.151037,
+            -0.386468,
+            -0.063247
+          ],
+          "support": 0,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 89.469727,
+          "view_yaw": 0.0,
+          "source_line": 887
+        },
+        {
+          "local": 2,
+          "tick": 882,
+          "time": 44.100002,
+          "entity": 567,
+          "generation": 5,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 73.200001,
+          "prev_source": 8,
+          "prev_hop": 12,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 73.200001,
+          "out_hop": 12,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            1.0,
+            7.2e-05,
+            1.0
+          ],
+          "requested_yaw": -0.004133,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            0.000361,
+            0.0,
+            -10.0
+          ],
+          "rotation": [
+            226.855621,
+            -16.95722,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -42.835987,
+            24.006838,
+            63.09182
+          ],
+          "velocity": [
+            -17.548903,
+            0.0,
+            -0.195399
+          ],
+          "support": 193,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 89.359749,
+          "view_yaw": 0.0,
+          "source_line": 899
+        },
+        {
+          "local": 2,
+          "tick": 887,
+          "time": 44.350002,
+          "entity": 567,
+          "generation": 5,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 73.200001,
+          "prev_source": 8,
+          "prev_hop": 12,
+          "reached": 1,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 73.200001,
+          "out_hop": 34,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            -0.649973,
+            0.759957,
+            1.0
+          ],
+          "requested_yaw": -9.0,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            3.799788,
+            11.0,
+            6.499728
+          ],
+          "rotation": [
+            217.858017,
+            -14.943354,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -47.223209,
+            24.006838,
+            63.04232
+          ],
+          "velocity": [
+            -17.548901,
+            0.0,
+            -0.196591
+          ],
+          "support": 193,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 89.358093,
+          "view_yaw": 0.0,
+          "source_line": 905
+        },
+        {
+          "local": 2,
+          "tick": 888,
+          "time": 44.400002,
+          "entity": 567,
+          "generation": 5,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 73.200001,
+          "prev_source": 12,
+          "prev_hop": 34,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 73.200001,
+          "out_hop": 34,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            -0.651691,
+            0.758485,
+            0.0
+          ],
+          "requested_yaw": -9.0,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            3.792424,
+            0.0,
+            6.516906
+          ],
+          "rotation": [
+            217.857956,
+            -16.95722,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -47.723179,
+            24.121937,
+            63.03672
+          ],
+          "velocity": [
+            53.062492,
+            73.184364,
+            -77.255417
+          ],
+          "support": 0,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 89.35804,
+          "view_yaw": 0.0,
+          "source_line": 906
+        },
+        {
+          "local": 2,
+          "tick": 889,
+          "time": 44.450001,
+          "entity": 567,
+          "generation": 5,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 73.200001,
+          "prev_source": 12,
+          "prev_hop": 34,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 73.200001,
+          "out_hop": 34,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            -0.527842,
+            0.849342,
+            0.0
+          ],
+          "requested_yaw": -9.0,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            4.246712,
+            0.0,
+            5.278424
+          ],
+          "rotation": [
+            208.858017,
+            -14.943354,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -45.10807,
+            28.421154,
+            59.238602
+          ],
+          "velocity": [
+            52.302174,
+            85.98436,
+            -75.962387
+          ],
+          "support": 0,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 80.358101,
+          "view_yaw": 0.0,
+          "source_line": 907
+        }
+      ]
+    },
+    {
+      "local": 3,
+      "entity": 568,
+      "generation": 6,
+      "action_rows": 120,
+      "first_tick": 1227,
+      "last_tick": 1346,
+      "incoming_source": 8,
+      "raw_positive_up_before_arrival": 3,
+      "all_prearrival_positive_up_suppressed": true,
+      "arrival_tick": 1240,
+      "arrival_final_up": 0.0,
+      "selected_action_rows": [
+        {
+          "local": 3,
+          "tick": 1227,
+          "time": 61.350002,
+          "entity": 568,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 91.192548,
+          "prev_source": 7,
+          "prev_hop": 8,
+          "reached": 1,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 91.192548,
+          "out_hop": 12,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            0.999953,
+            0.009712,
+            1.0
+          ],
+          "requested_yaw": -0.556461,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            0.04856,
+            0.0,
+            -9.999529
+          ],
+          "rotation": [
+            485.497681,
+            -1.364703,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -36.433613,
+            23.96418,
+            63.126343
+          ],
+          "velocity": [
+            -17.151722,
+            2.613642,
+            0.018246
+          ],
+          "support": 54,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 90.059502,
+          "view_yaw": 0.0,
+          "source_line": 1244
+        },
+        {
+          "local": 3,
+          "tick": 1232,
+          "time": 61.600002,
+          "entity": 568,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 91.192548,
+          "prev_source": 8,
+          "prev_hop": 12,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 91.192548,
+          "out_hop": 12,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            0.999999,
+            0.001023,
+            1.0
+          ],
+          "requested_yaw": -0.058607,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            0.005114,
+            0.0,
+            -9.999994
+          ],
+          "rotation": [
+            485.36026,
+            -1.364703,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -40.721405,
+            24.167568,
+            63.1138
+          ],
+          "velocity": [
+            -17.150997,
+            -1.886467,
+            -0.067232
+          ],
+          "support": 0,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 89.424271,
+          "view_yaw": 0.0,
+          "source_line": 1249
+        },
+        {
+          "local": 3,
+          "tick": 1237,
+          "time": 61.850002,
+          "entity": 568,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 91.192548,
+          "prev_source": 8,
+          "prev_hop": 12,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 91.192548,
+          "out_hop": 12,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            1.0,
+            -4.4e-05,
+            1.0
+          ],
+          "requested_yaw": 0.002499,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 1,
+          "action": [
+            -0.000218,
+            0.0,
+            -10.0
+          ],
+          "rotation": [
+            485.321503,
+            -1.364703,
+            0.0
+          ],
+          "buttons": 32768,
+          "pos": [
+            -45.071743,
+            24.00835,
+            63.069637
+          ],
+          "velocity": [
+            -17.548777,
+            0.0,
+            -0.207412
+          ],
+          "support": 193,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 89.324486,
+          "view_yaw": 0.0,
+          "source_line": 1260
+        },
+        {
+          "local": 3,
+          "tick": 1240,
+          "time": 62.0,
+          "entity": 568,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 91.192548,
+          "prev_source": 8,
+          "prev_hop": 12,
+          "reached": 1,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 91.192548,
+          "out_hop": 34,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            -0.649915,
+            0.760007,
+            0.0
+          ],
+          "requested_yaw": -9.0,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 1,
+          "action": [
+            3.800036,
+            0.0,
+            6.499146
+          ],
+          "rotation": [
+            476.321777,
+            -1.364703,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -47.326588,
+            24.00835,
+            63.043137
+          ],
+          "velocity": [
+            53.059448,
+            73.181099,
+            -77.261307
+          ],
+          "support": 0,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 89.327293,
+          "view_yaw": 0.0,
+          "source_line": 1274
+        },
+        {
+          "local": 3,
+          "tick": 1241,
+          "time": 62.049999,
+          "entity": 568,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 91.192548,
+          "prev_source": 12,
+          "prev_hop": 34,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 91.192548,
+          "out_hop": 34,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            -0.652477,
+            0.757808,
+            0.0
+          ],
+          "requested_yaw": -9.0,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 1,
+          "action": [
+            3.789042,
+            0.0,
+            6.524771
+          ],
+          "rotation": [
+            476.321686,
+            -1.364703,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -44.724285,
+            27.592405,
+            59.235367
+          ],
+          "velocity": [
+            52.046066,
+            71.681099,
+            -76.155396
+          ],
+          "support": 0,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 89.327202,
+          "view_yaw": 0.0,
+          "source_line": 1276
+        },
+        {
+          "local": 3,
+          "tick": 1242,
+          "time": 62.100002,
+          "entity": 568,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 91.192548,
+          "prev_source": 12,
+          "prev_hop": 34,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 91.192548,
+          "out_hop": 34,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            -0.528855,
+            0.848712,
+            1.0
+          ],
+          "requested_yaw": -9.0,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 1,
+          "action": [
+            4.243562,
+            11.0,
+            5.288548
+          ],
+          "rotation": [
+            467.321777,
+            -1.364703,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -42.159737,
+            31.10146,
+            55.492401
+          ],
+          "velocity": [
+            51.290947,
+            70.181099,
+            -74.859322
+          ],
+          "support": 0,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 80.327293,
+          "view_yaw": 0.0,
+          "source_line": 1277
+        }
+      ]
+    },
+    {
+      "local": 1,
+      "entity": 566,
+      "generation": 6,
+      "action_rows": 120,
+      "first_tick": 1245,
+      "last_tick": 1364,
+      "incoming_source": 11,
+      "raw_positive_up_before_arrival": 2,
+      "all_prearrival_positive_up_suppressed": true,
+      "arrival_tick": 1253,
+      "arrival_final_up": 11.0,
+      "selected_action_rows": [
+        {
+          "local": 1,
+          "tick": 1245,
+          "time": 62.25,
+          "entity": 566,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 83.299999,
+          "prev_source": 10,
+          "prev_hop": 11,
+          "reached": 1,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 83.299999,
+          "out_hop": 12,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            0.999961,
+            0.008869,
+            1.0
+          ],
+          "requested_yaw": -0.508146,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            0.044344,
+            0.0,
+            -9.999607
+          ],
+          "rotation": [
+            9.228118,
+            -37.649414,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -50.963764,
+            23.917864,
+            54.056622
+          ],
+          "velocity": [
+            0.06969,
+            1.86847,
+            14.130307
+          ],
+          "support": 194,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": -179.723984,
+          "view_yaw": 0.0,
+          "source_line": 1283
+        },
+        {
+          "local": 1,
+          "tick": 1249,
+          "time": 62.450001,
+          "entity": 566,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 83.299999,
+          "prev_source": 11,
+          "prev_hop": 12,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 83.299999,
+          "out_hop": 12,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            0.999999,
+            0.001169,
+            1.0
+          ],
+          "requested_yaw": -0.06699,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            0.005846,
+            0.0,
+            -9.999993
+          ],
+          "rotation": [
+            9.094803,
+            -37.649414,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -50.959881,
+            24.043743,
+            56.710152
+          ],
+          "velocity": [
+            0.004413,
+            -1.245604,
+            13.267616
+          ],
+          "support": 0,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 179.701523,
+          "view_yaw": 0.0,
+          "source_line": 1292
+        },
+        {
+          "local": 1,
+          "tick": 1253,
+          "time": 62.650002,
+          "entity": 566,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 83.299999,
+          "prev_source": 11,
+          "prev_hop": 12,
+          "reached": 1,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 83.299999,
+          "out_hop": 34,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            -0.736644,
+            -0.67628,
+            1.0
+          ],
+          "requested_yaw": 9.0,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            -3.381402,
+            11.0,
+            7.366443
+          ],
+          "rotation": [
+            18.04319,
+            -37.649414,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -50.973858,
+            24.005875,
+            59.394257
+          ],
+          "velocity": [
+            -0.10277,
+            0.0,
+            13.499605
+          ],
+          "support": 193,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 179.583038,
+          "view_yaw": 0.0,
+          "source_line": 1302
+        },
+        {
+          "local": 1,
+          "tick": 1254,
+          "time": 62.700001,
+          "entity": 566,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 83.299999,
+          "prev_source": 12,
+          "prev_hop": 34,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 83.299999,
+          "out_hop": 34,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            -0.738025,
+            -0.674773,
+            0.0
+          ],
+          "requested_yaw": 9.0,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            -3.373866,
+            0.0,
+            7.380252
+          ],
+          "rotation": [
+            18.041491,
+            -38.357498,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -50.977531,
+            24.192781,
+            59.894241
+          ],
+          "velocity": [
+            69.743164,
+            72.391014,
+            -62.723866
+          ],
+          "support": 0,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": 179.581406,
+          "view_yaw": 0.0,
+          "source_line": 1304
+        },
+        {
+          "local": 1,
+          "tick": 1255,
+          "time": 62.75,
+          "entity": 566,
+          "generation": 6,
+          "map": 1,
+          "goal_entity": 243,
+          "goal": 34,
+          "deadline": 83.299999,
+          "prev_source": 12,
+          "prev_hop": 34,
+          "reached": 0,
+          "update": 1,
+          "update_goal": 34,
+          "update_entity": 243,
+          "update_deadline": 83.299999,
+          "out_hop": 34,
+          "active": 1,
+          "arrived": 0,
+          "stuck": 0,
+          "relocated": 0,
+          "flags": 42,
+          "requested": [
+            -0.625335,
+            -0.780357,
+            0.0
+          ],
+          "requested_yaw": 9.0,
+          "allow_jump": 1,
+          "nav": 1,
+          "safety": 1,
+          "visible": 0,
+          "action": [
+            -3.901784,
+            0.0,
+            6.253345
+          ],
+          "rotation": [
+            27.04319,
+            -37.649414,
+            0.0
+          ],
+          "buttons": 0,
+          "pos": [
+            -47.548618,
+            27.737331,
+            56.805298
+          ],
+          "velocity": [
+            68.578247,
+            70.891014,
+            -61.7789
+          ],
+          "support": 0,
+          "state": 0,
+          "immersion": 1.0,
+          "gravity": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "body_yaw": -171.41687,
+          "view_yaw": 0.0,
+          "source_line": 1306
+        }
+      ]
+    }
+  ],
+  "matching_bouncer_hooks": [
+    {
+      "hook_source_line": 1,
+      "sequence": 1,
+      "local": 2,
+      "global_slot": 3,
+      "entity": 567,
+      "generation": 5,
+      "elapsed_since_window_start_ms": 34154.118896484375,
+      "matched_posthook_action_tick": 888,
+      "before": {
+        "position": [
+          -47.72317886352539,
+          24.121936798095703,
+          63.036720275878906
+        ],
+        "velocity": [
+          -17.548898696899414,
+          0,
+          -0.1965833604335785
+        ],
+        "intended_translation": [
+          -17.548900604248047,
+          0,
+          -0.19659093022346497
+        ],
+        "support_id": 193,
+        "render": 3,
+        "physics": 1073742471
+      },
+      "after": {
+        "position": [
+          -47.72317886352539,
+          24.121936798095703,
+          63.036720275878906
+        ],
+        "velocity": [
+          53.06249237060547,
+          73.18436431884766,
+          -77.25541687011719
+        ],
+        "intended_translation": [
+          -17.548900604248047,
+          0,
+          -0.19659093022346497
+        ],
+        "support_id": null,
+        "render": 3,
+        "physics": 1073742471
+      },
+      "life_first_ranged_pickup_driver_tick": null,
+      "life_first_minigun_pickup_driver_tick": null,
+      "life_death_driver_tick": 1272
+    },
+    {
+      "hook_source_line": 2,
+      "sequence": 2,
+      "local": 3,
+      "global_slot": 4,
+      "entity": 568,
+      "generation": 6,
+      "elapsed_since_window_start_ms": 51762.118896484375,
+      "matched_posthook_action_tick": 1240,
+      "before": {
+        "position": [
+          -47.32658767700195,
+          24.008350372314453,
+          63.04313659667969
+        ],
+        "velocity": [
+          -17.548791885375977,
+          0,
+          -0.2060050070285797
+        ],
+        "intended_translation": [
+          -17.548791885375977,
+          0,
+          -0.20592017471790314
+        ],
+        "support_id": 193,
+        "render": 3,
+        "physics": 1073742471
+      },
+      "after": {
+        "position": [
+          -47.32658767700195,
+          24.008350372314453,
+          63.04313659667969
+        ],
+        "velocity": [
+          53.0594482421875,
+          73.18109893798828,
+          -77.26130676269531
+        ],
+        "intended_translation": [
+          -17.548791885375977,
+          0,
+          -0.20592017471790314
+        ],
+        "support_id": null,
+        "render": 3,
+        "physics": 1073742471
+      },
+      "life_first_ranged_pickup_driver_tick": 1329,
+      "life_first_minigun_pickup_driver_tick": 1329,
+      "life_death_driver_tick": 1659
+    },
+    {
+      "hook_source_line": 3,
+      "sequence": 3,
+      "local": 1,
+      "global_slot": 2,
+      "entity": 566,
+      "generation": 6,
+      "elapsed_since_window_start_ms": 52456.118896484375,
+      "matched_posthook_action_tick": 1254,
+      "before": {
+        "position": [
+          -50.97753143310547,
+          24.192781448364258,
+          59.89424133300781
+        ],
+        "velocity": [
+          -0.09921902418136597,
+          0,
+          13.499635696411133
+        ],
+        "intended_translation": [
+          -0.10276972502470016,
+          0,
+          13.499605178833008
+        ],
+        "support_id": 193,
+        "render": 3,
+        "physics": 1073742471
+      },
+      "after": {
+        "position": [
+          -50.97753143310547,
+          24.192781448364258,
+          59.89424133300781
+        ],
+        "velocity": [
+          69.7431640625,
+          72.3910140991211,
+          -62.7238655090332
+        ],
+        "intended_translation": [
+          -0.10276972502470016,
+          0,
+          13.499605178833008
+        ],
+        "support_id": null,
+        "render": 3,
+        "physics": 1073742471
+      },
+      "life_first_ranged_pickup_driver_tick": 2024,
+      "life_first_minigun_pickup_driver_tick": null,
+      "life_death_driver_tick": 2418
+    },
+    {
+      "hook_source_line": 4,
+      "sequence": 4,
+      "local": 0,
+      "global_slot": 0,
+      "entity": 565,
+      "generation": 6,
+      "elapsed_since_window_start_ms": 63460.118896484375,
+      "matched_posthook_action_tick": null,
+      "before": {
+        "position": [
+          -53.85489273071289,
+          24.204084396362305,
+          62.18899154663086
+        ],
+        "velocity": [
+          -7.476744651794434,
+          -11.2528076171875,
+          5.96061897277832
+        ],
+        "intended_translation": [
+          -7.600759983062744,
+          -12.700002670288086,
+          6.059486389160156
+        ],
+        "support_id": 234,
+        "render": 3,
+        "physics": 1073742471
+      },
+      "after": {
+        "position": [
+          -53.85489273071289,
+          24.204084396362305,
+          62.18899154663086
+        ],
+        "velocity": [
+          66.08611297607422,
+          63.67190933227539,
+          -74.35563659667969
+        ],
+        "intended_translation": [
+          -7.600759983062744,
+          -12.700002670288086,
+          6.059486389160156
+        ],
+        "support_id": null,
+        "render": 3,
+        "physics": 1073742471
+      },
+      "life_first_ranged_pickup_driver_tick": 901,
+      "life_first_minigun_pickup_driver_tick": null,
+      "life_death_driver_tick": 2034
+    }
+  ]
+}

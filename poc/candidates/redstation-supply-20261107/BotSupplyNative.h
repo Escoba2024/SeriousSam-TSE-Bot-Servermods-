@@ -201,16 +201,20 @@ static void BotCecilApproachFinal(CPlayer* player,SSupplyState& s,int slot,int t
 }
 static void BotSupplyReset(INDEX slot){BotSupplyState(slot).Reset();}
 static unsigned BotCecilRandom(SSupplyState &s){s.rng^=s.rng<<13;s.rng^=s.rng>>17;s.rng^=s.rng<<5;return s.rng;}
-// One observed map/edge exception; never a generic Bouncer classifier. Published
+// Two observed directed approaches; never a generic Bouncer classifier. Published
 // only by the loader under the hooks lock after its existing content checks.
 static long& BotCecilBouncerBindingSerial(){static long serial=-1;return serial;}
 static bool BotCecilBouncerMetadata(){
   const auto& g=BotSupplyGraph();if(g.points.size()!=193)return false;
-  const auto& a=g.points[8];const auto& b=g.points[12];
+  const auto& a=g.points[8];const auto& c=g.points[11];const auto& b=g.points[12];
   static const int links8[]={7,13,12,187,83,94};
+  static const int links11[]={10,13,12,89,189,94};
   return a.id==8&&a.x==-37.78368377685547f&&a.y==24.503324508666992f&&a.z==63.12769317626953f&&
     a.radius==2&&a.flags==0&&a.important_entity==-1&&a.next_slot==-1&&a.lock_entity==-1&&
     a.links.size()==6&&std::equal(a.links.begin(),a.links.end(),links8)&&
+    c.id==11&&c.x==-50.95821762084961f&&c.y==24.501291275024414f&&c.z==55.24614334106445f&&
+    c.radius==2&&c.flags==0&&c.important_entity==-1&&c.next_slot==-1&&c.lock_entity==-1&&
+    c.links.size()==6&&std::equal(c.links.begin(),c.links.end(),links11)&&
     b.id==12&&b.x==-51&&b.y==24.5&&b.z==63&&b.radius==4&&b.flags==42&&
     b.important_entity==-1&&b.next_slot==-1&&b.lock_entity==-1&&b.links.size()==1&&b.links[0]==34;
 }
@@ -1064,9 +1068,10 @@ static bool BotCecilPatrolStatic(CPlayer* player){
     !(ref->GetPhysicsFlags()&EPF_MOVABLE)&&ref->en_pwoWorld==player->GetWorld()&&BotCecilIsClass(ref,"WorldBase","World Base");
 }
 static void BotCecilBouncerApproach(CPlayer* player,const SSupplyState& s,botcore::CecilMotion& move){
+  const int source=s.navigator.SourceSlot(s.goal);
   if(!BotCecilBouncerBindingValid()||!BotCecilBouncerMetadata()||!move.active||move.arrived||move.stuck||move.relocated||
      !std::isfinite(move.up)||move.up<=0||move.up>1||move.flags!=42||move.hop!=12||s.hop!=12||
-     s.navigator.SourceSlot(s.goal)!=8||s.blocked.size()!=193||s.blocked[8]||s.blocked[12]||
+     (source!=8&&source!=11)||s.blocked.size()!=193||s.blocked[source]||s.blocked[12]||
      !s.playable||!BotCecilFrameReady(player)||!player->GetWorld()||!std::isfinite(player->GetHealth())||player->GetHealth()<=0||!player->m_penWeapons||
      (player->GetFlags()&ENF_DELETED)||player->en_ulID!=s.entity||
      (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH)||
@@ -1076,8 +1081,9 @@ static void BotCecilBouncerApproach(CPlayer* player,const SSupplyState& s,botcor
      ref->GetRenderType()!=CEntity::RT_BRUSH||(ref->GetPhysicsFlags()&EPF_MOVABLE)))return;
   for(int axis=1;axis<=3;++axis)if(!std::isfinite(player->en_vCurrentTranslationAbsolute(axis)))return;
   // A brief missing reference during STAND/CROUCH does not prevent a queued
-  // ordinary up action from jumping at later contact (native009). Remove only
-  // that request on this bound approach; no support/arrival/air authority is
+  // ordinary up action from jumping at later contact (native009). Native010
+  // also records an ordinary jump before contact on11-to12. Remove only that
+  // request on these bound approaches; no support/arrival/air authority is
   // synthesized. Flags, radius, navigator jump clock and later edges stay intact.
   move.up=0;
 }
