@@ -789,6 +789,10 @@ class Backend:
         P.require(state.get("schema") == 3 and state.get("scope") == SCOPE and
                   state.get("status") in RECOVERABLE and state.get("qualified") is False,
                   "recovery state not eligible")
+        self._load_bound_recovery(state)
+
+    def _load_bound_recovery(self, state):
+        """Shared exact bindings; each controller checks its own schema/phases first."""
         P.require(state.get("roots") == self.roots and state.get("stage_sha256") == stage_fingerprint(self.stage) and
                   state.get("source_fingerprint") == self.source_fingerprint and
                   state.get("launch_helper_pins") == self.launch_helper_pins and
