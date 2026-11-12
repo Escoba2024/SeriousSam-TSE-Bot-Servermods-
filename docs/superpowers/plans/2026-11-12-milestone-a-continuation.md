@@ -105,3 +105,34 @@ Files: poc/candidates/redstation-supply-20261107/{BotDriver.cpp,bot_human.h,bot_
 - A1 next route package is BLOCKED by independent pure-memory reproduction: final endpoint guards can make an input stale or late after the last budget callback. No native route was run; author correction and re-review are required.
 - Drive delta019 remains the last verified remote private backup. The local execution environment is unavailable, blocking new local-file upload transport; Ubuntu and GitHub continue to work. Prepare delta020 with separate restoration and report the unresolved remote-upload step accurately.
 - A1/A3/A4/full stability/A5 remain open. B unstarted. Root alone owns integration/native/live operations, with at most two active workers.
+
+
+## Build016 and names follow-up 2026-11-12T10:24:22.746819+00:00
+
+- Source fix integrated at58e8559; Build016 created successfully, DLL e5a80634b5247c900ae25b5b18869c433c30dcfb49b890338fb231da63b04825, manifest4cd6b5a8d853afe2dbe492fb12fff0aed22a06c77b5de7fc4e732795d2676603, qualified=false. Native reset test remains pending.
+- GitHub553afa7 was fetched and exact source tree3337a68 matched. New checkpoint docs await next publication.
+- Fresh fleet-after-names check confirms48 owned bots/zero UNKNOWN. Six runtime identity records updated with fresh mapped identities, exact names/profile/GUID hashes and retained before-records. Existing Dev cumulative37BAD/3disconnects remains explicitly unresolved.
+- A4 early inventory correction has a true3/3 behavioral RED at the actual observer-wait path. A1 final transport-boundary fix is in progress. Both new private controllers remain disabled until independent/root review. No B work and no release rollout.
+
+## Native016 and current fleet checkpoint
+
+- [x] Compile Build016 and execute the separately reviewed early-inventory reset protocol; preserve FAIL and independently verify all648 restore paths. The16 fresh map-epoch baselines are proven in same-world reloads. A4 remains open for documented activity/weapon gaps.
+- [x] Fresh42-query/30.509s production activity observation: six times8owned/0UNKNOWN; hostCPU30.944–35.352%, minimum2.789GiBMemAvailable. No long-term claim.
+- [x] Preserve A1V2 native FAIL and prove its numerical boundary cause with exact native replay. Separate disabledV3 passes155tests, integrated documentation2c8559b.
+- [x] Independent V3 review, one bounded Root successor, final cleanup/restore. The native result remains FAIL; this checkbox records completed evaluation, not A1 acceptance.
+- [x] Quiescent delta020 archive, independent file restore and ordered transfer parts verified. This does not close the required Drive roundtrip or any gameplay acceptance gate.
+- Final documentation publication must be verified by actual fetch/tree equality; its authoritative closing receipt is `/srv/tse-milestone-a-continuation-evidence-20261112/github-codex-final-publication.json`. Drive transfer remains externally blocked by the missing local execution environment.
+- A1/A3/A4/current-candidate stability/A5 remain open; no B implementation or rollout.
+
+## Closed native work and reviewed backup preparation
+
+- A1 V3 trial111716: full current calibration captured; route attempt17 rejected before its Down request after the observed approach/flight transition. Pickup/fire remain false. Three roles and two displays closed; Root directly verified664 files plus nine absent paths and four quiescent lab roots. The original45s route deadline and corridor remain unchanged. Detailed analysis is committed separately.
+- Backup020 original review found two Important issues before any archive ran. Actual legacy archive-loop tests reproduced two Append failures. Descriptor/path checks and reserve-protected bundle/gzip/restore writes now pass9 targeted tests. Independent corrected review is READY with0 Critical/Important, SHA37c0761e9694145e8a2c30b7f5051b06c30bc2f4dcb3470843aee74774f1760e.
+- All workers are complete/idle. Root next creates the explicit quiescent26-root/eight-window archive and separate restore. The new Drive transfer remains blocked; original A/B acceptance criteria remain unchanged.
+
+
+## Final local backup checkpoint 2026-11-12T11:53:14.506991+00:00
+
+- Delta020 is complete: 114833032 bytes, SHA256 `82a661bb52ae8d6b08232aba3f70577ebdaa594e52ddf8dfe9edee147cb7c132`, exact clean archived source `cd7a4a639191a2033390f39f0681e8b64b3d6b6c`. Separate restore wrote/rehashed 14707 regular files and 999970861 bytes with verified uid/gid/mode/mtime; two symlinks indexed only. Eight closed native windows are retained with their original outcomes. No native startup from restore.
+- Two ordered transfer parts and their reassembled archive hash are verified. Delta020 remains NOT uploaded; Delta019 remains the last verified Drive roundtrip. Final report/receipt metadata postdates the archive and is published separately in Git.
+- All workers are idle. No native test, build or archive process remains active. Root owns final documentation/publication and its actual fetch/tree check. Global Task4 and all outstanding A1/A3/A4/stability gates remain unchecked; B remains unstarted.

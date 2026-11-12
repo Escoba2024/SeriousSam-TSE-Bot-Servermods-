@@ -1,0 +1,58 @@
+{
+  "utc": "2026-11-12T11:19:12.861613+00:00",
+  "scope": "ROOT_INDEPENDENT_CURRENT_FIXTURE_RESTORE_AND_QUIESCENCE",
+  "window": "/srv/tse-milestone-a-evidence-20261111/a1-route-after-rotation-completion-v3-20261112-111716",
+  "result_sha256": "2ce98da90855a5b1328d1a5367158f285ee7d1825e95b2e0146e6a9110fc51bc",
+  "status": "FAIL_PRESERVED",
+  "errors": [
+    "RuntimeError(\"ValueError('outside reviewed approach corridor/heading')\")"
+  ],
+  "three_roles_closed": true,
+  "closed_logs_accepted": true,
+  "restore_paths_verified": {
+    "files": 664,
+    "absent": 9
+  },
+  "lab_four_roots_quiescent": true,
+  "both_displays_absent": true,
+  "calibration_status": "CAPTURED_REVIEW_REQUIRED",
+  "calibration": {
+    "yaw_degrees_per_pixel": [
+      -0.25,
+      -0.25
+    ],
+    "action_yaw_degrees_per_pixel": [
+      -0.25,
+      -0.25
+    ],
+    "body_yaw_degrees_per_pixel_raw": [
+      -0.25000635782877606,
+      -0.2499974568684896
+    ],
+    "gain_basis": "acknowledged_action",
+    "return_error_deg": 0.0001068115234375
+  },
+  "input_receipts": 16,
+  "actions_attempted": 17,
+  "preparation_seconds": 17.46350694890134,
+  "host_budget": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 18,
+    "cpu_busy_max_measured_percent": 64.81113320079523,
+    "mem_available_min_bytes": 2350129152,
+    "disk_free_min_bytes": 17144180736,
+    "max_sample_gap_seconds": 25.077713870909065,
+    "budget_pass_claim": false
+  },
+  "first_state_proven": false,
+  "qualified": false,
+  "root_frozen_manifest_sha256": "3aac5eadf62a9b6064319d92528ad2fda02cf733d234892dd0a991fbb3aacab7",
+  "root_frozen_controller_sha256": "de8b741c56833d63c1946a48edee450e2041a974c9c0ffd2f22ad950af033f43",
+  "independent_review_sha256": "9c5b6ecaf26eba42927face0cbe675d34d729d799fc2a53389f6e67ba8d1c214"
+}

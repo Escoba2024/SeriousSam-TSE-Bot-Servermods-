@@ -1,8 +1,80 @@
-# Latest continuation checkpoint — 2026-11-12T10:12:31.570577+00:00
+<!-- CURRENT_COMPLETION_BEGIN -->
+# Current continuation checkpoint — 2026-11-12T11:53:14.505024+00:00
 
-A2 names rollout is complete on all six instances. The final actual 48-identity check passed after sequential Dev-first client restarts; all 51 after-files were independently rehashed. See docs/reports/2026-11-12-names-sequential-live-completion.md and the latest continuation-plan checkpoint. Historical entries below remain unchanged.
+**A remains incomplete. B remains unstarted.** This section supersedes historical checkpoints below. Original request: `/srv/tse-milestone-a-evidence-20261111/request.md`. Full current German report: `docs/reports/2026-11-12-codex-continuation-status.md`.
 
-A1 route preparation awaits correction of a proven final-emission timing gap. A4 rotation-epoch source regression is GREEN18/18 after RED8/18, but integration/build/native evidence remain pending. Build015 is still unqualified. A remains incomplete, B unstarted. Ubuntu/GitHub accessible; local execution environment unavailable, so the new Drive upload path is externally blocked. Last verified Drive backup: delta019.
+## Completed and live
+
+A2 is complete: 458 pool entries, comprising the unchanged 208-entry prefix and exactly 250 new names. All six instances completed the Dev-first, server-by-server names transaction. There are 48 globally unique owned bot identities, twelve normally restarted owned clients, and 51 independently verified final payload files. Six current runtime identity files were refreshed from mapped process/profile/GUID evidence, with prior records preserved. Never reapply the consumed pre-change names stage blindly.
+
+Fresh production activity at 11:12:56 UTC: seven queries on each server across 30.509 seconds; eight owned bots per instance, zero additional UNKNOWN. Changed-frag slots in port order: 5/8/3/7/6/4. Host CPU interval values 30.944–35.352%, minimum MemAvailable 2995437568 bytes. This is not a duration gate or per-slot damage proof. The 11:03 current-log snapshot retains the prior Dev totals of 37 BAD / 3 disconnect events; publics have 0/0. No Dev sync fix is claimed.
+
+Public bot DLL remains 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835. Dev bot remains 048/ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530 with approved fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0 server. Effective spawn values and templates remain zero. New candidate DLL/nav/config release has not been deployed.
+
+## Latest candidate and native outcomes
+
+Build016 source: 58e8559903d999772218a6b5fd1d042b1759b547. DLL: e5a80634b5247c900ae25b5b18869c433c30dcfb49b890338fb231da63b04825. Manifest: 4cd6b5a8d853afe2dbe492fb12fff0aed22a06c77b5de7fc4e732795d2676603. Build succeeded, qualified=false. The actual Driver rotation regression reproduced eight failures before the correction, then passed 47 ASan/UBSan checks plus existing action guards.
+
+A4 trial104821 is **FAIL**, retained unchanged. Protocol was Red Station → Red Station → Red Station. Sixteen slot/reload transitions confirm fresh rotation baselines and first observed live zero View/Input/Last pitch; 49 ordinary respawns remain distinguished. All-four normal close, accepted closed logs, and 648 independently rechecked restoration paths. Early inventory contributes 259 additional accepted group samples. Only 16/24 slot-phase rows satisfy all existing activity fields. Four missing fire lines are sampling gaps, one pickup is left-censored, and genuine useful-weapon/fire gaps remain. See build016-native-reset-analysis report and private `/srv/tse-a4-build016-analysis-20261112-104821`.
+
+A1 routeV2 trial104429 remains FAIL from its raw body-gain boundary rejection. Separate V3 retains the existing ACK range, EPS, deadlines, action counts, final request guard and release/restore paths. Author 155 tests and independent targeted replay/review passed. Author manifest 8aa93b6db274fe78af30c23caa2b2e7fb946345468fa96788745c5911a53bb87; independent review 9c5b6ecaf26eba42927face0cbe675d34d729d799fc2a53389f6e67ba8d1c214. Root frozen manifest 3aac5eadf62a9b6064319d92528ad2fda02cf733d234892dd0a991fbb3aacab7, controller de8b741c56833d63c1946a48edee450e2041a974c9c0ffd2f22ad950af033f43.
+
+The single authorized V3 trial111716 is also **FAIL**, retained unchanged. Calibration fully captured with ACK gains -0.25/-0.25 and raw return error 0.0001068115234375 degrees. The earlier -0.5 boundary was not regenerated; its exact native replay remains the specific boundary proof. The approach-to-flight detector misses the observed transition: next pose satisfies all velocity predicates but x=-28.811554 no longer satisfies x<-35, then only z fails the approach corridor. There is a 0.386162-second read gap; exact physical launch/Bouncer event was not captured. Attempt17 was rejected before a new XTest Down; 16 confirmed inputs exist. Pickup/fire are false. Three roles/two displays closed, 664 files plus nine absent paths directly rechecked under the lab lock; all four lab roots quiescent. This checkpoint closes the bounded trial. A successor requires a separately reviewed design and fresh source/identity pins; existing user authorization remains in force. See a1-route-v3-native-result report and private `/srv/tse-a1-route-v3-native-111716-analysis-20261112`.
+
+A1 first-state damage, full current-candidate A3 crossed comparisons, A4 map/weapon/activity acceptance and the still-applicable 1/4/8-bot 3600/3600/7200-second gates remain open. Build015 MITTEL is mixed and its single STARK window positive; these are not complete Build016 qualification. B is strictly dependent on full A acceptance.
+
+## Backup, publication and external blocker
+
+Delta020 exists at /srv/tse-milestone-a-backup-completion-20261112/runtime-evidence-delta020-build016-114326.tar.gz, 114833032 bytes, SHA256 82a661bb52ae8d6b08232aba3f70577ebdaa594e52ddf8dfe9edee147cb7c132. Its exact archived source is cd7a4a639191a2033390f39f0681e8b64b3d6b6c. Separate restore /srv/tse-milestone-a-backup-completion-20261112/restore-delta020-build016-114326 wrote/rehashed 14707 regular files / 999970861 bytes with exact owner/mode/mtime verification. Symlinks indexed: 2; no native startup from restore. Drive upload remains false. Final report/receipt metadata postdates this archive; source and runtime scope is explicit.
+
+The original backup-script review found two Important issues before any archive ran: an append after hashing could be silently truncated, and disk reserve was checked too late. The original script/review remain preserved. Actual old archive-loop tests produced two RED failures; the corrected descriptor/path guards and reserve-protected bundle/gzip/restore writes pass nine targeted tests, including a real streamed Git bundle. The final independent re-review was READY with zero Critical/Important findings. Root verified the exact script/helper pins in the explicit ready scope and executed the archive successfully under CPUQuota=25% and the exclusive lab lock.
+
+Two ordered private transfer parts are prepared at `/srv/tse-milestone-a-backup-completion-20261112/delta020-transfer-parts-114326`, sizes 100663296 and 14169736 bytes. Per-part hashes and combined archive SHA256 were independently re-read. Manifest: `/srv/tse-milestone-a-backup-completion-20261112/delta020-transfer-manifest.json`. Both parts remain NOT uploaded. Free disk after splitting: 15818780672 bytes. Public sanitized receipts: `docs/reports/milestone-a-20261112/backup020.json` and `backup020-transfer-parts.json`.
+
+Last verified Drive backup remains Delta019, object 1MAHfGkschhrtPJivuJxvlza3l83CsTvP, 45078384 bytes, SHA256 0342390c65ae7759d0e6838d6696b4f28eadb3a27364d44d71a4f14b4309ba3b. Its separate restore verified 11858 regular files / 297185813 bytes. It predates final names/Build016 evidence. Existing folder: 14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2.
+
+The local ChatGPT execution environment is unavailable. The existing Drive uploader needs an absolute local workspace path; Ubuntu has no established rclone/gdrive/drive/gsutil transport. Ubuntu/RDC and GitHub remain usable. Do not claim a newer Drive object, upload or roundtrip without actual verification. No credential extraction, public Retail upload or new paid environment is required.
+
+Build016 source publication553afa7c73af0c080f9ac165c7b2045f20d65724 was independently fetched and matched tree3337a68d4208e1a4e15d76b57374943e0f538f42 exactly. The final report branch is `codex/20261112-milestone-a-completion`. The authoritative closing publication receipt is written only after actual fetch/tree comparison, at `/srv/tse-milestone-a-continuation-evidence-20261112/github-codex-final-publication.json`; consult that receipt for its exact local/API commits. No force push or main merge.
+
+## Ownership and resumption
+
+Root alone integrates, builds and changes native/live runtime. Maximum two active workers. Names, A4 analysis, A1 authorship/review and final A1 analysis are complete/idle. The corrected backup review, archive, separate restoration and ordered transfer-part verification are complete. Final documentation/publication is the remaining root-owned wrap-up. No native test, build or archive process is running. All workers were idle and the root worktree clean at the archived source checkpoint cd7a4a639191a2033390f39f0681e8b64b3d6b6c.
+
+After the existing upload environment returns, transfer the unchanged final archive, verify its SHA256, upload to the existing Drive project folder, download back and compare. Then address the precisely evidenced route transition and remaining gameplay/stability gates, with fresh source/build/identity pins. Do not relax gates or relabel FAILs. Only after complete A qualification and required backup should Dev-first candidate rollout and then B proceed. The continuation plan retains all original acceptance criteria.
+<!-- CURRENT_COMPLETION_END -->
+
+---
+
+# Historical continuation checkpoint — 2026-11-12T10:29:22.176469+00:00
+
+## Current outcome
+
+A2 names application and operational identity follow-up are complete: 458 pool entries (208 retained plus250), 48 globally unique visible bot names, all six instances accepted in Dev-first order, twelve normal owned client restarts and51 intended payload files. Fresh query at10:21:35UTC still confirms8 owned bots on each server and0 additional UNKNOWN. Six current runtime identity files were refreshed from exact mapped generations/profile/GUID hashes, with original metadata retained. Dedicated/DLL/map/nav settings were not promoted. Final names evidence: /srv/tse-cecil-full-20261107/.codex/evidence/restart-fleet-20261111-names-20261112-094338-f5180ed1aec8.
+
+Build016 exists from source58e8559903d999772218a6b5fd1d042b1759b547. DLL e5a80634b5247c900ae25b5b18869c433c30dcfb49b890338fb231da63b04825, manifest4cd6b5a8d853afe2dbe492fb12fff0aed22a06c77b5de7fc4e732795d2676603; qualified=false, not deployed. The requested-angle epoch correction reproduced8/18 RED then passed47/47 ASan/UBSan plus existing actual Driver action guards. Native effect remains pending.
+
+Public bot DLL7fc remains active; Dev bot048/ec820d and its approved fe4 server remain active. Dev retains the previously recorded cumulative37BAD/3disconnect events; names did not establish a sync fix. A remains incomplete and B remains unstarted. Formal1/4/8-bot3600/3600/7200s gates remain open.
+
+## Active ownership and next operations
+
+Root alone integrates/builds/runs native/live operations. At most two workers: identify_latest_codex owns the disabled A4 early-inventory package and review_names_transaction owns the corrected disabled A1 route V2 package. The independent reviewer finish_names_transaction is idle until the A1 author completes; do not activate a third worker.
+
+A1 V1 route package was blocked by a proven last-transport-guard timing gap. Author reports V2's149 offline tests pass after moving the policy callback immediately before XTest, retaining safe key-up. Root must obtain its final pins and independent review before freezing/running. No native route result exists yet.
+
+A4 source is integrated. Its separate GateFalse early-inventory package is /srv/tse-a4-phase-inventory-completion-20261112. Root confirmed3 genuine failing observer-wait cases before correction. It must preserve original300s protocol/50s transition/19s close and all per-bot pickup/native-fire gates. It uses Build016 pins. No old FAIL may be relabelled; missing weapon/fire behavior is not all observation loss.
+
+No root native test/build is currently active. After each new window, verify normal close, final logs and exact restore before the next operation. Then prepare the next quiescent private archive using backup-completion020.py and an explicit reviewed scope.
+
+## Source and backup
+
+Current root branch is codex/20261112-milestone-a-completion; latest existing checkpoint commit772ebb70db6f794d2fbc46b6c83298a4469fd287. Source publication553afa7c73af0c080f9ac165c7b2045f20d65724 was independently fetched, tree3337a68d4208e1a4e15d76b57374943e0f538f42 exactly matches local58e8559. Later documentation still needs publication.
+
+Last verified remote private backup is Drive delta019, object1MAHfGkschhrtPJivuJxvlza3l83CsTvP,45078384bytes,SHA0342390c65ae7759d0e6838d6696b4f28eadb3a27364d44d71a4f14b4309ba3b. Its separate restore verified11858regular files/297185813bytes. It predates the latest A1/A4/STARK/names/Build016 evidence.
+
+The local ChatGPT execution environment is unavailable. Ubuntu/RDC and GitHub remain usable, but the existing Drive uploader requires an absolute local workspace file. Ubuntu has no existing rclone/gdrive/drive/gsutil client. New Drive upload is concretely blocked; no newer upload/roundtrip is claimed. Prepare/verify all reachable source and Ubuntu archive work and retain exact continuation steps. A cannot close while required backup is missing.
+
+Private continuation evidence: /srv/tse-milestone-a-continuation-evidence-20261112. Latest reports: names-sequential-live-completion, build016-and-names-checkpoint, a4-rotation-epoch-and-observation; current plan: docs/superpowers/plans/2026-11-12-milestone-a-continuation.md.
 
 ---
 

@@ -1,0 +1,78 @@
+{
+  "utc": "2026-11-12T11:04:40.784711+00:00",
+  "scope": "STRICT_FAILURES_PRESERVED_WITH_SEPARATE_SCOPED_FIX_EVIDENCE_NO_A_ACCEPTANCE",
+  "windows": [
+    {
+      "window": "a1-route-after-rotation-completion-v2-20261112-104429",
+      "result_sha256": "4c6da53723ed39bab7549b40a9a85561161fcd99918f54022c1bee99c844c055",
+      "status": "FAIL",
+      "qualified": false,
+      "errors": [
+        "ValueError('unproven/reversed/stale actual body response after normal Forward')"
+      ],
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 4,
+        "cpu_busy_max_measured_percent": 60.869565217391305,
+        "mem_available_min_bytes": 2401107968,
+        "disk_free_min_bytes": 17249316864,
+        "max_sample_gap_seconds": 25.31688531115651,
+        "budget_pass_claim": false
+      },
+      "restored": true,
+      "verified_restore_files": 673,
+      "normal_close": {
+        "server": true,
+        "vanilla": true,
+        "botA": true
+      },
+      "closed_logs_accepted": true,
+      "observed_seconds": null,
+      "reset_sequence_observed": null,
+      "input_receipts": 2
+    },
+    {
+      "window": "a4-reset016-early-inventory-20261112-104821",
+      "result_sha256": "e48cf93025d0c158a8c396e0722b14ad7d933e7d582cc2ea806f4dec5f8acebf",
+      "status": "FAIL",
+      "qualified": false,
+      "errors": [
+        "RuntimeError('reset observed but required per-phase active evidence incomplete')"
+      ],
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 229,
+        "cpu_busy_max_measured_percent": 57.03703703703704,
+        "mem_available_min_bytes": 2167332864,
+        "disk_free_min_bytes": 17203908608,
+        "max_sample_gap_seconds": 46.74168252199888,
+        "budget_pass_claim": false,
+        "gameplay_max_sample_gap_seconds": 2.2349424879066646
+      },
+      "restored": true,
+      "verified_restore_files": 648,
+      "normal_close": {
+        "server": true,
+        "botA": true,
+        "vanilla": true,
+        "botB": true
+      },
+      "closed_logs_accepted": true,
+      "observed_seconds": 242.60094665898941,
+      "reset_sequence_observed": true,
+      "input_receipts": 0
+    }
+  ]
+}

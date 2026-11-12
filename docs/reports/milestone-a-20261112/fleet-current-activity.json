@@ -1,0 +1,79 @@
+{
+  "utc": "2026-11-12T11:12:56.951291+00:00",
+  "scope": "CURRENT_READ_ONLY_QUERY_ACTIVITY_AND_HOST_INTERVAL_SNAPSHOT_NOT_DAMAGE_OR_STABILITY_ACCEPTANCE",
+  "elapsed_seconds": 30.508955558994785,
+  "fleet": [
+    {
+      "instance": "redstation",
+      "port": 25600,
+      "map": "Red Station",
+      "query_samples": 7,
+      "own_bots_each_sample": 8,
+      "additional_unknown_max": 0,
+      "own_slots_with_changed_frags": 5,
+      "net_own_frag_change": 10,
+      "same_native_generations_before_after": true
+    },
+    {
+      "instance": "yodeller",
+      "port": 25610,
+      "map": "Yodeller",
+      "query_samples": 7,
+      "own_bots_each_sample": 8,
+      "additional_unknown_max": 0,
+      "own_slots_with_changed_frags": 8,
+      "net_own_frag_change": 19,
+      "same_native_generations_before_after": true
+    },
+    {
+      "instance": "skulls",
+      "port": 25620,
+      "map": "We Got Skulls'n'Bones Too",
+      "query_samples": 7,
+      "own_bots_each_sample": 8,
+      "additional_unknown_max": 0,
+      "own_slots_with_changed_frags": 3,
+      "net_own_frag_change": 5,
+      "same_native_generations_before_after": true
+    },
+    {
+      "instance": "trouble",
+      "port": 25630,
+      "map": "Little Trouble",
+      "query_samples": 7,
+      "own_bots_each_sample": 8,
+      "additional_unknown_max": 0,
+      "own_slots_with_changed_frags": 7,
+      "net_own_frag_change": 13,
+      "same_native_generations_before_after": true
+    },
+    {
+      "instance": "hole",
+      "port": 25640,
+      "map": "Hole",
+      "query_samples": 7,
+      "own_bots_each_sample": 8,
+      "additional_unknown_max": 0,
+      "own_slots_with_changed_frags": 6,
+      "net_own_frag_change": 5,
+      "same_native_generations_before_after": true
+    },
+    {
+      "instance": "development",
+      "port": 25650,
+      "map": "Red Station",
+      "query_samples": 7,
+      "own_bots_each_sample": 8,
+      "additional_unknown_max": 0,
+      "own_slots_with_changed_frags": 4,
+      "net_own_frag_change": 4,
+      "same_native_generations_before_after": true
+    }
+  ],
+  "host_cpu_min_percent": 30.943785456420837,
+  "host_cpu_max_percent": 35.35196687370601,
+  "mem_available_min_bytes": 2995437568,
+  "disk_free_min_bytes": 17168654336,
+  "formal_budget_or_longterm_pass": false,
+  "claims_no_human_classification": true
+}

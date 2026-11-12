@@ -33,9 +33,9 @@
 - [x] Produce compact phase/local-bot evidence table: log coverage, pickup transitions, cumulative fire deltas, inventory start, native ranged-fire observations and pitch continuity.
 - [x] Trace actual Build015 Driver and original input/map/life reset behavior; confirm or reject a causal rotation-state defect with explicit limits.
 - [x] Before implementation, send Root the finding and precise plan. Write a meaningful RED regression at the actual production boundary, then implement the minimal correction and prove GREEN. If no defect is established, leave C++ unchanged.
-- [ ] Prepare a new disabled private observation package if required: early passive samples during observer restart, strict fresh-phase/entity binding, complete failure receipts and unchanged activity requirements. Any longer protocol requires a separately named fixed design justified by measured coverage.
+- [x] Prepare a new disabled private observation package if required: early passive samples during observer restart, strict fresh-phase/entity binding, complete failure receipts and unchanged activity requirements. Any longer protocol requires a separately named fixed design justified by measured coverage.
 - [x] Review existing RedStation Bouncer/items/reset evidence; state the exact remaining map-whitelist risk instead of treating all qualification as permanently false.
-- [ ] Verify bounded tests, preservation/pins and normalized deltas; write sanitized report, commit own changes and hand off disabled package plus Root run plan.
+- [x] Verify bounded tests, preservation/pins and normalized deltas; source correction committed, sanitized reports complete and disabled package plus Root run plan handed off. The final two documentation files are ready for Root's separate commit.
 
 ## Ledger
 
@@ -51,3 +51,12 @@
 - Full phase-1 logs also establish real gaps: A2 never records a useful ranged pickup (only 3->7 twice), while B0 obtains Shotgun late and does not increase its fire counter thereafter. Early inventory alone therefore cannot close the whole activity gate.
 - RedStation has no actual Teleport/PlayerActionMarker entity in the pinned world. Existing Bouncer/item and ordered reload evidence is concrete; remaining candidate qualification concerns phase-wide eight-bot activity and native effect of the corrected rotation baseline. No blanket transfer to other maps/liquids.
 - Source report and five-file source commit are ready for Root commit/integration. Next, separately prepare epoch-bound inventory during observer rejoin, preserving the 300/50/19-second bounds and all pickup/fire requirements; do not edit old frozen controllers or failed trials.
+
+## Offline implementation handoff complete
+
+- Source commit `bea377448cd03465b651d2c11059e4e0fda5c790` was integrated by Root as `58e8559903d999772218a6b5fd1d042b1759b547`. Root built Build016; manifest SHA `4cd6b5a8d853afe2dbe492fb12fff0aed22a06c77b5de7fc4e732795d2676603`, DLL SHA `e5a80634b5247c900ae25b5b18869c433c30dcfb49b890338fb231da63b04825`.
+- Separate private package `/srv/tse-a4-phase-inventory-completion-20261112` opens the same Original reader before observer launch and captures phase-bound eight-bot frames inside existing bounded waits. Actual entity/log/process/world/time binding and later nine-player confirmation are required. Raw failure receipts precede rejection. Existing pickup/fire gates and 300/50/19-second bounds are unchanged.
+- Root verified three actual-path RED failures, 7+10 targeted GREEN tests and finally the complete 130/130 suite in 0.731s. The only intermediate full-suite failure was the obsolete while-local Reader AST assertion; its exact helper-call/constructor adaptation and every remaining assertion are documented and normalized.
+- Of 82 old pinned sources, 79 remain byte-identical; eleven lifecycle/evidence functions and the entire old operation-guard prefix are AST-identical. All 59 previous runtime dependencies were rechecked. The final new package has 111 source pins and 64 runtime pins.
+- After A1 normally closed/restored, Root's final refresher succeeded. GateFalse manifest SHA `40abb08ff7fab1f71b0bf9359161c7d258fb26fdfffb3b1c3baf2925f3ded093`; controller SHA `bbe3a481bb3ac94e13e4e7a262db03d42fe8be48d4319213dc4ca986b8d9c789`; helper SHA `2ea407070b15ed8ed94a765c7bccfb6510805d0b89676ba774a4452eb4e15b73`; delta SHA `0bd4095caa9825253434a75bb39fa9419b8762dfa58f2ee77cbbee428f2c6a88`. The private package is now immutable for this worker.
+- Final companion report: `docs/reports/2026-11-12-a4-early-phase-inventory.md`. Root owns the separate documentation commit, independent runtime freeze and one newly named native A4 attempt under the existing exclusive lock. No old failed result was reclassified, no live configuration was changed by this worker, and native A4 qualification remains open.

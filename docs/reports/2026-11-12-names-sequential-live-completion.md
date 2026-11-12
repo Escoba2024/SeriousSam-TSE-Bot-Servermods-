@@ -26,3 +26,7 @@ The wrapper also wrote one final sample only 0.000537451 seconds after its previ
 A2 application is complete. This names-only result does not accept A1 first-state damage, A3 difficulty comparisons, A4 full map/lifecycle behavior, the required 1/4/8-bot stability durations or A5 candidate rollout. Milestone A remains open and B remains unstarted.
 
 The last independently restored and Drive-roundtripped progress archive is delta019. The newer rollout journal, after-state and reports require delta020. The local ChatGPT execution environment became unavailable after the transaction began, blocking the established local-file transport required by the Drive uploader; Ubuntu and GitHub access remain available. A new Ubuntu-side archive/restore can still be prepared, but no newer Drive upload is claimed.
+
+## Follow-up identity refresh
+
+All six runtime identity records have now been atomically refreshed from new, independently mapped snapshots under deployment/install locks; all 48 current profile/name/GUID hashes matched the intended after-state. The previous six records are retained privately, and a new current deployment receipt records the verified generations. Dated historical inventories are preserved. Fresh post-rollout query: six times eight owned bots, zero additional UNKNOWN; see build016-and-names-checkpoint and the sanitized fleet-after-names.json.
