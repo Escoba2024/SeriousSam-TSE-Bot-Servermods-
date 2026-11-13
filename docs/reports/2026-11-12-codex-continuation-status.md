@@ -1,26 +1,20 @@
-# Codex-Fortsetzung: Umsetzung, Betrieb und offene Abnahme
+# Codex-Fortsetzung: Umsetzung, Betrieb und offener Rollout
 
-Stand: 12.11.2026 23:20:47 MEZ.
+Stand: 13.11.2026 11:39:12 MEZ.
 
-## Aktueller Fortschritt
+## Aktueller Auftrag
 
-**Build018 verbessert den direkten Kampf in sechs kurzen Vergleichen gegen die bisherige öffentliche Bot-Version. Der Gesamtauftrag ist offen und die weitere Serverarbeit durch das ausgeschöpfte RDC-Monatskontingent blockiert. A2 ist fertig; B wurde nicht begonnen.**
+**Der Nutzer hat den Rollout von Build018 auf alle sechs Server ausdrücklich freigegeben. Die Durchführung ist aktuell durch fehlenden Deploymentzugriff blockiert. Es wurde noch keine Instanz aktualisiert oder neu gestartet.**
 
-| Teil | Belegt | Verbleibende Abnahme |
-| --- | --- | --- |
-| A1 | Effektiver Spawnwert 0; Prescan-aus tatsächlich beobachtet; letzter normaler Eingabetest vor Schuss fehlgeschlagen; deaktivierter ObserverV2 und enger ControllerV2-Fix geprüft | Normaler Kontrolltreffer; erster gültiger Respawnzustand mit Fremdschaden für Vanilla/echte KI, Kartenwechsel und Neustart; tödlicher Schaden |
-| A2 | 208 erhaltene plus 250 neue Namen, 458 insgesamt; 48 eindeutige eigene Bots, GUIDs erhalten | abgeschlossen |
-| A3 | Sechs 120-s-Vergleiche mit vertauschten Starts; direkte Abschüsse 31:12, 31:13, 47:8, insgesamt 109:33 | STARK zuverlässig stärker als MITTEL; vollständige Gameplay-/Dauerabnahme |
-| A4 | 23/24 Slotphasen; 133 Inventarleben; zusätzliches frühes Clientlog-Leben außerhalb der Inventarabdeckung erklärt | Tatsächliche Versorgungslücke Phase1 botB:1 bleibt FAIL; Karten-/Navigations-/Gefahren-/Resetabnahme |
-| A5 | Quelle bis d0b8fb6 exakt auf dem Server gefetcht; Delta022 und Delta023 dort archiviert und separat restauriert; Delta022-Manifest auf Drive zurückgeprüft | Archive022/023 auf Drive übertragen und zurückprüfen; fortgeführte Stabilitätsgates und qualifizierter Dev-zuerst-Rollout |
+Der Umfang ist Dev zuerst, danach Red Station, Yodeller, Skulls, Little Trouble und Hole: insgesamt zwölf Botclients mit acht Bots je Instanz. DLL und die tatsächlich getestete aktive Kampfeinstellung gehören zusammen. Der bestehende Namen-/GUID-/Spawn0-Stand ist zu erhalten.
 
-**Betrieb:** Letzte tatsächliche Prüfung 12.11.2026 22:43:05 MEZ: sechs Instanzen mit je acht eigenen Bots, UNKNOWN0, Spawn0 und bisherigen DLLs. Build018 ist nicht live installiert. Alle dokumentierten Spiel-, Build- und Sicherungsfenster sind beendet; beide Worker sind ruhig. Eine neue Bestandsprüfung nach der Zugriffssperre wird nicht behauptet.
+**Frisch geprüft:**ssam.ai-System-Control-Hostcheck vom13.11.2026 um11:30:14MEZ erfolgreich, Kontrolldienst aktiv. Der Lesetest einer bestehenden privaten Backupquittung wird mit Permission denied abgewiesen; allgemeine Dienstdiagnose nicht erlaubt. Im aktuellen Toolbestand fehlt eine geeignete Deploy-/SSH-/Binärkopierfunktion. RDC wurde wegen der bestehenden Monatskontingentsperre nicht erneut aufgerufen. Das ist ein Zugriffsblocker trotz vorhandener Nutzerfreigabe.
 
-**Sicherung:** Delta022: 16033 Dateien / 826890437 Bytes separat wiederhergestellt. Delta023: 7982 Dateien / 115121646 Bytes separat wiederhergestellt, Archiv 35086463 Bytes, Exitcode0. Hashes und Metadaten geprüft. Beide Archive liegen bisher nur auf dem Server. Das unveränderte Delta022-Manifest wurde dagegen bereits tatsächlich auf Drive hochgeladen und nach Rückdownload bytegleich geprüft.
+**Fortsetzung:**[Ausführungsplan für den freigegebenen Rollout](../superpowers/plans/2026-11-13-build018-fleet-rollout.md) und [konkreter Zugriffsbefund](milestone-a-20261112/build018-rollout-authorized-20261113.json). Nach legitimer Wiederverfügbarkeit aktuelle Rollen, Profile, Rückstände und Payload prüfen, dann die Instanzen nacheinander umstellen und kurz tatsächlich kontrollieren. Kein Deploymentprozess läuft.
 
-**Aktueller Blocker:** Local exec und Drive funktionieren wieder. Weitere RDC-Aufrufe sind wegen ausgeschöpften Monatskontingents pausiert. Kein Wiederholen oder Umgehen der Sperre. Die beiden aktuellen Archive und geschlossenen Rohbelege sind lokal nicht verfügbar; die neuen Ursachenaufgaben konnten deshalb nicht beginnen. Der letzte vollständige externe Archivstand bleibt Delta021.
+**Fachliche Einordnung:**Die sechs kurzen Vergleiche mit109:33 direkten Abschüssen bleiben belegt. A2 ist fertig. Die offenen A1-/A3-/A4-/Dauerabnahmen werden durch die neue Rolloutfreigabe nicht als bestanden bezeichnet; sie ersetzen aber auch nicht den aktuellen ausdrücklichen Auftrag durch eine neue Freigaberunde. B ist weiter unimplementiert.
 
-**Belege und Fortsetzung:** [Geschlossener Stand mit Quotenblocker](2026-11-12-build018-final-access-blocker.md), [sechs A3-Vergleiche](2026-11-12-build018-six-window-comparison.md), [Abnahmedetails](2026-11-12-build018-acceptance-checkpoint.md), [ursprünglicher A4-FAIL](2026-11-12-a4-build018-native-failure.md). Die spätere Abschlussdokumentation wird separat auf GitHub veröffentlicht; ein zusätzlicher Server-Fetch ist blockiert. Keine volle Abnahme oder unbeaufsichtigte Hintergrundfortsetzung.
+**Letzter vollständiger Flottenbeleg:**12.11.2026 22:43:05MEZ, sechs mal acht eigene Bots mit bisherigen DLLs, UNKNOWN0 und Spawn0. Heute wurde kein neuer vollständiger Flottensnapshot erhoben. Delta022/023 sind auf dem Server separat restauriert; ihre großen externen Kopien fehlen im letzten belegten Stand. Private Übergabe und Delta022-Manifest sind dagegen extern zurückgeprüft.
 
 
 ---

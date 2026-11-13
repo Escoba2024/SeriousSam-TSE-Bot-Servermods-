@@ -1,3 +1,15 @@
+## Aktueller Rolloutauftrag — 13.11.2026 11:39:12 MEZ
+
+Der Nutzer hat am13.11. ausdrücklich den Rollout des vorhandenen Stands auf alle Server angeordnet. Diese Freigabe gilt für Build018 auf Dev und anschließend den fünf öffentlichen Instanzen; zwölf Botclients. Alte offene Releaseabnahmen bleiben offen, sind aber keine neue Erlaubnisabfrage oder pauschale Stopregel für diese ausdrücklich gewünschte Promotion.
+
+**Tatsächlicher Stand:**Host über ssam.ai System Control am13.11.10:30:14UTC erreichbar und Kontrolldienst aktiv. Der Dateileser verweigert den privaten Backupbeleg mit Permission denied; allgemeine systemctl-Diagnose nicht zugelassen. Keine passende Deploy-/SSH-/Binärkopierfunktion verfügbar. RDC wegen bestehender Kontingentsperre nicht erneut aufgerufen. Keine Serverdatei verändert, kein Dienst neu gestartet, kein Deploymentprozess aktiv.
+
+Root besitzt allein Deployment/Integration. Unabhängiger Prüfer hat018-Pins, sechs Instanzen, zwölf Botclientrollen und die nötige wirksame Profilmigration anhand vorhandener Quellen bestätigt; aktuelle Hostbindung fehlt. Nicht nur die DLL kopieren und einen möglicherweise alten Kampfpfad belassen. Keine Diagnose-/Test-/Offlineagentfunktion zur Umgehung von Zugriffsgrenzen verwenden.
+
+Aktueller Ausführungsplan: docs/superpowers/plans/2026-11-13-build018-fleet-rollout.md. Maschinenlesbarer Befund: docs/reports/milestone-a-20261112/build018-rollout-authorized-20261113.json. Nach legitimer Wiederverfügbarkeit zuerst aktuelle Rollen, Rückstände, Configs und018-Hashes prüfen, dann Dev→Red→Yodeller→Skulls→Trouble→Hole mit kurzen tatsächlichen Betriebschecks. Keine weitere Nutzerfreigabe erforderlich. Die vorherigen Archive und verbrauchten Wrapper bleiben unverändert.
+
+---
+
 ## Geschlossener Handoff nach RDC-Kontingentsperre — 12.11.2026 23:20:47 MEZ
 
 Build018 bleibt unqualifiziert und nicht live. Sechs kurze Alt-DLL-Vergleiche: direkte Abschüsse 109:33 (MITTEL31:12, STARK31:13, DEMON47:8). A2 fertig; A1, vollständige A3-/A4-Abnahme, Dauerprüfungen und A5 offen; B unbegonnen.
