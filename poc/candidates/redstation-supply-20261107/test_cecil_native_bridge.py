@@ -3936,7 +3936,55 @@ void itemConnectorRadiusContinuity(){
     "cold outside NAV target still requires normal directed navigation before any item connector");
  }
 }
+// Closed022: not_usable at an important node is followed by a blocked
+// acquisition origin outside its actual radius. Only the real production chain
+// is exercised; irrelevant graph points are disconnected, not invented routes.
+void blockedOriginFixture(bool outside=true){
+ setup(193);player.en_ulID=101;player.health=101;player.w.m_iAvailableWeapons=player.w.usable=15;
+ auto& graph=BotSupplyGraph();for(auto& p:graph.points){p.links.clear();p.x=10000;p.y=0;p.z=10000;}
+ auto& a=graph.points[138];a.id=139;a.x=63;a.y=1;a.z=-75;a.radius=2;a.important_entity=401;a.links={182};
+ auto& b=graph.points[182];b.id=184;b.x=72.25f;b.y=1;b.z=-72;b.radius=2;b.links={138};
+ auto& unusable=addItem(401,63,-75,botcore::CecilItemKind::Weapon);unusable.cls.name="Classes/WeaponItem.ecl";
+ unusable.pickable=false;unusable.pl.pl_PositionVector(2)=.376f;
+ auto& armor=addItem(260,72,-72,botcore::CecilItemKind::Armor);armor.pl.pl_PositionVector(2)=.376f;
+ auto& state=BotSupplyState(0);state.anchor=state.goal=138;state.importantGoal=true;state.scanTick=99999;state.owned=15;
+ player.pl.pl_PositionVector=FLOAT3D(63.15f,.381f,-75);
+ const auto arrived=BotSupplyTick(&player,0,968,1000);
+ check(state.goal<0&&state.avoidNode==138&&near(state.avoidUntil,968*.05+10)&&arrived.useControl,
+   "actual reached Important executes not_usable FinishImportant with its original ten-second avoid");
+ state.anchor=138;state.goal=182;state.goalEntity=260;state.goalKind=botcore::CecilItemKind::Armor;
+ state.goalSince=968*.05;state.scanTick=99999;
+ if(outside)player.pl.pl_PositionVector=FLOAT3D(63.15f,.381f,-79.827f);
+}
+void blockedOriginReproduction(){
+ blockedOriginFixture();auto& state=BotSupplyState(0);_botRayBudget=40;const int before=rayCount;
+ const auto first=BotSupplyTick(&player,0,980,1000);
+ std::printf("blocked-origin tick=980 avoid=%d until=%.6f blocked=%d anchor=%d goal=%d hop=%d active=%d owns=%d forward=%.6f strafe=%.6f rays=%d\n",
+   state.avoidNode,state.avoidUntil,state.blocked[138],state.anchor,state.goal,state.hop,first.active,first.ownsMovement,first.forward,first.strafe,rayCount-before);
+ check(state.goalEntity==260&&state.goal==182&&state.blocked[138]&&state.avoidNode==138&&near(state.avoidUntil,58.4),
+   "actual Locks retains the original avoided source and unchanged live ordinary armor attempt");
+ check(first.active&&(std::fabs(first.forward)+std::fabs(first.strafe)>0),
+   "RED ordinary reachable item attempt outside avoided acquisition origin must not remain neutral until avoid expiry");
+ _botRayBudget=40;const auto later=BotSupplyTick(&player,0,1160,1000);
+ check(later.active&&(std::fabs(later.forward)+std::fabs(later.strafe)>0),
+   "RED ordinary attempted exit still progresses before ten-second avoid expires");
+ _botRayBudget=40;const auto expired=BotSupplyTick(&player,0,1169,1000);
+ check(expired.active&&!state.blocked[138]&&state.goalEntity==260&&state.goalSince==968*.05,
+   "original avoid expiry restores a valid source-reapproach route without a new item attempt");
+ blockedOriginFixture(false);_botRayBudget=40;const auto inside=BotSupplyTick(&player,0,980,1000);
+ check(inside.active&&BotSupplyState(0).blocked[138]&&BotSupplyState(0).hop==182,
+   "original reached blocked-origin rule still permits genuine radius-bound route exit");
+ blockedOriginFixture();auto& target=BotSupplyState(0);target.avoidNode=182;_botRayBudget=40;
+ const auto denied=BotSupplyTick(&player,0,980,1000);
+ check(!denied.active&&target.blocked[182]&&denied.forward==0&&denied.strafe==0,
+   "a genuinely blocked destination remains forbidden by unchanged path search");
+ blockedOriginFixture();_botRayBudget=40;const auto route=BotSupplyTick(&player,0,1169,1000);
+ wallMode=2;_botRayBudget=40;double f=route.forward,st=route.strafe,u=route.up;const int casts=rayCount;
+ BotCecilSafeMotion(&player,BotSupplyState(0),1169*.05,f,st,u,0,1,true);
+ check(f==0&&st==0&&u==0&&rayCount>casts,"actual restored route still submits to physical wall/floor safety veto");
+}
 int main(){
+ blockedOriginReproduction();
  itemConnectorRadiusContinuity();
  healthConnectorContinuityGuards();
  localSupplyContention();

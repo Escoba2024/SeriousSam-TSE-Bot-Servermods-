@@ -116,5 +116,27 @@ Sie ist kein zusätzlicher Mausimpuls. Jetzt weder implementieren noch ausführe
 unverändert. Bei Methoden-FAIL erst tatsächlichen Widerspruch diagnostizieren;
 keine Folgeversuchsserie und keine neue Hülle als Ersatz für den fehlenden Beleg.
 
-Status: Plan/Text vorbereitet; noch keine Implementierung, kein OfflineRED,
-kein Methodenlauf. Root022 läuft unabhängig; alle eigenen Rechenjobs beendet.
+Status nach Root022Closed: Offline-RED→GREEN und deaktivierter Methodenfork
+fertig,46gezielte Fälle grün, keine Native-/Display-/Eingabeausführung.
+Tatsächliche0600-Logs/Hashes und Paket stehen im separaten Bericht
+`docs/reports/2026-11-14-own-xrecord-cold-warm-preparation.md`.
+Rootreview, separate Rootkopie und genau ein eigener Methodenlauf bleiben die
+nächsten Schritte im bestehenden Auftrag. Noch kein Warmup-/A1-/Guardfix.
+
+## Enger Rootreview-Folgeauftrag: Auditorordnung
+
+Der Rootreview fand vor jeder Methoden-Nativeausführung fehlende Evidenzguards:
+die gebundene Query musste noch nicht nach dem eigenen Emissionsintervall und
+vor dem nächsten liegen; Invocationflag und Counterkopien konnten widersprechen.
+Zuerst drei reale Mutationstests am Auditor RED (zehn Subfälle), danach nur:
+
+- `native_invoked is True`, streng ganzzahlige Counterkopien gleich dem Intervall.
+- Streng ganzzahlige Querysequenz mindestens `after`, vor folgendem `before`.
+- Raw-Queryrequest nach letztem zugehörigen Emissionsrequest, Raw-Reply danach
+  und vor erstem folgendem Emissionsrequest beziehungsweise EndOfData.
+
+Alle Mutationen behalten gültige neu serialisierte Rawindices und beantworten
+die Query auf dem passenden Fenster. Driver, Controller, Nativebibliothekscode,
+Inputs, Fristen und Core bleiben bytegleich zum vorigen deaktivierten Fork.
+49 fokussierte Offlinefälle PASS, kein Nativeaufruf. Neues unveränderliches
+deaktiviertes Paket und tatsächliche RED/GREEN-Quittungen im Vorbereitungsbericht.
