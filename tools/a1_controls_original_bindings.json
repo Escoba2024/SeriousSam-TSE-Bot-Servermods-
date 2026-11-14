@@ -1,0 +1,89 @@
+{
+  "schema": "a1-original-controls-static-bindings-v1",
+  "original_sha256": {
+    "GameMP.dll": "1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208",
+    "Engine.dll": "b79bf8bb3927fe4f8f252e141d721ae5c738df02218f0ecc12da5c1afbcb534f"
+  },
+  "reader_source_sha256": "b5627e91094594d0e1a0fae52ef8dc36be33f416436b92d0286396d37b31463a",
+  "guards": [
+    {
+      "rva": 66448,
+      "length": 318,
+      "hex": "558bec8b4508d9050c1586608d04c08d5481108b44811085c0744f568b35cc1086608d04808b36ddd8d94486108b815c0100005e85c075078b421485c07414d9c0d8421cd80d18158660d95d08d95a1cd945088b4210d9c0d8422085c0d95508d95a207505ddd8d94508d94208d81d0c158660dfe0f6c441755dd94208d80dac168660d9c0d9e0d9c2ded9dfe0f6c4017417d9c0dec2d90510158660d8e1defaddd8d84a185dc20400d9c1d8d9dfe0f6c4417519d9c9d8e1d90510158660d8e2def9d9c9ddd8d84a185dc20400ddd8ddd8d9050c158660d84a185dc204009090558bec53568bf1576a018b06ff500c8b7d0c6a00d9e0d91f8b168bceff520cd95f048b066a028bceff500cd9e0d95f088b166a048bceff520cd9e0d95f0c8b066a038bceff500cd95f108b166a058bceff520cd95f148b066a078bceff50",
+      "highlow_offsets": [
+        8,
+        30,
+        70,
+        111,
+        127,
+        152,
+        186,
+        211
+      ],
+      "module": "GameMP.dll",
+      "preferred_base": 1619263488,
+      "label": "Original CControls axis decoding and global smoothing"
+    },
+    {
+      "rva": 70032,
+      "length": 11,
+      "hex": "8b0da4fb8660e905000000",
+      "highlow_offsets": [
+        2
+      ],
+      "module": "GameMP.dll",
+      "preferred_base": 1619263488,
+      "label": "Original timer Game pointer"
+    },
+    {
+      "rva": 70269,
+      "length": 15,
+      "hex": "8d9fa40f0000833b000f84a2000000",
+      "highlow_offsets": [],
+      "module": "GameMP.dll",
+      "preferred_base": 1619263488,
+      "label": "Original local source pointer"
+    },
+    {
+      "rva": 70340,
+      "length": 55,
+      "hex": "8b43fc8b55f88d7dbc6a008d0c80578d3cc5000000008d0c482bf8c1e1058bb411d40200008d8c11d40200008d94fa1401000052ff5620",
+      "highlow_offsets": [],
+      "module": "GameMP.dll",
+      "preferred_base": 1619263488,
+      "label": "Original profile index controls stride and array"
+    },
+    {
+      "rva": 70446,
+      "length": 13,
+      "hex": "4081c30c08000083f8048945fc",
+      "highlow_offsets": [],
+      "module": "GameMP.dll",
+      "preferred_base": 1619263488,
+      "label": "Original local player stride"
+    },
+    {
+      "rva": 45168,
+      "length": 15,
+      "hex": "558bec8b45088d0480d94481105dc2",
+      "highlow_offsets": [],
+      "module": "Engine.dll",
+      "preferred_base": 1611399168,
+      "label": "Original CInput axis stride and reading field"
+    }
+  ],
+  "native_abi_qualified": false,
+  "input_cause_proven": false,
+  "engine_input_pointer_export": {
+    "name": "?_pInput@@3PAVCInput@@A",
+    "rva": 2037644
+  },
+  "game_pointer_rva": 195492,
+  "controls_array_offset": 724,
+  "controls_stride": 352,
+  "local_player_offset": 4000,
+  "local_player_stride": 2060,
+  "global_smooth_offset": 348,
+  "axis_offset": 16,
+  "axis_stride": 36
+}

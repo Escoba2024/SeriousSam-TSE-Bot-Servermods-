@@ -1,0 +1,44 @@
+{
+  "utc": "2026-11-14T08:44:28.098017+00:00",
+  "scope": "STATIC_RETARGET_AND_UNCHANGED_FOCUSED_PROTOCOL_TESTS_ONLY",
+  "runs": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "retarget019/test_retarget.py"
+      ],
+      "cwd": "/srv/tse-a4-build019-controller-20261114",
+      "exit_code": 0,
+      "tests": [
+        "8"
+      ],
+      "log_sha256": "6e8989d50d263a6393c27886385ed3e52ae34ca565cdad349b135234054f30e2"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "test_a4_adapter",
+        "test_extended_protocol",
+        "test_phase_inventory"
+      ],
+      "cwd": "/srv/tse-a4-build019-controller-20261114",
+      "exit_code": 0,
+      "tests": [
+        "47"
+      ],
+      "log_sha256": "f1ad175833da8e5fdc0476eda2aea36b2ea769e5c2710c461905d59c6877d23b"
+    }
+  ],
+  "initial_inherited_run": {
+    "tests": 47,
+    "failures": 1,
+    "test": "test_phase_inventory.PhaseBindingTests.test_original_policy_resource_and_restore_gates_are_byte_identical",
+    "reason": "expected candidate literal still Build018; only literal pin updated, remaining assertion unchanged"
+  },
+  "native_started": false,
+  "lab_files_changed": false
+}

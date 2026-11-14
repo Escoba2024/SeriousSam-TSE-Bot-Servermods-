@@ -83,7 +83,7 @@ struct CPlayer:CEntity {
  CWorld* GetWorld(){return hasWorld?(worldOverride?worldOverride:&world):nullptr;}
 };
 struct CSessionProperties {BOOL sp_bInfiniteAmmo=FALSE,sp_bWeaponsStay=TRUE;};
-struct Network {CSessionProperties session;const void* GetSessionProperties(){return &session;}} network,*_pNetwork=&network;
+struct Network {CSessionProperties session;double time=0;double GetGameTime(){return time;}const void* GetSessionProperties(){return &session;}} network,*_pNetwork=&network;
 struct Timer {double TickQuantum=.05;} timer,*_pTimer=&timer;
 int _botRayBudget=20,bot_iRosterOffset=0;
 bool bot_bDiagnostics=false;int supplyDiagLines=0;std::string supplyDiagText;
@@ -3483,7 +3483,128 @@ void liveItemFlightLockReplanPriority(){
  check(carried.activeFlight&&bridgeDriverOwns(true,carried,&player,true)&&near(state.flightAccepted,5.2),
    "only after genuine new-edge acceptance may close-combat traversal priority resume");
 }
+// Regression target: independent local mapped searches repeatedly selected the
+// same first weapon, including a far bot selecting a nearer bot's active goal.
+CPlayer supplyPeer;
+void localSupplyFixture(bool alternative=true,double peerNow=.05,double commonNow=.05,int extraAlternatives=0){
+ setup(5+extraAlternatives);
+ auto& g=BotSupplyGraph();
+ const FLOAT3D points[5]={{0,0,0},{0,0,-10},{0,0,-40},{30,0,-40},{0,0,-20}};
+ for(int i=0;i<5;++i){g.points[i].x=points[i](1);g.points[i].y=points[i](2);g.points[i].z=points[i](3);g.points[i].links.clear();}
+ g.points[0].links={2,3};g.points[4].links={2};
+ addItem(9901,0,-40,botcore::CecilItemKind::Weapon);g.points[2].important_entity=9901;
+ if(alternative){addItem(9902,30,-40,botcore::CecilItemKind::Weapon);g.points[3].important_entity=9902;}
+ for(int i=0;i<extraAlternatives;++i){
+  auto& point=g.points[5+i];point.x=float(31+i);point.y=0;point.z=-40;point.links.clear();
+  point.important_entity=9910+i;g.points[0].links.push_back(5+i);
+  addItem(9910+i,point.x+1,-40,botcore::CecilItemKind::Weapon);
+ }
+ player.en_ulID=101;player.cls.name="Classes/Player.ecl";BotSupplyState(0).entity=101;
+ supplyPeer=CPlayer();supplyPeer.m_penWeapons=&supplyPeer.w;supplyPeer.en_ulID=102;
+ supplyPeer.cls.name="Classes/Player.ecl";supplyPeer.worldOverride=player.GetWorld();
+ supplyPeer.pl.pl_PositionVector=points[4];player.world.wo_cenEntities.push_back(&supplyPeer);
+ auto& peer=BotSupplyState(1);peer=SSupplyState();peer.navigator.Prepare(g.points.size());peer.goals.Prepare(g.points.size());
+ peer.patrolSearch.Prepare(g.points.size());peer.blocked.resize(g.points.size());peer.worldLock.assign(g.points.size(),3);
+ peer.playable=true;peer.entity=102;peer.generation=1;peer.anchor=4;peer.owned=3;
+ peer.goals.Run(g,4);_botRayBudget=40;
+ network.time=commonNow;
+ BotCecilChooseMappedWeapon(&supplyPeer,peer,BotCecilItemInput(&supplyPeer,peer,1000),1,(int)(peerNow/.05),peerNow);
+ check(peer.goalEntity==9901&&peer.mappedWeaponGoal,"near local bot starts real mapped first-weapon route");
+}
+unsigned localSupplyChoose(double now=.05,double commonNow=-1,int budget=40){
+ network.time=commonNow<0?now:commonNow;
+ auto& far=BotSupplyState(0);far.ClearGoal();far.searchAfter=0;far.anchor=0;
+ far.goals.Run(BotSupplyGraph(),0);_botRayBudget=budget;
+ BotCecilChooseMappedWeapon(&player,far,BotCecilItemInput(&player,far,1000),0,(int)(now/.05),now);
+ return far.goalEntity;
+}
+void localSupplyContention(){
+ localSupplyFixture();
+ check(localSupplyChoose()==9902,"far local bot prefers reachable alternative to nearer live mapped pursuer");
+ check(!BotSupplyState(0).ItemRejected(9901,.05,false),"local contention never blacklists obtainable weapon");
+ localSupplyFixture(false);
+ check(localSupplyChoose()==9901,"single obtainable weapon remains fallback despite nearer local pursuer");
+ // A graph hint, hidden item or blocked connector is not an alternative.
+ localSupplyFixture();items[1].pickable=false;
+ check(localSupplyChoose()==9901,"hidden alternative cannot suppress sole obtainable weapon");
+ localSupplyFixture();BotSupplyGraph().points[0].links={2};
+ check(localSupplyChoose()==9901,"unreachable alternative cannot suppress sole directed route");
+ localSupplyFixture();items[1].pl.pl_PositionVector(1)=33;blockedItems=34;
+ check(localSupplyChoose()==9901,"physically blocked alternative falls back to original contested weapon");
+ // Preference must preserve the original fallback under BOTH existing caps.
+ for(int budget:{3,4}){
+  localSupplyFixture();items[1].pl.pl_PositionVector(1)=33;blockedItems=100;
+  check(localSupplyChoose(.05,-1,budget)==9901,
+    "three/four-ray budget preserves original contested route despite blocked preferred connector");
+  check(_botRayBudget>=2,"contention fallback never spends reserved final movement probes");
+ }
+ localSupplyFixture(true,.05,.05,8);items[1].pl.pl_PositionVector(1)=33;blockedItems=100;
+ const int beforeCap=rayCount;
+ check(localSupplyChoose()==9901,"eight-attempt cap preserves fallback behind nine blocked uncontested alternatives");
+ check(_botRayBudget>=32&&rayCount-beforeCap<=7,"attempt-capped fallback stays within original eight connector opportunities");
+ // Invert the route cost ordering: a farther peer does not deserve preference.
+ localSupplyFixture();BotSupplyGraph().points[0].z=-30;player.pl.pl_PositionVector(3)=-30;
+ check(localSupplyChoose()==9901,"nearer selecting bot does not yield to farther local pursuer");
+ for(int mode=0;mode<14;++mode){
+  localSupplyFixture();auto& peer=BotSupplyState(1);CWorld foreign;
+  double now=.05;
+  if(mode==0)supplyPeer.health=0;
+  if(mode==1)peer.Reset();
+  if(mode==2)peer.ClearGoal();
+  if(mode==3)++peer.generation;
+  if(mode==4)++_botSupplyMapSerial;
+  if(mode==5)supplyPeer.worldOverride=&foreign;
+  if(mode==6)++supplyPeer.en_ulID;
+  if(mode==7)now=.35;
+  if(mode==8)now=.04;
+  if(mode==9)peer.groundStalled=true;
+  if(mode==10)peer.goalDeadline=.05;
+  if(mode==11)supplyPeer.cls.name="Classes/MovingBrush.ecl";
+  if(mode==12)supplyPeer.w.usable=supplyPeer.w.m_iAvailableWeapons=11;
+  if(mode==13)peer.goalSince=.025;
+  check(localSupplyChoose(now)==9901,"dead reset stale replaced armed stalled or foreign local pursuer releases preference");
+ }
+ // A regularly ticking stationary claimant cannot hold another bot forever.
+ localSupplyFixture();
+ for(int tick=2;tick<=102;++tick){_botRayBudget=40;BotSupplyTick(&supplyPeer,1,tick,1000);}
+ check(localSupplyChoose(5.1)==9901,"five-second stationary pursuer loses local target preference while still ticking");
+ supplyPeer.pl.pl_PositionVector(3)-=.8f;_botRayBudget=40;BotSupplyTick(&supplyPeer,1,103,1000);
+ check(localSupplyChoose(5.15)==9902,"fresh positional progress restores nearer live local preference");
+ // The observation changes preference without adding hot-path allocations,
+ // competitor rays, item writes or diagnostic-dependent policy.
+ localSupplyFixture();const int initialRays=rayCount;const unsigned initialOwned=items[0].item.weapon;
+ allocations=0;measuring=true;const unsigned off=localSupplyChoose();measuring=false;
+ check(off==9902&&allocations==0&&rayCount==initialRays&&_botRayBudget==39,
+   "local preference reuses prepared searches and connector budget without allocation or competitor rays");
+ check(items[0].item.weapon==(int)initialOwned&&items[0].pickable&&supplyPeer.w.m_iAvailableWeapons==3,
+   "local supply preference preserves weapon entities and both native inventories");
+ bot_bDiagnostics=true;const unsigned on=localSupplyChoose();bot_bDiagnostics=false;
+ check(on==off,"diagnostics opt-in never changes local supply preference");
+ // Slot clocks reset independently on join/rejoin; only the network clock is
+ // comparable between slots. Both different-origin directions must work.
+ localSupplyFixture(true,.05,80);
+ check(localSupplyChoose(50,80)==9902,"fresh newly joined peer survives querying slot fifty-second clock origin");
+ localSupplyFixture(true,50,80);
+ check(localSupplyChoose(.05,80)==9902,"fresh long-running peer survives newly joined querying slot clock origin");
+ localSupplyFixture(true,.05,80);
+ check(localSupplyChoose(.05,80.35)==9901,"common-clock stale observation expires even with equal local slot ticks");
+ localSupplyFixture(true,50,80);
+ check(localSupplyChoose(50,79.9)==9901,"common-clock rewind cannot validate local supply observation");
+ // Exercise the actual lifecycle reset used for rejoined local player sources.
+ localSupplyFixture(true,50,80);BotSupplyReset(1);network.time=80.05;_botRayBudget=40;
+ BotSupplyTick(&supplyPeer,1,1,1000);
+ check(localSupplyChoose(50.05,80.05)==9902,"actual peer rejoin reset and fresh first tick retain cross-slot preference");
+ // Owner-local deadline/progress do not borrow the querying bot's tick origin.
+ localSupplyFixture(true,.05,80);
+ for(int tick=2;tick<=102;++tick){network.time=80+tick*.05;_botRayBudget=40;BotSupplyTick(&supplyPeer,1,tick,1000);}
+ check(localSupplyChoose(50,85.1)==9901,"stationary owner expires by own progress clock despite different querying origin");
+ supplyPeer.pl.pl_PositionVector(3)-=.8f;network.time=85.15;_botRayBudget=40;
+ BotSupplyTick(&supplyPeer,1,103,1000);
+ check(localSupplyChoose(.05,85.15)==9902,"owner progress restores fresh common-clock claim across another querying origin");
+ BotSupplyState(1).Reset();
+}
 int main(){
+ localSupplyContention();
  liveItemFlightLockReplanPriority();
  liveItemFlightArrivalPriority();
  liveItemFlightPriorityGuards();

@@ -1,0 +1,18 @@
+--- a/colt_preparation.py
++++ b/colt_preparation.py
+@@ -349,7 +349,6 @@
+                 frame[source]['vanilla']['game_tick']>before[source]['vanilla']['game_tick'] for source in('roles','client_roles'))
+             ready=fresh and -.5<=actual_gain<=-.02 and all(same(v,values[1])for v in values)
+             if ready:
+-                require(gain is None or same(delta,pixels*gain),'normal aim ACK differs from calibrated axis gain')
+                 physical=[]
+                 for source in('roles','client_roles'):
+                     current=geometry(frame[source]['vanilla'],frame[source]['botA'])
+@@ -363,6 +362,7 @@
+                     held=(frame['roles']['vanilla']['game_tick'],frame['client_roles']['vanilla']['game_tick'])
+                 if all(frame[source]['vanilla']['game_tick']-held[i]>=.1 for i,source in enumerate(('roles','client_roles'))):
+                     require(now()<deadline,'normal axis acknowledgement deadline exceeded')
++                    require(gain is None or same(delta,pixels*gain),'normal aim ACK differs from calibrated axis gain')
+                     event['axis_ack']=dict(axis=axis,pixels=pixels,delta_deg=delta,gain_deg_per_pixel=actual_gain,
+                         physical_delta_deg_raw=physical,frame=copy.deepcopy(frame),exactly_once_proven=False)
+                     return frame,actual_gain

@@ -1,3 +1,27 @@
+## Fortschreibung14.11.2026,08:50UTC — A1 geschlossen, A4-019 aktiv
+
+Dieser Checkpoint ersetzt die nachfolgenden aktiven A1-Angaben: Nosmooth-A1 **FAIL vor Fire**, verdoppelter lokaler Aimimpuls trotz gemessener Glättung0/Prescan0/Accel0. Alle drei Rollen geschlossen,664Dateien/neunAbwesenheiten/dreiLoghashes unabhängig restauriert, frischer OriginalpreflightPASS. Einzelheiten: `docs/reports/2026-11-14-a1-nosmooth-native-failure.md`. Keine Wiederholung derselben Voraussetzungen.
+
+Root führt jetzt genau ein natives Build019-A4-Fenster aus: `/srv/tse-cecil-rollout-evidence-20261114/a4-build019-owner.json`, `a4-build019-native.log`, abschließend `a4-build019-ended.json`. Neuer Freeze `/srv/tse-a4-build019-root-frozen-20261114`, Manifestfa9435192e41731acc2a447d15f05378965868d7fd2448880838d233a71be150, Launcher225bccff183daf7143d3bef20d3eb523d6397143aae72747cde8fc06b2b81fd5. Genau65Abhängigkeiten frisch nachgehasht, enger Kandidaten-/Präfixdiff geprüft. Unveränderte24Slotphasen/480s/Serious3, keine Hardabnahme; Port27850/Display154 exklusiv. Vor weiterer Labarbeit Ergebnis, normaleCloses, geschlosseneLogs und Restore unabhängig prüfen. Frischer Vorlauf08:50:15UTC: CPU40,47%,RAM3653353472B,Disk11947343872B. Build019 bleibt bis nativer Abnahme experimentell; Public weiterBuild018, Hard2nurDev/Red.
+
+Worker a4_diagnosis analysiert A1-Eingangskette nur offline; candidate_audit hat deaktiviertenA4-Retarget2d9dfcf fertiggestellt, integriertb924bf9. Keine parallele Live-/Labänderung erlaubt. Gesamtauftrag/A offen, B weiterhin unimplementiert.
+
+---
+
+## Neuer Runtimecheckpoint — 14.11.2026, Hard teilweise / A1-Diagnose aktiv
+
+Die oben folgende Historie bleibt erhalten, dieser Absatz ist aktueller: initialer Build018-Rollout6/6 vollständig kurz geprüft. Zusätzliche Hardkorrektur nur auf Dev und Red Station bestanden. Yodeller60sFAIL: botB:1 bewegte sich,0Feuer, nurMesser/Colt; regulär auf vorheriges Serious3 restauriert,8Bots. Skulls/Trouble/Hole bleiben unverändertSerious3. Alle sechs laden weiterBuild018. Keine neuen Sync-/Crashfehler daraus gemeldet. Hard-Executor beendet mit2/6PASS; keine automatische Wiederholung. Detaillierte Hard-Clientlogs wurden beim Restore überschrieben; Assertionszusammenfassung erhalten, Capturepfad vor künftigen Versuchen korrigiert. `runtime-identity.json` aller sechs nach kontrolliertem Wiederanlauf frisch aktualisiert und privat gehasht.
+
+Root hat A1-Änderungen48181ff/68d9f0a und A4be46772/a8c49e9 integriert. HauptbranchHEADa1e77b9f1aa6e2b5332e099c2d40ab5b51ba3f15; neuer Build019/DLL671df77a06eb9df8822032418e4d9ae2550f5581a2bf89c3e45b83c0f32472be/431104Byte, Manifeste1c921282c3c43257357f72914e4aea5da7f72021468ec9ed5260ed084fbffa5. Nur gebaut, nicht nativ qualifiziert/produktiv. RootASan/UBSanBridge2833/0, Weaponobserver306/0 normal+ASan nach engem Testharnessfix;356Tools/0FAIL/6Skip vor neuem6/6Nosmoothhelper. Historische67A1-Discovery mit3FAIL bleibt unverändert.
+
+Genau ein neuer isolierter Original-A1-Nosmooth-Diagnoselauf wird durchRoot ausgeführt: `/srv/tse-cecil-rollout-evidence-20261114/a1-nosmooth-owner.json`, `a1-nosmooth-native.log`, abschließend `a1-nosmooth-ended.json`. Rootfrozen `/srv/tse-a1-nosmooth-root-frozen-20261114`, Manifest1f133437eee449e7b8356942dc749e9f226b36d4e42c84c4eb9e723fb30d4351. Unabhängiges Sicherheitsreview109Pins/21unveränderteRuntimedateien/34AST-identischeFunktionen, keine materiellen Befunde; Gates separat durchRoot für diesen Diagnoseumfang gesetzt. Native Ursache und A1 bleiben offen bis Ergebnis/Restoreprüfung. Keine öffentliche Instrumentierung. Nach Abschluss unbedingt alle Labrollen/Displays/Restorewerte tatsächlich prüfen, bevorBuild019-A4 gestartet wird.
+
+Delta024 bewahrt geschlossenen initialen Rollout, Hardteilversuch samt belegter Lücke, aktuelle Helfer und Build019/Quellbundle:20040782Byte/SHA2566b7ec77298a148ba8a11dc65d4181d4eb09995c09f23686ac9916349d69208d3;5211Dateien/169434369Byte separat restauriert und Dateimetadaten gehasht. DriveID1tA0eiSyunCsQd-VH0ZkHyn4Subj9iDJf; Rückdownloadquittung unter `/srv/tse-cecil-rollout-backup-20261114`. Neuere A1-/A4-Nativbelege benötigen nächsten Nachtrag. Kein nativer Gesamtarchiv-Restorestart. Letzte tatsächliche öffentliche Remoteverifikationd38f567e…/Baum81aead23… zu lokald5ecccb; spätere Quellen brauchen Veröffentlichung.
+
+Worker candidate_audit bereitet nur deaktivierten019-A4-Retarget vor; a4_diagnosis hat A1-Sicherheitsreview abgeschlossen. Root allein startetNative/Build/Live. B unimplementiert und weiterhin bisA gesperrt.
+
+---
+
 ## Aktuelle Fortsetzung — 14.11.2026, initialer Rollout ausgeführt
 
 **Gesamtauftrag aktiv; A unvollständig, B unimplementiert.** Root-Worktree `/srv/tse-cecil-rollout-a-b-20261114`, Branch `codex/20261114-cecil-rollout-a-b`, Ausgangspunkt b797960. Regulärer bereitgestellter Terminalzugriff direkt auf ubuntu-4gb-nbg1-2/UID0 ist bestätigt; kein RDC-Ausführungsaufruf. Der alte Deployment-Zugriffsblocker gilt hier nicht mehr.

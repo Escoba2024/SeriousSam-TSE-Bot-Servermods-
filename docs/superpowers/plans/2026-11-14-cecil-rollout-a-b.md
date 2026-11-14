@@ -26,11 +26,12 @@ Dateien: bestehender `restart-fleet-20261111.py`, `cecil_fleet_install.py` als g
 - [x] Host und Git-Worktrees inventarisiert; Remote frisch gefetcht, Ausgangspunkt b797960.
 - [x] Eigener Branch `codex/20261114-cecil-rollout-a-b`, fremde Worktrees erhalten.
 - [x] Frische sechs Queries: je8 eigene Bots, keine zusätzlichen unbekannten Teilnehmer; Public7fc94a39, Dev ec820d04; Dedicated separat.
-- [ ] DLL/Manifest/Quellbaum und tatsächlich getestete Kampfkonfiguration/Navpayload gemeinsam nachhashen.
-- [ ] Dateimetadaten, DLLs, Profile/GUIDs, Konfiguration, Startweg, Nav und Prozess-/Modulidentität sichern und Rücklesen prüfen.
-- [ ] Dev25650, Red25600, Yodeller25610, Skulls25620, Trouble25630, Hole25640 nacheinander: normale eigene Botcloses, Payload installieren, bestehende Dienste starten.
-- [ ] Je Instanz geladene Module,8Bots, Map, Bewegung, Kampf, Tod/Respawn, Cecil und Fehlerdifferenzen im kurzen Fenster belegen. Bei schwerer Regression zurückrollen und Ursache beheben.
-- [ ] Gemeinsamen Flottennachweis und aktualisierte Runtimeidentitäten schreiben, committen/pushen und Remote-SHA prüfen.
+- [x] DLL/Manifest/Quellbaum und tatsächlich getestete Kampfkonfiguration/Navpayload gemeinsam nachhashen.
+- [x] Dateimetadaten, DLLs, Profile/GUIDs, Konfiguration, Startweg, Nav und Prozess-/Modulidentität sichern und Rücklesen prüfen.
+- [x] Dev25650, Red25600, Yodeller25610, Skulls25620, Trouble25630, Hole25640 nacheinander: normale eigene Botcloses, Payload installieren, bestehende Dienste starten.
+- [x] Je Instanz geladene Module,8Bots, Map, Bewegung, Kampf, Tod/Respawn, Cecil und Fehlerdifferenzen im kurzen Fenster belegen. Bei schwerer Regression zurückrollen und Ursache beheben.
+- [x] Gemeinsamen initialen Flottennachweis und aktualisierte Runtimeidentitäten schreiben, veröffentlichen und Remote-SHA prüfen.
+- [ ] Vorgefundene Serious3→Hard2-Abweichung abschließen: Dev/RedPASS; YodellerVersorgungFAIL mit verifiziertem Restore; übrige drei nochoffen. Erst nach Ursachen-/Kandidatenprüfung fortsetzen.
 
 ## Task 2: A-Abschluss [OFFEN]
 
@@ -62,3 +63,5 @@ Vor Umsetzung eigenes konkretes Design anhand Originalauftrag und vorhandener In
 ## Ausführungsledger
 
 2026-11-14: Historischer Deploymentblocker durch regulären bereitgestellten Terminalzugang ersetzt. Kein Umgehen eines Diagnose-/Kontingentlimits. Alte Runtime-/A-Abnahmen unverändert offen. Candidate-Audit arbeitet ausschließlich lesend; Root allein Runtimewriter. Die servereigenen Red-Station-Locks sind laufender Serverbesitz und werden nicht entfernt.
+
+2026-11-14 Fortsetzung: Initialer6/6-DLL-Rollout91sjeInstanz bestanden; Hardkorrektur bleibt2/6wegenneuem60sYodeller-Versorgungs-FAIL. Build019ausa1e77b9gebaut(671df77a…,431104B), nach2833SDK107ASan-Prüfungen; nochkeineNativefreigabe. Original-A1-NosmoothdiagnoseFAIL vorFire, RestoreunabhängigPASS; genau ein019-A4-Fenster läuft nach frischem Preflight. Delta024upload/download/DateirestorePASS;019A4Retarget55OfflineprüfungenPASS; keine024Slotphase- oderHardfreigabevorErgebnis.

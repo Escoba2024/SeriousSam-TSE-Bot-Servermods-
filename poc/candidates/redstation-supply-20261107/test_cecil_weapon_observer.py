@@ -5,6 +5,7 @@ No game, runtime memory, hook, Windows ABI or qualification claim.
 """
 from pathlib import Path
 import argparse
+import re
 import subprocess
 import tempfile
 
@@ -118,7 +119,10 @@ def main():
     # The unchanged Driver has no observation hook: its actual baseline emits
     # no observer events. This no-op supplies only the absent function boundary.
     block=source.split(start,1)[1].split(end,1)[0]if start in source else BASELINE
-    hook='ppls->SetAction(pa);'+source.split('    ppls->SetAction(pa);',1)[1].split('    // Count emitted combat',1)[0]
+    after_action=source.split('    ppls->SetAction(pa);',1)[1].split('    // Count emitted combat',1)[0]
+    calls=re.findall(r'BotWeaponObserverAfterAction\([^;]+;',after_action)
+    if len(calls)!=1:raise ValueError('exactly one actual observer call required after SetAction')
+    hook='ppls->SetAction(pa);'+calls[0]
     integration='static void driverAfterAction(CPlayer* player,CPlayerSource* ppls,int tick,int desired,unsigned final,unsigned pulse){struct {int bs_iTick;}bs={tick};const int iLP=0;const int combatWeapon=desired;const unsigned combatSelect=pulse;const bool automatic=true,bot_bSupplyNavigation=true;CPlayerAction pa;pa.pa_ulButtons=final;'+hook+'}'
     with tempfile.TemporaryDirectory(prefix='cecil-weapon-observer-')as d:
         path=Path(d)/'test.cpp';path.write_text(STUB+'\n'+block+'\n'+integration+'\n'+TESTS);exe=Path(d)/'test'

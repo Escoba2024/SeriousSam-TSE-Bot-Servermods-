@@ -1,0 +1,46 @@
+{
+  "schema": "a4-build019-offline-retarget-handoff-v1",
+  "utc": "2026-11-14T08:45:08.478335+00:00",
+  "package": "/srv/tse-a4-build019-controller-20261114",
+  "package_manifest_sha256": "4eaeadf32e84f9543ae14b3591e66f4b94a672abba70cbb7f1f6424f97f60da0",
+  "parent_manifest_sha256": "9064439561caac5deed96b1be4e546d8fa0c69ac6fbdf24a5c836b3538d0817c",
+  "controller_sha256": "b6b36bdef5446917e7b1529479a43b773d3f97fc2fb7b72a63eef940f24c4a5b",
+  "adapter_policy_sha256": "186149d89c8a4e5d02885efbb35851dd046fc7731153256be35a931da18cfe0a",
+  "runtime_diff_sha256": "755a2f9fe49c65371371ae69275a4003d955242601ca572d484e691cebf214dc",
+  "candidate": {
+    "build_manifest": "/srv/tse-milestone-a-build-019-20261114/manifest.json",
+    "build_manifest_sha256": "e1c921282c3c43257357f72914e4aea5da7f72021468ec9ed5260ed084fbffa5",
+    "dll_sha256": "671df77a06eb9df8822032418e4d9ae2550f5581a2bf89c3e45b83c0f32472be",
+    "dll_bytes": 431104,
+    "repo_tree": "ce7d715d1bf1df723c7af021b8f1b2abd88b89db",
+    "source_commit": "a1e77b9f1aa6e2b5332e099c2d40ab5b51ba3f15"
+  },
+  "inherited_external_pins_verified": 51,
+  "all_runtime_dependencies_verified": 65,
+  "build_source_pins_verified": 75,
+  "parent_package_byte_unchanged": true,
+  "runtime_gate": false,
+  "single_native_window_max": 1,
+  "automatic_retry": false,
+  "native_started": false,
+  "lab_files_changed": false,
+  "offline_tests_passed": 55,
+  "protocol": {
+    "maps": [
+      "redstation",
+      "redstation",
+      "redstation"
+    ],
+    "observation_cap_s": 480,
+    "time_limit_minutes": [
+      2,
+      2,
+      0
+    ],
+    "third_phase_min_wall_and_game_s": 120,
+    "slotphases": 24,
+    "game_start_difficulty": 3,
+    "original_serious3_retained": true
+  },
+  "published_zero_context_diff_sha256": "de578bf28d552ce4a18889b928e646e9c8c31d7ca81fbeb4df499f178a7028ab"
+}

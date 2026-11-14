@@ -1,0 +1,46 @@
+{
+  "utc": "2026-11-14T08:44:21.917448+00:00",
+  "status": "PARTIAL_RULE_CORRECTION_GAMEPLAY_FAIL_RETAINED",
+  "hard_pass": [
+    "development",
+    "redstation"
+  ],
+  "serious_remaining": [
+    "yodeller",
+    "skulls",
+    "trouble",
+    "hole"
+  ],
+  "all6_bot_dll": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+  "failed_instance": "yodeller",
+  "failed_slot": "botB:1",
+  "failure": {
+    "scope": "assertion_summary_retained_raw_client_logs_overwritten_by_controlled_rollback",
+    "samples": 60,
+    "ticks": 1180,
+    "positions": 60,
+    "shots_delta": 0,
+    "pickups_delta": 1,
+    "deaths_delta": 0,
+    "respawns_delta": 0,
+    "current_weapons": [
+      1,
+      2
+    ]
+  },
+  "rollback": "PASS_ORIGINAL_CONFIG_AND_EIGHT_BOTS_RESTORED",
+  "all6x8_after_rollback_verified": true,
+  "new_sync_errors_reported": 0,
+  "future_capture_fix": "live log and parsed-state checkpoints, failure log copy before recovery",
+  "build019": {
+    "returncode": 0,
+    "source": "a1e77b9f1aa6e2b5332e099c2d40ab5b51ba3f15",
+    "qualified": false,
+    "disk_free_bytes": 12265984000,
+    "dll_sha256": "671df77a06eb9df8822032418e4d9ae2550f5581a2bf89c3e45b83c0f32472be",
+    "dll_bytes": 431104,
+    "manifest_sha256": "e1c921282c3c43257357f72914e4aea5da7f72021468ec9ed5260ed084fbffa5"
+  },
+  "a": "INCOMPLETE",
+  "b": "NOT_IMPLEMENTED"
+}

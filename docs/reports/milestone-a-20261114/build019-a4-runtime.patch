@@ -1,0 +1,24 @@
+--- a/run-mapreset.py
++++ b/run-mapreset.py
+@@ -10 +10 @@
+-RUNTIME_REVIEWED=True
++RUNTIME_REVIEWED=False
+@@ -13 +13 @@
+-CANDIDATE_DLL=Path('/srv/tse-milestone-a-build-018-20261112/Sources/Game/GameMP.dll')
++CANDIDATE_DLL=Path('/srv/tse-milestone-a-build-019-20261114/Sources/Game/GameMP.dll')
+@@ -50 +50 @@
+- policy.options(map_key,duration,diag);value=0;DIAG=diag;INVENTORY=1;PREFIX='ssam-a4-reset018-extended-20261112'
++ policy.options(map_key,duration,diag);value=0;DIAG=diag;INVENTORY=1;PREFIX='ssam-a4-reset019-extended-20261114'
+@@ -54 +54 @@
+- E=BASE/f'a4-reset018-extended-{time.strftime("%Y%m%d-%H%M%S",time.gmtime())}';E.mkdir(mode=0o700);(E/'controller-source.py').write_bytes(Path(__file__).read_bytes());records={};display=None;server=None;cohort=False;bootstrap_original=None;inventory=None;inventory_stream=None;transaction=None;initial=policy.InitialObservations();initial_validated=False;active_snapshots=[];module_pins={};last_pin=-100;host_budget=HostBudget();last_host=-100;observer_history=[];observer_phase=0;operation_deadline=None;early_capture=None;phase_capture=None
++ E=BASE/f'a4-reset019-extended-{time.strftime("%Y%m%d-%H%M%S",time.gmtime())}';E.mkdir(mode=0o700);(E/'controller-source.py').write_bytes(Path(__file__).read_bytes());records={};display=None;server=None;cohort=False;bootstrap_original=None;inventory=None;inventory_stream=None;transaction=None;initial=policy.InitialObservations();initial_validated=False;active_snapshots=[];module_pins={};last_pin=-100;host_budget=HostBudget();last_host=-100;observer_history=[];observer_phase=0;operation_deadline=None;early_capture=None;phase_capture=None
+--- a/adapter_policy.py
++++ b/adapter_policy.py
+@@ -6 +6 @@
+-CANDIDATE_SHA='6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a'
++CANDIDATE_SHA='671df77a06eb9df8822032418e4d9ae2550f5581a2bf89c3e45b83c0f32472be'
+--- a/test_phase_inventory.py
++++ b/test_phase_inventory.py
+@@ -156 +156 @@
+-                             "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a")
++                             "671df77a06eb9df8822032418e4d9ae2550f5581a2bf89c3e45b83c0f32472be")
