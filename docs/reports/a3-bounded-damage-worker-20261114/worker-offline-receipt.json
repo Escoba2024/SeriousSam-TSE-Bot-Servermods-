@@ -1,0 +1,28 @@
+{
+  "status": "PASS_OFFLINE_ONLY",
+  "utc": "2026-11-14T11:41:08.084683+00:00",
+  "runtime_dependencies_verified": 79,
+  "package_source_entries_verified_before_receipt": 108,
+  "parent_source_entries_verified": 98,
+  "unchanged_damage_host_restore_files": 9,
+  "build_source_pins_verified": 47,
+  "build_overlay_pins_verified": 28,
+  "candidate_dll_sha256": "094ec8edbedd5e63d8e4eb03fcce70518283b22440e5f80ba4c2482ff81fe6c0",
+  "focused_tests": {
+    "run": 58,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds_reported": 0.448
+  },
+  "wrong_initial_test_invocation": {
+    "result": "FAILED_IMPORT_PATH_AND_MODULE_NAMES",
+    "tests_reported": 17,
+    "errors": 7,
+    "skipped": 1,
+    "does_not_replace_focused_results": true
+  },
+  "runtime_reviewed": false,
+  "native_started": false,
+  "qualified": false
+}

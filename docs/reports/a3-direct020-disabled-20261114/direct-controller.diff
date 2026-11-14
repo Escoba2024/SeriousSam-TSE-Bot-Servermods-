@@ -1,0 +1,51 @@
+--- build018/run-a3-damage018.py
++++ direct020/run-a3-direct020.py
+@@ -3 +3 @@
+-import controller_policy as policy
++import a3_direct_controller_policy as policy
+@@ -4,0 +5 @@
++import stability_hard_rules as hard_rules
+@@ -8 +9 @@
+-RUNTIME_REVIEWED=True
++RUNTIME_REVIEWED=False
+@@ -16 +17 @@
+-CANDIDATE_DLL=Path('/srv/tse-milestone-a-build-018-20261112/Sources/Game/GameMP.dll')
++CANDIDATE_DLL=Path('/srv/tse-milestone-a-build-020-20261114/Sources/Game/GameMP.dll')
+@@ -49,2 +50,2 @@
+- assert value==0
+- SWAP=swap;DIAG=diag;INVENTORY=1;PREFIX=f'ssam-arena018public-initialcapture-swap{SWAP}-20261112'
++ assert value==0 and duration==120 and diag==0 and instrumentation==1,'fixed direct-tier120s instrumented diagnostics0 protocol'
++ SWAP=swap;DIAG=diag;INVENTORY=1;PREFIX=f'ssam-direct020-hard-pair{trial}{trial+1}-swap{SWAP}-20261114'
+@@ -55,2 +56,2 @@
+- E=BASE/f'arena018public-initialcapture-swap{SWAP}-trial-{trial}-{time.strftime("%H%M%S",time.gmtime())}';E.mkdir(mode=0o700);(E/'controller-source.py').write_bytes(Path(__file__).read_bytes());records={};display=None;server=None;cohort=False;bootstrap_original=None;inventory=None;inventory_stream=None;config_originals={};initial=policy.InitialObservations();initial_validated=False;transaction=None;frida_session=None;frida_script=None;frida_stream=None;frida_host=None;frida_reg=None;frida_net=None;trace_drain=None;verify_original_bodies=None;original_guards=None;all_damage_records=[];message_guard=None;guard_module=None;last_frida_pin=0;attribution_registry={};module_pins={};host_budget=HostBudget();last_host=0
+- report={'status':'IN_PROGRESS','spawn':value,'trial':trial,'candidate_tier':trial,'diagnostics_enabled':bool(DIAG),'qualified':False,'first_processed_state_proven':False,'a3_accepted':False,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'events':[],'errors':[],'swap_cohorts':bool(SWAP),'controller_sha256':sha(E/'controller-source.py'),'pause_reader_sha256':sha(pauseprobe.__file__)}
++ E=BASE/f'direct020-hard-pair{trial}{trial+1}-swap{SWAP}-{time.strftime("%Y%m%d-%H%M%S",time.gmtime())}';E.mkdir(mode=0o700);(E/'controller-source.py').write_bytes(Path(__file__).read_bytes());records={};display=None;server=None;cohort=False;bootstrap_original=None;inventory=None;inventory_stream=None;config_originals={};initial=policy.InitialObservations();initial_validated=False;transaction=None;frida_session=None;frida_script=None;frida_stream=None;frida_host=None;frida_reg=None;frida_net=None;trace_drain=None;verify_original_bodies=None;original_guards=None;all_damage_records=[];message_guard=None;guard_module=None;last_frida_pin=0;attribution_registry={};module_pins={};host_budget=HostBudget();last_host=0
++ report={'status':'IN_PROGRESS','spawn':value,'trial':trial,'pair_lower_tier':trial,'direct_pair':[trial,trial+1],'role_tiers':{r:c['tier']for r,c in cohorts.items()},'diagnostics_enabled':bool(DIAG),'qualified':False,'first_processed_state_proven':False,'a3_accepted':False,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'events':[],'errors':[],'swap_cohorts':bool(SWAP),'controller_sha256':sha(E/'controller-source.py'),'pause_reader_sha256':sha(pauseprobe.__file__)}
+@@ -117 +118 @@
+-   for name in ('public.ini','candidate.ini','initial-reference.json','source-manifest.json','controller_policy.py'):
++   for name in ('public.ini','candidate.ini','initial-reference.json','source-manifest.json','controller_policy.py','a3_direct_controller_policy.py','a3_direct_tiers.py','stability_hard_rules.py'):
+@@ -119 +120 @@
+-   report['configuration_sources']={k:sha(DRAFT/k)for k in ('public.ini','candidate.ini','initial-reference.json','source-manifest.json','controller_policy.py')}
++   report['configuration_sources']={k:sha(DRAFT/k)for k in ('public.ini','candidate.ini','initial-reference.json','source-manifest.json','controller_policy.py','a3_direct_controller_policy.py','a3_direct_tiers.py','stability_hard_rules.py')}
+@@ -122 +123 @@
+-   config=R/'server/Scripts/Dedicated/BotTest/1_begin.ini';text=config.read_text().replace('dev_bRemoveDamageAndInvisibility=1;','');text=re.sub(r'\ngam_tmSpawnInvulnerability=.*?;','',text);config.write_text(text+f'\ngam_tmSpawnInvulnerability=(FLOAT){value};\nser_bClientsMayPause=1;\n')
++   config=R/'server/Scripts/Dedicated/BotTest/1_begin.ini';text=policy.hard_server_template(config.read_text()).replace('dev_bRemoveDamageAndInvisibility=1;','');text=re.sub(r'\ngam_tmSpawnInvulnerability=.*?;','',text);config.write_text(text+f'\ngam_tmSpawnInvulnerability=(FLOAT){value};\nser_bClientsMayPause=1;\n')
+@@ -163,0 +165 @@
++   for snapshot in barrier.values():hard_rules.validate_session(snapshot)
+@@ -233 +235 @@
+-    attribution_registry=damage.build_registry(owned_rows,mapping,cohorts)
++    attribution_registry=policy.build_direct_registry(damage,owned_rows,mapping,cohorts)
+@@ -281 +283 @@
+-   report['observer_input_schedule']='normal Pause only, no gameplay input during observation';report['baseline']=f'actual public7fc HumanAI0 AutoCombat1 pinned config; candidate018 tier{trial}';report['cohort_order']=order;report['cohort_config_sha256']={role:sha(R/role/'Scripts/Integrated.ini') for role in ('botA','botB')}
++   report['observer_input_schedule']='normal Pause only, no gameplay input during observation';report['baseline']=f'direct Build020 Hard2 tier{trial} versus tier{trial+1}; identical canonical config except ArenaTier';report['actual_role_profiles']=policy.check_actual_tiers({r:(R/r/'SeriousSam.log').read_text(errors='replace')for r in ('botA','botB')},cohorts);report['cohort_order']=order;report['cohort_config_sha256']={role:sha(R/role/'Scripts/Integrated.ini') for role in ('botA','botB')}
+@@ -301,0 +304 @@
++     for snapshot in snapshots.values():hard_rules.validate_session(snapshot)
+@@ -351 +354 @@
+-      q=B.query(server[0]);assert q.get('numplayers')=='9' and q.get('mapname')=='Red Station';queries.append({'elapsed':elapsed,'query':q});lastquery=elapsed
++      q=B.query(server[0]);assert q.get('numplayers')=='9' and q.get('mapname')=='Red Station';hard_rules.validate_query(q);queries.append({'elapsed':elapsed,'query':q});lastquery=elapsed
+@@ -437 +440 @@
+- parser=argparse.ArgumentParser(description='Private owned-fixture public7fc versus018 damage comparison; runtime only when explicitly invoked.')
++ parser=argparse.ArgumentParser(description='Disabled direct Build020 adjacent-tier comparison; Root freeze required.')
+@@ -439 +442 @@
+- parser.add_argument('tier',type=int,choices=(1,2,3));parser.add_argument('seconds',type=float);parser.add_argument('diagnostics',type=int,choices=(0,1));parser.add_argument('swap',type=int,choices=(0,1))
++ parser.add_argument('tier',type=int,choices=(1,2));parser.add_argument('seconds',type=float);parser.add_argument('diagnostics',type=int,choices=(0,1));parser.add_argument('swap',type=int,choices=(0,1))

@@ -1,0 +1,57 @@
+--- build018/analyze.py
++++ direct020/analyze-direct020.py
+@@ -15 +15,5 @@
+- spec=importlib.util.spec_from_file_location('pol_'+name,P/'controller_policy.py');pol=importlib.util.module_from_spec(spec);spec.loader.exec_module(pol)
++ spec=importlib.util.spec_from_file_location('pol_'+name,P/'a3_direct_controller_policy.py');pol=importlib.util.module_from_spec(spec);spec.loader.exec_module(pol)
++ hard_spec=importlib.util.spec_from_file_location('hard_'+name,P/'stability_hard_rules.py');hard=importlib.util.module_from_spec(hard_spec);hard_spec.loader.exec_module(hard)
++ for sample in R['barrier_before_release'].values():hard.validate_session(sample)
++ for line in (P/'session-health.jsonl').read_text().splitlines():
++  for sample in json.loads(line)['roles'].values():hard.validate_session(sample)
+@@ -18 +22,2 @@
+- cohorts={role:('candidate'if R['cohort_policy'][role]['candidate']else'public')for role in ('botA','botB')};cohorts['vanilla']='vanilla'
++ cohorts={role:R['cohort_policy'][role]['tier_name']for role in ('botA','botB')};cohorts['vanilla']='vanilla'
++ assert pol.check_actual_tiers({r:(P/(r+'.log')).read_text()for r in ('botA','botB')},R['cohort_policy'])==R['actual_role_profiles']
+@@ -20 +25,2 @@
+-  c=pol.cohort(role,R['candidate_tier'],int(R['swap_cohorts']),int(R['diagnostics_enabled']));assert c['config']==(P/(role+'-cohort.ini')).read_text();assert c['config_sha256']==R['cohort_policy'][role]['config_sha256']
++  c=pol.cohort(role,R['pair_lower_tier'],int(R['swap_cohorts']),int(R['diagnostics_enabled']));assert c['config']==(P/(role+'-cohort.ini')).read_text();assert c['config_sha256']==R['cohort_policy'][role]['config_sha256']
++  assert all(c[k]==R['cohort_policy'][role][k]for k in ('candidate','tier','tier_name','game_sha256','config_base_sha256'))
+@@ -22,0 +29 @@
++  hard.validate_query(q['query'])
+@@ -55,13 +62,14 @@
+-  lives.append(life)
+- candidate_role=next(role for role in ('botA','botB')if cohorts[role]=='candidate');text=(P/(candidate_role+'.log')).read_text();events=collections.defaultdict(list)
+- for ln,line in enumerate(text.splitlines(),1):
+-  match=re.match(r'\[(CecilSpawn|CecilDeath|CecilPickup)\]',line)
+-  if match:
+-   fields={k:int(v)for k,v in re.findall(r'(local|entity|generation|tick|owned)=(\d+)',line)};fields['line']=ln;events[match[1]].append(fields)
+- for local in range(4):
+-  ls=sorted([l for l in lives if l['role']==candidate_role and l['local']==local],key=lambda l:l['spawn_clock']);sp=[e for e in events['CecilSpawn']if e['local']==local];assert len(ls)==len(sp),(local,len(ls),len(sp))
+-  for index,(life,event)in enumerate(zip(ls,sp)):
+-   assert life['entity_id']==event['entity'];end=sp[index+1]['line']if index+1<len(sp)else math.inf
+-   ds=[e for e in events['CecilDeath']if e['local']==local and event['line']<e['line']<end];ps=[e for e in events['CecilPickup']if e['local']==local and event['line']<e['line']<end and e['owned']&0x3df8]
+-   assert len(ds)==int(not life['right_censored']),(local,life['life'],'death');assert bool(ps)==(life['first_useful_owned_age']is not None),(local,life['life'],'pickup')
+-   life.update(cecil_generation=event['generation'],cecil_spawn_line=event['line'],cecil_first_useful_line=ps[0]['line']if ps else None)
++  life['left_censored_first_useful_observation']=bool(alive and useful(alive[0]));lives.append(life)
++ for candidate_role in ('botA','botB'):
++  text=(P/(candidate_role+'.log')).read_text();events=collections.defaultdict(list)
++  for ln,line in enumerate(text.splitlines(),1):
++   match=re.match(r'\[(CecilSpawn|CecilDeath|CecilPickup)\]',line)
++   if match:
++    fields={k:int(v)for k,v in re.findall(r'(local|entity|generation|tick|owned)=(\d+)',line)};fields['line']=ln;events[match[1]].append(fields)
++  for local in range(4):
++   ls=sorted([l for l in lives if l['role']==candidate_role and l['local']==local],key=lambda l:l['spawn_clock']);sp=[e for e in events['CecilSpawn']if e['local']==local];assert len(ls)==len(sp),(local,len(ls),len(sp))
++   for index,(life,event)in enumerate(zip(ls,sp)):
++    assert life['entity_id']==event['entity'];end=sp[index+1]['line']if index+1<len(sp)else math.inf
++    ds=[e for e in events['CecilDeath']if e['local']==local and event['line']<e['line']<end];ps=[e for e in events['CecilPickup']if e['local']==local and event['line']<e['line']<end and e['owned']&0x3df8]
++    assert len(ds)==int(not life['right_censored']),(local,life['life'],'death');assert bool(ps)==(life['first_useful_owned_age']is not None),(local,life['life'],'pickup')
++    life.update(cecil_generation=event['generation'],cecil_spawn_line=event['line'],cecil_first_useful_line=ps[0]['line']if ps else None)
+@@ -69 +77 @@
+- for cohort in ('public','candidate','vanilla'):
++ for cohort in tuple(cohorts[r]for r in ('botA','botB'))+('vanilla',):
+@@ -109 +117,5 @@
+- report=dict(window=name,tier=R['candidate_tier'],swap=R['swap_cohorts'],observed_seconds=R['observed_seconds'],status=R['status'],qualified=False,a3_accepted=False,first_processed_state_proven=False,cohorts=summary,lives=lives,actual_mapping=mapping,actual_entity_by_slot=seen_ids,initial_replay_exact=True,initial_reference_sha256=sha(P/'initial-reference.json'),all_nine_initial_reference_match=True,cohort_configs_reproduced=True,damage=dict(records=len(records),partition=dict(counts),known_foreign=dict(damage),known_foreign_matrix=dict(matrix),pair_calls=dict(pairs),same_spawn_tick_health_decreases=same_tick,server_kill_pairs_equal_all_lethal_records=True,server_kills=kills,full_coverage=True,original_bodies_restored=True),host=host['summary'],costs=costs,inventory=R['inventory'],query_count=len(Q),last_query_elapsed=Q[-1]['elapsed'],closed_logs=closed,source_hashes={p.name:sha(p)for p in [P/'result.json',P/'inventory.jsonl',P/'frida-damage.jsonl',P/'damage-cohort-registry.json',P/'damage-attribution.json',P/'server-closed.log',P/'server.log',P/'queries.json',P/'controller-source.py',P/'controller_policy.py',Path(__file__)]})
++ report=dict(window=name,pair=R['direct_pair'],role_tiers=R['role_tiers'],swap=R['swap_cohorts'],observed_seconds=R['observed_seconds'],status=R['status'],qualified=False,a3_accepted=False,first_processed_state_proven=False,cohorts=summary,lives=lives,actual_mapping=mapping,actual_entity_by_slot=seen_ids,initial_replay_exact=True,initial_reference_sha256=sha(P/'initial-reference.json'),all_nine_initial_reference_match=True,cohort_configs_reproduced=True,damage=dict(records=len(records),partition=dict(counts),known_foreign=dict(damage),known_foreign_matrix=dict(matrix),pair_calls=dict(pairs),same_spawn_tick_health_decreases=same_tick,server_kill_pairs_equal_all_lethal_records=True,server_kills=kills,full_coverage=True,original_bodies_restored=True),host=host['summary'],costs=costs,inventory=R['inventory'],query_count=len(Q),last_query_elapsed=Q[-1]['elapsed'],closed_logs=closed,source_hashes={p.name:sha(p)for p in [P/'result.json',P/'inventory.jsonl',P/'frida-damage.jsonl',P/'damage-cohort-registry.json',P/'damage-attribution.json',P/'server-closed.log',P/'server.log',P/'queries.json',P/'controller-source.py',P/'a3_direct_controller_policy.py',Path(__file__)]})
++ report['direct_condition']={'dll_sha256':pol.CANDIDATE_SHA,'config_base_sha256':R['cohort_policy']['botA']['config_base_sha256'],'initial_reference_sha256':report['initial_reference_sha256'],'world_crc32':f['world_crc32'],'cecil_path_hash':f['cecil_path_hash'],'controller_sha256':sha(P/'controller-source.py'),'duration_seconds':120,'host_budget':json.loads((P/'source-manifest.json').read_text())['host_budget'],'native_rules':hard.EXPECTED,'hard_rules_sha256':sha(P/'stability_hard_rules.py')}
++ report['direct_condition_sha256']=hashlib.sha256(json.dumps(report['direct_condition'],sort_keys=True,separators=(',',':')).encode()).hexdigest()
++ report['native_hard_rules_verified']=True
++ report['tier_strength_accepted']=False

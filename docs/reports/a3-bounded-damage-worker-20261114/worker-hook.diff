@@ -1,0 +1,58 @@
+--- hard020-parent/worker-hook.diff
++++ hard020-worker/worker-hook.diff
+@@ -16,0 +17,5 @@
++let listenerCallbacks=0,getterCallbacks=0;
++function tracked(callback,getter=false){return function(...args){
++ listenerCallbacks++;if(getter)getterCallbacks++;
++ try{return callback.apply(this,args);}finally{if(getter)getterCallbacks--;listenerCallbacks--;}
++};}
+@@ -19,2 +24,12 @@
+- // A failed detach retains its handle. Always attempt both sites; a later
+- // retry may restore them, but cannot erase this run's cleanup fault.
++ // Admission only. Already admitted native ReceiveDamage pairs retain their
++ // onLeave observer under the unchanged TTL/identity/body limits.
++}
++function stopStatus(){return {admission_closed:!enabled,in_flight:inFlight,
++ active_records:active.length,listener_callbacks:listenerCallbacks,getter_callbacks:getterCallbacks,
++ idle:inFlight===0&&active.length===0&&listenerCallbacks===0&&getterCallbacks===0,
++ getter_bound:!!tls,getter_hook_present:!!getterHook,damage_hook_present:!!damageHook};}
++function finishStop(){
++ const state=stopStatus();need(state.admission_closed&&state.idle,'passive callbacks not idle');
++ // Historical successful getter binding has already restored its hook. A
++ // partial-arm/failed-bind handle is detached here only after the same idle
++ // proof; its earlier fault cannot be erased by cleanup.
+@@ -23,0 +39,6 @@
++ return {stopped:!getterHook&&!damageHook,idle:true,detach_errors:detachErrors.slice()};
++}
++function continuationAllowed(){
++ const now=Date.now();if(now>=expiresMs){stop('TTL');return false;}
++ if(!tls&&now>=bindingExpiresMs){stop('unproven: getter binding timeout');return false;}
++ return faults===0&&(enabled||reason==='host requested');
+@@ -54 +75 @@
+-    onEnter(){this.record=null;this.counted=false;if(!enabled)return;try{
++    onEnter:tracked(function(){this.record=null;this.counted=false;if(!enabled)return;try{
+@@ -66,2 +87,2 @@
+-    }catch(e){fault(e);}},
+-    onLeave(){const r=this.record;try{
++    }catch(e){fault(e);}}),
++    onLeave:tracked(function(){const r=this.record;try{
+@@ -69 +90 @@
+-     if(!enabled||!bounded())return;r.after=snapshot(this.player,r.player_id);r.left_ms=Date.now();
++     if(!continuationAllowed())return;r.after=snapshot(this.player,r.player_id);r.left_ms=Date.now();
+@@ -76 +97 @@
+-    }catch(e){fault(e);}finally{const i=active.indexOf(r);if(i>=0)active.splice(i,1);this.record=null;if(this.counted){inFlight--;this.counted=false;}if(total>=cfg.max_calls)stop('damage call bound');}}
++    }catch(e){fault(e);}finally{const i=active.indexOf(r);if(i>=0)active.splice(i,1);this.record=null;if(this.counted){inFlight--;this.counted=false;}if(total>=cfg.max_calls)stop('damage call bound');}})
+@@ -80 +101 @@
+-   getterHook=Interceptor.attach(engine.add(G.engine.current_tick.rva+15),{onEnter(){if(!enabled||tls)return;try{
++   getterHook=Interceptor.attach(engine.add(G.engine.current_tick.rva+15),{onEnter:tracked(function(){if(!enabled||tls)return;try{
+@@ -86 +107 @@
+-   }catch(e){fault(e);}}});
++   }catch(e){fault(e);}},true)});
+@@ -91 +112 @@
+-  const out={records,total_calls:total,matched_calls:matched,unknown_victim_calls:unknown,non_main_calls:nonMain,getter_calls:getterCalls,getter_other_threads:getterOtherThreads,in_flight:inFlight,detach_errors:detachErrors.slice(),faults,dropped,enabled,stop_reason:reason,tls_bound:!!tls,tls_binding:binding,tls_index:tlsIndex,tls_bound_ms:boundMs,getter_restored:restored,damage_restored:damageRestored,armed_ms:armedMs,expires_ms:expiresMs,binding_expires_ms:bindingExpiresMs,stopped_ms:stoppedMs,observed_ms:Date.now(),first_processed_state_proven:false,native_qualified:false};records=[];return out;
++  const out={records,total_calls:total,matched_calls:matched,unknown_victim_calls:unknown,non_main_calls:nonMain,getter_calls:getterCalls,getter_other_threads:getterOtherThreads,in_flight:inFlight,detach_errors:detachErrors.slice(),faults,dropped,enabled,stop_reason:reason,tls_bound:!!tls,tls_binding:binding,tls_index:tlsIndex,tls_bound_ms:boundMs,getter_restored:restored,damage_restored:damageRestored,armed_ms:armedMs,expires_ms:expiresMs,binding_expires_ms:bindingExpiresMs,stopped_ms:stoppedMs,observed_ms:Date.now(),first_processed_state_proven:false,native_qualified:false,...stopStatus()};records=[];return out;
+@@ -93 +114,3 @@
+- stop(){stop('host requested');return {stopped:!getterHook&&!damageHook,detach_errors:detachErrors.slice()};}
++ disarm(){stop('host requested');return stopStatus();},
++ status(){return stopStatus();},
++ finishstop(){return finishStop();}

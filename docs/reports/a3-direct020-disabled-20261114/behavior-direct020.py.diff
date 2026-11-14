@@ -1,0 +1,17 @@
+--- build018/behavior.py
++++ direct020/behavior-direct020.py
+@@ -12,2 +12,2 @@
+-def inspect(name):
+- P=BASE/name;R=json.loads((P/'result.json').read_text());assert R.get('finished_utc')and len(R['cleanup'])==4 and all(v['closed']for v in R['cleanup'].values())and not R['errors'];role=next(r for r,v in R['cohort_policy'].items()if v['candidate']);mapping=R['actual_slot_mapping'];slot_role={s:r for r,ss in mapping.items()for s in ss};states={};human=[];goals=[];modes=[]
++def inspect_role(name,role):
++ P=BASE/name;R=json.loads((P/'result.json').read_text());assert R.get('finished_utc')and len(R['cleanup'])==4 and all(v['closed']for v in R['cleanup'].values())and not R['errors'];mapping=R['actual_slot_mapping'];slot_role={s:r for r,ss in mapping.items()for s in ss};states={};human=[];goals=[];modes=[]
+@@ -53,2 +53,2 @@
+- output={'window':name,'tier':R['candidate_tier'],'candidate_role':role,'actual_profiles':modes,'per_local':stats,'inventory_lives':lifecycle,'longest_per_slot':longest,'goal_end_counts':dict(collections.Counter(g.get('reason')for g in goals if g['event']=='CecilGoalEnd')),'goals':[{k:g[k]for k in ('event','line','local','tick','reason','entity','generation','kind','source','hop','goal','node','deadline')if k in g}for g in goals]}
+- (D/(name+'-behavior.json')).write_text(json.dumps(output,indent=2)+'\n')
++ output={'window':name,'tier':R['cohort_policy'][role]['tier'],'physical_role':role,'actual_profiles':modes,'per_local':stats,'inventory_lives':lifecycle,'longest_per_slot':longest,'goal_end_counts':dict(collections.Counter(g.get('reason')for g in goals if g['event']=='CecilGoalEnd')),'goals':[{k:g[k]for k in ('event','line','local','tick','reason','entity','generation','kind','source','hop','goal','node','deadline')if k in g}for g in goals]}
++ (D/(name+'-'+role+'-behavior.json')).write_text(json.dumps(output,indent=2)+'\n')
+@@ -55,0 +56,4 @@
++def inspect(name):
++ output={role:inspect_role(name,role)for role in ('botA','botB')}
++ (D/(name+'-both-behavior.json')).write_text(json.dumps(output,indent=2)+'\n')
++ return output

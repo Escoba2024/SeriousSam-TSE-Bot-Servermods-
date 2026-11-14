@@ -1,0 +1,74 @@
+{
+  "scope": "OFFLINE_DESIGN_CHECK_NOT_NATIVE_QUALIFICATION",
+  "historical_status": "FAIL",
+  "qualified": false,
+  "functional_pass": false,
+  "source_hashes": {
+    "inventory.jsonl": "a6873074a34136f847dbb9a863b34bdfce542ff13349b9cee38477ee1b2c86d0",
+    "registry.json": "58b2130a9c0a7c64e9f2241554339597dc3ab5fb8da63c99f28064093e443db3",
+    "result.json": "493ddee10ad4b6202be522447bf97b8a74020bb7deffc8b2a3dd7f6b500a85ad",
+    "botA-closed.log": "ec1c031b4b20552f09b509f50b1c66e44ca050c4598031415d0bf25b38eaf2f5",
+    "botB-closed.log": "3c942f48d529dda901d587d79f746b4b3d87a3f5487b05870d649a1558f51104",
+    "a4_fire_observer_v2.py": "201ca2d0f3098637ffb129162d84e126062df24790cfa865693781683732e5fc",
+    "audit_a4_native_fire_observer_v2.py": "3ac187c8775b2bd1ed7021dc7b4037b0eeda6aec2a0292f9d87e47c9d8f4b466"
+  },
+  "sources_unchanged": true,
+  "paused_smoke_samples_excluded_from_gameplay_evidence": 3,
+  "retrospective_group_labels": true,
+  "prospective_contract_existed_during_historical_run": false,
+  "observation": {
+    "schema": "a4-fixed-native-groups-v1",
+    "contract_sha256": "cec93c575b37433861aadeef993c5225a22613381fbb756b84e939516587b9d7",
+    "fixed_sources": {
+      "botA": "botA_actual",
+      "botB": "botB_actual"
+    },
+    "raw_samples": 13683,
+    "canonical_samples": 9123,
+    "raw_group_samples": {
+      "botA_actual": 4551,
+      "botB_actual": 4572,
+      "vanilla_plus_overlap": 4560
+    },
+    "canonical_group_samples": {
+      "botA_actual": 4551,
+      "botB_actual": 4572
+    },
+    "overlap_scope": "raw and existing activity gates; excluded from V2 fire and pickup evidence"
+  },
+  "missing_native_evidence": [],
+  "slots": {
+    "botA:0": {
+      "native_fire_with_same_life_source_growth": 503,
+      "actual_useful_inventory_gains": 16
+    },
+    "botA:1": {
+      "native_fire_with_same_life_source_growth": 288,
+      "actual_useful_inventory_gains": 12
+    },
+    "botA:2": {
+      "native_fire_with_same_life_source_growth": 329,
+      "actual_useful_inventory_gains": 16
+    },
+    "botA:3": {
+      "native_fire_with_same_life_source_growth": 344,
+      "actual_useful_inventory_gains": 12
+    },
+    "botB:0": {
+      "native_fire_with_same_life_source_growth": 440,
+      "actual_useful_inventory_gains": 24
+    },
+    "botB:1": {
+      "native_fire_with_same_life_source_growth": 268,
+      "actual_useful_inventory_gains": 12
+    },
+    "botB:2": {
+      "native_fire_with_same_life_source_growth": 454,
+      "actual_useful_inventory_gains": 21
+    },
+    "botB:3": {
+      "native_fire_with_same_life_source_growth": 503,
+      "actual_useful_inventory_gains": 11
+    }
+  }
+}

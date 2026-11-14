@@ -1,0 +1,10 @@
+{
+  "scope": "PORTABLE_SYNTHETIC_ONLY",
+  "focused_test_count": 23,
+  "passed": true,
+  "command": "TSE_A3_DIRECT_PACKAGE=/srv/tse-a3-direct020-hard-controller-20261114 python3 -m unittest test_a3_direct_tiers test_a3_direct_adapter test_a3_direct_behavior test_a3_direct_compare_closed test_a3_direct_closed_fixture -v",
+  "log_sha256": "77250f192dde993b4741df0220f7122468c6991156eeeaab74cb70c1933302aa",
+  "native_started": false,
+  "qualified": false,
+  "initial_test_failure": "One source-assertion test expected nonexistent server=launch text; corrected to actual launch call. Runtime source unchanged."
+}

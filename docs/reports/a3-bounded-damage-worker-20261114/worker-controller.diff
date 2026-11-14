@@ -1,0 +1,109 @@
+--- hard020-parent/worker-controller.diff
++++ hard020-worker/worker-controller.diff
+@@ -8,0 +9 @@
++from original_damage_worker import WorkerProxy
+@@ -12,2 +13 @@
+-FRIDA_PACKAGE=Path('/srv/tse-frida-probe-20261111/lib/python3.12/site-packages')
+-FROZEN_HASHES={'controller_guard.py': '3f7142734eb26eb5d6277671b04299bbd0d167be085da14082726feff95274bf', 'damage_host.py': 'cf00cff1764f142c0423275d3ed43b937b8efcf1d7ba7c2009aae11174b9ce35', 'damage_readonly.js': '767a013ae896aa507d536e16f34ee3ed9bcc73121b41970ea329478f59381787', 'host_binding.py': 'db411bb6757abdc6e6b0ca124f948234fff656a71d8ec7659bb4322cbc18caa8', 'original_guards.json': '68307e425b593415dde4973a9765cde434c389b13992cf000cc597fe0dbd6740'}
++FROZEN_HASHES={'controller_guard.py': '3f7142734eb26eb5d6277671b04299bbd0d167be085da14082726feff95274bf', 'damage_host.py': 'cf00cff1764f142c0423275d3ed43b937b8efcf1d7ba7c2009aae11174b9ce35', 'damage_readonly.js': '4312c2e4c41c4c1207dcc54d5ae3c2e6239502fdb812ba4bec4e0a689706fc5d', 'host_binding.py': 'db411bb6757abdc6e6b0ca124f948234fff656a71d8ec7659bb4322cbc18caa8', 'original_guards.json': '68307e425b593415dde4973a9765cde434c389b13992cf000cc597fe0dbd6740'}
+@@ -51 +51 @@
+- SWAP=swap;DIAG=diag;INVENTORY=1;PREFIX=f'ssam-direct020-hard-pair{trial}{trial+1}-swap{SWAP}-20261114'
++ SWAP=swap;DIAG=diag;INVENTORY=1;PREFIX=f'ssam-direct020-hard-worker-pair{trial}{trial+1}-swap{SWAP}-20261114'
+@@ -56 +56 @@
+- E=BASE/f'direct020-hard-pair{trial}{trial+1}-swap{SWAP}-{time.strftime("%Y%m%d-%H%M%S",time.gmtime())}';E.mkdir(mode=0o700);(E/'controller-source.py').write_bytes(Path(__file__).read_bytes());records={};display=None;server=None;cohort=False;bootstrap_original=None;inventory=None;inventory_stream=None;config_originals={};initial=policy.InitialObservations();initial_validated=False;transaction=None;frida_session=None;frida_script=None;frida_stream=None;frida_host=None;frida_reg=None;frida_net=None;trace_drain=None;verify_original_bodies=None;original_guards=None;all_damage_records=[];message_guard=None;guard_module=None;last_frida_pin=0;attribution_registry={};module_pins={};host_budget=HostBudget();last_host=0
++ E=BASE/f'direct020-hard-worker-pair{trial}{trial+1}-swap{SWAP}-{time.strftime("%Y%m%d-%H%M%S",time.gmtime())}';E.mkdir(mode=0o700);(E/'controller-source.py').write_bytes(Path(__file__).read_bytes());records={};display=None;server=None;cohort=False;bootstrap_original=None;inventory=None;inventory_stream=None;config_originals={};initial=policy.InitialObservations();initial_validated=False;transaction=None;damage_worker=None;frida_stream=None;frida_host=None;frida_reg=None;frida_net=None;trace_drain=None;verify_original_bodies=None;original_guards=None;all_damage_records=[];message_guard=None;guard_module=None;last_frida_pin=0;attribution_registry={};module_pins={};host_budget=HostBudget();last_host=0
+@@ -93 +93,7 @@
+-  identity=record['identity'];assert identity and B.identity(role,unit(role))==identity
++  identity=record['identity']
++  if identity is None:
++   if B.pid(unit(role))==0 and B.empty(unit(role)):
++    B.quiescent(R/role);record.update(started=False,closed=True,close_evidence='own_unit_empty_and_root_quiescent');emit('closed_unstarted',role=role);return
++   assert B.ready(role,unit(role)),'partial start has no strictly owned ready identity'
++   identity=B.identity(role,unit(role));record['identity']=identity;record['started']=True
++  assert B.identity(role,unit(role))==identity
+@@ -118 +124 @@
+-   for name in ('public.ini','candidate.ini','initial-reference.json','source-manifest.json','controller_policy.py','a3_direct_controller_policy.py','a3_direct_tiers.py','stability_hard_rules.py'):
++   for name in ('public.ini','candidate.ini','initial-reference.json','source-manifest.json','controller_policy.py','a3_direct_controller_policy.py','a3_direct_tiers.py','stability_hard_rules.py','original_damage_worker.py','original_damage_collector.py'):
+@@ -120 +126 @@
+-   report['configuration_sources']={k:sha(DRAFT/k)for k in ('public.ini','candidate.ini','initial-reference.json','source-manifest.json','controller_policy.py','a3_direct_controller_policy.py','a3_direct_tiers.py','stability_hard_rules.py')}
++   report['configuration_sources']={k:sha(DRAFT/k)for k in ('public.ini','candidate.ini','initial-reference.json','source-manifest.json','controller_policy.py','a3_direct_controller_policy.py','a3_direct_tiers.py','stability_hard_rules.py','original_damage_worker.py','original_damage_collector.py')}
+@@ -185 +190,0 @@
+-    sys.path.insert(0,str(FRIDA_PACKAGE))
+@@ -187,6 +191,0 @@
+-    def import_frida():
+-     import frida
+-     return frida
+-    frida=damage.load_instrumentation(instrumentation,import_frida)
+-    assert Path(frida.__file__).resolve()==FRIDA_PACKAGE/'frida/__init__.py' and Path(frida._frida.__file__).resolve()==FRIDA_PACKAGE/'frida/_frida.abi3.so','unexpected Frida import location'
+-    assert frida.__version__=='17.26.2','unexpected Frida version'
+@@ -195 +194 @@
+-    guard_module=imp('owned_damage_guard',frozen/'controller_guard.py');message_guard=guard_module.MessageGuard(report)
++    guard_module=imp('owned_damage_guard',frozen/'controller_guard.py')
+@@ -241 +240 @@
+-    hook_source=(frozen/'damage_readonly.js').read_text();report['frida_damage']={'version':frida.__version__,'hook_source_sha256':sha(frozen/'damage_readonly.js'),'host_source_sha256':sha(frozen/'host_binding.py'),'guard_source_sha256':sha(frozen/'controller_guard.py'),'registry_sha256':sha(registry_file),'records_received':0,'matched_calls':0,'same_spawn_tick_health_decrease_count':0,'first_processed_state_proven':False,'dropped':0,'faults':0,'game_state_writes':0,'world_crc32':'ff3776e0','cecil_path_hash':'5af1a276','ttl_ms':125000,'qualified':False}
++    report['frida_damage']={'version':'17.26.2','hook_source_sha256':sha(frozen/'damage_readonly.js'),'host_source_sha256':sha(frozen/'host_binding.py'),'guard_source_sha256':sha(frozen/'controller_guard.py'),'registry_sha256':sha(registry_file),'records_received':0,'matched_calls':0,'same_spawn_tick_health_decrease_count':0,'first_processed_state_proven':False,'dropped':0,'faults':0,'game_state_writes':0,'world_crc32':'ff3776e0','cecil_path_hash':'5af1a276','ttl_ms':125000,'qualified':False}
+@@ -245,6 +244,10 @@
+-    frida_stream=(E/'frida-damage.jsonl').open('w');frida_started=time.perf_counter();frida_session=frida.get_local_device().attach(server[0]);damage_host.validate_damage_host(frida_reg)
+-    frida_script=frida_session.create_script(hook_source)
+-    def trace_drain(live=False):
+-     message_guard.check()
+-     damage_host.validate_damage_host(frida_reg);assert B.identity('server',unit('server'))==server and (process/'ns/net').stat().st_ino==frida_net
+-     packet=frida_script.exports_sync.drain();message_guard.check();records=packet.pop('records');assert isinstance(records,list) and len(records)<=64
++    frida_stream=(E/'frida-damage.jsonl').open('w');frida_started=time.perf_counter()
++    lockstat=(R/'runtime.lock').stat()
++    worker_config={'controller_root':str(DRAFT),'arena':str(R),'evidence':str(E),'registry_file':str(registry_file),
++     'parent':{'pid':os.getpid(),'start_ticks':int((Path('/proc')/str(os.getpid())/'stat').read_text().rsplit(') ',1)[1].split()[19]),'lock_file':[lockstat.st_dev,lockstat.st_ino]},
++     'roles':{role:{'identity':list(rec['identity']),'unit':unit(role),'net_namespace_inode':(Path('/proc')/str(rec['identity'][0])/'ns/net').stat().st_ino}for role,rec in records.items()}}
++    worker_config_file=E/'damage-worker-config.json';worker_config_file.write_text(json.dumps(worker_config,indent=2)+'\n');worker_config_file.chmod(0o600)
++    damage_worker=WorkerProxy.start(worker_config_file)
++    report['damage_worker_identity']={'pid':damage_worker.pid,'start_ticks':damage_worker.start_ticks,'config_sha256':sha(worker_config_file),'worker_source_sha256':sha(DRAFT/'original_damage_worker.py')};save()
++    def accept_trace_packet(packet,live=False):
++     records=packet.pop('records');assert isinstance(records,list) and len(records)<=64
+@@ -264 +267,3 @@
+-    frida_script.on('message',message_guard.on_message)
++    def trace_drain(live=False):
++     damage_host.validate_damage_host(frida_reg);assert B.identity('server',unit('server'))==server and (process/'ns/net').stat().st_ino==frida_net
++     accept_trace_packet(damage_worker.drain(),live)
+@@ -267 +272,2 @@
+-    frida_script.load();frida_arm=frida_script.exports_sync.arm(arm)
++    worker_arm=damage_worker.arm();frida_arm=worker_arm['arm_result'];report['frida_damage']['worker_arm']=worker_arm
++    assert worker_arm['frida_version']=='17.26.2' and worker_arm['pre_attach_original_bytes_verified']is True
+@@ -269 +275 @@
+-    assert frida_arm['armed'];report['frida_damage']['arm_result']=frida_arm;message_guard.check()
++    assert frida_arm['armed'];report['frida_damage']['arm_result']=frida_arm
+@@ -293 +299 @@
+-   if frida_script:damage.check_window_budget({'expires_ms':report['frida_damage']['arm_result']['armed_ms']+125000},report['frida_damage']['gameplay_window_start_ms'],duration)
++   if damage_worker:damage.check_window_budget({'expires_ms':report['frida_damage']['arm_result']['armed_ms']+125000},report['frida_damage']['gameplay_window_start_ms'],duration)
+@@ -348 +354 @@
+-     if frida_script:trace_drain(True)
++     if damage_worker:trace_drain(True)
+@@ -375 +381 @@
+-   if frida_script:
++   if damage_worker:
+@@ -377,8 +383,8 @@
+-     result=frida_script.exports_sync.stop();report['frida_damage']['stop_result']=result
+-     assert result.get('stopped') is True and result.get('detach_errors')==[],'damage hook stop not clean'
+-    cleanup_steps([('frida pre-stop pins',pin_trace_host),('frida pre-stop drain',trace_drain),('frida stop',stop_trace),('frida post-stop drain',trace_drain),('frida pre-unload pins',pin_trace_host),('frida unload',frida_script.unload)],report['errors'])
+-   if frida_session:
+-    def detach_trace():
+-     frida_session.detach();report['frida_damage']['detached']=True
+-    cleanup_steps([('frida pre-detach pins',pin_trace_host),('frida detach',detach_trace)],report['errors'])
+-   if message_guard:cleanup_steps([('frida post-detach messages',message_guard.check)],report['errors'])
++     result=damage_worker.close()
++     for packet in result.get('packets',[]):accept_trace_packet(packet)
++     report['frida_damage']['worker_close']={k:v for k,v in result.items()if k!='packets'}
++     report['frida_damage']['stop_result']=result.get('stop_result')
++     report['frida_damage']['detached']=result.get('detached')is True
++     report['errors'].extend('damage worker cleanup: '+str(e)for e in result.get('cleanup_errors',[]))
++     assert result.get('closed')is True and result.get('idle_verified')is True and result.get('original_bytes_verified')is True,'damage worker close not proven'
++    cleanup_steps([('damage worker bounded close',stop_trace)],report['errors'])
+@@ -393 +399 @@
+-   if frida_script:
++   if damage_worker:
+@@ -416,0 +423,6 @@
++   if damage_worker:
++    try:
++     normally_closed=set(records)=={'server','botA','botB','vanilla'}and all(r.get('closed')is True for r in records.values())
++     if normally_closed:whole_quiescent()
++     report['damage_worker_reaped']=damage_worker.finish(roles_closed=normally_closed)
++    except BaseException as error:report['errors'].append('damage worker reap:'+repr(error))

@@ -1,3 +1,27 @@
+## Vorbereitetes Canonical-Hardfenster — 14.11.2026,12:09 UTC
+
+Kein Native aktiv. Rootcopy /srv/tse-a4-build020-hard-canonical-root-frozen-20261114 unabhängig PASS_SCOPE: Manifest4dece08cd73a1db37e7626655bda03cd8ab0865a6c2cf3b9bd6968d85669a211,Launcher bff9853d8ed2b7fc3cb358535615b85e087e58a80ddd83c008cb328ddfee6ead,62/45Pins,44andereQuellen bytegleich, Launcher nurGate+eigenerNamespace. Root63gezielte PakettestsPASS; vorheriger falscherRoot-tools-CWD-Aufruffehler dokumentiert. Geplant genauein600sRedHard2-Fenster nach Publikationsende/frischemPreflight/Staticacks, alterHard600FAILunverändert. A3Root58OfflinePASS, keineNative. A1fünfMidpointfix+Win32Methodenquellen in separatemAgentenworktree, RootalleinCompiler/Runtime. Publicfrischalle6je8eigene/0zusätzliche, Red7fc/andere5018. RedServeroffset12:07:42weiter0neueBAD/DisconnectseitRückroll, Ursacheoffen. Delta030externPASS, alleNeubelege031offen. A/Boffen.
+
+---
+
+## Geschlossener A1-/Instruktionsprobe-Checkpoint — 14.11.2026
+
+**Kein Native-/Build-/Liveexecutor aktiv.** A1 115139 geschlossen FAIL: 20 GetInput/0 CreateAction/0 Gameplayinputs, Ergebnis b7efb2074b44598d1f9153184f0e9fc65fab9d14952187db5b23f35c9f39ba50. Alle Entry-EDI am gebundenen Game, Return-EDI abweichend; beobachtete Guards offen, tatsächlicher Branch unbewiesen. Expliziter Host-Originalbytevergleich verified=true, Unload/Detach, Workerende und Root664-Dateien/8-Absenzen/3-Schlusslog-/Metadatenrestore PASS. Frühere FAILs unverändert.
+
+Konkreter Instrumentierungsvertragsfehler: Objektform an vier Instruktionsmidpoints aktiviert Funktionslistener/Returntrap; zwei Midpoints haben gesichertes EDI am Stacktop. Funktionsprobes sind der enge Fix; native Kausalität noch offen, kein Frida-Bug behauptet. A3-Getter+15 ebenfalls prüfen. Persistenter enger Plan docs/superpowers/plans/2026-11-14-instruction-probe-contract.md. Root c98e164 enthält bounded A3-Quellen, aber noch keine A3-Nativefreigabe. Neue 115139-/Probe-/Canonical-Belege benötigen Delta031;030 extern vollständig geprüft. Letzter tatsächlich zurückgeprüfter Remote ee4af7397539be80b961d43b9400e2906083c979/Tree a63655d510ec054844883783d7b2ce733d7270b2 = lokal7a52f0e.
+
+Live zuletzt PublicRed Gen2 7fc94a39 nach betrieblichem Sync-Rückroll, übrige fünf Build018, je8 eigene Bots. Red-Offset bis11:22:55 keine neuen BAD/Disconnects; keine aktuelle Ursachenfreigabe. Hard weiterhin2/6. A offen, B unimplementiert. Nächster Schritt eigener Win32-Methodenbeleg und enger Probeformfix; parallel nur deaktivierter A4-Canonical-Review. Keine zusätzliche Livepromotion.
+
+---
+
+## Historischer Start A1-Cleanup-Guards — 2026-11-14T11:51:33.743727+00:00
+
+Genau eininstrumented-traceNoFire-Fensterstartet. Owner/Log/Ended `/srv/tse-cecil-rollout-evidence-20261114/a1-guard-cleanup-{owner.json,native.log,ended.json}`,run-a1-guard-cleanup.py. Freeze27972cdd295fc7a81f3177e4745bffc4c91bea32b4c71f918ce716c59b0db80b/Library3fd01825beb00bf5bedfe8110546c5fceedbd9aad35d743867fa2e960624b04cunabhängig68/14/47PinsPASS_SCOPE,Root75focusedPASS. ÄußererWorkeractualOriginalflagupdated. KeinezusätzlicheuninstControl-/Fireausführung,keineEPS/Gain/ACK/TTL/WarmupLockerung. a4STATICONLYbestätigt/alleTestsReaderGeneratorenbeendet; candidatefertig/idle/keineProzesse. RootArchive/Publikation/DriveDownload/Parallelreaderbeendet. BisEndeKEINERootCPUarbeit; nurleichteStatusabfrage. VorweitererRuntimealleNormalcloses/Originalquittung/Workerende/Schlusslogs/unabhängigenRestoreprüfen.
+
+Delta030externvollständigPASS:16.104.294Bytes/SHA256e5ccb48fef9805fc246817f19e0c34d2122ca3ed8a5ca5c2169582688c199acf,Drive16BnvBH1OVO36sgqRXCYr-P9kFcoosHhw,2328Dateien/138774234Bytes+MetadatenrestorePASS; inkrementellgegen029,ganzerNativeRestorestartNICHTgetestet. Remoteee4af7397539be80b961d43b9400e2906083c979/Treea63655d510ec054844883783d7b2ce733d7270b2 frischgleichlokal7a52f0e882a0d143c90e9eaa85ce09f6dcac1dce. NeuesNativeergebnisnach030braucht031. PublicRed7fc/andere5018; Syncursache/Aoffen,Bunimplementiert. a4CanonicalSourceV3nurprospektiv; alter600sFAILunverändert.
+
+---
+
 ## Geschlossener600s-/vorbereiteter A1-Checkpoint — 14.11.2026,11:46 UTC
 
 **Kein Native-/Build-/Liveexecutor aktiv.** Hard600112608geschlossenFAILbeiV2-Gesamtrowduplikat, Ergebnis493ddee10ad4b6202be522447bf97b8a74020bb7deffc8b2a3dd7f6b500a85ad.600,133sGameplay/Hard2/Spawn0durchlaufen, maxCPU63,476%,Rammin2691342336/Diskmin9845198848,Gameplaybudgetgap1,156s. Alle4normalclosed/4Schlusslogs0SyncCrashJoinCRC;Root640Dateien/meta+4HashRestorePASS. Preflight11:38:32UTCall4Rollen/Displays/Locksfrei. Startup93Queries/erstegenaueinmal{}danachalle92Hard. AchtkonfliktigeRowsnurcrossgroupBotA→observerOverlap, keineAtomicitätsgarantiezwiseparatenReads. AlterFAILbleibt. NeuerprospektiverPlan0066e12+3714337unabhängigPASS_SCOPE; a4implementiertseparatDisabledCanonicalGroupwrappermitaltenstrengenCore-/Life-/Gates. AlleHüllenvorFilterprüfen, identischekanonischeQuellefürFIRE+Pickup, keinFallback/Ignore/EPS.

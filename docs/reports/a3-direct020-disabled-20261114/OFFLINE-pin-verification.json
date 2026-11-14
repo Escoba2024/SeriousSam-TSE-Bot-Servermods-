@@ -1,0 +1,15 @@
+{
+  "utc": "2026-11-14T10:43:22.644079+00:00",
+  "scope": "OFFLINE hashes only; no runtime or gameplay qualification",
+  "runtime_dependencies": 77,
+  "build_source_and_overlay_pins": 75,
+  "parent_source_pins": 142,
+  "protected_unchanged_files": 10,
+  "errors": [],
+  "all_match": true,
+  "native_started": false,
+  "qualified": false,
+  "reproduced_source_files": 18,
+  "reproduction_package": "/srv/tse-a3-direct020-hard-reproduce-20261114",
+  "all_reproduced_sources_match": true
+}
