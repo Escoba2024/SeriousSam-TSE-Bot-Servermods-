@@ -113,3 +113,7 @@ Sourcecommit: `b8854df01479a3aa0cd0673de86bc5d170561e1e`.
 ## Rootintegration und Gegenprüfung20:28UTC
 
 Produktionsauthorb8854df→Root3ba189d, Berichtauthorf71653e→Rootfe55f10. Root hat den vollständigen Produktionsdiff und die echten Bridge-Gegenfälle unabhängig geprüft, Source-/SDKpins sowie alle gespeicherten Authoroutputs frisch gehasht. Eigene normale SDK107-Brücke3104/0/Exit0 in6,282s; eigene ASan/UBSan-Brücke3104/0/Exit0 in34,926s. Nur der dokumentierte Debug-Vartracking-Fallback, keine Sanitizerdiagnose. RootEV/health-connector-root-review.json und beide Rootlogs sind privateBelege. DLL-Build und native Verbesserung bleiben ausstehend.
+
+## Erster Windowsbuild: Build021 FAIL
+
+Build021 aus Source05112fcb6caa2abf29d634ac61aa386e76c3d43c scheiterte20:31:25UTC am echten MSVC-Compiler: cecil_motion.h-Zeile54, Windows-Funktionsmakro max kollidiert mit numeric_limits<uint64_t>::max(). C4003/C2589/C2059, kein DLL-Link und kein nativer Kandidat. PrivateBuild-/Compilerlogs und Manifest bleiben unverändert. Folgefix klammert den Funktionsnamen: (std::numeric_limits<uint64_t>::max)(). Zählerwert, Sättigung und Verhalten bleiben gleich; erneuter vollständiger Windowsbuild in neuem Verzeichnis steht aus.

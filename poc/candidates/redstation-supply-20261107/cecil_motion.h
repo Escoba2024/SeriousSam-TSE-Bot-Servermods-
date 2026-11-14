@@ -51,7 +51,7 @@ class CecilNavigator {
   // Observation only. Zero permanently disables dependent phase provenance on
   // exhaustion; it never wraps back to a previously valid reset generation.
   static uint64_t NextResetSerial(uint64_t value) {
-    return value==0||value==std::numeric_limits<uint64_t>::max()?0:value+1;
+    return value==0||value==(std::numeric_limits<uint64_t>::max)()?0:value+1;
   }
   uint64_t ResetSerial()const {return reset_serial_;}
   void Prepare(size_t nodes) {
