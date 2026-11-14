@@ -37,14 +37,27 @@ class XtstProxy:
    if self.observer is None:return fn(*args)
    if name=='XTestFakeButtonEvent':raise RuntimeError('no-fire passive adapter rejects button input')
    row=dict(function=name,arguments=list(args),started_monotonic=time.monotonic(),host_epoch_ms=time.time()*1000,return_value=None)
-   first=int(self.transport.x.XNextRequest(self.transport.d));primary=None
+   attempt=self.observer.reserve_attempt(row)
+   try:
+    first=int(self.transport.x.XNextRequest(self.transport.d));attempt['sequence_before']=first
+   except BaseException as error:
+    attempt.update(validation_status='REJECTED',failure_stage='first_counter',validation_error=repr(error)[:1024])
+    self.observer.failed=True
+    raise
+   primary=None;attempt['native_invoked']=True
    try:row['return_value']=fn(*args);return row['return_value']
    except BaseException as error:primary=error;row['error']=repr(error);raise
    finally:
+    stage='after_counter'
     try:
-     row.update(sequence_interval=[first,int(self.transport.x.XNextRequest(self.transport.d))],finished_monotonic=time.monotonic())
+     after=int(self.transport.x.XNextRequest(self.transport.d));attempt['sequence_after']=after
+     stage='finished_clock'
+     row.update(sequence_interval=[first,after],finished_monotonic=time.monotonic())
+     stage='validation'
      self.observer.record_emission(row)
-    except BaseException:
+     attempt['validation_status']='ACCEPTED'
+    except BaseException as error:
+     attempt.update(validation_status='REJECTED',failure_stage=stage,validation_error=repr(error)[:1024])
      if hasattr(self.observer,'failed'):self.observer.failed=True
      if primary is None:raise
   return invoke
@@ -84,7 +97,7 @@ def private_json(path,value):
 
 
 class PassiveRecorder:
- def __init__(self,kid,directory,transport):self.kid=kid;self.directory=directory;self.transport=transport;self.emissions=[];self.failed=False;self.closed=False;self.arm_receipt=None
+ def __init__(self,kid,directory,transport):self.kid=kid;self.directory=directory;self.transport=transport;self.emissions=[];self.attempts=[];self.failed=False;self.closed=False;self.arm_receipt=None
  @classmethod
  def start(cls,evidence,manifest,old_config,transport):
   if not RUNTIME_REVIEWED:raise RuntimeError('disabled passive A1 XRecord; Root freeze required')
@@ -109,6 +122,12 @@ class PassiveRecorder:
   if self.failed or self.closed or self.arm_receipt is None:raise RuntimeError('passive observer unavailable/sticky failure')
   try:return self.kid.call('check',timeout=.1)['value']
   except BaseException:self.failed=True;raise
+ def reserve_attempt(self,row):
+  # Reserve before the existing first counter/native path. No I/O or new read.
+  # The row remains shared until cleanup, so rejected/partial values survive.
+  if self.closed or len(self.attempts)>=96:raise RuntimeError('bounded/sticky passive attempt trace')
+  attempt=dict(attempt_index=len(self.attempts),native_invoked=False,validation_status='RESERVED',metadata=row)
+  self.attempts.append(attempt);return attempt
  def record_emission(self,row):
   if self.failed or self.closed or len(self.emissions)>=96:raise RuntimeError('bounded/sticky passive emission trace')
   row=dict(row,index=len(self.emissions));a,b=row['sequence_interval']
@@ -120,6 +139,8 @@ class PassiveRecorder:
   errors=[]
   try:private_json(self.directory/'controller-emissions.json',self.emissions)
   except BaseException as error:errors.append('emission receipt:'+repr(error))
+  try:private_json(self.directory/'controller-emission-attempts.json',self.attempts)
+  except BaseException as error:errors.append('emission attempt receipt:'+repr(error))
   child=self.kid.cleanup(stop_timeout=3)
   errors.extend(child['errors'])
   native=None

@@ -117,3 +117,7 @@ Produktionsauthorb8854df→Root3ba189d, Berichtauthorf71653e→Rootfe55f10. Root
 ## Erster Windowsbuild: Build021 FAIL
 
 Build021 aus Source05112fcb6caa2abf29d634ac61aa386e76c3d43c scheiterte20:31:25UTC am echten MSVC-Compiler: cecil_motion.h-Zeile54, Windows-Funktionsmakro max kollidiert mit numeric_limits<uint64_t>::max(). C4003/C2589/C2059, kein DLL-Link und kein nativer Kandidat. PrivateBuild-/Compilerlogs und Manifest bleiben unverändert. Folgefix klammert den Funktionsnamen: (std::numeric_limits<uint64_t>::max)(). Zählerwert, Sättigung und Verhalten bleiben gleich; erneuter vollständiger Windowsbuild in neuem Verzeichnis steht aus.
+
+## Build022 vollständig gebaut
+
+Der Folge-Windowsbuild aus Source621e92faf1d84e0fe03892b07ab7db230d630390 hat alle15C++-Übersetzungen und den Link bestanden. DLL434176Bytes/SHA28028e448e514cae8589b078d06533c8934a4a12ca7ab52aaead77e1590ab8fc; Manifest8557a3a3de831ed21ba99a74194c8060a1c346629f72bc9a1bd7d7f1184a07c1. Root hat47Source-/28Overlaypins sowie Manifest/DLL frisch geprüft. Build021 bleibt FAIL; Build022 ist ausdrücklich unqualifiziert und noch nirgendwo im Spiel getestet oder ausgerollt. Einzelne Red600-Prüfung mit bisheriger20FPS-Beobachterkonfiguration in Vorbereitung.

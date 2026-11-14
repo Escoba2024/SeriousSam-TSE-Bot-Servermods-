@@ -7,6 +7,10 @@
 **Tech Stack:** C++, MSVC/Wine, Python, systemd, GameSpy, Retail 1.07.
 **Spec:** Nutzerauftrag 14.11.2026; privates Original `/srv/tse-milestone-a-evidence-20261111/request.md`; bestehende Pläne vom 11./13.11.
 
+## Aktueller Arbeitsstand20:45UTC
+
+Build021MSVCFAILWindowsmaxMakro, engerFix621e92f→neuerBuild022voll15compile+linkPASS/DLL28028e44/434176B, unqualifiziert. A4DisabledEinzelRed600/20FPSinArbeit. A1Journal+Releasefixb156307integriert, Root43PASS/ImportantmitDown-UpRegressiongeschlossen; neuerRootfreezee26d3c6e, einNoFireCounterbelegnachPublikation+Delta048nochoffen.27geschlosseneNav20Rawsverlustfreigzipundvollrestoregeprüft,0Statusumwertungen. LiveNutzerbaselineerhalten, A/Boffen.
+
 ## Aktueller Arbeitsstand20:29UTC
 
 A1einmaligesOriginal-NoFire201838FAILamneuenEmissioncounterguard; entscheidendeverworfeneRowfehlt, genaueTeilbedingungUNKNOWN. Root664+8+3RestorePASS/3normaleTSEcloses/RecorderExit0,0Schlussfehler. BegrenzterVersuchsjournalfixohneGrenz/InputänderungisoliertinArbeit, keinAutoRetry. A4Healthfix3ba189dintegriert/RootsourceReview+eigeneSDK107normalASan/UBSanje3104/0PASS. DLL/Nativeoffen. Delta047fullDrive119MetadatenPASS; neueBelege048offen. Live20:17frischgleicherNutzerstandje8Bots.

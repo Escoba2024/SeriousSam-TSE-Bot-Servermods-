@@ -17,14 +17,14 @@ class Tests(unittest.TestCase):
   called=[];events=[];seq=[10]
   def fn(*args):called.append(args);seq[0]+=2;return 7
   x=SimpleNamespace(XNextRequest=Fn(lambda d:seq[0]));t=SimpleNamespace(XTestFakeRelativeMotionEvent=Fn(fn));transport=SimpleNamespace(x=x,t=t,d=123,pin=SimpleNamespace(display=':154',role='vanilla'))
-  proxy=a.instrument_transport(transport);proxy.observer=SimpleNamespace(record_emission=events.append)
+  proxy=a.instrument_transport(transport);proxy.observer=a.PassiveRecorder(None,None,transport);events=proxy.observer.emissions
   self.assertEqual(transport.t.XTestFakeRelativeMotionEvent(123,12,0,0),7);self.assertEqual(called,[(123,12,0,0)])
   self.assertEqual(len(events),1);self.assertEqual(events[0]['sequence_interval'],[10,12]);self.assertEqual(events[0]['arguments'],[123,12,0,0]);self.assertEqual(events[0]['return_value'],7)
  def test_proxy_preserves_native_exception_and_does_not_retry(self):
   count=[0];events=[]
   def fn(*args):count[0]+=1;raise OSError('exact original')
   transport=SimpleNamespace(x=SimpleNamespace(XNextRequest=Fn(lambda d:10)),t=SimpleNamespace(XTestFakeKeyEvent=Fn(fn)),d=123,pin=SimpleNamespace(display=':154',role='vanilla'))
-  proxy=a.instrument_transport(transport);proxy.observer=SimpleNamespace(record_emission=events.append)
+  proxy=a.instrument_transport(transport);proxy.observer=a.PassiveRecorder(None,None,transport);events=proxy.observer.emissions
   with self.assertRaisesRegex(OSError,'exact original'):transport.t.XTestFakeKeyEvent(123,25,1,0)
   self.assertEqual(count[0],1);self.assertEqual(len(events),1);self.assertIn('exact original',events[0]['error'])
  def test_public_gc_getters_read_existing_resource_without_pointer_query(self):
