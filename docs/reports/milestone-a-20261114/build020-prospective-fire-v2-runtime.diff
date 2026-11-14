@@ -1,0 +1,55 @@
+--- build020/run-mapreset.py
++++ fire020-v2/run-mapreset.py
+@@ -5,6 +5,7 @@
+ import observer_policy as observer
+ import round_script_io as round_scripts
+ import phase_inventory
++import a4_fire_observer_v2 as native_fire
+ from transaction import FileTransaction
+ from host_budget import HostBudget
+ RUNTIME_REVIEWED=False
+@@ -47,11 +48,11 @@
+  global DIAG,PREFIX,INVENTORY
+  if not RUNTIME_REVIEWED:raise RuntimeError('OFFLINE A4 DRAFT: Root review/frozen runtime copy required')
+  assert map_key=='redstation' and duration==480 and diag==1,'fixed Red-only three-round480s diagnostic protocol'
+- policy.options(map_key,duration,diag);value=0;DIAG=diag;INVENTORY=1;PREFIX='ssam-a4-reset020-extended-20261114'
++ policy.options(map_key,duration,diag);value=0;DIAG=diag;INVENTORY=1;PREFIX='ssam-a4-fire020-v2-20261114'
+  map_data=policy.prepared.catalog()['maps'][map_key]
+  cohorts={role:policy.cohort(role,diag)for role in ('botA','botB')};bootstrap=policy.bootstrap()
+  policy.checked_bytes(CANDIDATE_DLL,policy.CANDIDATE_SHA);init_runtime()
+- E=BASE/f'a4-reset020-extended-{time.strftime("%Y%m%d-%H%M%S",time.gmtime())}';E.mkdir(mode=0o700);(E/'controller-source.py').write_bytes(Path(__file__).read_bytes());records={};display=None;server=None;cohort=False;bootstrap_original=None;inventory=None;inventory_stream=None;transaction=None;initial=policy.InitialObservations();initial_validated=False;active_snapshots=[];module_pins={};last_pin=-100;host_budget=HostBudget();last_host=-100;observer_history=[];observer_phase=0;operation_deadline=None;early_capture=None;phase_capture=None
++ E=BASE/f'a4-fire020-v2-{time.strftime("%Y%m%d-%H%M%S",time.gmtime())}';E.mkdir(mode=0o700);(E/'controller-source.py').write_bytes(Path(__file__).read_bytes());records={};display=None;server=None;cohort=False;bootstrap_original=None;inventory=None;inventory_stream=None;transaction=None;initial=policy.InitialObservations();initial_validated=False;active_snapshots=[];module_pins={};last_pin=-100;host_budget=HostBudget();last_host=-100;observer_history=[];observer_phase=0;operation_deadline=None;early_capture=None;phase_capture=None
+  report={'status':'IN_PROGRESS','spawn':value,'map_key':map_key,'candidate_sha256':policy.CANDIDATE_SHA,'functional_pass':False,'first_simulation_state_proven':False,'map_reset_proven':False,'original_auto_rejoin_proven':False,'observer_restart_design':True,'diagnostics_enabled':bool(DIAG),'qualified':False,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'events':[],'errors':[],'controller_sha256':sha(E/'controller-source.py'),'pause_reader_sha256':sha(pauseprobe.__file__)}
+  def save():(E/'result.json').write_text(json.dumps(report,indent=2))
+  def emit(event,**kw):report['events'].append({'event':event,'elapsed_wall':time.time(),'details':kw});save();print(event,json.dumps(kw),flush=True)
+@@ -133,7 +134,7 @@
+    for entry in attempt['samples']:capture.add(entry['snapshot'],server_after,identities,completed-start,entry['group'],entry['epoch'])
+    identities,completed=current()
+    for entry in attempt['samples']:
+-    sample=entry['snapshot'];elapsed_sample=completed-start
++    sample=native_fire.bind_sample(entry['snapshot'],capture.phase,server,capture.epoch['log_offsets']);elapsed_sample=completed-start
+     inventory_stream.write(json.dumps({'elapsed':elapsed_sample,'phase':capture.phase,'group':'early-'+entry['group'],'snapshot':sample,'early_attempt':attempt['number']})+'\n');inventory_stream.flush()
+     initial.add(sample,elapsed_sample);phase_rows.append(sample);report['inventory']['valid_samples']+=1
+    attempt.update(completed_elapsed=completed-start,accepted_for_activity=True,accepted_samples=len(attempt['samples']))
+@@ -349,6 +350,7 @@
+     assert actual_mapping==mapping,'actual phase slot mapping changed after registry'
+     policy.prepared.check_loads(catalog[rotation.MAPS[protocol.index]],{r:phase_log[r]for r in ('botA','botB')},phase_log['server'])
+     result=policy.active_evidence({r:phase_log[r]for r in ('botA','botB')},mapping,phase_rows,phase_queries,phase_log['server'])
++    result=native_fire.apply(result,{r:phase_log[r]for r in ('botA','botB')},mapping,phase_rows,phase_registry,server)
+     result.update(phase=protocol.index,map=rotation.MAPS[protocol.index],ended_elapsed=elapsed,first_simulation_state_proven=False,round_script_execution=dict(report['round_script_execution']))
+     for role,text in phase_log.items():(phase_directory/(role+'.log')).write_bytes(text.encode('latin1'))
+     save_initial_observations(phase_directory,initial)
+@@ -449,11 +451,11 @@
+         if str(err)not in('state changed during read','tick changed during read'):raise
+         report['inventory']['discarded_changed']+=1
+        else:
+-        report['inventory']['valid_samples']+=1;inventory_stream.write(json.dumps({'elapsed':elapsed,'phase':protocol.index,'group':group,'snapshot':sampled})+'\n');inventory_stream.flush();initial.add(sampled,elapsed);phase_rows.append(sampled)
++        sampled=native_fire.bind_sample(sampled,protocol.index,server,phase_offsets);report['inventory']['valid_samples']+=1;inventory_stream.write(json.dumps({'elapsed':elapsed,'phase':protocol.index,'group':group,'snapshot':sampled})+'\n');inventory_stream.flush();initial.add(sampled,elapsed);phase_rows.append(sampled)
+         for row in sampled['players']:rows[row['slot']]=row
+        cost=time.perf_counter()-sample_start;report['inventory']['sample_seconds_total']+=cost;report['inventory']['sample_seconds_max']=max(cost,report['inventory']['sample_seconds_max'])
+       if phase_start_tick is None and set(rows)==set(range(9)):
+-       reg=rotation.registry(protocol.index,list(rows.values()));reg['actual_slot_mapping']=mapping;reg['session_snapshots']=snapshots
++       reg=rotation.registry(protocol.index,list(rows.values()));reg['actual_slot_mapping']=mapping;reg['session_snapshots']=snapshots;reg['native_fire_epoch']=native_fire.epoch(protocol.index,server,phase_offsets)
+        if phase_capture is not None:phase_capture.confirm_registry(reg)
+        (phase_directory/'registry.json').write_text(json.dumps(reg,indent=2));phase_registry=reg;phase_start_tick=snapshots['server']['game_tick']
+       if phase_start_tick is not None and protocol.complete(elapsed,snapshots['server']['game_tick']-phase_start_tick):

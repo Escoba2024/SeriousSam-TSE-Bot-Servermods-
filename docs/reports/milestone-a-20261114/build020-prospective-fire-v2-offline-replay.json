@@ -1,0 +1,126 @@
+{
+  "scope": "OFFLINE_REPLAY_WITH_EXPLICIT_SYNTHETIC_EPOCH_ANNOTATION_NOT_NATIVE",
+  "original_run_status": "FAIL",
+  "native_qualified": false,
+  "phases": {
+    "0": {
+      "original_missing": [
+        "botA:3:fire_action_rows"
+      ],
+      "v2_missing": [],
+      "offline_evaluation_seconds": 0.48276571510359645,
+      "slot_counts": {
+        "botA:0": {
+          "native_fire_with_same_life_source_growth": 11,
+          "actual_useful_inventory_gains": 6
+        },
+        "botA:1": {
+          "native_fire_with_same_life_source_growth": 143,
+          "actual_useful_inventory_gains": 1
+        },
+        "botA:2": {
+          "native_fire_with_same_life_source_growth": 31,
+          "actual_useful_inventory_gains": 3
+        },
+        "botA:3": {
+          "native_fire_with_same_life_source_growth": 11,
+          "actual_useful_inventory_gains": 2
+        },
+        "botB:0": {
+          "native_fire_with_same_life_source_growth": 184,
+          "actual_useful_inventory_gains": 4
+        },
+        "botB:1": {
+          "native_fire_with_same_life_source_growth": 26,
+          "actual_useful_inventory_gains": 2
+        },
+        "botB:2": {
+          "native_fire_with_same_life_source_growth": 22,
+          "actual_useful_inventory_gains": 2
+        },
+        "botB:3": {
+          "native_fire_with_same_life_source_growth": 173,
+          "actual_useful_inventory_gains": 3
+        }
+      }
+    },
+    "1": {
+      "original_missing": [],
+      "v2_missing": [],
+      "offline_evaluation_seconds": 0.47448133188299835,
+      "slot_counts": {
+        "botA:0": {
+          "native_fire_with_same_life_source_growth": 135,
+          "actual_useful_inventory_gains": 3
+        },
+        "botA:1": {
+          "native_fire_with_same_life_source_growth": 21,
+          "actual_useful_inventory_gains": 3
+        },
+        "botA:2": {
+          "native_fire_with_same_life_source_growth": 71,
+          "actual_useful_inventory_gains": 3
+        },
+        "botA:3": {
+          "native_fire_with_same_life_source_growth": 27,
+          "actual_useful_inventory_gains": 3
+        },
+        "botB:0": {
+          "native_fire_with_same_life_source_growth": 32,
+          "actual_useful_inventory_gains": 5
+        },
+        "botB:1": {
+          "native_fire_with_same_life_source_growth": 26,
+          "actual_useful_inventory_gains": 3
+        },
+        "botB:2": {
+          "native_fire_with_same_life_source_growth": 110,
+          "actual_useful_inventory_gains": 1
+        },
+        "botB:3": {
+          "native_fire_with_same_life_source_growth": 7,
+          "actual_useful_inventory_gains": 2
+        }
+      }
+    },
+    "2": {
+      "original_missing": [],
+      "v2_missing": [],
+      "offline_evaluation_seconds": 0.5598675510846078,
+      "slot_counts": {
+        "botA:0": {
+          "native_fire_with_same_life_source_growth": 19,
+          "actual_useful_inventory_gains": 5
+        },
+        "botA:1": {
+          "native_fire_with_same_life_source_growth": 67,
+          "actual_useful_inventory_gains": 3
+        },
+        "botA:2": {
+          "native_fire_with_same_life_source_growth": 4,
+          "actual_useful_inventory_gains": 1
+        },
+        "botA:3": {
+          "native_fire_with_same_life_source_growth": 136,
+          "actual_useful_inventory_gains": 3
+        },
+        "botB:0": {
+          "native_fire_with_same_life_source_growth": 32,
+          "actual_useful_inventory_gains": 3
+        },
+        "botB:1": {
+          "native_fire_with_same_life_source_growth": 10,
+          "actual_useful_inventory_gains": 2
+        },
+        "botB:2": {
+          "native_fire_with_same_life_source_growth": 97,
+          "actual_useful_inventory_gains": 5
+        },
+        "botB:3": {
+          "native_fire_with_same_life_source_growth": 95,
+          "actual_useful_inventory_gains": 6
+        }
+      }
+    }
+  }
+}

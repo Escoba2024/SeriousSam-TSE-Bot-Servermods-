@@ -1,0 +1,31 @@
+{
+  "package": "/srv/tse-a4-fire020-v2-controller-20261114",
+  "manifest_sha256": "86662c479b4a0928ba140fc8437ac7ea8f8683a9145dc9e69204606aa316329f",
+  "parent_manifest_sha256": "d5c289d607a064c5d4f96888d26a462f1696b16a9213c2d3653cdb963d704808",
+  "candidate": {
+    "build_manifest": "/srv/tse-milestone-a-build-020-20261114/manifest.json",
+    "build_manifest_sha256": "3099a0be953be1ff8047289de056b6cddf931cac9a4791f2520d3898357950c6",
+    "dll_sha256": "094ec8edbedd5e63d8e4eb03fcce70518283b22440e5f80ba4c2482ff81fe6c0",
+    "dll_bytes": 431104,
+    "repo_tree": "a06c039e1669f2bd3b2bad0efd1d7895c1934648",
+    "source_commit": "e5f7a65502fbea683014ef8fcc95ecdd2a927b6a"
+  },
+  "runtime_reviewed": false,
+  "native_started": false,
+  "runtime_dependencies_checked": 67,
+  "inherited_runtime_dependencies_unchanged_except_launcher": 64,
+  "build_source_overlay_pins_checked": 75,
+  "old_run_remains": "FAIL",
+  "tests": {
+    "focused_portable": 87,
+    "failures": 0,
+    "first_version_preservation_failure": "one original adapter byte-preservation failure; adapter restored fully unchanged; first disabled package retained privately",
+    "full_discovery": false
+  },
+  "namespace": "ssam-a4-fire020-v2-20261114",
+  "runtime_diff_sha256": "aa2f624a86679c070b26f7c9a477b642350011a1176ba4156c576afb82f54818",
+  "new_policy_source_sha256": {
+    "a4_fire_observer_v2.py": "201ca2d0f3098637ffb129162d84e126062df24790cfa865693781683732e5fc",
+    "audit_a4_native_fire_observer_v2.py": "3ac187c8775b2bd1ed7021dc7b4037b0eeda6aec2a0292f9d87e47c9d8f4b466"
+  }
+}

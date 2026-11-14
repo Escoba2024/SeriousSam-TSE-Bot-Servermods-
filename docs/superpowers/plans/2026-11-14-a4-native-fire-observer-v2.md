@@ -83,3 +83,16 @@ Private Eingaben: `/srv/tse-milestone-a-evidence-20261111/`
 `a4-reset020-extended-20261114-092735`; geerbter Controller
 `/srv/tse-a4-build020-controller-20261114`; Reader
 `/srv/tse-milestone-a-20261111/tools/retail_inventory_readonly.py`.
+
+## Prospektive Controllerkopie, 14.11.2026
+
+- [x] Neue deaktivierte Kopie unter `/srv/tse-a4-fire020-v2-controller-20261114`
+  erstellen; Manifest `86662c479b4a0928ba140fc8437ac7ea8f8683a9145dc9e69204606aa316329f`.
+- [x] Originaladapter bytegleich lassen; im Launcher nur Epochannotation,
+  V2-Policyanwendung und eigenen Namespace ergänzen. Keine Reader-/Rateänderung.
+- [x] 87 gezielt benannte Offlinechecks grün; 67 Runtime- und75 Buildpins frisch
+  prüfen. Ein vorher fehlgeschlagener Adapterpreservationcheck bleibt dokumentiert.
+- [x] Bereinigten Diff, Paketquittung und ausdrücklich synthetisch annotierten
+  Archivreplay bereitstellen. Der ursprüngliche Build020-FAIL bleibt unverändert.
+- [ ] Hauptagent reviewed, integriert und friert einen eigenen nativen Lauf ein.
+  Kein Start und keine Gateumschaltung durch diesen Worker.

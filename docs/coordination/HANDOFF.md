@@ -1,3 +1,13 @@
+## Aktiver A4-Checkpoint — 14.11.2026,10:05UTC
+
+Genau ein neuer isolierter prospektiver Build020-A4-Lauf mit FeuerobserverV2 ist aktiv. Rootowner `/srv/tse-cecil-rollout-evidence-20261114/a4-fire020-v2-owner.json`, Log `a4-fire020-v2-native.log`, nach Ende `a4-fire020-v2-ended.json`. Freeze `/srv/tse-a4-fire020-v2-root-frozen-20261114`, Manifest2b55f08482586b73d08e6e88fd607603b5687b1789937e5bb6161b980274cdd4, Launcher397d1193ed502ef53732567c8568538152cf0f17186d522f8823bbb10b483421.67Runtime-/75Buildpins frisch passend; Adapterbytegleich,69fokussierte RootprüfungenPASS. Beide Worker bestätigen alle Tests beendet und ausschließlich statischeArbeit während dieses Fensters.
+
+Vorlauf10:04UTC: allevierLabrollen/Displaysfrei, beideLocksgeprüft, CPU34,28%,RAM3637006336Bytes,Disk11115311104Bytes. Port27850/Display154 gehören jetzt allein diesem Lauf. Unverändert24Slotphasen/480s/Serious3, strenger nativeFIRE/current/owned/ammo+SameLife-Sourcewachstum statt sekündlichemState-FIRE-Gate. AlteFAILs bleibenFAIL. Vor nächsterRuntime vollständiges Ergebnis, normaleCloses, ClosedLogs und unabhängigenRestore prüfen. Publicweiter018je8; kein020Rollout.
+
+Zusätzlich nur deaktiviert vorbereitet: Hard2-Stabilitätsadapter `/srv/tse-stability-build020-hard-controller-20261114`, Manifest a7afdf0ea6bae78da0c8399d945c59c6811a0bd147f032c7d996ba5182569d09,57Pins,31OfflinechecksPASS; unabhängigerReview noch offen. KeineformaleStunde gestartet. FridaPythonMethodsmoke auf eigenemELF64PASS99Callpaare, ersterTinyprologFAILerhalten; keineRetailABI-/A1-Qualifikation. Remote zuletzt33e9671fd7f743d6d442073cf4cede577f1f5681/Tree44320f13b5d0c51a823fd1fa8277e6827a94a516 gleichlokal713bce9, neuereArbeit separatveröffentlichen.
+
+---
+
 ## Aktueller Checkpoint — 14.11.2026,09:53UTC
 
 Kein Native-/Build-/Liveexecutor aktiv. Feuerbeobachter-V2 ist als reine Archivanalyse integriert (`27761b0`, 13 fokussierte Tests unabhängig PASS): konservative Bindung an tatsächliche serverseitige Lebensintervalle, FIRE/Schusswaffe/Besitz/Munition und steigenden Sourcecounter; 24/24 Slotphasen besitzen diese Belege. Der alte Build020-Lauf bleibt FAIL. Worker candidate_audit bereitet jetzt einen deaktivierten Controller für einen neuen prospektiven Lauf vor. Root muss diesen unabhängig prüfen, einfrieren und erst nach frischem Preflight starten.

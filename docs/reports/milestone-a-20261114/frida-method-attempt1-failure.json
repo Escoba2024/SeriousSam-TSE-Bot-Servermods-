@@ -1,0 +1,14 @@
+{
+  "scope": "OWN_ELF64_ONLY",
+  "status": "FAIL",
+  "stage": "Interceptor.attach",
+  "error": "unable to intercept function",
+  "prologue": "\n/srv/tse-frida-method-smoke-20261114/probe:     file format elf64-x86-64\n\n\nDisassembly of section .init:\n\nDisassembly of section .plt:\n\nDisassembly of section .plt.got:\n\nDisassembly of section .plt.sec:\n\nDisassembly of section .text:\n\n0000000000001220 <probe>:\n    1220:\tf3 0f 1e fa          \tendbr64\n    1224:\t8d 47 01             \tlea    0x1(%rdi),%eax\n    1227:\tc3                   \tret\n\nDisassembly of section .fini:\n",
+  "target_closed_by_own_supervisor": true,
+  "files": {
+    "probe.c": "402b1e14e94ac1134466d7eff12b32a8f8c9c53fa608d11fcafaaef0fe38f4c6",
+    "probe": "5d8475b96d442c0945bd0dbf696a048ab5ec8c82d4385ecda2c17889493b3309",
+    "worker.py": "e471ac235f5f1d3d7556a0629693e27017169f9327a713b10767f01e160c32c1",
+    "run.py": "2035fce4fdccbcfa516ba7857bd70ab2e2bd0e495b3590e8dd41339b098bf3e9"
+  }
+}
