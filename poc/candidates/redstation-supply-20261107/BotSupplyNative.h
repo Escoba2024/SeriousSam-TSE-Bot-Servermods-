@@ -1798,10 +1798,21 @@ static bool BotCecilItemTransitFailed(CPlayer* player,SSupplyState& s,double now
     std::isfinite(now)&&std::isfinite(s.goalSince)&&std::isfinite(s.goalDeadline)&&now>=s.goalSince&&now<s.goalDeadline&&
     source>=0&&hop>=0&&source!=hop&&(size_t)source<graph.points.size()&&(size_t)hop<graph.points.size()&&
     s.blocked.size()==graph.points.size()&&!s.blocked[source]&&!s.blocked[hop];
-  double distance2=0,vertical=0,gravity2=0;
+  double distance2=0,vertical=0,gravity2=0;bool firstWeaponTerminal=false;
   if(eligible){
     const auto& a=graph.points[source];const auto& b=graph.points[hop];
-    eligible=!a.flags&&!b.flags&&a.important_entity<0&&b.important_entity<0&&a.lock_entity<0&&b.lock_entity<0&&
+    // The mapped first-weapon endpoint can circle just like an intermediate
+    // edge. Observe only that exact ordinary ground terminal, never an armed
+    // pickup/interaction or a special/vertical traversal. This grants no motion.
+    firstWeaponTerminal=hop==s.goal&&b.important_entity==(int)s.goalEntity&&
+      s.mappedWeaponGoal&&!s.goalRelocationBudgeted&&s.goalKind==botcore::CecilItemKind::Weapon&&
+      !s.importantGoal&&!s.flightFinishing&&
+      (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH);
+    if(firstWeaponTerminal){
+      const auto input=BotCecilItemInput(player,s,1000);
+      firstWeaponTerminal=((input.owned|input.usable)&0x3df8u)==0;
+    }
+    eligible=!a.flags&&!b.flags&&a.important_entity<0&&(b.important_entity<0||firstWeaponTerminal)&&a.lock_entity<0&&b.lock_entity<0&&
       std::find(a.links.begin(),a.links.end(),hop)!=a.links.end();
     for(int i=1;i<=3;++i){
       const double d=(i==1?b.x:(i==2?b.y:b.z))-player->GetPlacement().pl_PositionVector(i),g=player->en_vGravityDir(i);
@@ -1809,8 +1820,9 @@ static bool BotCecilItemTransitFailed(CPlayer* player,SSupplyState& s,double now
       distance2+=d*d;vertical+=d*g;gravity2+=g*g;
     }
   }
-  // Intentional vertical waits and special/terminal item actions keep their
-  // existing policy. This watchdog only ends an ordinary intermediate attempt.
+  // Reuse the final item connector's existing three-meter vertical bound.
+  // Other terminal items and intentional special/vertical waits keep policy.
+  if(firstWeaponTerminal)eligible=eligible&&std::fabs(vertical)<=3;
   eligible=eligible&&std::isfinite(distance2)&&std::isfinite(vertical)&&std::fabs(gravity2-1)<1e-3&&
     !(distance2-vertical*vertical<1&&std::fabs(vertical)>4);
   if(!eligible){s.ClearItemTransit();return false;}

@@ -1,3 +1,15 @@
+## Aktiver Checkpoint — 14.11.2026, 09:27 UTC
+
+Genau ein neuer isolierter A4-Lauf mit **Build020** ist aktiv. Autoritative Dateien unter `/srv/tse-cecil-rollout-evidence-20261114`: `a4-build020-owner.json`, `a4-build020-native.log`, danach `a4-build020-ended.json`. Port27850 und Display154 gehören diesem Lauf; beide Worker haben Tests/Compiler/Runtime untersagt und arbeiten ausschließlich statisch. Vor jeder nächsten Labaktion vollständiges Ergebnis, normale Closes, Closed-Logs und Restore unabhängig prüfen. Keine automatische Wiederholung.
+
+Quelle e5f7a65502fbea683014ef8fcc95ecdd2a927b6a, DLL094ec8edbedd5e63d8e4eb03fcce70518283b22440e5f80ba4c2482ff81fe6c0,431104Byte, Buildmanifest3099a0be953be1ff8047289de056b6cddf931cac9a4791f2520d3898357950c6. Enger terminaler First-Weapon-Watchdog wurde unabhängig ohne wichtige/kritische Befunde geprüft; Root SDK107 ASan/UBSan2920Checks/0Fehler. Retarget unabhängig byte-/AST-identisch bis Kandidatenpins/Präfix,65Runtime-/75Buildpins frisch passend,47geerbte Protokolltests bestanden. Rootfreeze `/srv/tse-a4-build020-root-frozen-20261114`, Manifestbb6254e331752c001c1a0cabc0e008d402f60918075ec3490fc86ff38529450a; Launcher852eddc2d62e576b474effeb3e7df2177ac25670668241347bd34041bb11b1c4.
+
+Unverändert24Slotphasen/480s/Serious3, keine Hard-/A4-Gesamtfreigabe vor Ergebnis. Vorlauf09:27:18UTC: vier Labrollen frei, Displays154/155frei, Runtime-/Buildlocks erwerbbar, CPU32,65%, verfügbarerRAM3644432384Byte, Disk11498475520Byte. Beide019-Fehlläufe bleibenFAIL. Alle sechs öffentlichen/Devinstanzen bleiben Build018; Hard2 nurDev/Red, weitereUmstellung nachYodellerFAIL offen. A1 bleibtFAIL vorFire, B unimplementiert.
+
+A1-Collector ist weiter deaktivierter Entwurf mit laufendem unabhängigem Review; Timer-TID, echte Character-/Actionargumente und Stop-InFlight müssen vor irgendeinem Attach fertig geprüft sein. Kein Collector-Runtimeauftrag gestartet. Letzte tatsächlich gefetchte Veröffentlichung969d9fcae24b31f2cc9581aa3fa07d4d3ce1b0d9 mit Baumd9bb0e7bcb86268853cbf078fa75c24b495f1629 entspricht lokal72ff878. Neuere020-Quellen noch separat veröffentlichen und nach Laufende in nächsten privaten Delta aufnehmen.
+
+---
+
 ## Sicherung und Flottenkontrolle — 14.11.2026,09:09UTC
 
 Geschlossener Delta025:14841410Archivbytes, SHA25616e0e80232b5623684928860802515766d44c530cc9bac6416f0f84c95ba9f46.2317Dateien/106913710Bytes separat restauriert, Hash/Modus/UID/GIDPASS. DriveID1pCaURA1jFqpPl4l0vQeF7Lgdw4ZsdGqx vollständig zurückgeladen, identischerHash. Enthält geschlossene A1Nosmooth- und beide019A4-Rohbelege/Frozencontroller samt Quellbundle bis22bad4e. Kein nativer Gesamtarchivrestorestart; spätere Diagnosearbeit braucht nächstenNachtrag.

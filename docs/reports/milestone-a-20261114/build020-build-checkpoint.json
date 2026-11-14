@@ -1,0 +1,26 @@
+{
+  "build": {
+    "returncode": 0,
+    "source": "e5f7a65502fbea683014ef8fcc95ecdd2a927b6a",
+    "qualified": false,
+    "disk_free_bytes": 11512074240,
+    "dll_sha256": "094ec8edbedd5e63d8e4eb03fcce70518283b22440e5f80ba4c2482ff81fe6c0",
+    "dll_bytes": 431104,
+    "manifest_sha256": "3099a0be953be1ff8047289de056b6cddf931cac9a4791f2520d3898357950c6"
+  },
+  "independent_review": "a4_diagnosis: f9f5531 eligibility diff, no Critical/Important findings; no native claim",
+  "root_bridge": {
+    "checks": 2920,
+    "failures": 0,
+    "sdk107_asan_ubsan": true,
+    "log_sha256": "69a12ee537321ecbac17e10b2fed21557a6373ff421e0d8cc76df95837222f63"
+  },
+  "protocol_tests": {
+    "tests": 47,
+    "failures": 0,
+    "log_sha256": "773b55456842cbd4742ba873a31fcdf043362570c8b956ce693f49facf9dada5",
+    "initial_wrong_cwd_import_failure_preserved": true
+  },
+  "runtime_qualified": false,
+  "deployed": false
+}

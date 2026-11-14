@@ -2055,6 +2055,129 @@ void itemTransit49Fixture(){
  item.item.weapon=4;item.pl.pl_PositionVector(2)=g.points[4].y;g.points[4].important_entity=991;
  s.goalEntity=991;s.goalSince=0;s.goalDeadline=45;s.mappedWeaponGoal=true;
 }
+// Sparse native Build019 anchors are held at synthetic20Hz in this portable
+// replay. This tests the real passive gate/clock, not unlogged collision frames.
+void terminalItem019Fixture(){
+ setup(193);auto& g=BotSupplyGraph();for(auto& p:g.points)p.links.clear();
+ g.points[111].x=-29.5;g.points[111].y=-5.5;g.points[111].z=-79;g.points[111].links={175};
+ g.points[175].x=-10.75;g.points[175].y=-5.5;g.points[175].z=-79;g.points[175].important_entity=544;
+ auto& item=addItem(544,-12,-79.25,botcore::CecilItemKind::Weapon);item.item.weapon=9;item.pl.pl_PositionVector(2)=-5.999;
+ auto& state=BotSupplyState(0);state.entity=player.en_ulID=560;state.generation=7;
+ state.goal=175;state.goalEntity=544;state.goalKind=botcore::CecilItemKind::Weapon;
+ state.goalSince=331.3;state.goalDeadline=351.3;state.mappedWeaponGoal=true;state.anchor=111;
+ botcore::CecilMotionInput in;in.alive=true;in.anchor=111;in.goal=175;in.now=337.7;
+ in.x=g.points[111].x;in.y=g.points[111].y;in.z=g.points[111].z;
+ const auto move=state.navigator.Update(g,state.blocked.data(),state.blocked.size(),in);state.hop=move.hop;
+ check(state.navigator.SourceSlot(175)==111&&state.hop==175,"019 fixture commits the actual ordinary111 to mapped175 terminal");
+ player.pl.pl_PositionVector=FLOAT3D(-16.588f,-5.998f,-73.444f);
+ player.en_vCurrentTranslationAbsolute=FLOAT3D(5,0,0);
+}
+void terminalItem019(){
+ const float poses[][3]={__TERMINAL019_POSES__};
+ terminalItem019Fixture();auto& state=BotSupplyState(0);double ended=-1;
+ const int casts=rayCount,lookups=worldLookups,budget=_botRayBudget;allocations=0;measuring=true;
+ for(int step=0;step<=260;++step){
+  const int index=step/20<14?step/20:13;
+  player.pl.pl_PositionVector=FLOAT3D(poses[index][0],poses[index][1],poses[index][2]);
+  const double now=338+step*.05;
+  if(BotCecilItemTransitFailed(&player,state,now,true,true)){ended=now;break;}
+ }
+ measuring=false;
+ check(ended>=348&&ended<348.1&&state.goalEntity==0&&state.ItemRejected(544,ended),
+   "019 recorded terminal wiggle rejects only the first mapped weapon after unchanged ten second no gain");
+ check(rayCount==casts&&worldLookups==lookups&&_botRayBudget==budget&&allocations==0,
+   "019 passive terminal observation adds no rays world lookups budget consumption or allocation");
+ check(player.health==100&&player.w.m_iAvailableWeapons==3&&player.w.usable==3&&state.goalSince==331.3&&state.goalDeadline==0,
+   "019 terminal rejection changes no player health inventory or original attempt and grants no deadline extension");
+ // The normal next selector can choose a different eligible item; no direct
+ // replacement, synthetic pickup or movement is supplied by the watchdog.
+ if(ended>=0){
+  auto& alternate=addItem(992,-29.5f,-81,botcore::CecilItemKind::Weapon);alternate.item.weapon=7;alternate.pl.pl_PositionVector(2)=-5.5;
+  auto& g=BotSupplyGraph();g.points[174].x=-29.5;g.points[174].y=-5.5;g.points[174].z=-81;g.points[174].important_entity=992;
+  g.points[111].links.push_back(174);state.anchor=111;player.pl.pl_PositionVector=FLOAT3D(-29.5f,-5.5f,-79);
+  _botRayBudget=16;BotSupplyTick(&player,0,int(ended*20)+1,1000);
+  check(state.goalEntity==992&&!state.ItemRejected(992,ended),
+    "019 ordinary typed selector takes a free alternative after failed terminal without overriding safety");
+ }
+ // The accepted final-action path must neutralize its axes on the same failure.
+ terminalItem019Fixture();auto& final=BotSupplyState(0);
+ for(int step=0;step<200;++step)BotCecilItemTransitFailed(&player,final,338+step*.05,true,true);
+ final.currentNavTime=348;final.currentNavGoal=175;final.currentNavTravel=true;
+ double f=1,st=.4,up=0;const int oldRays=rayCount;
+ const int result=BotCecilSafeMotion(&player,final,348,f,st,up,0,1,true);
+ check(result==0&&f==0&&st==0&&up==0&&final.goalEntity==0&&rayCount==oldRays,
+   "019 expired terminal only emits neutral final axes and never grants a collision bypass");
+ // Real progress retains the fixed lifetime; .75m is exactly the old reset.
+ terminalItem019Fixture();auto& progress=BotSupplyState(0);
+ for(int step=0;step<=260;++step){
+  player.pl.pl_PositionVector=FLOAT3D(float(-.75-step*.01),-5.5f,-79);
+  BotCecilItemTransitFailed(&player,progress,338+step*.05,true,true);
+ }
+ check(progress.goalEntity==544&&progress.goalSince==331.3&&progress.goalDeadline==351.3,
+   "019 genuine terminal approach gains retain the weapon without renewing its original deadline");
+ terminalItem019Fixture();auto& threshold=BotSupplyState(0);
+ player.pl.pl_PositionVector=FLOAT3D(-.75f,-5.5f,-79);
+ for(int step=0;step<180;++step)BotCecilItemTransitFailed(&player,threshold,338+step*.05,true,true);
+ player.pl.pl_PositionVector=FLOAT3D(-1.5f,-5.5f,-79);BotCecilItemTransitFailed(&player,threshold,347,true,true);
+ check(near(threshold.itemTransitSince,347),"019 exactly point75m terminal improvement resets the existing progress clock");
+}
+void terminalItem019Guards(){
+ for(int guard=0;guard<26;++guard){
+  terminalItem019Fixture();auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();bool accepted=true,current=true;
+  if(guard==0)g.points[175].flags=botcore::CECIL_JUMP;
+  if(guard==1)g.points[175].flags=botcore::CECIL_TELEPORT;
+  if(guard==2)g.points[175].flags=botcore::CECIL_IMPORTANT;
+  if(guard==3)g.points[175].flags=botcore::CECIL_CROUCH;
+  if(guard==4)g.points[175].flags=botcore::CECIL_UNREACHABLE;
+  if(guard==5)g.points[111].flags=botcore::CECIL_JUMP;
+  if(guard==6)g.points[111].lock_entity=9;
+  if(guard==7)g.points[175].lock_entity=9;
+  if(guard==8)g.points[175].important_entity=777;
+  if(guard==9)s.goalKind=botcore::CecilItemKind::Health;
+  if(guard==10){s.mappedWeaponGoal=false;s.goalRelocationBudgeted=true;}
+  if(guard==11)player.w.m_iAvailableWeapons=11;
+  if(guard==12)player.w.usable=11;
+  if(guard==13)s.importantGoal=true;
+  if(guard==14)s.followEntity=777;
+  if(guard==15)s.interactionPoint=175;
+  if(guard==16)s.useReleaseTick=99999;
+  if(guard==17)s.flightFinishing=true;
+  if(guard==18)player.m_pstState=PST_FALL;
+  if(guard==19)player.m_pstState=PST_SWIM;
+  if(guard==20)player.pl.pl_PositionVector(2)=-2;
+  if(guard==21)accepted=false;
+  if(guard==22)current=false;
+  if(guard==23)s.blocked[175]=1;
+  if(guard==24)g.points[111].important_entity=777;
+  if(guard==25)g.points[111].links.clear();
+  bool ended=false;for(int step=0;step<=260;++step)ended|=BotCecilItemTransitFailed(&player,s,338+step*.05,accepted,current);
+  check(!ended&&s.goalEntity==544&&!s.ItemRejected(544,351),
+   "019 terminal remains excluded for special locked mistyped armed vertical airborne interaction or unowned contexts");
+ }
+ // A boundary erases, rather than borrows, the terminal's unobserved history.
+ for(int change=0;change<12;++change){
+  terminalItem019Fixture();auto& s=BotSupplyState(0);CWorld other;
+  for(int step=0;step<180;++step)BotCecilItemTransitFailed(&player,s,338+step*.05,true,true);
+  bool accepted=true;
+  if(change==0)++s.generation;
+  if(change==1)++player.en_ulID;
+  if(change==2)++_botSupplyMapSerial;
+  if(change==3)player.worldOverride=&other;
+  if(change==4){s.goalEntity=545;BotSupplyGraph().points[175].important_entity=545;}
+  if(change==5)s.goalSince=332;
+  if(change==6)s.goalDeadline=352;
+  if(change==7)player.en_vGravityDir=FLOAT3D(0,1,0);
+  if(change==8)accepted=false;
+  if(change==9)player.w.m_iAvailableWeapons=11;
+  if(change==10)player.w.usable=11;
+  const double at=change==11?347.5:347;
+  BotCecilItemTransitFailed(&player,s,at,accepted,true);
+  player.w.m_iAvailableWeapons=player.w.usable=3;
+  bool ended=false;for(int step=1;step<=40;++step)ended|=BotCecilItemTransitFailed(&player,s,at+step*.05,true,true);
+  check(!ended&&!s.ItemRejected(544,350),
+   "019 terminal context owner life world map goal deadline gravity pickup and gap reset old observation time");
+ }
+}
 void itemTransit49(){
  for(int rebase=0;rebase<2;++rebase){
   itemTransit49Fixture();auto& s=BotSupplyState(0);if(!rebase)s.scanTick=99999;
@@ -3611,7 +3734,7 @@ int main(){
  liveItemFlightCloseEnemyReproduction();
  flightSelectedPathGuards();flightSealedGuards();flightSealedRegression();flightVisibleOwnership();flightLossRegression();flightLossGuards();
  boundedSupplySegment(); approachArrivalGeometry();approach008Transitions();bouncer009Transitions();bouncer010Native009Replay();bouncer011Native010Replay();bouncer012Native011Arrival();bouncer012RecordedArrivals();bouncer012ArrivalGuards();approachElevenDiagnostics();approachDiagnostics();approachDeathRespawnDiagnostics();supplyConnectorDiagnostics(); supplyDiagnosticsParity();supplyDiagnosticsBoundsAndReasons();supplyDiagnosticsRetentionAndTerminal();
- itemTransit49();itemTransit49Guards();
+ itemTransit49();itemTransit49Guards();terminalItem019();terminalItem019Guards();
  liquidProjection48();
  importantTransit48();importantPatrol48();
  nativeContactRecovery();farHintTests();farHintGuards();
@@ -4788,6 +4911,13 @@ def main():
     end = source.index("static botcore::CecilFrame BotCecilBodyFrame(", start)
     source = source[:start] + source[end:]
     source = "\n".join(line for line in source.splitlines() if not line.startswith("#"))
+    # Checked-in sparse own-bot anchors; holding frames is a portable mechanism
+    # replay only. No private paths or native runtime are required by this test.
+    import json
+    trace=json.loads((here / "fixtures/build019-terminal-111-175.json").read_text())
+    assert trace['source_slot']==111 and trace['goal_slot']==175 and len(trace['frames'])==14
+    poses=','.join('{'+','.join(str(x)+'f' for x in row['position'])+'}' for row in trace['frames'])
+    tests=TESTS.replace('__TERMINAL019_POSES__',poses)
     driver=(here / "BotDriver.cpp").read_text()
     choice=re.search(r'if\((ready&&[\s\S]*?)\)\{\s*bs\.bs_aHeading=player->m_aLastRotation',driver)
     if not choice:raise ValueError("actual Driver supply arbitration missing")
@@ -4797,7 +4927,7 @@ def main():
         items_source = (support / "BotCecilItems.h").read_text()
         helper_start = items_source.index("inline bool BotCecilIsClass(")
         helper_end = items_source.index("inline uint32_t BotCecilAmmoNeed", helper_start)
-        cpp.write_text("#define EXPECTED_NATIVE_USE "+str(use_mask)+"u\n"+STUBS + items_source[helper_start:helper_end] + source + ownership + TESTS)
+        cpp.write_text("#define EXPECTED_NATIVE_USE "+str(use_mask)+"u\n"+STUBS + items_source[helper_start:helper_end] + source + ownership + tests)
         cmd = ["g++", "-std=c++14", "-O1", "-g", "-Wall", "-Wextra", "-Wno-unused-function",
                "-I", str(here), "-I", str(support), str(cpp), "-o", str(exe)]
         if args.sanitize:

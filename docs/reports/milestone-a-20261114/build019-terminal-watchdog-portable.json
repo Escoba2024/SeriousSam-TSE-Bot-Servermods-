@@ -1,0 +1,61 @@
+{
+  "utc": "2026-11-14T09:17:56.551868+00:00",
+  "scope": "PORTABLE_REAL_BRIDGE_TERMINAL_REJECTION_ONLY_NO_RETAIL_BUILD_NATIVE_LAUNCH_OR_RUNTIME_CHANGE",
+  "base_commit": "22bad4efc982cdcf3ade3f8741df76b06ea17001",
+  "base_candidate_sha256": "671df77a06eb9df8822032418e4d9ae2550f5581a2bf89c3e45b83c0f32472be",
+  "source_sha256_before": "9d2cd8b06147b80e18e077dcd603977a5838a402a271531245cb13539a870717",
+  "source_sha256_after": "585dd66439d9c9fcb375acbaab3d43939da706ae38c6e24b32e947c0abf6f121",
+  "test_sha256": "191606df709eae9827311edb647dae5c2e58d3c4efcd264cbd649c701e9cd714",
+  "fixture_sha256": "d91d177bb6b589153c56fed55318376fca528c321150515b5e3e26618bc864de",
+  "tests": [
+    {
+      "kind": "RED_original_source",
+      "command": "python3 -B poc/candidates/redstation-supply-20261107/test_cecil_native_bridge.py",
+      "exit_code": 1,
+      "checks": 2919,
+      "failures": 4,
+      "log_sha256": "20e08462bdcdb39aa2671724ae74d28678e0160507e2634cafc17c502c2ed39f"
+    },
+    {
+      "kind": "GREEN_final_source",
+      "command": "python3 -B poc/candidates/redstation-supply-20261107/test_cecil_native_bridge.py",
+      "exit_code": 0,
+      "checks": 2920,
+      "failures": 0,
+      "log_sha256": "9b21e1762f12bdb1b831f1bd01408b66132c9f74d476c64b568a9c78bf54c50d"
+    },
+    {
+      "kind": "GREEN_ASAN_UBSAN_SDK107",
+      "command": "python3 -B poc/candidates/redstation-supply-20261107/test_cecil_native_bridge.py --sanitize --sdk-player /srv/tse-sdk-20261021/Sources/EntitiesMP/Player.es",
+      "exit_code": 0,
+      "checks": 2920,
+      "failures": 0,
+      "log_sha256": "d665ab6412ae99fb57b04b2953407ab7e81f7feb58e6d94bebaf183f8507c3d4",
+      "sdk_player_sha256": "85c92933fa5b0cc726be7b42a3bc82d4c95b255507ec8b1fffe2666fcf3888af",
+      "sdk_ray_header_sha256": "0865f54625b1b5da413c775c25589b3cd0d420fee3c131036bf6066ff82837b2",
+      "compiler_note": "GCC debug variable tracking exceeded limit; compiler retried without variable tracking. No sanitizer finding."
+    }
+  ],
+  "behavior_bounds": {
+    "no_hop_gain_seconds": 10,
+    "progress_reset_meters": 0.75,
+    "existing_item_rejection_seconds": 30,
+    "terminal_height_limit_meters": 3,
+    "height_limit_origin": "same existing final item connector guard",
+    "new_rays": 0,
+    "new_world_lookups": 0,
+    "new_allocations_in_guard": 0,
+    "new_movement_authority": false
+  },
+  "negative_terminal_context_cases": 26,
+  "terminal_context_reset_cases": 12,
+  "native_trace_limit": "Held sparse poses at synthetic20Hz isolate rejection eligibility/clock; they do not reconstruct unlogged native frames or prove physical collision cause.",
+  "physical_collision_cause_proven": false,
+  "original_23_of_24_failure_unchanged": true,
+  "A_complete": false,
+  "native_qualified": false,
+  "handoff": {
+    "private_logs": "/srv/tse-a4-terminal-watchdog-evidence-20261114",
+    "main_only": "review, integrate, new Retail candidate build, fresh native preflight and bounded gates; no automatic retry"
+  }
+}
