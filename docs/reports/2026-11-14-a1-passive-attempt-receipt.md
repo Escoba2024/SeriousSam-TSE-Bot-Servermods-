@@ -102,3 +102,15 @@ alten FAIL. Ein neuer Build oder Rollout ist nicht Bestandteil dieses Fixes.
 ## Rootintegration und Reviewkorrektur
 
 1d6e991→Root99eedfa und Releasefix11756e3→Rootb156307 integriert. Root prüfte den vollständigen29Zeilen-Diff und den anschließenden Ein-Predicate-Fix;43gezielte Fälle bestanden auch unabhängig im Rootlauf (2,394s), vollständiger Log privat RootEV/a1-attempt-journal-root-tests.log. Der ursprüngliche unabhängige IMPORTANT-Befund bleibt in seiner Quittung erhalten und ist durch den echten geerbten Down→Guardreject→finally-Up-Gegenfall geschlossen. Der feste unveränderte InputScope erlaubt maximal50Nativecalls; die97er-Releasekante ist darin unerreichbar. Separate Author-RED/GREEN-Rohlogdateien existieren nicht, deren Ergebnisse wurden im Tooltranskript beobachtet. Offlinequittung und Root-GREEN-Log sind tatsächlich als Dateien gesichert. Neuer Rootfreeze e26d3c6e64a32fc2e554baa3281f3e8551a6382b63281bd8392be884e5d07c66 vorbereitet; nur Gates/Namespace/CollectorPRIVATE/Repins gegenüber sicherem deaktiviertemf1cbd265 verändert. Kein neuer Native-Lauf bisher.
+
+## Stand 20:56 UTC – A1-Zählerbefund und Build022-Testvorbereitung
+
+Der einzelne A1-NoFire-Lauf205026 ist geschlossen **FAIL**. Das neue Journal
+belegt erstmals den tatsächlichen ersten Aufruf: XTestFakeRelativeMotionEvent
+(+12), Return1, Requestzähler26→31, Dauer0,217ms. Der unveränderte Guard
+verweigert diese Fünferspanne. Welche Requests die Spanne verursachen, wird
+statisch untersucht; keine Toleranz-, Input-, ACK- oder Gainänderung. ResultSHA
+269295bf1890621b641a7c976b27e521ea4775d5b1b37e40897331c9baf9e2ae.
+RootRestore664Dateien+8Absenzen+3Schlusslogs PASS; alle drei Spielrollen normal
+beendet. Recorder40Callbacks/40freed, keine unbekannten/fehlerhaften/verlorenen
+Records, Exit0/reaped/noForce. Kein A1-Schadens- oder Gainnachweis.

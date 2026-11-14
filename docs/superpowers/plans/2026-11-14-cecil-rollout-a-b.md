@@ -1,5 +1,35 @@
 # Cecil-Flottenrollout und Abschluss A → B
 
+## Stand 20:56 UTC – A1-Zählerbefund und Build022-Testvorbereitung
+
+Der einzelne A1-NoFire-Lauf205026 ist geschlossen **FAIL**. Das neue Journal
+belegt erstmals den tatsächlichen ersten Aufruf: XTestFakeRelativeMotionEvent
+(+12), Return1, Requestzähler26→31, Dauer0,217ms. Der unveränderte Guard
+verweigert diese Fünferspanne. Welche Requests die Spanne verursachen, wird
+statisch untersucht; keine Toleranz-, Input-, ACK- oder Gainänderung. ResultSHA
+269295bf1890621b641a7c976b27e521ea4775d5b1b37e40897331c9baf9e2ae.
+RootRestore664Dateien+8Absenzen+3Schlusslogs PASS; alle drei Spielrollen normal
+beendet. Recorder40Callbacks/40freed, keine unbekannten/fehlerhaften/verlorenen
+Records, Exit0/reaped/noForce. Kein A1-Schadens- oder Gainnachweis.
+
+Delta048 ist vollständig in Drive gesichert und rückgelesen:43259173Bytes,
+SHA f9e9720192ab15a17e9c61f74b4f8a77f59086d3ef852d1ee4a59fa224e402d3,
+1296Dateien mit SHA/uid/gid/mode/mtime_ns zweimal rekonstruiert geprüft.
+Remote0a1305b7a3c008099a8e04b4bb7a44dadc7b4a69 hat exakt denselben Tree
+2d7c9c920cc03af35ffe446a4a24d1abbd870b21 wie lokal6df06ff.
+
+Build022-Einzelfork integriert: authora39a811/22feb782→Rootb21e5eb/516f0c2.
+Root22Offlinefälle PASS; keine neuen Inputs/Reader/Grenzen.
+Rootfreeze /srv/tse-nav20-022-red600-root-frozen-20261114,
+Manifest3c45ca2d5fa1fa2d217ca6667cc6884a9a615ddce2c9e5d5fc3d8f6198d4cd5d,
+139Runtime/66Source/41Pythonpins; drei Retargets exakt reversibel,58weitere
+Parentsources bytegleich. Ein Gate plus private Namespaces/Repins; Kandidat
+weiter unqualifiziert. Genau ein isolierter Red600-Lauf mit acht Bots und
+Originalobserver20FPS ist vorgesehen, nach Quellveröffentlichung und Delta049.
+Kein automatischer Retry und kein Publicrollout. Live bleibt die bestätigte
+Mischflotte; A offen, B nicht begonnen. Worker bearbeiten nur statische Aufgaben.
+
+
 > **For agentic workers:** Use superpowers:executing-plans. Hauptagent integriert und verändert Runtime; maximal zwei getrennte Analyseworker.
 
 **Goal:** Zuerst den belegten Cecil-Stand auf sechs Instanzen aktivieren, danach A belegen, B auf Dev abnehmen und gestaffelt veröffentlichen.
