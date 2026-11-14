@@ -1,5 +1,40 @@
 # Aktueller Handoff — 14.11.2026,20:45 UTC
 
+## Stand 21:20 UTC – Build022 geschlossen, weitere A4-Lücken
+
+Einzelnes022-Redfenster205823 real600,0348175s geschlossen PASS_LIMITED;
+Root640Dateien+4SchlusslogsRestorePASS,0neueSync/Disconnect/CRC/Crash/Invalid/
+Joinfehler. Result ee217919c0462288ec1c77f61241f09b279fbaeabac166ee2f0e75b51af69bb3.
+170Kills,193kanonischeLeben/92mitUseful,118Inventargewinne,3379gebundeneFIRE,
+121links-/8rechtszensiert. LängsteNoUseful45,588867s bleibt offen. Healthphase
+wird nativ ausgeführt, positiver Pickup-/Routenbeleg noch in Detailprüfung.
+Andere frühe10s-Stationarität ist keiner Healthphase zugeordnet; gesperrter
+aktueller Ausgangsanker nach Importantnot_usable ist eingegrenzter Verdacht,
+A4worker erstellt getrennten realenSDK107-Reproducer vor einem Fix.
+[022-Bericht](../reports/2026-11-14-build022-red600-checkpoint.md).
+
+Frische tatsächliche Flotte21:17:15UTC unverändertDev048/RedGen2/vierPublic018,
+je8eigeneBots/0zusätzlicheTeilnehmer; laufende Module tatsächlich geprüft.
+Private Datei fleet-module-status-20261114-2118-private.json enthält tatsächliche
+UTC21:17. Kein neuer Aktivitäts-/Synczeitraum daraus abgeleitet.
+
+A1Audit e47b1d2→Root17f7e57 erklärt statisch passende Cold5-Kette, einzelne
+Wirefolge weiterhin unbeobachtet. Candidateworker arbeitet getrennt am
+deaktiviertenOwn167-Cold/Warm-Methodenfork; keine A1Guard/Inputänderung.
+Root allein darf Native starten. Momentan keine Native-/Compilerjobs des Root.
+
+Delta049vollDrive+858rekonstruierteDateimetadatenzweimalPASS:3162541B,
+SHA a046fee7e9bea4d0feefba4458d5e48942deff775dae9793e4e64643c2d84db4,
+Drive13CGlDHwnmdeUEg4f6bmuaNs70cPsOGml. Enthält A1-Fail205026 und022Freeze,
+noch nicht das spätere022-Spielergebnis. Letzter verifizierterRemote
+1e61e630823bf54fd50ce1c08089516b7400e78a/Tree5fdc12bb5ea5fcc3e8edcf52dbfc29a0470d7ada
+exakt lokal a2dfab4777fd3752d424868c8d77bd62697fb30d. NeuereQuellen/Resultate
+brauchen050. Zwölf reine Downloadduplikate nach vollständigem SHAvergleich
+beider Dateien entfernt,240471395B freigegeben; kanonischeArchiveunverändert,
+Rückkopierrezept+Metadatenin RootEV/download-copy-dedup-050.json.
+Aoffen, Bnichtbegonnen, keine Promotion.
+
+
 ## Stand 20:56 UTC – A1-Zählerbefund und Build022-Testvorbereitung
 
 Der einzelne A1-NoFire-Lauf205026 ist geschlossen **FAIL**. Das neue Journal

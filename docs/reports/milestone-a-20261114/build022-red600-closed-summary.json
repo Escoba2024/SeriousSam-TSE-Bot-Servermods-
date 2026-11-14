@@ -1,0 +1,46 @@
+{
+  "scope": "CLOSED_SINGLE_BUILD022_RED600_OBSERVATION_ONLY",
+  "status": "PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED",
+  "qualified": false,
+  "functional_pass": false,
+  "observed_seconds": 600.0348174998071,
+  "dll_sha256": "28028e448e514cae8589b078d06533c8934a4a12ca7ab52aaead77e1590ab8fc",
+  "result_sha256": "ee217919c0462288ec1c77f61241f09b279fbaeabac166ee2f0e75b51af69bb3",
+  "kills": 170,
+  "canonical_lives": 193,
+  "useful_possession_lives": 92,
+  "native_useful_inventory_gains": 118,
+  "bound_fire_observations": 3379,
+  "left_censored": 121,
+  "right_censored": 8,
+  "max_observed_alive_span_without_useful": 45.5888671875,
+  "max_stationary_all_stream_seconds": 9.999847412109375,
+  "all_eight_slots_activity": true,
+  "closed_log_errors": 0,
+  "restore_files": 640,
+  "closed_logs": 4,
+  "root_restore": "PASS_RESTORE",
+  "host": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 578,
+    "cpu_busy_max_measured_percent": 56.35910224438903,
+    "mem_available_min_bytes": 2628714496,
+    "disk_free_min_bytes": 8825348096,
+    "max_sample_gap_seconds": 46.52062455704436,
+    "budget_pass_claim": false,
+    "gameplay_max_sample_gap_seconds": 1.159038380952552
+  },
+  "limitations": [
+    "single_whole_candidate_window_not_head_to_head_strength_rank",
+    "health_proposal_is_not_pickup_proof",
+    "long_unarmed_life_and_stationarity_need_review",
+    "startup_46_52s_sample_gap_no_full_budget_pass",
+    "A1_reset_formal_stability_and_other_maps_open_A_open_B_not_started"
+  ]
+}
