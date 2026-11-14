@@ -3939,11 +3939,12 @@ void itemConnectorRadiusContinuity(){
 // Closed022: not_usable at an important node is followed by a blocked
 // acquisition origin outside its actual radius. Only the real production chain
 // is exercised; irrelevant graph points are disconnected, not invented routes.
-void blockedOriginFixture(bool outside=true){
+void blockedOriginFixture(bool outside=true,bool middleDoor=false){
  setup(193);player.en_ulID=101;player.health=101;player.w.m_iAvailableWeapons=player.w.usable=15;
  auto& graph=BotSupplyGraph();for(auto& p:graph.points){p.links.clear();p.x=10000;p.y=0;p.z=10000;}
  auto& a=graph.points[138];a.id=139;a.x=63;a.y=1;a.z=-75;a.radius=2;a.important_entity=401;a.links={182};
  auto& b=graph.points[182];b.id=184;b.x=72.25f;b.y=1;b.z=-72;b.radius=2;b.links={138};
+ if(middleDoor){a.links={137};auto& door=graph.points[137];door.x=68;door.y=1;door.z=-74;door.radius=2;door.lock_entity=999;door.links={182};}
  auto& unusable=addItem(401,63,-75,botcore::CecilItemKind::Weapon);unusable.cls.name="Classes/WeaponItem.ecl";
  unusable.pickable=false;unusable.pl.pl_PositionVector(2)=.376f;
  auto& armor=addItem(260,72,-72,botcore::CecilItemKind::Armor);armor.pl.pl_PositionVector(2)=.376f;
@@ -3955,6 +3956,118 @@ void blockedOriginFixture(bool outside=true){
  state.anchor=138;state.goal=182;state.goalEntity=260;state.goalKind=botcore::CecilItemKind::Armor;
  state.goalSince=968*.05;state.scanTick=99999;
  if(outside)player.pl.pl_PositionVector=FLOAT3D(63.15f,.381f,-79.827f);
+}
+template<class T>auto originProposal(const T& s,int)->decltype(s.currentImportantOriginRecovery){return s.currentImportantOriginRecovery;}
+template<class T>bool originProposal(const T&,long){return false;}
+void blockedOriginRecoveryGuards(){
+ blockedOriginFixture();auto& warm=BotSupplyState(0);_botRayBudget=40;const auto first=BotSupplyTick(&player,0,980,1000);
+ check(first.active&&originProposal(warm,0)&&warm.currentNavTime<0&&warm.currentNavGoal<0&&!warm.currentNavTravel&&warm.hop<0,
+   "RED origin recovery is a fresh proposal without fabricated NAV arrival source or floor authority");
+ // Every mutated state follows the real not_usable FinishImportant call.
+ for(int bad=0;bad<31;++bad){
+  blockedOriginFixture();auto& st=BotSupplyState(0);CWorld other;other.wo_cenEntities=player.world.wo_cenEntities;
+  auto& graph=BotSupplyGraph();
+  switch(bad){
+   case 0:player.worldOverride=&other;break;
+   case 1:++_botSupplyMapSerial;break;
+   case 2:++player.en_ulID;break;
+   case 3:++st.generation;break;
+   case 4:graph.points[138].important_entity=402;break;
+   case 5:graph.points[138].x+=.01f;break;
+   case 6:graph.points[138].radius+=.01f;break;
+   case 7:graph.points[138].flags=botcore::CECIL_JUMP;break;
+   case 8:graph.points[138].lock_entity=999;break;
+   case 9:graph.points[138].next_slot=137;break;
+   case 10:graph.points[138].links.clear();break;
+   case 11:graph.points[182].lock_entity=999;break;
+   case 12:graph.points[182].flags=botcore::CECIL_JUMP;break;
+   case 13:graph.points[182].important_entity=260;break;
+   case 14:st.avoidNode=137;break;
+   case 15:st.avoidUntil+=.01;break;
+   case 16:st.importantGoal=true;break;
+   case 17:st.followEntity=1;break;
+   case 18:st.flightFinishing=true;break;
+   case 19:player.m_pstState=PST_SWIM;break;
+   case 20:st.interactionPoint=138;break;
+   case 21:st.useReleaseTick=990;break;
+   case 22:st.ClearAvoidance();break;
+   case 23:player.en_vGravityDir(1)=.01f;break;
+   case 24:player.pl.pl_PositionVector(3)=-84;break;
+   case 25:player.pl.pl_PositionVector(2)=-3;break;
+   case 26:st.Reset();break;
+   case 27:player.health=INFINITY;break;
+   case 28:player.en_vCurrentTranslationAbsolute(1)=INFINITY;break;
+   case 29:++graph.points[138].id;break;
+   case 30:graph.points[138].links.resize(33,0);break;
+  }
+  _botRayBudget=40;BotSupplyTick(&player,0,980,1000);
+  if(originProposal(st,0))std::printf("origin invalid-context countercase=%d\n",bad);
+  check(!originProposal(st,0),"foreign context metadata lock special or avoidance cannot authorize Important-origin recovery");
+ }
+ for(int budget:{0,1,2}){
+  blockedOriginFixture();auto& st=BotSupplyState(0);_botRayBudget=budget;const int before=rayCount;
+  const auto held=BotSupplyTick(&player,0,980,1000);
+  check(!held.active&&!originProposal(st,0)&&rayCount==before&&near(st.avoidUntil,58.4)&&near(st.goalSince,48.4),
+    "budget-deferred origin recovery is neutral without rays or renewed avoid/item deadline");
+  _botRayBudget=40;const auto ready=BotSupplyTick(&player,0,981,1000);
+  check(ready.active&&originProposal(st,0),"RED budget-refilled same bounded origin attempt can reacquire");
+ }
+ blockedOriginFixture();wallMode=2;_botRayBudget=40;const auto wall=BotSupplyTick(&player,0,980,1000);
+ check(!wall.active&&!originProposal(BotSupplyState(0),0),"blocked fresh source LOS cannot authorize origin recovery");
+ wallMode=0;_botRayBudget=40;check(BotSupplyTick(&player,0,981,1000).active,"RED newly clear original source LOS permits same deadline recovery");
+ blockedOriginFixture();_botRayBudget=40;BotSupplyTick(&player,0,980,1000);auto& reset=BotSupplyState(0);reset.navigator.Reset();
+ _botRayBudget=40;BotSupplyTick(&player,0,981,1000);check(!originProposal(reset,0),"explicit navigator reset revokes a previously bound origin recovery");
+ blockedOriginFixture();_botRayBudget=40;BotSupplyTick(&player,0,980,1000);auto& back=BotSupplyState(0);
+ _botRayBudget=40;BotSupplyTick(&player,0,979,1000);check(!originProposal(back,0),"source clock rewind revokes a bound origin recovery");
+ blockedOriginFixture();_botRayBudget=40;BotSupplyTick(&player,0,980,1000);auto& goal=BotSupplyState(0);goal.ClearGoal();goal.goal=182;goal.goalEntity=260;goal.goalKind=botcore::CecilItemKind::Armor;goal.scanTick=99999;
+ _botRayBudget=40;BotSupplyTick(&player,0,981,1000);check(!originProposal(goal,0),"goal reset and restored item ID cannot revive bound origin recovery");
+ blockedOriginFixture();player.body.m[0][0]=2;_botRayBudget=40;BotSupplyTick(&player,0,980,1000);
+ player.body.m[0][0]=1;_botRayBudget=40;BotSupplyTick(&player,0,981,1000);
+ check(!originProposal(BotSupplyState(0),0),"RED invalid frame then restoration cannot revive pending Important-origin provenance");
+ for(int changed=0;changed<3;++changed){
+  blockedOriginFixture();_botRayBudget=40;BotSupplyTick(&player,0,980,1000);auto& st=BotSupplyState(0);
+  if(changed==0)st.goalSince+=.01;
+  if(changed==1)st.goalDeadline=60;
+  if(changed==2)BotSupplyGraph().points[182].x+=.01f;
+  _botRayBudget=40;BotSupplyTick(&player,0,981,1000);
+  check(!originProposal(st,0),"bound original goal start raw/effective deadline and target metadata changes revoke recovery");
+ }
+ blockedOriginFixture();_botRayBudget=40;const auto owned=BotSupplyTick(&player,0,980,1000);auto& foreign=BotSupplyState(0);
+ double of=owned.forward,os=owned.strafe,ou=owned.up;BotCecilSafeMotion(&player,foreign,49,of,os,ou,0,1,false);
+ _botRayBudget=40;BotSupplyTick(&player,0,981,1000);check(!originProposal(foreign,0),"foreign final movement owner revokes bound Important-origin recovery");
+ blockedOriginFixture();auto& selected=BotSupplyState(0);selected.ClearGoal();selected.scanTick=0;_botRayBudget=40;
+ const auto chosen=BotSupplyTick(&player,0,980,1000);
+ check(chosen.active&&originProposal(selected,0)&&selected.goalEntity==260&&selected.goal==182,
+   "actual goal selection ClearGoal and retained blocked-origin search handshake preserve legitimate pending provenance");
+ for(bool physical:{false,true}){
+  blockedOriginFixture();auto& st=BotSupplyState(0);st.goal=138;
+  if(physical)BotSupplyGraph().points[138].lock_entity=999;
+  BotCecilFinishImportant(&player,st,0,968,48.4,physical?"not_usable":"use_cooldown");
+  st.goal=182;st.goalEntity=260;st.goalKind=botcore::CecilItemKind::Armor;st.goalSince=48.4;st.scanTick=99999;
+  _botRayBudget=40;BotSupplyTick(&player,0,980,1000);
+  check(!originProposal(st,0),"same node and deadline with another avoidance reason or initial physical source lock never creates provenance");
+ }
+ blockedOriginFixture();_botRayBudget=40;BotSupplyTick(&player,0,980,1000);
+ allocations=0;measuring=true;
+ for(int tick=981;tick<990;++tick){_botRayBudget=40;BotSupplyTick(&player,0,tick,1000);}
+ measuring=false;check(allocations==0,"bounded origin recovery and prepared suffix validation allocate nothing per tick");
+ blockedOriginFixture(true,true);_botRayBudget=40;BotSupplyTick(&player,0,980,1000);
+ check(BotSupplyState(0).blocked[137]&&!originProposal(BotSupplyState(0),0),"closed intermediate door in the remaining suffix vetoes origin recovery without bypassing edges");
+ blockedOriginFixture();_botRayBudget=40;BotSupplyTick(&player,0,980,1000);auto& arrived=BotSupplyState(0);
+ player.pl.pl_PositionVector(3)=-77.5f;_botRayBudget=40;const auto approach=BotSupplyTick(&player,0,981,1000);
+ check(approach.active&&originProposal(arrived,0)&&arrived.hop<0&&!arrived.currentNavTravel,
+   "sequential outside pose remains only a source-reacquire proposal");
+ player.pl.pl_PositionVector(3)=-76;_botRayBudget=40;const auto enter=BotSupplyTick(&player,0,982,1000);
+ check(enter.active&&!originProposal(arrived,0)&&arrived.blocked[138]&&arrived.hop==182&&arrived.currentNavTravel&&near(arrived.avoidUntil,58.4),
+   "only actual original-radius entry creates the existing committed edge while avoid mask remains set");
+ player.pl.pl_PositionVector(1)=66.5f;player.pl.pl_PositionVector(3)=-74;_botRayBudget=40;
+ const auto exit=BotSupplyTick(&player,0,983,1000);
+ check(exit.active&&!originProposal(arrived,0)&&arrived.navigator.SourceSlot(182)==138,
+   "existing directed committed edge continues after leaving the blocked source with no new override");
+ blockedOriginFixture();_botRayBudget=40;const auto proposal=BotSupplyTick(&player,0,980,1000);auto& floor=BotSupplyState(0);
+ double f=proposal.forward,st=proposal.strafe,u=proposal.up;_botRayBudget=40;floorMode=0;
+ BotCecilSafeMotion(&player,floor,49,f,st,u,0,1,true);
+ check(f==0&&st==0&&u==0&&floor.currentNavTime<0&&floor.currentNavGoal<0,"origin proposal obtains no opt-in floor exemption from NAV stamps");
 }
 void blockedOriginReproduction(){
  blockedOriginFixture();auto& state=BotSupplyState(0);_botRayBudget=40;const int before=rayCount;
@@ -3985,6 +4098,7 @@ void blockedOriginReproduction(){
 }
 int main(){
  blockedOriginReproduction();
+ blockedOriginRecoveryGuards();
  itemConnectorRadiusContinuity();
  healthConnectorContinuityGuards();
  localSupplyContention();
