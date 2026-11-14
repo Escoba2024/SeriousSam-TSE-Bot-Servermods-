@@ -1,0 +1,230 @@
+{
+  "candidate_sha256": "094ec8edbedd5e63d8e4eb03fcce70518283b22440e5f80ba4c2482ff81fe6c0",
+  "qualification": false,
+  "scope": "Isolated Hard2 single-map observations; no A4/reset/first-state/long-term qualification",
+  "maps": [
+    {
+      "map": "Red Station",
+      "status": "PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED",
+      "observed_seconds": 600.1286207910161,
+      "result_sha256": "fb668f2a42e51b809ba528aa6d6a3682ab699521e99ace054cdea6e3ccb1db1e",
+      "missing_activity": [],
+      "server_kill_events": 179,
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 580,
+        "cpu_busy_max_measured_percent": 56.81818181818182,
+        "mem_available_min_bytes": 2706440192,
+        "disk_free_min_bytes": 9670295552,
+        "max_sample_gap_seconds": 46.57942811609246,
+        "budget_pass_claim": false,
+        "gameplay_max_sample_gap_seconds": 1.1659979289397597
+      },
+      "own_slots": {
+        "botA:0": {
+          "observed_lives": 20,
+          "hp_deaths": 19,
+          "motion_rows": 507,
+          "state_fire_rows": 63,
+          "useful_inventory_gains": 17,
+          "native_flags_same_life_source_growth": 408
+        },
+        "botA:1": {
+          "observed_lives": 30,
+          "hp_deaths": 29,
+          "motion_rows": 517,
+          "state_fire_rows": 62,
+          "useful_inventory_gains": 15,
+          "native_flags_same_life_source_growth": 428
+        },
+        "botA:2": {
+          "observed_lives": 28,
+          "hp_deaths": 27,
+          "motion_rows": 517,
+          "state_fire_rows": 51,
+          "useful_inventory_gains": 15,
+          "native_flags_same_life_source_growth": 449
+        },
+        "botA:3": {
+          "observed_lives": 25,
+          "hp_deaths": 24,
+          "motion_rows": 525,
+          "state_fire_rows": 62,
+          "useful_inventory_gains": 15,
+          "native_flags_same_life_source_growth": 391
+        },
+        "botB:0": {
+          "observed_lives": 21,
+          "hp_deaths": 20,
+          "motion_rows": 530,
+          "state_fire_rows": 77,
+          "useful_inventory_gains": 9,
+          "native_flags_same_life_source_growth": 556
+        },
+        "botB:1": {
+          "observed_lives": 24,
+          "hp_deaths": 24,
+          "motion_rows": 530,
+          "state_fire_rows": 61,
+          "useful_inventory_gains": 13,
+          "native_flags_same_life_source_growth": 406
+        },
+        "botB:2": {
+          "observed_lives": 21,
+          "hp_deaths": 20,
+          "motion_rows": 529,
+          "state_fire_rows": 48,
+          "useful_inventory_gains": 15,
+          "native_flags_same_life_source_growth": 304
+        },
+        "botB:3": {
+          "observed_lives": 23,
+          "hp_deaths": 22,
+          "motion_rows": 535,
+          "state_fire_rows": 59,
+          "useful_inventory_gains": 17,
+          "native_flags_same_life_source_growth": 442
+        }
+      },
+      "cleanup": "FOUR_NORMAL_CLOSES_AND_INDEPENDENT_FILE_META_LOG_PID_DISPLAY_RESTORE_PASS",
+      "map_reset_proven": false,
+      "first_simulation_state_proven": false,
+      "terminal_watchdog_positive_observation": false
+    },
+    {
+      "map": "Yodeller",
+      "status": "PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED",
+      "observed_seconds": 600.1265286379494,
+      "result_sha256": "de5756d18859aad6372a01f31bb790c44547bddb64d572262798f4bd7a61ce86",
+      "missing_activity": [],
+      "server_kill_events": 282,
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 580,
+        "cpu_busy_max_measured_percent": 61.881188118811885,
+        "mem_available_min_bytes": 2680934400,
+        "disk_free_min_bytes": 9165586432,
+        "max_sample_gap_seconds": 46.745806948048994,
+        "budget_pass_claim": false,
+        "gameplay_max_sample_gap_seconds": 1.1945308330468833
+      },
+      "own_slots": {
+        "botA:0": {
+          "observed_lives": 46,
+          "hp_deaths": 45,
+          "motion_rows": 505,
+          "state_fire_rows": 60,
+          "useful_inventory_gains": 16,
+          "native_flags_same_life_source_growth": 259
+        },
+        "botA:1": {
+          "observed_lives": 36,
+          "hp_deaths": 35,
+          "motion_rows": 527,
+          "state_fire_rows": 104,
+          "useful_inventory_gains": 22,
+          "native_flags_same_life_source_growth": 646
+        },
+        "botA:2": {
+          "observed_lives": 37,
+          "hp_deaths": 36,
+          "motion_rows": 527,
+          "state_fire_rows": 96,
+          "useful_inventory_gains": 17,
+          "native_flags_same_life_source_growth": 549
+        },
+        "botA:3": {
+          "observed_lives": 45,
+          "hp_deaths": 44,
+          "motion_rows": 514,
+          "state_fire_rows": 84,
+          "useful_inventory_gains": 15,
+          "native_flags_same_life_source_growth": 504
+        },
+        "botB:0": {
+          "observed_lives": 40,
+          "hp_deaths": 39,
+          "motion_rows": 516,
+          "state_fire_rows": 67,
+          "useful_inventory_gains": 15,
+          "native_flags_same_life_source_growth": 381
+        },
+        "botB:1": {
+          "observed_lives": 43,
+          "hp_deaths": 42,
+          "motion_rows": 524,
+          "state_fire_rows": 88,
+          "useful_inventory_gains": 19,
+          "native_flags_same_life_source_growth": 551
+        },
+        "botB:2": {
+          "observed_lives": 34,
+          "hp_deaths": 33,
+          "motion_rows": 533,
+          "state_fire_rows": 86,
+          "useful_inventory_gains": 19,
+          "native_flags_same_life_source_growth": 575
+        },
+        "botB:3": {
+          "observed_lives": 32,
+          "hp_deaths": 31,
+          "motion_rows": 535,
+          "state_fire_rows": 114,
+          "useful_inventory_gains": 24,
+          "native_flags_same_life_source_growth": 762
+        }
+      },
+      "cleanup": "FOUR_NORMAL_CLOSES_AND_INDEPENDENT_FILE_META_LOG_PID_DISPLAY_RESTORE_PASS",
+      "map_reset_proven": false,
+      "first_simulation_state_proven": false,
+      "terminal_watchdog_positive_observation": false
+    },
+    {
+      "map": "Skulls and Bones",
+      "status": "NOT_RUN",
+      "qualification": false
+    },
+    {
+      "map": "Little Trouble",
+      "status": "NOT_RUN",
+      "qualification": false
+    },
+    {
+      "map": "Hole",
+      "status": "NOT_RUN",
+      "qualification": false
+    },
+    {
+      "map": "Lost Tomb",
+      "status": "NOT_RUN",
+      "qualification": false
+    },
+    {
+      "map": "Fortress",
+      "status": "NOT_RUN",
+      "qualification": false
+    },
+    {
+      "map": "Compound (technical world KuntaKinte)",
+      "status": "NOT_RUN",
+      "qualification": false
+    },
+    {
+      "map": "Desert Temple",
+      "status": "BLOCKED_WORLD_ABSENT_FROM_VERIFIED_INSTALLED_ARCHIVE",
+      "qualification": false
+    }
+  ]
+}

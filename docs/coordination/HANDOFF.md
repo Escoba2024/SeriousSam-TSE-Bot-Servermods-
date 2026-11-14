@@ -1,3 +1,37 @@
+## Rückrollbetrieb bestätigt; Diagnosevorbereitung — 14.11.2026,14:00 UTC
+
+KeinNative-/Build-/Liveexecutoraktiv. Yodellerbot-onlyRollback13:53:59nach27BAD/2Disconnectsbelegt; unveränderteDedPID1340003/start127151007, eigeneBotPIDs1419417/start129082063 und1419489/start129082877, beide7fc94a39/8own.90,129s43Queries0neueSYNC/Disconnects+54positiveFrags; alteCecilpositionsparserleer ausdrücklichKEINBewegungsPASS. Getrennte20,100s/34direkteNativeprobenbelegenfüralle8Slots8–14PositioneninnerhalbselberLebensgeneration. GesicherterServerpräfix3221334Bytes/SHA c2d193ddfa4a5caa7cf4778de72f5013ee31bc5ea42019ae7d372f50b020f3a5;2externeIPv4keineHostiface,einerauchRed,Ursache/Original-/Menschstatusunbewiesen. KeinefremdeInstrumentierung/Verdrängung.
+
+SyncdiagnosehatPriorität; a4AgentdarfjetztnurOfflineBelege/Disassembly/Original107prüfenundOwnReproplanvorschlagen. Resetworktreeauf8002109mit5EpochentestsGREEN/nächsteRule/BuilderREDbleibtunverändert, keineunbeaufsichtigteAusführung. CandidateA3author79/109Pinsund59UNIQUEChecksPASS(bestätigtNormalisierungbereitsvorhanden); keineA3Native.
+
+A1exactcoverageintegriert77d54f0,Root26Python+31VMPASS,70/58/14PinsPASS,peerSourcePASS_SCOPE. NeueRootcopy /srv/tse-a1-exact-coverage-root-frozen-20261114 Manifest6534c8b447418f4a2a5310160ff0672b3b41aa742cbc3eb9389bfb648fef919a,Collector931f7c0d/Launcher8db8f421; unabhängigerRootpfad/Gate/Pinsvergleichläuft. KeineNativefreigabeausMappingtests. Delta034für133108A1/133544Yodeller+Liveincident/Restores/Forksnochzuprüfen;033externfullPASS. PublicRed+YodellerGen2/übrige4Build018je8, A/Boffen. LetzterverifizierterRemote9faafe1d/5402ef5fgleich988dd7f; neuesterlokalerCheckpointc6db433nochzuveröffentlichen.
+
+---
+
+## Yodeller-Syncincident und operativer Rückroll — 14.11.2026,13:55 UTC
+
+NeueprefixverifizierteLiveprüfung13:51:58gegen12:32:38: YodellerServer27neueSYNCBAD/2SyncDisconnects, eigeneBotlogs0; übrige5Instanzen0neueFehler. PrioritätnativeAbnahmenzurückgestellt. RootkontrollierterBot-onlyRollback13:53:31: aktuelle018Dateien/Metadaten/Identitäten/Unitsgesichert+separatrekonstruiert, beideeigeneBotclientsnormalgeschlossen, alte7fc94a39Modulewiedergeladen,8eigeneBots/0Zusätzliche, Dedicatedunverändert. PrivateOut /srv/tse-cecil-full-20261107/.codex/evidence/restart-fleet-20261111-yodeller-sync-rollback-20261114-135331/yodeller. Helperrollback-yodeller-sync.py/Owner+Endedvorhanden. FremdeSpieler/Identitätennichtgeändert;Syncursacheweiterunbewiesen.
+
+Genau90sread-onlyPostrollbackbeobachtung läuft /srv/tse-cecil-rollout-evidence-20261114/observe-yodeller-rollback.py; keineweitereNative/Build. BeideAgentenSTATICONLY/Prozessebeendet. DanachRollen/Delta/Bewegungauswerten,Peerzuordnungprivat,aktuellenRestore/Moduleerneutprüfenund034sichern. A1exactMapping69ba836ready57OfflinePASS,peerSourcePASS_SCOPE/Pinreviewnochzurückgestellt. ResetagentWorktree /srv/tse-a4-epoch-reset-v3-20261114 auf8002109,frühe5TestsGREEN/nächsteRule/BuildertestsRED,Codeerhalten. PublicjetztRedUNDYodellerGen2,übrige4Build018,je8;Bunbegonnen/Aoffen. NeueFlottensyncbefunde habenVorrang.
+
+---
+
+## Yodeller-Hardfenster geschlossen — 14.11.2026,13:47 UTC
+
+KeinNative-/Build-/Liveexecutoraktiv. Yodeller020Hard2-V3600,127s PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED,Resultde5756d18859aad6372a01f31bb790c44547bddb64d572262798f4bd7a61ce86. Alle8Bots Bewegung/StateFire/nativeFlag+SameLifeSourcegrowth/echteUsefulGains15–24,282Serverkillereignisse;0neueSync-/Disconnect-/Schlusslogfehler. Alle4normalclosed;Root640Dateien/Metadaten+4Loghashes/PIDStart/DisplaysRestorePASS. CPUmax61,881%,RAMmin2680934400/Diskmin9165586432,GameplayHostgap1,195s. EINphase0Fenster,keinWatchdogTransitEnd/Reset/3Phasen/volleA4abnahme,keine020Livepromotion.
+
+AgentsdürfennachRootCommitwiedergezieltofflinearbeiten: candidate historischenbytegleichenmapped_rows-Helperübernehmen undRED/GREEN+disabledA1fork; a4neuesten018Resetparent+V3epochenstreng020Hard2/diag0/2-2-0/480s/24Slots. RootalleinIntegration/Runtime; nächsteNativeerstdanach/frischemPreflight. Neue133108A1und133544YodellerRaws034offen;033externfullPASS. Publiczuletzt6×8Red7fc/andere5018, A/Boffen. Remote9faafe1d/tree5402ef5fgleich988dd7f; neueResetplan-/Handoffquellenjetztzucommitten.
+
+---
+
+## Historischer Start einzelnes Yodeller-Hardfenster — 14.11.2026,13:35 UTC
+
+Genau ein600sYodeller-Hard2/020/diag0-V3-Lauf startet. Root /srv/tse-cecil-rollout-evidence-20261114/run-hard-map-ordered.py yodeller; Owner/Log/Ended a4-hard020-ordered-yodeller. UnveränderterRootfreeze56f4c319/Launcher7f7d38c8, zuvorunabhängig64/52/33Pins+85RootOfflinePASS, geschlossenesRedfensterbegrenztesPASS. KeinRetry/automatischeKartenfolge. FrischerPreflight13:35:21all4Rollen/Displays/Locks frei,CPU33,25%RAM3648159744/Disk9318465536. BeideAgenten STATICONLY, RootallePublikation/Archiv/Downloads/Testsbeendet. NachEnde normale4Closes/Schlusslogs/PIDs/Displays/unabhängigenRestorevorweitererArbeit.
+
+Root988dd7f/Tree5402ef5f7b066a5929741859415ecdd65fb40696 tatsächlichgleichRemote9faafe1d7f98d0addb7ac5dbd310c41d55c04e4f. NeuerexakterMappingdeckungsplan veröffentlicht; candidate darfwährendFensternurTests/Designstatischvorbereiten, RED/Implementierung/GeneratorerstnachClosed. A1letzterFAILd2755f6dmitbelegterreinerVMA-Aufteilung,RestorePASS; neueBelege034offen,033externfullPASS. Public6×8Red7fc/andere5018; A/Boffen.
+
+---
+
 ## A1-Fehler jetzt konkret gemessen — 14.11.2026, 13:33 UTC
 
 Kein Native-/Build-/Liveexecutor aktiv. Einzelfenster133108 bleibtFAIL vorInput, Resultd2755f6d65122a3f27dfee577c9539cb7a4224cb1ed6e46eb99209668ac5d239. Private0600Mappingquittung: OriginalvanillaEngine vorher600c0000–600fe000r-xp/offset0 wird in3lückenlose r-xpBereiche mit offsets0/d000/e000 aufgeteilt; gleichesFile/Device/Inode/Signatur/Base, übrigeZeilenunverändert. RoheZeilenungleichheitbelegt; keinMappingaccept/Rebaseline. Candidate neuerWT nur Diagnose/Design exakterAdress-/Rechte-/Dateioffsetdeckung vorRootplan. SechsTraceRecords/0Inputs, Originalbytevergleich/Unload/Detachbelegt, eigene3Rollen/Displays/Workerbeendet, Root664+8+3Datei/Metadaten/LogrestorePASS.
