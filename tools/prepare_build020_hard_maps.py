@@ -52,7 +52,7 @@ def prepare(destination):
  for a,b in [('/srv/tse-milestone-a-build-013-20261111',str(BUILD)),('ssam-a4-013-{map_key}-20261112','ssam-a4-020-hard-{map_key}-20261114'),("E=BASE/f'a4-013-","E=BASE/f'a4-020-hard-"),('PRIVATE A4 013','PRIVATE A4 020 HARD'),('candidate013 normal gameplay','candidate020 Hard normal gameplay'),('gam_iStartDifficulty=3;','gam_iStartDifficulty=2;'),('default=120','default=600')]:s=once(s,a,b)
  s=once(s,'policy.options(map_key,duration,diag);','policy.options(map_key,duration,diag);hardmap.options(map_key,duration,diag,policy.prepared.catalog()[\'maps\']);')
  s=once(s,"(directory/'preflight-query-before.json').write_text(json.dumps(query,indent=2))","(directory/'preflight-query-before.json').write_text(json.dumps(query,indent=2))\n hard_rules.validate_query(query)")
- s=once(s,' def count(n):B.wait(lambda:B.query(server[0]).get'," def checked_query():\n  query=B.query(server[0]);hard_rules.validate_query(query);return query\n def count(n):B.wait(lambda:checked_query().get")
+ s=once(s," def count(n):B.wait(lambda:B.query(server[0]).get('numplayers')==str(n),100,'count not reached '+str(n))", " def checked_query():\n  query=B.query(server[0]);hard_rules.validate_query(query);return query\n def count(n):\n  def ready():\n   query=B.query(server[0])\n   with (E/'startup-query-attempts.jsonl').open('a')as output:output.write(json.dumps(dict(expected_players=n,monotonic=time.monotonic(),query=query))+'\\n')\n   return hardmap.startup_count(query,n,hard_rules.validate_query)\n  B.wait(ready,100,'count not reached '+str(n))")
  s=once(s,'q=B.query(server[0]);assert','q=checked_query();assert')
  s=once(s,"identity=record['identity'];assert identity and B.identity(role,unit(role))==identity", "identity=record['identity']\n  if identity is None:\n   assert B.ready(role,unit(role)),'partial start has no strictly owned ready identity'\n   identity=B.identity(role,unit(role));record['identity']=identity\n  assert B.identity(role,unit(role))==identity")
  # Same safe partial-start close as reviewed V2, without its irrelevant rotation operation guard.
@@ -70,6 +70,9 @@ def prepare(destination):
  anchor="   report['active_evidence']=policy.active_evidence({role:(R/role/'SeriousSam.log').read_text(errors='replace')for role in ('botA','botB')},mapping,active_snapshots,queries,(R/'server/Dedicated_BotTest.log').read_text(errors='replace')); (E/'active-evidence.json').write_text(json.dumps(report['active_evidence'],indent=2))"
  replacement="   assert native_registry is not None,'no complete current native registry'\n   logs={role:(R/role/'SeriousSam.log').read_text(errors='replace')for role in ('botA','botB')}\n   report['active_evidence']=policy.active_evidence(logs,mapping,active_snapshots,queries,(R/'server/Dedicated_BotTest.log').read_text(errors='replace'))\n   report['active_evidence']=native_fire.apply(report['active_evidence'],logs,mapping,active_snapshots,native_registry,server)\n   (E/'active-evidence.json').write_text(json.dumps(report['active_evidence'],indent=2))"
  s=once(s,anchor,replacement)
+ # Preserve normal-close logs for every role that actually started even when
+ # startup aborts early. The final trial still requires all four roles.
+ s=once(s,"    roles=('server','botA','botB','vanilla')\n    post=archive_closed_role_logs", "    roles=tuple(records)\n    post=archive_closed_role_logs")
  # Archive the exact additional pure runtime policies; no hook or Frida imported.
  s=once(s,"'strict_backend.py','transaction.py'):","'strict_backend.py','transaction.py','a4_hard_map_policy.py','stability_hard_rules.py','a4_fire_observer_v2.py','audit_a4_native_fire_observer_v2.py','reset_policy.py'):")
  fixture=(PARENT/'test_preflight_startup.py').read_text()

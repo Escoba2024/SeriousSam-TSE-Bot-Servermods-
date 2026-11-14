@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import struct
 import sys
+import tempfile
 import types
 import unittest
 
@@ -44,6 +45,20 @@ class HardMapTests(unittest.TestCase):
   with self.assertRaises(ValueError):rules.validate_session(dict(session156_hex=raw.hex()))
   with self.assertRaises(ValueError):rules.validate_session({})
   with self.assertRaises(ValueError):rules.validate_query(dict(difficulty='Serious'))
+
+ def test_startup_transport_timeout_is_not_a_difficulty_verdict(self):
+  import stability_hard_rules as rules
+  self.assertFalse(hardmap.startup_count({},0,rules.validate_query))
+  self.assertTrue(hardmap.startup_count(dict(difficulty='Hard',numplayers='0'),0,rules.validate_query))
+  self.assertFalse(hardmap.startup_count(dict(difficulty='Hard',numplayers='1'),0,rules.validate_query))
+ def test_startup_valid_wrong_or_missing_difficulty_never_becomes_ready(self):
+  import stability_hard_rules as rules
+  for query in [dict(difficulty='Serious',numplayers='0'),dict(numplayers='0'),dict(difficulty='Hard',numplayers='0x0')]:
+   if query.get('difficulty')=='Hard':self.assertFalse(hardmap.startup_count(query,0,rules.validate_query))
+   else:
+    with self.assertRaises(ValueError):hardmap.startup_count(query,0,rules.validate_query)
+  for query in [None,[],False]:
+   with self.assertRaises(ValueError):hardmap.startup_count(query,0,rules.validate_query)
 
 @unittest.skipUnless(os.environ.get('TSE_HARD_MAP_PACKAGE'),'explicit disabled package required')
 class AdapterTests(unittest.TestCase):
@@ -93,5 +108,24 @@ class AdapterTests(unittest.TestCase):
   self.assertIn('native_fire.apply(',self.source);self.assertIn('hardmap.registry(',self.source)
   self.assertIn('native_fire.bind_sample(sampled,0,server,log_offsets)',self.source)
   self.assertIn("assert native_registry is not None",self.source)
+
+ def test_startup_archives_empty_then_hard_without_accepting_wrong_status(self):
+  import json
+  import stability_hard_rules as rules
+  with tempfile.TemporaryDirectory()as td:
+   replies=iter([{},dict(difficulty='Hard',numplayers='0')]);observed=[]
+   def wait(predicate,seconds,message):
+    for unused in range(2):
+     value=predicate();observed.append(value)
+     if value:return
+    raise AssertionError('not ready')
+   env=dict(B=types.SimpleNamespace(query=lambda pid:next(replies),wait=wait),server=[17,91],E=Path(td),json=json,time=types.SimpleNamespace(monotonic=lambda:123),hardmap=hardmap,hard_rules=rules)
+   exec(self.function('count'),env);env['count'](0)
+   self.assertEqual(observed,[False,True])
+   packets=[json.loads(l)for l in(Path(td)/'startup-query-attempts.jsonl').read_text().splitlines()]
+   self.assertEqual([p['query']for p in packets],[{},dict(difficulty='Hard',numplayers='0')])
+   env['B'].query=lambda pid:dict(difficulty='Serious',numplayers='0')
+   with self.assertRaises(ValueError):env['count'](0)
+   self.assertEqual(json.loads((Path(td)/'startup-query-attempts.jsonl').read_text().splitlines()[-1])['query']['difficulty'],'Serious')
 
 if __name__=='__main__':unittest.main()

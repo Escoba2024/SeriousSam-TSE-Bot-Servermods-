@@ -1,3 +1,29 @@
+## Vorbereiteter Startadapter-Checkpoint — 14.11.2026,11:26 UTC
+
+Kein Native-/Build-/Liveexecutor aktiv. RootStartupfix49e93eb unabhängigPASS_SCOPEreviewt,84gezielteOfflinechecksPASS. NeueRootkopie /srv/tse-a4-build020-hard-map-startup-root-frozen-20261114 Manifestcf012d47d64b25bce5a9098a688d5d4b0fcf847283bd1cbedbc64956caf61bd8 Launcherf2b636b6a828b25e3c0f4c08c94df61236856eb8875afff6bb65410500bc1c9a,61/39Pins. Freezeabgleichcandidate_auditvorStart. Owner/Log/EndednächstereinzelnerMapa4-hard020-startup-redstation; nur600s/Hard2/diag0, keinRetry/Serienautomatik. ErsteHardmap111731FAILundseinefehlendeSchlusslogquittungunverändert. Transport{}nurStartupNotReady, nonemptystrictHard, Gameplay/Preflightstrictauchempty, Finaltrialweiter4Rollen.
+
+RootpubliziertvorNative, dannfrischerPreflight/beideAgentenSTATICONLYbestätigen. NeueA1-/Mapdatenbrauchen030nachdemnächstengeschlossenenFenster; allekritischen018/Rückroll/Quietbelegein029DrivevollständigPASSgesichert. RedPublic7fc, andere5018. A1Guardphasen-/HostReceiptfixundA3boundedWorkergetrenntofflineinArbeit; keinA/B-PASS. KeineparallelRootReader/Archive/Publikation/TestsimNativefenster.
+
+---
+
+## Geschlossener Hardmap-Startabbruch — 14.11.2026,11:24 UTC
+
+**Kein Native-/Build-/Liveexecutor aktiv.** Erster Hardmap111731 FAIL vor Botjoin/Gameplay an ersterQueryHardprüfung; Rohqueryfehlte, daheremptyTransportvsfalscherWertUNKNOWN. Result e832470e3d79e9098dcec6e7bcd92e4511e5860907fa7f633c5b68f73023c917. Nurservergestartet/regulärzu, Displaybeendet; Root640Dateien/MetadatenrestorePASS. Vierrollen-SchlusslogharnessfehlteimTeilstart;0geschlosseneLogs, Vorclosekopievorhanden. Originalpreflight11:20:17UTCallevierRollen/Displays/Locksfrei. RootReader/Archive/TestsbeendetnachfolgendenMetadatenchecks; AgentengezielteOfflinearbeitwiederfreigegeben.
+
+EngerFix vorbereitet: bisherigeStartuptransportleerantwort{} wiederhistorischNotReady, empfangenenonemptyweiterstrictHard; jedevorhandeneStartupqueryVORPrüfungarchiviert. Gameplay/PreflightHardauchemptystrict,Readrate/Warte/600sunverändert. PartialclosearchivjetzttatsächlichgestarteteRoles,finaleGameplayvierRolesweiterPflicht. SeparatesdisabledPaket/srv/tse-a4-build020-hard-map-startup-final-20261114 Manifest593e29ac10f68654e01e17f566a4aaa409a4843087d52560624aed2acca18f8f,84focusedchecksPASS. candidate_auditreviewtRootdelta, keinNativebisneuemFreeze+Review+freshPreflight+Staticacks. AlterFAILunverändert.
+
+Guardfixa4_diagnosis05213b3EDIphase/ArmGamebeobachtung,HostReceipt+WorkeränderunginArbeit; nochkein neuesRootfreeze. A3boundedWorker/Quieszenzfixcandidate_auditstatischangelegt, nochkeineRootintegration/Native. PublicRed7fc/andere5018; Redserveroffset11:22:55weiter0neueBAD/DisconnectseitRückroll,keineUrsachenabnahme. SourceRemotezuletzta56c6a59a5daca38e9fc1b6d733cbbc402d40972/Tree1b12177afccd950be9a1e846a47878a2000e7368gleichlokal7debef6. Delta029externPASS, nachfolgendeA1-/MapbelegeundFreezesbrauchen030. Aoffen/Bunimplementiert.
+
+---
+
+## Historisch aktives einzelnes Hard2-Kartenfenster — 2026-11-14T11:17:31.269866+00:00
+
+Genau ein600sRedStation-Hard2/diag0-Lauf startet mit Build020. Owner/Log/Ended `/srv/tse-cecil-rollout-evidence-20261114/a4-hard020-redstation-{owner.json,native.log,ended.json}`. Freezef1b0e7e417c0c81cc9c38cd57b5531b6f41913b8be97bf8b37ae7c0a3c724a26; Manifest/Launcher61Runtime/39SourcepinsunabhängigPASS_SCOPE(candidate_audit). BeideAgentenSTATICONLYbestätigt, alleTests/Reader/Compilerbeendet. RootPublikation/Archive/Downloads/Parallelreaderbeendet. WährendFenster nurleichteStatusabfragen, keineRechenlast. KeineautomatischeKartenfolge/Retry; nächsterSchritterstnachErgebnis/normalenCloses/Schlusslogs/unabhängigemRestore. PrivatesNetz/Port27850/Display154, RuntimeLockexklusiv. PublicunverändertRed7fc/übrige5018.
+
+Remotea56c6a59a5daca38e9fc1b6d733cbbc402d40972/Tree1b12177afccd950be9a1e846a47878a2000e7368 frischgleichlokal7debef6c3e6dde6b081632b36c413cbf8fd86a3e. Delta029externvollständigPASS, neueA1-/Mapdatenbrauchen030. KeineA-Abnahme/B-ImplementierungdurchgestartetenTest.
+
+---
+
 ## Geschlossener A1-/vorbereiteter Kartencheckpoint — 14.11.2026,11:16 UTC
 
 **Kein Native-, Build- oder Liveexecutor aktiv.** A1-Guardfenster110842 geschlossenFAIL vor Gameplay: erster GetInput/fault1 wegen EDI-Gleichheit; Entry/Return ununterscheidbar, keine Guardwerte/eine Gameursache belegt. Root664Dateien/8Absenzen/Metadaten/3Schlusslogs/alle3Rollen/2Displays/WorkerendePASS. JSquieszenz/detachtrue; expliziterHostfullbytevergleichsbeleg UNKNOWN. Ergebnis3f097a4a6b48f24064366280bdecc5aa46368cf2bca8c198b70f30872ecfaab6. Berichtdocs/reports/2026-11-14-a1-timer-guard-native-failure.md. KeineSchadens-/A1-Abnahme. a4_diagnosis behebt getrennte Entry-/Returnbeobachtung am gebundenen Gameobjekt und Cleanupquittung offline; keine Lockerung/Native.

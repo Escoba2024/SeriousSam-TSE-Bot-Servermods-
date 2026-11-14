@@ -9,6 +9,13 @@ def options(map_key,duration,diag,catalog):
  need(type(duration)in(int,float)and duration==600,'fixed600s functional window')
  need(type(diag)is int and diag==0,'fixed diagnostics0')
 
+def startup_count(query,expected,validate_hard):
+ """Preserve startup transport-not-ready; every received status must be Hard."""
+ need(type(query)is dict,'status transport must return a dictionary')
+ if not query:return False
+ validate_hard(query)
+ return query.get('numplayers')==str(expected)
+
 def registry(original,rows,mapping,server_identity):
  """Use existing V2 registry builder; independently validate its input binding."""
  need(set(mapping)=={'botA','botB','vanilla'},'physical roles')
