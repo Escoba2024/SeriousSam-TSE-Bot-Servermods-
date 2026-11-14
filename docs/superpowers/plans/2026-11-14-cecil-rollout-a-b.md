@@ -57,7 +57,7 @@ Vor Umsetzung eigenes konkretes Design anhand Originalauftrag und vorhandener In
 
 - [ ] Dev-abgenommenes B zuerst auf einem Public prüfen, weitere einzeln aktualisieren.
 - [ ] Gemeinsame Tabelle: Version/Module, Mindestziel/Soll/Ist/eigene/fremde, Sessions/Chat, Fehler/Ressourcen.
-- [x] Private Delta022/023 und geschlossene Nachträge024–026 im bestehenden Drive-Projekt sichern, vollständig rücklesen/hashen; weitere neue Belege benötigen weitere Nachträge.
+- [x] Private Delta022/023 und geschlossene Nachträge024–028 im bestehenden Drive-Projekt sichern, vollständig rücklesen/hashen; Quiet-V2 und spätere Belege benötigen Delta029.
 - [ ] Quellen/Configs/Navmetadaten/Tests/bereinigte Berichte committen/pushen; Remote tatsächlich lesen; vorgesehene Integration und ausführbaren Restore dokumentieren.
 
 ## Ausführungsledger
@@ -83,3 +83,7 @@ Vor Umsetzung eigenes konkretes Design anhand Originalauftrag und vorhandener In
 10:20UTC: A1Controller+Controlmodusfinalunabhängigreviewt, Root63OfflinechecksPASS; Rootfreeze2e3bf79b…/Library8b350891…ebenfallsunabhängig68/13/46PinsPASS. Delta027lokalerDateirestore+vollständigerDrive-RückdownloadPASS. NochkeineA1Native, geplanteReihenfolgeuninstControl→vollständigerRestore→passiveTrace; beideNoFire, keinA1SchadensPASS. VorStartPublikation/Sicherungenbeenden, Workerreinstatic.
 
 10:27UTC: BeideA1FenstergeschlossenFAIL. UninstPitchgains−.5/−.25nach6Inputs; Instr21GetInput/0Action/0FaultsvorGameplay, OriginalbyteRestore/WorkerendePASS. Rootje664+9+3Logs/MetadatenPASS, frischerPreflightfrei. KonkreteAction-/Fokusursachejetztofflineprüfen, keineToleranzlockerung. RootHard2-Formaladapter unabhängigPASS_SCOPE, weiterdeaktiviert. A3konkreterController/AnalyzermitgezieltenOfflinefälleninArbeit. NeueRawsDelta028offen.
+
+10:56 UTC: Quiet-V2 geschlossen mit 24/24 begrenzten Slotphasen und unabhängigem Restore-PASS; keine vollständige A4-/020-Freigabe. Delta028 extern vollständig geprüft. Neuer Red-SYNC-Befund hat Vorrang: im stabilen privaten Serverpräfix 10:54:01 UTC 15 BAD/ein Disconnect für eine öffentliche IPv4, acht eigene Botlogs/Slots unauffällig, ein zusätzlicher Teilnehmer. Zuordnung läuft nur lesend, keine fremde Instrumentierung/Entfernung. Neue Nativefenster zurückgestellt. A1-Timerguards und A3-Hardvergleich deaktiviert zur unabhängigen Prüfung; Root-Kartenadapter geplant.
+
+11:05 UTC: Zuordnung zusätzlicher externer Peer unabhängig bestätigt. Betrieblicher Bot-only-Rückroll Red abgeschlossen: aktuelle018-Sicherung rekonstruiert/hashgeprüft, reguläre eigene Closes, vorherige7fc94a39-Module geladen, acht Bots, Identitätsdateien und Dedicated unverändert.116,91s kurze Nachprüfung mit Zusatzteilnehmer und0neuenBAD/Disconnects, Ursache weiteroffen. Fünf weitere Instanzen018, keine weitere Promotion bis Syncklärung. A1-Guards efcb7eb integriert/39OfflinefällePASS; separater Freeze9fd173db zur Prüfung. A3 blockiert durch zwei wichtige Frida-Lifecycle-Befunde, Fix deaktiviert in Arbeit; HardMapadapter ohneFrida getrennt in Arbeit. Kein B-Beginn.

@@ -101,6 +101,42 @@ function lifetime() {
        'effective input profile changed');
   return profile;
 }
+// Passive observations of the Original post-GetInput guards. These values
+// can change before the native caller evaluates them; no branch is claimed.
+function timerGuard(callerGame) {
+  const g=guards.timer_gate;
+  need(g && g.schema==='original107-timer-guard-observation-v1','timer guard metadata');
+  same(callerGame,gameObject,'GetInput caller Game differs');
+  const network=engine.add(g.network_pointer_rva).readPointer();
+  const global=engine.add(g.network_guard_rva).readS32();
+  let session=null, pauseWord=null, localWord=null;
+  if(network.toUInt32()!==0) {
+    pointer(network.toString());
+    const observedSession=network.add(g.network_session_offset).readPointer();
+    if(observedSession.toUInt32()!==0) {
+      pointer(observedSession.toString()); session=observedSession;
+      pauseWord=session.add(g.session_pause_offset).readS32();
+    }
+    localWord=network.add(g.network_local_pause_offset).readS32();
+  }
+  const fallback=network.toUInt32()===0 || global!==0;
+  const paused=fallback?1:pauseWord, local=fallback?1:localWord;
+  const vtable=controls.readPointer();pointer(vtable.toString());
+  const target=vtable.add(g.controls_action_slot_offset).readPointer();
+  const gameOn=callerGame.add(g.game_on_offset).readS32();
+  return {observed_ms:Date.now(),caller_game:callerGame.toString(),game_on:gameOn,
+    menu_on:callerGame.add(g.game_menu_offset).readS32(),
+    input_enabled:input.add(g.input_enabled_offset).readS32(),
+    local_source:callerGame.add(0xfa4).readPointer().toString(),
+    network:network.toString(),network_global_guard:global,
+    session:session===null?null:session.toString(),session_pause_word:pauseWord,
+    local_pause_word:localWord,derived_is_paused:paused,derived_local_pause:local,
+    controls_vtable:vtable.toString(),virtual_action_target:target.toString(),
+    expected_vtable_matches:vtable.equals(game.add(g.controls_vtable_rva)),
+    expected_action_target_matches:target.equals(game.add(guards.sites.action.rva)),
+    derived_create_action_gate_open:gameOn!==0 && paused===0 && local===0,
+    actual_branch_proven:false};
+}
 function entry(thread) {
   if(!running()) return false;
   need(Number.isInteger(thread)&&thread>0,'invalid input thread');
@@ -122,6 +158,7 @@ rpc.exports={
     need(Number.isInteger(c.max_records)&&c.max_records>0&&c.max_records<=256,'queue bound');
     need(Number.isInteger(c.max_calls)&&c.max_calls>0&&c.max_calls<=4096,'call bound');
     need(Number.isInteger(c.ttl_ms)&&c.ttl_ms>0&&c.ttl_ms<=90000,'TTL bound');
+    need(g && g.timer_gate && g.timer_gate.schema==='original107-timer-guard-observation-v1','timer guard metadata required');
     guards=g; cfg=JSON.parse(JSON.stringify(c));
     engine=pointer(c.engine_base); game=pointer(c.game_base);
     need(engine.toUInt32()%4096===0&&game.toUInt32()%4096===0,'module base alignment');
@@ -141,13 +178,15 @@ rpc.exports={
           const prescan=bool(sp.add(4).readS32()); need(!prescan,'unexpected prescan call');
           if(inputThread===null) inputThread=this.threadId;
           const row={kind:'input',id:calls,thread:this.threadId,prescan,entry_sp:sp.toString(),
-            caller:sp.readPointer().toString(),entered_ms:Date.now(),profile:lifetime(),cursor:null,recenter:null};
+            caller:sp.readPointer().toString(),entered_ms:Date.now(),profile:lifetime(),
+            timer_guard_entry:timerGuard(this.context.edi),timer_guard_return:null,cursor:null,recenter:null};
           this.row=row; activeInputs.set(this.threadId,row); inFlight++;
         } catch(e) { fault(e); } },
         onLeave() { const row=this.row; if(!row) return; try {
           lifetime();
           need(row.cursor && row.cursor.ok,'missing cursor result');
           need(row.recenter && row.recenter.ok,'missing/failed recenter');
+          row.timer_guard_return=timerGuard(this.context.edi);
           row.engine_x=finite(input.add(0x24).readFloat());
           row.engine_y=finite(input.add(0x38).readFloat()); row.left_ms=Date.now();
           latestInput.set(this.threadId,row.id); emit(row);

@@ -16,13 +16,13 @@ RUNTIME_REVIEWED = False
 ORIGINAL_GAME_SHA = '1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208'
 FRIDA_PACKAGE = Path('/srv/tse-frida-probe-20261111/lib/python3.12/site-packages')
 A3 = Path('/srv/tse-milestone-a-continuation-evidence-20261112/a3-build017-root-frozen')
-PRIVATE = Path('/srv/tse-a1-input-trace-controller-20261114')
+PRIVATE = Path('/srv/tse-a1-input-trace-timer-guard-library-20261114')
 DEPENDENCIES = {
     A3/'frozen-v2/host_binding.py': 'db411bb6757abdc6e6b0ca124f948234fff656a71d8ec7659bb4322cbc18caa8',
     A3/'frozen-v2/controller_guard.py': '3f7142734eb26eb5d6277671b04299bbd0d167be085da14082726feff95274bf',
     A3/'damage_policy.py': '4095c30e55e4b8996a87807f3c55c7357411bf9c5fcd91d93f748d31cef84525',
 }
-GUARDS_SHA = '319cf4889bc3290ecfc84cc0a65b6015f330e7c99ad99b87d95e984bde67ed46'
+GUARDS_SHA = '2f4b494cbb4796727c821b7f6a4d3a5ab921ded5e9bf620dd5476f6765746936'
 CONTROLS_ROOT = Path('/srv/tse-a1-nosmooth-root-frozen-20261114')
 CONTROLS_SHA = '726a5abd10ff646b0c54c318d13cfb373b4bbaa37fa2e4162e05ebe448d99d54'
 

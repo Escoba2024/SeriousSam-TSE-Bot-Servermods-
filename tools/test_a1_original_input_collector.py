@@ -161,7 +161,7 @@ class CollectorPolicyTests(unittest.TestCase):
             self.assertFalse(c.closed)
 
     @unittest.skipUnless(os.environ.get('TSE_A1_INPUT_PRIVATE'), 'requires explicit private Original guards')
-    def test_real_original_files_pin_all_five_preferred_addresses_and_full_ranges(self):
+    def test_real_original_files_pin_six_sites_ten_ranges_and_timer_guards(self):
         import build_a1_input_guards as builder
         m = self.module()
         private = Path(os.environ['TSE_A1_INPUT_PRIVATE'])
@@ -172,6 +172,13 @@ class CollectorPolicyTests(unittest.TestCase):
             self.assertEqual(receipt['sites_verified'],6)
             self.assertEqual(output.read_bytes(),expected)
         guards=json.loads(expected)
+        chain=guards['timer_gate']
+        self.assertEqual(chain['schema'],'original107-timer-guard-observation-v1')
+        self.assertEqual(chain['network_local_pause_offset'],0x854)
+        self.assertEqual(chain['controls_vtable_rva'],0x2156c)
+        self.assertEqual(chain['original_getters']['get_local_pause']['va'],0x6019ac30)
+        self.assertEqual(chain['original_getters']['is_paused']['rva'],0xdab60)
+        self.assertEqual(len(guards['guards']),10)
         for site in guards['sites'].values():
             self.assertEqual(guards['modules'][site['module']]['preferred_base']+site['rva'],
                              site['preferred_va'])

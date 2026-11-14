@@ -1,3 +1,35 @@
+## Aktueller Checkpoint — 14.11.2026,11:05 UTC
+
+**Red Station betrieblich zurückgerollt, Gesamtauftrag offen.** Neuer externer Peer hatte 15 BAD/einen Sync-Disconnect; Zuordnung von Root und candidate_audit unabhängig bestätigt. Ursache einschließlich möglichen Boteinflusses ungeklärt. Nur eigene Red-Botclients regulär geschlossen und aus gesichertem Vorrollout-Payload wieder gestartet; aktive Module `7fc94a39…`, acht eigene Bots, GUID/Profile unverändert. Dedicated-Generation/Module/Eingaben unverändert. Aktueller018-Rückweg vorher vollständig gesichert, separat rekonstruiert/hashgeprüft. Kein Native-/Build-/Liveexecutor aktiv; ein rein lesender Flottenlogcheck kann noch laufen, vor Native unbedingt Ende bestätigen.
+
+Private Operation `rollback-red-sync.py`; Belege `/srv/tse-cecil-full-20261107/.codex/evidence/restart-fleet-20261111-red-sync-rollback-20261114-105950/redstation`. Kurze Nachprüfung 116,91s: acht eigene/ein zusätzlicher Teilnehmer, null neue BAD/Disconnects ab Serveroffset; alle acht bewegen sich. Keine Ursachen-/Langzeitbehauptung. Bericht `docs/reports/2026-11-14-red-external-sync-operational-rollback.md`. Fünf weitere Instanzen bleiben018; Publicweiterverteilung ausgesetzt bis Syncklärung. B nicht begonnen.
+
+A1-Guardquelle integriert `efcb7eb`, Root39 gezielte Offlinefälle PASS. Separater einfenstriger Tracefreeze `/srv/tse-a1-timer-guard-root-frozen-20261114`: Manifest `9fd173db1e700aab1b05a4197563abc413feae27aa402da005fef992124395a8`, Library `2f2e1595066c0eb825ae3f43faed5b7494f371d467046faf1c3523e1f1c98343`;68 Runtime-/13 Librarypins. Keine neue native Ausführung; a4_diagnosis prüft Freeze unabhängig. Keine zusätzliche uninstrumentierte Wiederholung, Warmup/ACK/Gain/EPS/Firegrenze unverändert. Vor diesem eigenen Diagnosefenster Delta029/Publikation abschließen und alle Leser/Worker-Tests beenden.
+
+A3-Review fand zwei wichtige geerbte Grenzen: unbegrenzte Frida-RPCs im Hauptprozess sowie fehlendes Idle-Gate vor Unload. candidate_audit behebt deaktiviert unter unveränderten Damage-/Zeit-/Hostgrenzen. Keine A3-Nativefreigabe. a4_diagnosis entwickelt getrennten deaktivierten Hard2-Kartenadapter; dessen konkreter Parent nutzt nur InventoryReader und benötigt keinen FridaWorker. Noch keine neue Kartenabnahme. Quiet-V2 bleibt begrenzter24/24-Teilerfolg, alte FAILs offen. Neue Belege brauchen Delta029; Remote zuletztb42d523… unverändert.
+
+---
+
+## Historischer Checkpoint — 14.11.2026,10:56 UTC
+
+**Kein Native-, Build- oder Liveexecutor aktiv.** Quiet-V2 ist geschlossen: 24/24 Slotphasen, 432,397 Sekunden, `PASS_LIMITED_BOT_RESET_FRESH_OBSERVER_REVIEW_REQUIRED`; maximal 60,494 % CPU. Root-Restore unabhängig 643 Dateien/fünf Absenzen/vier Schlusslogs plus Metadaten PASS. Ergebnis SHA256 `e6a2143fc942e211ee5e94b9c23c94595ccbc2706b5e8943672eda8ba746c0c4`. Bericht: `docs/reports/2026-11-14-build020-quiet-v2-native.md`. Serious3, keine vollständige A4-/020-Freigabe; der neue terminale Watchdog wurde nicht positiv nativ ausgeübt.
+
+**Priorität: neuer Red-Station-Syncbefund.** Seit dem fehlerfreien Serverlogcheck 09:51 wurden neue SYNCBAD und ein Sync-Disconnect sichtbar. Stabile private Kopie 10:54:01 UTC: `/srv/tse-cecil-rollout-evidence-20261114/red-sync-investigation-105401`; Serverpräfix 1.183.107 Bytes, SHA256 `8335e3d5d62bd5930ef7a25525517822de2b53b9d3172b6201521e0ba9848870`, 15 BAD/ein Disconnect. Genau eine öffentliche, nicht lokale IPv4 als Fehlerbezeichner; noch gegen eigene tatsächliche Verbindungen zuzuordnen. Acht eigene Bots, ein zusätzlicher Teilnehmer, beide eigenen Botlogs null Syncfehler. Keine fremden Identitäten veröffentlichen, Spieler entfernen oder fremde Prozesse instrumentieren. Root und candidate_audit untersuchen ausschließlich lesend. Keine voreilige Ursachen- oder Rückrollbehauptung.
+
+Alle sechs Instanzen laden weiter Build018, je acht eigene Bots; Hard2 nur Dev und Red. B nicht begonnen. Frischer letzter isolierter Preflight 10:41:09 UTC frei; vor einem weiteren Start erneut prüfen. Delta022–028 vollständig auf Drive rückgelesen und dateiweise wiederhergestellt; Quiet-V2, neuer Syncbefund und neue Agentenvorbereitungen benötigen Delta029. Remote zuletzt `b42d523debc0ba86ecfdea417efb72b162e39044`, Baum `ff483b9ceb50c2162fff60434e6b8593ab2b00f2`, gleich lokal `08ab21b8e1843e232e39e5f4e9bb71d4614ebde5`.
+
+Deaktivierte neue Vorbereitungen noch nicht integriert: A1-Timerguard `7cc28c431d231bf622ba245b0d1e2b5cc4dd70a4` in `/srv/tse-a1-timer-guard-record-20261114`; A3-Hard-Tiervergleich `739141980af1a42d828b92e2af42f289abde6069` in `/srv/tse-a3-tier-comparison-design-20261114`. a4_diagnosis reviewt A3, Root anschließend A1. Keine neue Library über alte Freezeverzeichnisse schreiben. Root-Kartenadapter bisher nur Plan `814d3c9`, keine Implementierung/Runtime. Erst Synczuordnung und Betriebsentscheidung, dann unabhängige Entwicklung fortsetzen.
+
+---
+
+## Historischer aktiver Quiet-V2-Checkpoint — 14.11.2026,10:33UTC
+
+Genau einA4V2Quietlauf aktiv. AutoritativOwner/Log/Ended `/srv/tse-cecil-rollout-evidence-20261114/a4-fire020-v2-quiet-{owner.json,native.log,ended.json}`; RuntimePort27850/Display154 exklusiv. Freeze0094121be382680971b132806bee0afa0b49dd2f7a8fd6e209ff3aea177a0b71, Launcher5de134fa5ca26a6d4bbde9c943c1adc99f2a10f85aef56d8116fe921079397c7. BeideWorkerbestätigtenTests/Prozessebeendet, nurnochstatic. RootBackup/Publikation/Parallelreaderabgeschlossen, keineweitereCPUarbeitimFenster. Originalpreflight10:32:21UTCfrei/LocksPASS,CPU33,76%,RAM3642486784Bytes,Disk10818936832Bytes.
+
+Remotezuletztb42d523debc0ba86ecfdea417efb72b162e39044/Treeff483b9ceb50c2162fff60434e6b8593ab2b00f2 frischgefetchtexaktgleichlokal08ab21b8e1843e232e39e5f4e9bb71d4614ebde5. Delta028vollständigDrive-rückgeprüft. DieseaktiveFortschreibungbleibtbisEndeuncommitted, keineParallelpublikation. VorweitererRuntimevollständigenAbschluss/Normalclose/Schlusslogs/unabhängigenRestoreprüfen, keineautomatischeWiederholung/020Promotion.
+
+---
+
 ## Vorbereiteter Quiet-V2-Checkpoint — 14.11.2026,10:31UTC
 
 NochkeinNativeaktiv. BeidegeschlossenenA1FAILs sindDelta028externvollständiggesichert/rückgeprüft:10469627Bytes/SHA2568f65d917543eebee24afbcb627b2f713da72d8b9f6ac8229416cee546bff0389, Drive1Cu4VNr7kplWBq39z6HLhS4Xl8Oa9mAnh;1607Dateien/36571670Bytes+MetadatenrestorePASS. NeueV2Quietkopie0094121b…/Launcher5de134fa…mit67PinsPASS, exaktgleicheGates/CodebisEigennamespace. Bericht `docs/reports/2026-11-14-delta028-and-quiet-v2-preparation.md`.

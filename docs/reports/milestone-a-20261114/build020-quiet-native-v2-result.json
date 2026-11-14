@@ -1,0 +1,262 @@
+{
+  "scope": "NATIVE_LIMITED_RED_RESET_WITH_FRESH_ORIGINAL_OBSERVER_NOT_FULL_A4",
+  "status": "PASS_LIMITED_BOT_RESET_FRESH_OBSERVER_REVIEW_REQUIRED",
+  "candidate_source": "e5f7a65502fbea683014ef8fcc95ecdd2a927b6a",
+  "candidate_sha256": "094ec8edbedd5e63d8e4eb03fcce70518283b22440e5f80ba4c2482ff81fe6c0",
+  "frozen_manifest_sha256": "0094121be382680971b132806bee0afa0b49dd2f7a8fd6e209ff3aea177a0b71",
+  "result_sha256": "e6a2143fc942e211ee5e94b9c23c94595ccbc2706b5e8943672eda8ba746c0c4",
+  "errors": [],
+  "observed_seconds": 432.3967842247803,
+  "functional_pass": false,
+  "qualified": false,
+  "map_reset_proven": false,
+  "reset_sequence_observed": true,
+  "server_difficulty": 3,
+  "host_budget": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 405,
+    "cpu_busy_max_measured_percent": 60.49382716049383,
+    "mem_available_min_bytes": 2788114432,
+    "disk_free_min_bytes": 10712571904,
+    "max_sample_gap_seconds": 47.549219973850995,
+    "budget_pass_claim": false,
+    "gameplay_max_sample_gap_seconds": 2.1071165821049362
+  },
+  "root_restore_counts": {
+    "files": 643,
+    "absences": 5,
+    "closed_logs": 4
+  },
+  "slot_phases": [
+    {
+      "phase": 0,
+      "slot": "botA:0",
+      "native_fire_with_same_life_growth": 28,
+      "observed_useful_inventory_gains": 3,
+      "observed_lives": 10,
+      "observed_hp_deaths": 9,
+      "motion_action_rows": 104
+    },
+    {
+      "phase": 0,
+      "slot": "botA:1",
+      "native_fire_with_same_life_growth": 95,
+      "observed_useful_inventory_gains": 4,
+      "observed_lives": 5,
+      "observed_hp_deaths": 4,
+      "motion_action_rows": 111
+    },
+    {
+      "phase": 0,
+      "slot": "botA:2",
+      "native_fire_with_same_life_growth": 38,
+      "observed_useful_inventory_gains": 5,
+      "observed_lives": 5,
+      "observed_hp_deaths": 4,
+      "motion_action_rows": 105
+    },
+    {
+      "phase": 0,
+      "slot": "botA:3",
+      "native_fire_with_same_life_growth": 15,
+      "observed_useful_inventory_gains": 2,
+      "observed_lives": 6,
+      "observed_hp_deaths": 5,
+      "motion_action_rows": 104
+    },
+    {
+      "phase": 0,
+      "slot": "botB:0",
+      "native_fire_with_same_life_growth": 102,
+      "observed_useful_inventory_gains": 3,
+      "observed_lives": 2,
+      "observed_hp_deaths": 1,
+      "motion_action_rows": 110
+    },
+    {
+      "phase": 0,
+      "slot": "botB:1",
+      "native_fire_with_same_life_growth": 38,
+      "observed_useful_inventory_gains": 2,
+      "observed_lives": 6,
+      "observed_hp_deaths": 5,
+      "motion_action_rows": 110
+    },
+    {
+      "phase": 0,
+      "slot": "botB:2",
+      "native_fire_with_same_life_growth": 79,
+      "observed_useful_inventory_gains": 3,
+      "observed_lives": 3,
+      "observed_hp_deaths": 2,
+      "motion_action_rows": 108
+    },
+    {
+      "phase": 0,
+      "slot": "botB:3",
+      "native_fire_with_same_life_growth": 59,
+      "observed_useful_inventory_gains": 3,
+      "observed_lives": 5,
+      "observed_hp_deaths": 4,
+      "motion_action_rows": 110
+    },
+    {
+      "phase": 1,
+      "slot": "botA:0",
+      "native_fire_with_same_life_growth": 168,
+      "observed_useful_inventory_gains": 3,
+      "observed_lives": 5,
+      "observed_hp_deaths": 4,
+      "motion_action_rows": 106
+    },
+    {
+      "phase": 1,
+      "slot": "botA:1",
+      "native_fire_with_same_life_growth": 88,
+      "observed_useful_inventory_gains": 2,
+      "observed_lives": 7,
+      "observed_hp_deaths": 6,
+      "motion_action_rows": 101
+    },
+    {
+      "phase": 1,
+      "slot": "botA:2",
+      "native_fire_with_same_life_growth": 24,
+      "observed_useful_inventory_gains": 1,
+      "observed_lives": 7,
+      "observed_hp_deaths": 6,
+      "motion_action_rows": 99
+    },
+    {
+      "phase": 1,
+      "slot": "botA:3",
+      "native_fire_with_same_life_growth": 84,
+      "observed_useful_inventory_gains": 4,
+      "observed_lives": 2,
+      "observed_hp_deaths": 2,
+      "motion_action_rows": 106
+    },
+    {
+      "phase": 1,
+      "slot": "botB:0",
+      "native_fire_with_same_life_growth": 24,
+      "observed_useful_inventory_gains": 6,
+      "observed_lives": 7,
+      "observed_hp_deaths": 6,
+      "motion_action_rows": 106
+    },
+    {
+      "phase": 1,
+      "slot": "botB:1",
+      "native_fire_with_same_life_growth": 103,
+      "observed_useful_inventory_gains": 2,
+      "observed_lives": 2,
+      "observed_hp_deaths": 1,
+      "motion_action_rows": 117
+    },
+    {
+      "phase": 1,
+      "slot": "botB:2",
+      "native_fire_with_same_life_growth": 33,
+      "observed_useful_inventory_gains": 3,
+      "observed_lives": 5,
+      "observed_hp_deaths": 4,
+      "motion_action_rows": 110
+    },
+    {
+      "phase": 1,
+      "slot": "botB:3",
+      "native_fire_with_same_life_growth": 53,
+      "observed_useful_inventory_gains": 4,
+      "observed_lives": 5,
+      "observed_hp_deaths": 4,
+      "motion_action_rows": 112
+    },
+    {
+      "phase": 2,
+      "slot": "botA:0",
+      "native_fire_with_same_life_growth": 15,
+      "observed_useful_inventory_gains": 3,
+      "observed_lives": 8,
+      "observed_hp_deaths": 7,
+      "motion_action_rows": 127
+    },
+    {
+      "phase": 2,
+      "slot": "botA:1",
+      "native_fire_with_same_life_growth": 95,
+      "observed_useful_inventory_gains": 3,
+      "observed_lives": 9,
+      "observed_hp_deaths": 8,
+      "motion_action_rows": 124
+    },
+    {
+      "phase": 2,
+      "slot": "botA:2",
+      "native_fire_with_same_life_growth": 92,
+      "observed_useful_inventory_gains": 3,
+      "observed_lives": 8,
+      "observed_hp_deaths": 7,
+      "motion_action_rows": 128
+    },
+    {
+      "phase": 2,
+      "slot": "botA:3",
+      "native_fire_with_same_life_growth": 52,
+      "observed_useful_inventory_gains": 6,
+      "observed_lives": 5,
+      "observed_hp_deaths": 4,
+      "motion_action_rows": 129
+    },
+    {
+      "phase": 2,
+      "slot": "botB:0",
+      "native_fire_with_same_life_growth": 78,
+      "observed_useful_inventory_gains": 3,
+      "observed_lives": 7,
+      "observed_hp_deaths": 7,
+      "motion_action_rows": 128
+    },
+    {
+      "phase": 2,
+      "slot": "botB:1",
+      "native_fire_with_same_life_growth": 16,
+      "observed_useful_inventory_gains": 4,
+      "observed_lives": 8,
+      "observed_hp_deaths": 7,
+      "motion_action_rows": 127
+    },
+    {
+      "phase": 2,
+      "slot": "botB:2",
+      "native_fire_with_same_life_growth": 41,
+      "observed_useful_inventory_gains": 1,
+      "observed_lives": 3,
+      "observed_hp_deaths": 2,
+      "motion_action_rows": 136
+    },
+    {
+      "phase": 2,
+      "slot": "botB:3",
+      "native_fire_with_same_life_growth": 84,
+      "observed_useful_inventory_gains": 2,
+      "observed_lives": 3,
+      "observed_hp_deaths": 2,
+      "motion_action_rows": 135
+    }
+  ],
+  "new_terminal_watchdog_native_exercised": false,
+  "limits": [
+    "Serious3, not Hard2",
+    "fresh Original observer per phase, not automatic observer rejoin",
+    "no full map/route/traversal parity",
+    "no exact damage/hit or first-state evidence",
+    "no formal hour gate"
+  ]
+}
