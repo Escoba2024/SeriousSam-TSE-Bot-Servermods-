@@ -7,6 +7,14 @@
 **Tech Stack:** C++, MSVC/Wine, Python, systemd, GameSpy, Retail 1.07.
 **Spec:** Nutzerauftrag 14.11.2026; privates Original `/srv/tse-milestone-a-evidence-20261111/request.md`; bestehende Pläne vom 11./13.11.
 
+## Aktueller Arbeitsstand20:03UTC
+
+SDK107Health-Reproducer finalauthor6b38b8 mitexplizitemHealthkind integriert (Rootfaf82bf), weiterhin6RED/2942 ohneProduktionsänderung. BegrenzterHealthconnectorfix mitadversarialenGuards isoliert inArbeit. Lebenshelper-Peerreview endgültigohneBefunde. A1eigene167Metadatenkopie vorbereitet, Main/A1/Collectorbleibendeaktiviert, Scope-/Parentpeerreviewläuft. [Methodenplan](2026-11-14-a1-passive-metadata-method.md); neueQuellveröffentlichung+Delta045vorNative. LivegemischterStand bleibtgemäßNutzer erhalten.
+
+## Aktueller Arbeitsstand19:50UTC
+
+Drei neue20FPS-Arme048/018/020 je600s geschlossen PASS_LIMITED,0neueSync/Disconnect/Crash,Root640+4RestorePASS jeArm. Kills84/168/159; alle8BotsjeArmUsefulgewinn/gebundenesFIRE, aberlangeunbewaffneteLeben48,20/51,44/45,74s; keineNav-/Stärkerangfolge. NeueLebensbilanz64TestsPASS, Readerausschnitte/links-rechtsZensierung ausdrücklich. SDK107 gezielterConnectorreproducer anProduktionsbytesRED6/2942; engerFixentwurfnochoffen. A1passivAdapter5f95817,92Roottests/77+69+14Pins/independentScopePASS, bleibtdeaktiviert/neue167Metadatenmethodeoffen. Livegemischtnutzerbestätigtunverändert. Delta044externfullPASS, aktuelleBelege045vorweiteremNative. A/Boffen.
+
 ## Aktueller Arbeitsstand18:46UTC
 
 Neueste ausdrückliche Nutzerantwort: gemischten aktuellen Stand behalten, isoliert weiterentwickeln. Frischer18:37-Modul-/Queryaudit: Dev048, RedGen2, Yodeller/Skulls/Trouble/Hole018, je8eigeneBots; Red1zusätzlich. Zweiter unabhängiger Publicrollout und Namensrefresh17:57–18:19 sind aus dessen Projektowner/scope nachgewiesen; Red dort nach10BAD/1Disconnect zurückgerollt. Unser17:12-Restore ist Historie, die Livezeile des Statusbildes überholt. Neuere fremde Arbeiten/Identitäten erhalten. Bericht2026-11-14-shared-host-fleet-reconciliation; kein Native während fremder Hostlast. Neue20FPS-Rootfreezes/Peerreview abgeschlossen; Reset-V3 author075754d→Rootecd92b3,117eigeneTestsPASS, weiterhin deaktiviert. Veröffentlichung und Delta044 vor nächstem Native offen. A/B bleiben offen.

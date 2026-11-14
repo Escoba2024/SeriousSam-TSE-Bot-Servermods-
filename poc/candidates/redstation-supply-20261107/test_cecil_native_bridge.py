@@ -3726,7 +3726,44 @@ void localSupplyContention(){
  check(localSupplyChoose(.05,85.15)==9902,"owner progress restores fresh common-clock claim across another querying origin");
  BotSupplyState(1).Reset();
 }
+// Closed Nav20-020 suggests an ordinary final-item connector is lost once the
+// same player moves outside the original terminal NAV sphere. These are
+// controlled poses, NOT an Engine movement/pickup simulation. Execute the real
+// retained-goal BotSupplyTick on successive ticks, without resetting Navigator.
+void itemConnectorRadiusContinuity(){
+ for(int direction:{-1,1}){
+  setup(56);auto& s=BotSupplyState(0);auto& node=BotSupplyGraph().points[55];
+  node.x=-50.992389679f;node.y=-5.495068073f;node.z=-6.009492397f;
+  node.radius=2;node.flags=0;node.important_entity=node.lock_entity=node.next_slot=-1;
+  auto& item=addItem(direction<0?285:287,-51,direction<0?-12:0,botcore::CecilItemKind::Health);
+  item.pl.pl_PositionVector(2)=-5.999f;player.health=10;
+  player.en_plViewpoint.pl_OrientationAngle(1)=direction<0?0:180;
+  s.goal=s.anchor=55;s.goalEntity=item.en_ulID;s.goalKind=botcore::CecilItemKind::Health;s.goalSince=0;s.scanTick=99999;
+  const float distances[]={1.5f,1.9f,2.125f,3.f,4.5f};
+  int tick=1;
+  for(float distance:distances){
+   player.pl.pl_PositionVector=FLOAT3D(node.x,node.y,node.z+direction*distance);_botRayBudget=40;
+   const auto move=BotSupplyTick(&player,0,tick++,1000);
+   std::printf("item connector repro direction=%d distance=%.3f nav_travel=%d forward=%.6f yaw=%.6f active=%d goal=%d\n",
+     direction,(double)distance,(int)s.currentNavTravel,move.forward,move.yaw_delta,(int)move.active,s.goal);
+   check(move.active&&s.goalEntity==item.en_ulID&&s.goal==55&&s.hop==55&&endEvents==0,
+     "ordinary live needed health goal remains retained throughout original-radius crossing");
+   check(move.forward>0,
+     "RED final item connector keeps approaching its live item after leaving reached NAV radius");
+  }
+  // Reaching the node in this attempt matters: a cold outside pose may not
+  // gain a direct-item shortcut merely because the connector is within8m.
+  setup(56);auto& cold=BotSupplyState(0);auto& point=BotSupplyGraph().points[55];
+  point.x=point.y=point.z=0;point.radius=2;point.flags=0;
+  auto& coldItem=addItem(285,0,-6);player.health=10;player.pl.pl_PositionVector=FLOAT3D(0,0,-3);
+  cold.goal=cold.anchor=55;cold.goalEntity=coldItem.en_ulID;cold.goalKind=botcore::CecilItemKind::Health;cold.scanTick=99999;
+  const auto coldMove=BotSupplyTick(&player,0,1,1000);
+  check(coldMove.active&&coldMove.forward<0&&cold.currentNavTravel,
+    "cold outside NAV target still requires normal directed navigation before any item connector");
+ }
+}
 int main(){
+ itemConnectorRadiusContinuity();
  localSupplyContention();
  liveItemFlightLockReplanPriority();
  liveItemFlightArrivalPriority();

@@ -1,0 +1,209 @@
+{
+  "scope": "THREE_CLOSED_RED600_COMMON_ORIGINAL20FPS_LIMITED_OBSERVATIONS",
+  "automatic_retry": false,
+  "full_navigation_comparison": false,
+  "rollout_qualification": false,
+  "life_summary_tests": 20,
+  "relevant_regression_total": 64,
+  "arms": [
+    {
+      "observed_lives": 96,
+      "expected_slots": 8,
+      "unobserved_slots": [],
+      "corpse_only_lives": 0,
+      "ambiguous_health_order_lives": 0,
+      "left_censored_lives": 52,
+      "right_censored_lives": 8,
+      "observed_death_lives": 88,
+      "useful_possession_lives": 76,
+      "useful_gain_events": 100,
+      "qualified": false,
+      "route_acceptance": false,
+      "scope": "ORDERED_NATIVE_LIFE_DENOMINATORS_ONLY_NO_CONTINUOUS_OR_ROUTE_PROOF",
+      "raw_group_samples": {
+        "botA_actual": 4504,
+        "botB_actual": 4490,
+        "vanilla_plus_overlap": 4510
+      },
+      "gameplay_group_samples": {
+        "botA_actual": 4503,
+        "botB_actual": 4489,
+        "vanilla_plus_overlap": 4509
+      },
+      "paused_smoke_samples": 3,
+      "attempt_count": 13857,
+      "failed_attempts": 353,
+      "original_status_unchanged": "PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED",
+      "build": "048",
+      "result_sha256": "9f2553e9c6be1dbb954f149e3ab685651f731e2b40b2745a531a7feacbf20b0b",
+      "seconds": 600.0692596379668,
+      "kills": 84,
+      "native_bound_fire_samples": 570,
+      "max_stationary_alive_game_seconds": 3.399169921875,
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 577,
+        "cpu_busy_max_measured_percent": 52.94117647058823,
+        "mem_available_min_bytes": 2646388736,
+        "disk_free_min_bytes": 9615716352,
+        "max_sample_gap_seconds": 46.79962491104379,
+        "budget_pass_claim": false,
+        "gameplay_max_sample_gap_seconds": 1.2240060809999704
+      },
+      "raw_file_sha256": {
+        "result.json": "9f2553e9c6be1dbb954f149e3ab685651f731e2b40b2745a531a7feacbf20b0b",
+        "registry.json": "1863ba80dab6034a0ee0b7935b037660da86b7dca2d7e502fe1a0d15cf270aa6",
+        "inventory.jsonl": "13f789f3840c22ef0e52d86f0df41de6f92e7618aa9dc3483d7fb6e03d6189a9",
+        "read-attempts.jsonl": "657ed395140922689771b2e67b1e2f202ecf0d1d5d4d6867260155be5a549e0d"
+      },
+      "alive_span_median_seconds": 38.54058837890625,
+      "max_no_useful_observed_alive_span_seconds": 48.20293426513672,
+      "neutral_slots_not_observed": [
+        1
+      ],
+      "first_simulation_state_proven": false
+    },
+    {
+      "observed_lives": 185,
+      "expected_slots": 8,
+      "unobserved_slots": [],
+      "corpse_only_lives": 0,
+      "ambiguous_health_order_lives": 4,
+      "left_censored_lives": 117,
+      "right_censored_lives": 8,
+      "observed_death_lives": 177,
+      "useful_possession_lives": 88,
+      "useful_gain_events": 121,
+      "qualified": false,
+      "route_acceptance": false,
+      "scope": "ORDERED_NATIVE_LIFE_DENOMINATORS_ONLY_NO_CONTINUOUS_OR_ROUTE_PROOF",
+      "raw_group_samples": {
+        "botA_actual": 4426,
+        "botB_actual": 4445,
+        "vanilla_plus_overlap": 4447
+      },
+      "gameplay_group_samples": {
+        "botA_actual": 4425,
+        "botB_actual": 4444,
+        "vanilla_plus_overlap": 4446
+      },
+      "paused_smoke_samples": 3,
+      "attempt_count": 13725,
+      "failed_attempts": 407,
+      "original_status_unchanged": "PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED",
+      "build": "018",
+      "result_sha256": "efa69cc64f5426b2342641d10243f186b5006337a84db96e8c0b56cb0c7adf04",
+      "seconds": 600.065526293125,
+      "kills": 168,
+      "native_bound_fire_samples": 3708,
+      "max_stationary_alive_game_seconds": 2.3994140625,
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 573,
+        "cpu_busy_max_measured_percent": 58.79396984924623,
+        "mem_available_min_bytes": 2683879424,
+        "disk_free_min_bytes": 9441566720,
+        "max_sample_gap_seconds": 47.774454817175865,
+        "budget_pass_claim": false,
+        "gameplay_max_sample_gap_seconds": 1.1625877551268786
+      },
+      "raw_file_sha256": {
+        "result.json": "efa69cc64f5426b2342641d10243f186b5006337a84db96e8c0b56cb0c7adf04",
+        "registry.json": "8be478464e5f60cf183b3992ba5a6d91e2ed8adc9b7b45d42f76b470abd26770",
+        "inventory.jsonl": "30dfc2f4236c4ae92b8d3f18317347c6ce2305501a659f3d3b5714438d414756",
+        "read-attempts.jsonl": "6f57e9ab56052eadbff6f1ee2e415d21816391567f85a8c85caa976ed6ae3c2d"
+      },
+      "alive_span_median_seconds": 18.44549560546875,
+      "max_no_useful_observed_alive_span_seconds": 51.43743896484375,
+      "neutral_slots_not_observed": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "first_simulation_state_proven": false
+    },
+    {
+      "observed_lives": 180,
+      "expected_slots": 8,
+      "unobserved_slots": [],
+      "corpse_only_lives": 0,
+      "ambiguous_health_order_lives": 2,
+      "left_censored_lives": 105,
+      "right_censored_lives": 8,
+      "observed_death_lives": 172,
+      "useful_possession_lives": 84,
+      "useful_gain_events": 112,
+      "qualified": false,
+      "route_acceptance": false,
+      "scope": "ORDERED_NATIVE_LIFE_DENOMINATORS_ONLY_NO_CONTINUOUS_OR_ROUTE_PROOF",
+      "raw_group_samples": {
+        "botA_actual": 4517,
+        "botB_actual": 4500,
+        "vanilla_plus_overlap": 4499
+      },
+      "gameplay_group_samples": {
+        "botA_actual": 4516,
+        "botB_actual": 4499,
+        "vanilla_plus_overlap": 4498
+      },
+      "paused_smoke_samples": 3,
+      "attempt_count": 13920,
+      "failed_attempts": 404,
+      "original_status_unchanged": "PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED",
+      "build": "020",
+      "result_sha256": "4e5f096529e31f4c13efb44ccc32da71af924a0308df27dcdeaeb2be87ca5d66",
+      "seconds": 600.0326914789621,
+      "kills": 159,
+      "native_bound_fire_samples": 3468,
+      "max_stationary_alive_game_seconds": 2.44940185546875,
+      "host_budget": {
+        "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+        "limits": {
+          "cpu_busy_ceiling_percent": 75.0,
+          "min_mem_available_bytes": 1610612736,
+          "min_disk_free_bytes": 8589934592,
+          "target_sample_interval_seconds": 1.0
+        },
+        "samples": 580,
+        "cpu_busy_max_measured_percent": 53.98009950248756,
+        "mem_available_min_bytes": 2681044992,
+        "disk_free_min_bytes": 9268142080,
+        "max_sample_gap_seconds": 47.084216598887,
+        "budget_pass_claim": false,
+        "gameplay_max_sample_gap_seconds": 1.1971241999417543
+      },
+      "raw_file_sha256": {
+        "result.json": "4e5f096529e31f4c13efb44ccc32da71af924a0308df27dcdeaeb2be87ca5d66",
+        "registry.json": "a6ffbce8ccbda299714b2d5f6cf80194c6712473f0134a51336db7f49356514a",
+        "inventory.jsonl": "67e49c1a95bd01e819715efa8c4c20ad164cca73ffd6d420241d5dede92d1634",
+        "read-attempts.jsonl": "6c45c77f8b52a13a7493975b97283543a7b47aaa8b4eb84809b42e58f71e0513"
+      },
+      "alive_span_median_seconds": 19.6951904296875,
+      "max_no_useful_observed_alive_span_seconds": 45.73883056640625,
+      "neutral_slots_not_observed": [],
+      "first_simulation_state_proven": false
+    }
+  ],
+  "limitations": [
+    "One window per build, no paired duel or statistical superiority claim",
+    "048 tier5 marksman versus018020 tier3 duelist at same raw profile7",
+    "Same pause protocol, not proven identical living start pose",
+    "Startup resource gaps about47s, only gameplay samples about1.2s apart",
+    "Ordered memory snapshots are not atomic; ambiguous postdeath positive states flagged/excluded from life extension",
+    "10s0.75m eligibility, bounded loops and recovery success not fully established"
+  ]
+}

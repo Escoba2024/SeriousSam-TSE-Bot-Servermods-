@@ -22,12 +22,14 @@ Der bestehende A1-Inputcontroller bleibt unverändert.
   Pakete ableiten. Erst nach FileTransaction.seal, vor jedem Start, die
   ohnehin vollständig gesicherte eigene Scripts/CecilObserver.ini ändern.
   Neue Namespaces; alte freezes und fehlgeschlagene Rawdaten unverändert.
-- [ ] Kopierte Helper-/Quell-/Kandidatenclosure prüfen und Root separat
+- [x] Kopierte Helper-/Quell-/Kandidatenclosure prüfen und Root separat
   einfrieren. Bisherige Rohdaten dienen nicht als Samples der neuen Reihe.
-- [ ] Genau048→018→020, je600s unter der neuen gemeinsamen Bedingung;
+- [x] Genau048→018→020, je600s unter der neuen gemeinsamen Bedingung;
   jeden Arm einzeln entscheiden, frischer Preflight, keine parallele Last,
   vollständiger normaler Cleanup und unabhängiger Restore. Neuer FAIL
   beendet erneut die Reihe; kein blindes Wiederholen.
-- [ ] systemd-CPUabrechnung und tatsächliche Hostwerte nach jedem
+- [x] systemd-CPUabrechnung und tatsächliche Hostwerte nach jedem
   geschlossenen Arm sichern. Eine erfolgreiche neue Reihe wäre ein
   begrenzter Vergleich, kein A1/A3/A4-/Dauerstabilitätsabschluss.
+
+Ergebnis: alle dreiArme600sgeschlossen/jeRoot640+4RestorePASS, keineFehler. BegrenzteBelegewieimDreifensterbericht, keinvollerBudget-/A-PASS. UnitswarenbisNachprüfunggarbagecollected; echteCPU_USAGE_NSEC-Abschlusswerte ausJournalvollgesichert, nichtausfehlendemUnitzustandgeschätzt.
