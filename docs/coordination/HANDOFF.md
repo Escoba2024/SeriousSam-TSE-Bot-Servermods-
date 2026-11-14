@@ -1,3 +1,21 @@
+## A1 geschlossen FAIL; eigene Syncmessung vorbereitet — 14.11.2026, 14:48 UTC
+
+Kein Native-/Build-/Liveexecutor aktiv. A1 E /srv/tse-milestone-a-evidence-20261111/a1-release-deadline-20261114-144306, Result51e8e0e5ed32177606a71e6c1ca17e82812c5ba047581bf81525fef5652cc772 FAIL action gain. Drei echte Eingaben jeweils137,449/159,541/144,257ms innerhalb unveränderter Grenzen; tatsächlich doppelte rechte GetInput-Verarbeitung gegenüber einzelner linker, ACK-Gains−0,5/−0,25, Ursache unbekannt. Keine Schadens-/A1freigabe. Originalbytes/Close/Worker/3normaleCloses/Schlusslogs+Root664Dateien/8Absenzen/3Loghashes/Meta/PIDs/DisplaysRestorePASS. Candidate untersucht nur vorhandene Daten in eigenem neuen WT; keine Implementierung vor Rootplan.
+
+PCAP Quellcommit3905f5f integriert, Root35gezielteFällePASS. Rootfreeze /srv/tse-owned-sync018-yodeller-root-frozen-20261114 Manifest65d146786a4b4efd9e12868a540208c406f6aaa67e2ff6a1a533ab95bb628747/Launchereccfab2d;69/61/40Pins+Gate/Namespace-DeltareviewPASS_SCOPE. Noch kein Capture/Native. Geplant ein018/Yodeller/Hard2/diag0/600s/8+stationärerOriginal unter frischemPreflight nach allen Readern. Kein WAN-/20Hz-/Stabilitätsclaim. A4-Agent STATICONLY.
+
+Delta035 externfullPASS, neueste geschlosseneA1- und PCAP-Forkdaten brauchen036. Vier Root-eigene geschlossene und externverifiziertarchivierte Red/Yodeller-V3-Streams verlustfrei komprimiert:200110026→12532381Bytes, Inhaltshashes vor/nachPASS; private RootEV/compressed-closed-a4-streams.json und restore-compressed-closed-a4-streams.py stellen ursprüngliche Pfade/Dateimetadaten wieder her. Alle Ergebnisse/übrigen Raws und Drivearchive erhalten, keine aktiven/fremden Daten geändert. Danach Disk9037238272Bytes. LetzterRemote f3056f27/tree3e73bd33 gleichc01ee19; neuere Quellen noch veröffentlichen. Live Red/YodellerGen2/übrige4Build018 je8; A/B offen.
+
+---
+
+## Einzelner A1-Release-Diagnoselauf — 2026-11-14T14:43:05.292023+00:00
+
+Root startet genau einen instrumented-trace Original-NoFire-Lauf über /srv/tse-cecil-rollout-evidence-20261114/run-a1-release-deadline.py, Owner/Log/Ended a1-release-deadline. Freeze2665517067a491e00607c7e4f88d5c3585739c66896f24c26b25eff672b7d136/Launchera2d9fbe4,70/61/14Pins PASS_SCOPE; Root20+27 gezielte Offlinefälle PASS. Beide Agenten STATICONLY und Reader beendet; sämtliche Rootarchive/Downloads/Publikation beendet. Preflight14:42:43 alle vier Rollen/Displays/Locks frei, CPU32,383%/RAM3641143296/Disk8909324288, nur Prüfzeitfreigabe; Controller hält eigene Sperre und prüft erneut. Keine weitere Messung/Build/Tests im Fenster. Danach Originalbytes/Unload/Detach/Workerende/3normaleCloses/Schlusslogs/unabhängigenRestore prüfen. Keine automatische Wiederholung/Fire-/A-Abnahme.
+
+Delta035 vollständig extern rückgelesen/hashgeprüft, Drive1GrOf6C9j8x81ApHL4TD-UGdkwp3G_4s4/SHA5a0b8e1e662a706fa22c8b25c365f9a62a05eaa834a275d13d0c63f9ac2b3420, temporäre Rekonstruktion erst nach erneutem Allhash-/Metadatencheck entfernt. Remote f3056f27af96c4268e45795c170480fec7ea3846/Tree3e73bd33440bc9a2e6ad34d5030ad3e8067f53fd tatsächlichgleichlokal c01ee19ef7aaf6016836b5e35c081f8089282a1e. PCAP-Autorencommit b0ace598 ist fertig/deaktiviert aber noch nicht integriert/reviewt. Live Red/YodellerGen2 und übrige4Build018 je8; A/B offen.
+
+---
+
 ## Vorbereiteter A1-Eingabeabschluss und A3-Rootvergleich — 14.11.2026, 14:42 UTC
 
 Kein Native-/Build-/Liveexecutor aktiv. A1-Releasekorrektur integriert 6f6e6b3; Root20 neue +27 historische gezielte Offlinefälle PASS. Historischer own_identity-VergleichsFAIL unverändert separat. Neuer Rootfreeze /srv/tse-a1-release-deadline-root-frozen-20261114 Manifest2665517067a491e00607c7e4f88d5c3585739c66896f24c26b25eff672b7d136, Collector8a7547d7, Launchera2d9fbe4;70/61/14Pins PASS_SCOPE. Genau ein NoFire-Fenster vorgesehen über RootEV/run-a1-release-deadline.py; noch nicht gestartet. Grenzen/ACK/Gain/Inputs/Hookbytes unverändert. Kandidatenagent STATICONLY, A4-Agent schließt eigenen deaktivierten PCAP-Fork ab; vor Native beide Reader/Tests beenden und frisch preflighten.
