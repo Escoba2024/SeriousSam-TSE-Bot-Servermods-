@@ -1,0 +1,321 @@
+{
+  "schema": "tse-build018-initial-rollout-v1",
+  "utc": "2026-11-14T08:23:15.454108+00:00",
+  "source_commit": "1802fb3f0720b53feb032abfe2c2a83407bfea6e",
+  "manifest_sha256": "f4212443317b58b04808bd42d084e6a3286e458af2c0dbcfb276aa3bca931c2e",
+  "dll_bytes": 428544,
+  "candidate_full_release_qualified": false,
+  "all_six_loaded_verified": true,
+  "own_bots": 48,
+  "unique_names": 48,
+  "unique_guids": 40,
+  "guid_scope_note": "8 preexisting GUIDs are shared across two distinct servers; all profile/GUID bytes preserved",
+  "name_pool": 458,
+  "additional_unknown": 0,
+  "milestone_a": "INCOMPLETE",
+  "milestone_b": "NOT_IMPLEMENTED",
+  "new_sync_bad": 0,
+  "new_sync_disconnect": 0,
+  "rows": [
+    {
+      "instance": "redstation",
+      "address": "91.99.75.33:25600",
+      "port": 25600,
+      "map": "Red Station",
+      "version": "Build018",
+      "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+      "own_bots": 8,
+      "minimum_target": 8,
+      "current_target": 8,
+      "additional_unknown": 0,
+      "tier": "DEMON",
+      "limited_window_s": 91.45435368805192,
+      "slot_movement_and_fire_passed": 8,
+      "positive_query_frag_delta": 30,
+      "deaths_delta": 35,
+      "respawns_delta": 42,
+      "item_pickup_counter_delta": 30,
+      "useful_weapon_possession_slots_since_start": 8,
+      "new_sync_bad": 0,
+      "new_sync_disconnect": 0,
+      "baseline_current_log_sync_bad": 0,
+      "baseline_current_log_sync_disconnect": 0,
+      "spawn_value": 0.0,
+      "resources_min": {
+        "disk_free_bytes": 12446523392,
+        "mem_available_bytes": 3609665536
+      },
+      "max_cpu_sample_percent": 50.0,
+      "profiles_and_guids_preserved": true,
+      "dedicated_unchanged": true,
+      "bot_configs": [
+        {
+          "role": "botA",
+          "sha256": "6d1ad75b3fce3696d4e8667d0c1d1ee20e258fae439f29b3f917b6948e500325",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        },
+        {
+          "role": "botB",
+          "sha256": "7351cc4e73b9418009e41f7e4a7d51e5568a3a704f0efc8720a61d391f1596a9",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        }
+      ],
+      "sessions": "NOT_IMPLEMENTED",
+      "chat": "NOT_IMPLEMENTED",
+      "status": "PASS_LIMITED_INITIAL_ROLLOUT"
+    },
+    {
+      "instance": "yodeller",
+      "address": "91.99.75.33:25610",
+      "port": 25610,
+      "map": "Yodeller",
+      "version": "Build018",
+      "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+      "own_bots": 8,
+      "minimum_target": 8,
+      "current_target": 8,
+      "additional_unknown": 0,
+      "tier": "DEMON",
+      "limited_window_s": 91.5149072019849,
+      "slot_movement_and_fire_passed": 8,
+      "positive_query_frag_delta": 51,
+      "deaths_delta": 48,
+      "respawns_delta": 48,
+      "item_pickup_counter_delta": 40,
+      "useful_weapon_possession_slots_since_start": 8,
+      "new_sync_bad": 0,
+      "new_sync_disconnect": 0,
+      "baseline_current_log_sync_bad": 0,
+      "baseline_current_log_sync_disconnect": 0,
+      "spawn_value": 0.0,
+      "resources_min": {
+        "disk_free_bytes": 12400095232,
+        "mem_available_bytes": 3641966592
+      },
+      "max_cpu_sample_percent": 52.77777777777778,
+      "profiles_and_guids_preserved": true,
+      "dedicated_unchanged": true,
+      "bot_configs": [
+        {
+          "role": "botA",
+          "sha256": "d151d6ca433deef962742fb9935b7626f5333cd092f185fcaf4fb3a8ce69bd27",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        },
+        {
+          "role": "botB",
+          "sha256": "c355a2a9f8594141464ff4658284014c63edd8bf854fde0f69d995ea2aaa388f",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        }
+      ],
+      "sessions": "NOT_IMPLEMENTED",
+      "chat": "NOT_IMPLEMENTED",
+      "status": "PASS_LIMITED_INITIAL_ROLLOUT"
+    },
+    {
+      "instance": "skulls",
+      "address": "91.99.75.33:25620",
+      "port": 25620,
+      "map": "We Got Skulls'n'Bones Too",
+      "version": "Build018",
+      "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+      "own_bots": 8,
+      "minimum_target": 8,
+      "current_target": 8,
+      "additional_unknown": 0,
+      "tier": "DEMON",
+      "limited_window_s": 91.22132777585648,
+      "slot_movement_and_fire_passed": 8,
+      "positive_query_frag_delta": 31,
+      "deaths_delta": 33,
+      "respawns_delta": 41,
+      "item_pickup_counter_delta": 27,
+      "useful_weapon_possession_slots_since_start": 8,
+      "new_sync_bad": 0,
+      "new_sync_disconnect": 0,
+      "baseline_current_log_sync_bad": 11,
+      "baseline_current_log_sync_disconnect": 1,
+      "spawn_value": 0.0,
+      "resources_min": {
+        "disk_free_bytes": 12382195712,
+        "mem_available_bytes": 3320311808
+      },
+      "max_cpu_sample_percent": 66.66666666666667,
+      "profiles_and_guids_preserved": true,
+      "dedicated_unchanged": true,
+      "bot_configs": [
+        {
+          "role": "botA",
+          "sha256": "d151d6ca433deef962742fb9935b7626f5333cd092f185fcaf4fb3a8ce69bd27",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        },
+        {
+          "role": "botB",
+          "sha256": "c355a2a9f8594141464ff4658284014c63edd8bf854fde0f69d995ea2aaa388f",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        }
+      ],
+      "sessions": "NOT_IMPLEMENTED",
+      "chat": "NOT_IMPLEMENTED",
+      "status": "PASS_LIMITED_INITIAL_ROLLOUT"
+    },
+    {
+      "instance": "trouble",
+      "address": "91.99.75.33:25630",
+      "port": 25630,
+      "map": "Little Trouble",
+      "version": "Build018",
+      "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+      "own_bots": 8,
+      "minimum_target": 8,
+      "current_target": 8,
+      "additional_unknown": 0,
+      "tier": "DEMON",
+      "limited_window_s": 91.49829484010115,
+      "slot_movement_and_fire_passed": 8,
+      "positive_query_frag_delta": 40,
+      "deaths_delta": 46,
+      "respawns_delta": 46,
+      "item_pickup_counter_delta": 47,
+      "useful_weapon_possession_slots_since_start": 8,
+      "new_sync_bad": 0,
+      "new_sync_disconnect": 0,
+      "baseline_current_log_sync_bad": 0,
+      "baseline_current_log_sync_disconnect": 0,
+      "spawn_value": 0.0,
+      "resources_min": {
+        "disk_free_bytes": 12371775488,
+        "mem_available_bytes": 3309846528
+      },
+      "max_cpu_sample_percent": 58.40386940749698,
+      "profiles_and_guids_preserved": true,
+      "dedicated_unchanged": true,
+      "bot_configs": [
+        {
+          "role": "botA",
+          "sha256": "d151d6ca433deef962742fb9935b7626f5333cd092f185fcaf4fb3a8ce69bd27",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        },
+        {
+          "role": "botB",
+          "sha256": "c355a2a9f8594141464ff4658284014c63edd8bf854fde0f69d995ea2aaa388f",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        }
+      ],
+      "sessions": "NOT_IMPLEMENTED",
+      "chat": "NOT_IMPLEMENTED",
+      "status": "PASS_LIMITED_INITIAL_ROLLOUT"
+    },
+    {
+      "instance": "hole",
+      "address": "91.99.75.33:25640",
+      "port": 25640,
+      "map": "Hole",
+      "version": "Build018",
+      "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+      "own_bots": 8,
+      "minimum_target": 8,
+      "current_target": 8,
+      "additional_unknown": 0,
+      "tier": "DEMON",
+      "limited_window_s": 91.42880230699666,
+      "slot_movement_and_fire_passed": 8,
+      "positive_query_frag_delta": 19,
+      "deaths_delta": 31,
+      "respawns_delta": 34,
+      "item_pickup_counter_delta": 43,
+      "useful_weapon_possession_slots_since_start": 8,
+      "new_sync_bad": 0,
+      "new_sync_disconnect": 0,
+      "baseline_current_log_sync_bad": 0,
+      "baseline_current_log_sync_disconnect": 0,
+      "spawn_value": 0.0,
+      "resources_min": {
+        "disk_free_bytes": 12311945216,
+        "mem_available_bytes": 2927669248
+      },
+      "max_cpu_sample_percent": 74.19354838709677,
+      "profiles_and_guids_preserved": true,
+      "dedicated_unchanged": true,
+      "bot_configs": [
+        {
+          "role": "botA",
+          "sha256": "d151d6ca433deef962742fb9935b7626f5333cd092f185fcaf4fb3a8ce69bd27",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        },
+        {
+          "role": "botB",
+          "sha256": "c355a2a9f8594141464ff4658284014c63edd8bf854fde0f69d995ea2aaa388f",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        }
+      ],
+      "sessions": "NOT_IMPLEMENTED",
+      "chat": "NOT_IMPLEMENTED",
+      "status": "PASS_LIMITED_INITIAL_ROLLOUT"
+    },
+    {
+      "instance": "development",
+      "address": "91.99.75.33:25650",
+      "port": 25650,
+      "map": "Red Station",
+      "version": "Build018",
+      "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+      "own_bots": 8,
+      "minimum_target": 8,
+      "current_target": 8,
+      "additional_unknown": 0,
+      "tier": "DEMON",
+      "limited_window_s": 91.30292126093991,
+      "slot_movement_and_fire_passed": 8,
+      "positive_query_frag_delta": 26,
+      "deaths_delta": 35,
+      "respawns_delta": 36,
+      "item_pickup_counter_delta": 26,
+      "useful_weapon_possession_slots_since_start": 8,
+      "new_sync_bad": 0,
+      "new_sync_disconnect": 0,
+      "baseline_current_log_sync_bad": 0,
+      "baseline_current_log_sync_disconnect": 0,
+      "spawn_value": 0.0,
+      "resources_min": {
+        "disk_free_bytes": 12595204096,
+        "mem_available_bytes": 3596472320
+      },
+      "max_cpu_sample_percent": 62.88532675709001,
+      "profiles_and_guids_preserved": true,
+      "dedicated_unchanged": true,
+      "bot_configs": [
+        {
+          "role": "botA",
+          "sha256": "a766d0b3023f98a38f4eb24aa28d1f023b744dcca4dd462e4e8af713fa217be7",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        },
+        {
+          "role": "botB",
+          "sha256": "8db779eec8e1dfcacff6cc0033efb00c4d278c93bc55b26d6407de0b0e3084ac",
+          "dll_sha256": "6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a",
+          "nav_sha256": "a98c865c4b4aee3adc8a10b79dfd3bcc011d20df1a339921271d243921ee9c78"
+        }
+      ],
+      "sessions": "NOT_IMPLEMENTED",
+      "chat": "NOT_IMPLEMENTED",
+      "status": "PASS_LIMITED_INITIAL_ROLLOUT"
+    }
+  ],
+  "limitations": [
+    "Short initial operating windows; no first-state damage or duration gate",
+    "Fire actions distinct from actual query frags and damage attribution",
+    "No Windows/GPU/WAN-browser or full Cecil parity acceptance",
+    "A4 historical 23/24 failure and A1 failures retained"
+  ]
+}

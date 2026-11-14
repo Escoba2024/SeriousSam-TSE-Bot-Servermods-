@@ -1,3 +1,21 @@
+## Aktuelle Fortsetzung — 14.11.2026, initialer Rollout ausgeführt
+
+**Gesamtauftrag aktiv; A unvollständig, B unimplementiert.** Root-Worktree `/srv/tse-cecil-rollout-a-b-20261114`, Branch `codex/20261114-cecil-rollout-a-b`, Ausgangspunkt b797960. Regulärer bereitgestellter Terminalzugriff direkt auf ubuntu-4gb-nbg1-2/UID0 ist bestätigt; kein RDC-Ausführungsaufruf. Der alte Deployment-Zugriffsblocker gilt hier nicht mehr.
+
+Build018 ist auf allen zwölf Botclientrollen frisch geladen und um08:23UTC gemeinsam geprüft:6x8eigeneBots, keine zusätzlichen UNKNOWN,48kollisionsfreie Namen, GUID-Dateien erhalten.40verschiedene GUIDs sind vorbestehend; acht werden auf zwei unterschiedlichen Servern wiederverwendet. Nicht stillschweigend neu vergeben. DLL6db89204…/428544Byte, Manifestf4212443…, Quelle1802fb3… . Beide Clients je Instanz haben aktives Cecil/Preset2 und DEMON/arena-v1. Dedicated-DLLs/Prozesse blieben beim initialen DLL-Rollout unverändert. Je91s Bewegung/Feuer aller8Slots, echte Query-Fragzuwächse, Tod/Respawn, keine neuen Sync-/Disconnectfehler. Das ist keine vollständige A-Abnahme.
+
+**Zusätzliche vorgefundene Regelabweichung:** native Schwierigkeit3/Serious statt beauftragtem Hard2. UnlimitedAmmo ist nativ1, rohe GameSpy-Angabe0 invertiert. Blut3/Gibs0/Fraglimit0/Zeitlimit0/Spawn0 sind nativ bestätigt. Root korrigiert Hard jetzt separat Dev→Public mit eigenem verifiziertem Rückstand, normalem Dedicated-/Botneustart und60sBetriebscheck. Aktueller Prozess-/Lockbesitz und Status in `/srv/tse-cecil-rollout-evidence-20261114/hard-owner.json`, `hard.log`, `hard-progress.json`, abschließend `hard-ended.json`. Vor weiteren Liveänderungen tatsächlich lesen, keine parallele Runtime starten.
+
+Private initiale Evidenz `/srv/tse-cecil-rollout-evidence-20261114`; Run `/srv/tse-cecil-full-20261107/.codex/evidence/restart-fleet-20261111-build018-20261114`. Vollständige betroffene Dateien samt Metadaten separat rekonstruiert/gehasht; `restore-instance.py INSTANCE` prüft nur, `--apply` stellt ausschließlich018-Botpayload aus ruhenden Rollen zurück. Nach Hardänderung Serverregeln und Identitätsmetadaten getrennt behandeln. Noch kein nativer Gesamtarchiv-Restorestart.
+
+Delta022/023 sind jetzt extern vollständig hoch-/zurückgeladen und SHA256-identisch. DriveIDs1tAQvDxBGDsFkwehm0vxLDUhB9p1mbSk6 /1YVlbGE6AaXPWA7EROydnAwKaFUKeRdxf im bestehenden privaten Projekt.022101451161Byte/e88caecf…;02335086463Byte/189f8186… . Neuer Rollout braucht eigenen Nachtrag. Terminalgitpush scheitert an fehlendem Login; GitHub-Connector hat Plancommitf026e372… veröffentlicht, frisch gefetchter Baum0f6f6dea… entspricht lokal3558022. Neuere Dokumentation noch separat veröffentlichen.
+
+Zwei begrenzte Worker: `codex/20261114-a4-local-supply-contention` (lokale Waffenzielkonkurrenz, SDK107-Bridge2811/0, noch keine native Freigabe); `codex/20261114-a1-settled-input` (Commit48181ff, ACK-Stabilität/Original-Controls-Diagnose,47relevante Tests grün; historische67erDiscovery3FAIL ausdrücklich erhalten). Nur Root integriert und startet Builds/native/live. B bleibt bis A gesperrt. Aktueller persistenter Gesamtplan: `docs/superpowers/plans/2026-11-14-cecil-rollout-a-b.md`.
+
+Nächste Schritte: Hardtransaktion schließen und6x8/Module/Regeln/Metadaten erneut sichern; Quellen/Belege veröffentlichen; eng geprüften A4-Fix integrieren/neuen Kandidaten bauen und nativ qualifizieren; A1-Controlsglättung am unveränderten Originalclient unter Restoretransaktion passiv messen, kein blindes Prescanretry; verbleibende A3/Karten-/Dauergates erfüllen, erst danach B.
+
+---
+
 ## Aktueller Rolloutauftrag — 13.11.2026 11:39:12 MEZ
 
 Der Nutzer hat am13.11. ausdrücklich den Rollout des vorhandenen Stands auf alle Server angeordnet. Diese Freigabe gilt für Build018 auf Dev und anschließend den fünf öffentlichen Instanzen; zwölf Botclients. Alte offene Releaseabnahmen bleiben offen, sind aber keine neue Erlaubnisabfrage oder pauschale Stopregel für diese ausdrücklich gewünschte Promotion.

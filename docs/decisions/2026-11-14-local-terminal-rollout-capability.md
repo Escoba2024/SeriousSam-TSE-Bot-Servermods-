@@ -1,0 +1,15 @@
+# Regulärer Terminalzugriff und initiale Cecil-Promotion
+
+Am 14.11.2026 wurde über den für diesen Auftrag bereitgestellten Codex-Terminalzugang unmittelbar `ubuntu-4gb-nbg1-2` erreicht: UID0, Arbeitsverzeichnis `/srv/tse-main-agent-20261019`, tatsächliche systemd-/Prozess-/UDP-/Dateizugriffe. Damit entfällt in dieser Sitzung der historische fehlende Deploymentweg. Keine RDC-Ausführung und keine zweckentfremdete System-Control-Diagnose wurde dafür benutzt.
+
+Der Hostname beschreibt die aktuelle Kapazität nicht zuverlässig: `/proc/meminfo` liefert tatsächlich7936200KiB RAM insgesamt. Diese Beobachtung belegt keine Herkunft oder Autorisierung einer historischen Aufrüstung. Vorhandene Ressourcen werden gemessen; keine neuen Dienste oder Abonnements bestellt.
+
+Die ausdrückliche Nutzeranweisung autorisiert zunächst Build018 trotz weiter offener Gesamt-A-Abnahme. DLL428544Byte/SHA256`6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a`, Manifest`f4212443317b58b04808bd42d084e6a3286e458af2c0dbcfb276aa3bca931c2e` und Quellcommit`1802fb3f0720b53feb032abfe2c2a83407bfea6e` wurden erneut geprüft. Eine unabhängige Bestandsprüfung fand keinen neueren geeigneten Kandidaten. Der Stand wird mit aktivem HumanAI-/SupplyNavigation-Pfad und explizitem bereits kurz getesteten DEMON-Tier3 eingesetzt. Bestehende Identitäten, Roster-/Profilzuordnungen und Seeds bleiben erhalten. Navdaten bleiben privat; ihre Pins werden gegen versionierte Herkunft geprüft.
+
+Alle Liveänderungen gehören Root. Vorhandene Flotten-, Deployment- und instanzbezogene Locks werden exklusiv erworben; die vom laufenden Red-Dedicated gehaltenen eigenen Serverlocks werden nicht entfernt. Dedicated-DLLs und Serverprozesse sind eigene, unveränderte Rollen. Botclients werden über den vorhandenen PID-/Cgroup-/CWD-gebundenen normalen Window-Close im tatsächlichen Dienstweg beendet. Frische Sicherungen werden separat rekonstruiert und nach Hash, Modus und Eigentümer verglichen. Die technische Rücknahme verlangt ruhende Botprozesse vor Dateirestore.
+
+Der lokale `git push` scheitert konkret an fehlendem HTTPS-Anmeldenachweis (`could not read Username`). Der vorhandene GitHub-Connector kann regulär Bäume/Commits/Refs veröffentlichen. Erstes veröffentlichtes Plancommit`f026e372fabbbd9e052a9743b971577018d31191` wurde tatsächlich gefetcht: identischer Baum`0f6f6deaebcb7a9da382ce6a2d45acb75b79f31f` zum lokalen`3558022`. Keine fremde Historie wird überschrieben.
+
+Auch der Drive-Dateitransport funktioniert wieder. Delta022 und Delta023 wurden in den bestehenden privaten Projektordner hochgeladen, vollständig zurückgeladen und per SHA256 verglichen. Das ersetzt keine neue native Abnahme und keine neue Sicherung späterer Rolloutbelege.
+
+Die initialen kurzen Betriebsfenster sind getrennt von Erstzustandsschaden, vollständiger Karten-/KI-Abnahme, formalen3600/3600/7200-Sekunden-Gates und B. Keine historische FAIL-Quittung wird verändert. Aktueller Gesamtplan: [Cecil → A → B](../superpowers/plans/2026-11-14-cecil-rollout-a-b.md).
