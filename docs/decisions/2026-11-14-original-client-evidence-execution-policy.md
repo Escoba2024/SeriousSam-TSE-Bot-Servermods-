@@ -1,0 +1,9 @@
+# Originalclient: Ausführungsrichtlinie des freiwilligen Nur-Lesen-Abgleichs
+
+Am14.11.2026 bestätigte der Nutzer seinen Devteilnehmer als unveränderten TSE-1.07-Client. Der erste Aufruf des veröffentlichten PowerShell-Helfers wurde vor Ausführung wegen fehlender digitaler Signatur blockiert. Dies ist kein Modul-/Syncbeleg und kein Nachweis eines veränderten Clients.
+
+Die anschließend vom Nutzer gelesenen Richtlinien: MachinePolicy/UserPolicy/Process/LocalMachine jeweils Undefined, CurrentUser RemoteSigned. Keine Richtlinie wurde durch uns geändert. Der konkrete Helfer ist nicht signiert. Sein veröffentlichter Stand in Remotecommit34c05ed6c84e6445a94410a836b507b73e765177 hat SHA256 `c0bf4eefce510b570fce49d06ff90abb2a6e59040a2c0a05ccaebd5fe4325402` (über git show tatsächlich nachgeprüft).
+
+Für diesen persönlichen RemoteSigned-Fall wurde dem Nutzer Microsofts vorgesehene Freigabe genau einer geprüften Download-Datei beschrieben: Hashvergleich gegen diesen veröffentlichten Stand; nur bei exakter Gleichheit Unblock-File für diesen LiteralPath, danach normaler Aufruf ohne ExecutionPolicy-Override. Der Nutzer kann Quelle und Datei vorher prüfen. Es gibt keine pauschale Dateifreigabe, Richtlinienänderung, Zertifikatsinstallation oder Umgehung einer Gruppenrichtlinie. Bis zur tatsächlichen Ausgabe bleibt der Modulabgleich NOT_RUN/OPEN; kein Betriebsergebnis ableiten.
+
+Primärquellen: [Get-ExecutionPolicy](https://learn.microsoft.com/powershell/module/microsoft.powershell.security/get-executionpolicy), [Unblock-File für Windows PowerShell5.1](https://learn.microsoft.com/powershell/module/microsoft.powershell.utility/unblock-file?view=powershell-5.1). Letztere dokumentiert ausdrücklich die einzelne geprüfte Internetdatei unter unveränderter RemoteSigned-Richtlinie. Rohpfade/Nutzeridentität bleiben aus diesem öffentlichen Bericht entfernt.

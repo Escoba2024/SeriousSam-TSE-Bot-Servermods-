@@ -47,14 +47,15 @@ def socket_rows(table,inodes):
  return out
 
 
-def validate_role_ports(rows):
- need(set(rows)==set(ROLES),'exact four roles')
+def _validate_role_ports(rows,roles):
+ need(roles in(ROLES,ROLES[:3]),'only closed three/four role schemas')
+ need(set(rows)==set(roles),'exact four roles'if roles==ROLES else'exact declared roles')
  need(all(type(r['identity'])is list and len(r['identity'])==2 and all(type(x)is int and x>0 for x in r['identity'])for r in rows.values()),'PID/start bounds')
- need(len({r['identity'][0]for r in rows.values()})==4,'duplicate role PIDs')
+ need(len({r['identity'][0]for r in rows.values()})==len(roles),'duplicate role PIDs')
  need(len({r['namespace']for r in rows.values()})==1 and all(type(r['namespace'])is int and r['namespace']>0 for r in rows.values()),'role namespace changed')
  need(sorted(p for p,i in rows['server']['ports'])==[27850,27851],'exact owned server game/query ports')
  ports={}
- for role in ROLES[1:]:
+ for role in roles[1:]:
   owned=rows[role]['ports'];need(len(owned)==1,'ambiguous/missing own client socket: '+role)
   ports[role]=owned[0][0]
  all_rows=[pair for r in rows.values()for pair in r['ports']]
@@ -63,11 +64,15 @@ def validate_role_ports(rows):
  return ports
 
 
-def observe_roles(registry):
+def validate_role_ports(rows):return _validate_role_ports(rows,ROLES)
+
+
+def _observe_roles(registry,roles):
  """Actual main-process FD inodes intersect its namespace UDP table, twice bound."""
- need(set(registry)==set(ROLES),'role registry')
+ need(roles in(ROLES,ROLES[:3]),'only closed three/four role schemas')
+ need(set(registry)==set(roles),'role registry')
  rows={}
- for role in ROLES:
+ for role in roles:
   spec=registry[role];pid,start=spec['identity'];proc=Path('/proc')/str(pid)
   def guard():
    need(read_start(pid)==start,'role PID reused')
@@ -94,9 +99,12 @@ def observe_roles(registry):
   need(all(inode in after_inodes for port,inode in selected),'owned UDP fd vanished during binding')
   need(guard()==namespace,'role namespace changed during read')
   rows[role]=dict(identity=[pid,start],unit=spec['unit'],namespace=namespace,ports=[list(pair)for pair in selected])
- validate_role_ports(rows)
+ _validate_role_ports(rows,roles)
  need(rows['server']['namespace']!=(Path('/proc/1/ns/net')).stat().st_ino,'host namespace forbidden')
  return rows
+
+
+def observe_roles(registry):return _observe_roles(registry,ROLES)
 
 
 def capture_argv(server_pid):
@@ -173,6 +181,17 @@ class OwnedSyncCapture:
   self.evidence=Path(evidence);self.registry=registry;self.process=None;self.supervisor_start=None;self.owner=None;self.before=None;self.ports=None;self.started=None;self.complete=False;self.closed=False;self.errors=[]
   self.receipt=dict(scope='OWN018_YODELLER_SAMPLED_SYNC_PROTOCOL_ONLY',qualified=False,first_simulation_tick_proven=False,initial_handshake_captured=False,limits=dict(seconds=MAX_SECONDS,bytes=MAX_BYTES,packets=MAX_PACKETS),errors=self.errors)
   self.pcap=self.evidence/'owned-sync.pcap';self.log=self.evidence/'owned-sync-tcpdump.log';self.config=self.evidence/'owned-sync-config.json';self.owner_path=self.evidence/'owned-sync-owner.json'
+ def observe_binding(self):return observe_roles(self.registry)
+ def binding_ports(self,rows):return validate_role_ports(rows)
+ def setup_helper(self):return Path(__file__).resolve().parent/'owned_capture_exec.py'
+ def setup_config(self):
+  source=Path(__file__).resolve().parent
+  return dict(registry=self.registry,binding=self.before,owner_path=str(self.owner_path),source_pins={str(p):hashlib.sha256(p.read_bytes()).hexdigest()for p in(source/'owned_capture_exec.py',source/'owned_sync_capture.py')})
+ def run_audits(self):
+  from analyze_retail_sync_pcap import analyze
+  self.receipt['pair_audits']=audit_pairs(self.pcap,self.ports,analyze)
+  need(all(v.get('paired_checks',0)>0 for v in self.receipt['pair_audits'].values()),'missing required pair observations')
+ def comparison_complete(self):return all(v['status']=='MATCHING_SAMPLED_SYNCCHECKS_ONLY'for v in self.receipt.get('pair_audits',{}).values())
  def save(self):
   (self.evidence/'owned-sync-capture.json').write_text(json.dumps(self.receipt,indent=2,allow_nan=False))
  def text(self):
@@ -181,18 +200,16 @@ class OwnedSyncCapture:
  def start(self):
   need(RUNTIME_REVIEWED,'disabled capture library')
   need(self.process is None,'capture already started')
-  self.before=observe_roles(self.registry);self.ports=validate_role_ports(self.before)
+  self.before=self.observe_binding();self.ports=self.binding_ports(self.before)
   self.receipt.update(role_binding_before=self.before,role_ports=self.ports);self.save()
-  source=Path(__file__).resolve().parent
-  config=dict(registry=self.registry,binding=self.before,owner_path=str(self.owner_path),
-              source_pins={str(p):hashlib.sha256(p.read_bytes()).hexdigest()for p in(source/'owned_capture_exec.py',source/'owned_sync_capture.py')})
+  helper_path=self.setup_helper();config=self.setup_config()
   exclusive_json(self.config,config)
   outfd=os.open(self.pcap,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
   try:logfd=os.open(self.log,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
   except BaseException:os.close(outfd);raise
   try:
    self.started=time.monotonic()
-   args=['/usr/bin/timeout','--signal=INT','--kill-after=3',str(MAX_SECONDS),'/usr/bin/python3','-B',str(source/'owned_capture_exec.py'),str(self.config)]
+   args=['/usr/bin/timeout','--signal=INT','--kill-after=3',str(MAX_SECONDS),'/usr/bin/python3','-B',str(helper_path),str(self.config)]
    self.process=subprocess.Popen(args,stdout=outfd,stderr=logfd,start_new_session=True)
    # Retain the actual child handle before any identity read can fail.
    self.receipt['supervisor_pid']=self.process.pid;self.save()
@@ -206,7 +223,7 @@ class OwnedSyncCapture:
      pid,start=self.owner['identity'];proc=Path('/proc')/str(pid)
      need(read_start(pid)==start and os.getpgid(pid)==self.process.pid,'setup identity/group changed')
      actual=[x.decode()for x in(proc/'cmdline').read_bytes().rstrip(b'\0').split(b'\0')]
-     helper=['/usr/bin/python3','-B',str(source/'owned_capture_exec.py'),str(self.config)]
+     helper=['/usr/bin/python3','-B',str(helper_path),str(self.config)]
      if exec_ready(actual,capture_argv(self.registry['server']['identity'][0]),helper,(proc/'ns/net').stat().st_ino,self.before['server']['namespace']):
       self.guard()
       with self.pcap.open('rb')as stream:header=stream.read(24)
@@ -224,7 +241,7 @@ class OwnedSyncCapture:
   need(os.getpgid(pid)==self.process.pid,'capture left own group')
   expected=capture_argv(self.registry['server']['identity'][0])[4:]
   need((proc/'cmdline').read_bytes().rstrip(b'\0').split(b'\0')==[a.encode()for a in expected],'capture command not exact tcpdump')
-  need(observe_roles(self.registry)==self.before,'own UDP role binding changed')
+  need(self.observe_binding()==self.before,'own UDP role binding changed')
   check_limits(size=self.pcap.stat().st_size,seconds=time.monotonic()-self.started)
   self.text()
  def gameplay_complete(self):
@@ -246,7 +263,7 @@ class OwnedSyncCapture:
    try:return operation()
    except BaseException as error:self.errors.append(label+':'+repr(error));return None
   def after_binding():
-   rows=observe_roles(self.registry);self.receipt['role_binding_after']=rows
+   rows=self.observe_binding();self.receipt['role_binding_after']=rows
    need(rows==self.before,'own ports changed at capture end')
   def hash_pcap():
    size=self.pcap.stat().st_size
@@ -254,10 +271,6 @@ class OwnedSyncCapture:
    self.receipt['pcap_sha256']=hashlib.sha256(self.pcap.read_bytes()).hexdigest()
    self.receipt['pcap_bytes']=size
    check_limits(size=size,seconds=time.monotonic()-self.started)
-  def audits():
-   from analyze_retail_sync_pcap import analyze
-   self.receipt['pair_audits']=audit_pairs(self.pcap,self.ports,analyze)
-   need(all(v.get('paired_checks',0)>0 for v in self.receipt['pair_audits'].values()),'missing required pair observations')
   def child_ended():
    if self.owner is None:return
    pid,start=self.owner['identity']
@@ -304,9 +317,9 @@ class OwnedSyncCapture:
     stats=attempt('capture statistics',lambda:capture_stats(self.text()))
     if stats is not None:self.receipt['stats']=stats
     attempt('capture hash',hash_pcap)
-    if self.ports is not None:attempt('pair comparisons',audits)
+    if self.ports is not None:attempt('pair comparisons',self.run_audits)
     self.receipt['normal_capture_closed']=self.receipt.get('exit_code')==0 and not self.errors
-    self.receipt['protocol_complete']=self.complete and not self.errors and all(v['status']=='MATCHING_SAMPLED_SYNCCHECKS_ONLY'for v in self.receipt.get('pair_audits',{}).values())
+    self.receipt['protocol_complete']=self.complete and not self.errors and self.comparison_complete()
   finally:
    self.receipt.update(full_gameplay_requested_window=self.complete,finished_monotonic=time.monotonic());self.save()
   if self.errors:raise RuntimeError('; '.join(self.errors))
