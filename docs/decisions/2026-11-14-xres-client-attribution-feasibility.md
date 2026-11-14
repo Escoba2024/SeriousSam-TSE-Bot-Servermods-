@@ -113,3 +113,25 @@ Primärquelldateien privat unter`/srv/tse-xres-attribution-primary-20261114/`:
 APT-/Toolinventur ist im tatsächlichen Tooltranskript belegt, nicht als bereits
 gespeicherter Log ausgegeben. Keine Fähigkeitsbehauptung über eine Display-
 Verbindung oder Bibliotheksausführung; beides fand in dieser Untersuchung nicht statt.
+
+## Rootfortschritt nach geschlossenem180s-Diagnosefenster
+
+Um22:54–22:57UTC stellte Root regulär libxres1 und libxres-dev
+`2:1.2.1-1build1` bereit: zunächst1neues Runtimepaket, danach10neue
+Header-/Devpakete, jeweils0Upgrades/0Entfernungen. Kein Dienst-/Hostneustart
+erfolgte. X11/Xtst/Xext/xcb-Bibliotheksziele und vollständige SHA256 blieben
+vor/nach beiden Operationen identisch. libXRes.so.1:
+`c2aefa4bf373492430f48aec108c5ead95e1dc757d52968775e905e23a2ad56c`.
+Installierte XRes.h/XResproto.h stimmen mit den obigen Primärhashes überein.
+Simulationen, vollständige Installationslogs und Vorher-/Nachherquittungen
+liegen privat im Root-Evidenceverzeichnis.
+
+Ein eigenes minimales C11-Programm kompilierte und lief Exit0, ohne Bibliotheks-
+oder Displayaufruf: XID/long8Byte, pid_t/CARD32je4; XResClient16Byte,
+Baseoffset0/Mask8; Spec16Byte/Client0/Mask8; Value32Byte/Spec0/Length16/Value24.
+PIDmaske2, Success0. _Generic-Compileassertionen prüfen öffentliche
+QueryClientIds-/GetClientPid-/Destroy-Signaturen. Dies ist ein tatsächlicher
+Header-/Compilerlayoutbeleg, noch kein Vergleich mit fertigen ctypes-Strukturen
+und keine native XRes-Display-/PID-Qualifikation. Diese bleibt dem separaten
+[eigenen Methodenplan](../superpowers/plans/2026-11-14-own-xres-pid-method.md)
+vorbehalten. Alter U, InputOnce, Gainursache und A1 bleiben offen.

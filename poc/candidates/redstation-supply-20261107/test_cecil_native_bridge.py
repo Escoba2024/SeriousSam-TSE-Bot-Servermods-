@@ -1044,6 +1044,72 @@ void hopCheckpoint45Arrival(){
  check(hopCheckpointEvents==0&&retained,
   "actual original-radius arrival and live final item connector are not a stuck directed edge");
 }
+// Reproducer only: preserve the old positive fixture below unchanged. The two
+// high nodes carry their original slots/positions/radii/flags/links; ground 0/1
+// remain the existing deterministic support-route fixture, not a native map.
+void groundedAcquireHandshakeFixture(){
+ setup(75);auto& g=BotSupplyGraph();
+ for(int i=0;i<75;++i){auto& p=g.points[i];p.x=1000+10*i;p.y=1000;p.z=1000;p.links.clear();}
+ const int slots[4]={0,1,69,71};
+ const float positions[4][3]={{71,1,63},{63,1,63},{63.0233955f,38.367321f,63.126381f},{67.5f,36.5f,63.25f}};
+ for(int i=0;i<4;++i){auto& p=g.points[slots[i]];p.x=positions[i][0];p.y=positions[i][1];p.z=positions[i][2];p.radius=i==0?3:(i==1?4:1);}
+ g.points[0].links={1};g.points[1].links={69};g.points[69].links={71,72,73,74};g.points[71].links={69,72,74};
+ g.points[71].important_entity=311;
+ auto& item=addItem(311,67.5f,63.25f,botcore::CecilItemKind::Weapon);item.item.weapon=14;item.pl.pl_PositionVector(2)=36.001f;
+ auto& state=BotSupplyState(0);state.goal=71;state.goalEntity=311;state.goalSince=0;state.goalDeadline=12;state.scanTick=2;
+ player.pl.pl_PositionVector=FLOAT3D(positions[2][0],positions[2][1],positions[2][2]);player.m_pstState=PST_FALL;
+ _botRayBudget=16;BotCecilChooseGoal(&player,0,1,1000,false);
+ check(state.anchor==69&&state.goal==71&&state.goalEntity==311,"real ChooseGoal acquires original high source for a retained valid Cannon attempt");
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(state.navigator.SourceSlot(71)==69&&state.hop==71,"real navigator commits original69to71 edge while FALL");
+ _botRayBudget=16;BotSupplyTick(&player,0,2,1000); // Real scan schedules22,42.
+ player.pl.pl_PositionVector=FLOAT3D(67.431f,.378f,63.419f);player.m_pstState=PST_STAND;
+ floorEntity.en_ulID=1;floorEntity.type=CEntity::RT_BRUSH;floorEntity.cls.name="Classes/WorldBase.ecl";
+ player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
+ // NO assignment of state.anchor after landing.
+}
+void groundedAcquireHandshakeReproduction(){
+ for(int mode=0;mode<6;++mode){
+  groundedAcquireHandshakeFixture();auto& state=BotSupplyState(0);SCecilMove move;
+  const bool depletedScan=mode==1;
+  const bool blockedScan=mode==2;
+  const bool blockedAlways=mode==3;
+  if(mode==4)player.en_penReference=nullptr;
+  if(mode==5)player.en_vCurrentTranslationAbsolute(3)=.101f;
+  for(int tick=3;tick<=42;++tick){
+   const bool scan=tick==22||tick==42;
+   _botRayBudget=depletedScan&&scan?2:16;
+   wallMode=blockedAlways||(blockedScan&&scan)?2:0;
+   move=BotSupplyTick(&player,0,tick,1000);
+   if(scan)std::printf("grounded handshake scan mode=%d tick=%d anchor=%d acquired=%d acquired_time=%.3f source=%d hop=%d next_scan=%d budget=%d since=%.3f deadline=%.3f\n",
+    mode,tick,state.anchor,state.acquiredAnchor,state.acquiredAnchorTime,state.navigator.SourceSlot(71),state.hop,state.scanTick,_botRayBudget,state.goalSince,state.goalDeadline);
+  }
+  const int retained=state.anchor,source=state.navigator.SourceSlot(71);
+  check(state.goalEntity==311&&source==69&&state.hop==71,"grounded handshake matrix retains actual high edge until unchanged two second hold boundary");
+  _botRayBudget=16;wallMode=blockedAlways?2:0;
+  const int fresh=BotSupplyNearest(&player,player.pl.pl_PositionVector,TRUE);
+  check(fresh==(blockedAlways?-1:0),"actual fresh Nearest sees ground hint only with a clear existing cast");
+  check(retained==((depletedScan||blockedScan||blockedAlways)?69:0)&&state.goalSince==0&&state.goalDeadline==12,
+   "actual periodic ChooseGoal updates or retains anchor without renewing the attempt");
+  if(fresh>=0){botcore::CecilNavSearch reach;reach.Prepare(BotSupplyGraph().points.size());
+   check(reach.Run(BotSupplyGraph(),fresh,state.blocked.data(),state.blocked.size())&&std::isfinite(reach.Distance(71)),
+    "fresh ground hint has a real directed graph suffix to the unchanged goal");}
+  _botRayBudget=16;const int before=rayCount;move=BotSupplyTick(&player,0,43,1000);
+  std::printf("grounded handshake mode=%d retained_anchor=%d source=%d fresh_nearest=%d ground_replans=%d goal_entity=%lu end=%s casts=%d budget=%d since=%.3f deadline=%.3f\n",
+   mode,retained,source,fresh,groundReplanEvents,(unsigned long)state.goalEntity,lastEnd,rayCount-before,_botRayBudget,state.goalSince,state.goalDeadline);
+  check(rayCount-before<=16&&_botRayBudget>=2,"handshake matrix never enlarges shared query budget or final reserve");
+  if(mode<=2){
+   check(rayCount-before==1&&near(lastTo(1),71)&&near(lastTo(2),1.8)&&near(lastTo(3),63),
+    "actual hold-boundary helper independently casts toward ground0 before anchor equality rejection");
+   check(groundReplanEvents==1&&state.goalEntity==311&&endEvents==0,
+    "fresh reachable ground hint must preserve the same attempt after deferred scan without manually setting anchor");
+   if(groundReplanEvents)check(state.goalSince==0&&state.goalDeadline==12&&state.currentNavTime<0&&state.currentNavGoal==-1,
+    "real grounded reset preserves original deadline and supplies no current floor permission");
+  }else check(groundReplanEvents==0&&state.goalEntity==0&&std::strcmp(lastEnd,"unreachable_hold")==0,
+    "blocked current LOS invalid support or moving contact retain existing grounded replan veto");
+ }
+}
+
 void groundedReplanFixture(){
  setup(4);auto& g=BotSupplyGraph();
  const float p[4][3]={{71,1,63},{63,1,63},{63.0233955f,38.367321f,63.126381f},{67.5f,36.5f,63.25f}};
@@ -4097,6 +4163,7 @@ void blockedOriginReproduction(){
  check(f==0&&st==0&&u==0&&rayCount>casts,"actual restored route still submits to physical wall/floor safety veto");
 }
 int main(){
+ groundedAcquireHandshakeReproduction();
  blockedOriginReproduction();
  blockedOriginRecoveryGuards();
  itemConnectorRadiusContinuity();

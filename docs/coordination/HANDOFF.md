@@ -1,5 +1,68 @@
 # Aktueller Handoff — 14.11.2026,20:45 UTC
 
+## Stand 23:33 UTC – SDK-Reproduktion und XRes-Methode vorbereitet
+
+Die frische SDK107-Reproduktion liefert 3274 Checks mit zwei gezielten REDs:
+Nach ausgefallenem Bodenscan bleibt Anker 69 erhalten; GroundedReplan verwirft
+den inzwischen frisch sichtbaren Bodenhint 0. Produktionsheader/Build023 bleiben
+unverändert. Das belegt den SDK-Fehler, noch nicht die genaue Ursache des nativen
+56,8s-Lebens. Nächster Gameplay-Schritt: enger Fix mit unveränderten Sicherheits-
+und Zielregeln, adversarialen Tests und anschließend neuer Kandidatenabnahme.
+
+87 typed Supply-Zeilen vollständig gebunden: 84 render_type, zwei missing_entity,
+eine Health typed_need; sechs weitere unavailable-Enden bleiben untypisiert.
+Root-Replay plus expliziter Metadatenfinalisierung reproduziert Quittung17905303
+bytegleich. Keine pauschale Healthblockade oder Fremd-Pickup-Kausalität behauptet.
+
+XRes: Root-Quellreview, 28 Offlinechecks und Freeze-Peerreview PASS_SCOPE;
+Manifest cad6a118, noch keine native PID-Methode. Äußere Hostbeobachtung nach
+einem belegten Journal-I/O-Reviewfehler korrigiert, 13 gezielte Checks PASS,
+Freeze87bced91. Nächste Reihenfolge: Quellpublikation/Fetchnachweis, Delta055
+vollständig Drive-rücklesen und Metadaten prüfen, genau eine eigene :167-Methode
+unter Sperren. Kein TSE/Wine/Input in dieser Metadatenprobe, keine Wiederholung.
+
+Letzte gemeinsame Flottenabfrage23:25:23: sechs Instanzen mit je acht eigenen
+Bots; Dev ein weiterer ungeklärter Teilnehmer. Dev048, RedGen2, andere vier018,
+keine Liveänderung. 22:33→23:25 fünf Public ohne neue sieben Fehlerklassen;
+Dev sechs neue SYNCBAD für einen externen Peer, maximal Zähler3, kein neuer
+Sync-Disconnect. Bis23:27 folgten796 SYNCOK derselben Verbindung. Eigene zwei
+Dev-Botlogpräfixe23:29 in allen sieben Fehlerklassen0. Ursache UNKNOWN.
+Nutzer meldet: eigener Originalclient nicht mehr verbunden; zusätzlichen Peer
+niemals ihm zuordnen oder instrumentieren. Keine Korrektur-/Stabilitätsbehauptung.
+
+A bleibt offen, B nicht begonnen. Beide Analyseagenten und alle isolierten
+Native-Jobs beendet; keine unbeaufsichtigte Weiterarbeit. Delta054 vollständig;
+055 für neue geschlossene Rohbelege/Quellen/Methoden vor nächster Native offen.
+
+## Stand 23:10 UTC – Supplygründe eingegrenzt, Methodenentwicklung isoliert
+
+180sDiag1bleibtgeschlossen/RestorePASS; unabhängigeVollbindung87typedZeilen
+läuftimA4worker. Vorbefund84render_type,2missing_entity,1Healthtyped_need;
+keinNachweispauschalerHealthblockade. NeueRecovery0. KonkreterSDKReprobedarf:
+56,8sNoUsefullebenliefnachHöhenwechselmitretainedhohemNAVsource69/71,
+gewöhnlicherGoal311endeteunreachable_hold; bisherigerFixture setztanchor0
+vorab. NochkeinbewiesenerHandshakefehler/keinGameplayfix/keinneuerBuild.
+
+XResplan6ac8b50→Roota553fff; tatsächlichekostenfreielib/devBereitstellungohne
+Runtimeupgrades/bestehendeLibhashänderung, CHeaderlayoutRootExit0, nochkeine
+XResDisplay-/PIDqualifikation. CandidateworkerimplementiertnurOfflineTask1–3
+ineigenemWT; keineNative. AlterUUNKNOWN/GainFAILbleibt. ReinerWirezusatz:
+RechtsRequest→UWarp65ms/links33ms innerhalbXserverClock; keineJSClockfusion,
+keineCache-/Prozessursachebehauptet.
+
+RooteigeneäußereHostbeobachtungPlan5f9c18e/RED6bc132e/Implementierunge6011cf/
+Report185a9e8:10gezielte+geerbteTestsPASS, eigene2,1sPythonprobe4Proben/
+Maxgap1,0008394s/Childreaped0. Nativecontrollerbytegleich, Budgetklasse9a8132af
+bytegleich, keineSignale/Retries/Qualification. ReviewvorNativeeinsatzoffen.
+
+LetzteFlottenabfrage22:54sechs×8eigene/Dev1ungeklärt, loadedDLLsweiter
+Dev048/RedGen2/andere4Build018, gleicheRuntimePIDs, keineLiveänderung.
+Quellpublikation061:lokal2e097331/remote d8513c833f2e96a9ef49a88c4f814884d4f57cf5,
+Treeabfa6780tatsächlichgefetched/diff0. NeuereRootcommitsnochzuveröffentlichen.
+Delta054vollDrive/892MetadatenzweimalPASS; neue180sRaw+Provision+Methodenbelege
+für055vormnächstenNativearchivieren. KeineNativeGameprozesseaktiv; Aoffen/Bnichtbegonnen.
+
+
 ## Stand 22:53 UTC – einmalige180s-Supplydiagnose geschlossen
 
 [Diagnosebericht](../reports/2026-11-14-build023-supply-diag1-closed.md):
