@@ -199,7 +199,7 @@ rpc.exports={
           if(stoppedMs!==null&&inFlight===0)setImmediate(detachIdle); } }
       }));
       // After the Original GetCursorPos call: test eax,eax (2 bytes), je (6).
-      handles.push(Interceptor.attach(engine.add(guards.sites.cursor_return.rva),{onEnter() { if(!activeInputs.has(this.threadId)&&!running()) return; try {
+      handles.push(Interceptor.attach(engine.add(guards.sites.cursor_return.rva),function() { if(!activeInputs.has(this.threadId)&&!running()) return; try {
         const row=currentInput(this.threadId); if(!row)return; need(!row.cursor,'duplicate cursor result');
         const bp=pointer(this.context.ebp.toString());
         same(bp,ptr(row.entry_sp).sub(4),'GetInput frame differs');
@@ -207,15 +207,15 @@ rpc.exports={
         const x=bp.sub(0x20).readS32(),y=bp.sub(0x1c).readS32();
         const cx=input.add(0x17a4).readS32(),cy=input.add(0x17a8).readS32();
         row.cursor={ok,x,y,center_x:cx,center_y:cy,raw_dx:x-cx,raw_dy:y-cy,epoch_ms:Date.now()};
-      } catch(e) { fault(e); } }}));
+      } catch(e) { fault(e); } }));
       // At the Original six-byte indirect call; no USER32 export hook.
-      handles.push(Interceptor.attach(engine.add(guards.sites.recenter_call.rva),{onEnter() { if(!activeInputs.has(this.threadId)&&!running()) return; try {
+      handles.push(Interceptor.attach(engine.add(guards.sites.recenter_call.rva),function() { if(!activeInputs.has(this.threadId)&&!running()) return; try {
         const row=currentInput(this.threadId); if(!row)return; need(!row.recenter,'duplicate recenter');
         const sp=pointer(this.context.esp.toString());
         row.recenter={needed:true,x:sp.readS32(),y:sp.add(4).readS32(),ok:false,entered_ms:Date.now()};
-      } catch(e) { fault(e); } }}));
+      } catch(e) { fault(e); } }));
       // Recenter returns here, or zero-displacement path branches here.
-      handles.push(Interceptor.attach(engine.add(guards.sites.recenter_return.rva),{onEnter() { if(!activeInputs.has(this.threadId)&&!running()) return; try {
+      handles.push(Interceptor.attach(engine.add(guards.sites.recenter_return.rva),function() { if(!activeInputs.has(this.threadId)&&!running()) return; try {
         const row=currentInput(this.threadId); if(!row)return; need(row.cursor,'recenter before cursor');
         if(row.recenter) {
           row.recenter.ok=this.context.eax.toUInt32()!==0;
@@ -225,7 +225,7 @@ rpc.exports={
           need(row.cursor.raw_dx===0&&row.cursor.raw_dy===0,'nonzero displacement without recenter');
           row.recenter={needed:false,ok:true};
         }
-      } catch(e) { fault(e); } }}));
+      } catch(e) { fault(e); } }));
       handles.push(Interceptor.attach(game.add(guards.sites.action.rva),{
         onEnter() { this.row=null; try {
           if(!running()) return;
@@ -263,7 +263,7 @@ rpc.exports={
       }));
       // Original CreateAction has finished axis/button assignment and is about
       // to call ctl_ComposeActionPacket; EDI remains the bound action argument.
-      handles.push(Interceptor.attach(game.add(guards.sites.compose_call.rva),{onEnter() {
+      handles.push(Interceptor.attach(game.add(guards.sites.compose_call.rva),function() {
         if(!activeActions.has(this.threadId)) return;
         try {
           const row=activeActions.get(this.threadId);
@@ -273,7 +273,7 @@ rpc.exports={
           row.raw_view_yaw=finite(this.context.edi.add(0x18).readFloat());
           row.compose_entered_ms=Date.now();
         } catch(e) { fault(e); }
-      }}));
+      }));
       Interceptor.flush();
       timer=setTimeout(()=>stop('TTL/clock'),cfg.ttl_ms);
     } catch(e) { fault(e); throw e; }

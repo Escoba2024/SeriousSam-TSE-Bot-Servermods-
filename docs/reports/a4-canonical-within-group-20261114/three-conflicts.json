@@ -1,0 +1,214 @@
+{
+  "scope": "CLOSED_WITHIN_GROUP_DIAGNOSIS_NO_GATE_CHANGE_NO_REQUALIFICATION",
+  "historical_status": "FAIL",
+  "source_window": "a4-020-hard-groups-redstation-20261114-120936",
+  "source_hashes": {
+    "inventory.jsonl": "be83398247a05698b5a6ffa53d28b2ab9e054549c27b1634c012f8d5a3ef169e",
+    "registry.json": "bf763100cd991dd9fe749cbac81c822e0fe604da2d82ff7acd0e8f422742b219",
+    "result.json": "935f6d88c1741bd2a37d6b5c076a7b409db2abf604c394b38fb5ed8c1763cc29",
+    "native-group-contract.json": "1dd1effcf6ac15107d1732eabd199ba8e235f72942e347cc61bc7a9ec5b232d1",
+    "controller-source.py": "bff9853d8ed2b7fc3cb358535615b85e087e58a80ddd83c008cb328ddfee6ead",
+    "a4_canonical_native_groups.py": "463e0b4a8d11c4daa61695ab4c3f82783f10414774242f7f670c2596ade43d0f",
+    "a4_fire_observer_v2.py": "201ca2d0f3098637ffb129162d84e126062df24790cfa865693781683732e5fc",
+    "audit_a4_native_fire_observer_v2.py": "3ac187c8775b2bd1ed7021dc7b4037b0eeda6aec2a0292f9d87e47c9d8f4b466"
+  },
+  "source_files_unchanged": true,
+  "gameplay_samples": 13627,
+  "group_samples": {
+    "botA_actual": 4541,
+    "botB_actual": 4538,
+    "vanilla_plus_overlap": 4548
+  },
+  "spawned_player_rows": 54495,
+  "canonical_spawned_player_rows": 36307,
+  "unique_canonical_group_slot_life_ticks": 36180,
+  "duplicate_pairs": {
+    "raw_conflicting": 9,
+    "crossgroup_conflicting": 6,
+    "raw_equal": 11524,
+    "crossgroup_equal": 11340,
+    "canonical_conflicting": 3,
+    "canonical_equal": 128
+  },
+  "distinct_observer_epochs": 1,
+  "max_read_seconds": 0.16614819993264973,
+  "conflict_fields": {
+    "physics_flags": 3,
+    "placement.1": 3,
+    "placement.3": 2
+  },
+  "canonical_conflicts": [
+    {
+      "role": "botA",
+      "local": 1,
+      "slot": 2,
+      "group": "botA_actual",
+      "spawn_clock": 0.9000001549720764,
+      "session_tick": 0.9000001549720764,
+      "inventory_lines": [
+        7,
+        10
+      ],
+      "loop_elapsed": [
+        0.12447293801233172,
+        0.15796421491540968
+      ],
+      "read_seconds": [
+        0.004344677086919546,
+        0.0038662259466946125
+      ],
+      "same_group_loop_gap": 0.03349127690307796,
+      "previous_group_lines": [
+        4,
+        7
+      ],
+      "changes": [
+        {
+          "field": "physics_flags",
+          "before": 1073742471,
+          "after": 1073742468
+        },
+        {
+          "field": "placement.1",
+          "before": 0.10750000178813934,
+          "after": 0.032499998807907104
+        },
+        {
+          "field": "placement.3",
+          "before": -180.0,
+          "after": 179.99998474121094
+        }
+      ],
+      "actual_callback_time_available": false,
+      "position_delta": [
+        0.0,
+        -0.07500000298023224,
+        0.0
+      ],
+      "new_velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "arithmetic_residual_for_0_05_seconds": [
+        0.0,
+        -0.07500000298023224,
+        0.0
+      ],
+      "observed_life_ordinal": 1
+    },
+    {
+      "role": "botA",
+      "local": 2,
+      "slot": 3,
+      "group": "botA_actual",
+      "spawn_clock": 0.9000001549720764,
+      "session_tick": 0.9000001549720764,
+      "inventory_lines": [
+        7,
+        10
+      ],
+      "loop_elapsed": [
+        0.12447293801233172,
+        0.15796421491540968
+      ],
+      "read_seconds": [
+        0.004344677086919546,
+        0.0038662259466946125
+      ],
+      "same_group_loop_gap": 0.03349127690307796,
+      "previous_group_lines": [
+        4,
+        7
+      ],
+      "changes": [
+        {
+          "field": "physics_flags",
+          "before": 1073742471,
+          "after": 1073742468
+        },
+        {
+          "field": "placement.1",
+          "before": 0.29499998688697815,
+          "after": 0.2199999839067459
+        }
+      ],
+      "actual_callback_time_available": false,
+      "position_delta": [
+        0.0,
+        -0.07500000298023224,
+        0.0
+      ],
+      "new_velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "arithmetic_residual_for_0_05_seconds": [
+        0.0,
+        -0.07500000298023224,
+        0.0
+      ],
+      "observed_life_ordinal": 1
+    },
+    {
+      "role": "botA",
+      "local": 3,
+      "slot": 4,
+      "group": "botA_actual",
+      "spawn_clock": 0.9000001549720764,
+      "session_tick": 0.9000001549720764,
+      "inventory_lines": [
+        7,
+        10
+      ],
+      "loop_elapsed": [
+        0.12447293801233172,
+        0.15796421491540968
+      ],
+      "read_seconds": [
+        0.004344677086919546,
+        0.0038662259466946125
+      ],
+      "same_group_loop_gap": 0.03349127690307796,
+      "previous_group_lines": [
+        4,
+        7
+      ],
+      "changes": [
+        {
+          "field": "physics_flags",
+          "before": 1073742471,
+          "after": 1073742468
+        },
+        {
+          "field": "placement.1",
+          "before": 0.29499998688697815,
+          "after": 0.2199999839067459
+        },
+        {
+          "field": "placement.3",
+          "before": 102.5,
+          "after": 102.50000762939453
+        }
+      ],
+      "actual_callback_time_available": false,
+      "position_delta": [
+        0.0,
+        -0.07500000298023224,
+        0.0
+      ],
+      "new_velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "arithmetic_residual_for_0_05_seconds": [
+        0.0,
+        -0.07500000298023224,
+        0.0
+      ],
+      "observed_life_ordinal": 1
+    }
+  ]
+}

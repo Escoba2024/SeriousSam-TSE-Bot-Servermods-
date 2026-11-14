@@ -89,5 +89,17 @@ getterHook={detach(){}};assert.equal(finishStop().stopped,true);assert.equal(fau
         for bound in ["limit(c.max_records,1,64", "limit(c.max_calls,1,1024", "limit(c.ttl_ms,1,125000", "limit(c.binding_ms,1,2000", "limit(c.binding_calls,1,256"]:
             self.assertIn(bound,new)
 
+    def test_getter_midpoint_registers_instruction_probe_without_return_trap(self):
+        source=patch(Path(ORIGINAL).read_text())
+        start=source.index('getterHook=Interceptor.attach(')
+        end=source.index('\n  }catch(e){fault(e);throw e;}',start)
+        registration=source[start:end]
+        self.run_model('''
+engine={add:x=>x};
+Interceptor={attach(at,callback){assert.equal(at,G.engine.current_tick.rva+15);
+ assert.equal(typeof callback,'function','getter instruction must not install call listener');
+ return {detach(){}};}};
+'''+registration)
+
 
 if __name__=='__main__':unittest.main()

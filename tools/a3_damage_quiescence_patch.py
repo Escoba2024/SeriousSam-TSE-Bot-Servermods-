@@ -49,8 +49,8 @@ def patch(source):
         '    }catch(e){fault(e);}},\n    onLeave(){':'    }catch(e){fault(e);}}),\n    onLeave:tracked(function(){',
         'if(!enabled||!bounded())return;r.after=snapshot':'if(!continuationAllowed())return;r.after=snapshot',
         "if(total>=cfg.max_calls)stop('damage call bound');}}\n   });":"if(total>=cfg.max_calls)stop('damage call bound');}})\n   });",
-        'onEnter(){if(!enabled||tls)return;try{':'onEnter:tracked(function(){if(!enabled||tls)return;try{',
-        '   }catch(e){fault(e);}}});':'   }catch(e){fault(e);}},true)});',
+        "engine.add(G.engine.current_tick.rva+15),{onEnter(){":"engine.add(G.engine.current_tick.rva+15),tracked(function(){",
+        '   }catch(e){fault(e);}}});':'   }catch(e){fault(e);}},true));',
         'first_processed_state_proven:false,native_qualified:false};records=[];return out;':'first_processed_state_proven:false,native_qualified:false,...stopStatus()};records=[];return out;',
         " stop(){stop('host requested');return {stopped:!getterHook&&!damageHook,detach_errors:detachErrors.slice()};}":" disarm(){stop('host requested');return stopStatus();},\n status(){return stopStatus();},\n finishstop(){return finishStop();}",
     }

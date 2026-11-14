@@ -38,7 +38,7 @@ function fixture(options={}) {
   g.timer_gate={schema:'original107-timer-guard-observation-v2',game_on_offset:0xf54,game_menu_offset:0xf58,input_enabled_offset:4,network_pointer_rva:0x20d6a4,network_guard_rva:0x20d6b8,network_session_offset:0x20,session_pause_offset:0xa8,network_local_pause_offset:0x854,controls_vtable_rva:0x2156c,controls_action_slot_offset:0x20};
   g.callers={input_return_rva:0x11241,action_return_rva:0x112fb};
   const api=context.rpc.exports;
-  function invoke(at,state,leave=false) { const h=hooks.get(at); if(h) (leave?h.onLeave:h.onEnter).call(state); }
+  function invoke(at,state,leave=false) { const h=hooks.get(at); if(h) (typeof h==='function'?h:(leave?h.onLeave:h.onEnter)).call(state); }
   function flushImmediates(){while(immediates.length)immediates.shift()();}
   function input(dx=12,{recenter=true,thread=99,cursor=true,stopDuring=false,callerGame=go,returnEDI=null,rawThis=inp,callerReturn=gb+0x11241,prescan=0,mutateAfterEntry=null}={}) {
     const sp=0x80000,bp=sp-4;u(sp,callerReturn);u(sp+4,prescan);u(bp-0x20,dx);u(bp-0x1c,0);
@@ -62,6 +62,16 @@ function fixture(options={}) {
 }
 let passed=0;
 function test(name,run){run();passed++;}
+test('instruction sites register true probes while real entries keep enter leave pairs',()=>{
+  const t=fixture();t.api.arm(t.c,t.g);
+  for(const at of [t.eb+0xd2b2,t.eb+0xd56a,t.eb+0xd570,t.gb+0x104fe]) {
+    assert.equal(typeof t.hooks.get(at),'function','instruction point must not register a call listener');
+  }
+  for(const at of [t.eb+0xd200,t.gb+0x10470]) {
+    const hook=t.hooks.get(at);assert.equal(typeof hook.onEnter,'function');assert.equal(typeof hook.onLeave,'function');
+  }
+  assert.equal(t.hooks.size,6);t.api.stop();
+});
 test('not armed at load',()=>{const t=fixture();assert.equal(t.hooks.size,0);});
 test('observer covers existing90s controller budget with fixed caps',()=>{
   const t=fixture();t.c.max_calls=4096;t.c.ttl_ms=90000;t.api.arm(t.c,t.g);t.api.stop();
