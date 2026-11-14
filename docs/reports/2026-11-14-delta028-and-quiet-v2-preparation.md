@@ -1,0 +1,9 @@
+# Geschlossene A1-Belege gesichert; getrenntes ruhiges V2-Fenster vorbereitet
+
+Delta028 enthält beide geschlossenen A1-FAILs mit unveränderten Rohbelegen/Originalguards, den geprüften Root-Freeze, Quellbundle bis6c88b35 und die ausschließlich vorbereitete neue V2-Kopie.10469627Archivbytes, SHA256 `8f65d917543eebee24afbcb627b2f713da72d8b9f6ac8229416cee546bff0389`.1607reguläre Dateien/36571670Bytes separat restauriert und Hash/Modus/UID/GID geprüft. Drive-ID `1Cu4VNr7kplWBq39z6HLhS4Xl8Oa9mAnh` vollständig zurückgeladen, identische Größe und SHA256. Kein nativer Gesamtarchivrestorestart; Disk nach lokaler Rekonstruktion10842304512Bytes.
+
+Neue vorbereitete Kopie `/srv/tse-a4-fire020-v2-quiet-root-frozen-20261114`, Manifest `0094121be382680971b132806bee0afa0b49dd2f7a8fd6e209ff3aea177a0b71`, Launcher `5de134fa5ca26a6d4bbde9c943c1adc99f2a10f85aef56d8116fe921079397c7`.67Runtimepins frisch passend. Normalisierte Launcherbytes sind bis auf eigenen Dienst-/Evidencepräfix exakt identisch zur vorherigen geprüften V2-Kopie; alle Policys unverändert. Kandidat bleibt020094ec8ed… .
+
+Die explizit geänderte Lastbedingung: auch Root schließt sämtliche Veröffentlichungen, parallelen Dateileser und Archive vor dem neuen Einzelfenster ab. Beide Worker bestätigten keine laufenden Test-/Build-/Nativeprozesse und ausschließlich statische Arbeit. Keine Toleranz-, Dauer-, Sampling- oder Aktivitätsänderung; alteCPU80,0959%-FAILs bleibenFAIL. Kein automatisches Wiederholen. Nach abgeschlossenem Git-Fetch folgt separat ein frischer echter Preflight; erst danach darf Root genau einen Lauf starten.
+
+Neue Owner-/Log-/Endeddateien tragen `a4-fire020-v2-quiet` im privaten Rootordner. Vor weiterer Runtime Ergebnis, normaleCloses, Schlusslogs und unabhängigenRestore prüfen. Noch kein ruhiger V2-Lauf gestartet; Build020 weiter experimentell und nicht live, Aoffen/Bunimplementiert.

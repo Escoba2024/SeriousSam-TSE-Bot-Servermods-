@@ -1,3 +1,35 @@
+## Vorbereiteter Quiet-V2-Checkpoint — 14.11.2026,10:31UTC
+
+NochkeinNativeaktiv. BeidegeschlossenenA1FAILs sindDelta028externvollständiggesichert/rückgeprüft:10469627Bytes/SHA2568f65d917543eebee24afbcb627b2f713da72d8b9f6ac8229416cee546bff0389, Drive1Cu4VNr7kplWBq39z6HLhS4Xl8Oa9mAnh;1607Dateien/36571670Bytes+MetadatenrestorePASS. NeueV2Quietkopie0094121b…/Launcher5de134fa…mit67PinsPASS, exaktgleicheGates/CodebisEigennamespace. Bericht `docs/reports/2026-11-14-delta028-and-quiet-v2-preparation.md`.
+
+RootschließtdiePublikationab, prüftRemote+frischenPreflight undstartetdanachgenaueinenV2Quietlauf; aktuelleOwner/Log/Endedheißen a4-fire020-v2-quiet. GeänderteLastbedingung: KEINERootpublikation/Parallelreader/Archive, beideWorkerbestätigtenTestsbeendetundnurstatic. AlterCPUFAILunverändert. VorweitererRuntimeNormalclose/Schlusslogs/Restoreunabhängigprüfen. A1Offlinebefund: FokusbereitsvorArmgesetzt/geprüft,GetInputerreichtInputEnable/!MenuOn; nachgeschalteteGameOn/Pause/Vtableweiterzuprüfen. KeineWarmup-/ACK-/Gain-/EPS-Lockerung.
+
+---
+
+## Geschlossener A1-Checkpoint — 14.11.2026,10:27UTC
+
+**Kein Native-/Build-/Liveexecutor aktiv.** UninstControl102107FAILnach6InputsPitch+12→−6°und−12→+3°, CP5,333s. InstrTrace102311FAILvorGameplayInput: sechsListenerinstalliert,21GetInput/0Action/0Faults/0Drops, Warmupnichtvollständig. ArmIPC2,254sinnerhalb3s; Originalbytesrestoretrue, WorkererstnachnormalenRolesclosedgereapt. Rootje664Dateien/9Absenzen/3Schlusslogs+MetadatenunabhängigPASS,3Rollen/2DisplaysproLaufzu. Resultshashes67c024d2…/97d58615… . Bericht `docs/reports/2026-11-14-a1-control-and-input-trace-native-failures.md`.
+
+Originalpreflight10:25:54UTCfrei/LocksPASS, CPU37,82%,RAM3651624960Bytes,Disk10916106240Bytes. a4_diagnosis untersuchtjetztfehlendenOriginalActionpfad/Fokus ausschließlichoffline; FokusnurnochHypothese, keineWarmup-/Gain-/ACK-/EPS-Lockerung oderblindeWiederholung. candidate_audit vervollständigt konkretenA3Controller/Analyzer, leichtegezielteOfflinetestsderzeitfreigegeben; keineNative/Compiler. RootHardStabilityvorbereitung unabhängigPASS_SCOPEreviewt, bleibtdeaktiviert/keineZeitqualifikation.
+
+BeideA1FenstersindnachDelta027 entstanden und brauchenDelta028. KeineA1-Schadensabnahme, Bweitergesperrt. Flotteunverändert018je8/HardnurDev+Red. LetzterRemoteweiterbe0f9445…/Tree66c22d08…gleichlokal9bf3753; neuegeschlosseneDoku separatveröffentlichen. KeineRootpublikation/Parallelreader/SicherungwährendnächstemNativefenster.
+
+---
+
+## Aktiver A1-Trace — 14.11.2026,10:23UTC
+
+UninstrumentierteKontrolle geschlossenFAILvorFire: gegenüberliegendePitchgainsnach6Inputs verschieden. Root664Dateien/9Absenzen/Metadaten/3SchlussloghashesunabhängigPASS, alle3Rollen+2Displayszu. Result67c024d2f66b652cc8f657eedeb38e373f5a76f0d6001154329b25c190fc1445. Jetztgenaueinepassiveinstrumented-trace läuft: Owner/Log/Ended a1-input-instrumented-trace imRootbelegordner. Freezeunverändert2e3bf79b…, Preflight10:22:40UTCfrei/LocksPASS,CPU36,01%,RAM3670605824Bytes,Disk10953179136Bytes. BeideWorkerreinstatic,keineRootpublikation/Archive/Parallelreader/Tests. VorweitererRuntimevollständigenAbschluss+Originalbyteprüfung+Workerende+Normalcloses/Logs+unabhängigenDateirestoreprüfen. KeinA1PASSdurchDiagnose.
+
+---
+
+## Aktiver A1-Checkpoint — 14.11.2026,10:21UTC
+
+Genau dieuninstrumentierteNoFire-Kontrollprobe läuft. Owner/Log/Ended `/srv/tse-cecil-rollout-evidence-20261114/a1-input-uninstrumented-control-{owner.json,native.log,ended.json}`. Rootwrapperrun-a1-input-trace.py; Freeze2e3bf79b… unverändert. KeinFridaWorker/Attachin diesemModus. BeideWorker ausschließlichstatisch; RootkeinePublikation/Sicherung/Parallelreader/TestsduringNative. Originalpreflight10:20:48UTCalle4Rollen/Displaysfrei, beideLockserwerbbar, CPU37,31%,RAM3646988288Bytes,Disk10982150144Bytes. VorInstrumentedTracezwingendErgebnis/Normalclose/Schlusslogs/unabhängigenRestoreundfrischenPreflightprüfen.
+
+LetzteabgeschlosseneRemoteverifikationbe0f9445c9a0119b4bb7d955b5f61dd4972bbbe6/Tree66c22d08c35609f7aebbf2a12d10b8971ff557c5 entsprichtlokal9bf37530cc9aa826a5a33d20949c3bf2a3482fa3. Delta027vollständigDrive-rückgeprüft. NeueMessdatennochunenthalten. DieseaktiveHandofffortschreibungwirdnachFensterendecommitted/veröffentlicht; keineParallelpublikation.
+
+---
+
 ## Vorbereiteter A1-Checkpoint — 14.11.2026,10:20UTC
 
 NochkeinNative-/Build-/Liveexecutoraktiv. A1NoFire/Kontrollmodus vollständigintegriertbis6b2c260, Reviewdoku9da0b24; unabhängigerGesamtreview ohnekritisch/wichtig, Root63OfflinechecksPASS. Rootfreeze undMetadatenrecheckdurcha4_diagnosisPASS:68Runtime/13Library/46Diagnosepins. `/srv/tse-a1-input-trace-root-frozen-20261114`, Manifest2e3bf79b98e76edad4ef04a78539a58dbe85a380a4689bd8f48a23defffc7eff, Library8b35089195147d80e6e59aa9ad6f15f86e8e556286a8fa4b677a961b9e45dbce. ExakteCodehashes/Grenzen imReport `docs/reports/2026-11-14-a1-input-trace-root-checkpoint.md`.
