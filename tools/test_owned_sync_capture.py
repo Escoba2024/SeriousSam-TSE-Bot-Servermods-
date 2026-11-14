@@ -114,6 +114,42 @@ class OwnedCaptureTests(unittest.TestCase):
      with self.assertRaises(ValueError):c.observe_roles(registry)
     (proc/'103/ns/net').unlink();(proc/'103/ns/net').write_text('other')
     with self.assertRaises(ValueError):c.observe_roles(registry)
+ def test_actual_fd_reader_json_roundtrip_reaches_exec_and_changed_binding_fails(self):
+  c=self.module();import owned_capture_exec as helper
+  with tempfile.TemporaryDirectory()as directory:
+   root=Path(directory);proc=root/'proc';arena=root/'arena';arena.mkdir()
+   (proc/'1/ns').mkdir(parents=True);(proc/'1/ns/net').write_text('host')
+   ns=root/'shared-netns';ns.write_text('owned')
+   registry={};table='header\n'+''.join(udp(p,i)+'\n'for p,i in[(27850,200),(27851,250),(30001,201),(30002,202),(30003,203)])
+   for i,role in enumerate(c.ROLES):
+    pid=100+i;p=proc/str(pid);(p/'fd').mkdir(parents=True);(p/'ns').mkdir();(p/'net').mkdir();(arena/role).mkdir()
+    (p/'cwd').symlink_to(arena/role);(p/'ns/net').hardlink_to(ns)
+    (p/'comm').write_text('DedicatedServer'if role=='server'else'SeriousSam.exe')
+    unit='own-'+role+'.service';(p/'cgroup').write_text('0::/system.slice/'+unit+'\n')
+    (p/'net/udp').write_text(table);(p/'net/udp6').write_text('header\n')
+    for index,inode in enumerate([200,250]if role=='server'else[200+i]):(p/'fd'/str(index)).symlink_to('socket:[%d]'%inode)
+    registry[role]=dict(identity=[pid,1000+i],unit=unit)
+   def fake_path(value):
+    value=str(value)
+    return proc/value.removeprefix('/proc/').removeprefix('/proc')if value.startswith('/proc')else Path(value)
+   with patch.object(c,'Path',side_effect=fake_path),patch.object(c,'ARENA',arena),patch.object(c,'read_start',side_effect=lambda pid:1000+pid-100):
+    binding=c.observe_roles(registry);config=root/'config.json';owner=root/'owned-sync-owner.json'
+    c.exclusive_json(config,dict(source_pins={},registry=registry,binding=binding,owner_path=str(owner)))
+    # Actual writer/reader boundary, not a mock tuple/list comparison.
+    with patch.object(helper,'RUNTIME_REVIEWED',True),patch.object(helper,'observe_roles',side_effect=c.observe_roles),patch.object(helper,'read_start',return_value=456),patch.object(helper.os,'execv',side_effect=RuntimeError('exec boundary reached'))as execute,patch.object(helper.resource,'setrlimit'):
+     with self.assertRaisesRegex(RuntimeError,'exec boundary reached'):helper.main(config)
+     self.assertEqual(binding,json.loads(config.read_text())['binding'])
+     execute.assert_called_once();owner.unlink()
+     for field in('port','inode','pid','namespace'):
+      altered=json.loads(config.read_text())
+      if field=='port':altered['binding']['botA']['ports'][0][0]+=1
+      elif field=='inode':altered['binding']['botA']['ports'][0][1]+=1
+      elif field=='pid':altered['binding']['botA']['identity'][0]+=1
+      else:altered['binding']['botA']['namespace']+=1
+      config.write_text(json.dumps(altered));execute.reset_mock()
+      with self.subTest(field=field),self.assertRaisesRegex(ValueError,'roles changed before capture exec'):helper.main(config)
+      execute.assert_not_called();self.assertFalse(owner.exists())
+      config.write_text(json.dumps(dict(source_pins={},registry=registry,binding=binding,owner_path=str(owner))))
  def test_partial_popen_identity_failure_keeps_handle_for_regular_cleanup(self):
   c=self.module();rows={r:dict(identity=[100+i,1000+i],namespace=500,ports=[(p,200+i)])for i,(r,p)in enumerate([('server',27850),('botA',30001),('botB',30002),('vanilla',30003)])};rows['server']['ports'].append((27851,250))
   with tempfile.TemporaryDirectory()as directory:

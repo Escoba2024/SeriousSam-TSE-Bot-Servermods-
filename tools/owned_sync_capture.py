@@ -89,7 +89,7 @@ def observe_roles(registry):
    if match:after_inodes.add(int(match[1]))
   need(all(inode in after_inodes for port,inode in selected),'owned UDP fd vanished during binding')
   need(guard()==namespace,'role namespace changed during read')
-  rows[role]=dict(identity=[pid,start],unit=spec['unit'],namespace=namespace,ports=selected)
+  rows[role]=dict(identity=[pid,start],unit=spec['unit'],namespace=namespace,ports=[list(pair)for pair in selected])
  validate_role_ports(rows)
  need(rows['server']['namespace']!=(Path('/proc/1/ns/net')).stat().st_ino,'host namespace forbidden')
  return rows

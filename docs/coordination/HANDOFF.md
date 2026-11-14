@@ -1,3 +1,23 @@
+## Capture-Fehlstart geschlossen; JSON-Korrektur — 14.11.2026, 14:54 UTC
+
+Kein Native-/Build-/Liveexecutor aktiv. Eigener018/Yodeller-Versuch E /srv/tse-milestone-a-evidence-20261111/own-sync018-yodeller-root-20261114-145119 FAIL ae048d5fc51fa6bd564d7cf891a5681c16a644366bdb77b956394765e454fd75 vorRelease/tcpdump: ports-Paare sind vorJSON Tupel, nachJSON Listen; Setupvergleich lehntgleicheWerteab. PCAP0Bytes, kein600s-/Sync-/Capabilitynachweis. Alle4normalclosed+Schlusslogs; Root640Dateien/4Loghashes/Meta/PIDs/DisplayRestorePASS. Planf78a1fd: tatsächlicherFD-/UDP-Leser→JSON→ExecvergleichRED, JSON-stabileListenanderQuelle, unveränderte35Cases/Guards, frischerdisabledFork. a4 arbeitet nuroffline im eigenenWT; Root integriertallein. Keine automatischeWiederholung/Lockerung.
+
+Candidate inventarisiertnurread-only vorhandeneXRecord/xtrace/xinputHeader/Libs/Primärdocs für gesondertenRecenter-Methodenplan; keinXOpenDisplay/Methodenstart/Input/Runtime. A1FAIL51e8e0e5bleibt; SummenGetInputdelta kannEnginegain−0,25erklären, ersetztaberNICHTunvorhersagbarenXTest→ACK-GainfürCP-Zielsteuerung. Keininput_once/Schadensclaim.
+
+Live14:54:17alle6×8/0Zusätzliche,Spawn0, alle6Serverpräfixeseit14:38:09verifiziert nullneueSync-/Disconnect-/Crash-/Join-/CRCmeldungen. Red/YodellerGen2,übrige4Build018. Delta036externfullPASS b2c12eeb/4376051B/831Datei-Metadatenrestore; neueFehlstart-/Folgedatenbenötigen037. Remote80719fc35535053d3cf28e53dadc1f119719b889/Treefae751aae1fb958eff93e759a9797aae2f4daed1gleich51af58f; neuePlan-/Handoffquellennichtpubliziert. A/B offen.
+
+---
+
+## Einzelner eigener Build018-Syncpaketversuch startet — 2026-11-14T14:51:19.692506+00:00
+
+Root startet genau einen600s-Yodeller/Hard2/diag0/8Bots+stationärerOriginal-Versuch über /srv/tse-cecil-rollout-evidence-20261114/run-owned-sync018.py. Owner/Log/Ended owned-sync018-yodeller. Rootfreeze /srv/tse-owned-sync018-yodeller-root-frozen-20261114 Manifest65d146786a4b4efd9e12868a540208c406f6aaa67e2ff6a1a533ab95bb628747/Launchereccfab2d;69/61/40Pins undDeltareviewPASS_SCOPE, Root35OfflinefällePASS. Capture erstab9erPausenbarriere, nurprivateOwnNS/loUDP27850, tatsächlicheFDports,640s/64MiB/250kPakete,normalerCaptureSIGINTvor4Rollencloses. KeineExtraInputs/Inventoryreads, keinefremdenTeilnehmer/WAN-/20Hz-/Stabilitätsqualifikation. Fehlende/abweichende/unsupportedPaare bleiben offen/FAIL. KeinRetry/automatischeFolgemessung.
+
+Preflight14:50:56 alle4Rollen/Displays/Locks frei,CPU38,28125%/RAM3652141056/Disk9013760000; ControllerprüftundhälteigeneSperre. BeideAgentenSTATICONLY/lesefrei. RootalleTests/Archive/Downloads/Publikationbeendet, währendFensternurkleineStatusreads. NachEnde CapturePID/Ende/Dropstats/PCAPhash/3Paare und4normaleCloses/Schlusslogs/unabhängigenRestore prüfen.
+
+Delta036 vollständig extern rückgelesen/hashgeprüft:4376051Bytes/SHA b2c12eeb5583e806f8606d35dcd9b65265571e81fb035d2fdb02eac03345244d,Drive1IRP1WFipZ4z95Cs79W7s42c-vNw4AajI;831Datei/MetadatenrestorePASS,temporäreRekonstruktionerstnachAllhashcheckentfernt. Remote80719fc35535053d3cf28e53dadc1f119719b889/Treefae751aae1fb958eff93e759a9797aae2f4daed1tatsächlichgleichlokal51af58f75fcabcfe626358e869c82ba91bf7e5e4. A1weiterFAIL51e8e0e5:ursprünglicherInputgainnichtvorhersagbar, doppelteCursorverarbeitungbelegt/Ursacheunbekannt. Live Red/YodellerGen2/übrige4Build018je8; A/B offen.
+
+---
+
 ## A1 geschlossen FAIL; eigene Syncmessung vorbereitet — 14.11.2026, 14:48 UTC
 
 Kein Native-/Build-/Liveexecutor aktiv. A1 E /srv/tse-milestone-a-evidence-20261111/a1-release-deadline-20261114-144306, Result51e8e0e5ed32177606a71e6c1ca17e82812c5ba047581bf81525fef5652cc772 FAIL action gain. Drei echte Eingaben jeweils137,449/159,541/144,257ms innerhalb unveränderter Grenzen; tatsächlich doppelte rechte GetInput-Verarbeitung gegenüber einzelner linker, ACK-Gains−0,5/−0,25, Ursache unbekannt. Keine Schadens-/A1freigabe. Originalbytes/Close/Worker/3normaleCloses/Schlusslogs+Root664Dateien/8Absenzen/3Loghashes/Meta/PIDs/DisplaysRestorePASS. Candidate untersucht nur vorhandene Daten in eigenem neuen WT; keine Implementierung vor Rootplan.
