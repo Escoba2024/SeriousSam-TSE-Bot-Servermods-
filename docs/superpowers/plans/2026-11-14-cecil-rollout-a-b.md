@@ -1,5 +1,36 @@
 # Cecil-Flottenrollout und Abschluss A → B
 
+## Stand 23:53 UTC – Build024 vorhanden, Red600 vorbereitet
+
+Build024 aus100bda43/Treea1c049f4 tatsächlich gebaut: DLL192169fe…,
+438272B, Manifest8903d7db. Root47Source+28Overlay geprüft, gegen023 nur
+BotSupplyNative.h anders. Noch keine Native-/Rolloutqualifikation.
+024Retarget integriertc646368/75a7c68/05b07e4/1af4ab2, Root7TestsPASS;
+68ParentSourcesbytegleich/3exakteInverse/139Runtime76Source45Pythonpins.
+Rootfreezeaf6206c2, Controller84e316d8; nurGate+Namespaces/Pfadrepins.
+Parented2773f5/äußererObservered9bbcd4 verlangt057vollDrive, genau600s
+RedHard/8DEMON+Original20FPS/diag0. Noch nicht gestartet. KeinPublicwechsel.
+
+XResV2-Methode begrenztPASS18d16f19:2Snapshots/12PIDqueries/2+12Arrays
+freigegeben/4reguläreExit0; Rootpolicy+Cleanup/167Absenz/Sperren geprüft.
+VorherigerWrapperpreflight wegenRoot-ScopeStringfehler ohneNativeFAIL erhalten;
+korrigierterWrappererstvollständigeReadonlyvorprüfungPASS, dann1Methodenlauf.
+KeineA1/Gain/Lifetimequalifikation. Neue Lauf-/Builddaten brauchen057.
+
+Dev23:47–48: gleicherexternerPeerwiefrüher6BAD, jetzt12weitere+1Syncdisconnect,
+letzteFolgeZähler1→10. Acht eigeneBotsweiterverbunden/zusätzlicherTeilnehmer0,
+eigeneBotlogdeltasbeide0aller7Fehlerklassen. Stand048/PowerupDedicatedunverändert,
+keineBuild024-/Rootrolloutbeteiligung. UrsacheUNKNOWN, Nutzerbereitsgetrennt,
+keineIdentitätszuordnung/Instrumentierung. Frühere796OKwarenkeinDauerfix.
+
+RootentscheidungzumA1-Plan7dc9198: vollständigeengbegrenzteLifecycle-
+Attributionmitmax32positivenContextbasen+2ResourcequeriesproSnapshot,2Snapshots
+INNERHALBStart/End,unveränderteBudgets/Corebytes; keinSnapshot-onlyFallback.
+Candidateworker neueOfflineumsetzung; vorRootNativeSTATICONLY, eigeneLifecycle-
+MethodenqualifikationvorRetailerforderlich. Alle übrigenJobsbeendet.
+Aoffen/Bnichtbegonnen. NächsterRootschritt057Sourcepublish/Fullbackup,
+danngenauein024Red600unteräußererHostbeobachtung,danachRestore/echteAuswertung.
+
 ## Stand 23:43 UTC – enger Gameplayfix integriert, Native noch offen
 
 GroundedFix40691e6→Root5e2f748, Abschluss1159ee3: Headerc32160c8;

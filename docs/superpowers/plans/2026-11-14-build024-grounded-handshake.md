@@ -24,10 +24,10 @@ SDK-Reproduktion3274/2 und neuer enger Fixplan des A4-Workers.
   lesen. Reine SDK-/Sanitizerchecks sind keine Retailabnahme.
 - [x] Getrennte saubere Commits integrieren; relevanten Source-/Testpins
   nachhashen. Vollständigen normalen SDK-Lauf am integrierten Stand prüfen.
-- [ ] Neues024-Verzeichnis mit bestehendem Builder unter Build-/Runtime-Lock,
+- [x] Neues024-Verzeichnis mit bestehendem Builder unter Build-/Runtime-Lock,
   frischen Quieszenz-/Prefix-/Datenträgerprüfungen erstellen. Quellcommit/tree,
   sämtliche Quellen, PE32-x86, DLL und Manifest erfassen. qualified=false.
-- [ ] Bestehendes deaktiviertes023-Red600-Paket ausschließlich auf echte024-
+- [x] Bestehendes deaktiviertes023-Red600-Paket ausschließlich auf echte024-
   Herkunft und getrennte Namespaces retargeten. Bedingungen unverändert:
   Hard, acht DEMON, Original20FPS, diag0,600s, keine automatische Wiederholung.
   Exakten reversiblen Delta und tatsächliche DLL-/Quellenpins prüfen; Rootfreeze.
