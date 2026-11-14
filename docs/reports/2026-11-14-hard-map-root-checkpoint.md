@@ -1,0 +1,11 @@
+# Rootcheckpoint: einzelnes Hard2-Kartenfenster
+
+Root integrierte die deaktivierte Vorbereitung `9b8a3fa` als `94114b7`. Unabhängiger Diffreview ohne wichtige Befunde im engen Mapadapterumfang; Root wiederholte die 81 gezielten Offlinefälle: PASS in0,114s. Parentreader und Samplingaufrufe bleiben gleich. Keine Frida-Verbindung, keine zusätzlichen Gameplayeingaben; ausschließlich der vorhandene Originalobserver-Pausenablauf. Die alte Sekunden-Feuerbitbedingung wird durch die geprüfte native Same-Life-V2-Bedingung ersetzt, alle übrigen Aktivitäts-/Host-/Restoregates bleiben bestehen und Hard2 wird zusätzlich effektiv geprüft.
+
+Separate Rootkopie `/srv/tse-a4-build020-hard-map-root-frozen-20261114`, Manifest `f1b0e7e417c0c81cc9c38cd57b5531b6f41913b8be97bf8b37ae7c0a3c724a26`, Launcher `50c4b288f54936e7bc09e7b01f1d500d8753cb86bea554d4bfebd6a8168403c7`. 61 Runtimepins,39 Sourcepins; Quelländerungen gegenüber dem geprüften Autorenpaket ausschließlich Gate und eigener Namespace. Unabhängiger Freezeabgleich vor Start erforderlich. Kandidat Build020 unverändert `094ec8ed…`, Quelle `e5f7a655…`.
+
+Geplant ist zuerst genau ein isoliertes Red-Station-Fenster:600s Gameplay, Hard2, Diagnose0, acht eigene Bots plus eigener Originalobserver, privates Netz/Port27850/Display154. Kein automatischer Kartenserienstart oder Retry. Erst vollständiges Ergebnis, reguläre Closes, Schlusslogs und unabhängiger Restore entscheiden über den nächsten Schritt. Der neue terminale Watchdog benötigt weiterhin einen positiven nativen Ausübungsbeleg; allgemeine Bewegung/Pickups ersetzen ihn nicht. Weitere Karten folgen einzeln erst anhand des Ergebnisses.
+
+Das Fenster ändert keine öffentliche Instanz. Red Public bleibt betrieblich zurückgerollt auf7fc94a39; die anderen fünf laden018. Der neue externe Syncfehler und A1 bleiben offen. B bleibt gesperrt.
+
+Sicherung vor diesem Schritt: Delta029,29.572.723Bytes, SHA256 `cc082d6982377bf4c8cc3db271bb065ba2ea3c188beb96a435ef8adc40982f56`, Drive-ID `1yOKgM11PkEq7g2KjAW-D_g_Uu4FLlqVE`: vollständiger Rückdownload hashgleich;1559 Dateien/278.602.169Bytes separat einschließlich Metadaten wiederhergestellt. Kein gesamter nativer Archivrestore-Start behauptet. Neue A1-/Mapbelege benötigen Delta030.

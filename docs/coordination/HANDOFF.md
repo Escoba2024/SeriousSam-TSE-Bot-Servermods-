@@ -1,3 +1,21 @@
+## Geschlossener A1-/vorbereiteter Kartencheckpoint — 14.11.2026,11:16 UTC
+
+**Kein Native-, Build- oder Liveexecutor aktiv.** A1-Guardfenster110842 geschlossenFAIL vor Gameplay: erster GetInput/fault1 wegen EDI-Gleichheit; Entry/Return ununterscheidbar, keine Guardwerte/eine Gameursache belegt. Root664Dateien/8Absenzen/Metadaten/3Schlusslogs/alle3Rollen/2Displays/WorkerendePASS. JSquieszenz/detachtrue; expliziterHostfullbytevergleichsbeleg UNKNOWN. Ergebnis3f097a4a6b48f24064366280bdecc5aa46368cf2bca8c198b70f30872ecfaab6. Berichtdocs/reports/2026-11-14-a1-timer-guard-native-failure.md. KeineSchadens-/A1-Abnahme. a4_diagnosis behebt getrennte Entry-/Returnbeobachtung am gebundenen Gameobjekt und Cleanupquittung offline; keine Lockerung/Native.
+
+Root integrierte HardMap94114b7,81gezielteChecksPASS. NeueRootkopie /srv/tse-a4-build020-hard-map-root-frozen-20261114, Manifestf1b0e7e417c0c81cc9c38cd57b5531b6f41913b8be97bf8b37ae7c0a3c724a26,Launcher50c4b288f54936e7bc09e7b01f1d500d8753cb86bea554d4bfebd6a8168403c7;61Runtime/39Sourcepins, nurGate/Namespacecodeänderung. candidate_auditprüftFreezevorStart. Genau ein600sRedHard2-FenstererstnachPublikationsende/frischemPreflight/beidenStaticbestätigungen; keineautomatischeSerie/Retry. WährendNativeKEINERootpublikation/Archive/Parallelreader/Tests.
+
+Delta029fullDrive/hash/datei+MetadatenrestorePASS, Datei1yOKgM11PkEq7g2KjAW-D_g_Uu4FLlqVE/SHA256cc082d6982377bf4c8cc3db271bb065ba2ea3c188beb96a435ef8adc40982f56. A1GuardFAIL/neueMapvorbereitungnachDelta029 brauchen030. Remotezuletzt6339f29eeecc68f6861b8754a6b61f7de9e0f864/Tree767b75cf8c7d6fa2d6f95ec25562ab97737e0405 frisch gleichlokal8d3e23b; neueQuellen/Doku jetztvorNativeveröffentlichen. Red7fcgen2/eight, andere5Build018/eight; externerSyncbetriebsfehleroffen, keineweitereLivepromotion. A3Worker/IdlefixofflineinArbeit, Bnichtbegonnen.
+
+---
+
+## Historisch aktive passive A1-Guards — 14.11.2026,11:09 UTC
+
+Genau ein instrumented-trace-Fenster mit unveränderten Fristen/Inputs und NoFire-Grenze startet. Owner/Log/Ended `/srv/tse-cecil-rollout-evidence-20261114/a1-timer-guard-{owner.json,native.log,ended.json}`, Wrapper run-a1-timer-guard.py; Freeze9fd173db1e700aab1b05a4197563abc413feae27aa402da005fef992124395a8. Unabhängiger ReadOnlyreview PASS_SCOPE:68 Runtime-/13Library-/46Sourcepins, Runner/Worker/CP unverändert bis Pfade/Gates. Neue Guards nur in bestehenden Inputrecords, keine zusätzlichen Hooks/Spielwrites/Calls. candidate_audit STATIC ONLY bestätigt; a4_diagnosis beendet und Worktree sauber. Root keine Publikation, Archive, Parallelreader oder Tests bis zum vollständigen Ende/normalen Closes/Originalbyteprüfung/Workerende/unabhängigen Restore.
+
+Delta029 vollständig rückgelesen:29.572.723 Bytes, SHA256cc082d6982377bf4c8cc3db271bb065ba2ea3c188beb96a435ef8adc40982f56; Drive1yOKgM11PkEq7g2KjAW-D_g_Uu4FLlqVE;1559Dateien/278.602.169Bytes plus MetadatenrestorePASS. Remote6339f29eeecc68f6861b8754a6b61f7de9e0f864/Tree767b75cf8c7d6fa2d6f95ec25562ab97737e0405 frisch gleichlokal8d3e23b. Red zurückgerollt7fc, übrige5Build018; A/B offen. Neues Nativeergebnis noch nicht archiviert/veröffentlicht.
+
+---
+
 ## Aktueller Checkpoint — 14.11.2026,11:05 UTC
 
 **Red Station betrieblich zurückgerollt, Gesamtauftrag offen.** Neuer externer Peer hatte 15 BAD/einen Sync-Disconnect; Zuordnung von Root und candidate_audit unabhängig bestätigt. Ursache einschließlich möglichen Boteinflusses ungeklärt. Nur eigene Red-Botclients regulär geschlossen und aus gesichertem Vorrollout-Payload wieder gestartet; aktive Module `7fc94a39…`, acht eigene Bots, GUID/Profile unverändert. Dedicated-Generation/Module/Eingaben unverändert. Aktueller018-Rückweg vorher vollständig gesichert, separat rekonstruiert/hashgeprüft. Kein Native-/Build-/Liveexecutor aktiv; ein rein lesender Flottenlogcheck kann noch laufen, vor Native unbedingt Ende bestätigen.

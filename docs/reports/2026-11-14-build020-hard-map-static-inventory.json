@@ -1,0 +1,103 @@
+{
+  "scope": "STATIC_METADATA_ONLY_NO_NATIVE",
+  "archive_sha256": "56039cbaaf9b7d4a5f6cc5afdf46df778eb4b49c1fe20ec0eec79c9126d533f9",
+  "archive_hash_is_inherited": true,
+  "actual_central_directory_read": true,
+  "maps": [
+    {
+      "map": "DM_LittleTrouble",
+      "world_present": true,
+      "archive_world_crc32": "4060d0dd",
+      "binding_crc32": "4060d0dd",
+      "world_crc_matches": true,
+      "nav_crc_matches": true,
+      "nav_sha256": "252d7e4c003804fe9ae2afef359843feb39b5dda29c1d6eadb0835fbe64a30ac",
+      "executable_catalog": true,
+      "native_status": "NOT_RUN_BUILD020_HARD_SINGLEMAP"
+    },
+    {
+      "map": "DM_TheLostTomb",
+      "world_present": true,
+      "archive_world_crc32": "618198ad",
+      "binding_crc32": "618198ad",
+      "world_crc_matches": true,
+      "nav_crc_matches": true,
+      "nav_sha256": "f9ed26706819bca6920cd5415915aa51ee209f164d1ab61d1e51f93da744aff1",
+      "executable_catalog": false,
+      "native_status": "NOT_RUN_BUILD020_HARD_SINGLEMAP"
+    },
+    {
+      "map": "Fortress",
+      "world_present": true,
+      "archive_world_crc32": "6a8768d6",
+      "binding_crc32": "6a8768d6",
+      "world_crc_matches": true,
+      "nav_crc_matches": true,
+      "nav_sha256": "bde550e7ffcdcf99fc5274f164752b444f8646fb7b9e15a4149ae04d031b2730",
+      "executable_catalog": false,
+      "native_status": "NOT_RUN_BUILD020_HARD_SINGLEMAP"
+    },
+    {
+      "map": "Hole",
+      "world_present": true,
+      "archive_world_crc32": "582bd040",
+      "binding_crc32": "582bd040",
+      "world_crc_matches": true,
+      "nav_crc_matches": true,
+      "nav_sha256": "6ae46f0a18e2f5071b981f111d1dcc338a02144b963da0bdbed777a3a1ff2646",
+      "executable_catalog": true,
+      "native_status": "NOT_RUN_BUILD020_HARD_SINGLEMAP"
+    },
+    {
+      "map": "KuntaKinte",
+      "world_present": true,
+      "archive_world_crc32": "14288f5b",
+      "binding_crc32": "14288f5b",
+      "world_crc_matches": true,
+      "nav_crc_matches": true,
+      "nav_sha256": "d5cd11f6853d641a7ccdf82d780d9505e8feae6a95f11ac687940994b3d4a3e5",
+      "executable_catalog": false,
+      "native_status": "NOT_RUN_BUILD020_HARD_SINGLEMAP"
+    },
+    {
+      "map": "RedStation",
+      "world_present": true,
+      "archive_world_crc32": "ff3776e0",
+      "binding_crc32": "ff3776e0",
+      "world_crc_matches": true,
+      "nav_crc_matches": true,
+      "nav_sha256": "70e2839587b0f14c024ef978579133e84eed594a3cbbd0fa1f1db98d99aa37c6",
+      "executable_catalog": true,
+      "native_status": "NOT_RUN_BUILD020_HARD_SINGLEMAP"
+    },
+    {
+      "map": "WeGotSkullsNBonesToo",
+      "world_present": true,
+      "archive_world_crc32": "42d03dd2",
+      "binding_crc32": "42d03dd2",
+      "world_crc_matches": true,
+      "nav_crc_matches": true,
+      "nav_sha256": "6aafa5eb0f80826033ff23a75b1dc21138127719756d207614561bffd23ce874",
+      "executable_catalog": true,
+      "native_status": "NOT_RUN_BUILD020_HARD_SINGLEMAP"
+    },
+    {
+      "map": "Yodeller",
+      "world_present": true,
+      "archive_world_crc32": "b3c8ceeb",
+      "binding_crc32": "b3c8ceeb",
+      "world_crc_matches": true,
+      "nav_crc_matches": true,
+      "nav_sha256": "adc56723662da0107dd777bfaacb78f5561bf43bc43da476b82af300436d5c41",
+      "executable_catalog": true,
+      "native_status": "NOT_RUN_BUILD020_HARD_SINGLEMAP"
+    },
+    {
+      "map": "DesertTemple",
+      "world_present": false,
+      "nav_present": true,
+      "executable_catalog": false,
+      "native_status": "BLOCKED_WORLD_ABSENT_IN_EXISTING_LEVEL_ARCHIVE"
+    }
+  ]
+}
