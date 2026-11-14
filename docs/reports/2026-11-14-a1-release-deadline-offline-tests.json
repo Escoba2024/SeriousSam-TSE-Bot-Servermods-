@@ -1,0 +1,23 @@
+{
+  "native_performed": false,
+  "build_performed": false,
+  "plan_commit": "58790d2",
+  "parent_manifest_sha256": "6534c8b447418f4a2a5310160ff0672b3b41aa742cbc3eb9389bfb648fef919a",
+  "package_manifest_sha256": "3b140fdc395db64082303719dc60473af71aa196b1c01558f0e618d69ba23043",
+  "new_focused_pass": 20,
+  "inherited_focused_pass": 49,
+  "historical_comparison_failure": {
+    "test": "test_a1_trace_preparation.NoFirePreparationTests.test_all_protected_nested_read_start_close_and_restore_functions_are_exact",
+    "subtest": "own_identity",
+    "reason": "compares to older NoSmooth parent before previously integrated mapping-failure receipt; retained FAIL, immediate 6534c8b4 parent nested functions match"
+  },
+  "broad_suite_performed": false,
+  "logs": {
+    "red.log": "7aa5ec84eaef9f18bfa710606bcc971016198bc5bace3425afe9631904eb2f65",
+    "red-package.log": "7b1bf36e88a4d1b7d9dbd7c66fe8b8441cee1f20fba733998f05a521ff349411",
+    "green-final.log": "d6f7b5486cbbbef4c0d0fcf4c067e9705e5159493ca6ac2a0de3153bd13f6d7f",
+    "legacy-regressions.log": "95c55178e45d9de23111aa105017b0e032292d4cde0388f0b563237d6ebf8728",
+    "preparation-regressions.log": "6e6669e8f82a7e176119c0eb636b9770f7ca373ec599c89cffa48e30c9b0bcd3",
+    "final-inherited.log": "b3b0f2583caa289ea367276d666916bbc7001eab61d90d93fd9cd59a19ac4fd7"
+  }
+}

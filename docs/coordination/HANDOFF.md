@@ -1,3 +1,13 @@
+## Vorbereiteter A1-Eingabeabschluss und A3-Rootvergleich — 14.11.2026, 14:42 UTC
+
+Kein Native-/Build-/Liveexecutor aktiv. A1-Releasekorrektur integriert 6f6e6b3; Root20 neue +27 historische gezielte Offlinefälle PASS. Historischer own_identity-VergleichsFAIL unverändert separat. Neuer Rootfreeze /srv/tse-a1-release-deadline-root-frozen-20261114 Manifest2665517067a491e00607c7e4f88d5c3585739c66896f24c26b25eff672b7d136, Collector8a7547d7, Launchera2d9fbe4;70/61/14Pins PASS_SCOPE. Genau ein NoFire-Fenster vorgesehen über RootEV/run-a1-release-deadline.py; noch nicht gestartet. Grenzen/ACK/Gain/Inputs/Hookbytes unverändert. Kandidatenagent STATICONLY, A4-Agent schließt eigenen deaktivierten PCAP-Fork ab; vor Native beide Reader/Tests beenden und frisch preflighten.
+
+A3 Rootfreeze /srv/tse-a3-instruction-probe-root-frozen-20261114 Manifest272d04e3f82f270ecf52241da8fc66a2f516e7f9657215af08703044e6aad6a7/Launcherf9cb4c49;79/109Pins PASS_SCOPE, Root59 Offlinefälle PASS nach Korrektur einer falschen historischen Fixtureauswahl; erster7-Hashfehlerlauf erhalten. Keine native A3-Abnahme. Details im Bericht2026-11-14-a1-release-and-a3-root-preparation.md.
+
+Live14:38:09 alle6×8/0Zusätzliche, Spawn0;6serverseitige Logpräfixe verifiziert seit13:51:58 null neue Fehler. Red+YodellerGen2/andere4Build018, keine020Livepromotion. Remote fb5c020eb4b4291e9dca262ff123369faeb59e97/Treeb60eecacc02081850c8ad2a4c81f38451236e3db tatsächlichgleichlokal00488fd3. Delta035 lokal1036Dateien/33200462Bytes+Metadatenrestore PASS,8827982Bytes/SHA5a0b8e1e662a706fa22c8b25c365f9a62a05eaa834a275d13d0c63f9ac2b3420; Driveupload erfolgt, vollständiges Rücklesen läuft noch. Keine ganze native Archivrestore-Abnahme. A/B offen.
+
+---
+
 ## A1-Zeitfehler geschlossen; Sync-Capturevorbereitung — 14.11.2026,14:22 UTC
 
 KeinNative-/Build-/Liveexecutoraktiv. A1141819FAIL f66266f97f9eadf008f42aa557e1a3aa2c25778d7c6ed9a04efbb76a0392bf74: Mappingdeckungbesteht,2vollständigeInputquittungen(12pxrechtsersteACK−3Grad;forward),dritterLinksversuchanobservationHost/InputReleaseOverrunfehlgeschlagen. KeineGain-/ACK-/Damagefreigabe,keineGrenzlockerung/automatischerRetry.13TracejournalzeilensindkeinEreigniszähler. VollOriginalbytevergleich/Unload/Detach/Workerende+3normaleCloses/Schlusslogs+Root664Dateien/8Absenzen/3Hashes/Metadaten/PID/DisplaysRestorePASS. Alle9RPCsinnerhalbBudgets,Hostmax69,976%,RAMmin2920849408/Diskmin9070125056,Startupgap27,298s.
