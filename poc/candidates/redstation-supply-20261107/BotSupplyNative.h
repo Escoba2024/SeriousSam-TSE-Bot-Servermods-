@@ -33,7 +33,17 @@ struct SCecilApproachDiagnostic {
   double start=-1,updated=-1;int updateTick=-1,lastTick=-1,previousSource=-1,previousHop=-1;
   bool reached=false;unsigned rows=0;int goal=-1;ULONG goalEntity=0;double deadline=0;botcore::CecilMotion move;
 };
+// Short-lived observation of this process's mapped first-weapon pursuit only.
+// No entity pointers, item reservations, replicated state or cross-process IPC.
+struct SCecilLocalSupply {
+  CWorld* world=NULL;long map=-1;
+  uint32_t entity=0,generation=0,item=0;int goal=-1;
+  // seen is shared GetGameTime; localTime/progress/deadline belong ONLY to
+  // the owning slot. Slot ticks reset independently when a source rejoins.
+  double attempt=0,deadline=0,seen=-1,localTime=-1,progress=-1,cost=0,position[3]={0,0,0};
+};
 struct SSupplyState {
+  SCecilLocalSupply localSupply;
   SCecilApproachDiagnostic approach; // Passive, bounded per-life action observer only.
 
   SCecilProbe probe;
@@ -137,7 +147,7 @@ struct SSupplyState {
     patrolLast=patrolSince=patrolProposalTime=-1;patrolStrikes=0;patrolAlternate=false;patrolLocks=0;
     std::fill(patrolTried,patrolTried+sizeof(patrolTried),0);}
   void ClearFlight(){flightWorld=NULL;flightGoal=flightSource=flightHop=-1;flightAccepted=flightPlanned=-1;flightFinishing=false;flightSuccessor=flightSuccessorPlanned=-1;flightSuccessorConsumed=false;}
-  void ClearGoal(){ClearFlight();acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearItemTransit();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
+  void ClearGoal(){localSupply=SCecilLocalSupply();ClearFlight();acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearItemTransit();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ClearAirMovement(){airMovementTime=-1;airMovementEntity=airMovementGeneration=0;airMovementNode=-1;}
   void ClearGroundSweep(){groundEscapeTried=groundEscapeCursor=0;groundSweepReady=false;}
@@ -637,17 +647,75 @@ static bool BotCecilMappedWeaponNeeded(const botcore::CecilItem& item,const botc
 static bool BotCecilMappedWeaponEligible(const botcore::CecilItem& item,const botcore::CecilItemInput& input){
   return !BotCecilHasRanged(input)&&BotCecilMappedWeaponNeeded(item,input);
 }
+static void BotCecilObserveLocalSupply(CPlayer* player,SSupplyState& s,
+    const botcore::CecilItemInput& input,double now){
+  const auto& graph=BotSupplyGraph();auto& claim=s.localSupply;
+  if(!player||!s.playable||!s.mappedWeaponGoal||!s.goalEntity||s.groundStalled||
+     !std::isfinite(now)||now<0||now<s.goalSince||now>=s.goalDeadline||BotCecilHasRanged(input)||
+     s.goal<0||s.anchor<0||(size_t)s.goal>=graph.points.size()||(size_t)s.anchor>=graph.points.size()||
+     graph.points[s.goal].important_entity!=(int)s.goalEntity||!std::isfinite(s.goals.Distance(s.goal))){
+    claim=SCecilLocalSupply();return;
+  }
+  const double observedAt=_pNetwork->GetGameTime();
+  if(!std::isfinite(observedAt)||observedAt<0){claim=SCecilLocalSupply();return;}
+  const auto& anchor=graph.points[s.anchor];
+  const double dx=input.x-anchor.x,dy=input.y-anchor.y,dz=input.z-anchor.z;
+  // Reuse the existing directed search estimate, excluding the item's connector
+  // for BOTH contenders. This is a local preference, never an arrival guarantee.
+  const double cost=s.goals.Distance(s.goal)+std::sqrt(dx*dx+dy*dy+dz*dz);
+  if(!std::isfinite(cost)){claim=SCecilLocalSupply();return;}
+  const long map=InterlockedCompareExchange(&_botSupplyMapSerial,0,0);
+  const bool same=claim.world==player->GetWorld()&&claim.map==map&&claim.entity==player->en_ulID&&
+    claim.generation==s.generation&&claim.item==s.goalEntity&&claim.goal==s.goal&&
+    claim.attempt==s.goalSince&&claim.deadline==s.goalDeadline&&claim.seen>=0&&observedAt>=claim.seen&&
+    claim.localTime>=0&&now>=claim.localTime;
+  const double mx=input.x-claim.position[0],my=input.y-claim.position[1],mz=input.z-claim.position[2];
+  if(!same||mx*mx+my*my+mz*mz>=.75*.75){
+    claim.progress=now;claim.position[0]=input.x;claim.position[1]=input.y;claim.position[2]=input.z;
+  }
+  claim.world=player->GetWorld();claim.map=map;claim.entity=player->en_ulID;claim.generation=s.generation;
+  claim.item=s.goalEntity;claim.goal=s.goal;claim.attempt=s.goalSince;claim.deadline=s.goalDeadline;
+  claim.seen=observedAt;claim.localTime=now;claim.cost=cost;
+}
+static bool BotCecilNearerLocalSupply(CPlayer* player,INDEX slot,uint32_t item,double cost,double observedAt){
+  if(!std::isfinite(observedAt)||!std::isfinite(cost)||!player->GetWorld())return false;
+  const long map=InterlockedCompareExchange(&_botSupplyMapSerial,0,0);
+  for(INDEX other=0;other<4;++other){
+    if(other==(slot&3))continue;
+    const auto& peer=BotSupplyState(other);const auto& claim=peer.localSupply;
+    if(!peer.playable||!peer.mappedWeaponGoal||peer.groundStalled||peer.goalEntity!=item||
+       claim.world!=player->GetWorld()||claim.map!=map||claim.entity!=peer.entity||
+       claim.generation!=peer.generation||claim.item!=item||claim.goal!=peer.goal||
+       claim.attempt!=peer.goalSince||claim.deadline!=peer.goalDeadline||
+       claim.seen<0||observedAt<claim.seen||observedAt-claim.seen>.250001||
+       claim.progress<0||claim.localTime<claim.progress||claim.localTime-claim.progress>=5||
+       claim.localTime>=claim.deadline||
+       !std::isfinite(claim.cost)||claim.cost+1>=cost)continue;
+    CEntity* entity=player->GetWorld()->EntityFromID(claim.entity);
+    if(!entity||(entity->GetFlags()&ENF_DELETED)||!BotCecilIsClass(entity,"Player","Player"))continue;
+    CPlayer* owner=static_cast<CPlayer*>(entity);
+    if(owner->GetWorld()!=player->GetWorld()||!std::isfinite(owner->GetHealth())||owner->GetHealth()<=0||
+       !owner->m_penWeapons||BotCecilHasRanged(BotCecilItemInput(owner,peer,1000)))continue;
+    return true;
+  }
+  return false;
+}
 static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const botcore::CecilItemInput& input,
     INDEX slot,INDEX tick,double now){
   if(s.goalEntity||now<s.searchAfter||!std::isfinite(input.enemy_distance)||input.enemy_distance<8||
      !input.settings.bItemSearch||BotCecilHasRanged(input))return;
   const auto& graph=BotSupplyGraph();
   const bool diagnostics=BotCecilSupplyDiagDue(now,s.diagSelectionLast);
+  const double observedAt=_pNetwork->GetGameTime();
   // Only original mapped WeaponItem references supply remote item knowledge.
   // No enemy visibility or ordinary preset search distance is changed.
   for(int attempt=0;attempt<8&&_botRayBudget>2;++attempt){
+    // A preference must leave an opportunity for the original ranking: one
+    // connector budget slot plus the final wall/floor reserve, and the last
+    // of the existing eight attempts. Never enlarge either native budget.
+    const bool preferUncontested=_botRayBudget>3&&attempt<7;
     unsigned eligible=0,emitted=0;
-    int best=-1;double bestScore=std::numeric_limits<double>::infinity(),bestCost=0;botcore::CecilItem chosen;
+    int best=-1;bool bestContested=false;double bestScore=std::numeric_limits<double>::infinity(),bestCost=0;botcore::CecilItem chosen;
     for(size_t i=0;i<graph.points.size();++i){
       const auto& point=graph.points[i];if(point.important_entity<0||s.blocked[i]||!std::isfinite(s.goals.Distance((int)i)))continue;
       CEntity* entity=player->GetWorld()->EntityFromID((ULONG)point.important_entity);botcore::CecilItem item;
@@ -663,6 +731,7 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
       // This ranks items only; graph costs/topology and physical deadlines stay unchanged.
       const FLOAT3D displacement((FLOAT)(item.x-input.x),(FLOAT)(item.y-input.y),(FLOAT)(item.z-input.z));
       const double score=cost+3*std::fabs(BotCecilHeight(player,displacement));
+      const bool contested=preferUncontested&&BotCecilNearerLocalSupply(player,slot,item.id,cost-length,observedAt);
       if(diagnostics){
         ++eligible;
         if(attempt==0&&emitted<16){
@@ -672,7 +741,12 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
             std::fabs(BotCecilHeight(player,displacement)),score,from,to,(unsigned long)flags);
         }
       }
-      if(score<bestScore){best=(int)i;bestScore=score;bestCost=cost;chosen=item;}
+      // Prefer another live eligible route, but never blacklist or exclude the
+      // contested target. If alternatives fail their existing connector checks,
+      // subsequent attempts can still select the original obtainable weapon.
+      if(best<0||(bestContested&&!contested)||(bestContested==contested&&score<bestScore)){
+        best=(int)i;bestContested=contested;bestScore=score;bestCost=cost;chosen=item;
+      }
     }
     if(diagnostics){
       int from,to;unsigned flags;BotCecilSupplyDiagPath(s,best,from,to,flags);
@@ -692,6 +766,7 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
     s.ClearGoal();s.goal=best;s.goalEntity=chosen.id;s.goalKind=chosen.kind;s.goalSince=now;
     s.mappedWeaponGoal=true;s.goalDeadline=now+std::fmin(45.0,std::fmax(20.0,bestCost/6.0+5.0));
     s.searchAfter=now+input.settings.fItemSearchCD;
+    BotCecilObserveLocalSupply(player,s,input,now);
     BotLog("[CecilGoal] local=%d tick=%d entity=%lu kind=%d weapon=%d anchor=%d pos=(%.3f,%.3f,%.3f) mapped=1 deadline=%.3f\n",
       slot,tick,(unsigned long)chosen.id,(int)chosen.kind,chosen.weapon,best,chosen.x,chosen.y,chosen.z,s.goalDeadline);
     return;
@@ -1413,6 +1488,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   }
   s.owned=owned;
   const auto input=BotCecilItemInput(player,s,enemyDistance);
+  BotCecilObserveLocalSupply(player,s,input,now);
   bool continueFlight=false;
   if(s.flightFinishing){
     const bool fresh=BotCecilFlightFresh(player,s,now)&&BotCecilFlightEdge(s);

@@ -1,0 +1,70 @@
+{
+  "schema": "a1-settled-input-offline-verification-v1",
+  "utc": "2026-11-14T08:21:51.522448+00:00",
+  "runs": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "tools/test_a1_settled_ack.py"
+      ],
+      "cwd": "/srv/tse-a1-settled-input-20261114",
+      "exit_code": 0,
+      "test_counts": [
+        "3"
+      ],
+      "log_sha256": "e8b87fc14d3c7fb0ea88fff398ba3c257e73c6ca0cc85a63fa696cc53345a07c"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "tools/test_a1_controls_diagnostic.py"
+      ],
+      "cwd": "/srv/tse-a1-settled-input-20261114",
+      "exit_code": 0,
+      "test_counts": [
+        "9"
+      ],
+      "log_sha256": "323a59daef1f6176ece3d2abf792279530d724ac18bcde2d649dcdedf94a37d1"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "test_colt_preparation",
+        "test_rotation_diagnostics",
+        "test_colt_reader"
+      ],
+      "cwd": "/srv/tse-a1-settled-input-private-20261114",
+      "exit_code": 0,
+      "test_counts": [
+        "35"
+      ],
+      "log_sha256": "393b4af6d1b96a49163dcd05f199e7223ead5fba51d72f8845e8428ca481ec77"
+    }
+  ],
+  "native_processes_started": 0,
+  "native_qualified": false,
+  "cause_proven": false,
+  "legacy_full_discovery": {
+    "tests": 67,
+    "candidate_failures": [
+      "test_prescan_recovery.PrescanTests.test_all_controller_functions_and_unaffected_runtime_files_are_exact",
+      "test_sticky_profile.StickyProfileEvidence.test_correct_profile_keeps_tick_retry_and_preserves_partial_read_evidence",
+      "test_sticky_profile.StickyProfileEvidence.test_second_changed_values_outrank_earlier_generic_state_change"
+    ],
+    "baseline_failures": [
+      "test_sticky_profile.StickyProfileEvidence.test_correct_profile_keeps_tick_retry_and_preserves_partial_read_evidence",
+      "test_sticky_profile.StickyProfileEvidence.test_second_changed_values_outrank_earlier_generic_state_change"
+    ],
+    "new_snapshot_assertion": "expected original controller SHA changes by the explicit reviewed one-line patch; not a behavior regression",
+    "initial_fixture_errors_corrected": [
+      "TSE_PRESCAN_EVIDENCE_DIR missing",
+      "shooter-plan.json missing",
+      "evidence directory missing"
+    ]
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "schema": "a1-nosmooth-disabled-offline-verification-v1",
+  "utc": "2026-11-14T08:35:12.563165+00:00",
+  "runs": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "tools/test_a1_nosmooth_intervention.py"
+      ],
+      "cwd": "/srv/tse-a1-settled-input-20261114",
+      "exit_code": 0,
+      "test_counts": [
+        "6"
+      ],
+      "log_sha256": "e9dbc1a31936475165af55356b566005547a03914ab93e4739e4aa9949799201",
+      "failing_tests": []
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "tools/test_a1_settled_ack.py"
+      ],
+      "cwd": "/srv/tse-a1-settled-input-20261114",
+      "exit_code": 0,
+      "test_counts": [
+        "3"
+      ],
+      "log_sha256": "a88853893eff9b512af13d0fe435fcd9bcdeb81a8decbd5e125a76e856410e49",
+      "failing_tests": []
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "tools/test_a1_controls_diagnostic.py"
+      ],
+      "cwd": "/srv/tse-a1-settled-input-20261114",
+      "exit_code": 0,
+      "test_counts": [
+        "9"
+      ],
+      "log_sha256": "c60670d43933a9305cc61ba334bf8a09ba629a5ea82f418d8dfacd29d96b5b00",
+      "failing_tests": []
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "test_colt_preparation",
+        "test_rotation_diagnostics",
+        "test_colt_reader"
+      ],
+      "cwd": "/srv/tse-a1-nosmooth-controller-20261114",
+      "exit_code": 0,
+      "test_counts": [
+        "35"
+      ],
+      "log_sha256": "4d300a992c61017ded83ad18c2332e87e84c488cc86deb49d2b2ccc62c613401",
+      "failing_tests": []
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "/srv/tse-a1-nosmooth-controller-20261114",
+        "-p",
+        "test*.py"
+      ],
+      "cwd": "/srv/tse-a1-settled-input-20261114",
+      "exit_code": 1,
+      "test_counts": [
+        "67"
+      ],
+      "log_sha256": "6a2d8aec9eeb7e866ec0cdce82e2d0a53c529888d4ec560343a501e0b0933021",
+      "failing_tests": [
+        "test_all_controller_functions_and_unaffected_runtime_files_are_exact (test_prescan_recovery.PrescanTests.test_all_controller_functions_and_unaffected_runtime_files_are_exact)",
+        "test_correct_profile_keeps_tick_retry_and_preserves_partial_read_evidence (test_sticky_profile.StickyProfileEvidence.test_correct_profile_keeps_tick_retry_and_preserves_partial_read_evidence)",
+        "test_second_changed_values_outrank_earlier_generic_state_change (test_sticky_profile.StickyProfileEvidence.test_second_changed_values_outrank_earlier_generic_state_change)"
+      ]
+    }
+  ],
+  "native_processes_started": 0,
+  "native_qualified": false,
+  "input_cause_proven": false,
+  "relevant_tests_pass": true,
+  "legacy_discovery_not_green": true,
+  "legacy_baseline_sticky_failures_previously_reproduced_unchanged": true,
+  "legacy_source_snapshot_assertion_expected_to_detect_new_controller": true
+}
