@@ -1,5 +1,88 @@
 # Aktueller Handoff — 14.11.2026,20:45 UTC
 
+## Stand 22:39 UTC – A1Archiv unabhängigreplayed, Diagnose180bereit
+
+A1Datenreportauthor2685bd0→Rootd67f802. Root vollständigerreinerArchivreplay
+(Pythonreproducer nurAusgabepfad geändert) byteidentischzur787917B-Quittung
+f23372ba5cbbffe52ed0229817512828fdfa5cf9edd65a310b4bc931b387b646:
+152Wire/keinependingReplies/Coreunknown2,81InputActionpaare/Seq1..162,
+0Fault/Drop,3nichtnullInputs. EinRel+12führtzu2Cursor412-Lesungen undje−3°,
+einRel−12zueiner388-Lesung/+3°. ACKs−6/+3undrechterBody−6,0000458°belegen
+GainFAIL. ClientUmit65Querypaaren/2Warps bleibtprozessseitigUNKNOWN; keine
+Uhrenfusion/keinKausalitäts- oderInputOncePASS. KeinA1Fix/Native.
+
+RootDiag180parentzusätzlichanPeerreviewc7404716gepinnt, SHA
+14a75d68baabff88005a249fe191c0ecaa0b9f322470a93dc30121cf0eeb803b.
+054vorStartnochSourcepublish/fetch, vollständigesArchive+Drive/Metadatenprüfen.
+AktiverCandidateVorauftragistNURstatischeFähigkeitsprüfunglegitimerlokaler
+XResClient→PID-Metadaten fürspätereOwnmethod; keineXserver/Native/Implementierung.
+AlterUbleibtUNKNOWN. A4workeridle, beidevorNativeSTATICONLY.
+LiveletzteIst22:31sechs×8eigene/Dev1zusätzlich,Versionenunverändert.
+Aoffen/Bnichtbegonnen, keinePromotion.
+
+
+## Stand 22:34 UTC –180Diag1Scope/Freeze bereit,054 vorNativeoffen
+
+A4author df743fb/9297ab3/3fdd9a3/7ef3532→Root2178885/a29be09/428df0c/a9ba7be.
+Root7gezielteTestsPASS(Autor29inkl.Parent); Source/Options/reverseReview noCriticalImportant.
+Neuerdeaktivierter180s/diag1Forkstattunverändertem600/diag0Parent, keineDLL-/
+Gameplayänderung. Rootfreeze/srv/tse-build023-supply-diag1-root-frozen-20261114,
+Manifest8b4e3311f7526c77316b26ce0cbdf95d7893178be44859608aadd78116520970,
+Controller55f482f89348d2daeabb6df7aab2d43e12859a3d33a020a36dfca832be1598cf.
+Peerreviewc7404716b243190ba4dfb64e3f276be3e5db6db637ddcc89eaff7a56a95d1e83:
+140/76/46Pins,Gate+zweiNamespacesreversierbar/75sonstigeQuellenbytegleich.
+Nurprivate_supply_diagnostic freigegeben,keinA4/Nav-/Budget-/Stärkevergleich.
+RootEV/run-supply023-diag1.py verlangt054fullDrive, genauein180sFenster, keinRetry.
+
+A1[neuerNativeCheckpoint](../reports/2026-11-14-a1-prearm-native-checkpoint.md)
+belegtvierEinzelrequests/3releasedPhasen, aberweiterGainFAIL; Candidateworker
+finalisiertgeschlossenesInput/Action/ACK/Body/RECORD-Audit imisoliertenWT.
+KeinneuerA1Fix/Native, keineGrenzlockerung.
+
+FrischeLiveIst22:31:46UTC unveränderteDLLssechs×8eigeneBots; Devzusätzlich1
+ungeklärterTeilnehmer, andere0. Namen/GUIDsunverändert, keineLiveänderung.
+Root22:33:16sechsServerLogpräfixe48443688BgesichertalsHash-/Offsetbaseline
+fürkurzenneuenFehlerdifferenzcheck; baselinealleinistkeinFehler-/Stabilitätsbeleg.
+NächsteSchritte: neueSourcepublish/fetchexakt,054mit222350Raw/aktuellenQuittungen/
+Diag1-Fork-Freeze-Parent sichern; Fehlerdifferenz/Belegung, WorkerSTATICONLY,
+genaueinDiagnose180s, danachRootrestore+typedReason/Ownlife/Zielauswertung.
+Aoffen/Bnichtbegonnen, keinePromotion.
+
+
+## Stand 22:26 UTC – A1Prearmnativgemessen, GainFAIL bleibt
+
+EinzelnesOriginalNoFire222350geschlossenFAIL957d68ce2f306d89dc0839ffd1abcd7d613c92b16aed64f459f91fb4ea72a446.
+XTestQueryExtension2.2+XSyncvorArmPASS; alle4realenEmissionenDelta1:
+32→33(Rel+12),46→47(KeyDown),50→51(KeyUp),64→65(Rel−12).
+DreiPhasenreleased,0,131603/0,165562/0,149011sunterunverändertem350msLimit.
+DanachoppositeLookActionGainFAIL, keineSchüsse/keineA1Freigabe.
+RECORD152/43816B,4gebundeneEmissionen/4Device/4Delivered,130unattributedQueries,
+2unattributedWarps;2Coreunknowns bleiben2, AdapterkennzeichnetsiealsnoncursorKeys.
+Raw2507870424b2410e7f751d9a1f46e41dbfa4ffa42a8b94fc293db017160ce2ef.
+RecorderExit0noForce/freed152/0malformed-drop,Originalbytesverified,
+Collectorworkerreaped(SIGTERM−15nachCleanup),3reguläreRollencloses.
+Root664Dateiinhalte/Modus/Eigentum/Mengen+8Absenzen+3SchlusslogsRestorePASS,
+Displaysfrei. KeineNativeaktiv. Candidateworker analysiertnurgeschlossene
+Input→Action→ACK/Body/RECORD-Kette in neuerWT; keinFixvorDatenbeleg.
+
+053vollDrive/SHA+934DateimetadatenzweimalPASS:13670589B,
+SHA6c9a06d19570df323a2cd61db951d1cd87511c4664816adc0782216a05c4e3f8,
+Drive1PF6mtZoU0AVBwPoy4R_KMKNiTe66XYe9. Enthältkomplettes023geschlossen+
+Recoveryreview/LongLifequittung undA1PrearmFork/Freeze/ParentVORdiesemLauf.
+DieNEUEN222350Rawserst054offen. Bundle source-through-023-closed-prearm-frozen.bundle
+benötigt615d2bc aus052. LetzterverifizierterRemote9b709be4cbe901321f5df7b4a4bf7750eb5cb8fe,
+Treee16f75fbd90bc38d500e3853a08c3a4eed05e332 gleichlokald8fbd270.
+
+A4Recoveryreviewee891d3→Rootd8fbd27,0Recoverybeobachtet,kein138Repro; alle5
+not_usable175mitnormalerSourceexitkettevereinbar, keininternerBranchbeweis.
+NeuerA4WT/srv/tse-build023-supply-diag1-20261114 bereitetNURdeaktivierten
+023Red180s/diag1ForkausspezifiziertemGrundunavailableUNKNOWNvor,keinDLLwechsel;
+Overhead/andereConditionexplizitgetrennt. STATICONLYnachA1Closedaufgehoben.
+NächsteSchritte: A1closedAudit+Diag1Builderreview/Tests, genaueine180Diag1Native
+nachRootfreeze/Sourcepublish/054vollBackup+Preflight; dannDaten→engerFix.
+Aoffen/Bnichtbegonnen, bestätigteLive-Mischflottebleibtunverändert.
+
+
 ## Stand 22:19 UTC –023geschlossen, A1-Prearmreview bereit
 
 023600,118889s geschlossenLIMITED,180Kills/198Leben/84Useful/108Gains,
