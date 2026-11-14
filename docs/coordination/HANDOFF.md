@@ -1,3 +1,33 @@
+## Vorbereitete passive Retailprüfung — 14.11.2026,13:02 UTC
+
+Kein Native-/Build-/Liveexecutor aktiv. Rootmethoden geschlossen: Baseline/Funktionsprobe je PASS_METHOD_ONLY, Objektform real korrupt+CleanupFAIL bleibt FAIL. Eigener Prefix quieszent entfernt, wieder knapp10GB frei. Delta032 vollständig extern rückgelesen/hashgeprüft:3905806Bytes/SHA256f9a007577340cbd5f3bafed2e2852f3090f4aecfa3619af970f694a7d86578d9,Drive1wQ1o-yQ82fAoDk7LQZJqxrtF8vjCNTlj,375Dateien/8162196Bytes+MetadatenrestorePASS; kein ganzer Native-Restorestart. Enthält abgeschlossene Methoden/V3Freezes, spätereA1/A3Forks und neueNativebelege benötigen033.
+
+Neue deaktivierte Forks Root2483e3c,40gezielteOfflinechecks ohneSkips PASS. A1Rootcopy /srv/tse-a1-instruction-probe-root-frozen-20261114 Manifest7521e53cec5bdfac3263adef82dd6ed6a2d654ee53259ce5c3505beacfec0c39; Collector b5f5f6c51fdd5248c9616e7fd1e4c0eaa57219ced7181832cdbae43418861f2f; Launcher a7b5346f3704a841faf1b67085a5538c6433b23f80f5b538a881d5cc5411a014.68Main-/14Collector-/47Diagnosticpins, nurGates/Namespace/PRIVATEpfad. UnabhängigerFreezeabgleich angefordert. Geplant genau ein instrumented-trace-NoFire-Fenster90s/max1, keine zusätzliche uninstrumentierte Kontrolle/Fire/Retry, unveränderte Inputs/ACK/EPS/Warmup/TTL. Wrapper run-a1-instruction-probe.py. Nach Publikationsende/frischemPreflight/STATICONLY starten.
+
+A3Autorenfork4143c97a/79Pins deaktiviert; Rootfreeze/Native offen. V3Root56f4c319/64Runtime-/52Source-/33Pythonpins unabhängig PASS_SCOPE,600sHard2/manuell/noRetry unverändert. Kein neuesV3Native gestartet; nach A1Cleanup/Restore folgt ein begründetes Redfenster. Publiczuletzt12:32 sechs×8,Red7fc/andere5018,0neueLogfehler seit11:03; externerSyncgrund offen. A/Boffen. Remote zuletzt d533d062/Tree17c17a08 gleichlokal8e417809; neuere Quellen jetzt veröffentlichen.
+
+---
+
+## Geschlossene Win32-Methoden und vorbereiteter V3-Stand — 14.11.2026,12:56 UTC
+
+Kein Native-, Build- oder Liveexecutor aktiv. Eigene Methodenbaseline c76101bc und Funktionsprobe42b2f249 bestehen jeweils vollständig PASS_METHOD_ONLY. Historische Objektform050b8472 verfälscht native EDI-/Argumentwerte, scheitert aber am2-s-Close-RPC und bleibt FAIL_METHOD_EVIDENCE; Original-/Unload-/Detachquittung unbekannt. Alle eigenen Prüflinge normal mit Q/Exit0 beendet; nur anschließend eigene Worker aufgeräumt. Bericht win32-instruction-method-results enthält vollständige SHAs und enges, unabhängig bestätigtes Urteil. Keine Retailfreigabe. Nächster zulässiger Schritt: neue deaktivierte A1/A3-Forks mit ausschließlich korrigierten Midpointformen, Rootreview/freeze, dann ein passiver eigener Retaillauf.
+
+Eigener quieszent nachgeprüfter reproduzierbarer Wineprefix entfernt; Registrykopien, Code, Builds und sämtliche Ergebnisse bleiben. Dadurch wieder9961406464Bytes frei. Keine fremden Prozesse/Installationen berührt. Delta031 extern vollständig PASS; Methoden und V3 brauchen032 vor nächster TSE-Nativeprüfung.
+
+Root A4-V3 integriert090218c+a5117ee, dokumentierte85Offlinefälle ohne Skips PASS. Neuer separater Rootfreeze /srv/tse-a4-build020-hard-ordered-memory-root-frozen-20261114: Manifest56f4c319551459d5c7a201d82ee75f03641232ec33d29eca7e2f86b71390fb65, Launcher7f7d38c88d2e554bb58866bae213d3e6a296e957df83a9e4547bb424201ad080,64/52Pins; unabhängiger Abgleich angefordert. Alter Canonical-Hardlauf935f6d88 bleibt FAIL. Kein neuer600s-Lauf gestartet. A1/A3-Forks in eigenem Candidateworktree, noch nicht nativ. Public zuletzt12:32 sechs×8, Red7fc/andere5018,0 neue Logfehler seit verifizierter Basis11:03. A offen/B unimplementiert. Letzter tatsächlich zurückgeprüfter Remote d533d062251cdd38df7ec4a386e4b917c11d7d82/Tree17c17a08 gleichlokal8e417809; neuere Quellen/Doku noch veröffentlichen.
+
+---
+
+## Geschlossene erste Methodenbaseline/konkrete Stdinursache — 14.11.2026,12:43 UTC
+
+Kein Native-/Build-/Liveexecutor aktiv. Erste eigeneWin32Baseline123948 FAILvorMethodenaufruf: READYdannMappingabsent/Exit10/QBrokenPipe,keinFridaWorker. Result4de8f22b250ce1627ca2f6df78e0a9e2f8d3e0c0dcac82f73575a7eab3543d6a. GesamtereigenerPrefixanschließendquieszentunabhängigbestätigt; keineOriginalbyte-/ABI-PASSbehauptung.
+
+RooteigenerDiagnosebuild (nurGetLastErrorAusgabe)703be11141ffeb481ecd32eb4ff4d91eb967fdad7be51973c58390dd0ab3ba94 belegt12:42:17 READY→STDIN_PEEK_FAILED/00000032/Exit10, keineFrida-/TSEaktion. SDKWinerror.h bestätigt50=ERROR_NOT_SUPPORTED. EngerFixplanRootfe1e958: ReadFileeinesBytesineigenemReaderthread, HauptthreadWaitForSingleObject15s,Threadhandleclose,timeout/WaitfehlernormalereigenerExitProcess12; R/Q/Midpoints/EDI/Args/Gatesunverändert. CandidateimplementiertnurQuellen/Offlinefälle,RootalleinNeubuild. AlteBaseline/Freezes/BuildsFAILerhalten.
+
+Root06dcd37enthältMethodenquellen;31uniquegezielteMethodenchecksRootPASSundAuthor/Rootfreeze19/19unabhängigPASS_SCOPEwarenkeineNativefreigabe. NeuerBuild/Paketnötig. A4V3geordneteBeobachtungen/gebundenesAttemptjournal separat inArbeit. Public12:32frisch6×8,Red7fc/andere5018,0neueLogereignisseseit11:03. Delta031externfullPASS; Methoden/V3Daten032offen. EigenerPrefixnoch1,3GiBvorhanden,disk~8,71GB,vorweitererAktion8GiBfrischprüfen/nachMethodenabschlussquieszentenreproduzierbarenPrefixabbauen. KeineA/B-Abnahme. Remotezuletzt d533d062251cdd38df7ec4a386e4b917c11d7d82/Tree17c17a08f863b99fdc6dee4f2fb5b39c26e38501 gleichlokal8e417809; neuereQuellennochpublizieren.
+
+---
+
 ## Aktueller Quellen-/Flotten-/Methodencheckpoint — 14.11.2026,12:33 UTC
 
 Kein TSE-Native-/Build-/Liveexecutor aktiv. FrischeFlotte12:32:38 sechs×8eigene/0zusätzliche, Spawn0alle6, Red7fc/andere5018. Alle18LogpräfixederBasis11:03:28 inderselbenPID-Generationnachgehasht; seitdem0neueSyncBAD/Disconnect/AccessViolation/Fatal/InvalidAction/Join-/CRC-Ereignisse. BegrenzterBetriebsbeleg, keineFormal-/020Freigabe. Berichtfleet-checkpoint-1232.

@@ -1,0 +1,78 @@
+{
+  "scope": "OFFLINE_DESIGN_MODEL_NOT_NATIVE_QUALIFICATION",
+  "historical_status": "FAIL",
+  "qualified": false,
+  "functional_pass": false,
+  "retrospective_serials_and_synthetic_intervals": true,
+  "real_historical_attempt_provenance_unavailable": true,
+  "other_legacy_gates_requalified": false,
+  "source_hashes": {
+    "inventory.jsonl": "be83398247a05698b5a6ffa53d28b2ab9e054549c27b1634c012f8d5a3ef169e",
+    "registry.json": "bf763100cd991dd9fe749cbac81c822e0fe604da2d82ff7acd0e8f422742b219",
+    "result.json": "935f6d88c1741bd2a37d6b5c076a7b409db2abf604c394b38fb5ed8c1763cc29",
+    "botA-closed.log": "3cdff5fb5e7ea1ba654bce19d0d74507bcbb759a74867c21cb95253a1f2493f3",
+    "botB-closed.log": "5c9f857f811518fceb4837fc8613c271df587fb014841721649e556761c26b8a"
+  },
+  "source_files_unchanged": true,
+  "model_source_sha256": {
+    "a4_ordered_memory_v3.py": "64f402a3fbb00463fb9b2ab112427fceffe0920a2a9983841ea322b62c1e021a",
+    "audit_a4_ordered_memory_v3.py": "74187b9a9f5e4f123762e005e9caade84bf70ecf337213eef344d3dc3c787ac3",
+    "check_a4_ordered_archive_design.py": "a12530808700c5be31186c2dcc609504a42acbe5473295e0700f7d7a1dbc72c4"
+  },
+  "paused_samples_not_gameplay_evidence": 3,
+  "observation": {
+    "raw_samples": 13627,
+    "canonical_samples": 9079,
+    "raw_group_samples": {
+      "botA_actual": 4541,
+      "botB_actual": 4538,
+      "vanilla_plus_overlap": 4548
+    },
+    "fixed_sources": {
+      "botA": "botA_actual",
+      "botB": "botB_actual"
+    },
+    "attempts": 13630,
+    "failed_attempts": 0,
+    "atomic_snapshot": false,
+    "weapon_function_call_proven": false,
+    "contract_sha256": "b3c2fd72474cbc7ee54213d8314c74fb49616efb8ae8e34cf7368b68bc25c79e",
+    "journal_max_bytes": 67108864,
+    "claim": "native flags in two-equal-read intervals plus same-life source growth; not weapon-function calls"
+  },
+  "missing_flag_evidence": [],
+  "slots": {
+    "botA:0": {
+      "native_fire_flag_observations_with_same_life_source_growth": 342,
+      "actual_useful_inventory_gains": 14
+    },
+    "botA:1": {
+      "native_fire_flag_observations_with_same_life_source_growth": 430,
+      "actual_useful_inventory_gains": 16
+    },
+    "botA:2": {
+      "native_fire_flag_observations_with_same_life_source_growth": 588,
+      "actual_useful_inventory_gains": 16
+    },
+    "botA:3": {
+      "native_fire_flag_observations_with_same_life_source_growth": 565,
+      "actual_useful_inventory_gains": 20
+    },
+    "botB:0": {
+      "native_fire_flag_observations_with_same_life_source_growth": 476,
+      "actual_useful_inventory_gains": 20
+    },
+    "botB:1": {
+      "native_fire_flag_observations_with_same_life_source_growth": 369,
+      "actual_useful_inventory_gains": 11
+    },
+    "botB:2": {
+      "native_fire_flag_observations_with_same_life_source_growth": 399,
+      "actual_useful_inventory_gains": 13
+    },
+    "botB:3": {
+      "native_fire_flag_observations_with_same_life_source_growth": 440,
+      "actual_useful_inventory_gains": 11
+    }
+  }
+}

@@ -22,7 +22,7 @@ Root allein Runtime/Build/Integration. a4_diagnosis darf fertigen Canonical-Obse
 ## Status
 
 - [x] Konkreter API-/Stackbefund aus gepinntem Frida-Quellcode und Retaildisassembly.
-- [ ] Enge RED/GREEN-Regression und Quellenkorrektur.
-- [ ] Eigener Win32-Methodenbeleg, Cleanup und Rootprüfung.
+- [x] Enge RED/GREEN-Regression und Quellenkorrektur.
+- [x] Baseline und korrigierte Win32-Funktionsform vollständig bestanden; historische Objektform real korrupt, CleanupFAIL bleibt offen (kein Gesamtmethoden-PASS).
 - [ ] Neue deaktivierte Pakete und Review.
 - [ ] Prospektive Retailbelege; A1-Schaden/A3-Tierstärke weiterhin separat offen.
