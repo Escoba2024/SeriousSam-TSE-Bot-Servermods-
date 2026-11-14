@@ -1,0 +1,8 @@
+{
+  "local_build_source_commit": "a1e77b9f1aa6e2b5332e099c2d40ab5b51ba3f15",
+  "public_equivalent_commit": "1344a948f2310e4684f77cd9531e86d82cd943b8",
+  "source_tree": "ce7d715d1bf1df723c7af021b8f1b2abd88b89db",
+  "verified_by_actual_fetch": true,
+  "same_commit_id": false,
+  "build_candidate_qualified": false
+}

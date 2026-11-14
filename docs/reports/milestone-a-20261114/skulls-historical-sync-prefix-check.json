@@ -1,0 +1,12 @@
+{
+  "utc": "2026-11-14T09:08:56.668063+00:00",
+  "scope": "SKULLS_UNCHANGED_DEDICATED_LOG_PREFIX_BEFORE_INITIAL_ROLLOUT_VS_CURRENT",
+  "baseline_bytes": 969810,
+  "baseline_sha256": "b16d73c875cacdc53e0ac75c8faac7cb0fab652acadb667722289fbd65f15699",
+  "current_captured_bytes": 1321363,
+  "prefix_hash_matches": true,
+  "historical_sync_bad": 11,
+  "historical_sync_disconnects": 1,
+  "new_sync_bad": 0,
+  "new_sync_disconnects": 0
+}

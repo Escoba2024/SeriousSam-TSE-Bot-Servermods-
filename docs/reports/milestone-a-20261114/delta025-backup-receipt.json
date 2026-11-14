@@ -1,0 +1,17 @@
+{
+  "archive": "/srv/tse-cecil-rollout-backup-20261114/delta025-a1-nosmooth-a4-build019-closed.tar.gz",
+  "archive_bytes": 14841410,
+  "sha256": "16e0e80232b5623684928860802515766d44c530cc9bac6416f0f84c95ba9f46",
+  "restored_regular_files": 2317,
+  "restored_bytes": 106913710,
+  "file_hash_and_metadata_restore": "PASS",
+  "native_restore_start": "NOT_RUN",
+  "drive": "UPLOAD_AND_FULL_DOWNLOAD_SHA256_PASS",
+  "disk_free_bytes": 11628453888,
+  "drive_roundtrip": {
+    "drive_id": "1pCaURA1jFqpPl4l0vQeF7Lgdw4ZsdGqx",
+    "bytes": 14841410,
+    "sha256": "16e0e80232b5623684928860802515766d44c530cc9bac6416f0f84c95ba9f46",
+    "full_download_hash_match": true
+  }
+}

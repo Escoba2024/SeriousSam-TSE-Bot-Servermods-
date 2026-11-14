@@ -1,3 +1,33 @@
+## Sicherung und Flottenkontrolle — 14.11.2026,09:09UTC
+
+Geschlossener Delta025:14841410Archivbytes, SHA25616e0e80232b5623684928860802515766d44c530cc9bac6416f0f84c95ba9f46.2317Dateien/106913710Bytes separat restauriert, Hash/Modus/UID/GIDPASS. DriveID1pCaURA1jFqpPl4l0vQeF7Lgdw4ZsdGqx vollständig zurückgeladen, identischerHash. Enthält geschlossene A1Nosmooth- und beide019A4-Rohbelege/Frozencontroller samt Quellbundle bis22bad4e. Kein nativer Gesamtarchivrestorestart; spätere Diagnosearbeit braucht nächstenNachtrag.
+
+Frisch09:08:07UTC alle6×8eigeneBots,0UNKNOWN, nativeSpawn0, aktuelleBotlogs ohneSync-/Crash-/InvalidAction-/Joinfehler. SkullsServer hat11SYNCBAD/1Disconnect, **bereits vollständig im vorRollout-Log**: dessen969810BytePrefix gehasht identisch, nachfolgend0neueBAD/Disconnect. Historische Fehler nicht löschen oder als neue018Regression umdeuten. AktuellerRootordner enthält diesen Prefixnachweis. Kein Native/Build/Liveexecutor aktiv.
+
+---
+
+## Geschlossener Checkpoint — 14.11.2026,09:03UTC
+
+A4-019Quiet **FAIL23/24**, Phase2botB:0 ohne beobachteten nützlichen Pickup. InitialesLeben bereits nützlich bewaffnet aber linkszensiert, deshalb nicht„niebewaffnet“ behaupten. Keine019Übernahme. Alle4Rollen/Displayszu,643Dateihashes/Metadaten+5Abwesenheiten+4ClosedLoghashes unabhängigRootPASS; Originalpreflight09:02:52PASS. Owner/Ended a4-build019-quiet im privatenRootordner bestätigen Ende. Kein Native/Build/Liveexecutor aktiv. Bericht `docs/reports/2026-11-14-build019-a4-native-failure.md`.
+
+candidate_audit analysiert jetzt neuen A4-Slotverlauf; A3-Vergleichsdesign bleibt isoliert erhalten, noch nicht implementiert. a4_diagnosis bereitet deaktivierten Originalinputcollector aus vorhandenem Frida17.26.2-Packagepfad vor und darf nur fokussierte leichte Offlineprüfungen ausführen; keineAttachs/Compiler/native ohneRoot. Root sichert diese geschlossenenBelege. A1 weiterhinFAILvorFire, B unimplementiert. Vor jedem neuen Lauf frische Belegungs-/Lock-/Ressourcenprüfung, keine alten verbrauchtenWrapper wiederholen.
+
+---
+
+## Aktiver Checkpoint — 14.11.2026, zweiter A4-Vergleich
+
+Der erste Build019-A4-Lauf ist **FAIL wegen CPU75,510204%>75%**, alle Rollen geschlossen. Unabhängig643Dateien/5Abwesenheiten/Metadaten und geschlosseneLogs bestätigt; siehe `docs/reports/2026-11-14-build019-a4-resource-failure.md`. Die eigene parallele Agentensuite ist beendet; alleinige CPU-Ursache nicht bewiesen. Keine Schwellenänderung.
+
+Jetzt ausschließlich Root-Einzellauf `/srv/tse-cecil-rollout-evidence-20261114/a4-build019-quiet-owner.json`, `a4-build019-quiet-native.log`, abschließend `a4-build019-quiet-ended.json`. Lab27850/Display154 exklusiv; beide Worker dürfen keine Tests/Builds/native Prozesse starten. Freeze `/srv/tse-a4-build019-quiet-root-frozen-20261114`, Manifest917fab112b3094a5793d7a6a7cecbf81a13167aa23e145dfde564e912415f974. Vor weiterer Labarbeit erst vollständiges Ergebnis, normaleCloses und unabhängigenRestore prüfen. Keine automatische Wiederholung.
+
+Aktuellster Flottenpunkt08:56:34UTC: alle sechs je8eigeneBots,0UNKNOWN, beide Botmodule0186db89204…; Dev/RedHard2, übrigeSerious3 nach Yodeller-Rücknahme. A1 bleibtFAIL vorFire; A4/A3/Dauer offen; B unimplementiert.
+
+Remote tatsächlich gefetcht: Hauptarbeitsbranch a958ae43a9c3cf6fff744f5479b9a2f8c7a776ed, Baumd5f16d5cedbb6d2340a97800b15d3f80f43ab8f1 entspricht lokalf0e3df5. Separater Build019-Quellbranch `codex/20261114-build019-source`, Commit1344a948f2310e4684f77cd9531e86d82cd943b8, Baumce7d715d1bf1df723c7af021b8f1b2abd88b89db entspricht genau ursprünglichem Buildquellcommita1e77b9. Commit-IDs sind wegen Connectorveröffentlichung verschieden; exakter lokalerCommit zusätzlich im verifizierten privaten Quellbundle. Spätere Dokumentation noch separat veröffentlichen.
+
+Worker a4_diagnosis bereitet minimalen deaktivierten Originalinput-Collector aus bestehenden Frida-Helfern vor; candidate_audit bereitet direkte019Tiervergleiche1↔2/2↔3 unter identischen Bedingungen vor. Ausschließlich Root integriert und verändert Runtime.
+
+---
+
 ## Fortschreibung14.11.2026,08:50UTC — A1 geschlossen, A4-019 aktiv
 
 Dieser Checkpoint ersetzt die nachfolgenden aktiven A1-Angaben: Nosmooth-A1 **FAIL vor Fire**, verdoppelter lokaler Aimimpuls trotz gemessener Glättung0/Prescan0/Accel0. Alle drei Rollen geschlossen,664Dateien/neunAbwesenheiten/dreiLoghashes unabhängig restauriert, frischer OriginalpreflightPASS. Einzelheiten: `docs/reports/2026-11-14-a1-nosmooth-native-failure.md`. Keine Wiederholung derselben Voraussetzungen.

@@ -1,0 +1,378 @@
+{
+  "scope": "LIGHTWEIGHT_READ_ONLY_POSTFLIGHT_NO_TEST_BUILD_NATIVE_OR_RETRY",
+  "recorded_status": "FAIL",
+  "candidate_sha256": "671df77a06eb9df8822032418e4d9ae2550f5581a2bf89c3e45b83c0f32472be",
+  "started_utc": "2026-11-14T08:50:29.163233+00:00",
+  "finished_utc": "2026-11-14T08:51:56.559927+00:00",
+  "errors": [
+    "ValueError('host CPU delta exceeds75%')"
+  ],
+  "qualified": false,
+  "functional_pass": false,
+  "completed_round_events": 0,
+  "host_resource_summary": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 26,
+    "cpu_busy_max_measured_percent": 75.51020408163265,
+    "mem_available_min_bytes": 2858459136,
+    "disk_free_min_bytes": 11913420800,
+    "max_sample_gap_seconds": 47.2129087629728,
+    "budget_pass_claim": false,
+    "gameplay_max_sample_gap_seconds": 1.1380766239017248
+  },
+  "resource_timeline": [
+    {
+      "monotonic": 1272627.169575591,
+      "cpu_busy_percent": null,
+      "sample_gap_seconds": null,
+      "mem_available_bytes": 3651629056,
+      "disk_free_bytes": 11945934848,
+      "violations": [],
+      "phase": "preflight-baseline"
+    },
+    {
+      "monotonic": 1272628.170351439,
+      "cpu_busy_percent": 43.007915567282325,
+      "sample_gap_seconds": 1.0007758478168398,
+      "mem_available_bytes": 3651801088,
+      "disk_free_bytes": 11945852928,
+      "violations": [],
+      "phase": "preflight-delta"
+    },
+    {
+      "monotonic": 1272675.383260202,
+      "cpu_busy_percent": 51.597600872410034,
+      "sample_gap_seconds": 47.2129087629728,
+      "mem_available_bytes": 2910171136,
+      "disk_free_bytes": 11921072128,
+      "violations": [],
+      "phase": "before-release"
+    },
+    {
+      "monotonic": 1272676.446701933,
+      "cpu_busy_percent": 55.609756097560975,
+      "sample_gap_seconds": 1.0634417310357094,
+      "mem_available_bytes": 2902990848,
+      "disk_free_bytes": 11920412672,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272677.522555655,
+      "cpu_busy_percent": 64.30260047281324,
+      "sample_gap_seconds": 1.0758537221699953,
+      "mem_available_bytes": 2895011840,
+      "disk_free_bytes": 11919986688,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272678.579474684,
+      "cpu_busy_percent": 64.89104116222761,
+      "sample_gap_seconds": 1.05691902898252,
+      "mem_available_bytes": 2881695744,
+      "disk_free_bytes": 11919863808,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272679.675354284,
+      "cpu_busy_percent": 65.66125290023201,
+      "sample_gap_seconds": 1.09587959991768,
+      "mem_available_bytes": 2880241664,
+      "disk_free_bytes": 11919536128,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272680.731621661,
+      "cpu_busy_percent": 55.961070559610704,
+      "sample_gap_seconds": 1.0562673769891262,
+      "mem_available_bytes": 2879115264,
+      "disk_free_bytes": 11919478784,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272681.809240516,
+      "cpu_busy_percent": 64.30260047281324,
+      "sample_gap_seconds": 1.0776188550516963,
+      "mem_available_bytes": 2878705664,
+      "disk_free_bytes": 11919163392,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272682.887646689,
+      "cpu_busy_percent": 64.70588235294117,
+      "sample_gap_seconds": 1.078406173037365,
+      "mem_available_bytes": 2874753024,
+      "disk_free_bytes": 11918901248,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272683.964184454,
+      "cpu_busy_percent": 61.097852028639615,
+      "sample_gap_seconds": 1.0765377648640424,
+      "mem_available_bytes": 2875723776,
+      "disk_free_bytes": 11918438400,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272685.040106669,
+      "cpu_busy_percent": 60.76555023923445,
+      "sample_gap_seconds": 1.0759222151245922,
+      "mem_available_bytes": 2875736064,
+      "disk_free_bytes": 11917950976,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272686.099837112,
+      "cpu_busy_percent": 61.16504854368932,
+      "sample_gap_seconds": 1.0597304429393262,
+      "mem_available_bytes": 2874535936,
+      "disk_free_bytes": 11917475840,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272687.190984582,
+      "cpu_busy_percent": 65.02347417840376,
+      "sample_gap_seconds": 1.091147470055148,
+      "mem_available_bytes": 2885124096,
+      "disk_free_bytes": 11916935168,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272688.277169152,
+      "cpu_busy_percent": 63.27014218009479,
+      "sample_gap_seconds": 1.0861845698673278,
+      "mem_available_bytes": 2888699904,
+      "disk_free_bytes": 11916509184,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272689.368381581,
+      "cpu_busy_percent": 64.94117647058823,
+      "sample_gap_seconds": 1.0912124291062355,
+      "mem_available_bytes": 2884382720,
+      "disk_free_bytes": 11916083200,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272690.441331421,
+      "cpu_busy_percent": 60.81730769230769,
+      "sample_gap_seconds": 1.0729498399887234,
+      "mem_available_bytes": 2889416704,
+      "disk_free_bytes": 11917602816,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272691.56544144,
+      "cpu_busy_percent": 63.44827586206897,
+      "sample_gap_seconds": 1.1241100190673023,
+      "mem_available_bytes": 2887049216,
+      "disk_free_bytes": 11918168064,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272692.650301663,
+      "cpu_busy_percent": 58.133971291866025,
+      "sample_gap_seconds": 1.0848602228797972,
+      "mem_available_bytes": 2883780608,
+      "disk_free_bytes": 11916759040,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272693.708626876,
+      "cpu_busy_percent": 56.23471882640587,
+      "sample_gap_seconds": 1.0583252129144967,
+      "mem_available_bytes": 2879258624,
+      "disk_free_bytes": 11916767232,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272694.765530995,
+      "cpu_busy_percent": 61.557177615571774,
+      "sample_gap_seconds": 1.0569041192065924,
+      "mem_available_bytes": 2887127040,
+      "disk_free_bytes": 11916271616,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272695.903607619,
+      "cpu_busy_percent": 73.09417040358744,
+      "sample_gap_seconds": 1.1380766239017248,
+      "mem_available_bytes": 2872270848,
+      "disk_free_bytes": 11914870784,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272697.018324446,
+      "cpu_busy_percent": 71.29629629629629,
+      "sample_gap_seconds": 1.1147168269380927,
+      "mem_available_bytes": 2863718400,
+      "disk_free_bytes": 11914952704,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272698.032376711,
+      "cpu_busy_percent": 73.23232323232324,
+      "sample_gap_seconds": 1.0140522650908679,
+      "mem_available_bytes": 2879868928,
+      "disk_free_bytes": 11918024704,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272699.144948041,
+      "cpu_busy_percent": 70.20785219399538,
+      "sample_gap_seconds": 1.112571330042556,
+      "mem_available_bytes": 2858459136,
+      "disk_free_bytes": 11914014720,
+      "violations": [],
+      "phase": "round-playing"
+    },
+    {
+      "monotonic": 1272700.27150972,
+      "cpu_busy_percent": 75.51020408163265,
+      "sample_gap_seconds": 1.1265616789460182,
+      "mem_available_bytes": 2860761088,
+      "disk_free_bytes": 11913420800,
+      "violations": [
+        "host CPU delta exceeds75%"
+      ],
+      "phase": "round-playing"
+    }
+  ],
+  "restore_audit": {
+    "controller_restored": true,
+    "controller_errors": [],
+    "verified_entries": 648,
+    "original_present_files": 643,
+    "original_absent_files": 1,
+    "generated_absences": 4,
+    "old_backup_hashes_verified": 643,
+    "next_transaction_backup_hashes_verified": 643,
+    "next_transaction_mode_uid_gid_matches": 643,
+    "next_transaction_explicit_absence_matches": 1,
+    "generated_absences_witnessed_by_complete_tree_snapshot": [
+      "server/Scripts/Dedicated/BotTest/2_begin.ini",
+      "server/Scripts/Dedicated/BotTest/2_end.ini",
+      "server/Scripts/Dedicated/BotTest/3_begin.ini",
+      "server/Scripts/Dedicated/BotTest/3_end.ini"
+    ],
+    "mismatches": [],
+    "scope_limit": "No direct post-close stat of the now-reused lab. Immutable next transaction snapshots independently witness old restored bytes, mode, uid, gid and absence. Modification times are not recorded or claimed."
+  },
+  "cleanup_audit": {
+    "old_role_process_pids_absent_now": 4,
+    "controller_roles_closed": 4,
+    "fresh_quiescence_not_claimed": "The same lab and display are now owned by a separately launched quiet comparison; no shared resource was touched.",
+    "observer_closed_copy_matches_vanilla": true
+  },
+  "closed_logs": {
+    "server": {
+      "sha256": "2183152085569c2d3b97d482b064fe8326315e4bc43eb38943591141549cc048",
+      "bytes": 8680,
+      "matches_result": true,
+      "retained_classifier_events": {
+        "bad_sync": [],
+        "sync_disconnect": [],
+        "crc_failure": [],
+        "crash": [],
+        "invalid_action": [],
+        "join_failure": []
+      }
+    },
+    "botA": {
+      "sha256": "c3e263c17a770d468b5fe5c3c4f2ce74ea624a5b4b6cfa4f5eefedeee6b7838e",
+      "bytes": 376312,
+      "matches_result": true,
+      "retained_classifier_events": {
+        "bad_sync": [],
+        "sync_disconnect": [],
+        "crc_failure": [],
+        "crash": [],
+        "invalid_action": [],
+        "join_failure": []
+      }
+    },
+    "botB": {
+      "sha256": "8ce27db24f5afe9fc3fa2bb614d15916248764789d415bc9c3388119b626a37c",
+      "bytes": 206725,
+      "matches_result": true,
+      "retained_classifier_events": {
+        "bad_sync": [],
+        "sync_disconnect": [],
+        "crc_failure": [],
+        "crash": [],
+        "invalid_action": [],
+        "join_failure": []
+      }
+    },
+    "vanilla": {
+      "sha256": "9e7127f1c741c9087c2db45da18d1028c19b8db07c6f4de70124846367c11e6b",
+      "bytes": 7338,
+      "matches_result": true,
+      "retained_classifier_events": {
+        "bad_sync": [],
+        "sync_disconnect": [],
+        "crc_failure": [],
+        "crash": [],
+        "invalid_action": [],
+        "join_failure": []
+      }
+    }
+  },
+  "concurrent_workload": {
+    "evidence_level": "ROOT_OPERATOR_OBSERVATION_NO_SEPARATE_TIMESTAMPED_PIDSTAT_RECEIPT",
+    "command": "python3 -m unittest discover -s tools -p test_*.py",
+    "reported_process_cpu_percent": 69.8,
+    "reported_elapsed_seconds": 75,
+    "reported_worktree": "/srv/tse-a1-input-trace-proposal-20261114",
+    "reported_owner_acknowledged_and_stopped": true,
+    "causality": "Temporal overlap and avoidable workload are supported by the operator observation. Full host CPU attribution is not measured; the original resource failure remains FAIL."
+  },
+  "quiet_freeze_review": {
+    "manifest_sha256": "917fab112b3094a5793d7a6a7cecbf81a13167aa23e145dfde564e912415f974",
+    "launcher_exact_allowed_gate_and_namespace_bytes": true,
+    "launcher_ast_parse": true,
+    "own_dependency_actual_hashes_verified": 14,
+    "external_dependency_pins_unchanged": 51,
+    "external_actual_full_rehash_during_live": false,
+    "acceptance_or_gameplay_change_detected": false,
+    "scope": "Static comparison only; no qualification of the separately running native window."
+  },
+  "evidence_sha256": {
+    "/srv/tse-milestone-a-evidence-20261111/a4-reset019-extended-20261114-085029/result.json": "0a1671738235583c9141404048dc6a23463f342587217d89e9b8c2abac578df4",
+    "/srv/tse-milestone-a-evidence-20261111/a4-reset019-extended-20261114-085029/restore-before.json": "0596b8cacae336cdfa6b65bc63c7fcada128f5dbf2b5a645107923badf47eccc",
+    "/srv/tse-milestone-a-evidence-20261111/a4-reset019-extended-20261114-085029/restore.json": "96b0e88851ceecff80b163b85073d902f78d5563ad94baaf5a3a18ef6c16e9ba",
+    "/srv/tse-milestone-a-evidence-20261111/a4-reset019-extended-20261114-085029/host-resources.json": "ddc716c417b66be62f0880162ff2c44cb2312d76034d0ed15d0157eb03ab8c43",
+    "/srv/tse-milestone-a-evidence-20261111/a4-reset019-extended-20261114-085029/transaction.py": "6fd1825b1bfda8713b8669f01ea3ab4cb5747c2084c338575fb0b0dbbf5c5dfb",
+    "/srv/tse-milestone-a-evidence-20261111/a4-reset019-quiet-20261114-085359/restore-before.json": "0596b8cacae336cdfa6b65bc63c7fcada128f5dbf2b5a645107923badf47eccc",
+    "/srv/tse-cecil-rollout-evidence-20261114/a4-build019-owner.json": "e4f46faf00ed5dd77271972aab6d7988ce1d55b8d9209932bf5655fc2ef9f909",
+    "/srv/tse-cecil-rollout-evidence-20261114/a4-build019-ended.json": "f1da4cda313922a2b737cab6e231a1b55fdd11b5efa6a816316fdee4b4b6b888",
+    "/srv/tse-cecil-rollout-evidence-20261114/a4-build019-native.log": "0e750bd4e5277272d8a7a506f6ac7e41f69c600ace32861bc7ba2f9a24cb627c",
+    "/srv/tse-cecil-rollout-evidence-20261114/freeze-a4-build019-quiet.py": "37cd8cb127951f245b26efbb090e2bb1917879266dce13ed5743e6ea0905153d"
+  }
+}
