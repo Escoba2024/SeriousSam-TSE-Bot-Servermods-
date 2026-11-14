@@ -7,6 +7,10 @@
 **Tech Stack:** C++, MSVC/Wine, Python, systemd, GameSpy, Retail 1.07.
 **Spec:** Nutzerauftrag 14.11.2026; privates Original `/srv/tse-milestone-a-evidence-20261111/request.md`; bestehende Pläne vom 11./13.11.
 
+## Aktueller Arbeitsstand18:04UTC
+
+Delta042 extern vollständig rückgelesen und760 Dateien/Metadaten erneut geprüft. Eigener Core-XRecord-Methodenlauf17:51 PASS_METHOD_PARTIAL_CORE_REQUESTS_ONLY, keine Retail-/A1-Freigabe. Neun-Slot-Readiness integriert (85ea553/a308756),95 Roottests PASS; Retest175329 Admission erfolgreich, danach FAIL77,28395%CPU>75 bei11,569s statt600s. Vier normale Closes/Root640Dateien+4Logs RestorePASS; keine Ursachenbehauptung oder automatische Wiederholung. Drei deaktivierte Navvergleichsarme048/018/020 mit je138 Runtimepins vorbereitet,53 gezielte Roottests PASS; native Vergleichsfenster und gemeinsame Auswertung offen. A1-Recorderintegration separat nur offline in Arbeit. Live Dev048/fünfPublicGen2 unverändert; A und B offen.
+
 ## Neue Nutzersteuerung17:10UTC
 
 Alle sechs Server zunächst auf Botstand samt Config/Nav vor diesem Auftrag zurückstellen. Erledigt17:12:46UTC: DevCecil048, fünfPublicGen2, je8eigeneBots; dreiInstanzenbereitsidentisch/keinRestart, drei normalzurückgestellt.92,82s gemeinsameBetriebsprüfungalle48bewegen/kämpfen/respawnen,0neueFehler. WeitereEntwicklung getrenntfortsetzen; erneuterRollouterstbelegtenVerbesserungen einschließlichBewegung/Navigation/Recovery/VersorgungundSync. Die ursprünglicheInitialrollout-Anweisung bleibt historisch erfüllt und ist durch diese neue Livevorgabe ersetzt. NutzerbeobachtungmöglicherNavschwächeistnochunbestätigt. Vergleichgegen048fürDevzusätzlichzuhistorischenGen2-Killdaten erforderlich.

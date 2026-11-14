@@ -176,6 +176,47 @@ class LatejoinRuntime:
   first={r:self.native_frame(r)for r in roles};self.progress()
   time.sleep(min(.2,self.remaining(.2)));self.progress()
   return [first,{r:self.native_frame(r)for r in roles}]
+ def admission_frames(self,registry,binding,started,history):
+  from ownns_latejoin_preflight import CANDIDATE,finite
+  from stability_hard_rules import validate_session
+  require(set(registry)=={'server','botA','botB','vanilla'}and self.capture.stage=='ADMITTING','own admission observations only')
+  require({r:binding[r]for r in ('server','botA','botB')}==self.capture.before,'old role binding changed before readiness')
+  old=self.original_prestart['evidence']['frames'][-1]
+  pointers={r:{p['slot']:p['entity_pointer']for p in old[r]['players']}for r in ('server','botA','botB')};pointers['vanilla']={}
+  clocks={};previous=None
+  while True:
+   self.progress();self.capture.admission_remaining()
+   require(observe_roles(registry)==binding,'admission endpoint binding changed while waiting')
+   frame={};complete=True;first_serial=self.frame_serial+1
+   for role in registry:
+    sample=self.native_frame(role);frame[role]=sample;self.capture.admission_remaining()
+    require(sample['process_identity_before']==binding[role]['identity']==sample['process_identity_after'],'admission frame PID/start changed')
+    require(sample['hashes']=={n:CANDIDATE if n=='GameMP.dll'and role in('botA','botB')else ORIGINALS[n]for n in('Engine.dll','EntitiesMP.dll','GameMP.dll')},'admission frame loaded hashes changed')
+    begin,end=sample['read_interval'];require(finite(begin)and finite(end)and started<=begin<=end<=time.monotonic(),'admission read interval')
+    validate_session(sample);tick=sample['game_tick'];require(finite(tick)and(role not in clocks or tick>=clocks[role]),'admission native clock reversed')
+    clocks[role]=tick
+    pairs=[[p['slot'],p['entity_pointer']]for p in sample['players']]
+    require(sample['slot_binding_before']==pairs,'admission first slot binding differs')
+    for position,observed in enumerate((pairs,sample['slot_binding_after'])):
+     slots=[p[0]for p in observed]
+     allowed=[list(range(9))]
+     if role=='vanilla'and 8 not in pointers[role]:allowed.append(list(range(8)))
+     require(all(type(s)is int for s in slots)and slots in allowed,'unexpected admission native slots')
+     for slot,pointer in observed:
+      require(type(pointer)is int and pointer>0x10000,'admission entity pointer bound')
+      require(slot not in pointers[role]or pointer==pointers[role][slot],'admission slot/entity changed')
+      pointers[role].setdefault(slot,pointer)
+     if slots!=list(range(9)):complete=False
+    self.progress()
+   history.append(dict(first_raw_frame_serial=first_serial,last_raw_frame_serial=self.frame_serial,complete_nine=complete,native_ticks={r:s['game_tick']for r,s in frame.items()}))
+   if complete:
+    if previous is not None and all(frame[r]['game_tick']>previous[r]['game_tick']for r in registry):
+     validate_frames([previous,frame],binding,range(9),[started,time.monotonic()])
+     require(observe_roles(registry)==binding,'admission endpoint binding changed after readiness')
+     self.progress();self.capture.admission_remaining();return [previous,frame]
+    previous=frame
+   else:previous=None
+   self.progress();time.sleep(min(.2,self.remaining(.2)));self.progress()
  def original_hashes(self):
   result={}
   for name in ORIGINALS:
@@ -274,31 +315,38 @@ class LatejoinRuntime:
    receipt.update(ended_monotonic=time.monotonic(),query_observations=queries,source_log_offsets=offsets)
    exclusive_json(self.evidence/'private-prejoin-readiness.json',receipt)
  def admission(self,names,reader_type):
-  started=time.monotonic();self.progress();require(set(self.records)=={'server','botA','botB','vanilla'},'exact four actual roles')
-  registry={r:dict(identity=list(v['identity']),unit=self.unit(r))for r,v in self.records.items()};binding=observe_roles(registry)
-  exclusive_json(self.evidence/'private-original-endpoint-before-schema.json',dict(status='ENDPOINT_OBSERVED_NOT_ADMITTED',binding=binding,qualified=False,functional_pass=False,a4_accepted=False))
-  frames=self.frames(tuple(registry));query=self.B.query(self.records['server']['identity'][0]);self.progress()
-  all_names=[v for k,v in query.items()if re.fullmatch(r'player_\d+',k)]
-  require(set(names)<=set(all_names)and len(set(all_names)-set(names))==1,'exact retained eight plus one Original name')
-  validate_query(query,all_names,self.map_name,9)
-  for role,v in self.records.items():require(self.pauseprobe.read_pause(v['identity'][0],self.root/role)['actual_pause']==0,'latejoin native pause')
-  native={}
+  started=time.monotonic();receipt=dict(protocol=PROTOCOL,status='FAIL',started_monotonic=started,readiness_rounds=[],frames=[],partial_inventory={},local_source=None,first_raw_frame_serial=self.frame_serial+1,qualified=False,functional_pass=False,a4_accepted=False)
   try:
+   self.progress();require(set(self.records)=={'server','botA','botB','vanilla'},'exact four actual roles')
+   registry={r:dict(identity=list(v['identity']),unit=self.unit(r))for r,v in self.records.items()};binding=observe_roles(registry);receipt['binding']=binding
+   exclusive_json(self.evidence/'private-original-endpoint-before-schema.json',dict(status='ENDPOINT_OBSERVED_NOT_ADMITTED',binding=binding,qualified=False,functional_pass=False,a4_accepted=False))
+   frames=self.admission_frames(registry,binding,started,receipt['readiness_rounds']);receipt['frames']=frames
+   query=self.B.query(self.records['server']['identity'][0]);receipt['query']=query;self.progress()
+   all_names=[v for k,v in query.items()if re.fullmatch(r'player_\d+',k)]
+   require(set(names)<=set(all_names)and len(set(all_names)-set(names))==1,'exact retained eight plus one Original name')
+   validate_query(query,all_names,self.map_name,9)
+   for role,v in self.records.items():require(self.pauseprobe.read_pause(v['identity'][0],self.root/role)['actual_pause']==0,'latejoin native pause')
+   native=receipt['partial_inventory']
    for role in ('server','vanilla'):
     identity=self.records[role]['identity']
     with reader_type(identity[0],identity[1],self.root/role,ORIGINALS['GameMP.dll'])as reader:
-     if role=='vanilla':local=local_source.sample(reader)
-     selected=reader.sample((8,0,1,2));row=next(p for p in selected['players']if p['slot']==8)
+     if role=='vanilla':
+      local=local_source.sample(reader);receipt['local_source']=local
+      exclusive_json(self.evidence/'private-original-local-source-sample.json',dict(raw_sample=local,validation_pending=True,qualified=False))
+     selected=reader.sample((8,0,1,2));native[role]=selected
+     exclusive_json(self.evidence/f'private-original-slot8-{role}-inventory.json',dict(raw_sample=selected,validation_pending=True,qualified=False))
+     row=next(p for p in selected['players']if p['slot']==8)
      require(selected['process_identity']==list(identity)and selected['hashes']=={k:ORIGINALS[k]for k in ('Engine.dll','EntitiesMP.dll','GameMP.dll')},'Original/server slot8 sample provenance')
      require(row['present']is True and row['entity_pointer']==next(p['entity_pointer']for p in frames[-1][role]['players']if p['slot']==8),'slot8 entity changed during admission')
-     native[role]=selected
+   require(local['process_identity']==registry['vanilla']['identity'],'Original local0 probe identity')
+   rows={r:next(p for p in s['players']if p['slot']==8)for r,s in native.items()}
+   require(rows['server']['entity_id']==rows['vanilla']['entity_id'],'server/Original actual slot8 entity ID differs')
+   ended=time.monotonic();validate_frames(frames,binding,range(9),[started,ended])
+   require(observe_roles(registry)==binding,'admission role rebaseline forbidden')
+   self.progress()
+   result=dict(protocol=PROTOCOL,window=[started,ended],binding=binding,query=query,frames=frames,readiness_rounds=receipt['readiness_rounds'],original_local_mapping=local,slot8_inventory=native,qualified=False,functional_pass=False,a4_accepted=False)
+   exclusive_json(self.evidence/'private-original-slot8-admission.json',result);return result
   except BaseException as error:
-   exclusive_json(self.evidence/'private-original-slot8-failure.json',dict(status='FAIL',binding=binding,query=query,frames=frames,partial_inventory=native,local_source=getattr(error,'local_source_evidence',None),error=repr(error)));raise
-  require(local['process_identity']==registry['vanilla']['identity'],'Original local0 probe identity')
-  rows={r:next(p for p in s['players']if p['slot']==8)for r,s in native.items()}
-  require(rows['server']['entity_id']==rows['vanilla']['entity_id'],'server/Original actual slot8 entity ID differs')
-  ended=time.monotonic();validate_frames(frames,binding,range(9),[started,ended])
-  require(observe_roles(registry)==binding,'admission role rebaseline forbidden')
-  self.progress()
-  result=dict(protocol=PROTOCOL,window=[started,ended],binding=binding,query=query,frames=frames,original_local_mapping=local,slot8_inventory=native,qualified=False,functional_pass=False,a4_accepted=False)
-  exclusive_json(self.evidence/'private-original-slot8-admission.json',result);return result
+   receipt.update(error=repr(error),ended_monotonic=time.monotonic(),last_raw_frame_serial=self.frame_serial)
+   if getattr(error,'local_source_evidence',None)is not None:receipt['local_source_failure']=error.local_source_evidence
+   exclusive_json(self.evidence/'private-original-slot8-failure.json',receipt);raise
