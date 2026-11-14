@@ -1,9 +1,19 @@
-# Aktueller Handoff — 14.11.2026,20:16 UTC
+# Aktueller Handoff — 14.11.2026,20:29 UTC
 
 Gesamtauftrag OFFEN. A nicht abgeschlossen, B nicht begonnen. Der initiale Cecil-Rollout6/6 und unser späterer Rückstelllauf17:12 sind historisch belegt. **Neueste ausdrückliche Nutzerentscheidung nach der18:37-Prüfung: aktuellen gemischten Stand behalten und isoliert weiterentwickeln.** Dev bleibt048, RedGen2, vier andere Public018. Keine020-Promotion ohne belegte Verbesserung. Der mögliche Navigationsrückschritt bleibt subjektiv; die Doppel-Colt-Nachricht wurde als falscher Chat zurückgenommen.
 
 Ein zweiter unabhängiger Auftrag hat17:57–18:19 Public018 und anschließend Namen aktualisiert. Herkunft ist aus dessen Projektdateien nachgewiesen; keine fremden Sitzungsinternas gelesen, keine Prozesse beendet oder neuere Namen/GUIDs überschrieben. Red wurde dort nach10BAD/1Disconnect aufGen2 zurückgerollt. Einzelheiten und Beleggrenzen im [Abgleichbericht](../reports/2026-11-14-shared-host-fleet-reconciliation.md). Das bereits gezeigte Statusbild beruht hinsichtlich Live auf dem älteren17:16-Stand und ist dadurch überholt; die Buildentwicklungsaussagen bleiben bestehen.
 Gesamtplan: [Rollout/A/B](../superpowers/plans/2026-11-14-cecil-rollout-a-b.md). Frühere ausführliche Historie bytegleich unter [Archiv](archive/2026-11-14-cecil-rollout-a-b-handoff-history.md); weitere Zwischenstände in Git erhalten. Root allein integriert/verändert Runtime, maximal zwei Worker mit getrennten Worktrees. Tatsächlich vorhandener lokaler Root-Terminal auf ubuntu-4gb-nbg1-2; RDC-Kontingent0, keine RDC-Ausführung. Kein ghidra:8080-Aufruf. Keine neue kostenpflichtige Infrastruktur.
+
+## Neuester Stand20:29UTC
+
+A1 genau ein eigener Original-NoFirelauf201838 geschlossen FAIL: neuer passiverEmissioncounterguard beim ersten+12-Impuls. Konkrete verletzteTeilbedingung UNKNOWN, abgewieseneCounter/Returnwertewurdennichtpersistiert. Raw36=Start/End+17QueryPointerAnfragen/17Antworten,0XTest/Warp/Motion; FehlerlagvorTransportXSync, daherkeineAussageübergepuffertenRequest. Result3ec74f216f0cfe78cc74dbe158d1c2bbaba546dd93418d023953efdd4d91c076. Root664Dateien+8Absenzen+3SchlusslogsRestorePASS;3TSErollennormalgeschlossen, Recorder36Callbacks/freed36,0unknown/errors/noForce, normalExit0. UnveränderteOriginalbytes, keineA1Gain-/Schadenfreigabe, keinautomatischerRetry. Candidate-Agent in getrenntemWT /srv/tse-a1-passive-attempt-journal-20261114 ergänzt ausschließlich beschränktesVersuchsjournal vorGuardprüfung, keineGrenz-/Input-/Warmupänderung. Diagnose RootEV/a1-passive-first-native-diagnosis.json SHAceaefe2db8ec178bb1f896a0034cc3556105806f1a18d90170db36453159184b.
+
+A4Healthfix fertig integriert: author4dbe241/0e10f9e/b8854df/f71653e →Root9d64743/017bb7a/3ba189d/fe55f10. Root unabhängigerSource-/PinreviewohneCritical/Important; eigeneSDK107normalundASan/UBSanje3104/0PASS. NurCompiler-Vartrackinghinweis, keineSanitizerdiagnose. Author12Header-/4PythonParentresultatefrischhashverifiziert. OrdinaryHealthphaseanvolleKontext-/Reset-/Hopbindung, alteItemreads/LOS/Budget/Fristen/Safetybeibehalten; keinneuerFloor-/Weaponpfad. NochkeineDLL/Nativequalifikation; nächsterneuerKandidatnachbestehenden001–020 erst nachQuellveröffentlichungundBuildpreflight.
+
+Frischer20:17:21-Lesebefund bestätigtgeladeneModuleundQuery: Dev048/RedGen2/vierPublic018, je8eigeneBots/0zusätzlicheTeilnehmer. RootEV/fleet-module-status-20261114-2018-private.json (Nameenthält2018, tatsächlicherUTC20:17). KeinAktivitätsfenster. Nutzerbaselinebleibterhalten.
+
+Delta047vollDrive/SHA+119DateimetadatenzweimalPASS:2125315B/16d287144f3dbdb0976c0b9cd3e0238612dac52f378dc9ce2097687f804280ce/Drive1YO9emuUtHi2TNKnbOmqxbtoMUD5bSXmP; enthältA1Rootfreeze+Review/MethodevorNative. LetzterverifizierterRemote79230f2409a36515cfc203decb177b3c5a08e1e9/Tree0897e463fd65da787fadcc8b52d5094fcbcef0fd exaktlokale9202ce71eb0ffdf112ac61c2440ddffeeb6d370. NeueA1fehlgeschlageneRawbelege/HealthsourceundReviewin048vorweitererNative sichern. KeinNativeaktiv.
 
 ## Neuester Stand20:16UTC
 

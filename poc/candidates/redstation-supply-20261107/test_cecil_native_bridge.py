@@ -3726,6 +3726,180 @@ void localSupplyContention(){
  check(localSupplyChoose(.05,85.15)==9902,"owner progress restores fresh common-clock claim across another querying origin");
  BotSupplyState(1).Reset();
 }
+template<class T>auto healthProposal(const T& s,int)->decltype(s.currentHealthConnector){return s.currentHealthConnector;}
+template<class T>bool healthProposal(const T&,long){return false;}
+template<class T>auto resetSerial(const T& n,int)->decltype(n.ResetSerial()){return n.ResetSerial();}
+template<class T>uint64_t resetSerial(const T&,long){return 0;}
+template<class T>auto nextResetSerial(uint64_t v,int)->decltype(T::NextResetSerial(v)){return T::NextResetSerial(v);}
+template<class T>uint64_t nextResetSerial(uint64_t,long){return 0;}
+void healthConnectorFixture(){
+ setup(3);player.en_ulID=101;player.health=10;
+ auto& graph=BotSupplyGraph();graph.points[0].radius=2;
+ graph.points[1].z=-10;graph.points[2].x=10;graph.points[2].z=-3;
+ auto& item=addItem(995,0,-6);item.item.kind=botcore::CecilItemKind::Health;
+ auto& s=BotSupplyState(0);s.goal=s.anchor=0;s.goalEntity=995;
+ s.goalKind=botcore::CecilItemKind::Health;s.goalSince=0;s.scanTick=99999;
+ player.pl.pl_PositionVector=FLOAT3D(0,0,-1.5f);
+ const auto first=BotSupplyTick(&player,0,1,1000);
+ check(first.active&&first.forward>0&&s.goalEntity==995,"health phase fixture enters actual live clear arrived connector");
+ player.pl.pl_PositionVector(3)=-3;
+}
+SCecilMove healthConnectorTick(int tick=2,int budget=40,double enemy=1000){_botRayBudget=budget;return BotSupplyTick(&player,0,tick,enemy);}
+void healthConnectorContinuityGuards(){
+ healthConnectorFixture();auto& warm=BotSupplyState(0);auto movement=healthConnectorTick();
+ check(movement.forward>0&&healthProposal(warm,0)&&!warm.currentNavTravel&&warm.currentNavTime<0&&warm.currentNavGoal<0,
+   "RED warm ordinary health connector is a proposal without a fabricated NAV arrival or floor exemption");
+ // All context mutations happen after a true arrived-and-clear tick. Restoring
+ // the previous context outside the NAV sphere must not revive the old phase.
+ for(int bad=0;bad<35;++bad){
+  healthConnectorFixture();auto& s=BotSupplyState(0);CWorld other;other.wo_cenEntities=player.world.wo_cenEntities;
+  if(bad==0)player.worldOverride=&other;
+  if(bad==1)++_botSupplyMapSerial;
+  if(bad==2)++player.en_ulID;
+  if(bad==3)++s.generation;
+  if(bad==4){addItem(996,0,-6);s.goalEntity=996;}
+  if(bad==5)s.goal=1;
+  if(bad==6)s.goalSince=.01;
+  if(bad==7)s.goalDeadline=100;
+  if(bad==8)player.en_vGravityDir=FLOAT3D(0,0,-1);
+  if(bad==9)s.navigator.Reset();
+  if(bad==10){s.ClearGoal();s.goal=s.anchor=0;s.goalEntity=995;s.goalKind=botcore::CecilItemKind::Health;s.goalSince=0;s.scanTick=99999;}
+  if(bad==11)BotSupplyGraph().points[0].flags=botcore::CECIL_JUMP;
+  if(bad==12)BotSupplyGraph().points[0].next_slot=1;
+  if(bad==13)BotSupplyGraph().points[0].important_entity=123;
+  if(bad==14)BotSupplyGraph().points[0].lock_entity=123;
+  if(bad==15)s.importantGoal=true;
+  if(bad==16)s.interactionPoint=0;
+  if(bad==17)s.useReleaseTick=2;
+  if(bad==18)player.m_pstState=PST_SWIM;
+  if(bad==19)player.m_pstState=PST_FALL;
+  if(bad==20)player.health=70;
+  if(bad==21)s.blocked.clear();
+  if(bad==22)BotSupplyGraph().points[0].z=.25;
+  if(bad==23)BotSupplyGraph().points[0].radius=2.25;
+  if(bad==24)items[0].item.kind=botcore::CecilItemKind::Weapon;
+  if(bad==25)player.body.m[0][0]=2;
+  if(bad==26)player.en_plViewpoint.pl_OrientationAngle(1)=NAN;
+  if(bad==27)s.patrolAlternate=true;
+  if(bad==28)_botSupplyMapReady=0;
+  if(bad==29)bot_bSupplyNavigation=false;
+  if(bad==31)items[0].pickable=false;
+  if(bad==32)player.health=100;
+  if(bad==33)s.flightFinishing=true;
+  if(bad==34)s.followEntity=123;
+  const int tick=bad==30?0:2;
+  healthConnectorTick(tick,40,bad==20?1:1000);
+  check(!healthProposal(s,0),"context change/reset/owner/special/timeback never retains a warm health proposal");
+  // Restore the mutations that do not independently clear the retained goal.
+  player.worldOverride=nullptr;_botSupplyMapSerial=7;player.en_ulID=101;
+  if(bad==3)--s.generation;
+  if(bad==4)s.goalEntity=995;
+  if(bad==5)s.goal=0;
+  if(bad==6)s.goalSince=0;
+  if(bad==7)s.goalDeadline=0;
+  player.en_vGravityDir=FLOAT3D(0,-1,0);player.health=10;
+  auto& node=BotSupplyGraph().points[0];node.flags=0;node.next_slot=node.important_entity=node.lock_entity=-1;node.z=0;node.radius=2;
+  s.importantGoal=false;s.interactionPoint=-1;s.useReleaseTick=-1;player.m_pstState=PST_STAND;
+  s.blocked.resize(3,0);items[0].item.kind=botcore::CecilItemKind::Health;player.body.m[0][0]=1;
+  items[0].pickable=true;s.flightFinishing=false;s.followEntity=0;
+  player.en_plViewpoint.pl_OrientationAngle(1)=0;s.patrolAlternate=false;_botSupplyMapReady=1;bot_bSupplyNavigation=true;
+  healthConnectorTick(3);
+  check(!healthProposal(s,0),"returning outside to a prior context cannot revive an invalidated health phase");
+ }
+ // Budget absence is uncertainty, not a rejected connector or a renewed attempt.
+ for(int budget:{0,1,2}){
+  healthConnectorFixture();auto& s=BotSupplyState(0);const int before=rayCount;
+  const auto neutral=healthConnectorTick(2,budget);
+  check(!neutral.active&&neutral.forward==0&&!healthProposal(s,0)&&rayCount==before&&s.goalEntity==995&&s.goalSince==0&&endEvents==0,
+    "RED warm health connector with at most two rays waits neutrally without a cast or rejection");
+  const auto resumed=healthConnectorTick(3);
+  check(resumed.forward>0&&healthProposal(s,0)&&s.goalSince==0,"RED replenished original ray budget resumes same fixed health attempt");
+ }
+ healthConnectorFixture();auto& timed=BotSupplyState(0);healthConnectorTick(240);
+ check(timed.goalEntity!=995&&endEvents==1&&std::strcmp(lastEnd,"timeout")==0&&timed.ItemRejected(995,12),
+   "warm health continuation never extends the original twelve-second timeout or thirty-second backoff");
+ for(int failure=0;failure<3;++failure){
+  healthConnectorFixture();auto& s=BotSupplyState(0);
+  if(failure==0)items[0].pl.pl_PositionVector(2)=3.01f;
+  if(failure==1)items[0].pl.pl_PositionVector(3)=-12;
+  if(failure==2)wallMode=2;
+  const auto move=healthConnectorTick();
+  check(!move.active&&!healthProposal(s,0)&&s.goalEntity==0&&endEvents==1&&std::strcmp(lastEnd,"connector")==0&&s.ItemRejected(995,.1),
+    "RED warm health connector retains exact height distance and current physical LOS rejection");
+ }
+ // A real directed approach retains its source metadata even on arrived ticks.
+ for(bool special:{false,true}){
+  healthConnectorFixture();auto& s=BotSupplyState(0);s.ClearGoal();s.goal=0;s.anchor=1;s.goalEntity=995;
+  s.goalKind=botcore::CecilItemKind::Health;s.goalSince=0;s.scanTick=99999;
+  auto& graph=BotSupplyGraph();graph.points[1].z=4;graph.points[1].links={0};graph.points[1].flags=special?botcore::CECIL_JUMP:0;
+  graph.points[2].x=3;graph.points[2].z=-3;graph.points[2].links={0};
+  player.pl.pl_PositionVector=FLOAT3D(0,0,4);healthConnectorTick(2);
+  check(s.navigator.SourceSlot(0)==1&&s.hop==0,"directed health fixture has an actual committed source-to-terminal edge");
+  player.pl.pl_PositionVector(3)=-1.5f;healthConnectorTick(3);player.pl.pl_PositionVector(3)=-3;
+  const auto outside=healthConnectorTick(4);
+  check(special?(!healthProposal(s,0)&&outside.forward<0):(healthProposal(s,0)&&outside.forward>0),
+    "RED only ordinary source edges can acquire warm health phase; special source approach remains legacy");
+  if(!special){
+   s.anchor=2;player.pl.pl_PositionVector=FLOAT3D(3,0,-3);healthConnectorTick(5);
+   check(!healthProposal(s,0),"actual navigator relocation ends the old health connector phase");
+   s.anchor=0;player.pl.pl_PositionVector=FLOAT3D(0,0,-3);healthConnectorTick(6);
+   check(!healthProposal(s,0),"return after actual relocation cannot revive old health connector phase");
+  }
+ }
+ // The existing physical layer still decides whether proposed motion is safe.
+ healthConnectorFixture();auto move=healthConnectorTick();auto& floor=BotSupplyState(0);
+ double f=move.forward,st=move.strafe,up=move.up;_botRayBudget=16;
+ check(BotCecilSafeMotion(&player,floor,.1,f,st,up,0,1)==0&&floor.probe.floorRays>0&&f==0,
+   "RED warm outside health connector grants no new opt-in floor exemption");
+ healthConnectorFixture();move=healthConnectorTick();auto& wall=BotSupplyState(0);wallMode=2;
+ f=move.forward;st=move.strafe;up=move.up;_botRayBudget=16;
+ check(BotCecilSafeMotion(&player,wall,.1,f,st,up,0,1)==0&&f==0&&st==0,
+   "warm health connector still obeys existing physical wall rejection");
+ healthConnectorFixture();auto& expired=BotSupplyState(0);player.health=0;healthConnectorTick();player.health=10;healthConnectorTick(3);
+ check(!healthProposal(expired,0),"death and subsequent source respawn do not revive an old health phase");
+ healthConnectorFixture();auto& reset=BotSupplyState(0);reset.Reset();healthConnectorTick(3);
+ check(!healthProposal(reset,0),"full source reset does not restore a previous health phase");
+ for(bool invalid:{false,true}){
+  healthConnectorFixture();const auto proposed=healthConnectorTick();auto& s=BotSupplyState(0);
+  double f=proposed.forward,st=proposed.strafe,up=proposed.up;_botRayBudget=16;
+  BotCecilSafeMotion(&player,s,.1,f,st,up,invalid?NAN:0,1,invalid);
+  check(!healthProposal(s,0),"RED final foreign movement ownership or invalid safety frame clears health continuation");
+  healthConnectorTick(3);check(!healthProposal(s,0),"RED a later valid frame cannot revive final-owner-invalidated health continuation");
+ }
+ healthConnectorFixture();movement=healthConnectorTick();BotCecilSettings().bAvoidPits=0;
+ f=movement.forward;st=movement.strafe;up=movement.up;_botRayBudget=16;
+ check(BotCecilSafeMotion(&player,BotSupplyState(0),.1,f,st,up,0,1)==1&&f>0&&BotSupplyState(0).probe.floorRays==0,
+   "default pit policy permits only its original physical-wall-checked health proposal without a new floor claim");
+ // An initial budget wait is not an arrived-and-successfully-cast connector.
+ healthConnectorFixture();auto& coldBudget=BotSupplyState(0);coldBudget.ClearGoal();coldBudget.goal=coldBudget.anchor=0;
+ coldBudget.goalEntity=995;coldBudget.goalKind=botcore::CecilItemKind::Health;coldBudget.scanTick=99999;
+ player.pl.pl_PositionVector(3)=-1.5f;healthConnectorTick(2,2);player.pl.pl_PositionVector(3)=-3;
+ check(healthConnectorTick(3).forward<0&&!healthProposal(coldBudget,0),"initial arrived budget denial never creates a warm health phase");
+ healthConnectorFixture();auto& weapon=BotSupplyState(0);weapon.ClearGoal();weapon.goal=weapon.anchor=0;
+ weapon.goalEntity=995;weapon.goalKind=botcore::CecilItemKind::Weapon;weapon.scanTick=99999;items[0].item.kind=botcore::CecilItemKind::Weapon;
+ player.pl.pl_PositionVector(3)=-1.5f;healthConnectorTick(2);player.pl.pl_PositionVector(3)=-3;
+ check(healthConnectorTick(3).forward<0&&!healthProposal(weapon,0),"ordinary weapon final connector keeps its unchanged per-arrived-tick behavior");
+ healthConnectorFixture();allocations=0;measuring=true;
+ for(int tick=2;tick<=20;++tick){player.pl.pl_PositionVector(3)=-3.f-float(tick)*.05f;healthConnectorTick(tick);}
+ measuring=false;check(allocations==0,"warm health phase adds no per-tick allocation or prepared search storage");
+ healthConnectorFixture();auto& replanned=BotSupplyState(0);BotSupplyGraph().points[1].links={0};replanned.anchor=1;
+ healthConnectorTick(2);
+ check(replanned.hop==1&&!healthProposal(replanned,0),"RED a fresh different NAV hop cannot retain a terminal health phase without a Reset or relocation flag");
+ replanned.anchor=0;healthConnectorTick(3);
+ check(!healthProposal(replanned,0),"RED returning to the former terminal hop cannot revive the lost health phase");
+ botcore::CecilNavigator n;const auto initial=resetSerial(n,0);n.Prepare(3);const auto prepared=resetSerial(n,0);n.Reset();
+ check(initial!=0&&prepared!=initial&&resetSerial(n,0)!=prepared,"RED construction Prepare and explicit navigator reset have distinct observable serials");
+ const uint64_t limit=std::numeric_limits<uint64_t>::max();
+ check(nextResetSerial<botcore::CecilNavigator>(limit-1,0)==limit&&nextResetSerial<botcore::CecilNavigator>(limit,0)==0&&nextResetSerial<botcore::CecilNavigator>(0,0)==0,
+   "RED reset serial exhaustion is permanently invalid instead of wrapping to an old valid phase");
+ botcore::CecilNavGraph graph;graph.points.resize(1);n.Prepare(1);const auto beforeInvalid=resetSerial(n,0);
+ botcore::CecilMotionInput in;n.Update(graph,nullptr,0,in);
+ check(resetSerial(n,0)!=beforeInvalid,"actual internal invalid-input reset increments the same serial");
+ in.alive=true;in.anchor=in.goal=0;in.now=1;const auto beforeValid=resetSerial(n,0);n.Update(graph,nullptr,0,in);
+ check(resetSerial(n,0)==beforeValid,"ordinary valid navigator updates do not mutate reset provenance");
+ in.now=.5;n.Update(graph,nullptr,0,in);
+ check(resetSerial(n,0)!=beforeValid,"actual internal timeback reset invalidates the same serial");
+}
 // Closed Nav20-020 suggests an ordinary final-item connector is lost once the
 // same player moves outside the original terminal NAV sphere. These are
 // controlled poses, NOT an Engine movement/pickup simulation. Execute the real
@@ -3764,6 +3938,7 @@ void itemConnectorRadiusContinuity(){
 }
 int main(){
  itemConnectorRadiusContinuity();
+ healthConnectorContinuityGuards();
  localSupplyContention();
  liveItemFlightLockReplanPriority();
  liveItemFlightArrivalPriority();

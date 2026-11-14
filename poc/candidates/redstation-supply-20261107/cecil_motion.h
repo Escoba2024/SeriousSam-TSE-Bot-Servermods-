@@ -48,11 +48,18 @@ struct CecilMotion {
 };
 class CecilNavigator {
  public:
+  // Observation only. Zero permanently disables dependent phase provenance on
+  // exhaustion; it never wraps back to a previously valid reset generation.
+  static uint64_t NextResetSerial(uint64_t value) {
+    return value==0||value==std::numeric_limits<uint64_t>::max()?0:value+1;
+  }
+  uint64_t ResetSerial()const {return reset_serial_;}
   void Prepare(size_t nodes) {
     if(nodes>CecilNavGraph::kMaxPoints)nodes=0;
     search_.Prepare(nodes);locks_.assign(nodes,0);Reset();
   }
   void Reset() {
+    reset_serial_=NextResetSerial(reset_serial_);
     source_=hop_=goal_=supported_lock_hop_=-1;last_time_=-1;next_replan_=next_jump_=0;
     recovery_until_=-1;have_progress_=false;progress_time_=px_=py_=pz_=0;
     std::fill(locks_.begin(),locks_.end(),0);
@@ -176,6 +183,7 @@ class CecilNavigator {
     have_progress_=true;progress_time_=in.now;px_=in.x;py_=in.y;pz_=in.z;
   }
   CecilNavSearch search_;
+  uint64_t reset_serial_=1;
   std::vector<unsigned char> locks_;
   int source_=-1,hop_=-1,goal_=-1,supported_lock_hop_=-1;
   double last_time_=-1,next_replan_=0,next_jump_=0,recovery_until_=-1;
