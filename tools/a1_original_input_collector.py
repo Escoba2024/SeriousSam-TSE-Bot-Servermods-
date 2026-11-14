@@ -16,13 +16,13 @@ RUNTIME_REVIEWED = False
 ORIGINAL_GAME_SHA = '1c41da35b3fc47378c407b770e1bd1dcc2b7e6bf676c140586bc6035461d4208'
 FRIDA_PACKAGE = Path('/srv/tse-frida-probe-20261111/lib/python3.12/site-packages')
 A3 = Path('/srv/tse-milestone-a-continuation-evidence-20261112/a3-build017-root-frozen')
-PRIVATE = Path('/srv/tse-a1-input-trace-timer-guard-library-20261114')
+PRIVATE = Path('/srv/tse-a1-input-trace-guard-cleanup-library-20261114')
 DEPENDENCIES = {
     A3/'frozen-v2/host_binding.py': 'db411bb6757abdc6e6b0ca124f948234fff656a71d8ec7659bb4322cbc18caa8',
     A3/'frozen-v2/controller_guard.py': '3f7142734eb26eb5d6277671b04299bbd0d167be085da14082726feff95274bf',
     A3/'damage_policy.py': '4095c30e55e4b8996a87807f3c55c7357411bf9c5fcd91d93f748d31cef84525',
 }
-GUARDS_SHA = '2f4b494cbb4796727c821b7f6a4d3a5ab921ded5e9bf620dd5476f6765746936'
+GUARDS_SHA = '3d2b237a787869fee27b02ac22a84f5bdf4e3528e8e2fee2981f05d3e8d7e9d1'
 CONTROLS_ROOT = Path('/srv/tse-a1-nosmooth-root-frozen-20261114')
 CONTROLS_SHA = '726a5abd10ff646b0c54c318d13cfb373b4bbaa37fa2e4162e05ebe448d99d54'
 
@@ -92,6 +92,8 @@ class Collector:
     def __init__(self, reader, registry, evidence, ownership_gate):
         self.reader = reader
         self.registry = registry
+        self.original_bytes_verified = False
+        self.original_verification_receipt = None
         self.evidence = Path(evidence)
         self.ownership_gate = ownership_gate
         self.session = self.script = self.stream = None
@@ -290,6 +292,10 @@ class Collector:
             self.closed = True;return
         steps = []
         safe=True
+        self.original_bytes_verified = False
+        self.original_verification_receipt = dict(
+            phase='host-original-verification',attempted=False,verified=False,
+            error='not attempted',native_qualified=False)
         if self.script is not None:
             safe=self._stop_and_wait()
         if safe:
@@ -299,8 +305,27 @@ class Collector:
                 self.session.detach();self.session=None
             if self.script is not None:steps.append(('unload',unload))
             if self.session is not None:steps.append(('detach',detach))
-            if steps:steps.append(('verify full Original bytes',self.verify_original))
+            def verify_restored_original():
+                receipt=self.original_verification_receipt
+                receipt.update(attempted=True,error=None)
+                try:
+                    self.verify_original()
+                except BaseException as error:
+                    receipt['error']=repr(error)
+                    raise
+                self.original_bytes_verified = True
+                receipt['verified']=True
+            if steps:steps.append(('verify full Original bytes',verify_restored_original))
+        else:
+            self.original_verification_receipt['error']='not attempted: callback quiescence unproven'
         if self.stream is not None:
+            def record_verification():
+                receipt=self.original_verification_receipt
+                receipt.update(script_unloaded=self.script is None,
+                               session_detached=self.session is None,
+                               cleanup_errors=list(self.cleanup_errors))
+                self._record(receipt)
+            steps.append(('host Original verification receipt',record_verification))
             steps.append(('close journal', self.stream.close))
         self.policy.cleanup_steps(steps, self.cleanup_errors)
         self.closed=self.script is None and self.session is None

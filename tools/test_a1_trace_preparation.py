@@ -89,7 +89,13 @@ class NoFirePreparationTests(unittest.TestCase):
             root=Path(temp)/'disabled';manifest=build(root)
             self.assertIs(manifest['runtime_reviewed'],False)
             for name in ('run_dual.py','colt_preparation.py','a1_input_worker.py','a1_trace_scope.py'):
-                with self.subTest(name=name):self.assertEqual((root/name).read_bytes(),(Path(PACKAGE)/name).read_bytes())
+                expected=Path(PACKAGE)/name
+                # The guard-cleanup library supplies the one explicitly revised
+                # Worker source; CP/runner/controls retain the old pinned bytes.
+                library=os.environ.get('TSE_A1_INPUT_PRIVATE')
+                if name=='a1_input_worker.py'and library and (Path(library)/name).is_file():
+                    expected=Path(library)/name
+                with self.subTest(name=name):self.assertEqual((root/name).read_bytes(),expected.read_bytes())
 
     def test_actual_control_branch_invokes_same_cp_without_collector_setup(self):
         import textwrap

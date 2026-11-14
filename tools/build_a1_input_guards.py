@@ -65,7 +65,7 @@ def generate(originals, output):
              ('GameMP.dll',0x60850390,0xe0,'Original full GetAxisValue'),
              ('GameMP.dll',0x60851190,11,'Original Game pointer getter'),
              ('GameMP.dll',0x60851231,0xd6,'Original timer input/action callers and character offset'),
-             ('GameMP.dll',0x608511a0,0x3b,'Original GameHandleTimer prologue binds EDI Game'),
+             ('GameMP.dll',0x608511a0,0x3b,'Original GameHandleTimer prologue; static EDI flow only'),
              ('GameMP.dll',0x6086156c,36,'Original CControls vtable through CreateAction'),
              ('Engine.dll',0x600cb020,4,'Original IsInputEnabled getter'),
              ('Engine.dll',0x6019ab60,29,'Original IsPaused including fallback'),
@@ -94,12 +94,13 @@ def generate(originals, output):
     # export/IAT evidence is retained privately. No new callback/call is added.
     if struct.unpack('<I',pe['GameMP.dll'].region(0x2158c,4))[0]!=0x60850470:
         raise ValueError('Original vtable CreateAction target differs')
-    timer_gate=dict(schema='original107-timer-guard-observation-v1',
+    timer_gate=dict(schema='original107-timer-guard-observation-v2',
         game_on_offset=0xf54,game_menu_offset=0xf58,input_enabled_offset=4,
         network_pointer_rva=0x20d6a4,network_guard_rva=0x20d6b8,
         network_session_offset=0x20,session_pause_offset=0xa8,
         network_local_pause_offset=0x854,controls_vtable_rva=0x2156c,
-        controls_action_slot_offset=0x20,caller_game_register='edi',
+        controls_action_slot_offset=0x20,diagnostic_register='edi',
+        game_binding='arm_global_lifetime_verified',caller_register_binding_proven=False,
         original_getters={
             'is_input_enabled':dict(module='Engine.dll',va=0x600cb020,rva=0xb020),
             'is_paused':dict(module='Engine.dll',va=0x6019ab60,rva=0xdab60,game_iat_rva=0x2129c),

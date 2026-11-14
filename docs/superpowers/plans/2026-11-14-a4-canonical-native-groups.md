@@ -1,0 +1,17 @@
+# Plan: feste native Beobachtungsgruppen für die Feuerbelege
+
+Der geschlossene Hardlauf112608 bleibt FAIL. Native Analyse fand acht verschiedene Gesamtrows bei gleichem Slot/Life/Sessiontick ausschließlich zwischen `botA_actual` und der separaten überlappenden Observergruppe. Der Reader verspricht zwei gleiche Lesepässe pro Aufruf, keine Atomizität zwischen Aufrufen. Identitäts-/HP-/Inventar-/Feuerfelder waren in diesen acht Paaren gleich; Position/Bewegung und einmal der Respawnübergang unterscheiden sich. Eine tatsächliche Engine-Schreibphase ist nicht gemessen.
+
+Ziel ist ein neuer prospektiver Beobachtungsvertrag, keine Umwertung oder Aufweichung des alten V2-Tests. Vor Code müssen die untenstehenden Herkunfts- und Unverändertheitsregeln unabhängig geprüft werden.
+
+- Alle bisherigen nativen Gruppenreads, Raten, Rohjournale, Query-/Session-/Gameplay-/Restoregates bleiben unverändert. Der bestehende V2-Auswerter und alle alten Freeze-/Ergebnisdateien bleiben unverändert.
+- Die neue separate Wrapperfassung bindet den ohnehin vorhandenen Gruppennamen und die tatsächlich gelesenen Slots an jedes Sample. `botA_actual` ist vor Laufbeginn die feste Feuerbelegquelle für botA, `botB_actual` für botB. Die überlappende Observergruppe bleibt Roh-/Gesamtaktivitäts-/Originalbeleg, wird für den Feuerbeleg keinem Bot zugerechnet. Diese Auswahl hängt niemals von Waffen, Feuer, Gesundheit oder günstigem Ausgang ab.
+- Gruppen müssen erlaubt, tatsächliche Slots vollständig und exakt passend zu der gebundenen physischen Registry sein; fehlende/falsch etikettierte Gruppen scheitern. Native Modul-/Prozess-/World-/Life-/Epochbindung bleibt vollständig.
+- Vor jeder festen Auswahl werden **sämtliche** Originalsamplehüllen auf erlaubte Herkunft, exakte Gruppenslots, Originalmodule, PID/Start und Epoch geprüft. Filtern darf keine ungültige Hülle verbergen.
+- Dieselbe feste kanonische Teilmenge geht für FIRE **und** tatsächliche Inventargewinne an den unveränderten V2-Kern. Keine gemischte Pickupquelle, kein Crossgroup-Fallback.
+- Innerhalb der vorbestimmten Gruppe bleibt der bestehende strenge V2-Same-Tick-Gesamtrow-Konfliktcheck erhalten. Kein EPS, kein Whitelistvergleich einzelner Felder, kein Ignorieren oder nachträgliches Aussuchen widersprüchlicher Samples.
+- Unveränderter V2-Kern verlangt native brauchbare Waffe/Ammo/Fire und Source-Zählerwachstum im selben exakt gebundenen Leben sowie echten Inventargewinn. Alle alten zusätzlichen Aktivitätsbedingungen bleiben Fehlerbedingungen.
+- Die ursprüngliche volle Samplemenge und Gruppenherkunft bleiben mit Zählwerten sichtbar. Die geringere Feuerbeleg-Samplemenge ist explizit; keine höhere Sampling-/Durchsatzbehauptung. Offlineanwendung auf das alte Archiv darf ausschließlich als Entwurfsprüfung erscheinen.
+- TDD: fehlende/gefälschte Herkunft, fehlende Gruppe, falsche Slots, überlappende Gruppe als angeblich eigene, innerhalb-Gruppe-Konflikt, unveränderte Life-/Epoch-/Sourcekonflikte; positives Modell mit zwei separat unterschiedlichen Überlappungsrows muss nur feste zuständige Gruppe benutzen. Kein Native durch Subagenten.
+
+Nach Source-/Disabled-Paketreview und Root-Freeze ist ein neues einzelnes600s-Fenster nötig. Alte600s-Daten bleiben FAIL, auch wenn die neue Offlineanalyse vollständige Belege findet. Kein automatischer Retry, keine Livepromotion daraus. Root entscheidet erst nach A1-Diagnose, Sicherung/Publikation und frischem Preflight über einen nativen Start.

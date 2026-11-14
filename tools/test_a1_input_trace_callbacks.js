@@ -35,20 +35,20 @@ function fixture(options={}) {
   const c={pid:99,max_records:256,max_calls:1024,ttl_ms:20000,engine_base:ptr(eb).toString(),game_base:ptr(gb).toString(),input:ptr(inp).toString(),game:ptr(go).toString(),controls:ptr(ctl).toString(),source:ptr(so).toString(),player:ptr(pl).toString(),world:ptr(wo).toString(),player_id:559,spawn_clock:.25};
   const g={modules:{'Engine.dll':{preferred_base:eb},'GameMP.dll':{preferred_base:gb}},guards:[{module:'Engine.dll',rva:0xd200,hex:'0000000000000000',length:8,highlow_offsets:[]},{module:'GameMP.dll',rva:0x10470,hex:'0000000000000000',length:8,highlow_offsets:[]}]};
   g.sites={input:{rva:0xd200},cursor_return:{rva:0xd2b2},recenter_call:{rva:0xd56a},recenter_return:{rva:0xd570},action:{rva:0x10470},compose_call:{rva:0x104fe}};
-  g.timer_gate={schema:'original107-timer-guard-observation-v1',game_on_offset:0xf54,game_menu_offset:0xf58,input_enabled_offset:4,network_pointer_rva:0x20d6a4,network_guard_rva:0x20d6b8,network_session_offset:0x20,session_pause_offset:0xa8,network_local_pause_offset:0x854,controls_vtable_rva:0x2156c,controls_action_slot_offset:0x20};
+  g.timer_gate={schema:'original107-timer-guard-observation-v2',game_on_offset:0xf54,game_menu_offset:0xf58,input_enabled_offset:4,network_pointer_rva:0x20d6a4,network_guard_rva:0x20d6b8,network_session_offset:0x20,session_pause_offset:0xa8,network_local_pause_offset:0x854,controls_vtable_rva:0x2156c,controls_action_slot_offset:0x20};
   g.callers={input_return_rva:0x11241,action_return_rva:0x112fb};
   const api=context.rpc.exports;
   function invoke(at,state,leave=false) { const h=hooks.get(at); if(h) (leave?h.onLeave:h.onEnter).call(state); }
   function flushImmediates(){while(immediates.length)immediates.shift()();}
-  function input(dx=12,{recenter=true,thread=99,cursor=true,stopDuring=false,callerGame=go,mutateAfterEntry=null}={}) {
-    const sp=0x80000,bp=sp-4;u(sp,gb+0x11241);u(sp+4,0);u(bp-0x20,dx);u(bp-0x1c,0);
-    const s={threadId:thread,context:{ecx:ptr(inp),edi:ptr(callerGame),esp:ptr(sp),ebp:ptr(bp),eax:ptr(cursor?1:0)}};
+  function input(dx=12,{recenter=true,thread=99,cursor=true,stopDuring=false,callerGame=go,returnEDI=null,rawThis=inp,callerReturn=gb+0x11241,prescan=0,mutateAfterEntry=null}={}) {
+    const sp=0x80000,bp=sp-4;u(sp,callerReturn);u(sp+4,prescan);u(bp-0x20,dx);u(bp-0x1c,0);
+    const s={threadId:thread,context:{ecx:ptr(rawThis),edi:ptr(callerGame),esp:ptr(sp),ebp:ptr(bp),eax:ptr(cursor?1:0)}};
     const enter=hooks.get(eb+0xd200);if(!enter)return;enter.onEnter.call(s);
-    if(mutateAfterEntry)mutateAfterEntry();
+    if(mutateAfterEntry)mutateAfterEntry(s);
     if(stopDuring){api.stop();assert(hooks.size>0);assert.equal(api.drain().in_flight,1);}
     invoke(eb+0xd2b2,s);
     if(recenter) {u(0x81000,0);u(0x81004,0);s.context.esp=ptr(0x81000);invoke(eb+0xd56a,s);s.context.eax=ptr(options.recenterFail?0:1);}
-    invoke(eb+0xd570,s);f(inp+0x24,dx*.25);f(inp+0x38,0);enter.onLeave.call(s);flushImmediates();
+    invoke(eb+0xd570,s);f(inp+0x24,dx*.25);f(inp+0x38,0);if(returnEDI!==null)s.context.edi=ptr(returnEDI);enter.onLeave.call(s);flushImmediates();
   }
   function action(delta=-3,thread=99) {
     const sp=0x82000,a=0x83000;u(sp,gb+0x112fb);u(sp+4,go+0x114);u(sp+8,a);u(sp+12,0);
@@ -74,7 +74,7 @@ test('records timer guards without changing readiness or calling game',()=>{
   const t=fixture();t.api.arm(t.c,t.g);t.input(0,{recenter:false});
   const p=t.api.drain();assert.equal(p.ready,false);const r=p.records[0];
   for(const gate of [r.timer_guard_entry,r.timer_guard_return]) {
-    assert.equal(gate.caller_game,'0x60000');assert.equal(gate.game_on,1);assert.equal(gate.input_enabled,1);
+    assert.equal(gate.observed_game,'0x60000');assert.equal(gate.game_binding,'ARM_GLOBAL_LIFETIME_VERIFIED');assert.equal(gate.caller_game_binding_proven,false);assert.equal(gate.game_on,1);assert.equal(gate.input_enabled,1);
     assert.equal(gate.menu_on,0);assert.equal(gate.network,'0x78000');assert.equal(gate.network_global_guard,0);
     assert.equal(gate.session_pause_word,0);assert.equal(gate.local_pause_word,0);
     assert.equal(gate.controls_vtable,'0x42156c');assert.equal(gate.virtual_action_target,'0x410470');
@@ -86,9 +86,26 @@ test('entry and return snapshots retain an intervening guard change',()=>{
   const t=fixture();t.api.arm(t.c,t.g);t.input(0,{recenter:false,mutateAfterEntry:()=>t.u(t.net+0x854,1)});
   const row=t.api.drain().records[0];assert.equal(row.timer_guard_entry.local_pause_word,0);assert.equal(row.timer_guard_return.local_pause_word,1);t.api.stop();
 });
-test('wrong caller Game register fails before any action readiness',()=>{
-  const t=fixture();t.api.arm(t.c,t.g);t.input(0,{recenter:false,callerGame:0x61000});
-  const p=t.api.drain();assert.equal(p.ready,false);assert(p.faults>0);assert.equal(p.enabled,false);t.api.stop();
+test('raw EDI is separate per callback and never dereferenced as Game',()=>{
+  const t=fixture();t.api.arm(t.c,t.g);t.input(0,{recenter:false,callerGame:0,returnEDI:0x61003});
+  const p=t.api.drain();assert.equal(p.ready,false);assert.equal(p.faults,0);assert.equal(p.enabled,true);
+  const r=p.records[0];assert.equal(r.timer_guard_entry.callback_phase,'entry');assert.equal(r.timer_guard_return.callback_phase,'return');
+  assert.equal(r.timer_guard_entry.raw_edi,'0x0');assert.equal(r.timer_guard_return.raw_edi,'0x61003');
+  for(const g of [r.timer_guard_entry,r.timer_guard_return]) {
+    assert.equal(g.observed_game,'0x60000');assert.equal(g.raw_edi_matches_bound_game,false);assert.equal(g.game_on,1);
+    assert.equal(g.caller_game_binding_proven,false);assert.equal(g.actual_branch_proven,false);
+  }
+  t.action(0);assert.equal(t.api.drain().ready,true);t.api.stop();
+});
+test('raw EDI observation cannot replace changed Arm Game global lifetime',()=>{
+  const t=fixture();t.api.arm(t.c,t.g);t.u(t.gb+0x2fba4,0x61000);t.input(0,{recenter:false,callerGame:0});
+  const p=t.api.drain();assert(p.faults>0);assert.equal(p.ready,false);assert.equal(p.enabled,false);t.api.stop();
+});
+test('diagnostic EDI cannot relax actual this caller or prescan guards',()=>{
+  for(const options of [{rawThis:0x61000},{callerReturn:0x411250},{prescan:1}]) {
+    const t=fixture();t.api.arm(t.c,t.g);t.input(0,{recenter:false,callerGame:0,...options});
+    const p=t.api.drain();assert(p.faults>0);assert.equal(p.enabled,false);assert.equal(p.ready,false);t.api.stop();
+  }
 });
 test('each observed post-input pause/game guard is visible without readiness',()=>{
   for(const which of ['game','global','session','local']) {

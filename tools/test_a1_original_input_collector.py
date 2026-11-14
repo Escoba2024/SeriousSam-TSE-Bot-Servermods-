@@ -160,6 +160,97 @@ class CollectorPolicyTests(unittest.TestCase):
             self.assertNotIn('unload',calls);self.assertNotIn('detach',calls)
             self.assertFalse(c.closed)
 
+    def test_full_original_receipt_survives_sticky_trace_failure(self):
+        m=self.module();events=[];rows=[]
+        class Exports:
+            def stop(self):events.append('stop')
+            def drain(self):return dict(faults=1,dropped=0,detach_errors=[],enabled=False,
+                stop_reason='synthetic prior trace fault',in_flight=0,native_qualified=False,
+                game_state_writes=0,records=[],restored=True)
+        with tempfile.TemporaryDirectory()as d:
+            c=m.Collector(None,{},Path(d),lambda:True)
+            c.script=type('S',(),{'exports_sync':Exports(),'unload':lambda self:events.append('unload')})()
+            c.session=type('S',(),{'detach':lambda self:events.append('detach')})()
+            c.stream=type('J',(),{'close':lambda self:events.append('stream close')})()
+            c._host_pin=lambda:None;c._record=lambda row:rows.append(dict(row))
+            c.message_guard=type('G',(),{'check':lambda self:None})()
+            c.policy=type('P',(),{'cleanup_steps':staticmethod(self.run_steps)})
+            c.verify_original=lambda:events.append('verify full Original')
+            with self.assertRaises(RuntimeError):c.close()
+            proof=[r for r in rows if r['phase']=='host-original-verification']
+            self.assertEqual(len(proof),1)
+            self.assertIs(proof[0]['attempted'],True);self.assertIs(proof[0]['verified'],True)
+            self.assertIsNone(proof[0]['error']);self.assertTrue(proof[0]['cleanup_errors'])
+            self.assertTrue(c.original_bytes_verified);self.assertTrue(c.closed);self.assertTrue(c.failed)
+            self.assertEqual(events[-2:],['verify full Original','stream close'])
+
+    def test_failed_full_original_compare_is_explicitly_false_before_stream_close(self):
+        m=self.module();events=[];rows=[]
+        class Exports:
+            def stop(self):pass
+            def drain(self):return dict(faults=0,dropped=0,detach_errors=[],enabled=False,
+                stop_reason='host requested',in_flight=0,native_qualified=False,
+                game_state_writes=0,records=[],restored=True)
+        with tempfile.TemporaryDirectory()as d:
+            c=m.Collector(None,{},Path(d),lambda:True)
+            c.script=type('S',(),{'exports_sync':Exports(),'unload':lambda self:events.append('unload')})()
+            c.session=type('S',(),{'detach':lambda self:events.append('detach')})()
+            c.stream=type('J',(),{'close':lambda self:events.append('stream close')})()
+            c._host_pin=lambda:None;c._record=lambda row:rows.append(dict(row))
+            c.message_guard=type('G',(),{'check':lambda self:None})()
+            c.policy=type('P',(),{'cleanup_steps':staticmethod(self.run_steps)})
+            def fail_verify():events.append('verify');raise OSError('synthetic byte mismatch')
+            c.verify_original=fail_verify
+            with self.assertRaises(RuntimeError):c.close()
+            proofs=[r for r in rows if r['phase']=='host-original-verification']
+            self.assertEqual(len(proofs),1)
+            proof=proofs[0]
+            self.assertTrue(proof['attempted']);self.assertFalse(proof['verified'])
+            self.assertIn('byte mismatch',proof['error']);self.assertFalse(c.original_bytes_verified)
+            self.assertEqual(events,['unload','detach','verify','stream close'])
+
+    def test_failed_unload_pending_callback_or_journal_cannot_hide_cleanup_failure(self):
+        m=self.module()
+        for mode in ('unload','pending','journal'):
+            with self.subTest(mode=mode),tempfile.TemporaryDirectory()as d:
+                events=[];rows=[];c=m.Collector(None,{},Path(d),lambda:True)
+                class Exports:
+                    def stop(self):pass
+                    def drain(self):return dict(faults=0,dropped=0,detach_errors=[],enabled=False,
+                        stop_reason='host requested',in_flight=int(mode=='pending'),native_qualified=False,
+                        game_state_writes=0,records=[],restored=mode!='pending')
+                def unload():
+                    events.append('unload')
+                    if mode=='unload':raise RuntimeError('synthetic unload failure')
+                c.script=type('S',(),{'exports_sync':Exports(),'unload':staticmethod(unload)})()
+                c.session=type('S',(),{'detach':lambda self:events.append('detach')})()
+                c.stream=type('J',(),{'close':lambda self:events.append('stream close')})()
+                c._host_pin=lambda:None
+                def record(row):
+                    if mode=='journal'and row['phase']=='host-original-verification':
+                        raise OSError('synthetic receipt journal failure')
+                    rows.append(dict(row))
+                c._record=record;c.message_guard=type('G',(),{'check':lambda self:None})()
+                c.policy=type('P',(),{'cleanup_steps':staticmethod(self.run_steps)})
+                c.verify_original=lambda:events.append('verify')
+                with patch.object(m.time,'monotonic',side_effect=[0,2]):
+                    with self.assertRaises(RuntimeError):c.close()
+                self.assertTrue(c.failed);self.assertTrue(c.cleanup_errors)
+                self.assertEqual(events[-1],'stream close')
+                if mode=='pending':
+                    self.assertFalse(c.original_bytes_verified);self.assertNotIn('verify',events)
+                    proof=[r for r in rows if r['phase']=='host-original-verification'][0]
+                    self.assertFalse(proof['attempted']);self.assertFalse(proof['verified'])
+                    self.assertFalse(proof['script_unloaded']);self.assertFalse(c.closed)
+                elif mode=='unload':
+                    # Actual bytes and resource cleanup are independent facts.
+                    self.assertTrue(c.original_bytes_verified);self.assertFalse(c.closed)
+                    proof=[r for r in rows if r['phase']=='host-original-verification'][0]
+                    self.assertTrue(proof['verified']);self.assertFalse(proof['script_unloaded'])
+                else:
+                    self.assertTrue(c.original_bytes_verified);self.assertTrue(c.closed)
+                    self.assertIn('receipt',str(c.cleanup_errors))
+
     @unittest.skipUnless(os.environ.get('TSE_A1_INPUT_PRIVATE'), 'requires explicit private Original guards')
     def test_real_original_files_pin_six_sites_ten_ranges_and_timer_guards(self):
         import build_a1_input_guards as builder
@@ -173,7 +264,7 @@ class CollectorPolicyTests(unittest.TestCase):
             self.assertEqual(output.read_bytes(),expected)
         guards=json.loads(expected)
         chain=guards['timer_gate']
-        self.assertEqual(chain['schema'],'original107-timer-guard-observation-v1')
+        self.assertEqual(chain['schema'],'original107-timer-guard-observation-v2')
         self.assertEqual(chain['network_local_pause_offset'],0x854)
         self.assertEqual(chain['controls_vtable_rva'],0x2156c)
         self.assertEqual(chain['original_getters']['get_local_pause']['va'],0x6019ac30)

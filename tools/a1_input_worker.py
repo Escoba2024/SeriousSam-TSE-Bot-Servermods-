@@ -156,7 +156,7 @@ def worker(config_path,fd):
             try:
                 if method not in ('arm','drain','before_input','close'):raise RuntimeError('worker command allowlist')
                 if method=='close':
-                    collector.close();result={'closed':collector.closed,'original_bytes_verified':collector.closed and collector.used and not collector.cleanup_errors}
+                    collector.close();result={'closed':collector.closed,'original_bytes_verified':collector.original_bytes_verified}
                 else:result=getattr(collector,method)(**request['kwargs'])
                 reply={'id':seq,'ok':True,'result':result}
             except BaseException as error:reply={'id':seq,'ok':False,'error':repr(error)}
