@@ -1,0 +1,111 @@
+--- a/colt_preparation.py
++++ b/colt_preparation.py
+@@ -409,0 +410,3 @@
++        receipt['stage']='diagnostic-stop-before-fire'
++        now();receipt.update(status='TRACE_ONLY_NO_FIRE',normal_fire_control_completed=False,diagnostic_only=True)
++        return receipt
+--- a/run_dual.py
++++ b/run_dual.py
+@@ -16 +16,3 @@
+-RUNTIME_REVIEWED=True
++from a1_input_worker import WorkerProxy,start_ticks
++from a1_trace_scope import InputScope,trace_complete
++RUNTIME_REVIEWED=False
+@@ -21 +23 @@
+-PREFIX='ssam-a1-nosmooth-root-20261114'
++PREFIX='ssam-a1-input-trace-20261114'
+@@ -180 +182,2 @@
+-def main(duration=30):
++def main(duration=30,mode='instrumented-trace'):
++ assert mode in ('instrumented-trace','uninstrumented-control'),'fixed diagnostic mode'
+@@ -198 +201 @@
+- E=BASE/('a1-colt-preparation-'+time.strftime('%Y%m%d-%H%M%S',time.gmtime()));E.mkdir(mode=0o700)
++ E=BASE/('a1-input-trace-'+time.strftime('%Y%m%d-%H%M%S',time.gmtime()));E.mkdir(mode=0o700)
+@@ -201,2 +204,2 @@
+- records={};displays={};pins={};endpoints={};streams=[];inventory=None;vanilla_inventory=None;rotation_samples=[];rotation_stream=None;rotation_attempt_stream=None;transaction=None;frames=[];budget=HostBudget();last_host=-100.;last_query=-100.;last_sample=-100.;last_good_sample=-100.;samples=[];mapping=None;slots=None;started=None
+- report={'status':'IN_PROGRESS','qualified':False,'input_once_proven':False,'first_processed_state_proven':False,'actual_shot_proven':False,'foreign_hit_proven':False,'normal_route_or_fire':False,'diagnostic_only':False,'scope':'OWN_TWO_ORIGINAL_CLIENT_RD_THEN_START_COLT_AIM_FIRE_HP_OBSERVATION_NO_HOOKS','errors':[],'input_receipts':[],'events':[],'native_summary':{},'duration_requested':duration}
++ records={};displays={};pins={};endpoints={};streams=[];inventory=None;vanilla_inventory=None;collector=None;input_scope=InputScope();rotation_samples=[];rotation_stream=None;rotation_attempt_stream=None;transaction=None;frames=[];budget=HostBudget();last_host=-100.;last_query=-100.;last_sample=-100.;last_good_sample=-100.;samples=[];mapping=None;slots=None;started=None
++ report={'status':'IN_PROGRESS','qualified':False,'input_once_proven':False,'first_processed_state_proven':False,'actual_shot_proven':False,'foreign_hit_proven':False,'normal_route_or_fire':False,'diagnostic_only':False,'scope':'OWN_ORIGINAL_INHERITED_CALIBRATION_AIM_NO_FIRE','observer_mode':mode,'collector_requested':mode=='instrumented-trace','errors':[],'input_receipts':[],'events':[],'native_summary':{},'duration_requested':duration}
+@@ -310,0 +314 @@
++   if collector is not None:collector.drain()
+@@ -454,0 +459,5 @@
++    trace_pixels=input_scope.admit(role,control,seconds,pixels)
++    assert mode=='uninstrumented-control'or collector is not None,'no input before collector complete binding'
++    def traced_before_press():
++     if mode=='instrumented-trace':collector.before_input(control=control,pixels=trace_pixels)
++     before_press()  # inherited final fresh paired-state/ACK guards remain last
+@@ -460 +469 @@
+-    try:row=action_step(endpoints,step,time.monotonic,time.sleep,periodic,before_release=lambda:None,timing=phase_timing,before_press=before_press)
++    try:row=action_step(endpoints,step,time.monotonic,time.sleep,periodic,before_release=lambda:None,timing=phase_timing,before_press=traced_before_press)
+@@ -464,0 +474,36 @@
++   def trace_preparation():
++    nonlocal collector
++    if mode=='uninstrumented-control':
++     assert collector is None,'uninstrumented control must have no collector'
++     return CP.run_preparation(native_rotation_pair,native_roles,bounded_step,capture,time.monotonic,time.sleep,report['shooter_preparation'],started=started,require_successful_read_sequence=True)
++    import struct
++    # Fresh existing paired reader binds the actual Original entity/life; this
++    # does not call any game getter or write action/game memory.
++    frame=native_roles();player=frame['client_roles']['vanilla'];reader=vanilla_inventory
++    reader._guard();engine=reader.bases['Engine.dll'];game=reader.bases['GameMP.dll']
++    observed=report['controls_input_profile']['effective']['sample']
++    reg={'role':'vanilla','pid':reader.identity[0],'start_ticks':reader.identity[1],
++     'cwd':str(R/'vanilla'),'game_sha256':P.ORIGINALS['GameMP.dll'],
++     'map_world_sha256':manifest['world']['world_sha256'],'map_crc32':manifest['world']['world_crc32'],
++     'namespace_inodes':{n:(Path('/proc')/str(reader.identity[0])/'ns'/n).stat().st_ino for n in ('pid','mnt','user')},
++     'net_namespace_inode':(Path('/proc')/str(reader.identity[0])/'ns/net').stat().st_ino,
++     'modules':{n:{'path':str(R/'vanilla/Bin'/n),'base':pin['base'],'inode':pin['signature'][1],
++      'device':pin['signature'][0],'sha256':pin['sha256']}for n,pin in pins['vanilla'].items()},
++     'arm':{'engine_base':hex(engine),'game_base':hex(game),
++      'input':hex(struct.unpack('<I',reader._read(engine+0x1f178c,4))[0]),
++      'game':hex(struct.unpack('<I',reader._read(game+0x2fba4,4))[0]),
++      'controls':hex(observed['controls_address']),'source':hex(observed['source_pointer']),
++      'player':hex(player['entity_pointer']),'world':hex(player['world_pointer']),
++      'player_id':player['entity_id'],'spawn_clock':player['spawned_tick']}}
++    for role in P.ROLES:own_identity(role)
++    query(2);st=(R/'runtime.lock').stat()
++    config={'controller_root':str(DRAFT),'evidence':str(E),'arena':str(R),'registry':reg,
++     'collector_source':manifest['collector_source'],
++     'parent':{'pid':os.getpid(),'start_ticks':start_ticks(os.getpid()),'lock_file':[st.st_dev,st.st_ino]},
++     'roles':{r:{'identity':rec['identity'],'unit':unit(r),
++      'net_namespace_inode':(Path('/proc')/str(rec['identity'][0])/'ns/net').stat().st_ino}for r,rec in records.items()}}
++    config_path=E/'collector-config.json'
++    with config_path.open('x')as output:json.dump(config,output,indent=2)
++    config_path.chmod(0o600)
++    collector=WorkerProxy.start(config_path);report['collector_arm']=collector.arm();save()
++    return CP.run_preparation(native_rotation_pair,native_roles,bounded_step,capture,time.monotonic,time.sleep,report['shooter_preparation'],started=started,require_successful_read_sequence=True)
+@@ -467 +512 @@
+-    lambda: CP.run_preparation(native_rotation_pair,native_roles,bounded_step,capture,time.monotonic,time.sleep,report['shooter_preparation'],started=started,require_successful_read_sequence=True))
++    trace_preparation)
+@@ -471,2 +516,2 @@
+-   report.update(diagnostic_only=False,normal_route_or_fire=True,input_once_proven=False,foreign_hit_proven=False,duration_bound_seconds=duration,full_requested_window_observed=False)
+-   assert report['shooter_preparation']['status']=='PREPARATION_COMPLETED_REVIEW_REQUIRED','normal preparation not completed'
++   report.update(diagnostic_only=True,normal_route_or_fire=False,input_once_proven=False,foreign_hit_proven=False,duration_bound_seconds=duration,full_requested_window_observed=False)
++   assert report['shooter_preparation']['status']=='TRACE_ONLY_NO_FIRE','trace-only preparation not completed'
+@@ -476,0 +522,6 @@
++   # Parent never enters Frida: a hung attach/RPC/unload is confined to worker.
++   # Stop/detach/byte verification runs before readers and normal role cleanup.
++   if collector is not None:
++    try:report['collector_cleanup']=collector.close()
++    except BaseException as error:report['errors'].append('collector close:'+repr(error))
++    finally:report['collector_ipc_timings']=list(collector.timings)
+@@ -483,0 +535,5 @@
++   if collector is not None:
++    try:
++     quiescent();assert all(rec.get('closed')is True for rec in records.values()),'own normal role cleanup incomplete'
++     report['collector_worker']=collector.finish(roles_closed=True)
++    except BaseException as error:report['errors'].append('collector worker retained:'+repr(error))
+@@ -485,3 +541,7 @@
+-   if report['status']=='CLEANUP_PENDING':report['status']='PASS_LIMITED_NORMAL_PREPARATION_REVIEW_REQUIRED'
+-   verdict=finalize_trial_evidence(report,expected_roles=P.ROLES);report['status']=verdict.status;report['final_evidence_reasons']=list(verdict.reasons);save()
+-   if not verdict.accepted:raise RuntimeError('dual input window rejected; see '+str(E/'result.json'))
++   if report['status']=='CLEANUP_PENDING':report['status']='TRACE_ONLY_NO_FIRE'if mode=='instrumented-trace'else'CONTROL_ONLY_NO_FIRE'
++   verdict=finalize_trial_evidence(report,expected_roles=P.ROLES)
++   report['generic_trial_accepted']=verdict.accepted;report['final_evidence_reasons']=list(verdict.reasons)
++   report['trace_evidence_complete']=trace_complete(report,verdict)
++   if not report['trace_evidence_complete']:report['status']='FAIL'
++   save()
++   if not report['trace_evidence_complete']:raise RuntimeError('trace-only evidence incomplete; see '+str(E/'result.json'))
+@@ -490 +550 @@
+- parser=argparse.ArgumentParser(description='Root-only OFFLINE-reviewed two OriginalVanilla input proof; no hooks');parser.add_argument('--seconds',type=int,default=90,choices=(90,));main(parser.parse_args().seconds)
++ parser=argparse.ArgumentParser(description='Disabled own Original passive trace, inherited calibration/aim, no fire; Root freeze required');parser.add_argument('--seconds',type=int,default=90,choices=(90,));parser.add_argument('--mode',choices=('instrumented-trace','uninstrumented-control'),default='instrumented-trace');args=parser.parse_args();main(args.seconds,args.mode)

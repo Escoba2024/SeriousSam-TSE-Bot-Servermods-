@@ -1,3 +1,23 @@
+## Vorbereiteter A1-Checkpoint — 14.11.2026,10:20UTC
+
+NochkeinNative-/Build-/Liveexecutoraktiv. A1NoFire/Kontrollmodus vollständigintegriertbis6b2c260, Reviewdoku9da0b24; unabhängigerGesamtreview ohnekritisch/wichtig, Root63OfflinechecksPASS. Rootfreeze undMetadatenrecheckdurcha4_diagnosisPASS:68Runtime/13Library/46Diagnosepins. `/srv/tse-a1-input-trace-root-frozen-20261114`, Manifest2e3bf79b98e76edad4ef04a78539a58dbe85a380a4689bd8f48a23defffc7eff, Library8b35089195147d80e6e59aa9ad6f15f86e8e556286a8fa4b677a961b9e45dbce. ExakteCodehashes/Grenzen imReport `docs/reports/2026-11-14-a1-input-trace-root-checkpoint.md`.
+
+NächsterRootschritt nachbeendeterVeröffentlichung/Sicherung: frischerPreflight, genauuninstrumented-control starten; Owner/Log/Ended a1-input-uninstrumented-control imRootbelegordner. Ergebnis/Normalclose/Schlusslogs/unabhängigenRestoreprüfen; erst danachfrischerPreflight undein instrumented-trace. BeideModigarantiertNoFire; keinA1PASSdurchDiagnose. KeineRootparallelreader/Publikation/Archive/Tests imNativefenster. BeideWorker nurnochstatisch: candidate_auditkonkreterA3Controller/Analyzer, a4_diagnosisunabhängigerHardStabilityreview.
+
+Delta027externvollständigPASS:6584985Bytes/SHA256b00f86e20799062ec4cdb894f80826134eba2157c2465afc5f48812dba02f1fb, Drive1R3uP8vjbq4HItIElGP3i0RQ_NhH96vXn, Dateirestore971/19943529Bytes+MetadatenPASS. NeueMessungennochunenthalten. AktuellerFlottenstand018je8/HardnurDev+Red; Aoffen/Bunimplementiert. FrühV2CPU80,0959%FAIL unverändert, RootrestorePASS.
+
+---
+
+## Geschlossener Checkpoint — 14.11.2026,10:10UTC
+
+**Kein Native-/Build-/Liveexecutor aktiv.** ProspektiverV2-Lauf frühFAILCPU80,095923%>75%, vor erster120sPhase. KeineV2-/020Freigabe. Alle4Rollen regulärzu; Root643Dateien/5Absenzen/Metadaten/4SchlussloghashesPASS. Result762713c0a1c0e688008e641bda62813c850a7f49beaf3ff9be8e1a5b0ce41f4b. Originalpreflight10:09:06UTCfrei/LocksPASS. Bericht `docs/reports/2026-11-14-build020-fire-v2-resource-failure.md`.
+
+Root-Publikation mit parallelenPythonlesern überlappte das Fenster; keinezeitgleichen vollständigenPID-CPU-Deltas, daherkeinealleinigeUrsachenbehauptung. VorneuemFenster müssen auchRootPublikationen/Sicherungen/Parallelreaderbeendet sein. UnveränderteGrenzen; keineautomatischeWiederholung. BeideWorker dürfenjetzt gezielteleichteOfflineprüfungenfürA1Controlmodus/Workerstartfix machen, weiterhinkeinAttach/Runtime/Compiler.
+
+A1-NoFire-Controlleradd4ed4 istkonkretvorbereitet, aber nochunabhängigimReview. Autor ergänztmatched uninstrumentierten Kontrollmodus und begrenztes Reaping eines nachPopenfehlgeschlagenen, nochunarmedWorkers. KeineTSEMessunggestartet. RootHard2-Stabilitätsadapter weiterdeaktiviert/31OfflinechecksPASS, unabhängigerReviewoffen. Remote3ed453da47ea94ec1af065a896e38045eeda12b8/Tree7f18928fc1f9253a570b7e06fedeef3617109f9d entsprichtfrischgefetchtem lokalf1c2dd2. SpätereFehlerdoku nochveröffentlichen undDelta027sichern. Flotteweiter018je8, Hard2nurDev/Red, Aunvollständig/Bunimplementiert.
+
+---
+
 ## Aktiver A4-Checkpoint — 14.11.2026,10:05UTC
 
 Genau ein neuer isolierter prospektiver Build020-A4-Lauf mit FeuerobserverV2 ist aktiv. Rootowner `/srv/tse-cecil-rollout-evidence-20261114/a4-fire020-v2-owner.json`, Log `a4-fire020-v2-native.log`, nach Ende `a4-fire020-v2-ended.json`. Freeze `/srv/tse-a4-fire020-v2-root-frozen-20261114`, Manifest2b55f08482586b73d08e6e88fd607603b5687b1789937e5bb6161b980274cdd4, Launcher397d1193ed502ef53732567c8568538152cf0f17186d522f8823bbb10b483421.67Runtime-/75Buildpins frisch passend; Adapterbytegleich,69fokussierte RootprüfungenPASS. Beide Worker bestätigen alle Tests beendet und ausschließlich statischeArbeit während dieses Fensters.
