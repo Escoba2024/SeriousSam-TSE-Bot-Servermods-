@@ -1,3 +1,19 @@
+## A1-Fehler jetzt konkret gemessen — 14.11.2026, 13:33 UTC
+
+Kein Native-/Build-/Liveexecutor aktiv. Einzelfenster133108 bleibtFAIL vorInput, Resultd2755f6d65122a3f27dfee577c9539cb7a4224cb1ed6e46eb99209668ac5d239. Private0600Mappingquittung: OriginalvanillaEngine vorher600c0000–600fe000r-xp/offset0 wird in3lückenlose r-xpBereiche mit offsets0/d000/e000 aufgeteilt; gleichesFile/Device/Inode/Signatur/Base, übrigeZeilenunverändert. RoheZeilenungleichheitbelegt; keinMappingaccept/Rebaseline. Candidate neuerWT nur Diagnose/Design exakterAdress-/Rechte-/Dateioffsetdeckung vorRootplan. SechsTraceRecords/0Inputs, Originalbytevergleich/Unload/Detachbelegt, eigene3Rollen/Displays/Workerbeendet, Root664+8+3Datei/Metadaten/LogrestorePASS.
+
+A4-V3unabhängigPASS_SCOPE/limitedbestätigt:291/291QueriesHard/9Spieler,alle8Beschaffung/Bewegung/Feuerflags. Keine3Resetphasen/Watchdog/Gefahrenparität/020Freigabe. NächstergetrennterHardmaptestYodeller600s nachfrischemPreflightundbeidenSTATICONLY. Delta033externvollständigPASS; neue133108Raws034offen. Publicfrisch6×8/0Zusätzliche,Red7fc/andere5018. Remote1b207adb/09fbee91gleich3258a89, neue7668+Berichtejetztveröffentlichen. A/Boffen.
+
+---
+
+## Historischer Start einzelner A1-Mappingfehlerbeleg — 14.11.2026, 13:31 UTC
+
+Genau ein passiver Original-NoFire-Lauf startet: /srv/tse-cecil-rollout-evidence-20261114/run-a1-mapping-failure.py, Owner/Log/Ended a1-mapping-failure. Rootfreeze bd83f6e3ad7320e7eed5b9059ec1d107dc295dd60168803eb2cef78f607750ae/Collector9070b44f/Launchera9f2cbb7 unabhängig69/51/14PinsPASS_SCOPE; Root7OfflinefällePASS. Ausschließlich vorhandene harte Mapungleichheit um private Fehlerquittung ergänzt, keine neue Akzeptanz/Inputs/Hooks/Reads. Ziel tatsächliche Differenz archivieren; keinA1PASSbehauptet.
+
+Preflight13:30:43alle4Rollen/Displays/Locks frei,CPU39,84%,RAM3657756672/Disk9390501888. BeideAgenten beendet/STATICONLY; RootalleArchive/Downloads/Publikation/Tests beendet. NachEnde Originalbytevergleich/Unload/Detach/Worker/normal3Closes/Schlusslogs/unabhängigenRestore prüfen. Delta033externfullPASS ac39532f47de83890e5860f92422eaae5f2fd3a49261a90ddd8ad26ee4d7a728/20036940Bytes/1776Dateien samtMetadatenrestore, Drive1VslYvGN3KKJEN4YM2f7L84khRa70eDSR. NeuerBeleg benötigt034. Public13:28weiter6×8,Red7fc/andere5018. Remote1b207adb/tree09fbee91 tatsächlichgleich3258a89; lokale7668e18nochzuveröffentlichen. A/Boffen.
+
+---
+
 ## Geschlossener A4-V3-Hardnachweis — 14.11.2026, 13:24 UTC
 
 Kein Native-/Build-/Liveexecutor aktiv. Red-Hard2/020 nach600,129s PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED; Ergebnis fb668f2a42e51b809ba528aa6d6a3682ab699521e99ace054cdea6e3ccb1db1e. Alle8Slots brauchbare tatsächliche Inventargewinne und gebundene Feuerflagbelege,179Serverkillereignisse, keine neuen Fehler in4vollständigenSchlusslogs. Root640Dateien/Metadaten+4Loghashes/allePIDStartidentitäten/2Displays unabhängigRestorePASS. CPUmax56,818%,RAMmin2706440192/Diskmin9670295552,Gameplaygap1,166s; allgemeinerBudgetclaimfalse/Startupgap46,579s. KeineAtomizität/Waffenfunktionscalls/Erstzustand/Reset-/Watchdogabnahme behauptet, keine020Livepromotion.
