@@ -62,6 +62,8 @@ Vor Umsetzung eigenes konkretes Design anhand Originalauftrag und vorhandener In
 
 ## Ausführungsledger
 
+15:43 UTC: Eigener Syncversuch150433 geschlossen FAIL wegen verschwindendemFD; drei Paare je456gleich/0diff, kein voller600s-/WANnachweis. Vier normaleCloses/Root640+4RestorePASS. Dev siebenneueBAD/0Disconnect bis15:17; kontrollierter eigenerBot-onlyRollback15:22 aufCecil048, Dedicated/Identitäten unverändert;90,340s/43Queries8eigene+1NutzerOriginal/alle8Bewegung/0neueFehler. Red/YodelGen2,Skulls/Trouble/Hole018,Dev048. FD-Fix nur offline; A/Boffen. Delta022–037externPASS;038offen. Handoffhistorie bytegleich archiviert, aktuellerHandoff gekürzt.
+
 14:54 UTC: A1-Eingabezeiten imneuenLaufalle3PASS, Gesamtergebnis51e8e0e5FAILwegenunterschiedlichemXTest→ACK-Gain: rechtsderselbeCursorversatz2×gelesen, links1×, Ereignisursacheoffen. Root664+8+3RestorePASS. Eigener018/Yodeller-Capture145119FAILbeimJSON-Tuple/Listvergleichvortcpdump/Release, Root640+4RestorePASS, kein600s-/Syncnachweis. EngerKorrekturplanf78a1fd; zweiAgentennurofflineJSON-RegressionundXRecordMethodenverfügbarkeit. Live14:54sechs×8/0Zusätzliche, Red/YodellerGen2/andere4Build018, seit13:51keineneuenServerfehler.036externfullPASS, neueBelege037offen.
 
 14:42 UTC: A1-Releasefix6f6e6b3 integriert; Root20 neue/27 historische Offlinefälle PASS. Rootfreeze26655170 und A3-Rootfreeze272d04e3 separat PASS_SCOPE; A3 Root59 gezielte Offlinefälle PASS. Noch kein neuer Native-Lauf, A1 f66266f9 bleibtFAIL. Live14:38 sechs×8, Red/YodellerGen2, andere4Build018; sechs Serverpräfixe seit13:51 null neue Fehler. Delta035 externes Rücklesen läuft; A4-PCAP-Fork noch offline. Vor Native Archive/Reader beenden, frischer Preflight.

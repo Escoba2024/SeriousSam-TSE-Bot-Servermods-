@@ -1,0 +1,13 @@
+# Dev: Syncbefund und begrenzter Rückrollnachweis
+
+Am 14.11.2026 um15:17:35UTC enthielt das gegen das14:54-Präfix geprüfte Dev-Serverlog sieben neue SYNCBAD-Meldungen, keinen neuen Syncdisconnect. Beide eigenen Botlogs enthielten keine BAD-/Disconnectmeldung. Andere fünf Server hatten in diesem Vergleich keine neuen entsprechenden Ereignisse. Der Nutzer bestätigt den aktuell zusätzlichen Teilnehmer als seinen unveränderten TSE-1.07-Client; dessen geladene Module und die Zuordnung sämtlicher historischer BAD-Zeilen sind dadurch noch nicht geprüft.
+
+Root sicherte Build018-DLL, aktive Konfiguration, Metadaten, Identitätsdateien, Units und Logs, schloss ausschließlich die eigenen Dev-Botclients regulär und stellte den verifizierten Vorrolloutstand Cecil048 wieder her. Geladene Botmodule wurden gegen SHA256 `ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530` geprüft. Dedicated-PID1336140/start_ticks127116227 und seine Powerup-DLL `fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0` blieben unverändert. Identitätsinventare stimmen überein. Ergebniszeit15:22:24UTC.
+
+Die anschließende90,340237s-Beobachtung mit43Abfragen belegt acht eigene Bots plus den zusätzlichen Teilnehmer, richtige Red-Station-Map, Spawn0 und tatsächliche Cecil-Bewegung aller acht Slots (98–100 unterschiedliche Positionen je Slot). Keine neuen BAD-/Syncdisconnectmeldungen. Status **PASS_LIMITED_POST_ROLLBACK_OPERATING_WINDOW**, keine Ursachenbehebung oder Langzeit-/Vanilla-Gesamtabnahme.
+
+Privater Belegpfad: `/srv/tse-cecil-full-20261107/.codex/evidence/restart-fleet-20261111-development-sync-rollback-20261114-152137/development`. Das vollständige Server-vorher-Log hat3829466Bytes/SHA256 `6e260e404d02a18560f4a73270675960446af06048cf6e91cfe60d2d47ea877e`. Geschlossene eigene Botlog-Sicherungskopien wurden nach vollständigem SHA-Roundtrip verlustfrei gzip-komprimiert; Originaldateimetadaten stehen in `current018/compressed-before-logs.json`. Aktive Logs wurden dabei nicht verändert. Neue Belege benötigen Delta038.
+
+Aktuelle Botgenerationen: botA1436385/start129610621, botB1436491/start129613433. Vor weiterer Mutation frisch prüfen. Rückrollursache bleibt offen; Build020 wurde nicht live übernommen. A und B sind nicht abgeschlossen.
+
+Für den externen Originalclient liegt [Get-TSEOriginalClientEvidence.ps1](../../tools/Get-TSEOriginalClientEvidence.ps1) bereit: ausschließlich geladene Moduldateihashes und begrenzte bereinigte Logzählung, keine Starts/Stops/Inputs/Hooks/Dateischreibvorgänge. Lokal statisch geprüft, mangels Windows-PowerShell hier noch nicht ausgeführt. Referenzabweichungen allein beweisen keine Clientmodifikation. Aktueller Logsnapshot ist kein zeitlich begrenztes Ereignisdelta.
