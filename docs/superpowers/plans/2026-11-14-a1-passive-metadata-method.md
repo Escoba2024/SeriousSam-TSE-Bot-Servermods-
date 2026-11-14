@@ -1,6 +1,6 @@
 # A1: eigene Metadatenmethode vor passiver Retail-Beobachtung
 
-Status: vorbereitet, noch nicht ausgeführt. Fortsetzung des [Adapterplans](2026-11-14-a1-passive-xrecord-adapter.md); Gesamtauftrag/A bleiben offen.
+Status: genau eine tatsächliche Metadatenmethode begrenzt bestanden. Fortsetzung des [Adapterplans](2026-11-14-a1-passive-xrecord-adapter.md); Gesamtauftrag/A bleiben offen.
 
 ## Bindende Grenzen
 
@@ -21,9 +21,9 @@ kein Ersatz für diese neue Metadatenqualifikation.
 - [x] Unabhängiger statischer Review von Kopie, Parent, Fingerprints und Pins.
 - [x] Quellen tatsächlich remote prüfen; Delta045 ins bestehende Driveprojekt
   sichern, vollständig zurücklesen und Dateihashes/Metadaten rekonstruieren.
-- [ ] Frische Belegungs-/Ressourcenprüfung, Worker-STATICONLY und exklusive
+- [x] Frische Belegungs-/Ressourcenprüfung, Worker-STATICONLY und exklusive
   Lab-/Build-/Methodensperren; genau eine Ausführung ohne automatischen Retry.
-- [ ] Ergebnis einschließlich beider normalen Prozessenden, tatsächlich
+- [x] Ergebnis einschließlich beider normalen Prozessenden, tatsächlich
   freiem Display, Requestintervall, Fingerprints und Ressourcen sichern.
 
 Erwarteter begrenzter Status: PASS_OWN_XRECORD_METADATA_BINDING_ONLY,
@@ -49,3 +49,7 @@ der8GiB-Grenze. Bei Unterschreitung abbrechen, keine fremden Daten entfernen.
 Remote435459310cd15c810778a6062132c784c59c74ff/Tree66fb7cba62901235e6fa34aceb2ee3172a1e351d exakt lokal d6f74c5. Delta04534565395B/SHA b1dbe4e97f971c59519640f940c375be84c779952b84b0b72883d941180d4fbb/Drive1Otywl1o6up7W7Zv3-YkMulRH8ampLtc0 vollständig rückgelesen;2305Dateien/388422514B samt uid/gid/mode/mtime_ns zweimal geprüft. Temporäre Rekonstruktion erst danach entfernt. Der erste Reservecheck stoppte vor Extraktion; ausschließlich frisch hashgeprüfte redundante043/044-Downloadkopien entfernt, Originalarchive und Drivekopien erhalten.
 
 Rootparent erster Aufruf stoppte VOR jedem Kindprozess: Lablock legitimer UID65534, falsche neue Root-only-Annahme. Keine Metadatenmethode ausgeführt. Separater Parentv2 pinnt bestehende Inodes/UID/GID/Modi und nutzt unverändert exklusives flock; kein Eigentumswechsel. Exakter neuer AST-Lockblock: drei echte Sperren kurz exklusiv geprüft und freigegeben; vier manipulierte Metadatenfälle korrekt abgewiesen. Parentsha98d7fb230bbddf7de3a250a353944d613fc203c8ea45d3827015fa0f0803c166; ursprünglicher Parent und sein Review unverändert archiviert. Vor Ausführung noch Delta046 für engen Parentfix/Quittungen vollständig sichern. Kein automatischer Native-Retry und keine Toleranzänderung.
+
+## Ergebnis20:12UTC
+
+Genau eine tatsächliche Methode PASS_OWN_XRECORD_METADATA_BINDING_ONLY, Result81c402edfb083d957daa21b12d9901303fea97204c8b661506d2a1fce9dd8135. Requestintervall16→26, beideNormalclosesExit0/reaped/noForce, Display167wirklichfrei; unabhängigeEndprüfungPASS. KeinTSE/Frida/Input/A1. Delta046vorhervollDrive/SHA+10MetadatenPASS. [Bericht](../../reports/2026-11-14-a1-passive-metadata-method.md). NächsterengerSchritt ist bereitsgeplantes passivesOriginal-NoFire-Fenster; neueRootkopiec41b8f20 vorbereitet, unabhängigerReviewundDelta047nochoffen.

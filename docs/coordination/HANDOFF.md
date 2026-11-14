@@ -1,9 +1,21 @@
-# Aktueller Handoff — 14.11.2026,20:10 UTC
+# Aktueller Handoff — 14.11.2026,20:16 UTC
 
 Gesamtauftrag OFFEN. A nicht abgeschlossen, B nicht begonnen. Der initiale Cecil-Rollout6/6 und unser späterer Rückstelllauf17:12 sind historisch belegt. **Neueste ausdrückliche Nutzerentscheidung nach der18:37-Prüfung: aktuellen gemischten Stand behalten und isoliert weiterentwickeln.** Dev bleibt048, RedGen2, vier andere Public018. Keine020-Promotion ohne belegte Verbesserung. Der mögliche Navigationsrückschritt bleibt subjektiv; die Doppel-Colt-Nachricht wurde als falscher Chat zurückgenommen.
 
 Ein zweiter unabhängiger Auftrag hat17:57–18:19 Public018 und anschließend Namen aktualisiert. Herkunft ist aus dessen Projektdateien nachgewiesen; keine fremden Sitzungsinternas gelesen, keine Prozesse beendet oder neuere Namen/GUIDs überschrieben. Red wurde dort nach10BAD/1Disconnect aufGen2 zurückgerollt. Einzelheiten und Beleggrenzen im [Abgleichbericht](../reports/2026-11-14-shared-host-fleet-reconciliation.md). Das bereits gezeigte Statusbild beruht hinsichtlich Live auf dem älteren17:16-Stand und ist dadurch überholt; die Buildentwicklungsaussagen bleiben bestehen.
 Gesamtplan: [Rollout/A/B](../superpowers/plans/2026-11-14-cecil-rollout-a-b.md). Frühere ausführliche Historie bytegleich unter [Archiv](archive/2026-11-14-cecil-rollout-a-b-handoff-history.md); weitere Zwischenstände in Git erhalten. Root allein integriert/verändert Runtime, maximal zwei Worker mit getrennten Worktrees. Tatsächlich vorhandener lokaler Root-Terminal auf ubuntu-4gb-nbg1-2; RDC-Kontingent0, keine RDC-Ausführung. Kein ghidra:8080-Aufruf. Keine neue kostenpflichtige Infrastruktur.
+
+## Neuester Stand20:16UTC
+
+Eigene167Metadatenmethode tatsächlich PASS_OWN_XRECORD_METADATA_BINDING_ONLY, Result81c402edfb083d957daa21b12d9901303fea97204c8b661506d2a1fce9dd8135. Request16→26,0Fehler,2NormalclosesExit0/reaped/noForce, Displayfrei; unabhängigerEndcheckPASS. KeinTSE/Frida/Input und keinA1-Gain-/Schadenbeleg. [Bericht](../reports/2026-11-14-a1-passive-metadata-method.md). ErstaufrufwarreinerVorprüfstop ohneKindstart (zuengeRoot-only-Lablockannahme); Parentv2pinntbestehendeLockmetadaten, 3positive/4negativeVorprüfungen. KeineSperrenänderung.
+
+Neue volleA1Rootkopie /srv/tse-a1-passive-xrecord-root-frozen-20261114 Manifestc41b8f20c88eac6a7dc2a135d75580c29b99578e38819ba83ced0244386ce04f. HerleitungdirektvonDisabled63860770, exakt5Gates/Namespace/CollectorPRIVATE/Methodqualifikation+77/69/14Repins. AlteCP/ACK/Gain/EPS/Inputs/Deadlinekörperunverändert; keineZusatzinputs, keinFire. RootEV/run-a1-passive-original.py verlangt unabhängigenReview+Delta047vollDrive. Reviewläuft; nochkeinRetailfenster. WorkerA4offlinewiederfreigegeben.
+
+A4Healthconnectorfix imgetrenntenWT: vorläufig3084portableChecksGREEN nach20echtenRED amaltenCode; SourceWIP, weitereGegenfälle/ASan/Review/Integration/DLL/Nativeoffen. KeinneuerLivebuild. Drei600sNav20-Arme/64Lebensauswertungstests bleiben begrenzteBelegeohneallgemeineStärke-/Nav-/Budgetabnahme. Aoffen, Bnichtbegonnen.
+
+Delta045/046 externvollSHA+DateimetadatenrekonstruktionPASS.04534565395B/b1dbe4e97f971c59519640f940c375be84c779952b84b0b72883d941180d4fbb/Drive1Otywl1o6up7W7Zv3-YkMulRH8ampLtc0/2305Dateien.046100296B/f64d3d562062978b0abdd0052a950c4f0f7ef7faa6f513b9261e794e89afd27b/Drive1e08rpkq6Q0k1IcErfC_WvHJoCuGfDeKL/10Dateien. TemporäreRestorebäumeerstnachzweitemMetadatentestentfernt. Originalarchive+Drive043/044 erhalten; nurfrischSHAgleiche redundanteDownloadkopienzurSpeicherreserveentfernt. Freiplatzweiter>8GiB.
+
+LetzterverifizierterRemote4982e44fa9f7db74ed94c56e77fbf26ab410a8f4/Tree73c8a09447c70ddf220f327115c97237febfcd59 exaktlokalc0cb5e452dfe34e98ef341843347c076e7bcd575. NeueMethodenergebnisse/A1Rootfreeze vorNativein047sichern+aktuellenQuellstandveröffentlichen. KeinNativeaktiv. FolgendeältereEntwicklungsstände sindhistorischeErgänzungen.
 
 ## Aktueller Entwicklungsstand19:50UTC
 
