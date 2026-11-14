@@ -7,6 +7,10 @@
 **Tech Stack:** C++, MSVC/Wine, Python, systemd, GameSpy, Retail 1.07.
 **Spec:** Nutzerauftrag 14.11.2026; privates Original `/srv/tse-milestone-a-evidence-20261111/request.md`; bestehende Pläne vom 11./13.11.
 
+## Neue Nutzersteuerung17:10UTC
+
+Alle sechs Server zunächst auf Botstand samt Config/Nav vor diesem Auftrag zurückstellen. Erledigt17:12:46UTC: DevCecil048, fünfPublicGen2, je8eigeneBots; dreiInstanzenbereitsidentisch/keinRestart, drei normalzurückgestellt.92,82s gemeinsameBetriebsprüfungalle48bewegen/kämpfen/respawnen,0neueFehler. WeitereEntwicklung getrenntfortsetzen; erneuterRollouterstbelegtenVerbesserungen einschließlichBewegung/Navigation/Recovery/VersorgungundSync. Die ursprünglicheInitialrollout-Anweisung bleibt historisch erfüllt und ist durch diese neue Livevorgabe ersetzt. NutzerbeobachtungmöglicherNavschwächeistnochunbestätigt. Vergleichgegen048fürDevzusätzlichzuhistorischenGen2-Killdaten erforderlich.
+
 ## Globale Grenzen und Abnahme
 
 Keine Umwertung alter FAILs. Keine RDC-Ausführung ohne belegte Wiederfreigabe. Regulärer lokaler Terminalzugriff ist vorhanden (Host/UID geprüft). Mindestens 8 GiB Disk; B mindestens 25 % CPU-Reserve/1,5 GiB verfügbarer RAM. Namenpool458, GUIDs, Maps, Spielregeln und englische Hinweise erhalten. Dedicated-DLL niemals durch Bot-DLL ersetzen. Keine menschlichen Teilnehmer verdrängen. Alle Liveänderungen unter bestehenden Flotten-/Runtime-Locks, mit frischem verifiziertem Restorestand.
@@ -61,6 +65,8 @@ Vor Umsetzung eigenes konkretes Design anhand Originalauftrag und vorhandener In
 - [ ] Quellen/Configs/Navmetadaten/Tests/bereinigte Berichte committen/pushen; Remote tatsächlich lesen; vorgesehene Integration und ausführbaren Restore dokumentieren.
 
 ## Ausführungsledger
+
+17:18UTC: Nutzer-Restorealle6belegt,Dev048/fünfPublicGen2; drei echte normaleRestarts,drei identischePayloadsohneRestart.92,8206s37QueriesjeServer/48SameLifeBewegungalleMapsFrag-/Respawnfortschritt/0neueFehler. WeitereLivepromotionerstbeiBelegverbesserungen; Navvergleich048→018/020 nurAudit/PlaninArbeit.040externvollrückgelesen520825ec/2243650B/202Dateien+Metadaten. NeueRestorebelege041offen; SpätjoinNativeweiterungestartet. A/Boffen.
 
 17:06 UTC: Spätjoinfinalc13cd76 integriert, Root121fokussierteTestsPASS, unabhängige74/75/53Pins/ReverseDelta/018ProvenienzPASS_SCOPE. Rootfreeze2cf9c5ca/Controller4994debfc; keinNative/OriginalABIbeleg.040externvorNativeoffen.022/023Testrekonstruktionen942012083BnachVollhash-/Metacheckentfernt/tatsächlichvollwiederhergestellt/erneutgeprüftundentfernt; Originalarchive+Driveerhalten,10,026GBfrei. A/Boffen.
 

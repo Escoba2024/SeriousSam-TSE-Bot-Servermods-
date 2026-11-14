@@ -1,23 +1,23 @@
-# Aktueller Handoff — 14.11.2026, 16:58 UTC
+# Aktueller Handoff — 14.11.2026, 17:18 UTC
 
-Gesamtauftrag OFFEN. Initialer Cecil-Rollout 6/6 tatsächlich erfolgt; nach externen Syncbefunden drei betroffene Bot-Runtimes kontrolliert zurückgerollt. A nicht abgeschlossen, B nicht begonnen. Kein Root-Native-/Build-/Captureprozess aktiv. Alle historischen FAILs bleiben FAILs.
+Gesamtauftrag OFFEN. Initialer Cecil-Rollout6/6 historisch erfolgt. NEUE NUTZERSTEUERUNG: alle sechs Botpayloads inzwischen exakt auf den Stand vor diesem Auftrag zurückgestellt; weitere Entwicklung getrennt, erneuter Rollout erst bei belegten Verbesserungen. Frühere Initialrollout-Priorität nicht erneut anwenden. A nicht abgeschlossen, B nicht begonnen. Kein Root-Native-/Build-/Captureprozess aktiv. Alle historischen FAILs bleiben FAILs.
 
 Der vollständige vorherige Handoff ist bytegleich unter [Historie](archive/2026-11-14-cecil-rollout-a-b-handoff-history.md) erhalten. Aktueller Gesamtplan: [Rollout/A/B](../superpowers/plans/2026-11-14-cecil-rollout-a-b.md). Nur Root integriert und verändert Runtime. Kein RDC-Ausführungszugriff: Monatskontingent weiterhin 0; regulärer lokaler Root-Terminalzugang auf ubuntu-4gb-nbg1-2 ist vorhanden.
 
 ## Live
 
-Adresse 91.99.75.33. Frischer prefix-/modulgebundener Stand 16:58:24 UTC: acht eigene Bots je Server, ein zusätzlicher Teilnehmer auf Dev, sonst keiner. Seit 15:53:53 auf allen sechs Servern null neue BAD/Disconnect/Crash/InvalidAction/Join-/CRC-Fehler. Dies ist keine formale Langzeitabnahme. Individuelle Sessions und Botchat noch nicht implementiert.
+Adresse 91.99.75.33. Frischer modul-/config-/nav-/metadatengebundener Stand17:12:46UTC: acht eigene Bots je Server, Dev1zusätzlich, sonst0. Auf ausdrücklichen Nutzerwunsch Dev048/fünfPublicGen2. Anschließend92,8206s/je37Queries alle48SameLifeBewegung>1m, jedeMapweitereFrags/Respawns/toteZustände/HPverluste; alle18Logpräfixe gehasht,0neueFehler. CPUmax48,9011%,RAMmin3491651584B,Diskmin9985638400B. Keine formale Langzeitabnahme/Ursachenbehebung. Individuelle Sessions und Botchat noch nicht implementiert.
 
 | Instanz | Port | Map | Bot-DLL | Zusatzteilnehmer zuletzt |
 |---|---:|---|---|---:|
 | development | 25650 | Red Station | Cecil048 ec820d04 | 1, aktuelle Identität nicht aus historischer Nutzerattestation ableiten |
 | redstation | 25600 | Red Station | Gen2 7fc94a39 | 0 |
 | yodeller | 25610 | Yodeller | Gen2 7fc94a39 | 0 |
-| skulls | 25620 | We Got Skulls'n'Bones Too | Build018 6db89204 | 0 |
-| trouble | 25630 | Little Trouble | Build018 6db89204 | 0 |
-| hole | 25640 | Hole | Build018 6db89204 | 0 |
+| skulls | 25620 | We Got Skulls'n'Bones Too | Gen2 7fc94a39 | 0 |
+| trouble | 25630 | Little Trouble | Gen2 7fc94a39 | 0 |
+| hole | 25640 | Hole | Gen2 7fc94a39 | 0 |
 
-Build018 SHA256 6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a; Gen2 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835; Cecil048 ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530. Dedicated public original1c41…, Dev selektiver Powerupmod fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0; beide Rollen getrennt. Kein Build020 live.
+Build018 SHA256 6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a; Gen2 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835; Cecil048 ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530. Dedicated public original1c41…, Dev selektiver Powerupmod fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0; beide Rollen getrennt. Kein Build018 oder020 live. Alle Dedicated-Prozesse/aktuellen Regeln/Maps blieben beim Nutzer-Restore unverändert. [Aktueller Betriebsbeleg](../reports/2026-11-14-user-requested-pretask-fleet-restore.md).
 
 Hard2 nur Dev/Red; andere vier vorbestehend Serious3, Korrektur bis geprüfter Versorgung zurückgestellt. Spawn0/UnlimitedAmmo/Blumenblut/keineGibs/keineLimits/englische Hinweise300s erhalten. Namenpool458 und Identitätsdateien unverändert;48 sichtbare eigene Namen kollisionsfrei,40 eindeutige GUIDs wegen acht bereits vorher über zwei Instanzen wiederverwendeter GUIDs. Keine Behauptung48eindeutiger GUIDs.
 
@@ -64,3 +64,5 @@ ExternerClienthelfer zunächst vorAusführung digitalSignaturblockiert. NutzerPo
 16:58 UTC: Zwei identische lokale Drive-Rückdownloadkopien022/023 erst nach erneutem SHA-/Größenvergleich mit vorhandenen Originalarchiven und externen Vollrücklesequittungen entfernt,136537624Bytes frei. Originalarchive/Drive/Quittungen erhalten; RootEV/drive-return-duplicate-cleanup-022-023.json. Tatsächlich9,030GB frei. Frühere geschlossene Hardstreams186442297→11607536Bytes verlustfrei komprimiert und vollständig mit SHA/uid/gid/mode/mtime_ns rückrekonstruiert; RootEV/compressed-closed-earlier-hard-streams.json und restore-compressed-closed-earlier-hard-streams.py. Aktive Logs unverändert. Noch keine Delta040-Sicherung dieser neuen Dateien.
 
 17:06 UTC: Spätjoinfinal30832ce alsRootc13cd76 integriert; Root121 gezielte Fälle PASS0,528s. Rootfreeze /srv/tse-owned-sync018-latejoin-root-frozen-20261114 Manifest2cf9c5ca457c263ee4d1f2d00ffb89d99000b75389d71db169fc60a5ff468f31, Controller4994debfc682cc4a93e32d17c0fd3aab85c43862c026bede7fb4273a77978500.74/75/53Pins und unabhängiger Reverse-Delta-/018-ProvenienzcheckPASS_SCOPE, keineNative/ABIqualifikation. Genau ein Fall nach040/Static-only/Preflight. Kandidatenagent fertig, alleJobsbeendet. A4agentweiterXRecordoffline. Delta022/023-Testrestores24015Dateien/942012083Payloadbytes nachfrischemVollhash-/Metacheck entfernt, tatsächlichvollrekonstruiert/geprüft undwiederentfernt; Originalarchive+Driveerhalten, RootEV/restore-retired-backup-copies-022-023.py. Disk10,026GBfrei. [Rootreview](../reports/2026-11-14-ownns-latejoin-root-review.md).
+
+17:18 UTC: Nutzer-Restore geschlossen, RootEV/user-pretask-restore-ended.json→/srv/tse-cecil-full-20261107/.codex/evidence/restart-fleet-20261111-user-baseline-20261114-171100; sechs exaktePayloadbelege, drei normaleBotgruppen-Restarts, drei bereitsidentischeInstanzenohneRestart. Alte obenstehendeSkulls/Trouble/Hole-Prozessgenerationen sind ersetzt; aktuelleGenerationenausdiesemRun frischlesen. NutzerhinweisBewegung/Navigation/Festhängen ausdrücklichsubjektiv. Candidate-Agent arbeitet nur anneuemplan/Audit im /srv/tse-navigation-baseline-comparison-20261114, keineImplementierung/Runtime. A4Agent setztXRecordnurOfflinefort; tatsächliche/procEnvironmentbindung+finalerGesamtlaufnochOffen. VorNativewiederbeideSTATICONLY. Spätjointest blieb ungestartet; Rootfreeze unverändert. Delta040externfullPASS520825ec13bfa2548903c7ab7dc06ac0e78192b6005ef8a7e2467d8ed1862c90/2243650B/202Dateihashes+Metadaten; Drive1u5QlVIbWuixmhiRd1CUt1xey9O5NcVZv,Restoretempentfernt. ErsteDownloadreferenznachNutzerunterbrechungHTTP403, regulärfrischerDrivefetchundVollrücklesenPASS. NeuesteQuellenRemote3912febc610cb5825fea28d9e1c92b8372c41341/Tree230504d600957049a92caaa049a7a12a1207d635gleichRoot61ddb505;dieserNachtragnochunveröffentlicht. NeueRestorebelegebenötigen041.
