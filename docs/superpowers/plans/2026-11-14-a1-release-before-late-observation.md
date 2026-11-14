@@ -1,0 +1,18 @@
+# A1: geplantes Eingabeende vor weiterer Held-Beobachtung beachten
+
+> executing-plans; getrennter Kandidatenworktree. Root allein Runtime/Integration. Kein neuer nativer Versuch vor RED→GREEN, Review, frischem Freeze und Preflight.
+
+**Konkreter Befund:** Geschlossener Lauf141819 bleibtFAILf66266f9…: dritte tatsächlich bestätigte−12pxEmission erzeugt nativeGegenaktion+3°, aber kein abgeschlossenerRück-ACK. Eine gültigeHeldbeobachtung endete bei+69,365ms. Der nächste periodischeMessblock startete erst bei+144,423ms, obwohl der feste100ms-Eingabeendpunkt verstrichen war. Die Schleife prüft den geplantenEndpunkt erst nach observe(). Der Block endete bei+351,985ms, Release+352,431ms, bestehende350ms-Hardgrenze verletzt. Kein CPU- oder einzelnerRPC-Limitfehler; Kosten nur soweit archiviert zuordnen.
+
+13Journalhüllen enthalten138echtePayloadrecords,69GetInput+69passendeActionrecords, vollständigeSequenzen1–138,0Faults/0Drops. Erster12pxRechtsimpuls mit formalemACK−3°/Gain−0,25. NativeLinksgegenaktionbelegt, finalerACK/Gain/Bodyreturnoffen. KeineSchadens-/Erstzustandsabnahme.
+
+## Enger prospektiver Fix und Prüfungen
+
+- [ ] Vorhandene action_step-Funktion des exakt eingefrorenen Root6534c8b4… per gepinntem Generator in neuem deaktiviertem Fork ableiten; keine Originalfreeze mutieren. Bereits vorhandene private Timingdaten und Actionloop-Tests wiederverwenden.
+- [ ] Geplantes Ende unmittelbar vor den Held-Guards und erneut nach ihren unveränderten harten Zeit-/Identitäts-/Fokusprüfungen prüfen. Bei Fälligkeit den bestehenden capture/before_release→finally-release-Pfad wählen, bevor ein weiterer observe-Block startet. Bisherige Post-observe-Prüfung erhalten. Capture weiterhin genau einmal; harteZeitgrenze bleibt `seconds+.25`, keineEPS-/ACK-/Gain-/Input-/Frida-/Hostbudgetänderung.
+- [ ] Keine erfundenen oder ausgelassenen Daten als Beobachtung ausgeben. Tatsächliche Heldbeobachtungen zählen; ein Fall mit0Beobachtungen bleibt ausdrücklich0. Der bestehende CP.act-Pfad ruft nach erfolgreichemRelease `observe(stage+'-after-input')` auf; fällige periodische Host-/Collector-/Queryarbeit kann dort erfolgen. Keine nachträgliche Heldbeobachtung oder ACKerfinden. Tatsächliche nachfolgendeACK-/Body-/Gainbedingungen unverändert zwingend.
+- [ ] Gezieltes RED→GREEN mit tatsächlichem transformiertenActionloop: vorgegebener100ms-Endpunkt bereits vorGuards oder erst nachGuards erreicht→kein weitererHeldobserve, normaleFreigabe; konkreter144msGuard+208msBeobachterfall; schnelle normale Beobachtung/102Iterationsgrenze; rechtzeitig gestarteter langsamerObserver, langsameCapture, verspäteteRelease, rückwärts/nichtendlicheClock, Guard-/Press-/Releasefehler weiterhinFAIL und bestmöglicheechteFreigabe. KeineGrenzenlockerung, keineEreignisverdopplung.
+- [ ] Bestehende normalInput-/RouteFlight-/Collector-/Receipt-/Restore-/Paketregressionen gezielt prüfen. Neues Paket deaktiviert, Herkunft/Pins/Scope und alle geschütztenBytes konsistent. Keine neuen Eingaben, Hooks, Reads oder automatischen Wiederholungen.
+- [ ] UnabhängigesReview/Rootchecks/neueRootcopy; genau ein festesOriginalNoFire-Fenster mit unverändertemKalibrierprotokoll. Danach vollständigeNativeInput/Action-/ACK-/Body-/Gainauswertung, Originalbytevergleich/Unload/Detach/Worker, normaleRollencloses/Schlusslogs und unabhängigerDatei-/Metadatenrestore.
+
+AlteFAILs und ihre tatsächlichen längerenHaltezeiten bleibenFAIL. Der Fix erzwingt die bestehende geplanteFreigabeabfolge; er qualifiziert weder A1Schaden noch öffentlicheSyncfreiheit. NativeSchuss-/Respawn-/Kartenwechseltests erst nach tatsächlich bestandenerVorbereitung.

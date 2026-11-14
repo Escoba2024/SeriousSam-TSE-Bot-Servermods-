@@ -1,0 +1,11 @@
+# A1: Mappingvergleich passiert, Zeitgrenze bleibt fehlgeschlagen
+
+Der eigene passive NoFire-Versuch vom14.11.2026,14:18UTC, bleibt **FAIL**. Die exakte Bereichsdeckung überwindet den belegten reinen VMA-Partitionsfehler; Originalpins, Dateisignaturen, Rechte, Adress-/Offsetdeckung und Prozessidentitäten bleiben erforderlich. Keine rückwirkende Umwertung alter Läufe.
+
+Zwei vollständige Eingabequittungen wurden erfasst: ein normaler12-Pixel-Rechtsimpuls und anschließende Vorwärtsbewegung. Die beobachtete erste Drehantwort beträgt−3Grad, entsprechend−0,25Grad/Pixel. Das ist ein enger Einzelbefund, keine abgeschlossene Gain-/ACK-/Eingabewiederholungs- oder Schadensabnahme. Der dritte Versuch, ein Linksimpuls, scheiterte mit `observation host overrun; input through release host overrun`. Alle vorhandenen Zeitgrenzen bleiben unverändert. Die genaue zeitliche Ursache wird anhand der gespeicherten Quittungen und tatsächlichen Originalinput-/Actiondaten separat untersucht; keine automatische Wiederholung.
+
+Der Tracejournal enthält13Zeilen; das wird nicht als13unabhängige native Ereignisse ausgegeben. Alle neun aufgezeichneten Collector-RPCs hielten ihre jeweiligen Fristen ein. Gesamtversuch dennoch FAIL. Höchster gemessener CPU-Intervallwert69,976%, mindestens2.920.849.408Bytes verfügbarerRAM und9.070.125.056Bytes Datenträger. SiebenHostproben mit27,298smaximalerStartup-Lücke sind keine kontinuierliche Last- oder Dauerstabilitätsabnahme.
+
+Expliziter voller Originalbytevergleich, Script-Unload/Session-Detach und anschließendes Ende des eigenen Workers bestätigt. Alle drei Spielrollen normal geschlossen; drei vollständige Schlusslogs archiviert. Unabhängiger Rootrestore:664Dateien,achtursprünglicheAbsenzen, Eigentümer-/Modusmetadaten, Schlussloghashes, Prozessidentitäten und beideDisplays bestanden. Keine Schüsse, Fremdtreffer, Erstzustandsschäden oder A1-Abnahme behauptet.
+
+PrivateEvidenz `/srv/tse-milestone-a-evidence-20261111/a1-exact-coverage-20261114-141819`; Ergebnis-SHA256 `f66266f97f9eadf008f42aa557e1a3aa2c25778d7c6ed9a04efbb76a0392bf74`. Rootfreeze6534c8b4… wurde mit70Runtime-/58Diagnose-/14Collectorpins geprüft;57gezielteOfflinefälle bestanden. NeueRawbelege müssen inDelta035 gesichert werden. Der GesamtauftragA→B bleibt offen.
