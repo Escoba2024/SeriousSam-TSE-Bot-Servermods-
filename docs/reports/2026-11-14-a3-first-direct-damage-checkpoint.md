@@ -11,3 +11,9 @@ Keine neuen BAD-/Disconnectmeldungen in allen vier Schlusslogs. Messwerte CPUmax
 Root prüfte unabhängig640Dateien/Metadaten+vier Schlussloghashes sowie Prozess-/Displayende: PASS_RESTORE. Result2567e1803cd1dcf9065301b4576dcd1c7e3fe61e1333458ec904910519350e26. Privat /srv/tse-milestone-a-evidence-20261111/direct020-hard-probe-root-pair12-swap0-20261114-154843. Das ursprüngliche Ergebnis wird unverändert erhalten.
 
 Vertauschte Gruppenpositionen und beide STARK/DEMON-Fenster fehlen. Keine vollständige A3-, A1-Respawn-, menschlichesSpielniveau- oder Stundenabnahme. Nächster Schritt ist das separat geprüfte zweite Fenster mit vertauschter Startbelegung und exakt demselben Controller.
+
+## Vertauschte Belegung: native Beobachtung geschlossen, Auswertung FAIL
+
+Zweites Fenster155849 erreichte120s und schloss alle vier Rollen regulär. Native Status weiterhin PASS_LIMITED_A3_DAMAGE_OBSERVATION_REVIEW_REQUIRED; Root640Dateien/Metadaten+vierSchlusslogs/Prozess-/DisplayendePASS_RESTORE. Resultb0562be36a881553e25fcbd8199dd6f40ab6935722acf971f3d77a4b211191d8.
+
+Der unveränderte geschlossene Analyzer scheitert ausdrücklich mit `AssertionError: (1, 3, 4)` beim Gleichheitsvergleich Inventarleben/CecilSpawn. Einziger betroffener Slot botA:1/global2 hat drei beobachtete Leben und vier Source-Spawnereignisse. Letzte Inventarprobe Tick120,602760/elapsed119,870109 zeigt das tote dritte Leben; der zusätzliche Spawn Generation9 steht vor einem WeaponObserve mit native_time120,702766 im nach Fensterende kopierten Log. Seine genaue Zuordnung innerhalb des ungesampelten Endintervalls oder kurz nach WindowEnd ist unbelegt. Keine PID-/Entity-/Slotabweichung gefunden. Der ursprüngliche AnalyzerFAIL bleibt bestehen; keine volle gepaarte A3-/Stärkeabnahme, kein automatisches nächstes Vergleichsfenster. Private Fehlerquittung RootEV/a3-swap-closed-analysis-failure.json SHA4c156b0107c9510ef679d378f46c5b7a13e8bc0f6a3f1bd166b744a8656065cb. Separate Diagnose läuft.
