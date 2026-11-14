@@ -1,0 +1,13 @@
+# Build020: A4 bleibt FAIL bei nachgewiesener Feuer-Beobachtungslücke
+
+Der vollständige Originalcontrollerlauf endet nach423,897843s **FAIL23/24**: ausschließlich Phase0/botA:3 erfüllt `fire_action_rows` nicht. Phase1 und2 erfüllen alle bisherigen Aktivitätsfelder; alle24Slotphasen besitzen native nützliche Pickupbelege. Der unveränderte Ergebnis-/Rawbestand wird nicht umetikettiert.
+
+Der fehlgeschlagene Slot ist actualSlot4/entity568. Fünf beobachtete Leben, vierTode,105Bewegungsrows, zweiUseful-Pickup-Leben und11native Inventarsamples mit Schusswaffe, Besitz, Munition, `fire_requested=1` und tatsächlichem serverseitigem `last_buttons=1`. Die elfProben liegen bei nativenZeiten12,50003/12,65003/12,75003/12,90003/13,05003/13,20003 sowie111,10218/112,40226/112,55227/112,70228/112,85229. Der Quellschusszähler steigt unter anderem0→16 beziehungsweise26→37. Dennoch sind die kurzen Fireimpulse in sämtlichen einsekündigen CecilState-Proben dieses Slots0. Deshalb ist „Bot hat nicht geschossen“ aus diesem FAIL falsch; die tatsächlichen Fireaktionen sind unabhängig beobachtet. Das begründet eine separat versionierte strengere native Feuerbeobachtung, keine gelockerten Gain-/Bewegungs-/Pickupgrenzen oder nachträglichen Erfolg des altenControllers.
+
+Zwei normale Rundenwechsel, achtBotclientslots plus Originalobserver. Keine klassifizierten Sync-/CRC-/Crash-/InvalidAction-/Joinfehler in den vier geschlossenenLogs. Maximal61,479592%CPU, mindestens2807869440Bytes verfügbarerRAM und11402309632Bytes freieDisk;399Ressourcensamples, maximaleGameplaylücke2,358148s, Startupmesslücke47,416249s. Keine Dauerabnahme aus diesem kurzen Fenster.
+
+Zwei ItemTransitEnd-Ereignisse sind nativ beobachtet, beide für gewöhnliche Intermediate-Kanten. **Der neue terminale Watchdogzweig wurde nicht positiv ausgeübt.** Sein portable2920/0-Nachweis bleibt von echter nativer Zweigwirksamkeit getrennt.
+
+Alle vierRollen normalgeschlossen; Root prüfte unabhängig643aktuelleDateihashes samtModus/UID/GID, fünfAbwesenheiten und vierClosedLoghashes. Frischer Originalpreflight09:36:43UTC: Rollen/Displaysfrei, Locks erwerbbar, CPU33,59%, RAM3648581632Byte, Disk11380957184Byte. Keine020Liveübernahme. Public/Dev bleiben018; Hardkorrektur weiterhin2/6.
+
+PrivateRohbelege `/srv/tse-milestone-a-evidence-20261111/a4-reset020-extended-20261114-092735`; ResultSHA25647f65e673d176a39ca6e77c08ad72f3f7e3c5c96b41fecca570baf0e46c28d5a. [Bereinigtes Ergebnis](milestone-a-20261114/build020-a4-native-result.json). Originalinputcollector und nativeFeuer-Observer-V2 werden ausschließlich deaktiviert vorbereitet/geprüft; noch kein neuerRuntimeauftrag gestartet.

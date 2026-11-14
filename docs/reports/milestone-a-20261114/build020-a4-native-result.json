@@ -1,0 +1,555 @@
+{
+  "status": "FAIL",
+  "candidate_sha256": "094ec8edbedd5e63d8e4eb03fcce70518283b22440e5f80ba4c2482ff81fe6c0",
+  "started_utc": "2026-11-14T09:27:35.186708+00:00",
+  "finished_utc": "2026-11-14T09:35:43.419929+00:00",
+  "observed_seconds": 423.897843439132,
+  "active_evidence_missing": {
+    "0": [
+      "botA:3:fire_action_rows"
+    ]
+  },
+  "host_budget": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 399,
+    "cpu_busy_max_measured_percent": 61.47959183673469,
+    "mem_available_min_bytes": 2807869440,
+    "disk_free_min_bytes": 11402309632,
+    "max_sample_gap_seconds": 47.416249368106946,
+    "budget_pass_claim": false,
+    "gameplay_max_sample_gap_seconds": 2.358148247934878
+  },
+  "errors": [
+    "RuntimeError('reset observed but required per-phase active evidence incomplete')"
+  ],
+  "qualified": false,
+  "functional_pass": false,
+  "map_reset_proven": false,
+  "original_auto_rejoin_proven": false,
+  "phase_slots": [
+    {
+      "phase": 0,
+      "missing_activity": [
+        "botA:3:fire_action_rows"
+      ],
+      "slots": {
+        "botA:0": {
+          "state_rows": 129,
+          "ready_rows": 129,
+          "motion_action_rows": 106,
+          "fire_action_rows": 2,
+          "player_state_counts": {
+            "0": 113,
+            "4": 16
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 4,
+          "observed_lives": 7,
+          "observed_hp_deaths": 6,
+          "native_ranged_fire_samples": 11,
+          "observed_useful_pickup_lives": 4,
+          "max_stationary_alive_game_seconds": 2.0501251220703125
+        },
+        "botA:1": {
+          "state_rows": 129,
+          "ready_rows": 129,
+          "motion_action_rows": 101,
+          "fire_action_rows": 20,
+          "player_state_counts": {
+            "0": 115,
+            "4": 14
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 1,
+          "observed_lives": 8,
+          "observed_hp_deaths": 7,
+          "native_ranged_fire_samples": 143,
+          "observed_useful_pickup_lives": 1,
+          "max_stationary_alive_game_seconds": 1.1499824523925781
+        },
+        "botA:2": {
+          "state_rows": 129,
+          "ready_rows": 129,
+          "motion_action_rows": 100,
+          "fire_action_rows": 6,
+          "player_state_counts": {
+            "0": 115,
+            "4": 14
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 7,
+          "observed_hp_deaths": 7,
+          "native_ranged_fire_samples": 31,
+          "observed_useful_pickup_lives": 3,
+          "max_stationary_alive_game_seconds": 1.4999771118164062
+        },
+        "botA:3": {
+          "state_rows": 129,
+          "ready_rows": 129,
+          "motion_action_rows": 105,
+          "fire_action_rows": 0,
+          "player_state_counts": {
+            "0": 93,
+            "4": 36
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 5,
+          "observed_hp_deaths": 4,
+          "native_ranged_fire_samples": 11,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 0.4000244140625
+        },
+        "botB:0": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 109,
+          "fire_action_rows": 34,
+          "player_state_counts": {
+            "0": 98,
+            "4": 23
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 4,
+          "observed_hp_deaths": 3,
+          "native_ranged_fire_samples": 184,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 0.8999862670898438
+        },
+        "botB:1": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 103,
+          "fire_action_rows": 7,
+          "player_state_counts": {
+            "0": 112,
+            "4": 9
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 7,
+          "observed_hp_deaths": 6,
+          "native_ranged_fire_samples": 26,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 2.100008010864258
+        },
+        "botB:2": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 110,
+          "fire_action_rows": 6,
+          "player_state_counts": {
+            "0": 104,
+            "4": 17
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 6,
+          "observed_hp_deaths": 5,
+          "native_ranged_fire_samples": 22,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 1.3999929428100586
+        },
+        "botB:3": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 112,
+          "fire_action_rows": 30,
+          "player_state_counts": {
+            "0": 84,
+            "4": 37
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 4,
+          "observed_hp_deaths": 3,
+          "native_ranged_fire_samples": 173,
+          "observed_useful_pickup_lives": 3,
+          "max_stationary_alive_game_seconds": 0.60003662109375
+        }
+      }
+    },
+    {
+      "phase": 1,
+      "missing_activity": [],
+      "slots": {
+        "botA:0": {
+          "state_rows": 120,
+          "ready_rows": 120,
+          "motion_action_rows": 95,
+          "fire_action_rows": 19,
+          "player_state_counts": {
+            "0": 102,
+            "4": 18
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 12,
+          "observed_hp_deaths": 11,
+          "native_ranged_fire_samples": 135,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 0.399993896484375
+        },
+        "botA:1": {
+          "state_rows": 120,
+          "ready_rows": 120,
+          "motion_action_rows": 107,
+          "fire_action_rows": 4,
+          "player_state_counts": {
+            "0": 102,
+            "4": 18
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 8,
+          "observed_hp_deaths": 7,
+          "native_ranged_fire_samples": 21,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 0.6999893188476562
+        },
+        "botA:2": {
+          "state_rows": 120,
+          "ready_rows": 120,
+          "motion_action_rows": 103,
+          "fire_action_rows": 15,
+          "player_state_counts": {
+            "0": 104,
+            "4": 16
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 0,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 7,
+          "observed_hp_deaths": 6,
+          "native_ranged_fire_samples": 71,
+          "observed_useful_pickup_lives": 3,
+          "max_stationary_alive_game_seconds": 1.0499839782714844
+        },
+        "botA:3": {
+          "state_rows": 120,
+          "ready_rows": 120,
+          "motion_action_rows": 102,
+          "fire_action_rows": 5,
+          "player_state_counts": {
+            "0": 89,
+            "4": 31
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 5,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 7,
+          "observed_hp_deaths": 7,
+          "native_ranged_fire_samples": 27,
+          "observed_useful_pickup_lives": 3,
+          "max_stationary_alive_game_seconds": 1.2500762939453125
+        },
+        "botB:0": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 107,
+          "fire_action_rows": 8,
+          "player_state_counts": {
+            "0": 108,
+            "4": 13
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 1,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 5,
+          "observed_hp_deaths": 4,
+          "native_ranged_fire_samples": 32,
+          "observed_useful_pickup_lives": 3,
+          "max_stationary_alive_game_seconds": 0.9500579833984375
+        },
+        "botB:1": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 108,
+          "fire_action_rows": 6,
+          "player_state_counts": {
+            "0": 107,
+            "4": 14
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 4,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 6,
+          "observed_hp_deaths": 5,
+          "native_ranged_fire_samples": 26,
+          "observed_useful_pickup_lives": 3,
+          "max_stationary_alive_game_seconds": 0.8000030517578125
+        },
+        "botB:2": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 105,
+          "fire_action_rows": 18,
+          "player_state_counts": {
+            "0": 100,
+            "4": 21
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 4,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 5,
+          "observed_hp_deaths": 4,
+          "native_ranged_fire_samples": 110,
+          "observed_useful_pickup_lives": 1,
+          "max_stationary_alive_game_seconds": 1.1499824523925781
+        },
+        "botB:3": {
+          "state_rows": 121,
+          "ready_rows": 121,
+          "motion_action_rows": 111,
+          "fire_action_rows": 5,
+          "player_state_counts": {
+            "0": 98,
+            "4": 23
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 1,
+          "stationary_unknown_gap_count": 5,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 3,
+          "observed_hp_deaths": 2,
+          "native_ranged_fire_samples": 7,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 1.0499839782714844
+        }
+      }
+    },
+    {
+      "phase": 2,
+      "missing_activity": [],
+      "slots": {
+        "botA:0": {
+          "state_rows": 135,
+          "ready_rows": 135,
+          "motion_action_rows": 117,
+          "fire_action_rows": 6,
+          "player_state_counts": {
+            "0": 105,
+            "4": 30
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 13,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 7,
+          "observed_hp_deaths": 6,
+          "native_ranged_fire_samples": 19,
+          "observed_useful_pickup_lives": 3,
+          "max_stationary_alive_game_seconds": 0.6999893188476562
+        },
+        "botA:1": {
+          "state_rows": 135,
+          "ready_rows": 135,
+          "motion_action_rows": 113,
+          "fire_action_rows": 16,
+          "player_state_counts": {
+            "0": 109,
+            "4": 26
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 15,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 10,
+          "observed_hp_deaths": 9,
+          "native_ranged_fire_samples": 67,
+          "observed_useful_pickup_lives": 3,
+          "max_stationary_alive_game_seconds": 2.049978256225586
+        },
+        "botA:2": {
+          "state_rows": 135,
+          "ready_rows": 135,
+          "motion_action_rows": 113,
+          "fire_action_rows": 7,
+          "player_state_counts": {
+            "0": 100,
+            "4": 35
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 23,
+          "useful_acquisition_lives": 1,
+          "observed_lives": 10,
+          "observed_hp_deaths": 9,
+          "native_ranged_fire_samples": 4,
+          "observed_useful_pickup_lives": 1,
+          "max_stationary_alive_game_seconds": 0.700042724609375
+        },
+        "botA:3": {
+          "state_rows": 135,
+          "ready_rows": 135,
+          "motion_action_rows": 125,
+          "fire_action_rows": 34,
+          "player_state_counts": {
+            "0": 114,
+            "4": 21
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 27,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 4,
+          "observed_hp_deaths": 3,
+          "native_ranged_fire_samples": 136,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 1.3500823974609375
+        },
+        "botB:0": {
+          "state_rows": 135,
+          "ready_rows": 135,
+          "motion_action_rows": 116,
+          "fire_action_rows": 11,
+          "player_state_counts": {
+            "0": 101,
+            "4": 34
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 15,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 8,
+          "observed_hp_deaths": 7,
+          "native_ranged_fire_samples": 32,
+          "observed_useful_pickup_lives": 3,
+          "max_stationary_alive_game_seconds": 0.4500274658203125
+        },
+        "botB:1": {
+          "state_rows": 135,
+          "ready_rows": 135,
+          "motion_action_rows": 123,
+          "fire_action_rows": 6,
+          "player_state_counts": {
+            "0": 131,
+            "4": 4
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 22,
+          "useful_acquisition_lives": 2,
+          "observed_lives": 6,
+          "observed_hp_deaths": 5,
+          "native_ranged_fire_samples": 10,
+          "observed_useful_pickup_lives": 2,
+          "max_stationary_alive_game_seconds": 1.00006103515625
+        },
+        "botB:2": {
+          "state_rows": 135,
+          "ready_rows": 135,
+          "motion_action_rows": 120,
+          "fire_action_rows": 20,
+          "player_state_counts": {
+            "0": 116,
+            "4": 19
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 29,
+          "useful_acquisition_lives": 4,
+          "observed_lives": 7,
+          "observed_hp_deaths": 6,
+          "native_ranged_fire_samples": 97,
+          "observed_useful_pickup_lives": 4,
+          "max_stationary_alive_game_seconds": 1.199981689453125
+        },
+        "botB:3": {
+          "state_rows": 135,
+          "ready_rows": 135,
+          "motion_action_rows": 125,
+          "fire_action_rows": 21,
+          "player_state_counts": {
+            "0": 110,
+            "4": 25
+          },
+          "liquid_state_rows": 0,
+          "corpse_only_lives": 0,
+          "stationary_unknown_gap_count": 29,
+          "useful_acquisition_lives": 3,
+          "observed_lives": 4,
+          "observed_hp_deaths": 3,
+          "native_ranged_fire_samples": 95,
+          "observed_useful_pickup_lives": 3,
+          "max_stationary_alive_game_seconds": 1.2000732421875
+        }
+      }
+    }
+  ],
+  "independent_restore": {
+    "utc": "2026-11-14T09:36:41.792924+00:00",
+    "window": "/srv/tse-milestone-a-evidence-20261111/a4-reset020-extended-20261114-092735",
+    "result_sha256": "47f65e673d176a39ca6e77c08ad72f3f7e3c5c96b41fecca570baf0e46c28d5a",
+    "actual_restored_file_hashes": 643,
+    "actual_expected_absences": 5,
+    "mode_uid_gid_files": 643,
+    "closed_log_hashes": 4,
+    "all_role_closes": true,
+    "postclose_classifier_accepted": true
+  },
+  "native_item_transit_events": [
+    {
+      "role": "botA",
+      "entity": "565",
+      "generation": "11",
+      "time": "139.750",
+      "goal_entity": "248",
+      "goal": "128",
+      "source": "16",
+      "hop": "152",
+      "since": "129.750",
+      "best_distance": "16.460574",
+      "reason": "no_hop_progress",
+      "terminal": false
+    },
+    {
+      "role": "botB",
+      "entity": "562",
+      "generation": "8",
+      "time": "275.250",
+      "goal_entity": "243",
+      "goal": "34",
+      "source": "10",
+      "hop": "11",
+      "since": "265.250",
+      "best_distance": "40.198068",
+      "reason": "no_hop_progress",
+      "terminal": false
+    }
+  ],
+  "new_terminal_guard_natively_exercised": false
+}

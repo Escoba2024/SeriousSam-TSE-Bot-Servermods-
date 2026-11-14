@@ -1,3 +1,27 @@
+## Aktueller Checkpoint — 14.11.2026,09:53UTC
+
+Kein Native-/Build-/Liveexecutor aktiv. Feuerbeobachter-V2 ist als reine Archivanalyse integriert (`27761b0`, 13 fokussierte Tests unabhängig PASS): konservative Bindung an tatsächliche serverseitige Lebensintervalle, FIRE/Schusswaffe/Besitz/Munition und steigenden Sourcecounter; 24/24 Slotphasen besitzen diese Belege. Der alte Build020-Lauf bleibt FAIL. Worker candidate_audit bereitet jetzt einen deaktivierten Controller für einen neuen prospektiven Lauf vor. Root muss diesen unabhängig prüfen, einfrieren und erst nach frischem Preflight starten.
+
+A1 bleibt FAIL vor Fire. Der separat geprüfte Collector benötigt noch einen eigenständigen Frida-Worker mit äußerem, fristgebundenem OwnRole-Supervisor: blockierende Attach/RPC/Unload-Aufrufe dürfen normale Rollen-/Dateiwiederherstellung nicht verhindern. Worker a4_diagnosis baut den deaktivierten NoFire-Controller; weder Attach noch Runtime gestartet. B bleibt bis A gesperrt.
+
+Delta026 ist vollständig extern rückgeprüft: 9554820 Bytes, SHA25684d689d8aa04f08c3a1512d9799c68227b963eb1b5964e8bd2d455117dbb44cf, Drive-ID1YIwz7T_TL4O1wgFS4yTkAPISgF5CyCdU, separater Restore860Dateien/76467630Bytes samt Metadaten PASS. Enthält geschlossene020Belege/Quellbundle bis27761b0, keine spätere A1-Arbeit. Bericht `docs/reports/2026-11-14-delta026-and-fleet-check.md`.
+
+Flotte frisch09:51:48UTC: Build018 je8 eigene Bots, keine UNKNOWN, nativeSpawn0, aktuelle Botlogs ohne Sync-/Crashereignisse. Skulls-Server11/1historisch bereits vorRollout belegt. Hard2nurDev/Red; übrigevierSerious3. Letzte veröffentlichte Arbeitsbranchbasis weiterhin759c6fab43fdd2dad301048e42b03f3455d93de0; neuere Quellen/Berichte jetzt veröffentlichen und Tree tatsächlich zurückprüfen.
+
+---
+
+## Geschlossener Checkpoint — 14.11.2026,09:37UTC
+
+Build020-A4 ist beendet: **FAIL23/24**, allein Phase0botA:3`fire_action_rows=0`. Derselbe Slot hat jedoch11tatsächliche serverseitige FIRE-/Schusswaffen-/Munitionsproben plus Sourcecounteranstieg; alle24SlotphasenUsefulPickup. AlteErgebnisse unverändert; separat geprüfte nativeFeuer-Observer-V2 nötig. Keine020Übernahme und keine pauschale Nichtfeuer-KI-Diagnose. Bericht `docs/reports/2026-11-14-build020-a4-fire-observation-gap.md`.
+
+Alle vier eigenen Rollen/Displayszu; Root unabhängig643Dateihashes+Modus/UID/GID, fünfAbwesenheiten und vierClosedLogsPASS. Originalpreflight09:36:43UTCfrei/LocksPASS. **Kein Native-/Build-/Liveexecutor aktiv.** Der neue terminale Itemwatchdog wurde im nativen Fenster nicht positiv ausgeübt; nur2Intermediate-Endereignisse, portableQuellprüfung separatPASS.
+
+candidate_audit bearbeitet streng gebundene nativeFeuerbeobachtung und unabhängigenA1Collectorreview; a4_diagnosis korrigiert Collector und erstellt deaktivierten, tatsächlich ausführbaren NoFire-Diagnosecontroller auf dem bestehenden NoSmooth-Ablauf. Die zwei historischen Forward-Bodyalignmentimpulse bleiben ausdrücklich erhalten; keine neueRoute/Pickup/Fireaktion, keineGain-/EPS-/ACK-Lockerung. Fokussierte leichteOfflineprüfungen erlaubt; keinAttach/Compiler/native ohneRoot. Vor nächstemLauf frischer Preflight und tatsächlicheExklusivität.
+
+Aktueller Quell-/Arbeitsbranch zuletzt tatsächlich veröffentlicht759c6fab43fdd2dad301048e42b03f3455d93de0, Baum247b069d80d963ccc254b44bdcf7f9f37162c792 entspricht lokalb5da905.020/neuereRaws brauchen nächsten privatenDelta026;025schonvollständigDrive-rückgeprüft. Flotteweiter018je8, Hard2nurDev/Red. A unvollständig, B unimplementiert.
+
+---
+
 ## Aktiver Checkpoint — 14.11.2026, 09:27 UTC
 
 Genau ein neuer isolierter A4-Lauf mit **Build020** ist aktiv. Autoritative Dateien unter `/srv/tse-cecil-rollout-evidence-20261114`: `a4-build020-owner.json`, `a4-build020-native.log`, danach `a4-build020-ended.json`. Port27850 und Display154 gehören diesem Lauf; beide Worker haben Tests/Compiler/Runtime untersagt und arbeiten ausschließlich statisch. Vor jeder nächsten Labaktion vollständiges Ergebnis, normale Closes, Closed-Logs und Restore unabhängig prüfen. Keine automatische Wiederholung.

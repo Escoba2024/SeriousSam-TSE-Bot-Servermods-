@@ -1,0 +1,655 @@
+{
+  "scope": "ARCHIVED_OBSERVER_V2_REVIEW_ONLY",
+  "native_qualified": false,
+  "original_run_status": "FAIL",
+  "original_missing_activity": {
+    "0": [
+      "botA:3:fire_action_rows"
+    ],
+    "1": [],
+    "2": []
+  },
+  "runtime_or_criteria_changed": false,
+  "slots": {
+    "0:botA:0": {
+      "native_fire_with_same_life_source_growth": 11,
+      "actual_useful_inventory_gains": 6,
+      "source_generations_bound": 7,
+      "source_spawn_rows": 7,
+      "rejected_source_time_witnesses": 8,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 147,
+        "game_tick": 7.900012016296387,
+        "source_generation": 5,
+        "source_counter_lines": [
+          384,
+          396
+        ],
+        "source_counter_ticks": [
+          340,
+          360
+        ],
+        "source_counter_values": [
+          12,
+          17
+        ]
+      }
+    },
+    "0:botA:1": {
+      "native_fire_with_same_life_source_growth": 143,
+      "actual_useful_inventory_gains": 1,
+      "source_generations_bound": 8,
+      "source_spawn_rows": 8,
+      "rejected_source_time_witnesses": 9,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 663,
+        "game_tick": 34.999752044677734,
+        "source_generation": 6,
+        "source_counter_lines": [
+          1537,
+          1557
+        ],
+        "source_counter_ticks": [
+          1520,
+          1540
+        ],
+        "source_counter_values": [
+          383,
+          391
+        ]
+      }
+    },
+    "0:botA:2": {
+      "native_fire_with_same_life_source_growth": 31,
+      "actual_useful_inventory_gains": 3,
+      "source_generations_bound": 7,
+      "source_spawn_rows": 7,
+      "rejected_source_time_witnesses": 10,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 240,
+        "game_tick": 12.650030136108398,
+        "source_generation": 5,
+        "source_counter_lines": [
+          919,
+          972
+        ],
+        "source_counter_ticks": [
+          780,
+          800
+        ],
+        "source_counter_values": [
+          27,
+          33
+        ]
+      }
+    },
+    "0:botA:3": {
+      "native_fire_with_same_life_source_growth": 11,
+      "actual_useful_inventory_gains": 2,
+      "source_generations_bound": 5,
+      "source_spawn_rows": 5,
+      "rejected_source_time_witnesses": 5,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 235,
+        "game_tick": 12.500029563903809,
+        "source_generation": 5,
+        "source_counter_lines": [
+          509,
+          517
+        ],
+        "source_counter_ticks": [
+          440,
+          460
+        ],
+        "source_counter_values": [
+          0,
+          16
+        ]
+      }
+    },
+    "0:botB:0": {
+      "native_fire_with_same_life_source_growth": 184,
+      "actual_useful_inventory_gains": 4,
+      "source_generations_bound": 4,
+      "source_spawn_rows": 4,
+      "rejected_source_time_witnesses": 4,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 218,
+        "game_tick": 11.60002613067627,
+        "source_generation": 5,
+        "source_counter_lines": [
+          1232,
+          1253
+        ],
+        "source_counter_ticks": [
+          900,
+          920
+        ],
+        "source_counter_values": [
+          307,
+          321
+        ]
+      }
+    },
+    "0:botB:1": {
+      "native_fire_with_same_life_source_growth": 26,
+      "actual_useful_inventory_gains": 2,
+      "source_generations_bound": 7,
+      "source_spawn_rows": 7,
+      "rejected_source_time_witnesses": 8,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 1457,
+        "game_tick": 78.00016021728516,
+        "source_generation": 7,
+        "source_counter_lines": [
+          2025,
+          2054
+        ],
+        "source_counter_ticks": [
+          1640,
+          1660
+        ],
+        "source_counter_values": [
+          70,
+          72
+        ]
+      }
+    },
+    "0:botB:2": {
+      "native_fire_with_same_life_source_growth": 22,
+      "actual_useful_inventory_gains": 2,
+      "source_generations_bound": 6,
+      "source_spawn_rows": 6,
+      "rejected_source_time_witnesses": 6,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 146,
+        "game_tick": 7.900012016296387,
+        "source_generation": 5,
+        "source_counter_lines": [
+          566,
+          604
+        ],
+        "source_counter_ticks": [
+          380,
+          400
+        ],
+        "source_counter_values": [
+          69,
+          72
+        ]
+      }
+    },
+    "0:botB:3": {
+      "native_fire_with_same_life_source_growth": 173,
+      "actual_useful_inventory_gains": 3,
+      "source_generations_bound": 4,
+      "source_spawn_rows": 4,
+      "rejected_source_time_witnesses": 4,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 422,
+        "game_tick": 22.09994888305664,
+        "source_generation": 5,
+        "source_counter_lines": [
+          719,
+          751
+        ],
+        "source_counter_ticks": [
+          560,
+          580
+        ],
+        "source_counter_values": [
+          86,
+          97
+        ]
+      }
+    },
+    "1:botA:0": {
+      "native_fire_with_same_life_source_growth": 135,
+      "actual_useful_inventory_gains": 3,
+      "source_generations_bound": 12,
+      "source_spawn_rows": 12,
+      "rejected_source_time_witnesses": 12,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 2290,
+        "game_tick": 15.850042343139648,
+        "source_generation": 4,
+        "source_counter_lines": [
+          589,
+          630
+        ],
+        "source_counter_ticks": [
+          3580,
+          3600
+        ],
+        "source_counter_values": [
+          200,
+          214
+        ]
+      }
+    },
+    "1:botA:1": {
+      "native_fire_with_same_life_source_growth": 21,
+      "actual_useful_inventory_gains": 3,
+      "source_generations_bound": 8,
+      "source_spawn_rows": 8,
+      "rejected_source_time_witnesses": 9,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 2708,
+        "game_tick": 41.59965133666992,
+        "source_generation": 7,
+        "source_counter_lines": [
+          1211,
+          1244
+        ],
+        "source_counter_ticks": [
+          4140,
+          4160
+        ],
+        "source_counter_values": [
+          482,
+          484
+        ]
+      }
+    },
+    "1:botA:2": {
+      "native_fire_with_same_life_source_growth": 71,
+      "actual_useful_inventory_gains": 3,
+      "source_generations_bound": 7,
+      "source_spawn_rows": 7,
+      "rejected_source_time_witnesses": 6,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 3232,
+        "game_tick": 72.84984588623047,
+        "source_generation": 6,
+        "source_counter_lines": [
+          1965,
+          2003
+        ],
+        "source_counter_ticks": [
+          4780,
+          4800
+        ],
+        "source_counter_values": [
+          252,
+          266
+        ]
+      }
+    },
+    "1:botA:3": {
+      "native_fire_with_same_life_source_growth": 27,
+      "actual_useful_inventory_gains": 3,
+      "source_generations_bound": 7,
+      "source_spawn_rows": 8,
+      "rejected_source_time_witnesses": 20,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 2506,
+        "game_tick": 29.699832916259766,
+        "source_generation": 5,
+        "source_counter_lines": [
+          743,
+          755
+        ],
+        "source_counter_ticks": [
+          3680,
+          3700
+        ],
+        "source_counter_values": [
+          74,
+          93
+        ]
+      }
+    },
+    "1:botB:0": {
+      "native_fire_with_same_life_source_growth": 32,
+      "actual_useful_inventory_gains": 5,
+      "source_generations_bound": 5,
+      "source_spawn_rows": 5,
+      "rejected_source_time_witnesses": 2,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 2285,
+        "game_tick": 15.250040054321289,
+        "source_generation": 4,
+        "source_counter_lines": [
+          436,
+          451
+        ],
+        "source_counter_ticks": [
+          3340,
+          3360
+        ],
+        "source_counter_values": [
+          1115,
+          1117
+        ]
+      }
+    },
+    "1:botB:1": {
+      "native_fire_with_same_life_source_growth": 26,
+      "actual_useful_inventory_gains": 3,
+      "source_generations_bound": 6,
+      "source_spawn_rows": 6,
+      "rejected_source_time_witnesses": 4,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 2302,
+        "game_tick": 16.950027465820312,
+        "source_generation": 4,
+        "source_counter_lines": [
+          525,
+          537
+        ],
+        "source_counter_ticks": [
+          3420,
+          3440
+        ],
+        "source_counter_values": [
+          145,
+          165
+        ]
+      }
+    },
+    "1:botB:2": {
+      "native_fire_with_same_life_source_growth": 110,
+      "actual_useful_inventory_gains": 1,
+      "source_generations_bound": 5,
+      "source_spawn_rows": 5,
+      "rejected_source_time_witnesses": 3,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 2206,
+        "game_tick": 7.850011825561523,
+        "source_generation": 4,
+        "source_counter_lines": [
+          593,
+          608
+        ],
+        "source_counter_ticks": [
+          3520,
+          3540
+        ],
+        "source_counter_values": [
+          341,
+          342
+        ]
+      }
+    },
+    "1:botB:3": {
+      "native_fire_with_same_life_source_growth": 7,
+      "actual_useful_inventory_gains": 2,
+      "source_generations_bound": 2,
+      "source_spawn_rows": 3,
+      "rejected_source_time_witnesses": 24,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 2859,
+        "game_tick": 50.74951171875,
+        "source_generation": 5,
+        "source_counter_lines": [
+          938,
+          957
+        ],
+        "source_counter_ticks": [
+          3920,
+          3940
+        ],
+        "source_counter_values": [
+          1068,
+          1077
+        ]
+      }
+    },
+    "2:botA:0": {
+      "native_fire_with_same_life_source_growth": 19,
+      "actual_useful_inventory_gains": 5,
+      "source_generations_bound": 7,
+      "source_spawn_rows": 7,
+      "rejected_source_time_witnesses": 13,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 4125,
+        "game_tick": 14.150035858154297,
+        "source_generation": 5,
+        "source_counter_lines": [
+          360,
+          377
+        ],
+        "source_counter_ticks": [
+          6240,
+          6260
+        ],
+        "source_counter_values": [
+          982,
+          1000
+        ]
+      }
+    },
+    "2:botA:1": {
+      "native_fire_with_same_life_source_growth": 67,
+      "actual_useful_inventory_gains": 3,
+      "source_generations_bound": 9,
+      "source_spawn_rows": 10,
+      "rejected_source_time_witnesses": 10,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 4082,
+        "game_tick": 9.900019645690918,
+        "source_generation": 5,
+        "source_counter_lines": [
+          564,
+          581
+        ],
+        "source_counter_ticks": [
+          6440,
+          6460
+        ],
+        "source_counter_values": [
+          571,
+          579
+        ]
+      }
+    },
+    "2:botA:2": {
+      "native_fire_with_same_life_source_growth": 4,
+      "actual_useful_inventory_gains": 1,
+      "source_generations_bound": 10,
+      "source_spawn_rows": 10,
+      "rejected_source_time_witnesses": 10,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 4962,
+        "game_tick": 69.54964447021484,
+        "source_generation": 9,
+        "source_counter_lines": [
+          1768,
+          1774
+        ],
+        "source_counter_ticks": [
+          7360,
+          7380
+        ],
+        "source_counter_values": [
+          750,
+          752
+        ]
+      }
+    },
+    "2:botA:3": {
+      "native_fire_with_same_life_source_growth": 136,
+      "actual_useful_inventory_gains": 3,
+      "source_generations_bound": 4,
+      "source_spawn_rows": 4,
+      "rejected_source_time_witnesses": 4,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 4044,
+        "game_tick": 6.250005722045898,
+        "source_generation": 5,
+        "source_counter_lines": [
+          704,
+          732
+        ],
+        "source_counter_ticks": [
+          6520,
+          6540
+        ],
+        "source_counter_values": [
+          260,
+          267
+        ]
+      }
+    },
+    "2:botB:0": {
+      "native_fire_with_same_life_source_growth": 32,
+      "actual_useful_inventory_gains": 3,
+      "source_generations_bound": 8,
+      "source_spawn_rows": 8,
+      "rejected_source_time_witnesses": 10,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 4136,
+        "game_tick": 14.850038528442383,
+        "source_generation": 5,
+        "source_counter_lines": [
+          579,
+          594
+        ],
+        "source_counter_ticks": [
+          6380,
+          6400
+        ],
+        "source_counter_values": [
+          1279,
+          1288
+        ]
+      }
+    },
+    "2:botB:1": {
+      "native_fire_with_same_life_source_growth": 10,
+      "actual_useful_inventory_gains": 2,
+      "source_generations_bound": 6,
+      "source_spawn_rows": 6,
+      "rejected_source_time_witnesses": 5,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 4979,
+        "game_tick": 70.69971466064453,
+        "source_generation": 6,
+        "source_counter_lines": [
+          1391,
+          1418
+        ],
+        "source_counter_ticks": [
+          7200,
+          7220
+        ],
+        "source_counter_values": [
+          233,
+          251
+        ]
+      }
+    },
+    "2:botB:2": {
+      "native_fire_with_same_life_source_growth": 97,
+      "actual_useful_inventory_gains": 5,
+      "source_generations_bound": 7,
+      "source_spawn_rows": 7,
+      "rejected_source_time_witnesses": 9,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 4320,
+        "game_tick": 26.89987564086914,
+        "source_generation": 7,
+        "source_counter_lines": [
+          950,
+          969
+        ],
+        "source_counter_ticks": [
+          6800,
+          6820
+        ],
+        "source_counter_values": [
+          807,
+          826
+        ]
+      }
+    },
+    "2:botB:3": {
+      "native_fire_with_same_life_source_growth": 95,
+      "actual_useful_inventory_gains": 6,
+      "source_generations_bound": 4,
+      "source_spawn_rows": 4,
+      "rejected_source_time_witnesses": 3,
+      "contradictory_source_life_generations": [],
+      "invalid_source_counter_generations": [],
+      "first_fire_reference": {
+        "inventory_line": 4442,
+        "game_tick": 34.749755859375,
+        "source_generation": 5,
+        "source_counter_lines": [
+          917,
+          958
+        ],
+        "source_counter_ticks": [
+          6780,
+          6800
+        ],
+        "source_counter_values": [
+          1282,
+          1289
+        ]
+      }
+    }
+  },
+  "input_sha256": {
+    "result.json": "47f65e673d176a39ca6e77c08ad72f3f7e3c5c96b41fecca570baf0e46c28d5a",
+    "inventory.jsonl": "95d299bb87ff22bf87bd850f99392cb3fc2cc505df9bb0432be05825ba25418c",
+    "phase-0-redstation/registry.json": "8080aacf6381fc7c5506b8a3d1b1bf44b66748a8af05b42aa3f680e2a9d57a5b",
+    "phase-0-redstation/active-evidence.json": "842427495729afe418b721dc1660e92522239b13f119b2566e885178e8bfd37b",
+    "phase-0-redstation/botA.log": "43ad48dc2b1be7044bcb200747630411f984a0f38a082c7ff3103b086644cc97",
+    "phase-0-redstation/botB.log": "52359170eac0f62ae784438a2be58e955f50d2d28df2ecd0e4c117d936ef00aa",
+    "phase-1-redstation/registry.json": "8d241113b61b906b75e8d41218dadce6b91072e7a75603af14db4074017b2f79",
+    "phase-1-redstation/active-evidence.json": "cf26627130cf0b97eb5f389974f591e039283983f069830a5179fb9ec22eb377",
+    "phase-1-redstation/botA.log": "845a883f0f2cb5165c636fa9681380272f589c6ac14cdcf9e83a439b96e39e7a",
+    "phase-1-redstation/botB.log": "93730ca8b1d60d87ee039cce71fdc6cd8e6339dda09682f0c0fd074408b50ca5",
+    "phase-2-redstation/registry.json": "1f5b70608f5b1318c0fe5befa115d00d033a80055103da966dde8b74538e4e85",
+    "phase-2-redstation/active-evidence.json": "643b28aacde48842abb0b55ff557fa67837023e00fb396c07dc2dc63abdb5c6b",
+    "phase-2-redstation/botA.log": "e6086ed99fa025b798754aa9c34ea2aabc7a06b3689e1863d9de86bd6973f592",
+    "phase-2-redstation/botB.log": "226cdbe6b4f14dd94dfe07f370768295fbbb29ad8c75f0f0b6dd191ff8a4ddbc"
+  }
+}
