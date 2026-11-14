@@ -1,0 +1,136 @@
+{
+  "scope": "CLOSED023_SINGLE_RED600_HARD2_ORIGINAL20FPS_DIAG0_LIMITED_OBSERVATION_NOT_ACCEPTANCE",
+  "result_sha256": "405974020bd4a533a5036f8d42b1945c324a4cbb4b6d94baa48190a2694c34cb",
+  "status": "PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED",
+  "observed_seconds": 600.1188889101613,
+  "dll_sha256": "4dec2aa434c50ad602f1f9f136bf7f8663e9d16c5896a17ea1d343db8faf4883",
+  "server_kills": 180,
+  "life_counts": {
+    "observed_lives": 198,
+    "useful_possession_lives": 84,
+    "useful_gain_events": 108,
+    "left_censored_lives": 121,
+    "right_censored_lives": 7,
+    "ambiguous_health_order_lives": 1
+  },
+  "slots": {
+    "botA:0": {
+      "motion_action_rows": 513,
+      "native_ranged_fire_samples": 207,
+      "max_stationary_alive_game_seconds": 2.54937744140625,
+      "useful_acquisition_lives": 14
+    },
+    "botA:1": {
+      "motion_action_rows": 523,
+      "native_ranged_fire_samples": 252,
+      "max_stationary_alive_game_seconds": 1.5500946044921875,
+      "useful_acquisition_lives": 12
+    },
+    "botA:2": {
+      "motion_action_rows": 514,
+      "native_ranged_fire_samples": 382,
+      "max_stationary_alive_game_seconds": 1.500091552734375,
+      "useful_acquisition_lives": 10
+    },
+    "botA:3": {
+      "motion_action_rows": 524,
+      "native_ranged_fire_samples": 431,
+      "max_stationary_alive_game_seconds": 1.6995849609375,
+      "useful_acquisition_lives": 6
+    },
+    "botB:0": {
+      "motion_action_rows": 530,
+      "native_ranged_fire_samples": 567,
+      "max_stationary_alive_game_seconds": 2.9501800537109375,
+      "useful_acquisition_lives": 9
+    },
+    "botB:1": {
+      "motion_action_rows": 494,
+      "native_ranged_fire_samples": 793,
+      "max_stationary_alive_game_seconds": 1.9499702453613281,
+      "useful_acquisition_lives": 13
+    },
+    "botB:2": {
+      "motion_action_rows": 515,
+      "native_ranged_fire_samples": 187,
+      "max_stationary_alive_game_seconds": 2.199462890625,
+      "useful_acquisition_lives": 9
+    },
+    "botB:3": {
+      "motion_action_rows": 538,
+      "native_ranged_fire_samples": 872,
+      "max_stationary_alive_game_seconds": 2.1501312255859375,
+      "useful_acquisition_lives": 11
+    }
+  },
+  "stationary_scope": "INHERITED_ACTIVE_EVIDENCE_ALL_STREAMS_SAME_AS_022_NOT_CANONICAL_LIFE_GROUP_ONLY",
+  "max_observed_no_useful_alive_span_seconds": 103.72467041015625,
+  "recovery_proposals": {
+    "botA": 0,
+    "botB": 0
+  },
+  "sync_checks": {
+    "server": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botA": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "vanilla": {
+      "bad": 0,
+      "disconnects": 0
+    },
+    "botB": {
+      "bad": 0,
+      "disconnects": 0
+    }
+  },
+  "resources": {
+    "scope": "HOST aggregate non-idle delta including other workloads; interval averages not instantaneous peaks",
+    "limits": {
+      "cpu_busy_ceiling_percent": 75.0,
+      "min_mem_available_bytes": 1610612736,
+      "min_disk_free_bytes": 8589934592,
+      "target_sample_interval_seconds": 1.0
+    },
+    "samples": 581,
+    "cpu_busy_max_measured_percent": 54.91183879093199,
+    "mem_available_min_bytes": 2602995712,
+    "disk_free_min_bytes": 10526322688,
+    "max_sample_gap_seconds": 47.58715343498625,
+    "budget_pass_claim": false,
+    "gameplay_max_sample_gap_seconds": 1.2791106200311333
+  },
+  "root_restore": {
+    "scope": "ROOT_INDEPENDENT_FILE_RESTORE_AND_STARTED_ROLES_EXIT_ONLY",
+    "status": "PASS_RESTORE",
+    "native_status": "PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED",
+    "result_sha256": "405974020bd4a533a5036f8d42b1945c324a4cbb4b6d94baa48190a2694c34cb",
+    "counts": {
+      "files": 640,
+      "absences": 0,
+      "closed_logs": 4
+    },
+    "closed_log_scope_complete": true,
+    "started_roles": [
+      "server",
+      "botA",
+      "vanilla",
+      "botB"
+    ],
+    "gameplay_pass": false
+  },
+  "functional_pass": false,
+  "qualified": false,
+  "promotion": false,
+  "limits": [
+    "One window is no paired ranking or causal regression result",
+    "No recovery proposals means intended origin-fix path not exercised",
+    "Life103.724670 has792 canonical rows and106 source states; only mask3 in observed living rows; no continuous sampling claim",
+    "Long life aborted weapons243/267/544/243 unavailable; exact typed reason unknown at diagnostics0",
+    "Startup host-sampling gap47.587153s prevents full budget claim",
+    "Unchanged first-state damage/A1, remaining A3/A4/maps/formal gates and B remain open"
+  ]
+}

@@ -49,7 +49,7 @@ class Tests(unittest.TestCase):
  def test_arm_failure_is_sticky_and_does_not_attach_input_observer(self):
   kid=SimpleNamespace(call=lambda *a,**kw:dict(value=dict(start_count=0)));proxy=SimpleNamespace(observer=None)
   obj=a.PassiveRecorder(kid,None,SimpleNamespace(_passive_xrecord_proxy=proxy))
-  with self.assertRaises(ValueError):obj.arm()
+  with patch.object(a,'prepare_xtest_transport',return_value={'no_inputs':True}),self.assertRaisesRegex(ValueError,'StartOfData'):obj.arm()
   self.assertTrue(obj.failed);self.assertIsNone(proxy.observer)
   with self.assertRaises(RuntimeError):obj.before_input()
  def test_method_fingerprint_attestation_is_required_not_assumed(self):

@@ -1,5 +1,57 @@
 # Aktueller Handoff — 14.11.2026,20:45 UTC
 
+## Stand 22:19 UTC –023geschlossen, A1-Prearmreview bereit
+
+023600,118889s geschlossenLIMITED,180Kills/198Leben/84Useful/108Gains,
+alle8SlotsMotion/Gain/FIRE;0neueFehler/fourNormalcloses/Root640+4RestorePASS.
+Result405974020bd4a533a5036f8d42b1945c324a4cbb4b6d94baa48190a2694c34cb.
+0Recoveryproposal, daherkeinWirksamkeitsbeleg;103,724670sNoUseful-Leben offen,
+792Native/106SourceRowsgebunden, typedunavailableGrundweiterUNKNOWN.
+[023Checkpoint](../reports/2026-11-14-build023-red600-checkpoint.md).
+A4worker finalisiertalle5not_usable-Fälle/Stationaritätsgrenzen, keineProduktion.
+
+A1authorf99e014/a2e21cd→Root458922c/9afe402; Root50/50Tests4,269sPASS.
+Prearmhelper nurXTestQueryExtension+XSyncaufderselbenVerbindungvorRecorderarm,
+keinInput/Guard-/Fristwechsel. Rootfreeze/srv/tse-a1-xtest-preparation-root-frozen-20261114
+Manifest71b9c896e068e473d0fd8317871b0fa3ccc5f4a43828c87e8b1b09619c60170a,
+Collector32a8c5d4d014171df137fdb0148e6cdac40d1d6f9bf480f88c36ad5b666da371,
+Launcher4f5e1fa7a61d81dc02c0f5e6c1cc64c5744ae82c1be6943b3dcb61f01e809528.
+Peerreviewb8459ffc77/73/14Pins/107DateienReversePASS_SCOPEohneBefunde.
+Rootreview783c60fefe9a94b1f1413065f0d124dc5ffad54b3e76bcd12448cf8264eff47b.
+Rootparent13b7286373481ba92ee9fcba93befac792963f68b1842e182fc12ed826e4cc93
+(RootEV/run-a1-xtest-preparation-original.py) verlangt053vollDrivevor genau
+einemOriginalNoFire. NochkeinneuerA1Native, alteFAILsunverändert.
+
+NächsteSchritte:023Detailbericht integrieren, Quellencommit/publish/fetchexakt,
+053mitgeschlossenem023Raw/allenSourcebelegen+neuemA1Fork/Freeze/Parent sichern;
+WorkerSTATICONLY, frischerBelegungspreflight, genau1NoFire-Diagnose, Cleanup/Restore
+undInput/Action/ACK/Gain/RECORDtatsächlichauswerten. KeinePromotion.
+Aoffen/Bnichtbegonnen; LivebestätigteMischflotteunverändert, letzteIst21:56.
+
+
+## Stand 22:01 UTC – genau ein isoliertes023-Fenster läuft
+
+Rootstart22:00:49UTC, PID1526195/132004654, Toolsession45437.
+RootEV/run-navigation023.py, feste600sRed/Hard2/8DEMON3+Original20FPS/diag0,
+keinRetry. VierRollen vorStartquieszent, Displays154/155frei,253Pins frischPASS,
+Runtimeflockfrei;10,675GBfrei. GeladeneBotmodule4dec2aa4, DedicatedOriginal1c41da35.
+BeideWorkerSTATICONLY bestätigt. KeineLiveänderung/keinPromotion-/A4PASS.
+
+Delta052vollDrive+321Dateien/7707641B samtMetadatenzweimalPASS:1802557B,
+SHAad1fbc852eb2e52e42c65aee065c5c2acac5766e424ec33a13f9ca93ab77fbd6,
+Drive1U20_zsjes8LB8uKq4Rz6j5Ak5cwlutkY. EnthältBuild023/disabled+frozenFork/
+Rootfixreview/Own167geschlossen/Autorbelege; aktiverA1PrepWTausgeschlossen.
+Quellbundle source-through-built023-frozen.bundle benötigtbc8d01f aus051.
+LetzterverifizierterRemote d5b2a08c92023fc30ad4d25e2bb2ca3481463382,
+Treef5d1ff787afb5702f8f2da1ad45764caba158e56 exaktlokal615d2bc.
+
+NächsteSchritte: Nativefenster wirklichschließen, vierNormalcloses/Schlusslogs/
+Rootdatei-/Rollenrestore unabhängigprüfen; dannfunktionaleRecovery-/Radius-/Exit-/
+finalMovement-/Waffen-/Kampfauswertung. RecoveryEvents striktMap+local/Lebenbinden,
+GrenzambiguitätUNKNOWN. DanachA1PrearmworkerGREEN/disabledFork+Rootreview.
+Aoffen/Bnichtbegonnen, LiveletzteIst21:56 sechs×8Botsunverändert.
+
+
 ## Stand 21:57 UTC – Build023-Einzelarm eingefroren, noch nicht gestartet
 
 Retargetauthorbd4d084/bb429917/f07884cc→Rootd83630f/ce53c0e/84dfc42.

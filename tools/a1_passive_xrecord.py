@@ -69,6 +69,24 @@ def instrument_transport(transport):
  return proxy
 
 
+def prepare_xtest_transport(transport):
+ """Metadata only, on the existing own transport before RecorderArm."""
+ import ctypes as c
+ proxy=getattr(transport,'_passive_xrecord_proxy',None);pin=getattr(transport,'pin',None)
+ if getattr(pin,'role',None)!='vanilla'or getattr(pin,'display',None)!=':154'or not transport.d or not isinstance(proxy,XtstProxy)or transport.t is not proxy or proxy.transport is not transport or proxy.observer is not None:raise ValueError('exact unarmed own Original transport required')
+ transport.guard()
+ query=transport.t.XTestQueryExtension
+ query.argtypes=[c.c_void_p]+[c.POINTER(c.c_int)]*4;query.restype=c.c_int
+ transport.x.XSync.argtypes=[c.c_void_p,c.c_int];transport.x.XSync.restype=c.c_int
+ event=c.c_int();error=c.c_int();major=c.c_int();minor=c.c_int()
+ result=query(transport.d,c.byref(event),c.byref(error),c.byref(major),c.byref(minor))
+ if type(result)is not int or result!=1 or(major.value,minor.value)!=(2,2)or not all(0<=v<=255 for v in(event.value,error.value)):raise ValueError('XTest metadata preparation return/version invalid: '+repr((result,event.value,error.value,major.value,minor.value)))
+ synchronized=transport.x.XSync(transport.d,0)
+ if type(synchronized)is not int or synchronized!=1:raise ValueError('XTest metadata preparation XSync failed: '+repr(synchronized))
+ transport.guard()
+ return dict(function='XTestQueryExtension',version=[major.value,minor.value],return_value=result,event_base=event.value,error_base=error.value,synchronized=True,no_inputs=True)
+
+
 def method_fingerprints(source=None,core=None):
  source=Path(__file__).resolve().parent if source is None else Path(source)
  core=source/'passive-core'if core is None else Path(core)
@@ -112,9 +130,11 @@ class PassiveRecorder:
   return cls(kid,directory,transport)
  def arm(self):
   try:
+   preparation=prepare_xtest_transport(self.transport)
    self.arm_receipt=self.kid.call('arm',timeout=3)['value']
    if self.arm_receipt.get('start_count')!=1:raise ValueError('passive StartOfData absent')
    self.arm_receipt['forward_keycode']=int(self.transport.keys['forward'])
+   self.arm_receipt['transport_preparation']=preparation
    self.transport._passive_xrecord_proxy.observer=self
    return self.arm_receipt
   except BaseException:self.failed=True;raise
