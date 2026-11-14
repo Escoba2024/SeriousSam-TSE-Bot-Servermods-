@@ -1,3 +1,23 @@
+## Geschlossener korrigierter Retailtrace — 14.11.2026,13:09 UTC
+
+Kein Native-/Build-/Liveexecutor aktiv. A1130456 FAIL vor Gameplayinput an bestehender exact-mapped_rows-Modulprüfung strict_backend.py91 nach Arm. Tatsächliche Rolle/Modul/Mapdifferenz nicht archiviert und UNKNOWN; keine pauschale Ausnahme zulässig. Result3d33b79367b718bb9b38acc38bcf4634ed3493c23b566e27d18b464ce957fea5. Originalbytevergleich/Unload/Detach bestätigt; alle3Rollen/2Displays/Worker beendet, Root664Dateien+8Absenzen+3Schlusslogs/MetadatenrestorePASS.
+
+Wichtiger enger Fortschritt: privater Trace936eaf68… enthält jetzt2 vollständige GetInput/CreateAction/Compose-Paare,0Faults/0Drops, entry UND return EDI am gebundenen Game. KeineGameplayinputs/Gain-/Schadensabnahme. Candidate diagnostiziert nur vorhandene Snapshots/Verifier; tatsächliche Mapdifferenz muss ggf. in eigener enger passiver Fehlerquittung gemessen werden, bestehende Assertion nicht überspringen.
+
+FrischerPreflight13:08:08 alle4Rollen/Displays/Locksfrei, CPU37,5%,RAM3643387904/Disk9847930880. V3Root56f4c319 unabhängig64/52/33Pins PASS_SCOPE,85RootOfflinefällePASS. Geplant genau ein600sRed-Hard2-Lauf nach aktuellem Publikationsende/erneutemPreflight/STATICONLY; alter935f6d88FAIL unverändert. Root alleinRuntime, keine parallelen Reader/Tests/Archive/Publikation im Messfenster. Delta032 externfullPASS; neueFork-/Nativebelege033 offen. Publiczuletzt6×8 Red7fc/andere5018, A/Boffen. Letzter Remote5c5f31e5b76fa64d0babd9f7c72eb1e91c2d9068/Tree9e47e3926dbc097232804a9f18a384b0e141ab08 gleichlokalf6087f4; neuenCheckpointjetztveröffentlichen.
+
+---
+
+## Historischer Start einzelner korrigierter A1-Trace — 2026-11-14T13:04:09.067947+00:00
+
+Genau ein NoFire-instrumented-trace-Fenster startet. Owner/Log/Ended /srv/tse-cecil-rollout-evidence-20261114/a1-instruction-probe-{owner.json,native.log,ended.json}, run-a1-instruction-probe.py. Freeze7521e53cec5bdfac3263adef82dd6ed6a2d654ee53259ce5c3505beacfec0c39, Collector b5f5f6c51fdd5248c9616e7fd1e4c0eaa57219ced7181832cdbae43418861f2f,68/47/14Pins unabhängig PASS_SCOPE;40RootOfflinechecks PASS. Korrigierte vier Midpointprobes, echte Funktionseintritte unverändert. Keine weitere Kontrolle/Fire/Retry oder Grenzänderung.
+
+Preflight13:03:36 frei/Locks PASS, CPU41,69%,RAM3632951296/Disk9895006208. Beide Agenten STATICONLY, alle Rootarchive/Publikation/Downloads/Tests beendet. Während Native nur leichte Statusabfrage; danach vollständige Bytes/Unload/Detach/Workerende/normale Rollencloses/Schlusslogs und unabhängigen Restore prüfen. Kein A1-PASS aus Teststart.
+
+Remote5c5f31e5b76fa64d0babd9f7c72eb1e91c2d9068/Tree9e47e3926dbc097232804a9f18a384b0e141ab08 tatsächlich gleichlokal f6087f4a2b4c45d164ffc519a56be6ed9e4ec0b8. Delta032 extern vollständig PASS; neue Fork-/Nativebelege033 offen. V3Root56f4c319 ist vorbereitet, noch kein neuer600s-Lauf. A/B offen; Public Red7fc/andere5018 je8.
+
+---
+
 ## Vorbereitete passive Retailprüfung — 14.11.2026,13:02 UTC
 
 Kein Native-/Build-/Liveexecutor aktiv. Rootmethoden geschlossen: Baseline/Funktionsprobe je PASS_METHOD_ONLY, Objektform real korrupt+CleanupFAIL bleibt FAIL. Eigener Prefix quieszent entfernt, wieder knapp10GB frei. Delta032 vollständig extern rückgelesen/hashgeprüft:3905806Bytes/SHA256f9a007577340cbd5f3bafed2e2852f3090f4aecfa3619af970f694a7d86578d9,Drive1wQ1o-yQ82fAoDk7LQZJqxrtF8vjCNTlj,375Dateien/8162196Bytes+MetadatenrestorePASS; kein ganzer Native-Restorestart. Enthält abgeschlossene Methoden/V3Freezes, spätereA1/A3Forks und neueNativebelege benötigen033.

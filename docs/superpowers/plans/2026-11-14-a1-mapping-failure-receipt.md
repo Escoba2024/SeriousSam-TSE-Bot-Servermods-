@@ -1,0 +1,10 @@
+# A1: unveränderte Mapping-Assertion mit vollständiger Fehlerquittung
+
+Ausgangspunkt: geschlossener130456-FAIL3d33b793. Zwei vollständige passive Input/Action/Compose-Paare und korrekte EDI-Rückkehr beobachtet; keine Gameplayinputs. Backend90-Signaturprüfung bestanden, Backend91-Gesamtzeilenvergleich gescheitert; Rolle/Modul/Actualmaps nicht archiviert.1,142s bezeichnet Gesamtvorbereitung einschließlich1,039sArm; die Assertion liegt innerhalb etwa0,00055–0,02486s nach Armreturn. Keine Ursache aus fehlenden Maps erfinden.
+
+1. In eigenem Worktree Generator für eine neue deaktivierte Ableitung des vollständig geprüften A1-Root7521e53c vorbereiten. Bestehende Lauf-/Frida-/Input-/ACK-/EPS-/Frist-/Raten-/Quellen- und Restoregates unverändert.
+2. An exakt der bestehenden Modul-Mappingvergleichsstelle dieselben bereits einmal gelesenen expected/actualZeilen und gebundene Rolle,PID/Start,Modulpfad,Dateisignatur in eine strukturierte Fehlerquittung aufnehmen. Keine zusätzlichen Prozess-/Memoryreads. Dieselbe Ungleichheit muss weiterhin unmittelbar scheitern; keine neue akzeptierte Mapkonfiguration oder Hookausnahme.
+3. Quittung vor Weiterreichen des Fehlers ausschließlich im privaten vorhandenen Evidenceverzeichnis speichern. Erfolgsverhalten und Aufrufreihenfolge unverändert, Fehler darf keine Gameplayaktionen zulassen. Tests zuerst RED für ungleiche Zeilen: Assertion bleibtFAIL, vollständige gleicheReadquittung vorhanden; gleicheMaps erfüllen weiterhin bisherigenVerifier. Identität/Signaturfehler dürfen nicht verdeckt werden. Fehlgeschlagenes Quittungsschreiben bleibtFAIL.
+4. Alle Source-/Runtimepins, deaktivierten Gates und neuen Namespaces konsistent; unabhängiger Review. Root allein Freeze/Preflight, genau ein passiver NoFire-Lauf nach geschlossenem A4-Fenster. Ziel tatsächlicher Mappingdiff, keineKalibrierungs-/A1-Freigabe. AlterFAIL bleibtFAIL.
+
+Während des bevorstehenden600sA4-Fensters ausschließlich statische Vorbereitung; keine Tests/Generator-/Pinscans bisRootClosed. KeineNative-/Compiler-/Fridaausführung durch Agenten.
