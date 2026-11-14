@@ -18,8 +18,8 @@ kein Ersatz für diese neue Metadatenqualifikation.
   begrenzt; Main/A1/Inputworker/Frida-Collector bleiben deaktiviert.
 - [x] Bestehende qualifizierte OwnChild-/Display-/Cleanup-Helfer wiederverwenden.
   Neuer Parent ruft deren alte inputhaltige execute/run_method-Pfade nicht auf.
-- [ ] Unabhängiger statischer Review von Kopie, Parent, Fingerprints und Pins.
-- [ ] Quellen tatsächlich remote prüfen; Delta045 ins bestehende Driveprojekt
+- [x] Unabhängiger statischer Review von Kopie, Parent, Fingerprints und Pins.
+- [x] Quellen tatsächlich remote prüfen; Delta045 ins bestehende Driveprojekt
   sichern, vollständig zurücklesen und Dateihashes/Metadaten rekonstruieren.
 - [ ] Frische Belegungs-/Ressourcenprüfung, Worker-STATICONLY und exklusive
   Lab-/Build-/Methodensperren; genau eine Ausführung ohne automatischen Retry.
@@ -43,3 +43,9 @@ gleichzeitig zweimal die unkomprimierte Größe zu reservieren, wird stufenweise
 geprüft: vor Archivierung mindestens8GiB+Rohgröße+64MiB frei; nach tatsächlicher
 Kompression erneut mindestens8GiB+Rekonstruktionsgröße+64MiB. Keine Absenkung
 der8GiB-Grenze. Bei Unterschreitung abbrechen, keine fremden Daten entfernen.
+
+## Fortschritt20:10UTC
+
+Remote435459310cd15c810778a6062132c784c59c74ff/Tree66fb7cba62901235e6fa34aceb2ee3172a1e351d exakt lokal d6f74c5. Delta04534565395B/SHA b1dbe4e97f971c59519640f940c375be84c779952b84b0b72883d941180d4fbb/Drive1Otywl1o6up7W7Zv3-YkMulRH8ampLtc0 vollständig rückgelesen;2305Dateien/388422514B samt uid/gid/mode/mtime_ns zweimal geprüft. Temporäre Rekonstruktion erst danach entfernt. Der erste Reservecheck stoppte vor Extraktion; ausschließlich frisch hashgeprüfte redundante043/044-Downloadkopien entfernt, Originalarchive und Drivekopien erhalten.
+
+Rootparent erster Aufruf stoppte VOR jedem Kindprozess: Lablock legitimer UID65534, falsche neue Root-only-Annahme. Keine Metadatenmethode ausgeführt. Separater Parentv2 pinnt bestehende Inodes/UID/GID/Modi und nutzt unverändert exklusives flock; kein Eigentumswechsel. Exakter neuer AST-Lockblock: drei echte Sperren kurz exklusiv geprüft und freigegeben; vier manipulierte Metadatenfälle korrekt abgewiesen. Parentsha98d7fb230bbddf7de3a250a353944d613fc203c8ea45d3827015fa0f0803c166; ursprünglicher Parent und sein Review unverändert archiviert. Vor Ausführung noch Delta046 für engen Parentfix/Quittungen vollständig sichern. Kein automatischer Native-Retry und keine Toleranzänderung.
