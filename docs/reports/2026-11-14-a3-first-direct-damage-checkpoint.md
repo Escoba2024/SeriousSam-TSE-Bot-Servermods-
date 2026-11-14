@@ -1,0 +1,13 @@
+# Build020 Hard: erster direkter Schadensvergleich
+
+Root führte am14.11.2026 ein einzelnes120,162s-Fenster MITTEL gegen STARK auf Red Station/Hard2/Diagnostik0 aus. Beide Gruppen hatten identische Konfiguration außer ArenaTier; Originalclient stationär, normale Pause nur zur Startbarriere. Controller SHA256 f9cb4c4991d101e096787c5ccd5ee26a552b0a34dc8f43e600e7f75f07a7433a, Rootmanifest272d04e3f82f270ecf52241da8fc66a2f516e7f9657215af08703044e6aad6a7. Bot-DLL094ec8edbedd5e63d8e4eb03fcce70518283b22440e5f80ba4c2482ff81fe6c0, keine Livepromotion.
+
+Status PASS_LIMITED_A3_DAMAGE_OBSERVATION_REVIEW_REQUIRED.244tatsächliche ReceiveDamage-Aufrufe, alle im Beobachtungsfenster und vollständig zugeordnet:136Fremdschaden,93Leichentreffer,10Selbstschaden,5nichtzugeordnete Verursacher; keine verlorenen oder fehlerhaften Hookrecords. Direkte STARK→MITTEL:59schädigende Aufrufe/13tödliche/1482,912am vorherigen Leben gedeckelte HP. MITTEL→STARK:20/3/304,331HP. Der geschlossene Analyzer bestätigt25Serverkills exakt gegen sämtliche tödlichen Aufrufe, Startreferenzen aller9Teilnehmer und tatsächliche Tierprofile.
+
+Queryfragzuwachs: MITTEL6, STARK17. Waffenbesitz in8/19beobachteten MITTEL-Leben und11/13STARK-Leben; acht abgeschlossene MITTEL-Leben und zwei STARK-Leben ohne brauchbare Zusatzwaffe. Diese einzelnen kurzen Leben sind kein Nachweis dauerhaften Festhängens; sie werden auch nicht als erfolgreiche Versorgung gezählt. Erste Useful-Pickups proSlot MITTEL[2,55s,fehlend,9,85s,10,00s], STARK[3,60s,7,60s,2,40s,10,00s]. Keine Trefferquote aus Schadensaufrufen ableiten.
+
+Keine neuen BAD-/Disconnectmeldungen in allen vier Schlusslogs. Messwerte CPUmax60,352%, RAMmin2707517440Bytes, Diskmin8897298432Bytes, Gameplayabstandmax1,764s. Startupabstand47,324s bleibt offen; keine vollständige Ressourcen-/Dauerstabilitätsfreigabe. Instrumentierung deckte das gesamte Gameplayfenster ab, Originalfunktionsbytes vorAttach und vorUnload gleich, Listener stillgelegt/detacht, Worker nach normalen Rollencloses beendet. Kein gemessener uninstrumentierter Kostenvergleich.
+
+Root prüfte unabhängig640Dateien/Metadaten+vier Schlussloghashes sowie Prozess-/Displayende: PASS_RESTORE. Result2567e1803cd1dcf9065301b4576dcd1c7e3fe61e1333458ec904910519350e26. Privat /srv/tse-milestone-a-evidence-20261111/direct020-hard-probe-root-pair12-swap0-20261114-154843. Das ursprüngliche Ergebnis wird unverändert erhalten.
+
+Vertauschte Gruppenpositionen und beide STARK/DEMON-Fenster fehlen. Keine vollständige A3-, A1-Respawn-, menschlichesSpielniveau- oder Stundenabnahme. Nächster Schritt ist das separat geprüfte zweite Fenster mit vertauschter Startbelegung und exakt demselben Controller.

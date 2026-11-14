@@ -77,7 +77,9 @@ def observe_roles(registry):
    return (proc/'ns/net').stat().st_ino
   namespace=guard();inodes=set()
   for f in(proc/'fd').iterdir():
-   target=str(f.readlink());match=re.fullmatch(r'socket:\[(\d+)\]',target)
+   try:target=str(f.readlink())
+   except FileNotFoundError:continue
+   match=re.fullmatch(r'socket:\[(\d+)\]',target)
    if match:inodes.add(int(match[1]))
   table=(proc/'net/udp').read_text();selected=socket_rows(table,inodes)
   # The auditor supports IPv4 only; never hide an owned IPv6 socket.
@@ -85,7 +87,9 @@ def observe_roles(registry):
   need(not any(len(v:=line.split())>=10 and int(v[9])in inodes for line in ipv6.splitlines()[1:]),'unsupported owned IPv6 socket')
   after_inodes=set()
   for f in(proc/'fd').iterdir():
-   match=re.fullmatch(r'socket:\[(\d+)\]',str(f.readlink()))
+   try:target=str(f.readlink())
+   except FileNotFoundError:continue
+   match=re.fullmatch(r'socket:\[(\d+)\]',target)
    if match:after_inodes.add(int(match[1]))
   need(all(inode in after_inodes for port,inode in selected),'owned UDP fd vanished during binding')
   need(guard()==namespace,'role namespace changed during read')

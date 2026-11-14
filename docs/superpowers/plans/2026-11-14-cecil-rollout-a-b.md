@@ -62,6 +62,10 @@ Vor Umsetzung eigenes konkretes Design anhand Originalauftrag und vorhandener In
 
 ## Ausführungsledger
 
+15:56UTC: Devnachrückroll vierweitereBAD/0Disconnect nachOffset3829466 mit048; Ursache durchRollbacknichtbehoben. Alle6aktuell8eigene/0Zusätzliche;andere5delta0. FD-Churnfix320f286b integriert382503a, Root48gezielteTestsPASS, nurbeideReadlink-ENOENTs, keinNative/Retry.
+
+15:54 UTC: Erster020Hard2A3direkt120s PASS_LIMITED,244Damagecalls/direktSTARK13:3MITTEL,25Serverkills exaktreplayed,0neueFehler; Root640+4RestorePASS. Swap/DEMONoffen. Delta038externfullPASS de0f0d79/38956273B/1300Dateien+Metadaten. Remote34c05ed/Tree03ff0161 gleichRoot18734c9. FD-Fixagent nurOffline; Spätjoinplanagent nurPlan. A/Boffen.
+
 15:43 UTC: Eigener Syncversuch150433 geschlossen FAIL wegen verschwindendemFD; drei Paare je456gleich/0diff, kein voller600s-/WANnachweis. Vier normaleCloses/Root640+4RestorePASS. Dev siebenneueBAD/0Disconnect bis15:17; kontrollierter eigenerBot-onlyRollback15:22 aufCecil048, Dedicated/Identitäten unverändert;90,340s/43Queries8eigene+1NutzerOriginal/alle8Bewegung/0neueFehler. Red/YodelGen2,Skulls/Trouble/Hole018,Dev048. FD-Fix nur offline; A/Boffen. Delta022–037externPASS;038offen. Handoffhistorie bytegleich archiviert, aktuellerHandoff gekürzt.
 
 14:54 UTC: A1-Eingabezeiten imneuenLaufalle3PASS, Gesamtergebnis51e8e0e5FAILwegenunterschiedlichemXTest→ACK-Gain: rechtsderselbeCursorversatz2×gelesen, links1×, Ereignisursacheoffen. Root664+8+3RestorePASS. Eigener018/Yodeller-Capture145119FAILbeimJSON-Tuple/Listvergleichvortcpdump/Release, Root640+4RestorePASS, kein600s-/Syncnachweis. EngerKorrekturplanf78a1fd; zweiAgentennurofflineJSON-RegressionundXRecordMethodenverfügbarkeit. Live14:54sechs×8/0Zusätzliche, Red/YodellerGen2/andere4Build018, seit13:51keineneuenServerfehler.036externfullPASS, neueBelege037offen.

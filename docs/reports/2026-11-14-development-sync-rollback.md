@@ -11,3 +11,7 @@ Privater Belegpfad: `/srv/tse-cecil-full-20261107/.codex/evidence/restart-fleet-
 Aktuelle Botgenerationen: botA1436385/start129610621, botB1436491/start129613433. Vor weiterer Mutation frisch prüfen. Rückrollursache bleibt offen; Build020 wurde nicht live übernommen. A und B sind nicht abgeschlossen.
 
 Für den externen Originalclient liegt [Get-TSEOriginalClientEvidence.ps1](../../tools/Get-TSEOriginalClientEvidence.ps1) bereit: ausschließlich geladene Moduldateihashes und begrenzte bereinigte Logzählung, keine Starts/Stops/Inputs/Hooks/Dateischreibvorgänge. Lokal statisch geprüft, mangels Windows-PowerShell hier noch nicht ausgeführt. Referenzabweichungen allein beweisen keine Clientmodifikation. Aktueller Logsnapshot ist kein zeitlich begrenztes Ereignisdelta.
+
+## Späterer Gegenbefund15:53UTC
+
+Die erneut präfixverifizierte Serverprüfung zeigte vier weitere BAD-Meldungen/keinen Disconnect nach dem gespeicherten Rückrolloffset3829466, also mit den weiterhin geladenen048-Botmodulen. Das ursprüngliche90,340s-Fenster bleibt fehlerfrei; eine dauerhafte Behebung durch Rückroll ist ausdrücklich nicht belegt. Aktuell acht eigene Bots/kein zusätzlicher Teilnehmer; alle fünf anderen Server seit15:17 ohne neue erfasste Fehler. Die vier BADs liegen an Byte3877298,3877508,3910281,3919174 nach dem unveränderten Vorherpräfix. Private Quittung RootEV/development-postrollback-new-sync-sanitized.json. Ursachenabgrenzung zwischen Client/Joinzeitpunkt/Dedicated-Powerupmod/Netz und Botständen bleibt offen.
