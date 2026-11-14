@@ -7,6 +7,14 @@
 **Tech Stack:** C++, MSVC/Wine, Python, systemd, GameSpy, Retail 1.07.
 **Spec:** Nutzerauftrag 14.11.2026; privates Original `/srv/tse-milestone-a-evidence-20261111/request.md`; bestehende Pläne vom 11./13.11.
 
+## Aktueller Arbeitsstand18:46UTC
+
+Neueste ausdrückliche Nutzerantwort: gemischten aktuellen Stand behalten, isoliert weiterentwickeln. Frischer18:37-Modul-/Queryaudit: Dev048, RedGen2, Yodeller/Skulls/Trouble/Hole018, je8eigeneBots; Red1zusätzlich. Zweiter unabhängiger Publicrollout und Namensrefresh17:57–18:19 sind aus dessen Projektowner/scope nachgewiesen; Red dort nach10BAD/1Disconnect zurückgerollt. Unser17:12-Restore ist Historie, die Livezeile des Statusbildes überholt. Neuere fremde Arbeiten/Identitäten erhalten. Bericht2026-11-14-shared-host-fleet-reconciliation; kein Native während fremder Hostlast. Neue20FPS-Rootfreezes/Peerreview abgeschlossen; Reset-V3 author075754d→Rootecd92b3,117eigeneTestsPASS, weiterhin deaktiviert. Veröffentlichung und Delta044 vor nächstem Native offen. A/B bleiben offen.
+
+## Aktueller Arbeitsstand18:28UTC
+
+Erster048Navvergleich181117 bei253,46s/75,245098%CPU FAIL, Root640+4RestorePASS. KeinvaliderDreiervergleich, keineNavrangfolge. SystemdOriginal174,166CPU-svsBotgruppen14,645+14,498 zeigt erheblichen zusätzlichen Clientaufwand. NeueprospektiveBedinung füralle3Arme: nurOriginalRenderlimit20statt30, alleGrenzen/Inputs/Readergleich;39TestsPASS, dreiDisabledpakete139/61/39Pins. AlterFAILunverändert. Delta043externfull+1272MetaPASS; aktuelleQuellen/Nativebeleg044nochoffen. NutzerangefragtesBildangezeigt; weiterarbeiten. A1adapter/ResetV3offlinefortgesetzt; A/Boffen.
+
 ## Aktueller Arbeitsstand18:04UTC
 
 Delta042 extern vollständig rückgelesen und760 Dateien/Metadaten erneut geprüft. Eigener Core-XRecord-Methodenlauf17:51 PASS_METHOD_PARTIAL_CORE_REQUESTS_ONLY, keine Retail-/A1-Freigabe. Neun-Slot-Readiness integriert (85ea553/a308756),95 Roottests PASS; Retest175329 Admission erfolgreich, danach FAIL77,28395%CPU>75 bei11,569s statt600s. Vier normale Closes/Root640Dateien+4Logs RestorePASS; keine Ursachenbehauptung oder automatische Wiederholung. Drei deaktivierte Navvergleichsarme048/018/020 mit je138 Runtimepins vorbereitet,53 gezielte Roottests PASS; native Vergleichsfenster und gemeinsame Auswertung offen. A1-Recorderintegration separat nur offline in Arbeit. Live Dev048/fünfPublicGen2 unverändert; A und B offen.

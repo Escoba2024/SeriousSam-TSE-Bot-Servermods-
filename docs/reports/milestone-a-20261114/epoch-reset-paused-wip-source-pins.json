@@ -1,0 +1,36 @@
+{
+  "scope": "READONLY_WIP_INVENTORY_COPIES_ONLY_OLD_WORKTREE_UNCHANGED",
+  "branch": "codex/20261114-a4-epoch-reset-v3",
+  "base": "8002109",
+  "owner": "paused Root/A4 task; exclusive new-worktree reset claim confirmed by Root",
+  "files": [
+    {
+      "path": "tools/prepare_a4_epoch_reset_v3.py",
+      "sha256": "4001bd2e3d1f6f5b5071fd031bcbadf7f408713fe12dbe793c704a7db0f69ef8",
+      "bytes": 2167,
+      "mtime_ns": 1794664268142647624,
+      "mode": "0o644"
+    },
+    {
+      "path": "tools/test_a4_epoch_reset_v3.py",
+      "sha256": "9d7f3c22e11f55b048af0de79da35a464ee125ca93b595306fd70db60bc8f7cb",
+      "bytes": 6402,
+      "mtime_ns": 1794664363084563228,
+      "mode": "0o644"
+    },
+    {
+      "path": "tools/test_prepare_a4_epoch_reset_v3.py",
+      "sha256": "83000f02071bbbba687becb2d9d21b6afc68129484c2340f6af3581184ce6602",
+      "bytes": 3836,
+      "mtime_ns": 1794664363085563238,
+      "mode": "0o644"
+    },
+    {
+      "path": "docs/reports/2026-11-14-build020-epoch-reset-controller.md",
+      "sha256": "9be1d5c564efef4ded4c1ec148cafdbf58ba602c7b25c734d8018bd18739baab",
+      "bytes": 1460,
+      "mtime_ns": 1794664246576439613,
+      "mode": "0o644"
+    }
+  ]
+}

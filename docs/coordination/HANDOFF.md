@@ -1,34 +1,39 @@
-# Aktueller Handoff — 14.11.2026,18:04 UTC
+# Aktueller Handoff — 14.11.2026,18:46 UTC
 
-Gesamtauftrag OFFEN. A nicht abgeschlossen, B nicht begonnen. Der initiale Cecil-Rollout6/6 ist historisch belegt. **Neueste Nutzersteuerung:** Auf allen sechs Servern wieder Botstand samt Config/Nav von vor diesem Auftrag; weiterentwickeln, erneut ausrollen erst bei belegten Verbesserungen. Dieser Rückstellauftrag ist vollständig tatsächlich ausgeführt. Keine018-/020-Promotion allein wegen Buildnummer/Killzahlen. Nutzerhinweis zu möglicherweise schlechterer Bewegung/Navigation/Festhängen ist ausdrücklich subjektiv. Die spätere Doppel-Colt-Nachricht wurde vom Nutzer als falscher Chat zurückgenommen und erweitert den Auftrag nicht.
+Gesamtauftrag OFFEN. A nicht abgeschlossen, B nicht begonnen. Der initiale Cecil-Rollout6/6 und unser späterer Rückstelllauf17:12 sind historisch belegt. **Neueste ausdrückliche Nutzerentscheidung nach der18:37-Prüfung: aktuellen gemischten Stand behalten und isoliert weiterentwickeln.** Dev bleibt048, RedGen2, vier andere Public018. Keine020-Promotion ohne belegte Verbesserung. Der mögliche Navigationsrückschritt bleibt subjektiv; die Doppel-Colt-Nachricht wurde als falscher Chat zurückgenommen.
 
+Ein zweiter unabhängiger Auftrag hat17:57–18:19 Public018 und anschließend Namen aktualisiert. Herkunft ist aus dessen Projektdateien nachgewiesen; keine fremden Sitzungsinternas gelesen, keine Prozesse beendet oder neuere Namen/GUIDs überschrieben. Red wurde dort nach10BAD/1Disconnect aufGen2 zurückgerollt. Einzelheiten und Beleggrenzen im [Abgleichbericht](../reports/2026-11-14-shared-host-fleet-reconciliation.md). Das bereits gezeigte Statusbild beruht hinsichtlich Live auf dem älteren17:16-Stand und ist dadurch überholt; die Buildentwicklungsaussagen bleiben bestehen.
 Gesamtplan: [Rollout/A/B](../superpowers/plans/2026-11-14-cecil-rollout-a-b.md). Frühere ausführliche Historie bytegleich unter [Archiv](archive/2026-11-14-cecil-rollout-a-b-handoff-history.md); weitere Zwischenstände in Git erhalten. Root allein integriert/verändert Runtime, maximal zwei Worker mit getrennten Worktrees. Tatsächlich vorhandener lokaler Root-Terminal auf ubuntu-4gb-nbg1-2; RDC-Kontingent0, keine RDC-Ausführung. Kein ghidra:8080-Aufruf. Keine neue kostenpflichtige Infrastruktur.
 
 ## Live und letzter Betriebsbeleg
 
-Adresse91.99.75.33. Je8eigeneBots; Sessions/Botchat noch nicht implementiert.
+Neueste Entwicklungsbelege: genau ein048Nav-Redfenster181117 scheiterte nach253,46sGameplay bei75,245098%CPU>75. Alle4normalclosed/Root640Dateien+4LogsRestorePASS; Schlusslogs0neueFehler. Result543b31cefe6183b7435ceb114e7d6dc570eaa76049944913c2d0539a34beab2c; alterDreiervergleichunvollständig,018/020-Armenichtgestartet. Geschlossene systemd-Abrechnung Original174,166CPU-s, Botgruppen14,645+14,498CPU-s, Server16,398CPU-s: erheblicherTestclientaufwand, keinealleinigeSpikeattribution. HostBudgetformelkorrekt, keinGategeändert. Neuegemeinsame Vergleichsbedingung nurOriginalbeobachter20/20FPSstatt30/30; alleKandidatenbekommendasselbe, keine30FPS-Samplesbeimischen. Sechsneue+9Kandidaten+24V3=39TestsPASS0,218s. Disabledpakete /srv/tse-nav20-{048,018,020}-red600-disabled-20261114 je139/61/39Pins, Rootreview/Freeze und unabhängiger Peerreview abgeschlossen; Native offen. Original-A1controllerbleibtunverändert.
 
-| Instanz |Port|Map|Bot-DLL|Zusätzliche zuletzt|
+Delta043externfullDrive/SHAund1272Dateien/MetadatenPASS:12263687B/SHA d15936f5c20597296239bffd3875da2635c17f9d176901d7f50a913677ca32be/Drive18cbRIChvFWva-BJB3yAXSZ9Imy6aaiLU. Neue181117Rohbelege/20FPS-Adapter/angefragtesStatusbildbrauchen044. BildprivatRootEV/build-status-20261114-1809.png, Nutzerbereitsangezeigt. KeineNativeaktiv. A1agentnurofflinein /srv/tse-a1-passive-xrecord-adapter-20261114, Planauthor4d24c30. Reset-V3 author075754d→Rootecd92b3 integriert;117 eigene gezielte Fälle PASS1,120s, unabhängiger Scope-/Pinreview abgeschlossen. Paket bleibt deaktiviert, keine native Reset-/24-Phasenabnahme.
+
+Adresse91.99.75.33. Frische reine Leseprüfung18:37:20UTC: je8eigeneBots, Sessions/Botchat unimplementiert. Modulzuordnung tatsächlich an laufenden Prozessen geprüft; momentane Abfrage ist kein neues Aktivitätsfenster.
+
+| Instanz | Port | Map | Bot-DLL | Zusätzliche Teilnehmer |
 |---|---:|---|---|---:|
-|development|25650|Red Station|Cecil048 ec820d04|1|
-|redstation|25600|Red Station|Gen2 7fc94a39|0|
-|yodeller|25610|Yodeller|Gen2 7fc94a39|0|
-|skulls|25620|We Got Skulls'n'Bones Too|Gen2 7fc94a39|0|
-|trouble|25630|Little Trouble|Gen2 7fc94a39|0|
-|hole|25640|Hole|Gen2 7fc94a39|0|
+| development |25650|Red Station|Cecil048 ec820d04|0|
+| redstation |25600|Red Station|Gen2 7fc94a39|1|
+| yodeller |25610|Yodeller|Build018 6db89204|0|
+| skulls |25620|We Got Skulls'n'Bones Too|Build018 6db89204|0|
+| trouble |25630|Little Trouble|Build018 6db89204|0|
+| hole |25640|Hole|Build018 6db89204|0|
 
-048 SHA256 ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530; Gen2 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835. Alle12Botprozesse laden nachweislich den genauen vorher gesicherten DLL-/Config-/Navpayload einschließlich Dateimetadaten. Dev/Red/Yodeller waren bereits identisch und blieben ohne Restart; Skulls/Trouble/Hole regulär zurückgestellt. Dedicated/Maps/aktuelleRegeln/Namen/GUIDs unverändert. Public-Dedicated original1c41…, Dev fe4a77bd1eae15a25cfeb67cf5dfdd6643cba59661f2ca3e99467a9fb15b06e0. Hard2 nurDev/Red; vorbestehendesSerious3 auf vieranderen weiteroffen. Spawn0/UnlimitedAmmo/Blumenblut/Gibs0/keineLimits/EnglishMOTD300s erhalten. Namenpool458,48sichtbareNamen kollisionsfrei,40eindeutigeGUIDs mit8vorbestehend überzweiInstanzen wiederverwendetenIDs; Identitäten nicht verändern.
+Hashes:048 ec820d0461313c41fec2b477f57109310d3c71a77b4423955ac69f3807566530; Gen2 7fc94a39c3f5d9516f262d9e4d04a5cf38e6eb5ae3482976c32c952a99d30835;018 6db89204e33dc7d76ecdfed68055d2b75bde4950475793a57101fd0cefcb8e4a. Dedicated bleibt separat: Public original1c41…, Dev fe4a77bd…. Fremder Namensrefresh beansprucht Erhalt der GUID-Endungen; unser aktueller Audit veröffentlicht keine Spieleridentitäten und ist kein vollständiger neuer Regel-/Namens-/GUID-Akzeptanznachweis.
 
-Rückstellrun privat /srv/tse-cecil-full-20261107/.codex/evidence/restart-fleet-20261111-user-baseline-20261114-171100, RootEV/user-pretask-restore-ended.json. Gemeinsame92,8206s/je37Queries abgeschlossen17:16:52: alle48SameLifeBewegung>1m, jedeMap weitereFrags/HPverluste/Tode/Respawns, alle18Logpräfixe verifiziert/0neueBAD,Disconnect,Crash,InvalidAction,Join,CRC. CPUmax48,9011%,RAMmin3491651584B,Diskmin9985638400B. Begrenzter Betriebsbeleg, keine Ursachen-/Langzeitabnahme. [Bericht](../reports/2026-11-14-user-requested-pretask-fleet-restore.md).
-
-Prozessgenerationen PID/start_ticks, vor Mutation frisch prüfen:
+Aktuelle Prozessgenerationen PID/start_ticks, jeweils Dedicated,A,B; vor Mutation erneut prüfen:
 Dev1336140/127116227,1436385/129610621,1436491/129613433;
-Red1337395/127127818,1389123/128042002,1389245/128044846;
-Yodeller1340003/127151007,1419417/129082063,1419489/129082877;
-Skulls1321795/126381762,1457372/130267356,1457444/130268219;
-Trouble1321798/126381763,1458313/130270144,1458386/130270958;
-Hole1321792/126381761,1459203/130272824,1459390/130275637.
-Jeweils Dedicated,A,B. Tatsächliche Units/Roots aus deployment-matrix und frischem snapshot; keine Namen erfinden.
+Red1337395/127127818,1477272/130620002,1477367/130622788;
+Yodeller1340003/127151007,1479985/130640578,1480102/130641389;
+Skulls1321795/126381762,1481541/130649396,1481663/130650259;
+Trouble1321798/126381763,1483265/130658296,1483381/130659110;
+Hole1321792/126381761,1484360/130667127,1484485/130669939.
+Privater Audit: RootEV/fleet-module-status-20261114-1837-private.json.
+
+Unser früherer gemeinsamer Rückstellnachweis17:16:52 bleibt gültige **Historie**:92,8206s/37Queries jeInstanz,48SameLife-Bewegungen, Frags/HP/Tode/Respawns auf jeder Map,0neueFehler, CPUmax48,9011%. Er beschreibt die damalige048/Gen2-Flotte, nicht die vier später neu gestarteten018-Instanzen. [Historischer Bericht](../reports/2026-11-14-user-requested-pretask-fleet-restore.md).
 
 ## Sync und zuletzt fehlgeschlagener privater Spätbeitritt
 
@@ -50,13 +55,13 @@ XRecordursprünglicher3DateienWIP in /srv/tse-own-xrecord-core-method-20261114 b
 
 A3 zwei020Hard120s-Fenster: erstes244Damagecalls/STARK13:3MITTEL; Swap207/STARK5:6MITTEL. KeinallgemeinerStärkenachweis/DEMONoffen. SwapalterClosedAnalyzerbleibtFAIL3Inventarlebenvs4SourceSpawns; einterminalesLebenunbeobachtet. GetrennterKomponentenauditor3215239a→Root0ab3774 mit31RootfällenPASS; echteArchiv-SHAsd0d8a2e3…/57659d0d… bestätigt, keineLegacy-/Stärkefreigabe. Rootfreeze /srv/tse-a3-instruction-probe-root-frozen-20261114 Manifest272d04e3f82f270ecf52241da8fc66a2f516e7f9657215af08703044e6aad6a7. Alle4normalclosed/Root640+4RestorePASS jeFall.
 
-A4 Build020 Quellee5f7a65502fbea683014ef8fcc95ecdd2a927b6a, DLL094ec8edbedd5e63d8e4eb03fcce70518283b22440e5f80ba4c2482ff81fe6c0/431104B,2920SDK107ASanPASS. HardRed/Yodellerje600s begrenzterVersorgungs-/Aktivitätsbelegnur1Phase, aktiverTerminalwatchdognichtausgeübt. Skulls/Trouble/Hole020Hardnochoffen. ResetWT /srv/tse-a4-epoch-reset-v3-20261114 mit5GREEN/nächstenRED pausiert, keine24Phasenabnahme. ZusatzweltenLostTomb/Fortress/Compound(KuntaKinte)assetsvorhanden/functionaluntested;DesertTempleWorldfehltgesperrt. Formale1/4/8Bots+Original3600/3600/7200sNICHTbegonnen. KeineCecilparität/Koopbehauptung.
+A4 Build020 Quellee5f7a65502fbea683014ef8fcc95ecdd2a927b6a, DLL094ec8edbedd5e63d8e4eb03fcce70518283b22440e5f80ba4c2482ff81fe6c0/431104B,2920SDK107ASanPASS. HardRed/Yodellerje600s begrenzterVersorgungs-/Aktivitätsbelegnur1Phase, aktiverTerminalwatchdognichtausgeübt. Skulls/Trouble/Hole020Hardnochoffen. Reset-V3 als neuer deaktivierter Fork integriert:075754d→ecd92b3,117RoottestsPASS,144Runtime-/71Dateipins; alterWIP unangetastet. Keine native24Phasenabnahme. ZusatzweltenLostTomb/Fortress/Compound(KuntaKinte)assetsvorhanden/functionaluntested;DesertTempleWorldfehltgesperrt. Formale1/4/8Bots+Original3600/3600/7200sNICHTbegonnen. KeineCecilparität/Koopbehauptung.
 
 Navvergleichauthor38ac848→Root2d0899a: [Audit](../reports/2026-11-14-navigation-baseline-source-evidence-audit.md), [Plan](../superpowers/plans/2026-11-14-navigation-baseline-comparison.md). Rootbestätigt: Profil7 bei048Expert-Rifle/tier5/marksman, bei018/020DEMON/tier3/duelist; gleicheRawConfig/NavalsoanderesKandidatenverhalten. Plan048→018→020je600sOriginalDedicated/HardRed, gleicheNav/Seeds/Startbarriere, keineFrida. Gesamtkandidatenvergleich. NEU: drei deaktivierte Adapter /srv/tse-nav-{048,018,020}-red600-disabled-20261114 mit138/57/36Pins und vollständiger47/28-Kandidatenclosure;53RootfällePASS0,226s. Exaktes048LoglabelBOT-Expert-Rifle. NochkeinNativevergleich; keineUrsachen-/ÜberlegenheitsbehauptungausunterschiedlichenaltenStandmaxima. Root sollAdapter anhandPlans selbst implementieren.
 
 ## Veröffentlichung, Sicherung und nächste Schritte
 
-RootWT /srv/tse-cecil-rollout-a-b-20261114, Branch codex/20261114-cecil-rollout-a-b, HEADvorNachtrag00cee65. Zuletzt tatsächlich gefetchter Remote13a9bacc829818e50287bc98aa9872bdcefec8e4/Tree2fe0183ffa9ffbb9daf41fd4e4f71196a8f88636 exaktgleichRoot2d0899a. NeuereXRecordquellen/Spätjoinberichtnochveröffentlichen. APIcreate_tree/create_commit/update_ref mit expected_sha/forcefalse; danach echterFetch+Tree-/Diffvergleich. KeinePR-/main-Integration.
+RootWT /srv/tse-cecil-rollout-a-b-20261114, Branch codex/20261114-cecil-rollout-a-b. Letzter verifizierter Remote c545da93034dcc28e88538a7d279c8154374850e/Tree31ca613937a343ae6c0d99353991e898c715525a exaktgleichlokaleb4a8c19d07c7914104ca1a4606351d629288192. Neue20FPS-Quellen/048Last-FAIL/Handoff nochveröffentlichen. APIcreate_tree/create_commit/update_ref mit expected_sha/forcefalse; danach echterFetch+Tree-/Diffvergleich. KeinePR-/main-Integration.
 
 Driveprojekt14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2, Backuproot /srv/tse-cecil-rollout-backup-20261114. Delta022–042vollständigexternrückgelesen/SHA-/DateimetadatenrekonstruktionPASS.0428938294B/SHA1b37b52a3a0b2be810c4518f35794b7c698c7e5927200842f314f39e23bbbc44/Drive1Dx84IHJNqIvREKDtSfT3aUALdBMzYu24;760Dateien erneut geprüft, temporärerRestorebaum entfernt. Neue175200/175329-Rohbelege und Navadapter brauchen043.0402243650B/SHA520825ec13bfa2548903c7ab7dc06ac0e78192b6005ef8a7e2467d8ed1862c90, Drive1u5QlVIbWuixmhiRd1CUt1xey9O5NcVZv.041ursprüngliche166123130BDateikorrekt413abgewiesen(100MiBToollimit), nicht hochgeladen. Stattdessenvier eigenständige instanzbezogeneArchive innerhalbLimit, allevollrückgelesen+1788Dateien/MetadatenPASS, temporäreRekonstruktionenentfernt:
 Skulls49622491B/SHA03829abd2ff9ed9eb6e010734f3f78cf675df03135634919f0cebae38eae7658/Drive1L58F-j0s37N40cLfJfiIpeFeR2yHD1qb;
@@ -67,6 +72,6 @@ Receipt delta041-instance-archives-receipt.json maßgeblich; Einzeldateigrenze w
 
 NurRooteigene geschlosseneKopienverlustfreikomprimiert, aktiveLogsunangetastet. Neu1125661528→162042853B sechsUser-Restore-beforelogs; RootEV/compressed-user-restore-closed-logs.json+restore-user-restore-closed-logs.py, tatsächlichervollerOriginalpfad-/SHA-/uid/gid/mode/mtime_nsRestoregetestet undRawkopienwiederentfernt. FrühereA4/Sync-/Hardstreams analogmitjeweiligen restore-compressed-closed-*.py wiederherstellbar.022/023exakteTestrestorebäume24015Dateien/942012083PayloadBnachVollhash-/Metacheckentfernt,tatsächlichrekonstruiert+erneutgeprüft/entfernt; Originalarchive/Driveerhalten, restore-retired-backup-copies-022-023.py. LokaleidentischeDrive-Rückdownloadduplikate022/023,029–036,038/039 entfernt, Originale/Quittungen/Driveerhalten. Diskzuletzt10,4GBfrei. VorFormalgatesEvidenz-/Logwachstumforecasten.
 
-Nächste Schritte: neue Rootquellen/Methoden-PASS/Last-FAIL/Handoff veröffentlichen und Delta043 sichern. Root prüft die drei neuen Navpakete und gemeinsame Auswertung; danach feste048→018→020-Redfenster je600s, einzeln mit frischem Preflight/vollem Restore, keine erfolgsabhängigen Wiederholungen. Kein aktueller Native-/Buildprozess. Agent a4_diagnosis arbeitet in neuem getrennten Worktree ausschließlich offline an einem deaktivierten passiven A1-XRecordadapter für bestehende eigene :154-Originaltests ohne weitere Inputs/Queries oder Toleranzänderung. Candidateagent CPUaudit fertig/alleJobsbeendet. A1/A3/A4/Reset/Formalgates offen, B erst nach A. Live erst nach belegten Verbesserungen ändern.
+Nächste Schritte: neue20FPS-Quellen/letzten048FAILbericht/Reset-V3/aktuellenFlottenabgleich veröffentlichen und Delta044 sichern. Neue139Pin-Pakete sindRootgeprüft/gefroren/peerreviewt. Vor Native zusätzliche fremde Deploy-/Namensjobs konkret ausschließen und vorhandene Host-/Runtime-Locks beachten. Dann neuegemeinsame048→018→020-Redfenster je600s unter20FPS-Beobachterbedingung, einzelnfrischpreflight/Restore. KeinNativebeiaktivenTest-/Archiv-/Gitjobs; AgentsSTATICONLYACKeinholen. NeuerFAILstopptSerie, keineautosenken75Grenze. A1adapter+ResetV3codeunabhängigreviewen, dann fehlendeA1/A3/A4-/Formalgates. AundBoffen; LiveerstbeibelegtenVerbesserungenändern.
 
 RootEV /srv/tse-cecil-rollout-evidence-20261114. Lab /srv/tse-arena-isolated-20261111 vierRollen/OwnNS27850/Displays154,155/runtime.lock; Buildlock /srv/tse-msvc-wine-20261021/tse-milestone-build.lock. fresh-lab-preflight.py probe+release, Controllerhältanschließendexklusiv. VorNative alleTests/Reader/Archive/Downloads/Gitjobsbeenden, WorkerexplizitSTATICONLY. UnbekanntenXvfb151undPublic102erhalten. KeineunbeaufsichtigteWeiterarbeitbehaupten.

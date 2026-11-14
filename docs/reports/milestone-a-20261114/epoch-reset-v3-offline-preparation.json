@@ -1,0 +1,23 @@
+{
+  "scope": "OFFLINE_ONLY_NOT_RUNTIME_QUALIFICATION",
+  "package": "/srv/tse-a4-build020-hard-reset-v3-disabled-review-20261114",
+  "manifest_sha256": "2a93b4f03c560e6f7364ca8cac06002d28b1157dbc7d0f6226d2dc6af381e9fb",
+  "runtime_pins_verified": 144,
+  "package_source_pins_verified": 71,
+  "build_source_pins_verified": 47,
+  "build_overlay_pins_verified": 28,
+  "old_wip_files_hash_size_mtime_mode_unchanged": 4,
+  "test_result": {
+    "exit_code": 0,
+    "tests": 117,
+    "skips": 0,
+    "duration_seconds": 1.168,
+    "working_directory": "/srv/tse-a4-build020-hard-reset-v3-disabled-review-20261114",
+    "command": "python3 -m unittest -v test_a4_epoch_reset_v3 test_prepare_a4_epoch_reset_v3 test_extended_protocol test_phase_inventory test_host_budget test_transaction test_round_script_readability test_a4_ordered_memory_v3 test_a4_fire_observer_v2 test_a4_canonical_native_groups test_audit_a4_native_fire_observer_v2",
+    "tool_output_chunk": "b20509"
+  },
+  "qualified": false,
+  "functional_pass": false,
+  "native_started": false,
+  "independent_review": "PENDING"
+}
