@@ -66,6 +66,8 @@ Vor Umsetzung eigenes konkretes Design anhand Originalauftrag und vorhandener In
 
 ## Ausführungsledger
 
+17:39UTC: Spätjoin173005 geschlossenFAILvor600s: ersterOriginalFrame8, zweiter9; strengeAdmissionkorrektFAIL. Alle4normalclosed/Root640+4RestorePASS, Capture1157/0Drops, jeOriginalpaar1gleichaberINCOMPLETE. Readinessfixf6db761nurOfflineinArbeit, Frist/Predicatesunverändert. XRecordfinalauthorb86163a→Root00cee65, Root62TestsPASS2,232s+14Pins/Systemlibs/Primärdatenprüfung; Rootfreeze43d38e72nochUNGETESTETnativ. Navvergleichsplan2d0899aintegriert, nochkeinAdapter.041vierInstanzarchivejeunter100MiBalleexternfullPASS/1788Dateien+Metadaten;042fürneueBelegeoffen. LiveDev048/fünfPublicGen2beibehalten. A/Boffen.
+
 17:18UTC: Nutzer-Restorealle6belegt,Dev048/fünfPublicGen2; drei echte normaleRestarts,drei identischePayloadsohneRestart.92,8206s37QueriesjeServer/48SameLifeBewegungalleMapsFrag-/Respawnfortschritt/0neueFehler. WeitereLivepromotionerstbeiBelegverbesserungen; Navvergleich048→018/020 nurAudit/PlaninArbeit.040externvollrückgelesen520825ec/2243650B/202Dateien+Metadaten. NeueRestorebelege041offen; SpätjoinNativeweiterungestartet. A/Boffen.
 
 17:06 UTC: Spätjoinfinalc13cd76 integriert, Root121fokussierteTestsPASS, unabhängige74/75/53Pins/ReverseDelta/018ProvenienzPASS_SCOPE. Rootfreeze2cf9c5ca/Controller4994debfc; keinNative/OriginalABIbeleg.040externvorNativeoffen.022/023Testrekonstruktionen942012083BnachVollhash-/Metacheckentfernt/tatsächlichvollwiederhergestellt/erneutgeprüftundentfernt; Originalarchive+Driveerhalten,10,026GBfrei. A/Boffen.
