@@ -1100,13 +1100,68 @@ void groundedAcquireHandshakeReproduction(){
   check(rayCount-before<=16&&_botRayBudget>=2,"handshake matrix never enlarges shared query budget or final reserve");
   if(mode<=2){
    check(rayCount-before==1&&near(lastTo(1),71)&&near(lastTo(2),1.8)&&near(lastTo(3),63),
-    "actual hold-boundary helper independently casts toward ground0 before anchor equality rejection");
+    "actual hold-boundary helper independently casts toward the fresh ground0 hint");
    check(groundReplanEvents==1&&state.goalEntity==311&&endEvents==0,
     "fresh reachable ground hint must preserve the same attempt after deferred scan without manually setting anchor");
-   if(groundReplanEvents)check(state.goalSince==0&&state.goalDeadline==12&&state.currentNavTime<0&&state.currentNavGoal==-1,
-    "real grounded reset preserves original deadline and supplies no current floor permission");
+   check(state.anchor==0&&state.goalSince==0&&state.goalDeadline==12&&state.currentNavTime<0&&state.currentNavGoal==-1&&
+     !state.currentNavTravel&&state.acquiredAnchor==-1&&state.acquiredAnchorTime==-1,
+    "successful fresh replan alone adopts hint without synthetic acquisition arrival floor or deadline stamps");
+   if(groundReplanEvents){
+    check(!BotCecilAtNode(&player,0)&&state.navigator.SourceSlot(71)==-1,
+     "successful reset is not original ground radius arrival or a committed new edge");
+    _botRayBudget=16;const auto approach=BotSupplyTick(&player,0,44,1000);
+    check(approach.active&&state.hop==0&&state.goalEntity==311&&state.goalDeadline==12,
+     "next real navigator tick must approach the unchanged original ground radius before edge progress");
+   }
   }else check(groundReplanEvents==0&&state.goalEntity==0&&std::strcmp(lastEnd,"unreachable_hold")==0,
     "blocked current LOS invalid support or moving contact retain existing grounded replan veto");
+ }
+}
+
+void groundedRetainedAnchorGuards(){
+ for(int mode=0;mode<31;++mode){
+  groundedAcquireHandshakeFixture();auto& state=BotSupplyState(0);auto& g=BotSupplyGraph();
+  botcore::CecilMotion move;move.active=true;move.hop=71;
+  _botRayBudget=16;
+  if(mode==0)state.blocked[69]=1;
+  if(mode==1)state.blocked[71]=1;
+  if(mode==2)state.blocked[0]=1;
+  if(mode==3)g.points[0].flags=botcore::CECIL_UNREACHABLE;
+  if(mode==4)g.points[0].flags=botcore::CECIL_TELEPORT;
+  if(mode==5)g.points[0].flags=botcore::CECIL_IMPORTANT;
+  if(mode==6)g.points[0].links.clear();
+  if(mode==7)g.points[69].flags=botcore::CECIL_UNREACHABLE;
+  if(mode==8)g.points[71].flags=botcore::CECIL_TELEPORT;
+  if(mode==9)g.points[69].y=1;
+  if(mode==10)g.points[71].y=1;
+  if(mode==11)player.pl.pl_PositionVector(1)=70;
+  if(mode==12)player.en_penReference=nullptr;
+  if(mode==13)floorEntity.flags=ENF_DELETED;
+  if(mode==14)floorEntity.cls.name="Classes/MovingBrush.ecl";
+  if(mode==15)player.en_vCurrentTranslationAbsolute(1)=NAN;
+  if(mode==16)player.en_vCurrentTranslationAbsolute(3)=.101f;
+  if(mode==17)player.m_pstState=PST_FALL;
+  if(mode==18)player.m_pstState=PST_SWIM;
+  if(mode==19)_botRayBudget=2;
+  if(mode==20)wallMode=2;
+  if(mode==21)state.importantGoal=true;
+  if(mode==22)state.interactionPoint=0;
+  if(mode==23)state.useReleaseTick=42;
+  if(mode==24)state.navigator.Reset();
+  if(mode==25)state.goal=70;
+  if(mode==26)player.hasWorld=false;
+  if(mode==30){g.points[0].y=5;g.points[1].y=5;} // No alternative fresh hint within original vertical range.
+  if(mode>=27&&mode<=29){const int slot=mode==27?69:(mode==28?71:0);g.points[slot].lock_entity=999;
+   BotCecilLocks(&player,state,.15);check(state.blocked[slot],"real missing physical lock remains blocked in retained anchor guard matrix");}
+  const int anchor=state.anchor;const double nav=state.currentNavTime;const int navGoal=state.currentNavGoal;
+  const bool navTravel=state.currentNavTravel;const int rays=rayCount;const int budget=_botRayBudget;
+  const bool accepted=BotCecilGroundedReplan(&player,state,move,0,42);
+  check(!accepted&&groundReplanEvents==0&&state.anchor==anchor&&anchor==69,
+   "stale retained anchor cannot bypass any current grounded eligibility connector lock or graph veto");
+  check(state.goalEntity==311&&state.goalSince==0&&state.goalDeadline==12&&state.currentNavTime==nav&&
+    state.currentNavGoal==navGoal&&state.currentNavTravel==navTravel,
+   "failed fresh grounded check changes no attempt deadline anchor or current navigation authority");
+  check(rayCount-rays<=budget&&_botRayBudget>=2,"retained anchor guard failure preserves original shared query bounds");
  }
 }
 
@@ -1157,7 +1212,9 @@ void groundedReplanGuards(){
   if(n==15)wallMode=2;
   if(n==16)state.useReleaseTick=10000;
   if(n==17){state.avoidNode=0;state.avoidUntil=100;}
-  if(n==18)state.anchor=2;
+  if(n==18){state.anchor=2;groundedReplanHold();
+   check(groundReplanEvents==1&&state.anchor==0&&state.goalEntity==311&&state.goalDeadline==12,
+    "stale committed source hint is replaced only by a freshly checked ground replan");continue;}
   if(n==19)player.en_vCurrentTranslationAbsolute=FLOAT3D(.08f,.08f,0);
   if(n==20)floorEntity.cls.name="Classes/WorldBaseFake.ecl";
   if(n==21){player.hasWorld=false;botcore::CecilMotion denied;denied.active=true;denied.hop=3;
@@ -1165,7 +1222,9 @@ void groundedReplanGuards(){
   if(n==22)BotSupplyGraph().points[2].flags=botcore::CECIL_IMPORTANT;
   if(n==23)BotSupplyGraph().points[3].flags=botcore::CECIL_TELEPORT;
   if(n==24)BotSupplyGraph().points[3].y=4;
-  if(n==25)BotSupplyGraph().points[0].y=5;
+  if(n==25){BotSupplyGraph().points[0].y=5;groundedReplanHold();
+   check(groundReplanEvents==1&&state.anchor==1&&state.goalEntity==311&&state.goalDeadline==12,
+    "fresh alternative ground1 remains valid when ground0 alone lies outside vertical acquisition range");continue;}
   if(n==26){state.avoidNode=3;state.avoidUntil=100;}
   if(n==27)state.interactionPoint=2;
   if(n==28)state.navigator.Reset();
@@ -1173,7 +1232,9 @@ void groundedReplanGuards(){
   if(n==30){BotSupplyGraph().points[3].flags=botcore::CECIL_UNREACHABLE;
    player.pl.pl_PositionVector=FLOAT3D(63.0233955f,.378f,63.126381f);state.anchor=1;BotSupplyGraph().points[1].radius=.1f;}
   if(n==31)player.en_plViewpoint.pl_OrientationAngle(1)=NAN;
-  groundedReplanHold();check(groundReplanEvents==0,"unknown moving liquid invalid special disconnected or stale anchor context cannot rebase high edge");
+  groundedReplanHold();
+  if(groundReplanEvents)std::printf("grounded existing veto case=%d events=%d anchor=%d\n",n,groundReplanEvents,state.anchor);
+  check(groundReplanEvents==0,"unknown moving liquid invalid special disconnected or unavailable ground context cannot rebase high edge");
  }
  groundedReplanFixture();groundedReplanHold(2);check(BotSupplyState(0).goalEntity!=311||BotSupplyState(0).hop!=0,"missing shared connector budget never authorizes grounded rebase");
  groundedReplanFixture();bool bounded=true;for(int tick=2;tick<=43;++tick){_botRayBudget=16;const int before=rayCount;BotSupplyTick(&player,0,tick,1000);bounded&=rayCount-before<=16&&_botRayBudget>=2;}
@@ -4164,6 +4225,7 @@ void blockedOriginReproduction(){
 }
 int main(){
  groundedAcquireHandshakeReproduction();
+ groundedRetainedAnchorGuards();
  blockedOriginReproduction();
  blockedOriginRecoveryGuards();
  itemConnectorRadiusContinuity();

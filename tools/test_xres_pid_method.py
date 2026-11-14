@@ -34,6 +34,31 @@ class Policy(unittest.TestCase):
    with self.subTest(key=key,value=value):
     s,e=fixture();s['results'][0]['ids'][0][key]=value
     with self.assertRaises(ValueError):self.module().validate_snapshot(s,e)
+ def test_server_zero_range_is_retained_but_all_six_own_queries_remain_positive(self):
+  s,e=fixture();s['clients'].insert(0,dict(resource_base=0,resource_mask=2097151))
+  try:r=self.module().validate_snapshot(s,e)
+  except ValueError as error:self.fail('valid server-owned range rejected:'+str(error))
+  self.assertEqual(r['resource_bases'],[0x200000,0x400000,0x600000]);self.assertEqual(len(s['clients']),5)
+  self.assertTrue(all(v['requested_xid']>3 for v in s['results']));self.assertEqual(r['pid_rows'],6)
+ def test_server_zero_does_not_allow_invalid_duplicate_or_ambiguous_ranges(self):
+  for kind in('negative','boolean','too_large','mask_zero','mask_boolean','mask_overlap','small_nonzero','duplicate_zero','ambiguous_zero'):
+   with self.subTest(kind=kind):
+    s,e=fixture();zero=dict(resource_base=0,resource_mask=2097151);s['clients'].insert(0,zero)
+    if kind=='negative':zero['resource_base']=-1
+    elif kind=='boolean':zero['resource_base']=False
+    elif kind=='too_large':zero['resource_base']=0x100000000
+    elif kind=='mask_zero':zero['resource_mask']=0
+    elif kind=='mask_boolean':zero['resource_mask']=True
+    elif kind=='mask_overlap':zero['resource_base']=4
+    elif kind=='small_nonzero':zero.update(resource_base=1,resource_mask=4)
+    elif kind=='duplicate_zero':s['clients'].append(dict(zero))
+    else:zero['resource_mask']=0xffffffff
+    with self.assertRaises(ValueError):self.module().validate_snapshot(s,e)
+ def test_owned_resource_cannot_be_reassigned_to_server_zero_even_with_matching_pid(self):
+  s,e=fixture();s['clients'].insert(0,dict(resource_base=0,resource_mask=2097151));e['resources'][0]['resource']=0x100001
+  for row in s['results'][:2]:
+   row['requested_xid']=0x100001 if row['requested_kind']=='resource'else 0;row['ids'][0]['spec_client']=0
+  with self.assertRaises(ValueError):self.module().validate_snapshot(s,e)
  def test_64_client_bound_and_ambiguous_or_missing_range_rejected(self):
   for kind in('65','missing','duplicate','badmask'):
    with self.subTest(kind=kind):

@@ -1251,11 +1251,14 @@ static bool BotCecilGroundedReplan(CPlayer* player,SSupplyState& s,const botcore
   if(!std::isfinite(sourceHeight)||!std::isfinite(hopHeight)||!std::isfinite(horizontal2)||
      sourceHeight<=4||hopHeight<=4||horizontal2>=1)return false;
   const int candidate=BotSupplyNearest(player,position,TRUE);
-  if(candidate<0||candidate!=s.anchor||candidate==source||candidate==hop||s.blocked[candidate]||
+  if(candidate<0||candidate==source||candidate==hop||s.blocked[candidate]||
      (graph.points[candidate].flags&special)||!s.goals.Run(graph,candidate,s.blocked.data(),s.blocked.size())||
      !std::isfinite(s.goals.Distance(s.goal)))return false;
   BotLog("[CecilGroundReplan] local=%d tick=%d entity=%lu reason=landed_below_committed_edge source=%d hop=%d anchor=%d source_height=%.6f hop_height=%.6f goal=%d goal_entity=%lu\n",
     slot,tick,(unsigned long)player->en_ulID,source,hop,candidate,sourceHeight,hopHeight,s.goal,(unsigned long)s.goalEntity);
+  // A failed periodic scan may retain the committed high anchor. Adopt only
+  // this freshly checked hint; it still needs its original radius on next tick.
+  s.anchor=candidate;
   s.navigator.Reset();s.hop=s.heldNode=-1;s.holdSince=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;
   return true;
 }

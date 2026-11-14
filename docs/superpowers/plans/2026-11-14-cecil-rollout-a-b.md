@@ -1,5 +1,43 @@
 # Cecil-Flottenrollout und Abschluss A → B
 
+## Stand 23:43 UTC – enger Gameplayfix integriert, Native noch offen
+
+GroundedFix40691e6→Root5e2f748, Abschluss1159ee3: Headerc32160c8;
+Root-integriert3440SDKChecks/0Fehler. Worker zusätzlichASan/UBSan3440/0 und
+16ParentprogrammePASS. Root las kompletten Source-/Testdelta, keineCritical/
+Important. Alte Fall18/25 als Anker-Gleichheits-Proxys belegt; legitimer
+Alternativbodenhint bleibt positiv, vollständiger Höhenverlust separat negativ.
+Keine Engine-/Radius-/Deadline-/Floorfreigabeänderung. Nativeursache/Wirksamkeit
+weiter unbewiesen. Build024-Plan1ffd427, DLL noch nicht gebaut.
+
+XResBasis0-Fix integriert61564d6/2f8b0cd; Root16TestsPASS, Originalsnapshot
+replayPASS, alterGesamtFAIL47e10306 unverändert. V2Rootfreeze09be57b6, Peer
+c359a36ePASS_SCOPE nurGatedelta/Pins. Neuer vorbereiteter Parent a7f08e65
+verlangt056vollDrive und altenFAIL/Cleanup, neueOwner-/Ended-/Evidencenamen,
+gleicher enger NoInput-/Zweiersnapshotvertrag. Noch nicht gestartet.
+Nächste Reihenfolge: Quellen/Remote056sichern, genau ein begründeter eigener
+XResV2-Metadatenfall, danach MSVC-Build024 und begründete native A4-Prüfung.
+Beide Worker/Compiler und alle isolierten Spiel-/Methodenprozesse beendet.
+Live unverändert letzte23:36sechs×8/Dev1ungeklärt. Aoffen/Bnichtbegonnen.
+
+## Stand 23:38 UTC – erster XRes-Lauf geschlossen FAIL, Gameplayfix in Arbeit
+
+Die eigene Metadatenprobe23:35 bleibt FAIL47e10306: valide sechs eigene
+PIDantworten im ersten Snapshot, aber Purevalidator verwirft Hintergrundbase0;
+kein zweiter Snapshot. Vier reguläre Closes/reaped0/keineForce; Root prüfte
+Prozessgenerationen/167Absenz/fünf freigegebene Sperren und tatsächliche1+6
+Arrayfreigaben. Kein TSE/Wine/Input, keine automatische Wiederholung.
+[Checkpoint](../reports/2026-11-14-own-xres-pid-native-first-checkpoint.md).
+Candidateworker korrigiert ausschließlich den belegten Protokoll-/Validatorfehler
+mit neuen REDs in separatemWT; A4worker arbeitet getrennt am engen Grounded-
+Replan-Fix nach3274/2RED. Root allein integriert und entscheidet Nativefenster.
+
+Delta055:7097402B/SHA06ad5e26, vollständig Drive-rückgelesen und807
+Dateimetadaten zweimal PASS. Source lokal6d07a9b/remote7cced7dd, Tree3573366f
+nach Fetch identisch. Neue geschlossene XResdaten gehören erst in056.
+Flotte23:36:34 weiterhin sechs×8eigene, Dev1ungeklärt; alle18Role-PIDs/DLLs
+bytegleich zur23:25Abfrage. Keine Liveänderung/Promotion. Aoffen/Bnichtbegonnen.
+
 ## Stand 23:33 UTC – SDK-Reproduktion und XRes-Methode vorbereitet
 
 Die frische SDK107-Reproduktion liefert 3274 Checks mit zwei gezielten REDs:

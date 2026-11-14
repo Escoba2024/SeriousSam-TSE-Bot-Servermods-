@@ -46,7 +46,7 @@ def validate_snapshot(snapshot,expected):
  bases=[]
  for item in clients:
   base=uint(item.get('resource_base'));mask=uint(item.get('resource_mask'))
-  require(base>3 and mask>0 and not base&mask,'invalid client range')
+  require((base==0 or base>3)and mask>0 and not base&mask,'invalid client range')
   bases.append(base)
  require(len(set(bases))==len(bases),'duplicate client base')
  resources=expected.get('resources')
@@ -58,7 +58,7 @@ def validate_snapshot(snapshot,expected):
   xid=uint(target.get('resource'));require(xid>3,'known own resource required')
   matches=[v for v in clients if xid&(~v['resource_mask']&0xffffffff)==v['resource_base']]
   require(len(matches)==1,'resource client range absent/ambiguous')
-  client=matches[0];base=client['resource_base'];matched.append(base)
+  client=matches[0];base=client['resource_base'];require(base>3,'own resource must belong to a positive client base');matched.append(base)
   for j,(kind,requested)in enumerate((('resource',xid),('base',base))):
    row=results[i*2+j]
    require(row.get('requested_kind')==kind and type(row.get('requested_xid'))is int and row['requested_xid']==requested,'actual resource/base query order differs')
