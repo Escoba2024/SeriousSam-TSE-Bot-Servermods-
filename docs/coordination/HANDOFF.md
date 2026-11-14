@@ -1,3 +1,21 @@
+## Geschlossener A4-V3-Hardnachweis — 14.11.2026, 13:24 UTC
+
+Kein Native-/Build-/Liveexecutor aktiv. Red-Hard2/020 nach600,129s PASS_LIMITED_A4_OBSERVATION_FUNCTIONAL_REVIEW_REQUIRED; Ergebnis fb668f2a42e51b809ba528aa6d6a3682ab699521e99ace054cdea6e3ccb1db1e. Alle8Slots brauchbare tatsächliche Inventargewinne und gebundene Feuerflagbelege,179Serverkillereignisse, keine neuen Fehler in4vollständigenSchlusslogs. Root640Dateien/Metadaten+4Loghashes/allePIDStartidentitäten/2Displays unabhängigRestorePASS. CPUmax56,818%,RAMmin2706440192/Diskmin9670295552,Gameplaygap1,166s; allgemeinerBudgetclaimfalse/Startupgap46,579s. KeineAtomizität/Waffenfunktionscalls/Erstzustand/Reset-/Watchdogabnahme behauptet, keine020Livepromotion.
+
+BeideAgenten dürfen nun eng offline arbeiten: candidate A1-Mappingfehlerquittung mit unveränderter Assertion und denselben bereits gelesenen Rows; a4 unabhängiger geschlossenerV3Review. RootalleinRuntime/Integration; nächstesNative erst nachderenEnde/frischemPreflight. NeueA1/A3Forks,130456A1FAIL und131207V3Belege benötigen Delta033. Remote zuletzt08c065fab8f96a62508b0b16b1d3d716c4a73917/Treeaac38a7c0f61545fa1e9857e9e78dd27c12dd135 gleichlokal783b0e7; neueDokumentation nochzuveröffentlichen. Publiczuletzt6×8,Red7fc/andere5018; A/Boffen.
+
+---
+
+## Historischer Start einzelnes A4-V3-Hardfenster — 2026-11-14T13:12:02.006885+00:00
+
+Genau ein600sRedStation-Hard2/diag0-Lauf startet. Owner/Log/Ended /srv/tse-cecil-rollout-evidence-20261114/a4-hard020-ordered-redstation-{owner.json,native.log,ended.json}, run-hard-map-ordered.py. Freeze56f4c319551459d5c7a201d82ee75f03641232ec33d29eca7e2f86b71390fb65/Launcher7f7d38c88d2e554bb58866bae213d3e6a296e957df83a9e4547bb424201ad080 unabhängig64/52/33Pins PASS_SCOPE;85RootOfflinechecksPASS. Alle kanonischen MemoryObservations und gebundenen Attempts erhalten; kein atomarer Waffenfunktionscall behauptet. AlterHard935f6d88FAIL unverändert.
+
+Preflight13:11:39 frei/LocksPASS,CPU35,34%,RAM3644272640/Disk9821462528. Beide Agenten STATICONLY; candidate bereitet nur statisch A1-Fehlerquittung vor, Assertion bleibt hart. Rootpublikation/Archive/Downloads/Tests beendet, während Fenster nur leichte Statusabfragen. Nach Ende normaleCloses/Schlusslogs/unabhängigenRestore prüfen, keine automatische Wiederholung/Kartenserie/Livepromotion.
+
+Remote08c065fab8f96a62508b0b16b1d3d716c4a73917/Treeaac38a7c0f61545fa1e9857e9e78dd27c12dd135 tatsächlich gleichlokal783b0e7409158c966e609af221939c9a88f8d08c. Delta032 externfullPASS; neue A1/V3Nativebelege033 offen. A/B offen, PublicRed7fc/andere5018 je8.
+
+---
+
 ## Geschlossener korrigierter Retailtrace — 14.11.2026,13:09 UTC
 
 Kein Native-/Build-/Liveexecutor aktiv. A1130456 FAIL vor Gameplayinput an bestehender exact-mapped_rows-Modulprüfung strict_backend.py91 nach Arm. Tatsächliche Rolle/Modul/Mapdifferenz nicht archiviert und UNKNOWN; keine pauschale Ausnahme zulässig. Result3d33b79367b718bb9b38acc38bcf4634ed3493c23b566e27d18b464ce957fea5. Originalbytevergleich/Unload/Detach bestätigt; alle3Rollen/2Displays/Worker beendet, Root664Dateien+8Absenzen+3Schlusslogs/MetadatenrestorePASS.

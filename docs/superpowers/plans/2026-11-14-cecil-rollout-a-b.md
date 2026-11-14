@@ -19,7 +19,7 @@ Keine Umwertung alter FAILs. Keine RDC-Ausführung ohne belegte Wiederfreigabe. 
 - Alte Fehler mit neuen Ereignissen vermischt: Logoffsets und Prozessgenerationen getrennt halten.
 - Sessionwechsel entfernt Gruppe oder verschiebt GUID: B-Einzelzyklen und unbeteiligte Spieler explizit prüfen.
 
-## Task 1: Bestand und initialer Rollout [IN ARBEIT]
+## Task 1: Bestand und initialer Rollout [INITIALER ROLLOUT BELEGT; REGELKORREKTUR OFFEN]
 
 Dateien: bestehender `restart-fleet-20261111.py`, `cecil_fleet_install.py` als geprüfte Hilfen; neue private Runtimequittungen; bereinigter Bericht unter `docs/reports/`.
 
@@ -61,6 +61,8 @@ Vor Umsetzung eigenes konkretes Design anhand Originalauftrag und vorhandener In
 - [ ] Quellen/Configs/Navmetadaten/Tests/bereinigte Berichte committen/pushen; Remote tatsächlich lesen; vorgesehene Integration und ausführbaren Restore dokumentieren.
 
 ## Ausführungsledger
+
+13:24 UTC: Geordnetes V3-Hard2-Redfenster geschlossen mit begrenztem Beobachtungs-PASS nach600,129s. Alle8Slots echte brauchbare Inventargewinne und gebundene Feuerflags/Quellzähler,179Serverkillereignisse, keine neuen Schlusslogfehler. Root640Dateien/Metadaten+4Schlusslogs/Prozess-/DisplayendeRestorePASS. Resultfb668f2a42e51b809ba528aa6d6a3682ab699521e99ace054cdea6e3ccb1db1e. Kein vollständiges A4, kein020live; unabhängige Review läuft. A1-Mappingfehlerquittung nur mit unveränderter harter Gleichheitsprüfung im separatenWorktree; Offlinearbeit wieder erlaubt. Delta033 für neueForks/A1-/V3-Belege offen.
 
 2026-11-14: Historischer Deploymentblocker durch regulären bereitgestellten Terminalzugang ersetzt. Kein Umgehen eines Diagnose-/Kontingentlimits. Alte Runtime-/A-Abnahmen unverändert offen. Candidate-Audit arbeitet ausschließlich lesend; Root allein Runtimewriter. Die servereigenen Red-Station-Locks sind laufender Serverbesitz und werden nicht entfernt.
 
