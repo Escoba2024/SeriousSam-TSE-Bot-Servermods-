@@ -1,0 +1,64 @@
+# Cecil-Flottenrollout und Abschluss A → B
+
+> **For agentic workers:** Use superpowers:executing-plans. Hauptagent integriert und verändert Runtime; maximal zwei getrennte Analyseworker.
+
+**Goal:** Zuerst den belegten Cecil-Stand auf sechs Instanzen aktivieren, danach A belegen, B auf Dev abnehmen und gestaffelt veröffentlichen.
+**Architecture:** Bestehende Retail-1.07-Dedicated-Rollen erhalten; Bot-DLL plus nachgewiesenes Kampf-/Navprofil in separaten Botclients. Individuelle B-Sessions erst nach A-Abschluss.
+**Tech Stack:** C++, MSVC/Wine, Python, systemd, GameSpy, Retail 1.07.
+**Spec:** Nutzerauftrag 14.11.2026; privates Original `/srv/tse-milestone-a-evidence-20261111/request.md`; bestehende Pläne vom 11./13.11.
+
+## Globale Grenzen und Abnahme
+
+Keine Umwertung alter FAILs. Keine RDC-Ausführung ohne belegte Wiederfreigabe. Regulärer lokaler Terminalzugriff ist vorhanden (Host/UID geprüft). Mindestens 8 GiB Disk; B mindestens 25 % CPU-Reserve/1,5 GiB verfügbarer RAM. Namenpool458, GUIDs, Maps, Spielregeln und englische Hinweise erhalten. Dedicated-DLL niemals durch Bot-DLL ersetzen. Keine menschlichen Teilnehmer verdrängen. Alle Liveänderungen unter bestehenden Flotten-/Runtime-Locks, mit frischem verifiziertem Restorestand.
+
+## Review Focus
+
+- Höhere Buildnummer ohne Herkunft/Testbeleg: nicht auswählen.
+- Neue DLL mit deaktiviertem Cecil-/Kampfprofil: tatsächliche Startwerte und Logs prüfen.
+- Verwaister/ausgetauschter Prozess: PID, Starttick, Cgroup, CWD und geladenes Modul erneut binden.
+- Alte Fehler mit neuen Ereignissen vermischt: Logoffsets und Prozessgenerationen getrennt halten.
+- Sessionwechsel entfernt Gruppe oder verschiebt GUID: B-Einzelzyklen und unbeteiligte Spieler explizit prüfen.
+
+## Task 1: Bestand und initialer Rollout [IN ARBEIT]
+
+Dateien: bestehender `restart-fleet-20261111.py`, `cecil_fleet_install.py` als geprüfte Hilfen; neue private Runtimequittungen; bereinigter Bericht unter `docs/reports/`.
+
+- [x] Host und Git-Worktrees inventarisiert; Remote frisch gefetcht, Ausgangspunkt b797960.
+- [x] Eigener Branch `codex/20261114-cecil-rollout-a-b`, fremde Worktrees erhalten.
+- [x] Frische sechs Queries: je8 eigene Bots, keine zusätzlichen unbekannten Teilnehmer; Public7fc94a39, Dev ec820d04; Dedicated separat.
+- [ ] DLL/Manifest/Quellbaum und tatsächlich getestete Kampfkonfiguration/Navpayload gemeinsam nachhashen.
+- [ ] Dateimetadaten, DLLs, Profile/GUIDs, Konfiguration, Startweg, Nav und Prozess-/Modulidentität sichern und Rücklesen prüfen.
+- [ ] Dev25650, Red25600, Yodeller25610, Skulls25620, Trouble25630, Hole25640 nacheinander: normale eigene Botcloses, Payload installieren, bestehende Dienste starten.
+- [ ] Je Instanz geladene Module,8Bots, Map, Bewegung, Kampf, Tod/Respawn, Cecil und Fehlerdifferenzen im kurzen Fenster belegen. Bei schwerer Regression zurückrollen und Ursache beheben.
+- [ ] Gemeinsamen Flottennachweis und aktualisierte Runtimeidentitäten schreiben, committen/pushen und Remote-SHA prüfen.
+
+## Task 2: A-Abschluss [OFFEN]
+
+Dateien/Interfaces: bestehende A1-Observer/Originalinputcontroller; `poc/release/gamemp/`; Cecil-Adapter und bestehende A3/A4-Analyzer. Vor Codeänderung konkreten Fehler aus Belegen lokalisieren, Regression RED→GREEN, qualifizierten neuen Build separat behandeln.
+
+- [ ] A1: normale Erstzustandstreffer/tödlicher Schaden Bot+Vanilla, Input/ACK-Ursache, Neustart und Mapwechsel.
+- [x] A2 historisch abgeschlossen; Erhaltung beim neuen Rollout separat nachweisen.
+- [ ] A3: MITTEL/STARK/DEMON, STARK>MITTEL, Waffenbeschaffung/Bewegung/Kampf anhand tatsächlicher Schaden-/Killbelege.
+- [ ] A4: Build01823/24-Versorgungslücke kausal beheben; Red priorisieren, Neun-Karten-Matrix/Gefahren/Übergänge/Reset vervollständigen.
+- [ ] A5: relevante1/4/8-Bot-Gates3600/3600/7200s, Ressourcen, keine neue Sync-/Crashregression; geprüfte Verbesserung Dev→Public.
+
+## Task 3: B auf Dev [GESPERRT BIS A]
+
+Vor Umsetzung eigenes konkretes Design anhand Originalauftrag und vorhandener Interfaces festhalten; keine verfrühte B-Implementierung.
+
+- [ ] B1 sechs Originalzustände, persistente IDs, exklusiver Controller, idempotenter individueller Join/Leave/Rejoin; Ersatz zuerst, Mindestziel8, Menschen vor Zusatzbots.
+- [ ] Aufenthalt20–90min, Pause3–20min, Zielwechsel10–30min, ein Wechsel/Server, mindestens30s Abstand;8/11/13 nur innerhalb Budget.
+- [ ] Drei echte unterschiedliche Botzyklen, voller Server, Joinablehnung, Crash, Controllerneustart; unbeteiligte Bots laufen weiter.
+- [ ] B2 lokaler DE/EN-Pool,5–12%, Botcooldown3–8min, höchstens3/60s, Abstand≥10s, Verzögerung1–4s, keine Textwiederholung30min, getrennte Flags.
+- [ ] Ingame-Zuordnung/Encoding/Chatlimit auf Originalclient, gleichzeitige Sessions, Ressourcen und Restore prüfen.
+
+## Task 4: B-Flotte, Sicherung und Veröffentlichung [OFFEN]
+
+- [ ] Dev-abgenommenes B zuerst auf einem Public prüfen, weitere einzeln aktualisieren.
+- [ ] Gemeinsame Tabelle: Version/Module, Mindestziel/Soll/Ist/eigene/fremde, Sessions/Chat, Fehler/Ressourcen.
+- [ ] Private Delta022/023 und neue Restorearchive in bestehendem Drive-Projekt sichern, rücklesen/hashen; fehlenden Transport konkret dokumentieren.
+- [ ] Quellen/Configs/Navmetadaten/Tests/bereinigte Berichte committen/pushen; Remote tatsächlich lesen; vorgesehene Integration und ausführbaren Restore dokumentieren.
+
+## Ausführungsledger
+
+2026-11-14: Historischer Deploymentblocker durch regulären bereitgestellten Terminalzugang ersetzt. Kein Umgehen eines Diagnose-/Kontingentlimits. Alte Runtime-/A-Abnahmen unverändert offen. Candidate-Audit arbeitet ausschließlich lesend; Root allein Runtimewriter. Die servereigenen Red-Station-Locks sind laufender Serverbesitz und werden nicht entfernt.
