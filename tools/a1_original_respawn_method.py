@@ -12,6 +12,7 @@ import math
 import os
 from pathlib import Path
 import struct
+import stat
 import time
 from types import SimpleNamespace
 
@@ -21,6 +22,75 @@ def need(ok,message):
 
 
 def finite(value):return type(value)in(int,float)and math.isfinite(value)
+
+
+# Same maximum already enforced by unchanged NAI.private_json. Aggregate
+# reservation is deliberately conservative: two old maxima, never unbounded.
+OWNERSHIP_RECEIPT_LIMIT=1536*1024
+OWNERSHIP_TOTAL_LIMIT=2*OWNERSHIP_RECEIPT_LIMIT
+
+
+class OwnershipReads:
+    """Fresh custody for initial frame and every subsequent roles read.
+
+    No role/proof cache. Callback performs the unchanged actual capture. The
+    whole callback and fsync stay inside the existing absolute parent deadline.
+    """
+    def __init__(self,evidence,clock,deadline):
+        need(finite(deadline),'ownership absolute deadline')
+        self.evidence=Path(evidence);self.clock=clock;self.deadline=deadline
+        self.attempts=[];self.payload_bytes=0;self.failed=False;self.created=False
+        self.receipt={'schema':'ORIGINAL_RESPAWN030_FRESH_ROLE_READS_V1',
+          'maximum_reads_including_initial':1024,'single_receipt_limit':OWNERSHIP_RECEIPT_LIMIT,
+          'aggregate_payload_limit':OWNERSHIP_TOTAL_LIMIT,'absolute_deadline':deadline,
+          'attempts':self.attempts,'payload_bytes':0,'failed':False}
+
+    def read(self,capture):
+        row=None;primary=None;result=None;path=None;start=None
+        try:
+            need(not self.failed,'sticky ownership read failure')
+            need(len(self.attempts)<1024,'1024 ownership reads including initial')
+            need(self.payload_bytes+OWNERSHIP_RECEIPT_LIMIT<=OWNERSHIP_TOTAL_LIMIT,'ownership receipt payload budget')
+            start=self.clock();need(finite(start)and start<self.deadline,'ownership read deadline before capture')
+            serial=len(self.attempts)+1
+            row={'serial':serial,'started':start,'finished':None,'status':'IN_PROGRESS',
+                 'receipt':f'respawn-role-reads/{serial:04d}/natural-ai-ownership.json',
+                 'capture_invoked':False,'payload_bytes':None,'custody_errors':[]}
+            self.attempts.append(row)
+            base=self.evidence/'respawn-role-reads'
+            if not self.created:base.mkdir(mode=0o700);self.created=True
+            directory=base/f'{serial:04d}';directory.mkdir(mode=0o700)
+            path=directory/'natural-ai-ownership.json'
+            before=self.clock();need(finite(before)and start<=before<self.deadline,'ownership read deadline before callback')
+            row['capture_invoked']=True;result=capture(directory)
+        except BaseException as error:primary=error
+        finally:
+            if row is not None and row['capture_invoked']:
+                try:
+                    # No extra game/source read. Only account the known, newly
+                    # created receipt, including when actual validation failed.
+                    with os.fdopen(os.open(path,os.O_RDONLY|os.O_NOATIME|os.O_NOFOLLOW),'rb')as stream:
+                        info=os.fstat(stream.fileno())
+                        self.payload_bytes+=info.st_size;row['payload_bytes']=info.st_size
+                        need(stat.S_ISREG(info.st_mode)and stat.S_IMODE(info.st_mode)==0o600,'private ownership receipt type/mode')
+                        need(0<info.st_size<=OWNERSHIP_RECEIPT_LIMIT,'bounded actual ownership receipt')
+                        need(self.payload_bytes<=OWNERSHIP_TOTAL_LIMIT,'aggregate ownership receipt payload')
+                except BaseException as error:
+                    row['custody_errors'].append(repr(error)[:256])
+                    if primary is None:primary=error
+            if row is not None:
+                try:
+                    end=self.clock();row['finished']=end if finite(end)else None
+                    need(finite(end)and start<=end<self.deadline,'ownership read deadline after capture')
+                except BaseException as error:
+                    row['custody_errors'].append(repr(error)[:256])
+                    if primary is None:primary=error
+                row['status']='PASS'if primary is None else'FAIL'
+                if primary is not None:row['error']=repr(primary)[:256]
+            if primary is not None:self.failed=True
+            self.receipt.update(payload_bytes=self.payload_bytes,failed=self.failed)
+        if primary is not None:raise primary
+        return result
 
 
 class FireJournal:

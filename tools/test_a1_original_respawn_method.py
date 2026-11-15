@@ -28,6 +28,65 @@ def replica(frame):
             'vanilla_process_identity':frame['identity']['vanilla']}
 
 
+class OwnershipReadBounds(unittest.TestCase):
+    def setUp(self):
+        self.m=module();self.assertTrue(hasattr(self.m,'OwnershipReads'),'bounded fresh ownership-read adapter absent')
+        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
+        self.evidence=Path(self.tmp.name);self.clock=Clock()
+        self.reads=self.m.OwnershipReads(self.evidence,self.clock,85.)
+
+    def capture(self,path):
+        data=b'{"actual":"fresh"}\n'
+        with os.fdopen(os.open(path/'natural-ai-ownership.json',os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600),'wb')as f:f.write(data)
+        return {'fresh':str(path)}
+
+    def test_serial_cap_includes_initial_and_prohibits_1025_before_callback(self):
+        calls=[]
+        self.reads.attempts=[{}]*1023
+        self.reads.read(lambda p:(calls.append(str(p)),self.capture(p))[1])
+        with self.assertRaisesRegex(ValueError,'1024'):self.reads.read(lambda p:calls.append('bad'))
+        self.assertEqual(len(calls),1);self.assertTrue(self.reads.failed)
+        self.assertEqual(len(self.reads.attempts),1024)
+
+    def test_aggregate_cap_reserves_actual_old_single_receipt_max_before_read(self):
+        self.assertEqual(self.m.OWNERSHIP_RECEIPT_LIMIT,1536*1024)
+        self.assertEqual(self.m.OWNERSHIP_TOTAL_LIMIT,2*self.m.OWNERSHIP_RECEIPT_LIMIT)
+        self.reads.payload_bytes=self.m.OWNERSHIP_RECEIPT_LIMIT+1;calls=[]
+        with self.assertRaisesRegex(ValueError,'payload budget'):self.reads.read(lambda p:calls.append(p))
+        self.assertFalse(calls);self.assertFalse(self.reads.attempts)
+
+    def test_pre_and_post_real_absolute_deadline_fail_no_reset(self):
+        self.clock.t=85.;calls=[]
+        with self.assertRaisesRegex(ValueError,'deadline'):self.reads.read(lambda p:calls.append(p))
+        self.assertFalse(calls)
+        self.reads=self.m.OwnershipReads(self.evidence,self.clock,85.);self.clock.t=84.
+        def late(p):value=self.capture(p);self.clock.t=85.;return value
+        with self.assertRaisesRegex(ValueError,'deadline'):self.reads.read(late)
+        self.assertTrue(self.reads.failed);self.assertEqual(len(self.reads.attempts),1)
+        self.assertGreater(self.reads.payload_bytes,0)
+
+    def test_capture_primary_exception_retained_with_missing_evidence_secondary(self):
+        primary=OSError('actual ownership read failed')
+        def bad(p):raise primary
+        with self.assertRaises(OSError)as result:self.reads.read(bad)
+        self.assertIs(result.exception,primary);self.assertTrue(self.reads.failed)
+        self.assertTrue(self.reads.attempts[0]['custody_errors'])
+        with self.assertRaisesRegex(ValueError,'sticky'):self.reads.read(self.capture)
+
+    def test_missing_receipt_permissions_and_preexisting_namespace_fail_closed(self):
+        with self.assertRaises(FileNotFoundError):self.reads.read(lambda p:{})
+        self.reads=self.m.OwnershipReads(self.evidence,self.clock,85.)
+        with self.assertRaises(FileExistsError):self.reads.read(self.capture)
+        self.assertTrue(self.reads.failed)
+
+    def test_after_validation_failure_actual_receipt_remains_accounted(self):
+        def bad(p):self.capture(p);raise ValueError('real role/hash guard')
+        with self.assertRaisesRegex(ValueError,'real role/hash guard'):self.reads.read(bad)
+        row=self.reads.attempts[0];self.assertEqual(row['status'],'FAIL')
+        self.assertGreater(self.reads.payload_bytes,0);self.assertEqual(row['payload_bytes'],self.reads.payload_bytes)
+        self.assertEqual((self.evidence/row['receipt']).stat().st_mode&0o777,0o600)
+
+
 class NormalFire(unittest.TestCase):
     def setUp(self):
         self.m=module();self.assertIsNotNone(self.m,'separate normal-fire method is missing')

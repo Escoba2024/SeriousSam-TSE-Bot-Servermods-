@@ -39,6 +39,9 @@ RUNNER=[
   '# New DEAD_READY basis-reader condition; optional live Colt geometry is not\n    # requested. Both unchanged Reader implementations remain strictly read-only.'),
  ("    report['own_method_windows']=dict(method_windows)",
   "    report['own_method_windows']=dict(method_windows)\n    role='vanilla';number=154;ident=records[role]['identity'];di=displays[number]['identity'];wid=method_windows[role]\n    pin=Pin(role,*ident,str(R/role),P.DISPLAYS[role],*di,wid,str(R/('prefix-'+role)))\n    fire_journal=RP.FireJournal(time.monotonic);FireTransport=RP.make_transport_class(X11Transport)\n    t=FireTransport(pin,lambda:display_guard(number),journal=fire_journal)\n    endpoints[role]=Endpoint(pin,t,lambda:own_identity('vanilla'),lambda:display_guard(number))\n    t.focus();time.sleep(.25);endpoints[role].check_focus();assert window(role)==wid"),
+ ("    def native_roles():", "    ownership_reads=RP.OwnershipReads(E,time.monotonic,parent_started+85.)\n    report['ownership_reads']=ownership_reads.receipt\n    def native_roles():\n     return ownership_reads.read(native_roles_in_scope)\n    def native_roles_in_scope(ownership_evidence):"),
+ ("NAI.capture_ownership(R,E,frame,records,pins,mapping,entity_ids,report['natural_ai_staging'])",
+  "NAI.capture_ownership(R,ownership_evidence,frame,records,pins,mapping,entity_ids,report['natural_ai_staging'])"),
  ("     own_identity('botA')\n     frame['natural_ai_ownership']", "     frame['original_replica']=pair['vanilla']\n     own_identity('botA')\n     frame['natural_ai_ownership']"),
  ("     record=report.setdefault('first_state_method',{}))", "     record=report.setdefault('first_state_method',{}),read_roles=native_roles,endpoint=endpoints['vanilla'],journal=fire_journal)"),
  ('report.update(diagnostic_only=True,normal_route_or_fire=False,input_once_proven=False,foreign_hit_proven=False,',
@@ -89,7 +92,12 @@ def reverse_source(name,data):
 def contracts(outer,nested):
     a,b=copy.deepcopy(outer),copy.deepcopy(nested)
     condition={'condition':CONDITION,'new_condition':True,'readiness_changed':True,
-      'native_input_attempts':2,'requested_fire_seconds':.1,'actual_hold_and_release':'measured; no100ms ACK promise',
+      'native_input_attempts':2,'ownership_read_namespace_changed':True,
+      'ownership_reads_including_initial_max':1024,'ownership_single_receipt_bytes':1536*1024,
+      'ownership_aggregate_receipt_payload_bytes':2*1536*1024,
+      'ownership_full_single_receipt_reserved_before_each_read':True,
+      'ownership_capture_validator_and_private_json_unchanged':True,
+      'requested_fire_seconds':.1,'actual_hold_and_release':'measured; no100ms ACK promise',
       'preparation':'real observed positive health then dead MayRespawn2/neutral before Arm, otherwise FAIL',
       'reader':'unchanged basis Reader without optional live Colt geometry; no fallback',
       'basis_reader_colt_preparation':False,'basis_reader_mouse_input_profile':False,

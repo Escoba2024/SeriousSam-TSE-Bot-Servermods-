@@ -4972,7 +4972,161 @@ void firstWeaponSideItemReproduction(){
  }
 }
 
+// Mechanism reproduction, not a replay of unlogged native physics. Positions
+// below are scripted between sparse032 source observations. Only the authored
+// induced27/59/60/61/62 subgraph is retained; full native lock/LOS state is unknown.
+void mapped220CirculationFixture(){
+ setup(110);bot_bDiagnostics=false;auto& g=BotSupplyGraph();
+ for(auto& p:g.points){p.links.clear();p.x=10000;p.y=10000;p.z=10000;}
+ const int slots[]={27,59,60,61,62};
+ const float xyzr[][4]={{-68.75f,4.5f,-.25f,2},{-65.5f,4.5f,18.75f,2},
+  {-55.25f,.5f,19.25f,1},{-56.25f,.5f,29.75f,3},{-61.25f,.5f,22.75f,1.5f}};
+ for(int i=0;i<5;++i){auto& p=g.points[slots[i]];p.x=xyzr[i][0];p.y=xyzr[i][1];p.z=xyzr[i][2];p.radius=xyzr[i][3];}
+ g.points[27].links={59};g.points[27].important_entity=220;
+ g.points[59].links={60,27,61};g.points[60].links={59,61};g.points[61].links={60};g.points[62].links={61,60};
+ auto& item=addItem(220,-69,0,botcore::CecilItemKind::Weapon);item.item.weapon=9;item.pl.pl_PositionVector(2)=4.001f;
+ auto& s=BotSupplyState(0);s.entity=player.en_ulID=684;s.generation=39;
+ s.goal=27;s.goalEntity=220;s.goalKind=botcore::CecilItemKind::Weapon;
+ s.goalSince=0;s.goalDeadline=20;s.mappedWeaponGoal=true;s.anchor=60;s.scanTick=0;
+ player.pl.pl_PositionVector=FLOAT3D(-55.293f,.005f,18.734f);player.health=40;
+ player.w.m_iAvailableWeapons=player.w.usable=7;s.owned=7;
+ floorEntity.en_ulID=1;floorEntity.type=CEntity::RT_BRUSH;floorEntity.cls.name="Classes/WorldBase.ecl";
+ floorEntity.en_pwoWorld=&player.world;player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
+ floorMode=1;BotCecilSettings().bAvoidPits=0;
+}
+void mapped220CirculationPose(int tick){
+ const FLOAT3D poses[]={FLOAT3D(-55.293f,.005f,18.734f),FLOAT3D(-59.859f,.003f,20.609f),FLOAT3D(-62.210f,.003f,23.186f)};
+ const int phase=(tick-1)%60,leg=phase/20;const double fraction=(phase%20)/20.0;
+ const auto& a=poses[leg];const auto& b=poses[(leg+1)%3];
+ player.pl.pl_PositionVector=a*(float)(1-fraction)+b*(float)fraction;
+ player.en_vCurrentTranslationAbsolute=b-a; // Synthetic nonstationary input, not an ACK.
+}
+void mapped220Circulation(){
+ mapped220CirculationFixture();auto& s=BotSupplyState(0);int enters59=0,returns62=0,oldSource=-1,oldHop=-1;
+ bool bounded=true,timing=true,neverArrived=true;double bestGoal=1e30,bestAt=-1,ended=-1;
+ for(int tick=1;tick<400;++tick){
+  mapped220CirculationPose(tick);
+  const int raysBefore=rayCount;auto move=hopCheckpoint45Tick(tick);
+  const int source=s.navigator.SourceSlot(27),hop=s.hop;
+  if(source!=oldSource||hop!=oldHop){
+   if(source==60&&hop==59)++enters59;
+   if(source==62&&hop==60)++returns62;
+   std::printf("CIRC220 t=%.3f source=%d hop=%d anchor=%d transit_since=%.3f transit_best=%.6f goal=%lu deadline=%.3f\n",
+    tick*.05,source,hop,s.anchor,s.itemTransitSince,s.itemTransitBest,(unsigned long)s.goalEntity,s.goalDeadline);
+   oldSource=source;oldHop=hop;
+  }
+  const double distance=(player.pl.pl_PositionVector-FLOAT3D(-68.75f,4.5f,-.25f)).Length();
+  if(distance<bestGoal-1e-5){bestGoal=distance;bestAt=tick*.05;}
+  bounded&=rayCount-raysBefore<=16&&_botRayBudget>=0;
+  neverArrived&=!BotCecilAtNode(&player,27)&&!BotCecilAtNode(&player,59)&&hop!=27;
+  timing&=s.goalEntity!=220||(s.goalSince==0&&s.goalDeadline==20&&!s.goalRelocationBudgeted);
+  if(s.goalEntity!=220){ended=tick*.05;break;}
+  (void)move;
+ }
+ std::printf("CIRC220 summary enters59=%d returns62=%d best_goal=%.6f last_new_best=%.3f ended=%.3f transit_since=%.3f clock_age=%.3f\n",
+  enters59,returns62,bestGoal,bestAt,ended,s.itemTransitSince,19.95-s.itemTransitSince);
+ check(enters59>=3&&returns62>=3,"032 mechanism uses real fresh nearest reached62 relocations and repeatedly recommits60-to59");
+ check(neverArrived&&bestAt<4&&bounded&&timing,"032 circulation gives no goal or hop59 arrival no new target progress and no ray or lifetime grant");
+ check(player.w.m_iAvailableWeapons==7&&player.w.usable==7,"032 circulation fixture never fabricates useful pickup");
+ check(ended>=10&&ended<19.95,"032 repeated reached-neighbor circulation must not restart the same first-weapon no-progress allowance until its full twenty-second deadline");
+ // A real arrival/route advance remains legal under the exact same metadata.
+ mapped220CirculationFixture();hopCheckpoint45Tick(1);player.pl.pl_PositionVector=FLOAT3D(-65.5f,4.5f,18.75f);
+ hopCheckpoint45Tick(2);check(BotSupplyState(0).navigator.SourceSlot(27)==59&&BotSupplyState(0).hop==27,
+  "032 actual arrival at59 still advances the original directed edge toward27");
+ player.pl.pl_PositionVector=FLOAT3D(-68.75f,4.5f,-.25f);hopCheckpoint45Tick(3);
+ check(BotCecilAtNode(&player,27)&&BotSupplyState(0).goalEntity==220&&BotSupplyState(0).goalDeadline==20,
+  "032 genuine final node arrival keeps unchanged weapon connector and fixed lifetime");
+}
+void mapped220InterruptedEvidence(){
+ for(int mode=0;mode<12;++mode){
+  mapped220CirculationFixture();auto& s=BotSupplyState(0);auto& g=BotSupplyGraph();
+  bool retained=true;
+  for(int tick=1;tick<400;++tick){
+   if(mode==0&&tick>=80&&tick<=88)continue; // Missing observations, not proof of no motion.
+   mapped220CirculationPose(tick);_botRayBudget=16;
+   auto move=BotSupplyTick(&player,0,tick,1000);const int source=s.navigator.SourceSlot(s.goal),hop=s.hop;
+   bool accepted=true;const bool interrupt=tick==80;
+   if(interrupt){
+    if(mode==1)accepted=false;
+    if(mode==2)s.currentNavTime=-1;
+    if(mode==3&&source>=0)s.blocked[source]=1;
+    if(mode==4&&hop>=0)s.blocked[hop]=1;
+    if(mode==5&&source>=0)g.points[source].flags=botcore::CECIL_JUMP;
+    if(mode==6&&hop>=0)g.points[hop].flags=botcore::CECIL_TELEPORT;
+    if(mode==7&&source>=0)g.points[source].lock_entity=123;
+    if(mode==8&&hop>=0)g.points[hop].lock_entity=123;
+    if(mode==9)player.en_vGravityDir=FLOAT3D(0,0,-1);
+    if(mode==10)player.en_vCurrentTranslationAbsolute(1)=std::numeric_limits<float>::quiet_NaN();
+    if(mode==11)s.playable=false;
+   }
+   double f=move.forward,st=move.strafe,up=move.up;
+   BotCecilSafeMotion(&player,s,tick*.05,f,st,up,0,1,accepted);
+   retained&=s.goalEntity==220&&s.goalSince==0&&s.goalDeadline==20;
+   if(interrupt){
+    if(source>=0){s.blocked[source]=0;g.points[source].flags=0;g.points[source].lock_entity=-1;}
+    if(hop>=0){s.blocked[hop]=0;g.points[hop].flags=0;g.points[hop].lock_entity=-1;}
+    player.en_vGravityDir=FLOAT3D(0,-1,0);s.playable=true;
+   }
+  }
+  check(retained,"circulation unknown owner/current/lock/special/gravity/gap never supplies cross-edge rejection authority or changes deadline");
+ }
+}
+void mapped220HistoryBoundaries(){
+ // Exercise the actual production history with copied scalar inputs; all real
+ // admission/collision guards are separately exercised by the sequential test.
+ setup(12);auto& graph=BotSupplyGraph();CWorld other;SCecilItemTransitHistory history;
+ const FLOAT3D gravity(0,-1,0);CWorld* world=player.GetWorld();
+ auto observe=[&](double now,int from,int to,double distance){
+  return history.Observe(world,7,684,39,220,11,0,20,gravity,now,from,to,distance,graph.points[from],graph.points[to]);};
+ const int before=rayCount,lookups=worldLookups;allocations=0;measuring=true;
+ observe(.05,0,1,10);observe(.10,1,2,100);observe(.15,0,1,9.75);observe(.20,1,2,99.75);
+ observe(.25,0,1,9.5);observe(.30,1,2,99.5);
+ check(near(history.since,.10),"partial gains to different edge endpoints cannot combine into a false point75 progress");
+ observe(.35,0,1,9.25);check(near(history.since,.35),"three same-edge point25 gains legitimately accumulate to point75");
+ observe(.40,0,1,12);observe(.45,0,1,9.25);
+ check(near(history.since,.35)&&history.count==2,"moving away and returning to a retained edge best never renews allowance");
+ observe(.50,2,3,1);check(near(history.since,.50)&&history.count==3,"genuinely unseen directed edge receives legitimate progress credit");
+ measuring=false;
+ check(rayCount==before&&worldLookups==lookups&&allocations==0,"actual bounded history adds no Engine rays lookups or heap allocations");
+ history=SCecilItemTransitHistory();
+ for(int i=0;i<8;++i)observe((i+1)*.05,i,i+1,10+i);
+ const auto first=history.edges[0];const double oldSince=history.since;
+ observe(.45,8,9,20);observe(.50,0,1,9);
+ check(history.disarmed&&history.count==8&&history.edges[0].source==first.source&&history.edges[0].best==first.best&&history.since==oldSince,
+  "ninth new edge permanently disarms identical attempt without evicting old facts or inventing allowance");
+ for(int key=0;key<8;++key){
+  history=SCecilItemTransitHistory();observe(.05,0,1,10);history.Disarm();
+  CWorld* w=key==0?&other:world;long map=key==1?8:7;unsigned actor=key==2?685:684,generation=key==3?40:39,item=key==4?221:220;
+  const int goal=key==5?10:11;const double attempt=key==6?.01:0,deadline=key==7?19:20;
+  history.Observe(w,map,actor,generation,item,goal,attempt,deadline,gravity,.10,0,1,9,graph.points[0],graph.points[1]);
+  check(!history.disarmed&&history.count==1&&near(history.since,.10),"only a truly different full attempt domain can establish a fresh history after disarm");
+ }
+ for(int changed=0;changed<4;++changed){
+  history=SCecilItemTransitHistory();observe(.05,0,1,10);
+  const float saved=changed==0?graph.points[0].x:changed==1?graph.points[1].z:changed==2?graph.points[0].radius:graph.points[1].radius;
+  if(changed==0)graph.points[0].x+=1;
+  if(changed==1)graph.points[1].z+=1;
+  if(changed==2)graph.points[0].radius+=1;
+  if(changed==3)graph.points[1].radius+=1;
+  observe(.10,0,1,8);
+  if(changed==0)graph.points[0].x=saved;
+  if(changed==1)graph.points[1].z=saved;
+  if(changed==2)graph.points[0].radius=saved;
+  if(changed==3)graph.points[1].radius=saved;
+  observe(.15,0,1,7);
+  check(history.disarmed&&near(history.since,.05),"edge geometry or radius drift cannot reuse distance facts and cannot rearm when restored");
+ }
+ history=SCecilItemTransitHistory();observe(.05,0,1,10);observe(.31,0,1,9);
+ observe(.36,0,1,8);check(history.disarmed&&near(history.since,.05),"unknown capture gap permanently disarms same attempt rather than charging or renewing it");
+ history=SCecilItemTransitHistory();observe(.10,0,1,10);observe(.05,0,1,9);
+ check(history.disarmed,"backward clock never supplies fresh history authority");
+ auto& state=BotSupplyState(0);state.itemTransitHistory=history;state.ClearGoal();
+ check(!state.itemTransitHistory.world&&!state.itemTransitHistory.disarmed&&!state.itemTransitHistory.count,
+  "real ClearGoal releases all cross-edge attempt facts and disabled state");
+}
+
 int main(){
+ mapped220Circulation();mapped220InterruptedEvidence();mapped220HistoryBoundaries();
  firstWeaponSideItemReproduction();firstWeaponSideItemGuards();firstWeaponAtomicCommitAndLimits();
 
 

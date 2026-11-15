@@ -8,6 +8,7 @@ import copy
 import math
 import struct
 import types
+import tempfile
 from pathlib import Path
 import unittest
 
@@ -65,6 +66,100 @@ class Preparation(unittest.TestCase):
         m=self.helper();old={n:read(ROOT/n)for n in m.CHANGED}
         bad=dict(old);bad['run_dual.py']+=b'\n#unrelated mutation\n'
         with self.assertRaises(ValueError):m.changed_sources(bad)
+
+    def actual_roles_fixture(self,root,evidence):
+        from test_first_state_natural_ai import fixture,gms,raw_log
+        m=self.helper();changed=m.changed_sources({n:read(ROOT/n)for n in m.CHANGED})
+        nai={'__file__':str(root/'first_state_natural_ai.py')}
+        exec(compile(changed['first_state_natural_ai.py'],'actual_transformed_NAI','exec'),nai)
+        frame,records,pins=fixture();payloads=[b'fake-own-dll',b'fake-config',b'fake-nav',b'fake-maps',b'fake-settings',raw_log().encode()]
+        for name,data in zip(nai['TARGETS'],payloads):
+            p=root/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data)
+        p=root/'botA/Data/SeriousSam.gms';p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(gms())
+        for key,data in zip(('BOT_GAME','ACTIVE_CONFIG_SHA','NAV_SHA','MAPS_SHA','SETTINGS_SHA'),payloads):nai[key]=hashlib.sha256(data).hexdigest()
+        pins['botA']['GameMP.dll']['sha256']=nai['BOT_GAME']
+        staging={'schema':'ORIGINAL_RESPAWN030_STAGING_V1','log_epoch':frame['natural_ai_ownership']['log_epoch'],
+                 'staged':{k:hashlib.sha256(v).hexdigest()for k,v in zip(('dll_sha256','config_sha256','nav_sha256'),payloads)}}
+        nai=types.SimpleNamespace(**nai)
+        server=dict(frame['roles']['vanilla'],game_tick=5.,process_identity=records['server']['identity'])
+        pair={'server':server,'vanilla':dict(server,process_identity=records['vanilla']['identity']),
+              'monotonic_started':1.,'monotonic_finished':1.01}
+        samples=[{'game_tick':5.,'process_identity':records['server']['identity'],'players':[
+          dict(row,slot=slot,present=True)for slot,row in enumerate(frame['roles'].values())]}]
+        rotations=[];identities=[];clock=types.SimpleNamespace(t=1.,monotonic=lambda:1.)
+        def paired():rotations.append(pair);return pair
+        spec=importlib.util.spec_from_file_location('actual_RP',HELPER.with_name('a1_original_respawn_method.py'))
+        rp=importlib.util.module_from_spec(spec);spec.loader.exec_module(rp)
+        report={'natural_ai_staging':staging}
+        ns={'R':root,'E':evidence,'NAI':nai,'RP':rp,'time':clock,'parent_started':0.,'report':report,
+            'native_rotation_pair':paired,'samples':samples,'rotation_samples':rotations,
+            'mapping':{'vanilla':0,'botA':1},'entity_ids':{0:101,1:102},'records':records,'pins':pins,
+            'own_identity':identities.append,'S':types.SimpleNamespace(key=lambda x:x['entity_id'])}
+        tree=ast.parse(changed['run_dual.py'])
+        nodes=[n for n in ast.walk(tree)if isinstance(n,ast.FunctionDef)and n.name in('native_roles','native_roles_in_scope')]
+        setup=[n for n in ast.walk(tree)if isinstance(n,ast.Assign)and any(isinstance(t,ast.Name)and t.id=='ownership_reads'for t in n.targets)]
+        exec(compile(ast.Module(body=setup+nodes,type_ignores=[]),'actual_runner_native_roles_closure','exec'),ns)
+        return ns,identities
+
+    def test_actual_native_roles_capture_twice_is_fresh_exclusive_not_cached(self):
+        with tempfile.TemporaryDirectory()as d:
+            root=Path(d)/'arena';root.mkdir();evidence=Path(d)/'evidence';evidence.mkdir()
+            ns,identities=self.actual_roles_fixture(root,evidence)
+            try:
+                first=ns['native_roles']();second=ns['native_roles']()
+            except FileExistsError as error:self.fail('actual second native_roles capture collides: '+str(error))
+            self.assertIsNot(first,second);self.assertIsNot(first['natural_ai_ownership'],second['natural_ai_ownership'])
+            self.assertEqual(identities,['botA']*4)
+            paths=sorted(evidence.glob('respawn-role-reads/*/natural-ai-ownership.json'))
+            self.assertEqual(len(paths),2);self.assertEqual(len(ns['ownership_reads'].attempts),2)
+            for p in paths:self.assertEqual(p.stat().st_mode&0o777,0o600)
+            (root/ns['NAI'].TARGETS[-1]).write_bytes(b'bad fresh log')
+            with self.assertRaisesRegex(ValueError,'source/player-index'):ns['native_roles']()
+            self.assertEqual(len(list(evidence.glob('respawn-role-reads/*/natural-ai-ownership.json'))),3)
+            self.assertTrue(ns['ownership_reads'].failed)
+
+    def test_fresh_roles_feed_actual_native_context_and_strict_sample_twice(self):
+        from test_retail_inventory_animator_context_patch import Memory
+        with tempfile.TemporaryDirectory()as d:
+            root=Path(d)/'arena';root.mkdir();evidence=Path(d)/'evidence';evidence.mkdir()
+            ns,unused=self.actual_roles_fixture(root,evidence);memory=Memory(animator=0)
+            bindings=json.loads(read(ROOT/'method-api/vendor/observer/bindings/original-bindings.json'))
+            rows=ns['samples'][0]['players']
+            for row in rows:
+                row.update(spawned_tick=2.5,health=100.,last_buttons=0)
+                for key,value in [('entity_flags',8),('player_flags',1),('may_respawn',0),('buttons_now',0)]:
+                    memory.put(row['entity_pointer']+bindings['offsets'][key],'I',value)
+                for key,value in [('spawn_clock',2.5),('health',100.)]:memory.put(row['entity_pointer']+bindings['offsets'][key],'f',value)
+            pair=ns['native_rotation_pair']();ns['rotation_samples'].clear()
+            pair['server'].update(spawned_tick=2.5,health=100.,last_buttons=0,present=True,slot=0)
+            pair['vanilla'].update(spawned_tick=2.5,health=100.,last_buttons=0,present=True,slot=0)
+            tree=ast.parse(read(ROOT/'method-api/native_first_state.py'))
+            fn=next(n for n in ast.walk(tree)if isinstance(n,ast.FunctionDef)and n.name=='input_frame')
+            now=[1.01]
+            env={'struct':struct,'math':math,'time':types.SimpleNamespace(monotonic=lambda:now[0]),
+                 'observer_policy':lambda:types.SimpleNamespace(BINDINGS=bindings),'require':ns['NAI'].require}
+            exec(compile(ast.Module(body=[fn],type_ignores=[]),'actual_NativeContext_input_frame','exec'),env)
+            registry={role:{'id':row['entity_id'],'pointer':hex(row['entity_pointer']),'world':hex(row['world_pointer'])}
+                      for role,row in zip(('vanilla','botA'),rows)}
+            ctx=types.SimpleNamespace(registry=registry,read=memory.read,guard=lambda:None,
+                host={r:v['identity']for r,v in ns['records'].items()},
+                expected={'world':hex(rows[0]['world_pointer']),'session':'0x310000','session_level':0})
+            ctx.input_frame=types.MethodType(env['input_frame'],ctx)
+            initial=ns['native_roles']()
+            cls=ns['RP'].make_window_class(types.SimpleNamespace(MethodWindow=object));window=object.__new__(cls)
+            window.record={'readiness_reads':[]};window.context=ctx;window.prep_context=None
+            window.read_roles=ns['native_roles'];window.now=lambda:now[0]
+            first=window._sample();second=window._sample()
+            self.assertEqual(first,second);self.assertEqual(len(ns['ownership_reads'].attempts),3)
+            self.assertIsNot(initial['natural_ai_ownership'],window.record['readiness_reads'][0]['frame'])
+            for row in rows:
+                for key in('may_respawn','buttons_now'):
+                    self.assertEqual(memory.calls.count((row['entity_pointer']+bindings['offsets'][key],4)),4)
+            # Fresh custody does not refresh the paired sample timestamp or relax .2s.
+            now[0]=1.21
+            with self.assertRaisesRegex(ValueError,'fresh .2s frame'):window._sample()
+            self.assertIn('error',window.record['readiness_reads'][-1])
+            self.assertEqual(len(ns['ownership_reads'].attempts),4)
 
     def reader_functions(self):
         tree=ast.parse(read(ROOT/'tools/retail_inventory_readonly.py'))

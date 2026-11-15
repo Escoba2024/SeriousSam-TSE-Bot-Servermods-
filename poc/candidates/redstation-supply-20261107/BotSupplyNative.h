@@ -30,6 +30,49 @@ struct SCecilProbe {
   ULONG hitEntity=0;
   double support=0,normal[3]={0,0,0},from[3]={0,0,0},to[3]={0,0,0};
 };
+// One mapped-weapon attempt may revisit ordinary edges after genuine nearest
+// relocation. Never compare distances to different hops or renew allowance just
+// because a previously seen edge becomes current again. No motion authority.
+struct SCecilItemTransitHistory {
+  struct Edge {int source=-1,hop=-1;double best=0,gainBase=0;
+    float from[3]={0,0,0},to[3]={0,0,0},fromRadius=0,toRadius=0;} edges[8];
+  CWorld* world=NULL;long map=-1;
+  uint32_t actor=0,generation=0,item=0;int goal=-1;
+  double attempt=0,deadline=0,gravity[3]={0,0,0},last=-1,since=-1;
+  unsigned count=0;bool disarmed=false;
+  void Disarm(){if(world)disarmed=true;}
+  bool Observe(CWorld* w,long m,uint32_t a,uint32_t g,uint32_t i,int target,
+      double start,double end,const FLOAT3D& down,double now,int source,int hop,double distance,
+      const botcore::CecilNavPoint& from,const botcore::CecilNavPoint& to){
+    const bool same=world==w&&map==m&&actor==a&&generation==g&&item==i&&goal==target&&
+      attempt==start&&deadline==end;
+    if(!same){
+      *this=SCecilItemTransitHistory();world=w;map=m;actor=a;generation=g;item=i;goal=target;
+      attempt=start;deadline=end;for(int k=0;k<3;++k)gravity[k]=down(k+1);
+    }
+    if(disarmed)return false;
+    for(int k=0;k<3;++k)if(gravity[k]!=down(k+1)){disarmed=true;return false;}
+    if(last>=0&&(now<last||now-last>.25)){disarmed=true;return false;}
+    last=now;
+    unsigned at=0;for(;at<count;++at)if(edges[at].source==source&&edges[at].hop==hop)break;
+    if(at==count){
+      // A long legitimate route remains allowed. No eviction can turn a later
+      // revisit into a fictitiously new edge/allowance for this same attempt.
+      if(count==8){disarmed=true;return false;}
+      ++count;edges[at].source=source;edges[at].hop=hop;
+      edges[at].best=edges[at].gainBase=distance;since=now;
+      edges[at].from[0]=from.x;edges[at].from[1]=from.y;edges[at].from[2]=from.z;edges[at].fromRadius=from.radius;
+      edges[at].to[0]=to.x;edges[at].to[1]=to.y;edges[at].to[2]=to.z;edges[at].toRadius=to.radius;
+    }else{
+      auto& edge=edges[at];
+      if(edge.from[0]!=from.x||edge.from[1]!=from.y||edge.from[2]!=from.z||edge.fromRadius!=from.radius||
+         edge.to[0]!=to.x||edge.to[1]!=to.y||edge.to[2]!=to.z||edge.toRadius!=to.radius){disarmed=true;return false;}
+      edge.best=std::fmin(edge.best,distance);
+      if(edge.gainBase-edge.best>=.75){since=now;edge.gainBase=edge.best;}
+    }
+    return now-since+1e-9>=10;
+  }
+};
 struct SCecilApproachDiagnostic {
   double start=-1,updated=-1;int updateTick=-1,lastTick=-1,previousSource=-1,previousHop=-1;
   bool reached=false;unsigned rows=0;int goal=-1;ULONG goalEntity=0;double deadline=0;botcore::CecilMotion move;
@@ -136,6 +179,7 @@ struct SSupplyState {
   int itemTransitGoal=-1,itemTransitSource=-1,itemTransitHop=-1;
   double itemTransitLast=-1,itemTransitSince=-1,itemTransitBest=0,itemTransitGainBase=0;
   double itemTransitAttempt=0,itemTransitDeadline=0,itemTransitGravity[3]={0,0,0};
+  SCecilItemTransitHistory itemTransitHistory;
   // Passive provenance of accepted special flight; never grants movement safety.
   CWorld* flightWorld=NULL;long flightMap=-1;
   uint32_t flightEntity=0,flightGeneration=0,flightItem=0;
@@ -193,7 +237,7 @@ struct SSupplyState {
   void ClearReacquireScan(){std::fill(reacquireTried,reacquireTried+sizeof(reacquireTried),0);reacquireScanTime=-1;}
   void ClearAvoidance(){ClearHeldProgress();ClearImportantOrigin();avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
   void ClearHopCheckpoint(){hopCheckpointLast=hopCheckpointSince=-1;hopCheckpointGoal=hopCheckpointSource=hopCheckpointHop=-1;hopCheckpointEntity=hopCheckpointGeneration=0;hopCheckpointWorld=NULL;}
-  void ClearItemTransit(){itemTransitWorld=NULL;itemTransitMap=-1;itemTransitEntity=itemTransitGeneration=itemTransitItem=0;
+  void ClearItemTransit(){itemTransitHistory.Disarm();itemTransitWorld=NULL;itemTransitMap=-1;itemTransitEntity=itemTransitGeneration=itemTransitItem=0;
     itemTransitGoal=itemTransitSource=itemTransitHop=-1;itemTransitLast=itemTransitSince=-1;}
   void ClearPatrolEpisode(){patrolWorld=NULL;patrolMap=-1;patrolEntity=patrolGeneration=0;patrolGoal=patrolSource=patrolHop=patrolHint=-1;
     patrolLast=patrolSince=patrolProposalTime=-1;patrolStrikes=0;patrolAlternate=false;patrolLocks=0;
@@ -201,7 +245,7 @@ struct SSupplyState {
   void ClearFlight(){flightWorld=NULL;flightGoal=flightSource=flightHop=-1;flightAccepted=flightPlanned=-1;flightFinishing=false;flightSuccessor=flightSuccessorPlanned=-1;flightSuccessorConsumed=false;}
   void ClearHealthConnector(){healthConnector=SCecilHealthConnector();currentHealthConnector=false;}
   void ClearImportantOrigin(){importantOrigin=SCecilImportantOrigin();currentImportantOriginRecovery=false;}
-  void ClearGoal(){ClearHeldProgress();if(importantOrigin.goal>=0)ClearImportantOrigin();localSupply=SCecilLocalSupply();ClearHealthConnector();ClearFlight();acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearItemTransit();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
+  void ClearGoal(){ClearHeldProgress();if(importantOrigin.goal>=0)ClearImportantOrigin();localSupply=SCecilLocalSupply();ClearHealthConnector();ClearFlight();acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearItemTransit();itemTransitHistory=SCecilItemTransitHistory();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ClearAirMovement(){airMovementTime=-1;airMovementEntity=airMovementGeneration=0;airMovementNode=-1;}
   void ClearGroundSweep(){groundEscapeTried=groundEscapeCursor=0;groundSweepReady=false;}
@@ -2228,6 +2272,7 @@ static bool BotCecilClearMotion(CPlayer* player,double forward,double strafe,dou
 // next typed/needed/allowed target and all subsequent movement keeps its guards.
 static bool BotCecilItemTransitFailed(CPlayer* player,SSupplyState& s,double now,bool accepted,bool currentPoint){
   const auto& graph=BotSupplyGraph();
+  CWorld* observedWorld=NULL; // Capture the existing eligibility read, not a new Engine call.
   int source=s.navigator.SourceSlot(s.goal),hop=s.hop;
   // A checkpoint only reapproaches the same original source. It must not give
   // an unsuccessful item a fresh no-progress clock every five seconds.
@@ -2236,7 +2281,7 @@ static bool BotCecilItemTransitFailed(CPlayer* player,SSupplyState& s,double now
   bool eligible=accepted&&currentPoint&&s.playable&&s.goalEntity&&
     (s.mappedWeaponGoal||s.goalRelocationBudgeted)&&!s.followEntity&&s.interactionPoint<0&&
     (s.useReleaseTick<0||now>s.useReleaseTick*_pTimer->TickQuantum)&&
-    player->GetWorld()&&player->GetHealth()>0&&player->m_penWeapons&&!(player->GetFlags()&ENF_DELETED)&&
+    (observedWorld=player->GetWorld())&&player->GetHealth()>0&&player->m_penWeapons&&!(player->GetFlags()&ENF_DELETED)&&
     !BotCecilLiquid(player)&&(player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH||player->m_pstState==PST_FALL)&&
     std::isfinite(now)&&std::isfinite(s.goalSince)&&std::isfinite(s.goalDeadline)&&now>=s.goalSince&&now<s.goalDeadline&&
     source>=0&&hop>=0&&source!=hop&&(size_t)source<graph.points.size()&&(size_t)hop<graph.points.size()&&
@@ -2284,9 +2329,15 @@ static bool BotCecilItemTransitFailed(CPlayer* player,SSupplyState& s,double now
   }
   s.itemTransitLast=now;s.itemTransitBest=std::fmin(s.itemTransitBest,distance);
   if(s.itemTransitGainBase-s.itemTransitBest>=.75){s.itemTransitSince=now;s.itemTransitGainBase=s.itemTransitBest;}
-  if(now-s.itemTransitSince+1e-9<10)return false;
-  BotLog("[CecilItemTransitEnd] entity=%lu generation=%lu time=%.3f goal_entity=%lu goal=%d source=%d hop=%d since=%.3f best_distance=%.6f reason=no_hop_progress\n",
-    (unsigned long)player->en_ulID,(unsigned long)s.generation,now,(unsigned long)s.goalEntity,s.goal,source,hop,s.itemTransitSince,s.itemTransitBest);
+  bool circulation=false;
+  if(s.mappedWeaponGoal&&s.goalKind==botcore::CecilItemKind::Weapon){
+    circulation=s.itemTransitHistory.Observe(observedWorld,map,player->en_ulID,s.generation,s.goalEntity,s.goal,
+      s.goalSince,s.goalDeadline,player->en_vGravityDir,now,source,hop,distance,graph.points[source],graph.points[hop]);
+  }else s.itemTransitHistory.Disarm();
+  if(now-s.itemTransitSince+1e-9<10&&!circulation)return false;
+  BotLog("[CecilItemTransitEnd] entity=%lu generation=%lu time=%.3f goal_entity=%lu goal=%d source=%d hop=%d since=%.3f best_distance=%.6f reason=%s\n",
+    (unsigned long)player->en_ulID,(unsigned long)s.generation,now,(unsigned long)s.goalEntity,s.goal,source,hop,
+    circulation?s.itemTransitHistory.since:s.itemTransitSince,s.itemTransitBest,circulation?"revisited_edges":"no_hop_progress");
   s.RejectItem(s.goalEntity,now);s.ClearGoal();s.ClearEscape();s.searchAfter=now;s.scanTick=0;
   return true;
 }

@@ -133,3 +133,39 @@ F-v1-FAIL unverändert erhalten. PrivateQuittung disabled-v4-final-receipt.json
 SHAfda261c7047a6881ed078f769a30833ce24bca42a1410f177c14a4ebecdf4fc4.
 MIP-Startupintervention/Originalmarker, NIPcontrols und alte20Method-/Policy-
 Tests unverändert; Letztere nicht erneut ausgeführt. KeineNativefreigabe.
+
+## Forwardfix D-v5: frische Ownershipbelege je Rollenread
+
+Claim bleibt eigener RP-Methodenadapter, exakter Runnertransform und zugehörige
+Tests/Metadaten. Allgemeine NAI-Capture-/Validator-/private_json-Quelle unverändert.
+Realer F2-Control-FAIL FileExistsError beim zweiten Capture bleibt erhalten.
+
+1. Tatsächliche native_roles-Closure samt Capture/private_json mit zwei Reads
+   ausführen: erwarteter RED ist Kollision am bisherigen O_EXCL-Pfad.
+2. Eigenen expliziten RP-Adapter ergänzen: initialer Methodframe UND Folgeproben
+   in EINEM Serialbudget1..1024; frische0700-Verzeichnisse; O_EXCL0600 beibehalten.
+   Maximal3MiB Receiptpayload gesamt = zweimal bestehendes1536KiB-Einzelmaximum;
+   vor jedem Read vollständiges Einzelmaximum reservieren, danach tatsächliche
+   Größe anrechnen. Deshalb kann das Bytebudget konservativ vor1024 abbrechen.
+   Keine Ownership-/Hash-/Logprüfung überspringen oder cachen.
+3. Bestehende absolute parent_started+85-Frist vor/nach Callback; keine neue
+   Frist, Writes zählen real mit. Capturefehler bleibt primär; Custody-/Zeitfehler
+   separat sticky und weiterhin FAIL. Gegenfälle für Budget, Frist, O_EXCL,
+   fehlenden/fehlerhaften Beleg sowie unverändert fatale Ownershipmutation.
+4. Gezielt GREEN und ganze4Runner/NAI/Config-Inversen; frischer D-v5 mit
+   vollständigen Pins, alte D/F unverändert. Root allein Freeze/Native.
+
+D-v5-Implementierung abgeschlossen: realer Doppelcapture-RED und sechs
+Bounds-REDs beobachtet;34 fokussierte Tests GREEN0,664s. Initialframe plus zwei
+_sample-Reads mit tatsächlicher NativeContext.input_frame-AST und puren
+Byteports geprüft, keineRuntime/ABIqualifikation. Zusätzliche Logs/Dateien
+ändern keine Nativeinputs oder Guards. Ganze4Inversen weiter geprüft.
+Quelle/Belege siehe neuen Fresh-Ownership-Report; Abschluss mit frischemD-v5
+und vollständigem Pinreceipt erfolgt nach separatem Sourcecommit.
+
+D-v5 final1662009B, Manifest6ca287db33640b859b2854df19dfd1acd78b6b4f91ab2fc3879b1d8d2a33a9a7.
+280/77/14Pinwerte und ganze4Inversen verifiziert; Receipt
+disabled-v5-final-receipt.json SHA
+bbed8048c5fb0fbd4a07efa47dcdf3c1923e1332aa8d11a182c2d6a24f3648f1.
+Root hat34Tests eigenständig reproduziert; keine Native durch Autor. Keine
+weitere Implementierungsaufgabe offen; Rootfreeze/Retest bleibt Rootaufgabe.
