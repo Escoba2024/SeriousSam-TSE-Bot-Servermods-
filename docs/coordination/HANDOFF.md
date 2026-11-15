@@ -1,3 +1,58 @@
+# Aktueller Handoff – 15.11.2026 10:59UTC
+
+Aoffen/Bunbegonnen, alleNative/ELFJobsbeendet. Live10:47unverändert.
+A1V8TraceFAILunverändert, Root664PostcrashRestorePASS; keinV8Retry.
+Reset030Rootfreeze bereitc5256df6e936779d1c12b5040592051999101d707541298d789d77b9b5535a3c,
+Controller86bb7da4f2b518d4359862ec1cfd42d64bf65e3423068a52dcc07b0e48f23a9e.
+Disabled98294d1c,147/86/45Pins,87andereDateiengleich,3Fragmente/Gate+Namespaces.
+Root23TestsPASS0,224s, unabhängigerRootdeltaPeer8084f333_SCOPEohneC/I;
+keineVollpolicy-/Nativequalifikation. Wrapperb83b9778d77c8c6275479c777208c342a29ec23b28aaab4ad04fa544c5358be8,
+RootE/observe-reset030-root.py verwendetbestehenden13TestsOuterHostobserver.
+NachSource092/Delta084 vollständigemexternenNachweis genauEIN480s-Fenster:
+Red→Red→Red,24BotSlotphasen,Hard2,diag0,8DEMON,OriginalobserverwieParent,
+19sclose/50stransition/≥120Wall+GamesPhase3/Grenzenunverändert.
+Kein automatischerRetry undkeinePromotion/24SlotPASSvorErgebnis.
+
+030Native3Rawstreams102021091→6953303Bgzip,4großeAuditJSONs77109051→6467626Bgzip;
+vollständigeTestrestoresSHA/Rechte/mtimePASS, Originale082externgeprüft.
+EigeneabgeschlossenePowerupONv2FAILraw2streams99403800→6680175Bgzip,
+Originale076externgeprüft; ursprünglicherFAILbleibtFAIL. NeueGzips+Restorehelperin084.
+Disk~8,94GB,8GiBFloor erhalten,192MiBStartreserve fürResetwrapper.
+A1Konfigurationskorrektur: aktuellesOwnOriginalStartscript setzt30FPS, nicht20;
+30→10würdeauchPrescankadenz/Schedulingändernkönnen undbrauchteeigeneControl.
+KeineFPS-/QJS-Implementierungbisher; nurprivaterEntwurf,keinNativevorteilsclaim.
+
+## Frühere belegte Stände (historisch)
+
+# Aktueller Handoff – 15.11.2026 10:51UTC
+
+**Aoffen/Bunbegonnen. KeinNative/ELFaktiv. Live unverändert frisch10:47:01geprüft.**
+A1V8Control103946limitedPASS/Root664beideNS9Abwesenheiten3normalLogsPASS/reaped0.
+Trace104051FAILStarting; tatsächlichesV8bestätigt aberScriptDestroyed,
+0Events/Calls/TLS,3IPCRepliesohneCapture/1unreturnedRaw/8Schedulerfehler;
+ServerunitCoreDumpSIGSEGV11/10:41:35, UrsacheUNKNOWN. Normalcleanup/restoreFAIL.
+SeparaterRootOwnCrashhelperclose+664Files/9Absent/bothNS/TreeRestorePASS10:45:03;
+OriginalResultEBF5a446unverändertFAIL, keinNormalclose oderAfterregionenbeleg.
+EigenerELF32V8plus15ProbedreiFälleNONREPRODUCING, natürlicheExits0.
+[GeschlossenerA1Crashbericht](../reports/2026-11-15-a1-v8-trace-closed-crash-and-restore.md).
+CPUControl51/Trace75Samples/0Bindingfehler, toteQuellenUNKNOWN; keinealteCPUursache.
+KeineNativewiederholungmitV8. Candidatebereitetdisabled030ResetV3vor;
+a4grenztfehlendepa_llCreated/ApplyAction/Physics-CustodyimStillstandsfall ein.
+
+Source091actualfetch2e487b612f21fe64968ffad1ca1ae1f5545bd3d9,
+lokalc88aa5b2909cf25444a600aac60d138e23a6afb3/Tree4293ed591ffe9335cb17466adeccb42849402e4c.
+Delta082Drive1sP4QEKzPz59ujk1ny11nJDlWOlZF7D_l,30193706B/350bf6ed,
+770Dateien231485920B zwei vollständigeDateimetadatenrestoresPASS10:36:58.
+Delta083Drive1eNjOf_xCir51L22osKX4aOW0X7BraZXj,818005B/FD87203a,
+246Dateien3014179B zwei vollständigeDateimetadatenrestoresPASS.
+030dreiNativeRawstreams102021091→6953303Bgzip/volleTestrestoresPASS;
+Originale082externvollgeprüft, neueGzipsin084. HelperRootE/restore-compressed030-native-streams.py --scope all.
+NeueControl/Trace/Reparatur/ELF/Livebelege+Source092jetztin084externsichern.
+LiveDev048/RedGen2/vierPublic018, jeweils8eigeneBots;Skulls1ungeklärt.
+Dev093702→1047030BAD/0Disconnect/10073OK; frühereFAILsbleiben.
+
+## Frühere belegte Stände (historisch)
+
 # Aktueller Handoff – 15.11.2026 10:34 UTC
 
 **A offen, B nicht begonnen. Live-Mischstand unverändert; kein Native aktiv.**

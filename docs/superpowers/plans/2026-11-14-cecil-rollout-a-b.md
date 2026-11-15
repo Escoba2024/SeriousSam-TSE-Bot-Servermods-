@@ -1,3 +1,5 @@
+<!-- 15.11.2026 10:59UTC: RootReset030Gate3Fragmente/Pins/23Tests/Peer8084PASS_SCOPE; nachSource092+Delta084genauEIN480s24SlotNative. A1V8FAILgesperrt/PostcrashRoot664RestorePASS. Aoffen/Bunbegonnen. -->
+<!-- Fortschreibung 15.11.2026 10:51UTC: A1V8Control limitedPASS, TraceFAILSTARTING+SIGSEGVownserver; separateRoot664RestorePASS. KeinV8Retry, A4Reset030disabledRetarget/ACKCustodydiagnose. Aoffen/Bunbegonnen. -->
 <!-- Fortschreibung15.11.2026 10:34UTC: Build030600 geschlossen, Vollaudit offenlegt weiter50sNoUseful/Stillstand; keinePromotion. V8Source15Tests/CPUhelper6Tests; neuerNativefork erst nachReview/Source091/Delta082. Aoffen/Bunbegonnen. -->
 <!-- 09:48UTC: livefresh6x8/0additional/18Targets051gleich; Dev0736→0937
 0neueBAD0Kick19134OK, alteFehleroffen. A1neuerControl093301limitedPASS,
