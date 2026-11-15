@@ -1,0 +1,9 @@
+# FirstState Wine module identity
+
+Der geschlossene Trace051307 scheiterte vor der Hookinstallation an Process.getModuleByName('Engine.dll'), obwohl Parent und Worker38 Originalregionen geprüft hatten. Das bleibt FAIL; Control051115 ist separat PASS_LIMITED_UNINSTRUMENTED_TWO_ORIGINALS_ONLY. Kein Retry oder altergebnisabhängiger Fallback.
+
+Geänderter Vertrag ausschließlich moduleIdentity: bereits gehostete gepinnte Basen mods[name] verwenden. Readonly DOS-MZ, bounded e_lfanew UND dessen exakten Originalwert, NT-PE-Signatur, I386, OptionalHeadergröße224, PE32magic und SizeOfImage==unverändertes G.image_size prüfen. e_lfanew in64..4096−248; Engine264, Entities248. Die tatsächlichen Originaldateien wurden gegen Engineb79bf8bb… und Entities7f595f2a… gehasht; Imagegrößen2285568/2539520 stimmen mit G. Keine Frida-PE-Modulliste, NativeFunction, Aufrufe oder Writes. Headerpins liegen außerhalb des bytegleichen G.
+
+Hostdatei-SHA/Base/Inode/canonicalMapping, alle38 Fullbody/HIGHLOW- und11 IAT-Prüfungen bleiben; ebenso alle18 Calllistener, Registry2, Getter, I1/I2, Counter, Deadline und Limits. Neue Headerreads ersetzen die Listenabfrage bei jedem bisherigen moduleIdentity-Aufruf; deren Nativekosten sind noch unqualifiziert. Der qualifizierte A3-Pfad verwendet bereits Hostbasen und Fullbytes ohne Frida-PE-Liste, ist aber kein Nachweis dieses neuen Headerguards an Original-DLLs.
+
+Parent ist nur der deaktivierte Fensterfork51e1bc45 und dessen API-Body7d93b441/compiledJSfec627f2. Neue eigene Transform-/Builderdateien und frischer privater Fork; alle alten Pakete/Raws unverändert. Wholebody- und compiledJS-Inverse müssen exakt den Parent einschließlich G ergeben. Neuer Runner lediglich zwei private Namespaces; Runtime-/Observer-/Manifestgates false, BaseCLI/alterRunner/sechs Inputs false. Kein Controllerimport/Native/Build/Live/Population/qualifizierender Statuswechsel.

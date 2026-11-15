@@ -1,18 +1,62 @@
-# Aktueller Handoff – 15.11.2026, 05:06 UTC
+# Aktueller Handoff – 15.11.2026, 05:29 UTC
 
-Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker:
-reguläres lokales Terminal auf dem Host funktioniert. RDC bleibt gesperrt und
-wurde nicht erneut benutzt. Aktuell kein Nativeversuch und kein Build aktiv.027Skulls600diag1 geschlossen:
-Case`/srv/tse-milestone-a-evidence-20261111/nav20-027-skulls-root-skulls-20261115-043608`,
-RootwrapperPID1602465/Startticks134376605 beendet/Execsession25129geschlossen.
+Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker.
+Reguläres lokales Terminal funktioniert; RDC bleibt gesperrt und unbenutzt.
+**Keine Native-/Buildausführung aktiv.** Beide First-State-Methodenarme sind
+beendet, inklusive Worker und aller drei regulär geschlossenen Spielrollen.
+
+- Control `a1-first-state-method-enabled-root-control-20261115-051115`:
+  **PASS_LIMITED_UNINSTRUMENTED_TWO_ORIGINALS_ONLY**, 10,000165s ohne Input,
+  API oder Frida. Resultat `7c4bf5af2c885e74e478ff4cf4e475cd2cddf38f69095ad4cd80fe64b0c2859d`.
+  Rootrestore 05:12:11: 664 Dateien, neun Abwesenheiten, drei Logs, PIDs/Units/
+  Displays/vier Sperren geprüft. Parent1609045/Start134587274 beendet.
+- Trace `a1-first-state-method-enabled-root-trace-20261115-051307`: **FAIL**
+  beim Armieren vor dem Attachloop: Fridas Linux-Modulliste findet Wine-PE
+  `Engine.dll` nicht. Keine beobachteten Callbacks, kein aktives Messfenster,
+  null Input. Resultat `e682374f91601d831cccbf6f7fcf67aba3bfd84f12903546da9fe4f2e7551406`.
+  Nachlaufvalidator ebenfalls FAIL (noch nicht initialisierte by_kind-Felder);
+  keine Schemaaufweichung. Unload/Detach erfolgreich; Worker1610148 nach drei
+  normalen Rollencloses beendet. Parent1609746/Start134598483 beendet.
+  Rootrestore 05:14:52: 664 Dateien/neun Abwesenheiten/drei Logs und alle vier
+  Sperren/PIDs/Units/Displays geprüft. Zusätzlich pure Rootprüfung05:23:14:
+  alle 38 gespeicherten vollständigen Originalbereiche vor/nachher exakt zur
+  unveränderten HIGHLOW-Policy, Identität gleich. Das akzeptiert nicht den Trace.
+- Nächster Schritt: exakte schreibgeschützte PE-Headerprüfung an den unabhängig
+  gepinnten Hostbasen statt Linux-PE-Modulliste; neue deaktivierte Paketversion,
+  VM-RED/GREEN, Rootreview, Sicherung und neuer begrenzter Einzelfall.
+  Alte Pakete und FAIL bleiben erhalten; keine automatische Wiederholung.
+
+Delta068 vollständig Drive-rückgelesen und 1138 Dateimetadaten geprüft05:10:06:
+17005507B, SHA `7b496b0ae1a529681257dfde0f13d7858c5555fc4391daff2451c37f9a1b6210`,
+Drive `1GPjgf2bMe0EXzyL9L0rCRze9CIXcZXr-`. **Die beiden neuen Nativearme sind
+noch nicht in069 gesichert.** Source077 Remote `2dac458382939fd0044e99d7ca704e7424757dbe`
+ist tatsächlich gefetcht, exakt lokaler9a41a43/Tree179cbf20. Bundle9a41 benötigt
+1a0ad0b aus067. Root-Handoffänderungen danach noch lokal.
+
+027Skulls600diag1 geschlossen: `nav20-027-skulls-root-skulls-20261115-043608`,
 Result55954ed68802b99c8d2d4004e0840d94931b92975ee6698685d440a9c48dcb2b,
-600,052021s/PASS_LIMITED_REACQUIRE_DIAGNOSTIC_OBSERVATION_ONLY, vierNormalcloses,
-keineSyncabweichung/Disconnect in vierRollen. Rootrestore04:48:07PASS640Dateien/
-4Closedlogs/PIDsUnitsDisplaysvierLocksfrei. Outer683SamplesCPUmax63,7975%,
-RAMmin2429173760B/Diskmin8778379264B/maxGap1,002075s/keineVerletzung,
-nurHostbeobachtungkeinFormalpass. Funktionalauditjetztcandidate_audit; nochkeine
-027Promotion. a4_diagnosis beendet nachRootHashVerifierfinding gezielteKorrektur/
-Finalpaket/Report. BeideWorkerCPUfreigegeben, keineNativebefugnis.
+600,052021s, vier normale Closes/keine BAD oder Disconnects. Rootrestore640Dateien/
+vierLogs/PIDsUnitsDisplays/vierLocksPASS. Vier qualifizierte Reader exakt
+invertiert, sechs Helfer bytegleich; Root prüfte alle Outputhashes ohne erneuten
+Vollparse. 190Leben/97Usefulleben/118Gewinne/558ReadFAIL. Exactstill5,15s,
+NoUseful52,087s offen; kein kausaler Vergleich oder A4-Pass. Publicbericht:
+[geschlossener027-Audit](../reports/2026-11-15-build027-skulls-closed-audit.md).
+
+Storage nach sechs exklusiven Root-Retire/Rekonstruktionstests05:27:38:
+11.000.229.888B frei. 31.321 Dateien/2.252.459.190B tatsächlich neu rekonstruiert
+und alle SHA/UID/GID/mode/mtime_ns geprüft; jeweils nur alte und danach neue
+eigene Testkopie entfernt. Originalarchive/DriveReadbacks/Drive erhalten.
+Vierzehn Symlinks nur indiziert. Exakte aktuelle Tempmetadaten neu erhalten,
+keine historische Originalmetadatenqualifikation erfunden. [Bericht](../reports/2026-11-15-verified-storage-reserve.md).
+RootEV/six-retired-restore-copies-summary.json und sechs Metadatenoverlays/
+Restorehelfer, jeweils --restore-only. Vor weiteren Writes immer aktuelle Reserve.
+
+Wineheaderfix Teil1 integriert973ac7a (Autor dbc2a00, Spezifikation ausaa48bdb
+mitübernommen). Root19Tests/1,145sPASS, zwei tatsächliche Originalheader frisch
+gegen Dateihash/PE geprüft, ganze Body-/JSinverse gleich. Noch kein neuer Native-
+Nachweis; deaktivierter Freshfork in Arbeit. BefundRootEV/
+first-state-wine-identity-root-source-review.json. AlterTraceFAIL bleibt.
+
 Der Nutzer hat den Mischstand ausdrücklich bestätigt: **live behalten, isoliert
 entwickeln, erst belegte Verbesserungen wieder ausrollen**. Seine spätere
 Rückmeldung: Originalclient nicht mehr verbunden. Unbekannte Peers nicht ihm
@@ -61,12 +105,12 @@ Disk8882692096B, keineBudgetverletzung, Child1→FAIL_HOST_OBSERVATION. KeinRetr
 ## Zugriff, Arbeitsbereiche und Sperren
 
 Root allein integriert und verändert Runtime. Zwei bestehende Worker:
-`a4_diagnosis` implementiert deaktivierten FirstStateV2-Methodenadapter
-(Getterfunction/admission-idle-stop/FreshExec-Transport, Registryweitergenau2);
-`candidate_audit` implementiert ausschließlich eigenenCombat-Recovery-Optin
-(Header/Driver/zweiTests+Docs). Beide vorhandene getrennteWorktrees, keinNative.
-Getrennte Worktrees/Claims, keine Writer im Rootworktree. Vor Native alle
-Workerjobs beenden und STATICONLY ausdrücklich bestätigen lassen.
+`a4_diagnosis` entwickelt den begrenzten Wine-Modulidentitätsfix in
+`/srv/tse-build026-skulls-closed-audit-20261115`; `candidate_audit` untersucht
+nur Storage/alte Restore-Testkopien in `/srv/tse-a1-pitch-feedback-20261115`.
+Beide getrennte Worktrees/Claims, kein Native oder Livezugriff, keine Löschrechte
+im Auftrag. Vor Native müssen ihre CPU-/Dateilesearbeiten beendet und STATICONLY
+bestätigt sein. Root integriert allein.
 
 - Root: `/srv/tse-cecil-rollout-a-b-20261114`, Branch
   `codex/20261114-cecil-rollout-a-b`; aktuelle HEAD jeweils frisch prüfen.
@@ -87,9 +131,9 @@ exklusive Ownerquittungen; neue Fälle brauchen neue Namen, keine Retrieschleife
 
 ## Tatsächlich live
 
-Frisch03:56:11UTC: alle18 geladenen Rollen/Datei-/Configtargets gleich dem
-Mischrollback051. Jede Instanz acht eigene Bots. Zusätzlich LittleTrouble eine
-ungeklärte Verbindung, andere keine. Das ist eine aktuelle Modul-/Queryprüfung,
+Frisch05:29:08UTC: alle18 geladenen Rollen/Datei-/Configtargets gleich dem
+Mischrollback051. Jede Instanz acht eigene Bots. Zusätzlich Dev eine
+ungeklärte Verbindung, andere keine; nicht dem abgemeldeten Nutzer zuordnen. Das ist eine aktuelle Modul-/Queryprüfung,
 kein neues Kampf- oder Syncqualifikationsfenster.
 
 | Instanz | Port | Map | Bot-DLL | Sessions/Chat |
@@ -101,7 +145,7 @@ kein neues Kampf- oder Syncqualifikationsfenster.
 |Little Trouble|25630|Little Trouble|Build018 `6db89204`|nicht implementiert|
 |Hole|25640|Hole|Build018 `6db89204`|nicht implementiert|
 
-Vollhashes in RootEV/fleet-current-after-feedback-private.json; tatsächliche
+Vollhashes in RootEV/fleet-current-after-method-pair-private.json; tatsächliche
 Dedicatedrollen separat: Public Original`1c41da35…`, Dev Powerupmod`fe4a77bd…`.
 Keine pauschale Bot-DLL-Ersetzung der Dedicatedrolle. Vier Publics haben
 historisch Serious3 statt gewünschtem Hard2; erhalten, bis ein geprüfter

@@ -110,6 +110,11 @@ No complete resource or long-duration Sync pass is inferred.
 
 Private readers, stage logs, full life/decision/goal chains and all source/native
 bindings are under `/srv/tse-build027-skulls-closed-audit-evidence-20261115`.
+Closed raw data and five large audit outputs were subsequently losslessly
+compressed. Before replay, reconstruct them with
+`python3 /srv/tse-cecil-rollout-evidence-20261114/restore-compressed027-and-author-audit.py --scope all`.
+The helper checks the 8GiB free-space floor and full recorded file metadata;
+original archives and gzip copies remain available in verified Delta068.
 Run the copied stages in order: `life-summary.py`, `analyze.py`, `decisions.py`,
 `followup.py`. `reader-adaptation.json` proves exact inverse changes. The final
 supplemental `comparison-receipt.py` interrogates these outputs and original

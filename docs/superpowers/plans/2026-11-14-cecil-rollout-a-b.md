@@ -1,6 +1,6 @@
 # SSAM.AI – ausführbarer Gesamtplan A → B
 
-Stand15.11.2026,05:06UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
+Stand15.11.2026,05:30UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
 Maßgeblich sind der vollständige Nutzerauftrag, ursprüngliche
 [Milestonespezifikation](2026-11-11-milestones-a-b.md),
 [Toolchainrichtlinie](../../decisions/2026-10-17-tse-ai-tools-mcp-policy.md)
@@ -16,7 +16,7 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 
 | Arbeit | Status | Nachweis bzw. nächste konkrete Aktion |
 |---|---|---|
-|Tatsächliche Flotte|geprüft03:56|sechs×8eigeneBots/18Targets051gleich,Dev048/RedGen2/4Public018;LittleTrouble+1ungeklärt|
+|Tatsächliche Flotte|geprüft05:29|sechs×8eigeneBots/18Targets051gleich,Dev048/RedGen2/4Public018;Dev+1ungeklärt|
 |Namen/Identitäten erhalten|Bestand geprüft|458Pool/48Anzeigenamen/Profile051gleich, Instanz+ID verwenden|
 |Dev-Sync|**FAIL/Ursache offen**|70neueBAD/3Kick seit23:54, eigeneBotclients0; unverändert048+PowerupDedicated|
 |026passiveDiagnose|Build/Portable bestanden|15MSVC+Link/77Closure,3532normal+ASan, keinRuntime-/Skullsfixclaim|
@@ -24,7 +24,7 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 |A1Maus/Keyboard|historischeFAILs|MousevariableAntwort,Keyboard7,5°Rückkehrfehler; Rootclosedaudit vollständig|
 |A1Pitchfeedback|Native034224 FAIL vor ersterEmission|nur+12Detour/1pxFeedback/0,75°diagnostischeRückkehr,keinSchuss/A1pass|
 |027Combat-Recovery|gebaut/Skulls600geschlossen;keineA4Abnahme|190Leben97Useful118Gain;Exactstill5,15s;neverUseful52,09soffen|
-|A1Methodwindow|Root21/0/frozen151+72Pins|Control+Traceje10sinputfrei nach068Backup, nurMethodenbeobachtung|
+|A1Methodwindow|Control begrenzt bestanden; Trace FAIL vor Hooks|Wine-PE-Modulliste unbrauchbar; exakte Hostbase/PE-Headerprüfung entwickeln, alte FAILs behalten|
 |A3Tiernachweis|offen|020STARK13:3,Swap5:6; keinbelegtesSTARK>MITTELüberbeide|
 |A4Karten|teilweiseBeobachtung|024Red/Skulls/Trouble600geschlossen, Skulls242,49sNoUseful; weitereMaps/Transitions/Resetoffen|
 |A5Formalgates|nichtbegonnen|nachfunktionalgeeignetemKandidaten1/4/8Bots60/60/120min|
@@ -102,13 +102,15 @@ mitMindestziel/Zielzahl/eigenenBots/MenschenungeklärtenTeilnehmern,keinpauschal
 
 ## Sicherung, Veröffentlichung und Abschluss
 
-Aktuell Source074 Remote c57467c4acd2a9f7f971ee6c1649badf64f3a5b7,
-Treee30e0b6b374720182f5d140ec50690fce01b0be5 exaktRoote54282c, Fetch/Diff0;
-neuereMethod-/CombatcommitsnochSource075publizieren. Delta022–065 vollDrive/
-Dateimetadatengeprüft,065d4bb3b7e/2842626B/724Files19854093B,
-Drive1ZS2s_f6WiQtNmAL_jjyUEg88G8wG0p1J. 051istMischrollback.
-NeueKompression024Skulls/022023Red vollständigDateimetadaten-testrestored,
-066externeSicherung noch ausstehend, Originalarchive060/050/053bleiben.
+Source077 Remote `2dac458382939fd0044e99d7ca704e7424757dbe`,
+Tree `179cbf20f46915d241849893461e8751f47a1f5a`, tatsächlich gefetcht/exakt
+lokaler9a41a43. Delta022–068 voll Drive-rückgelesen und Dateimetadaten geprüft;
+068 SHA7b496b0a/17005507B/1138Dateien, Drive1GPjgf2bMe0EXzyL9L0rCRze9CIXcZXr-.
+051 bleibt Mischrollback. Die neuen Control/Trace-Rohdaten müssen in069 gesichert
+werden. Sechs alte eigene Restore-Testkopien vollständig geprüft/neu rekonstruiert:
+31.321 Dateien/2.252.459.190B samt aktuellen Tempmetadaten, danach nur Kopien
+entfernt; Originalarchive/Drive erhalten. Frei11.000.229.888B05:27:38.
+Weiterhin aktuelle Reserve vor Native/Restore prüfen, keine Schutzreserve senken.
 
 NeueBelege/Quellen/Config/Navmetadatenbereinigtcommitten/publizieren,
 Remote tatsächlichabholen/diffen, ZielbranchintegrationnachReviewregeln.
