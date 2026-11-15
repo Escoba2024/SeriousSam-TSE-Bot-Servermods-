@@ -959,7 +959,7 @@ struct SCecilReacquireDiagnostic {
   }
   void Inputs(bool g,bool sh,bool m,bool a,bool l){if(active){ground=g;shape=sh;metadata=m;air=a;liquid=l;}}
   void Position(const FLOAT3D& p){if(active){positionKnown=true;for(int i=0;i<3;++i)position[i]=p(i+1);}}
-  void Geometry(bool checked,bool local,bool far){if(active){geometryChecked=checked;localPoint=local;farHint=far;}}
+  void Geometry(bool checked,bool local,bool farValue){if(active){geometryChecked=checked;localPoint=local;farHint=farValue;}}
   void Slots(const int* slots,const double* distances){if(active){selectionKnown=true;
     for(int i=0;i<3;++i){hint[i].slot=slots[i];hint[i].distance2=distances[i]<0?retainedDistance2:distances[i];}}}
   void Probe(int k,bool valid,const SCecilSupplyCastDetail& detail){if(active){

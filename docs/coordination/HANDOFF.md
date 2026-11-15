@@ -1,4 +1,93 @@
-# Aktueller Handoff — 15.11.2026, 02:22 UTC
+# Aktueller Handoff — 15.11.2026, 02:45 UTC
+
+## Stand 15.11.2026, 02:45 UTC – Build026 gebaut, Keyboardaudit vollständig
+
+Build026 aus05e1708abc8b886895157b57a28e35d7375c4f29/Tree1f96c7a6:
+15MSVC+LinkExit0, Root47Sources28Overlay/77PinsPASS. DLL2c9a238191b9642bf7f9613f01a461cf711f97fe62e581bdd7c93b5f58a9bcdd,
+443392B, Manifestbe0513a059e2dcf5bda364ea70c4f2dee800fb084d2c44861912eaa22e186fd3.
+NurHeader gegenüber024 verändert. ErsterRootchecker falscherLog-Unterpfad
+korrigiert, Kandidat unverändert; RootEV/build026-root-closure-review.json.
+Build025 bleibt FAIL. Neuer026Skulls600/diag1-Builder isoliert in Arbeit,
+keinNative gestartet/keineProduktionsfreigabe/keinbewiesenerSkullsfix.
+
+GeschlossenerKeyboardaudit90727c→Root3adc5b7 vollständig reviewed und echter
+Rootreplay byteidentisch5078d455c808c4c60998433e0e981341bc48e2bc7b1d332465cee49163700858:
+12Calls/Attempts/Keymaps,6Releases/EinzelACKs,45Paare/46Readversuche,
+39Policyframes. EinConsistencyreadFAIL nachForward/vorPitch bleibt verworfen.
+Original-localPitch bereits0→30→7,5, gleiche ACK-Endpunkte imServer/Original/View;
+keinegenaueFramezahl/Ursache bewiesen, FAIL7,5>0,75 unverändert.
+A1neuerseparaterClosedLoop-Inputansatz wird nur statisch geprüft;
+keineToleranz-/Gain-/FPSlockerung,keinFire-/FirstState-PASS.
+
+NächsteSchritte: Source071 tatsächlichpublish/fetch, Sourcebundle und Delta062
+mitKeyboardRaw/025Fehler/026Kandidat/Audits externfullSHA+Metadaten prüfen,
+026Skulls-Paket Rootreview/Freeze und genaueinisolierterDiagnosefall.
+Live bleibtDev048/RedGen2/anderevierPublic018; Aoffen/Bnichtbegonnen.
+
+## Stand 15.11.2026, 02:45 UTC – Build025 fehlgeschlagen, Makrofix geprüft
+
+Build025 aus f905962 tatsächlich MSVC C2059 in BotSupplyNative.h:962:
+Windows minwindef.h:94 definiert leeres Makro `far`; Diagnoseparameter kollidiert.
+Ausgabe /srv/tse-milestone-a-build-025-20261115 und RootEV/build025.log/result.json
+bleiben unverändert FAIL; keine DLL-/Runtimequalifikation daraus.
+Makro-RED 5c6b2cf, einzige Headerzeile far→farValue 06a14b3, Bericht c98b2ad
+integriert als cd02b33/ea93115/b38e3a0. Autor unter aktivem Windowsmakro
+3532/0 normal+ASan; Root vollständiger Diff-/Bytevergleich und3532/0 normal,
+Quittung RootEV/reacquire-winmacro-root-review.json. Header92712d4e/Harnessd07147f2;
+ursprüngliche Guards/Bodyinverse unverändert, keine16Parentwiederholung.
+Separater Build026 als nächster Kandidat; keine automatische Nativeabnahme.
+
+Geschlossener Keyboarddaten-Audit fertig, Rootreview/Replay noch ausstehend;
+sechsEinzelACKs bleiben getrennt vom FAIL7,5°>0,75°. Live unverändert,
+keine Nativeprozesse aktiv. Neue Rohbelege/025/Fix brauchen Delta062.
+A offen, B nicht begonnen; bestehende061-/Source070-Belege wie unten.
+
+## Stand 15.11.2026, 02:32 UTC – Keyboard geschlossen FAIL
+
+Originalkeyboardfall022737 geschlossen FAIL, Resultat
+f8c132577541c97bfb257dbfba7a46882dd9c290cf8a28299ffa87dbf581ba5e:
+`opposite keyboard pitch did not return`. Alle6Aktionen admitted/attempted/
+released/ACKed, zwölfEmissions/Attempts/Keymaps und sechsReleasequittungen,
+JournalfailedFalse/0Journalerrors. Yaw+45/-45,0000002235, Bodyreturnfehler
+0,0001068115; Pitch+30/-22,5→7,5>0,75. KeinKeyboard-/Mouse-/Aim-/A1-PASS.
+EchteRohdaten werden in neuemisoliertem WT vollständig ausgewertet;
+keineToleranz-/Inputdauerlockerung oderRetry.
+
+DreiOriginalrollen regulärgeschlossen, dreiLogs0neue6Fehlerklassen.
+RootRestore02:30:05 PASS664Dateien/9Abwesenheiten/3Loghashes/PIDgenerationen/
+Units/Displays154155/4Sperren. Outer47Proben, maxGap1,002888989s,
+CPU68,733850%, RAM2901135360B, Disk9237839872B,0Budgetverletzungen,
+KindExit1/reaped→FAIL_HOST_OBSERVATION bleibt. KeineNativejobsaktiv.
+
+NächsterRootschritt separatenRetail-Build025 aus geprüftem passivem
+Reacquirecode erstellen, vollständigeSource-/DLL-/Manifestclosure prüfen,
+neueBelege/Buildsichern undpassendenisoliertenDiagnosefall ausführen.
+Verbleibende024Hole/Yodeller-Fälle weiterhinbereit; keineLivepromotion.
+A1undSkullsfehler offen, Aoffen/Bnichtbegonnen. Delta061undSource070wieunten.
+
+## Stand 15.11.2026, 02:28 UTC – Keyboard-Einzelfall läuft
+
+Delta061 vollständig:16931474B/SHA51e08477e09909580ca7e9592af7d12ffce5c5541d87d4abced0f7eccedfcb86,
+Drive1R9O1qZxwr-svjHMRX8-spsriXzyF6meV,1160Files/152068976entpackteBytes.
+Vollständiger Rücklesehash und zweimal alle Datei-SHA/UID/GID/Mode/mtime_ns
+PASS; temporärerRestoreerstnachzweiterPrüfungentfernt, frei9265799168B.
+EnthältTroubleRaw/beideKeyboardpakete/Rootfreeze/Reviews/Diagnosebelege und
+Sourcebundle067dda4, benötigt6f4fbbd aus060. NativerVollrestoreStartnichtgeprüft.
+Remote63c1d0cba597d7b67b768e3b3b9cc14432e64757 tatsächlichgefetchter
+Tree07ce2c7f644437a797e388015ad45f23be9d8f55 gleichRoot067dda4.
+
+ReadonlyKeyboardpreflighttatsächlichPASS. Einziger90sKeyboardfall gestartet
+02:27:37.382759 UTC, ParentPID1580208/Startticks133605493, Sitzung1271,
+Owner a1-keyboard-original-20261115-owner.json, Unitpräfix
+ssam-a1-keyboard-root-20261115. Rootmanifest eaa83f51/Controller467c5560/
+Parent31a528b6/Outerfa601b18. Eigene dreiOriginalrollenundzweiDisplays
+gestartet, keineFrida-/RECORD-/Fireaktion. Case
+`/srv/tse-milestone-a-evidence-20261111/a1-keyboard-root-20261115-022737`.
+Nochkein geschlossenes Resultat/Keyboard-PASS. BeideWorker STATICONLY;
+kein weiterer Native-/Compiler-/Test-/Generatorjob parallel starten.
+NachClose vollständiger Rootrestore allerWurzeln/Logs/PIDs/Units/Displays/
+Sperren, tatsächliche Eingaben/ACKs/Fehler prüfen und unverändert dokumentieren.
+Live bleibtbestätigt, Aoffen/Bnichtbegonnen.
 
 ## Stand 15.11.2026, 02:22 UTC – geprüfte Quellen, Keyboard vor Einzelfall
 

@@ -5700,7 +5700,11 @@ def main():
         items_source = (support / "BotCecilItems.h").read_text()
         helper_start = items_source.index("inline bool BotCecilIsClass(")
         helper_end = items_source.index("inline uint32_t BotCecilAmmoNeed", helper_start)
-        cpp.write_text("#define EXPECTED_NATIVE_USE "+str(use_mask)+"u\n"+STUBS + items_source[helper_start:helper_end] + source + ownership + tests)
+        # Match the existing Windows SDK's empty far macro in actual production
+        # source only; synthetic fixtures intentionally retain their old names.
+        cpp.write_text("#define EXPECTED_NATIVE_USE "+str(use_mask)+"u\n"+STUBS + items_source[helper_start:helper_end] +
+                       "\n#define far\n" + source + "\n#undef far\n" + ownership + tests)
+        print("SDK107 actual production source: Windows empty far macro; synthetic fixtures after undef", flush=True)
         cmd = ["g++", "-std=c++14", "-O1", "-g", "-Wall", "-Wextra", "-Wno-unused-function",
                "-I", str(here), "-I", str(support), str(cpp), "-o", str(exe)]
         if args.sanitize:

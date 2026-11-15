@@ -1,5 +1,53 @@
 # Cecil-Flottenrollout und Abschluss A → B
 
+## Aktuell 15.11.2026, 02:45 UTC – neuer Diagnosekandidat
+
+- [x] Build02615MSVC/Link und47Sources28Overlay/77Pins RootPASS; DLL2c9a2381.
+- [x] GeschlossenerKeyboardvollaudit Rootreview/replay byteidentisch5078d455;
+  alleFAILs erhalten, keineA1-Abnahme.
+- [ ] Source071/Bundle/Delta062 vollständig veröffentlichen/rücklesen.
+- [ ] Deaktiviertes026Skulls600diag1-Paket Rootreview/freeze und Einzelprüfung.
+- [ ] A1ClosedLoop-Originalsteuerung statisch entscheiden; FirstState separat.
+- [ ] OffeneKarten/A3/Formalgates, danachB. Live unverändert.
+
+## Aktuell 15.11.2026, 02:45 UTC
+
+- [x] Build025 tatsächlicher MSVC-FAIL C2059/Makro far unverändert gesichert.
+- [x] Windowsmakro im Produktionssource reproduziert; einziger Parametername
+  geändert. Autor3532/0 normal+ASan, Rootdiff/Bytevergleich/3532/0 bestanden.
+- [ ] Separaten Build026 erstellen und alle47Source/28Overlay-Pins prüfen.
+- [ ] Geschlossenen Keyboardvollaudit Rootreplay/review/integration.
+- [ ] Neue Quellen veröffentlichen und Delta062 vollständig extern rücklesen.
+- [ ] Ein neuer Skulls-Diagnosefall, A1-Steuerung/FirstState und weitere Karten.
+
+Live unverändert, keine Nativejobs. A offen/B nicht begonnen.
+
+## Aktuell 15.11.2026, 02:32 UTC
+
+- [x] EinzelnerOriginalkeyboardfall geschlossen f8c13257; drei normaleCloses/
+  RootRestore664Dateien9Abwesenheiten3Logs/PIDsUnitsDisplaysSperrenPASS.
+- [ ] Keyboardqualifikation **FAIL**: Pitch+30/-22,5→7,5>0,75 trotzsechsACKs.
+  KeineToleranz-/Dauerlockerung/Retry; geschlosseneVolldatenauswertung läuft.
+- [ ] NeuerseparaterRetaildiagnosebuild025 ausrevidiertem passivemHeader;
+  danachalleSource-/DLL-/Manifestpinsprüfen, sichern,isolierttatsächlichprüfen.
+- [ ] Offene024Hole/Yodellerbelege,Skullsursache/A1-Schuss-/FirstStatekette.
+
+KeinNativeaktiv, Livebeibehalten. Aoffen/Bnichtbegonnen.
+
+## Aktuell 15.11.2026, 02:28 UTC
+
+- [x] Remote63c1d0cb tatsächlichgefetchterTree07ce2c7f gleichRoot067dda4;
+  verifiziertesSourcebundle benötigt6f4fbbd aus060.
+- [x] Delta061vollDrive51e08477/16931474B/1160Files152068976B,
+  vollständigerRücklesehash und zweimalalleDateiinhalte/MetadatenPASS.
+- [ ] Keyboard90-Einzelfall läuft seit02:27:37, Parent1580208/Sitzung1271,
+  Rootfreeze eaa83f51; nochkein geschlossenes Ergebnis. Worker STATICONLY.
+- [ ] NachClose unabhängiger vollständigerRestore und tatsächlicheKey-/ACK-
+  Evidenz prüfen; keine alten MouseFAILs umwerten.
+- [ ] Danach neuer Retaildiagnosekandidat und verbleibende einzelne Kartenfälle.
+
+Live unverändert. A offen/B nicht begonnen; kein unbewiesener Fortschrittsclaim.
+
 ## Aktuell 15.11.2026, 02:22 UTC
 
 - [x] Keyboardadapter/Policy/Builder vollständig Root reviewed/integrated;
