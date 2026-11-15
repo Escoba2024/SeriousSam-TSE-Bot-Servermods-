@@ -1,0 +1,32 @@
+# Build035 Yodeller closed functional observation
+
+The single 600.106065-second, Hard2, eight-DEMON-tier3/Original20FPS, DIAG0 case completed with four normal closes and no recorded SyncBad, disconnect, crash or case errors. Root independently restored 640 files, with zero expected absences and four closed logs. This is a bounded functional observation of Build035 on Yodeller, not an A4, strength, human-parity, physics or stability qualification. The original limited status is unchanged.
+
+The unchanged V3 reader validates all three raw groups, including overlap and paused smoke envelopes, before selecting the fixed bot sources. There are 13,953 read attempts, including 538 recorded failures, and 308 native lives: 303 observed deaths, five right-censored endings, 190 left-censored lives, one corpse-only life and four lives with alive-after-dead observations. The latter are conservatively cut at the first observed death. There are 129 useful-possession lives and 149 strictly later same-life useful inventory gains. No perfect per-life gain quota is imposed.
+
+| Bot slot | Native lives | Useful-possession lives | Useful gains | Bound native ranged-fire flag observations | Longest inherited 1m stationary span (s) |
+|---|---:|---:|---:|---:|---:|
+| 0 | 41 | 16 | 18 | 534 | 1.650101 |
+| 2 | 42 | 15 | 17 | 385 | 1.549622 |
+| 3 | 47 | 14 | 14 | 494 | 1.399658 |
+| 4 | 42 | 18 | 21 | 508 | 1.499634 |
+| 5 | 33 | 16 | 22 | 873 | 2.449402 |
+| 6 | 31 | 18 | 22 | 760 | 1.899536 |
+| 7 | 32 | 16 | 19 | 672 | 5.648621 |
+| 8 | 40 | 16 | 16 | 362 | 2.699341 |
+
+Every bot has observed movement, useful gains and same-life source-counter-growth-bound native ranged-fire flags. These 4,588 flags are not weapon-function calls, shots or hit/damage ACKs. Endpoint chords total about46.27km across the eight bots; the inherited geometry only sums neighboring observations with gaps at most0.5s, and proves neither continuous trajectories nor safe route/trigger completion. Three native lives lack a unique source-generation join and remain in the native denominator without invented source attribution.
+
+The longest observed no-useful prefix is29.192871s on slot8, ending in observed death. Its 209 alive observations retain owned-mask3, with185 Knife and24 Colt observations, HP10–100 and276.60m of endpoint chords. Its bound source life shows four mapped weapon goals ending unavailable and one existing motion probe, but DIAG0 supplies no typed unavailable reason, picker custody or final-driver arbitration. The physical pickup failure/competition explanation therefore remains UNKNOWN. Other long prefixes include28.043152s and26.001587s. Acquisition of an excluded/non-useful weapon bit does not become a useful gain.
+
+The longest1m stationary episode is5.648621s on slot7. It is not exact zero translation: that life's exact-position/zero-translation span is zero. Its source states show an important navigation goal, neutral movement while that interaction is held, followed by the existing interaction timeout at source tick10218 and resumed route movement. The existing `BotCecilImportant` body has a fixed5s attempt bound (`BotSupplyNative.h:1452` onward). This is compatible with an intentional bounded interaction wait; no new stuck or causal regression is established. Source ticks are not divided by20 or fused with native clocks.
+
+Two `CecilFlightFinish` rows bind to one life: begin followed by end/context. One air-recovery steer row binds to that life but has no exact native-time witness. There are seven interaction rows (two use-action proposals, four not-usable and one timeout),24 reacquire-support rows and six goal-budget rows. A use proposal is not a switch/door ACK. No GroundReplan/ImportantOriginRecovery/ReacquireDecision or explicit bouncer/jump/teleport rows were observed. DIAG0/throttling and the absent trigger/physics custody prevent interpreting this as absence or successful qualification of those behaviors. One unclocked impact-death template does not identify a navigation hazard cause.
+
+The original server alone contains293 player-kill-shaped templates (220 lead,72 blast, one telefrag),21 self-blast and one impact record. All315 exact tokens/line references are retained privately. Strict query-name joins resolve zero killer and zero victim tokens. In this case all nine distinct console tokens equal `^o` + one unique query name + `^r`; the query parser passes Latin1 values unchanged. SDK107 declares separate `GetName`/`GetNameForPrinting` APIs, but the Retail decoration implementation was not proved here. The observed one-to-one decoration correspondence is recorded separately, without blind stripping, authoritative slot reassignment or inferred native kill/life/damage chains. Older Trouble records are not reread or retroactively relabelled.
+
+Outer host observation reports690 samples, CPUmax66.83544%, minimum available RAM2,414,829,568B, minimum free disk8,823,967,744B and maximum gap1.0028705s, with no violations. This remains host-observation-only. Root's restore scope includes exact file atime_ns and mtime_ns; it does not turn this observation into a gameplay pass.
+
+Reproduction uses the new exact case adapter over the pinned unchanged Hole031 reader, with a whole-source inverse. Run `PYTHONDONTWRITEBYTECODE=1 nice -n 15 python3 -u -i tools/audit_yodeller035_closed.py`, then, in that same retained process, `import yodeller035_ram_detail as detail; detail.complete(C)`. The first detail checkpoint is retained; v2 adds an already-known player-entity join for the air-recovery row. No Native raw stream is opened for either RAM supplement. Ten focused pure tests pass; the initial missing-token baseline produced four behavioral failures, and the old Trouble-only admission rejected the real Yodeller metadata before correction. Input cap128MiB (64MiB/stream,16MiB/log,32MiB/log aggregate); output cap8MiB with the unchanged8GiB+64MiB write reserve. Public sources contain no private names, GUIDs, raw logs or Retail bytes.
+
+Private evidence lives at `/srv/tse-yodeller035-closed-audit-evidence-20261115`. The primary immutable receipt is `final-yodeller035-receipt.json`; `final-author-closure.json` records all current source/proof/output hashes; `worker-end.json` records the completed RAM-worker lifecycle. This audit supports eight-slot supply/movement/fire-flag observations on this map, with the long supply gaps and unproved specialty/kill bindings explicitly open. It establishes no new gameplay defect requiring a speculative fix.

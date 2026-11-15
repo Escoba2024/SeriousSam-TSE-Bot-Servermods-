@@ -1,0 +1,42 @@
+# Ein normaler Original-W-Impuls: Translation statt erneuter Winkelkalibrierung
+
+> Umsetzung mit executing-plans und TDD, ohne Delegation. Root führt ausschließlich nach eigener Quellen-/Pinfprüfung einen neuen Nativefall aus.
+
+**Goal:** Genau ein normaler W-Down/Up auf derselben eigenen Originalverbindung; danach reale serverseitige XYZ-Änderung und gespeicherte aktuelle Translation bei unveränderter Actor/Life. Kein exakter CPlayerAction-ACK, keine Aim-/Gain-/FirstState-/Coltfreigabe.
+
+**Architecture:** Frischer deaktivierter Fork des LittleTrouble-D3-Parents. Neue reine Admission-/Outcome-Regeln und schmaler uninstrumentierter Windowadapter; vorhandene normale X11Endpoint-, Journal-, Release-, Reader-, Ownership-, Transaktions-/Closepfade bleiben erhalten. Kein Aufruf von CP.run_preparation, RD.run_calibration, RP._prepare oder Tracearm. Ganze genaue Runnerinverse, alte RP-/Corebytes unverändert.
+
+**Claim/base:** Neuer WT `/srv/tse-a1-wasd-movement-design-20261115`, Branch `codex/20261115-a1-wasd-movement-design`, Root `8870a6dca21a6c9b51b5ba5d81ca7f2310acfc9e`. Nur neue `tools/a1_original_forward.py`, `prepare_a1_original_forward.py`, zugehörige gezielte Tests, dieser Plan und eigener Bericht/private Quittungen. Keine vorhandenen Dateien ändern.
+
+## Bestehender Beleg und präzise Lücke
+
+`docs/reports/2026-11-15-original-keyboard-closed-audit.md` und private Ableitung `closed-keyboard-audit-final.json` (SHA256 `5078d455c808c4c60998433e0e981341bc48e2bc7b1d332465cee49163700858`) belegen zwölf Nativecalls, sechs Einzelaktionen, zwei W-Impulse samt Keymap/neutralem Release und Körper-Yawwirkung. Gesamtergebnis bleibt FAIL wegen Pitchreturn 7,5° statt 0,75°. Die 45 gespeicherten Paare sind **angles-only**: damaliger Reader Zeile 61 projiziert `placement[3:]`; XYZ/Translation fehlen in dieser Ableitung. Kein alter Rawreplay wurde ausgeführt. Wir wiederholen keine Winkelserie und qualifizieren nicht vier WASD-Richtungen.
+
+Aktuelles Controls0.ctl SHA256 `5d525c46993be88d45941fe14f4638fa001ba9583d1151a27d6df9129d9b9d9b` bindet W/S/A/D an `ctl_bMoveForward/Backward/Left/Right` mit normalem 1/0. Vor Verwendung bleiben tatsächliches Profil, transaktionale Controls-/Startupbindung und effektiver Controlsread Pflicht. Keine neue Tastenumbelegung.
+
+## Konkrete Bedingung und Stopregeln
+
+- OriginalDedicated + unveränderter Originalclient + bestehender genau einlokaler 030-Bot, LittleTrouble/Serious3/Move0 (historische Parentbedingung, kein Hard2-Beleg) und normale Spawns wie Parent; keine neue Route/LOS-/Trefferbehauptung. Bestehende Botownership und exakte Population bleiben Pflicht. Original ist möglicher späterer **Opfer**; dieser Fall feuert nicht.
+- Nur `control`, keine Traceoption, kein Frida-/RECORD-/Gettertrace. Aktive Instrumentierungsgates False; historische passive Corefingerprints unverändert. Parentquellenstatus bleibt dokumentarisch, aktueller Scope heißt ausschließlich `ORIGINAL_FORWARD_TRANSLATION_V1`.
+- Zwei frische gültige Basisframes, Original lebend/initialisiert, gleiche PID/start/World/Slot/Entity/Spawnclock, unveränderte Peerlife und native Clockdomänen. Unterstützte ruhige Ausgangslage: bestehende Supportpflicht und Translationnorm ≤0,2; kein Warten auf Death/MayRespawn2/Colt/Muzzle. Keine Wiederverwendung der alten DEAD_READY-Admission.
+- Genau W für angeforderte 0,1 s, höchstens zwei tatsächliche Keycalls. Vorher verifizierte eigene PID/Display/Window/Fokus, alle Inputs neutral, geerbter finaler BeforePress. Vor Down mindestens 2,35 s Rest; Hold+Release ≤0,35 s. Bei Teilfehler trotzdem genau einmal nötiges Up versuchen, XSync und Neutrality unabhängig quittieren, FAIL sticky. Kein weiterer Key/Retry.
+- Danach innerhalb 2 s ab tatsächlichem Requestabschluss: frischer eigener Serverframe mit fortgeschrittenem nativen Tick, gleicher Life und realer horizontaler Positionsänderung > bestehender numerischer EPS=0,001. Originalreplica muss ebenfalls frische fortschreitende, gleich gebundene Positionen liefern; beide Vektoren/XYZ und getrennte Ticks archivieren. Keine Interpolation, keine tickübergreifende Gleichsetzung; Geschwindigkeit allein genügt nicht. Erste Überschreitung ist **server_observed_translation**, kein genauer ActionACK und kein Beweis zuverlässiger Schrittweite/Richtung/ExactlyOnce/Collisionfreiheit.
+- Unbekannter Read/Binding/Clock/Fokus/Host/Release, Tod/Lifewechsel, fehlende Bewegung/Wand oder Zeitüberschreitung ⇒ FAIL, normale Closes/Restore, kein automatischer zweiter Impuls. Bestehende State-/Tick-changed-Discards und .2 s/8-Akquisition bleiben unverändert; keine Readrate erhöhen. Höchstens 16 Rollenreadversuche einschließlich fehlgeschlagener Captureversuche und Initialframe; späterer Fehlread bleibt vollständig erhalten.
+- 85 s inner / 90 s äußerer Runner, 48/96 globale Obergrenzen unverändert (neuer fester Fall strenger: 1/2), ACK2/.2/8/.35 und Original-Reader unverändert. Vor/Nachchecks echten Deadlineüberschritt nach Reads prüfen.
+
+## Vorabressourcen: neuer persistenter Fall, keine RAM-Casekopie
+
+Neue Bedingung benutzt ausschließlich diskbasiertes E; BASE/Tools/Runtime bleiben unverändert. Kein RAM-CLI und keine alte F2-Reserve nachträglich ändern. Für 16 Ownershipreads mit unverändertem vollen 1,5-MiB-Vorbehalt reichen 24 MiB eigener Ownershipreservoir; Read 17 wird vor Capture verweigert. Zusätzlich 64 MiB für minimale Raw-/Attempt-/Resultjournale, 64 MiB Case/Close/Startup, 64 MiB Safety **über** unverändertem 8-GiB-Floor: vor Start mindestens 8 GiB+216 MiB = 8816427008 Byte. Keine Garantie unbegrenzter Startup-/Close-/Fremdloggröße: bestehende Hostguards laufen weiter, tatsächlicher Outputcap FAIL; Root benötigt getrennte Backupkapazität. MemAvailable vor und während Fenster mindestens unveränderte 1,5 GiB plus 128 MiB eigener konservativer JSON-/Readreservoir; keine RAM-Case-/512-MiB-Frida-Serialization. Reserven werden vor Native geprüft und nach einem Fehlversuch nicht abgesenkt.
+
+## Frische Quellenpins / Anschlüsse
+
+LittleTrouble F2 (nur lesend; generierter Parent wird D3): `run_dual.py` `9e18bf3e86cae81e01541e56f5846ef10ed3c3741d430da5269f4088531d7796`, Zeilen 38–128 Inputstep, 452–453 echte Basisreader, 478–504 echte Rollenclosure; `x11_endpoint.py` `652147c86c52ce3a49afa7ef39c499df7c7a16a357259b4e09b66b2b8d40cb2b`, Zeilen 7–26 Guard/Up, 51–59 W/S/A/D, 74–92 XTest/XSync/Keymap; `dual_input.py` `458853198473bcb51a2667d68e7ca41cad24f05798e61ed2b232823f539a4fdd`; `tools/retail_inventory_readonly.py` `52ef1def71e642d9086e0703bc0ae477be92cb90b38e8529b20f4b9888969e9f`, Zeilen 120–138 Velocity/XYZ/Life. `colt_preparation.py` `0ad45ef707fb1d75e4bfee53af82d91b9b482e3e1abcca61f63cc51356070f59`, EPS/85/48/2 und numerische Positionsgleichheit 153; keine Coltready-Prüfung als neue Movementpflicht übernehmen. RP.FireJournal payloads enthalten keine Fire-Behauptung; der neue Adapter benennt Scope/control ausdrücklich und übernimmt sichere Journal-/Pulse-/Transportkörper mit enger voll reversibler Fire→Forward-Auswahl. Alte Funktionen unverändert.
+
+## Ausführbarer kleiner Arbeitsplan
+
+- [x] Task 1 RED: reine Frames/Admission/Outcome (gleiche Life, .2 fresh, echte XYZ statt Velocity-only, no-motion, später Read/ACK, falsche Peer/Slot/Clock, 16 Reads). Kleinster Adapter GREEN; alle verlorenen/fehlgeschlagenen Reads im eigenen Record.
+- [x] Task 2 RED: tatsächlicher normaler Keycallpfad, Down-Metadatenfehler→Up/XSync/neutral genau einmal, Upfehler bleibt FAIL, Budget/Deadline. Produktionsgenutzte Pulse-/Transportableitung mit exaktem AST-/Wholebody-Fire→Forward-Inversenbeleg. Kein Nativecall in Tests.
+- [x] Task 3 RED: Builder aktualisiert nur exakte Runnerfragmente/Namespaces und neue aktive Metadaten, alle alten RP/Core-/Readerbytes bytegleich; main/instrumentation false, keine Trace-/RAM-Option nutzbar. Frischer Disabled-Fork, volle tatsächliche Pinwerte/Sourceinversen und Metadatenscope prüfen.
+- [x] Ein enger abschließender Testlauf, private echte RED/GREEN-Logs 0600/hash, bereinigter Bericht/Commits an Root. Kein Native-ready/PASS aus Offlinequellen. Root reviewt, friert/sichert und entscheidet den einzigen neuen Lauf.
+
+Abschluss: 26 gezielte Tests PASS; frischer Disabled-Fork und vollständige private Pin-/Inversequittung siehe Bericht `docs/reports/2026-11-15-original-forward-translation-preparation.md`. Keine Ausführung/Native-ready. Rootreview folgt. Ruling: keine Delegation/keine breite Parentserie; Root verlangt genau diese neuen, relevanten Checks. Die neue einzige Keyprobe ersetzt keine alte Mouse-/Keyboard-/Damage-Abnahme.

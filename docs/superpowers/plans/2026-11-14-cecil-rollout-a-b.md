@@ -1,3 +1,87 @@
+## Maßgeblich — Yodeller035 vollständig ausgewertet — 2026-11-15 21:44 UTC
+
+Alle Native-/Auditworker beendet und abgeholt, beide Nebenagenten quieszent. Kein Livewechsel.
+Yodeller035600s: 308 beobachtete Leben/303 Tode/149 brauchbare Inventargewinne,
+alle acht Bots Bewegung/Gewinne/gebundene Fernfeuerflags; längste Waffenlücke29,192871s
+bewegter Bot. Kein Shot-/Damage-/A4-PASS; Spezialtrigger und Kill-Lifebindung bleiben offen.
+315 serverseitige Death/Killtemplates, 0 strenge Namensjoins; neun beobachtete eindeutige
+^o+Queryname+^r-Korrespondenzen separat, Retailimplementierung ungeprüft.
+Author3393177 → Roote80d7c9, Root10Tests/0,066s/0 und18Quell-/14Ableitungspins geprüft;
+finale private Quittung fc87811b7bc9c9b003f3f8f881dcb1fc4dfac428499be1a68b6e7341ce7959cc.
+Bericht: docs/reports/2026-11-15-build035-yodeller-closed-functional-audit.md.
+Flotte frisch21:41:24: alle6×8eigeneBots, keine zusätzlichen Teilnehmer,18geladeneModule
+undKonfigurationen weiterhinMixedRollback051. Dev20:36:20→21:41:39:0BAD/9407OK/0Synckick,
+beideBotlogs0BAD/Disconnect; frühereSyncfehlerbleibenoffen undunzugeordnet.
+Nächster tatsächlicher Test bleibt genau eine Original-W-Probe nach Source118/FULL110 und
+persistenter Yodeller-Speicherabsicherung. Die darunterstehenden laufenden Auditangaben
+sind durch diesen Abschluss ersetzt. Aoffen/Bunbegonnen/keinexternerBlocker.
+
+## Aktuell — Yodeller035 geschlossen, Original-W vorbereitet — 2026-11-15 21:39 UTC
+
+A bleibt offen; B nicht begonnen. Live Mixed erhalten, kein Rollout dieses Kandidaten.
+Kein Nativeprozess aktiv. Yodeller-Closedaudit arbeitet ausschließlich auf dem neuen Fall;
+Original-W wartet auf abgeschlossene Auswertung, Source118 und vollständig rückgelesenes FULL110.
+
+- Nativefall `N/nav20-035-yodeller-v3-root-yodeller-20261115-211726` regulär geschlossen;
+  Ergebnis `ba0da223d3188da74f0df3775821739dffdfce2399b8931df8f5c5c8afe2c2b8`,
+  600,106065 s, `PASS_LIMITED_REACQUIRE_DIAGNOSTIC_OBSERVATION_ONLY`, keine Ergebnisfehler.
+- RootRestore 21:29:12: 640 Dateien/0 Abwesenheiten/4 geschlossene Rollenlogs,
+  SHA/Rechte/beide Snapshotzeitstempel, Prozessgenerationen/Units/X154/vier Sperren geprüft.
+  Host: 690 Samples, CPUmax66,83544%, RAMmin2414829568 B, Diskmin8823967744 B,
+  Samplegapmax1,002871 s; kein formales A5-Gate. Vollständiger funktionaler Audit ausstehend.
+- Original-W: Authora4563b3 → Rootfe324d0/f47cd9e/180dee5/245efbe; Root26Tests/0,589s/0.
+  Voller neuer Adapter/Builder/Tests/tatsächlicher Runner-/Context-/Portaufruf geprüft.
+  F `/srv/tse-a1-original-forward-v1-root-frozen-20261115`, Manifest
+  `dfdad2b5fbd53a67ab4d7ff42d3b77f20e0bc866d33634f1efdc59c8c677e6b9`, Runner
+  `f755599d7f26b0cf6df6c5a27591a1ae2f0d192a0d45a91d2bcb2c82516fa0cc`.
+  294/77/14 tatsächliche Pins, drei Literalinversen, 152 andere Dateien bytegleich.
+  Main allein aktiviert; sämtliche aktiven Instrumentierungsgates/nested/collector False.
+  Rootanwendungspeer `df0029404f66561cd910a6d98bfbf8cc7268ad9a37663c3df0bca41c18337c8a`
+  PASS_SCOPE ohne Befunde, ausdrücklich keine unabhängige Prüfung der Autorenvorlage.
+  Tatsächliche finale CLI aus AST geprüft; nur control/original-forward/90, keine RAMoption.
+  Persistente Reserven 8816427008 B Disk/1744830464 B RAM unverändert vorausgesetzt.
+  Noch kein Native-/Bewegungs-/A1-Pass. Genau ein normaler W-Impuls, kein Schuss/Trace/Retry.
+- Zwei Root-Vorbereitungsfehler bleiben erhalten: identische sechs Quellen hatten andere
+  Autorenpfad-Metadaten; anschließend erwartete Root irrtümlich eine vierte geänderte Datei,
+  obwohl das Collectormanifest bytegleich blieb. Kein Runtimeaufruf; vollständige 155-Datei-
+  Neubildung/Prüfung vor finaler Quittung, keine bestehende F-Datei nachträglich verändert.
+- Acht vollständig geschlossene035Trouble-Rawrepräsentationen 79252235 B nach voller
+  Delta107-Absicherung verlustfrei auf7374941 B gzip reduziert. Eigenständiges Recoveryarchiv
+  `B/trouble035-storage-recovery-20261115.tar.gz`, 7381944 B,
+  SHA `5d3d7e37c70e00dc321ab0559bd7adefcb0122a27e69b487563407e28f975922`,
+  Drive `1bsgUbojHVi2YqjsH2YiGRLg187AwUxLd`, Vollrücklauf und zwei volle Perfile-Restores.
+  Ausführbare Standardpfad-CLI `E/restore-trouble035-storage.py --output-dir FRESH` zusätzlich
+  nach Installation auf allen8 Dateien/Metadaten geprüft. Originales Delta107 bleibt erhalten.
+
+Nächste Schritte: tatsächlichen Yodeller-Closedaudit integrieren/prüfen; Source118+FULL110
+extern verifizieren; bei knapper Disk zusätzlich aktuelle geschlossene Yodellerstreams nach
+unabhängiger Vollsicherung verlustfrei komprimieren. Danach genau eine neue Original-W-Probe
+über `E/observe-original-forward-v1-control.py`, anschließend zwingend
+`E/check-original-forward-v1-control-closed.py` und vollständige Ergebnisprüfung.
+Keine automatische Wiederholung und keine Toleranzlockerung. A1 Schaden/Restart/Mapwechsel,
+A3 Stufenvergleich, A4 weitere Karten/Spezialübergänge und A5 formale Gates bleiben offen.
+
+## Aktiv — korrigierter035Yodeller-Einzellauf — 2026-11-15T21:18:19.781545+00:00
+
+RootExec42967 läuft tatsächlich unterobserve-navigation035-yodeller-v3.py.
+ControlleridentitätPID1758530/start_ticks140384407; Case
+N/nav20-035-yodeller-v3-root-yodeller-20261115-211726 angelegt.
+KeinErfolgsausStartbehauptet. Quelle/RootFv3/Peer/Source117 sindgeprüft undFULL109
+1222381B/a444793cdf8040bf9f5bf3796d596af6841f12da0a5876adfc490603c3c83ca6,
+Drive1hV-iOpIRv7XBaM3wVesmDO3UYeHImXdx/505Dateien4713566B/fullReturn+2Restores
+21:16:53.154509PASS. Original-W-Entwurf samtQuellbundle bereits109mitgesichert,
+nochunreviewed/nichtausgeführt. RemoteSource1172b4f39bb52ed4571c87934e014f929fbed88527b,
+Local0ab43832702bf9b0a888bcb1548d75bc628bbe70/treeb94298790b84a2a9b462bf3866e3ecce5265a4f5,
+actualfetch/lsremote/diff0PASS21:15:43.661181.
+
+WährendNativekeineTests/Compiler/Archive/Git/Downloads; beideWorkerQUIESCENT/STATICONLY.
+Root liestnureigeneHost-/kleineKontrollmetadatenundOriginal-Forwardquellenstatisch;
+keineInventory-/Health-/Readattempt- oderGameplayloganalytikvorEnde.
+NächstezwingendeOperation: Exec42967 regulärabholen, dann
+E/check-navigation035-yodeller-v3-closed.py; FAILsbleibenFAIL, erstnachRootCLOSED
+neuenClosedauditor auf tatsächlicheCase/Result/Host/Restorepinsbinden. KeinAutoRetry.
+LiveMixed unangetastet, Aoffen/Bunbegonnen/keinexternerBlocker.
+
 ## Maßgeblich — Yodeller-Startfehler korrigiert, noch kein600s-Lauf — 2026-11-15T21:13:57.610276+00:00
 
 A offen/B nicht begonnen, Live Mixed unverändert. Kein Spiel-/Compiler-/Readerprozess aktiv.
