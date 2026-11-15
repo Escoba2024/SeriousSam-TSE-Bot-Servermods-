@@ -113,3 +113,23 @@ Private finaleQuittung disabled-v3-final-receipt.json SHA17302d53a6276889f321660
 im obenbenannten Evidenceverzeichnis. Rootreview/Integration/Freeze/Native
 bleiben allein Rootaufgabe. Keine offene Implementierungsaufgabe in diesemClaim;
 FirstStateabnahme/Botopfer/Aim/Gain bleiben ausdrücklich außerhalb.
+
+## Forwardfix nach echtem geschlossenen Control-FAIL17:03
+
+Root bestätigte explizite Vanilla-Basisflags `colt_preparation=False` UND
+`mouse_input_profile=False`; optionaler perFrame-Mausprofilzusatz ist für den
+reinen Fire-Respawnfall nicht erforderlich. Alter Reader unverändert.
+Der bisherige True/False-Mix war ein eigener Interfacefehler, keine
+Readiness-Transientursache. Tatsächlich ausgeführter Constructorprefix und
+Snapshotguard reproduzieren denselben EvidenceError (v4-real-reader-contract-red.log).
+Engster Literalfix plus explizite neue Metadaten;6gezielteTests GREEN .081s.
+Basisframes ohne Animatorread füttern unveränderte NativeContext-Doppelreads;
+unveränderte Controls.sample-Guard-/Doppelreadkette bleibt aktiv und wurde mit
+einem tatsächlichen fatalen Smooth-Gegenfall geprüft. Keineproc-/Runtimecalls.
+
+Frischer D-v4 Manifest360afce14b4a1193c28ff8cd33d9fbe34b2da167c30affff52640a8040af99f6,
+1644803Bytes;280/77/14Pins+4Inversen frischPASS. Alle älteren D und tatsächlicher
+F-v1-FAIL unverändert erhalten. PrivateQuittung disabled-v4-final-receipt.json
+SHAfda261c7047a6881ed078f769a30833ce24bca42a1410f177c14a4ebecdf4fc4.
+MIP-Startupintervention/Originalmarker, NIPcontrols und alte20Method-/Policy-
+Tests unverändert; Letztere nicht erneut ausgeführt. KeineNativefreigabe.
