@@ -1,3 +1,40 @@
+# Fortschreibung – 15.11.2026 08:53UTC
+
+A1Rootfreeze f7de4234/Runner2451ecbd/Nestedf81c85f4/WorkerCDF0f39b,
+162/75Pins,100übrigeDateiengleich, Root57+5+8Quelltests.
+RootCgroup e8b6089 integriert. Peer nurRootPaketanwendung/Pins läuft;
+Source088/Delta079danach, dann EIN neuerControl, unabhängigClose/Restore,
+anschließend genauEINTrace. KeinNativeaktiv. Liveunverändert,Aoffen/Bunbegonnen.
+Timestampzwischenfork60216e88 hatte alten metadata-Nestedverweis; niegestartet;
+in nachfolgendem Cgroupfork e0546c37 korrigiert, kein altesArtefaktgeändert.
+[RootA1Freeze](../reports/2026-11-15-first-state-autodrain-root-freeze.md).
+
+# Aktueller Handoff – 15.11.2026 08:47 UTC
+
+**A offen/B nicht begonnen. Live unverändert. Kein Nativejob aktiv.**
+Build029Skulls600geschlossen: Result9800b41c..., limiteddiagnostic,
+238Leben97Useful218Fremdkillzeilen,4normalCloses/4saubereLogs,
+Root640Dateien erstmals beideSnapshot-NS geprüft, RollenUnitsDisplaysLocks frei,
+Exec75000reaped0. [GeschlossenerBericht](../reports/2026-11-15-build029-skulls-closed.md).
+Candidateworker führt einmal kompletten geschlossenenRaw-/DriverFinalaudit aus,
+WT/srv/tse-build029-skulls-closed-audit-20261115, Basis3381b02, keineRuntime.
+
+A1autodrainQuellen Root94bc43b/f8c70af/07f7fea/957da05/09aaabc integriert;
+Root57Tests4,221sPASS inklIMPORTANTDeadlinefix. DeaktiviertePakete518aea47
+undTimestampfork60216e88 vollständig154/75 bzw158/75geprüft. NochkeinNative.
+A1author erstellt nurengeZwei-SHA-CgroupSourceanpassung+Tests; Rootintegriert,
+prüft/freeze/Peer/Vollsicherung vor neuem matchedControl+Trace. Kein alterControltransfer.
+
+Source087 tatsächlicherFetchffa4bfec85347ebb6e37a2117bf7c6e9dbb84a77,
+Tree8a5466ca2a21438910640515aaf92203514739ab, lokal3381b02.
+Delta078 fullDriveReturn/zweiteHashMetadataPASS08:26:37,
+636517B/SHA101b69eca6a2fc0af9a18f76cf41c4ba846eda8516565eca0dc2871e23a16af3,
+371Dateien2423412B/Drive1epddEftOnMm-N_KjcbmCk4nH5XUD42ar.
+029Raw/A1neueSource/Pakete müssenSource088/Delta079nochaufnehmen.
+Keine gleichartige029Wiederholung; nächsteGameplayänderung auskonkretemAudit.
+
+## Frühere belegte Stände (historischer Handoff)
+
 # Aktueller Handoff – 15.11.2026 08:28 UTC
 
 **A offen/B nicht begonnen. Live unverändert. Kein Nativejob aktiv.**
