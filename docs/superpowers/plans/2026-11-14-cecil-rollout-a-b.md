@@ -1,6 +1,6 @@
 # SSAM.AI – ausführbarer Gesamtplan A → B
 
-Stand15.11.2026,06:04UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
+Stand15.11.2026,06:29UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
 Maßgeblich sind der vollständige Nutzerauftrag, ursprüngliche
 [Milestonespezifikation](2026-11-11-milestones-a-b.md),
 [Toolchainrichtlinie](../../decisions/2026-10-17-tse-ai-tools-mcp-policy.md)
@@ -24,14 +24,19 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 |A1Maus/Keyboard|historischeFAILs|MousevariableAntwort,Keyboard7,5°Rückkehrfehler; Rootclosedaudit vollständig|
 |A1Pitchfeedback|Native034224 FAIL vor ersterEmission|nur+12Detour/1pxFeedback/0,75°diagnostischeRückkehr,keinSchuss/A1pass|
 |027Combat-Recovery|gebaut/Skulls600geschlossen;keineA4Abnahme|190Leben97Useful118Gain;Exactstill5,15s;neverUseful52,09soffen|
-|A1Methodwindow|Control begrenzt bestanden; Trace FAIL vor Hooks|Trace054021FAIL bleibt; Boundaryfix Root35Tests/Freeze3a93993/PeerPASS, vor neuemTrace072sichern|
-|DevPowerup-Kontrast|vorbereitet/nicht nativ|OFF/ON gleichefe4DLL/048ExpertRifle, Root15Tests/PeerPASS; nachkurzemGettertraceje600s isoliert|
+|A1Methodwindow|Control begrenzt bestanden; neuerTrace060723FAIL|Getter/TLS/21Calls zuerstvalide, dannLegacy-Colt-ownHook-Konflikt+NachlaufQueueoverflow; Monitor-/Drainfix undneuerControl nötig|
+|DevPowerup-Kontrast|OFF061540FAILvorRelease, ONnichtgestartet|DownstreamfireObserverOriginalGameMPhashkonflikt; rollenstrikterv2Adapter/Negativtests, neuePakete vorweiteremKontrast|
 |A3Tiernachweis|offen|020STARK13:3,Swap5:6; keinbelegtesSTARK>MITTELüberbeide|
 |A4Karten|teilweiseBeobachtung|024Red/Skulls/Trouble600geschlossen, Skulls242,49sNoUseful; weitereMaps/Transitions/Resetoffen|
 |A5Formalgates|nichtbegonnen|nachfunktionalgeeignetemKandidaten1/4/8Bots60/60/120min|
 |BImplementierung/Dev/Flotte|nichtbegonnen|erstnachbelegtemA-Abschluss|
 
 ## Unmittelbare Ausführung
+
+Aktuell haben die geschlossenen060723/061540Guardfehler Vorrang; beideRootrestores
+sindbestanden. Ausführbare Folge undexaktePins imaktuellenHandoff. Source082/
+Delta073 sichern, engsteMonitor-/Drain-/rollenbezogeneHashfixes qualifizieren,
+danach neuebegründeteEinzelfälle. KeinealteON-Ausführung/unveränderteWiederholung.
 
 1. **026 geschlossen und vollständig ausgewertet.** Vier Readerstufen Rootreplay bytegleich,
    Finalquittung298253fd; 188Leben/111Gewinne/515ReadFAIL, 871Decisions/19UNKNOWN.

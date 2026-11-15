@@ -1,8 +1,86 @@
-# Aktueller Handoff – 15.11.2026, 06:04 UTC
+# Aktueller Handoff – 15.11.2026, 06:29 UTC
+
+**A offen, B nicht begonnen. Kein externer Zugriffsblocker.** Kein eigener
+Native-/Buildjob aktiv. Beide letzten Jobs sind beendet und unabhängig auf
+Wiederherstellung geprüft. Kein Liveeingriff: Nutzerentscheidung bleibt
+Dev048, RedGen2, vier Public018; letzte vollständige Flottenprüfung05:29UTC.
+RDC gesperrt/unbenutzt, regulärer lokaler Terminalzugang funktioniert.
+
+Aktuelle Arbeit und nächste ausführbare Schritte:
+
+- Getterboundary-Trace060723 **FAIL**: erstes Paket21Calls/42Events ohne
+  Fault/Drop; danach widerspricht Legacy-Colt-Originalprüfung dem eigenen
+  FireColt-Hook. Nachlauf Queue64/1Drop/1AbortedLeave. ResultSHA
+  aeffa6a7040b155cae6a49e30b5960c4e182db7c0fe605f4d40b35136f7e4753.
+  Rootrestore06:10:25:664Dateien/9Abwesenheiten/3Logs, alle38Originalbereiche
+  vor/nach undIdentitätgleich. Exec42983/Parent1618393/Start134924077 beendet;
+  Worker1618802 nachdreiNormalclosesbeendet. Keine10s-/18ABI-/A1-Abnahme.
+- PowerupOFF061540 **FAIL vor Census/Release**: downstream
+  a4_fire_observer_v2 fordert OriginalGameMP1c41 trotz vorgesehenem
+  Dedicatedfe4. ResultSHAa216c955abf56bf22a1741f9936302f8e0fdd83dfc4748c1e737219423891a02.
+  Exec73678/Parent1619513/Start134973799 beendet. Rootrestore06:24:21PASS:
+  640Dateien/4Logs/vierRollen/Units/PIDs/Display/vierLocks.
+  Keine600s-/Sync-/Filterursachenaussage. AlterON-Wrapper wird nicht gestartet.
+- A4-Worker /srv/tse-build026-skulls-closed-audit-20261115:
+  engster Methodenmonitorfix im eigenenWT, prearmPaired/Originalguards bleiben;
+  aktive Methodenphase behält Host/Log/Identity/Display/Window/Query, ersetzt
+  widersprüchlichen Legacy-Inventory-/Geometrysample. Neuer Control erforderlich.
+  Drainplanung vor weiterer Runtime: alter Gesamtpoll159,6ms bei23msIPC und
+  begrenzter64Eventqueue; keineQueue-/TTL-/Schema-/Toleranzerhöhung.
+- Candidate-Worker /srv/tse-powerup-contrast-20261115:
+  nachgelagerte rollenstriktefe4-Hashprüfung samt tatsächlichemRED/Negativfällen,
+  neue deaktivierte v2Pakete; keinealtenfrozenPaketänderungen. 027kleines
+  Supply-/FinalAction-Diagnosedesign liegtprivatfertig, nochkeineUmsetzung.
+- Root: Source082mitgeschlossenenFehlern tatsächlichfetchprüfen; Delta073
+  neue060723/061540Rohdaten, Rootrestores undbeideDesignmemos vollständig
+  Drive-rücklesen/allSHA+UID/GID/mode/mtime_nsrekonstruieren. Danach neueQuellen/
+  Tests/Sourceinversen/Pinsreviewen, neueFreezes+Sicherung vorjedemNativefall.
+
+Letzte Veröffentlichung081: Remote114b40845c9168eab926f17eb38598ce52c91452,
+exaktlokaler16984204bdd9718328acdba2285862b77179cadc,
+Tree27e6984f5f89d6d8356707ebe64d1176d4c26bdd, tatsächlichfetch/diff0.
+Delta072 vollständiggesichert:1375011B,
+SHA24215cd6e78e8a42910fde9611d1836efe330611ccbc98c858509e031e20294a,
+Drive1Y3U2b8DoVOSGQyeA_FUl0zK6SyT2gsht;518Dateien/4910764B zweimal
+SHA/UID/GID/mode/mtime_nsPASS06:07:13. EnthältbeideVorbereitungen, nichtdie
+neuen060723/061540Rohdaten. Bundle1698420benötigtbc11b1bin071.
+
+VierexklusiveSperren: Fixture/runtime.lock, tse-msvc-wine-20261021/
+tse-milestone-build.lock, tse-cecil-rules-20261107/.codex/evidence/
+fleet-install.lock, tse-milestone-a-evidence-20261111/deployment.lock.
+EigeneTestports27850/Displays154,155; fremdeDisplays/Prozesse unangetastet.
+VorNative wiederQuieszenz/Locks/Pins/Reserve prüfen, Worker nurkleineStatik;
+keineCompiler/Tests/Archive/Git/Downloads parallelzuNative.
+
+Die folgende Historie beschreibt frühere Zwischenstände; aktive Angaben oben
+und neuer [geschlossener Bericht](../reports/2026-11-15-method-and-powerup-guard-failures.md)
+haben Vorrang. Vollständige Abnahmekriterien stehen im
+[Gesamtplan](../superpowers/plans/2026-11-14-cecil-rollout-a-b.md).
+
+## Frühere Checkpoints (historisch)
+
+# Aktueller Handoff – 15.11.2026, 06:16 UTC
 
 Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker.
 Reguläres lokales Terminal funktioniert; RDC bleibt gesperrt und unbenutzt.
-**Kein Native-/Buildjob aktiv.** Neuer Wine-Trace054021 ist geschlossen FAIL:
+**Ein eigener PowerupOFF600-Nativejob aktiv, kein Build.**
+RootPID1619513/Startticks134973799/Execsession73678,Start2026-11-15T06:15:40.059204+00:00.
+RootBuild/Fleet/Deploylocks+Childfixture exklusiv; andereArmenichtstarten.
+BeideWorkerNURkleineStaticSource-/Designmemoarbeit, keineTests/Compiler/Archive/
+Git/Downloads/Rawscans. KeinLiveeingriff.
+ Getterboundarytrace060723 geschlossen FAIL,
+Parent1618393/Start134924077/Execsession42983 beendet. Resultaeffa6a7040b155cae6a49e30b5960c4e182db7c0fe605f4d40b35136f7e4753.
+ErstesPaket21abgeschlosseneCalls/42Rows/fault0/dropped0/Getter1,
+ProcessTick/ApplyAction/PostMoving/CastRay, phasenweiseOBSERVING erreicht.
+Dann alterHost-ColtReaderfingerprint trifft eigenesFireColtHookziel undFAIL;
+CleanupdanachQueueoverflow64/1Dropped/1AbortedLeave. GesamterTraceFAILbleibt.
+Rootrestore06:10:25PASS664Dateien/9Abwesenheiten/3Logs/PIDsUnitsDisplaysvierLocks.
+PureRoot38Originalbereiche+Identitätgleich understesPaketSchema/OrderPASS,
+zweitesPaketkorrektzurückgewiesen. Keine10s-/Methoden-/18ABI-/A1abnahme.
+VorweiteremNativeRootkontrolliertgeschlossen; beideWorkerquieszent.
+Neue060723Rohdaten noch073sichern. PowerupOFF600jetztaktiv; Ownerangabenoben. ONerstnachOFFRootrestore.
+
+Neuer Wine-Trace054021 ist geschlossen FAIL:
 Rootwrapper1614764/Start134761835, Execsession69140 beendet. Result
 2c0cdcd772864a3a97904dd04f6bfd954483163fe8a69e20267fb9f14ef8dd71.
 Armierung erfolgreich nach Headerfix; erster Fault im Gettercallback:
@@ -28,7 +106,7 @@ Aktuelle Vorbereitung, beide Workerquieszent/keine Native-/Buildjobs:
   ErsterFreezescript-Entwurf scheiterte vorScript-/Paketwrite anüberlappender
   Ersatzassertion; korrigiert/offengelegt. RootControlreuse06:01:48 enger
   unveränderterRunner/10Helfer/Fixturepinsbeleg, keine neueKontrollbeobachtung.
-  Wrapper1f4818a4/Outerc1776495 braucht072vollDrive; noch nicht ausgeführt.
+  Wrapper1f4818a4/Outerc1776495 nach072vollDrivejetztaktiv; Ownerangabenoben.
 - Powerup-OFF0/ON1 neueVorbereitung, tatsächlicherWriter-WT
   `/srv/tse-powerup-contrast-20261115`, Branchcodex/20261115-powerup-contrast,
   Base30dfef2. AlterPitchWT unverändert. 57d30dd6/8730c3e9 integriertcc60fba/fd42815.
@@ -472,3 +550,8 @@ aller16Files samtNSMetadaten bestanden, anschließendnurverifizierteTempfilesent
 EininitialerPAXfloat-nsCheckstopptevorEntfernung; maßgeblichesexaktesNSstehtim
 archiviertenManifestundwurdemitgeprüft. 068enthältneueGzip/Indizes/Helper.
 8GiBFloor/64MiBReserve bleiben, aktuell~8,84GBfrei. KeineNativegeradeaktiv.
+
+072vollDrive+518DateimetadatenPASS06:07:13,1375011B,
+SHA24215cd6e78e8a42910fde9611d1836efe330611ccbc98c858509e031e20294a,
+Drive1Y3U2b8DoVOSGQyeA_FUl0zK6SyT2gsht. Source081Remote114b40845c9168eab926f17eb38598ce52c91452
+tatsächlichgefetchtexaktlokaler1698420/Tree27e6984f. Bundle1698420benötigtbc11b1bin071.
