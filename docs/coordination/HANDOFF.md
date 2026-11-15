@@ -1,8 +1,8 @@
-# Aktueller Handoff – 15.11.2026, 04:28 UTC
+# Aktueller Handoff – 15.11.2026, 04:32 UTC
 
 Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker:
 reguläres lokales Terminal auf dem Host funktioniert. RDC bleibt gesperrt und
-wurde nicht erneut benutzt. Aktuell kein Nativeversuch und kein Build aktiv.
+wurde nicht erneut benutzt. Aktuell kein Nativeversuch und kein Build aktiv. Build027 ist abgeschlossen; isolierte Runner werden vorbereitet.
 Der Nutzer hat den Mischstand ausdrücklich bestätigt: **live behalten, isoliert
 entwickeln, erst belegte Verbesserungen wieder ausrollen**. Seine spätere
 Rückmeldung: Originalclient nicht mehr verbunden. Unbekannte Peers nicht ihm
@@ -219,11 +219,12 @@ RUerstEncodingtest. WeitereAbnahme im ursprünglichen A/B-Plan.
 
 Letzter tatsächlich gefetchter Remote c57467c4acd2a9f7f971ee6c1649badf64f3a5b7,
 Tree e30e0b6b374720182f5d140ec50690fce01b0be5 exakt Root e54282c.
-Source074 vorbereitet+Remote tatsächlicher Fetch/Diff0. Neuere Commitgruppe
-4b8317d–600e3f6 (MethodAPI), 8a17350/1b6dd35/692b0d0 (Combatfix) noch publizieren.
+Source074 vorbereitet+Remote tatsächlicher Fetch/Diff0. Source075 tatsächlichgefetchter Remoteff32dc1c0fbeb4cd7991cf407e39eeb271099355,
+Treeeadd2e1e28f03bc65acdf563f95ebd1eec4c762b exaktRoot13896f5,Diff0.
+UmfasstMethodAPI+Combatfix; neueRunnernachfolgendpublishen.
 main/PR99 unvollständig, keine abschließende Integration behauptet.
 
-Driveprojekt14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2. Deltas022–065 vollständig
+Driveprojekt14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2. Deltas022–066 vollständig
 extern rückgelesen, alle Inhalte/Metadaten rekonstruiert. 065:
 2842626B/SHA d4bb3b7e203ff27356a3a8c45750b95e38d0c3627dc3010535226e38ee4d2f0e,
 Drive1ZS2s_f6WiQtNmAL_jjyUEg88G8wG0p1J,724Files/19854093entpackteBytes,
@@ -260,7 +261,9 @@ Nächste konkrete Reihenfolge:
    KeinBeweis für Ursache der026Episode. Rootreview in privatem
    RootEV/combat-recovery-root-source-review.json, öffentlicher Bericht
    [Combat-Recovery](../reports/2026-11-15-automatic-combat-ground-recovery.md).
-   Jetzt027 mit sauberemExactHEAD/quiescent/Buildlock/8GiB+256MiB bauen.
+   027 gebaut:Quelle13896f5/Treeeadd2e1/15MSVC+Link0,47+28+Manifest+DLL77PinsPASS.
+   DLLf5bf76801cade78803c6f4bcf97837390329fc30d2a016d202a9f4b96bbfc17e,
+   446464B,Manifestca235d88. KeinNativepass. [Build027](../reports/2026-11-15-build027-combat-recovery-preparation.md).
 2. **MethodAPI fertig, nur offline.** Root35/0Tests und vollständigerSource-/Testreview;
    disabledManifest1e59d326/72Pins, alterRunnerFalse. Getterfunction/admission-only
    Stop/idleoutsidecallback/finishstop,18Hooks38BindingsRegistry2/alteI1I2-Drain-
@@ -288,7 +291,11 @@ compressed-closed022-023-red-index.json, Restorehelfer
 restore-compressed022-023-red.py --build 022|023; Originale050/053Drive.
 Vor Entfernung jedesOriginals vollständigesTestrestoreSHA/UID/GID/Mode/mtime_ns
 geprüft; Archive vorKompression gegen frühereManifeste undDrivebelege verifiziert.
-Neue Gzip/index/Helper noch in066sichern; derzeit ~9,087GB frei, 8GiBFloor bleibt.
+Neue Gzip/index/Helper vollständig066Drivegesichert. 06627382263B/
+SHA72049d8accca6105d417350a757dea4f5bb1554809117bb2bebf0ff9b5290836,
+Drive1mnNPd_Y2zsB5PAYLrqzGbWN5qdq_U9Fq/239Files32631557B,
+vollerDrivehash+zweifach alleDateimetadatenPASS04:31:15. Bundle13896f5
+benötigte54282c aus065. Aktuell~8,98GBfrei;8GiBFloor bleibt.
 
 Keine unbeaufsichtigten Prozesse behaupten: gestartete Aufgaben/Jobs und
 Eigentum müssen vor Fortsetzung erneut tatsächlich geprüft werden.
