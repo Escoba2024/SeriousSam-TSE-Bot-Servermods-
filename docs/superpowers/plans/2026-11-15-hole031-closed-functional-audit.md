@@ -1,0 +1,14 @@
+# Hole031: ein begrenzter geschlossener Funktionsaudit
+
+Fester Case/Claim siehe `docs/coordination/CLAIM-hole031-closed-audit-20261115.md`. A offen/B nicht begonnen, keine Native-/Fixfreigabe. Vorherige bekannte Render5-/Masken-/WeaponsStaysemantik bleibt bekannt, kein neuer Ursachenfund.
+
+1. Statnenner und feste Readcaps128MiBgesamt/64MiBjeStream deklarieren; Result/Controller-/Helper-/Registry-/Map-/Configpins prüfen. Exakt Originalstatus behalten; alle vier normalen Closes und Rootrestore getrennt dokumentieren.
+2. Ein Inventory-/Attemptdurchlauf; unverändertes navigation_life_summary.validated_summary für alleHüllen/Overlap/Canonical/Smokes/Readversuche/Leben/Zensierung verwenden. Kein Legacy-CLI-Status umetikettieren, keinTick/20. Alle acht eigenen Slots alsNenner.
+3. Ein Durchlauf der vier closedLogs; bestehende031Pickergrammatik und ursprüngliche Source-/Decimal-/WPO-/Lifejoins wiederverwenden. Alle Batches und Reacquire-/GroundReplan-/Recoveryereignisse zählen, auch UNKNOWN. Bereitsgedrosselte1Hz ist keine komplette Entscheidungsfolge. Source-/Arbitration-/Submit≠NativeACK.
+4. RAMableitung aller Leben: echte Usefulgewinne, Fernfeuerflags+SameLife-Sourcegrowth, Positionschords mit bestehendem0.5sGap,1mStationarität/exakteNulltranslation, längsteNoUseful mitgesamtemQuellkontext. Height/Liquid/Flights/Teleporter/Lavagefahr nurqualifizieren, wenn tatsächliche passende Witnesskette; sonstUNKNOWN. Kills nurserverseitigeOriginaleventnenner, keinefrag→Damageersatzbehauptung.
+5. Session-/Host-/Sync-/Close-/Rawfaultnenner vollständig. Kleine private deterministische Outputs/Receipt mitInputhashes/Bytes undReaderpin, bereinigterReport+Commits. Output≤5MiB undreserve8GiB+64MiB proWrite; keine Rohidentitätenpublic. Fehlende entscheidende Felder nennen, keine spekulativeVerhaltensänderung/neuenNativevorschlag.
+
+Status: statplan fertig, Readerimplementierung folgt. Reuse bestehender Parser/Life-/Join-/Geometryhelper; keine neuepureSemantik benötigt, deshalb kein unabhängiger unveränderterTestsuiteloop.
+
+Abgeschlossen: einmaliger121036445B-Readerdurchlauf,206ganzeLeben/154Useful/204Gains undalle8Slots,4351Pickerbatches/536Reacquirezeilen. NeuepureEreignisabdeckung5RED→2GREEN; ausschließlichRAMergänzung/keineRawwiederholung. KanonischerReceipt a43cb6f7,4.376MBOutputs. Reader-/Rawhandles normalgeschlossen; Source/Report/Commit folgt. Lange79.43/57.85sDefizite erhalten, Spezial-/ACKbelege weiteroffen. Root übernimmtIntegration, kein neuerNative-/Fixvorschlag.
+Source-only Nachkorrektur: tatsächliche DriverFinal-Keyreihenfolge per1behaviorRED→3TestsGREEN abgesichert; exakt1Ausdruck, ganzeInverse zum tatsächlich gelaufenenReader0bafb00a. Alle4351Arbitrationen schonvorhanden, daherkeineBeobachtungsänderung/keinRawreplay. AktuelleSource475ddc0a/alteAuditreceiptsunverändert, Metadatenunterschiedoffenbegrenzt.

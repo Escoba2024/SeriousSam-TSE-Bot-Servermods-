@@ -1,0 +1,7 @@
+# Hole031 geschlossener Funktionsaudit
+
+Owner `/root/a4_diagnosis`; eigener bestehender WT `/srv/tse-reset031-diag1-prepare-20261115`, neuer sauberer Branch `codex/20261115-hole031-closed-audit`, Basis4990d6a. Keine fremden Rootänderungen übernommen; Root allein Runtime/Integration. Nur neuer bounded Reader, falls nötig wirklich neue pure Tests, eigener Bericht/Planstatus. Keine Produktions-/Harness-/Assetänderung.
+
+Fall `/srv/tse-milestone-a-evidence-20261111/nav20-031-hole-root-hole-20261115-141204`, Result7e581f512eaf9717221d18eeb9b5091e11ed72d83b8960d282858c3bc00262a4. Exakt ein neuer Durchlauf je schwerem Rawstream, danach RAMableitungen; keine alten Raws. Inventory56.245MB + SessionHealth43.328MB + beide closedBotlogs16.819MB + Attempts2.808MB + restliche kleine Metadaten unter128MiB. Vorscan ausschließlich stat; jede einzelneStreamdatei≤64MiB, Gesamtinput≤128MiB, abgeleiteter Gesamtoutput≤5MiB,8GiB+64MiBReserve vor jedemWrite. Keine großen Duplikate oder Paketkopien.
+
+CLOSED/HANDOFF: Reader/TTY22871 normalExit0, alleRawhandlesgeschlossen undRootausdrücklichfreigegeben. Vollaudit beendet,4375582BprivateOutputs/121036445BReaderinputs,206Leben/154Useful/204Gains,alle8Slots. KanonischerReceipt a43cb6f74e3cbd67bc20d7cb2a4f889be81db8c3a5653e78fce2217f68d7080d. Zwei neuepureTestsPASS; keineWiederholung alterRawfälle, keinBuild/Native. Kein weitererQuelljob nachCommit; Root alleinIntegration/Runtime.
