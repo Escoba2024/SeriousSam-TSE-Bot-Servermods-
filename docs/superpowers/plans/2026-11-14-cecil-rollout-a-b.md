@@ -25,7 +25,7 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 |A1Pitchfeedback|Native034224 FAIL vor ersterEmission|nur+12Detour/1pxFeedback/0,75°diagnostischeRückkehr,keinSchuss/A1pass|
 |027Combat-Recovery|gebaut/Skulls600geschlossen;keineA4Abnahme|190Leben97Useful118Gain;Exactstill5,15s;neverUseful52,09soffen|
 |A1Methodwindow|Control begrenzt bestanden; neuerTrace060723FAIL|Getter/TLS/21Calls zuerstvalide, dannLegacy-Colt-ownHook-Konflikt+NachlaufQueueoverflow; Monitor-/Drainfix undneuerControl nötig|
-|DevPowerup-Kontrast|V2OFF600begrenztbestanden, ONoffen|600,135s/0BAD4Rollen/1987OK/Root640File4LogRestorePASS;075sichern,dannON600;keinCRC-Ursachenclaim|
+|DevPowerup-Kontrast|V2OFF600begrenzt; ON600FAILcleanup|OFF600,135s/4Logs; ON600,0495s/0BADobserved, ServercleanupFileNotFound/3Logs; Root640FileRestorePASS;076sichern, Cleanupursacheklären;keinCRC-Ursachenclaim|
 |028Contentiondiagnose|gebaut/portabelbelegt;keineNativeabnahme|3733Bridge/3SourceformatPASS/77Buildpins;Headeronly/Drivergleich;OwnerUNKNOWNkorrekt|
 |A3Tiernachweis|offen|020STARK13:3,Swap5:6; keinbelegtesSTARK>MITTELüberbeide|
 |A4Karten|teilweiseBeobachtung|024Red/Skulls/Trouble600geschlossen, Skulls242,49sNoUseful; weitereMaps/Transitions/Resetoffen|

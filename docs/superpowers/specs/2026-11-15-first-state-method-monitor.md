@@ -1,0 +1,7 @@
+# Inputfreie Methodenüberwachung ohne Legacy-Colt-Sample
+
+Rootruling: beide neuen Arme verwenden während der aktiven Methodenphase dieselben bestehenden Host-, Log-, own_identity-, Display-, PID-Window- und Queryprüfungen ohne Legacy sample(). Paired native_roles/Originalfingerprints vor Arm und alle Original-/Restore-/Cleanupguards bleiben. Keine aktive Inventory-/Geometry-/fixedLife-Abnahme; neuer matched Control erforderlich, keine Wiederverwendung051115.
+
+Nur neuer reversibler Transform/Builder/Tests/Plan/Bericht und neue private deaktivierte Ableitung des Getterboundary-Forks b365d06a. Alter Runner/Helper/Frozen bleiben unangetastet. Alter periodic wird nicht geändert. Neuer method_periodic enthält exakt dessen bestehende gemeinsame Guardanweisungen, ausgenommen sample(); allein diese Funktion wird MethodWindow übergeben. Der Helper erhält höchstens eine korrekte Kommentaränderung, keine AST-/Budget-/Cleanupänderung. Zusammenfassungen der verbleibenden Inventarwerte müssen JOIN_PREARM_ONLY heißen.
+
+Alle151/72 erwarteten Pfade und Hashwerte, Body/JS/G/18/38/11/Registry2/TTL/Schema/Counters und Authorgates bleiben unverändert bis auf die ausdrücklich abgeleiteten Runner-/Kommentarpins und Manifeste. Keine Inputs/Frida im Control, keine Grenzerhöhung. Neuer Fork ist NICHT nativ ausführungsbereit: Drain-Service muss zusätzlich separat überprüft werden. Rootreview/Freeze/Backup/Native bleiben exklusiv Root.

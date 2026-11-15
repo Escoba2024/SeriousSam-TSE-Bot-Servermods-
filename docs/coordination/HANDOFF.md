@@ -1,14 +1,44 @@
-# Aktueller Handoff – 15.11.2026 06:45 UTC
+# Aktueller Handoff – 15.11.2026 07:29 UTC
 
-**A offen, B nicht begonnen. Kein externer Zugriffsblocker.** Kein eigenerNative-/Buildjobaktiv. PowerupOFFv2 geschlossen/reaped0,
-Rootrestore07:00:20PASS640Dateien/4Logs/Units/PIDs/Display/vierLocks.
-600,1353s/0BAD/0Disconnect/0Crash4Rollen,1987ServerSYNCOK,
-63Fremdkillrows/alle8Aktivitätsprädikate. Result6d1e17606f1abee35674df2e782a4520a7448021e6a79fbbf44821e7c16b06ff.
-KeinA4-/A5-/CRC-Ursachenpass. ONnochNICHTgestartet.
-A1Worker hatofflineAutodrainTDDwiederaufgenommen; vorONQuieszenzquittierenlassen.
-Regulärer lokaler Terminalzugang funktioniert; RDC bleibt gesperrt/unbenutzt.
-Die spätere Nutzerentscheidung gilt: **aktuellen Mischstand behalten, isoliert
+**A offen, B nicht begonnen; kein externer Zugriffsblocker.** Kein Nativejob aktiv.
+Die spätere Nutzerentscheidung gilt: **gemischten Livezustand behalten, isoliert
 weiterentwickeln, erst nach nachgewiesenen Verbesserungen erneut ausrollen**.
+Regulärer Terminalzugang funktioniert; RDC bleibt gesperrt und unbenutzt.
+
+ONv2 `powerup-048-offon1-modulev2-root-redstation-20261115-071200` ist
+**FAIL**: 600,0495s ohne beobachtete BAD/Sync-Disconnects, jedoch Servercleanup
+FileNotFoundError und keine normale Closeattestierung; nur drei Abschlusslogs.
+Serverfinal-Log ist PRE_CLOSE und ersetzt das fehlende Abschlusslog nicht.
+Resultf4ef09e27abb4e4fa00cb1020d4c7c5faa236723d9e3d8a132cc0f6e54356ded.
+Rootrestore07:26:02 PASS640Dateien/alleRollenUnitsPräfixequieszent/vierLocks;
+eigenes orphanDisplay154 erstdanach PID/Start/Cmdline/Unit-geprüft SIGTERM.
+Exec16732/Parent1630386 Start135311871 beendet/reaped1. Fehler nicht umwerten.
+Census Flag1 zwei Items entfernt; OFF behielt beide. Kein CRC-Ursachenbeleg.
+Details [ON-Bericht](../reports/2026-11-15-powerup-on-cleanup-failure.md).
+
+OFFv2 geschlossen/reaped0, Rootrestore07:00:20 PASS640Dateien/4Abschlusslogs,
+600,1353s/0BAD/0SyncDisconnect/1987ServerOK,63Fremdkillzeilen/achtaktiv.
+Result6d1e17606f1abee35674df2e782a4520a7448021e6a79fbbf44821e7c16b06ff.
+Kein A4-/A5-/allgemeiner Synclösungsbeleg aus beiden passivenOriginalfenstern.
+
+Beide bestehenden Worker wurden NACH dem geschlossenen ON-Fall tatsächlich
+mit **followup_task** neu gestartet (send_message allein startet keinen Turn):
+- A1: `/srv/tse-build026-skulls-closed-audit-20261115`, autonomer Drain nach
+  akzeptierter Spezifikation. Echter RED am fehlenden Modul liegt vor; Umsetzung
+  läuft, GREEN/Nativefreigabe noch offen. Neuer begrenzter längengeframter
+  Batchtransport: max2MiB unveränderte Journal-Rawbytes +16KiBMetadaten,
+  keine String/Base64-/Parent-Reserialisierung. Originalschema/alteLimits bleiben.
+- A3/A4: `/srv/tse-driver-final-decision-20261115`, Branch
+  `codex/20261115-driver-final-decision`, Basis exakt
+  fce7f1c80264bacd5d445ad0c3d5b83999c3b3c9. Claim BotDriver.cpp, reiner
+  Formatter/Tests/Plan/Report. Nur passive diag1-Endaktionsreceipt; tatsächliche
+  Map bekannt=false, Generationwechsel→UNKNOWN. Keine Verhaltensänderung.
+Root allein integriert/buildet/verändert Runtime. Keine anderen Agenten.
+
+Root integrierte Monitorcommits0084f74/901462b/fce7f1c; Root10Tests8,374sPASS
+(Author22inkl12alterMethodWindowtests separat). Neuer gepaarter Control erforderlich.
+Source085/Delta076 als nächstes: Monitorquellen, ONfullRaw/Rootrestore,
+aktuellen Plan/Handoff und privaten Driverdesignmemo veröffentlichen/sichern.
 
 ## Tatsächlicher Live-Stand
 
@@ -25,49 +55,22 @@ DevSync weiter **FAIL/Ursache offen**: letztervollerDelta02:49:28 seit
 14.11.23:54:70neueBAD/3SyncDisconnect, eigeneBotclients0. KeineGrenzwertänderung,
 keineFilterursacheausSourcebehaupten. AlteDetailberichte/Rohdaten063gesichert.
 
-## Unmittelbare Arbeit
+## Nächste Schritte
 
-1. PowerupModuleV2 Rootreview/12Tests0,451sPASS, vollständigeRunner-/Group-/
-   Serverkopieinversen; OriginalV2/Reader/V3/Auditor/Finalizer unverändert.
-   Je223Runtime/75Source/48Python erwarteteHashwerte ausParent/Rootsources
-   abgeleitet undvollgeprüft,81fe4Buildpins. RootFREEZE:
-   - OFF `/srv/tse-powerup-off0-048-red600-module-v2-root-frozen-20261115`,
-     Manifest0608985ed2be00d23d450dfd98c50b11d3dc23c576c421a01d7a47a3e5328da0,
-     Runner842e681f4900d0cf9c7ab564e27c278477eeaca4e71e798ad60e0a23b749e2a1.
-   - ON entsprechenderon1-Pfad, Manifest
-     3ae03c59d21e2d509a49a98bf3864d14feaa57c9963b1cff29b1683b135bc53a,
-     Runnerb1b79e00044b5b62304117fdf69de2c29b843aafed208c10bfbf1cec8b2a300f.
-   GenauGate/zweiNamespaces/Manifest:2Dateienanders,77bytegleichjeArm.
-   RootEreview-powerup-module-v2-root.py undfreeze-powerup-module-v2-root.py.
-   Peerf4137715764df17bd77a4942941d46053f46897459a68a5b988a46be478fa033
-   PASS_SCOPE nurRootdelta/Pins, keineeigenePolicyunabhängigreviewen.
-2. NeueRootWrapper `run-powerup-module-v2-0-048-red600.py` eed631fb,
-   Outer `observe-powerup-module-v2-0-048-red600.py` e94c1fde; ONae1e9b76/
-   Outer33bf687a. ExakteSHA256 inRootE/powerup-module-v2-root-wrappers.json.
-   OFFv2jetztgeschlossen; ONnichtgestartet. Delta074vollDrive+MetadatenPASS06:47:49,
-   Peerf4137715PASS.
-   JetztOFFRohdaten/Rootsummary/Source084in075vollDrive+Metadaten sichern.
-   DanachfrischePins/Quieszenz/allevierLocks/8GiBReserve; WorkerSTATICONLY;
-   OFF600bereitsgeschlossen/RestorePASS; nächsterON600einzeln. KeinAutoRetry.
-   Bedingungen:Red/Hard2/acht048ExpertRifleTier5Marksman/Original20FPS/diag0;
-   identischefe4Dedicated, einzigesGameplaydeltaStartupFilterflag0/1.
-3. A1-Worker `/srv/tse-build026-skulls-closed-audit-20261115`: enger
-   Methodenmonitorfix fürBEIDEArme, prearmPaired/Originalguards erhalten;
-   aktiveHost/Logs/Identity/Display/Window/Query statt inkompatiblemColtsample.
-   KeinaktivesInventory/Aim/fixedLifeclaim. NeuerpassenderControl erforderlich.
-   SeparaterautonomerDrainentwurf29aebea/f565030gelesen/Rootangenommen:
-   alleinigerFreshExecWorker/20msZiel/100msgemesseneServicegrenzeFAIL,
-   Rawjournal512MiB/2MiB+16KiBEnvelope/Index1024/JSqueue64 unverändert.
-   Originalpacketegeordneteinzelnvalidieren, StopbarrierS/FinalserialF und
-   vollständigePrecutoff-/TailvalidierungsversucheauchbeiExceptions.
-   ExplizitvolleParentguardsproBatch, Workerownership/nativeidentityproCapture,
-   JSguardsproEvent; keinverdeckterÄquivalenzclaim. Architektur nochinTDD,
-   keineNativefreigabe. VorOFFquieszent/STATICONLY quittierenlassen.
-4. Source083tatsächlichgefetchterRemote7977d8ba6058cb4ec6348be9e98834b9dee0e2b6
-   exaktlokaler45d6f44/Treebd16cbe2. Delta074Drive149QsQEDHkZoSnKbG0LJoAcGOsnE6KEIC,
-   2141708B/SHAec136b7886290e4967755a79c4f9122823adb1e69f21c305660f659ded1d4c4e,
-   477Dateien8373541Bvollrücklesen/dualMetadatenPASS06:47:49.
-   Source084/OFFRohdaten075jetztsichern, dannONEinzelfall. B erstnachbelegtemA-Abschluss.
+1. Source085/Delta076 vollständig veröffentlichen, tatsächlich fetch/rücklesen,
+   alle Datei-/Metadaten prüfen. Vorherige Source084: Remoteb2acc21685f07d16cb76298729fa160f2abc9e83,
+   lokala0f5fea1581877170eb6fd2cce7dd0deb45d92f5, Tree0ab968c1823f516bd4ff44a0e7a2aa2ecc5a59d3.
+2. Delta075 bereits vollständig verifiziert07:07:16: Drive1gYRRNUtvwBmwSGagdtFsIP-OX_hFoiWq,
+   9469727B/SHA0f8c8c23a81253ec7d130bd33b652ece1e21403ee030b3d4348b4d0f4bff2372,
+   715Dateien/126304232B dualHash-/Metadatenrekonstruktion. Enthält OFFfullRaw,
+   A1NaturalAI-Rollenentwurf und Source084bundle(requires45d6f44in074).
+3. Cleanupfehler in eigener schmaler reproduzierbarer Probe lokalisieren; keine
+   pauschale FileNotFoundError-Unterdrückung, keine fehlenden Logs erfinden.
+4. Beide aktiven Writer-Ergebnisse reviewen/TDD-/Inversenbelege prüfen, integrieren.
+   Danach erst Rootfreeze, unabhängiger Review, Vollbackup und einzelne Nativefälle.
+   Kein automatischer Retry. A1Control neu gepaart; keine alteMethodenfreigabe.
+5. Funktional geeigneten Kandidaten über Maps/Tiers abnehmen; formale
+   1/4/8-Bot-Gates60/60/120min bleiben unverändert offen. B erst nach A-Abschluss.
 
 ## Neue KI-Diagnose und Kandidat028
 
@@ -127,7 +130,7 @@ PrivateBackupbasis `/srv/tse-cecil-rollout-backup-20261114`,
 RootE `/srv/tse-cecil-rollout-evidence-20261114`,
 Native `/srv/tse-milestone-a-evidence-20261111`.
 
-022–073bereitsvollDrive-rückgelesen/Dateimetadatengeprüft. Mischrollback051
+022–075bereitsvollDrive-rückgelesen/Dateimetadatengeprüft. Mischrollback051
 mit5573Dateien/898964677B gesichert, tatsächlicheLivebasis
 `/srv/tse-current-mixed-fleet-backup-20261114` schützen.
 KeineRetaildateien/privatenRohidentitäten insöffentlicheRepo.
@@ -148,4 +151,4 @@ ResetsundverlässlicheVersorgungoffen. DesertTemplefehlendeWorldgesperrt,
 LostTomb/Fortress/Compoundvorhandenungeprüft. A5formale1/4/8Bots60/60/120min
 nochnichtbegonnen, erstfunktionalgeeigneterKandidat. B1/B2nichtimplementiert;
 volleKriterien im[Gesamtplan](../superpowers/plans/2026-11-14-cecil-rollout-a-b.md).
-KeineunbeaufsichtigteRuntimearbeitläuft. FrühereCheckpointsstehenimGit/Backups.
+Kein Nativejob läuft; zwei verifizierte isolierte Entwicklungsaufträge aktiv. FrühereCheckpointsstehenimGit/Backups.
