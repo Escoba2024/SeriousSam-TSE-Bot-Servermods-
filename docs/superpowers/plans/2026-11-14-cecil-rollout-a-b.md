@@ -1,6 +1,6 @@
 # SSAM.AI – ausführbarer Gesamtplan A → B
 
-Stand 15.11.2026, 15:52 UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
+Stand 15.11.2026, 16:07 UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
 Maßgeblich sind der vollständige Nutzerauftrag, ursprüngliche
 [Milestonespezifikation](2026-11-11-milestones-a-b.md),
 [Toolchainrichtlinie](../../decisions/2026-10-17-tse-ai-tools-mcp-policy.md)
@@ -14,28 +14,28 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 
 ## Aktueller Zustand und Priorität
 
-Stand 15.11.2026, 15:52 UTC. Exakte private Pfade/Hashes und frühere Fehler stehen im Handoff; ältere Planstände bleiben in Git erhalten.
+Stand 15.11.2026, 16:07 UTC. Exakte private Pfade/Hashes und frühere Fehler stehen im Handoff; ältere Planstände bleiben in Git erhalten.
 
 | Arbeit | Status | Beleg und nächster Schritt |
 |---|---|---|
-| Live-Flotte | zuletzt 14:50 erneut geprüft | Dev048, Public Red Gen2, vier Public018; je acht eigene Bots, keine zusätzlichen Teilnehmer; 18 geladene Rollen/Startkonfigurationen wie Rollback051. Bis belegter Verbesserung erhalten. |
+| Live-Flotte | zuletzt 15:59 erneut geprüft | Dev048, Public Red Gen2, vier Public018; je acht eigene Bots, keine zusätzlichen Teilnehmer; 18 geladene Rollen/Startkonfigurationen wie Rollback051. Bis belegter Verbesserung erhalten. |
 | Namen/Identitäten | Bestand erhalten | 458 Namen; 48 kollisionsfreie sichtbare Botnamen, stabile Profile/IDs wie Rollback051. |
-| Dev-Sync | frühere Ursache offen | 13:52–14:50 weitere 8.457 OK/0BAD/0Disconnect; ältere 23BAD/2Disconnect und 70BAD/3Disconnect bleiben FAIL. |
+| Dev-Sync | frühere Ursache offen | 14:50–15:59 weitere 9.987 OK/0BAD/0Disconnect; ältere 23BAD/2Disconnect und 70BAD/3Disconnect bleiben FAIL. |
 | A1 Eingabekalibrierung | offen | Maus-/Tastatur-/Pitchbefunde fehlgeschlagen; keine Toleranzänderung. |
 | A1 neue Messmethode | begrenzt bestanden | Kontroll-/Traceprobe geschlossen und voll ausgewertet: 414 tatsächlich beendete exkludierte Weltcasts, 207 GameTickpaare bis F, 38 Originalbereiche restauriert; Init/Colt/Schaden jeweils 0. Kein A1-Pass. |
 | A1 normaler Originalrespawn | Source/TDD in eigenem Worktree | Echter regulärer Tod vor Arm/MayRespawn2; danach ein normaler Fire-Release und tatsächliche Init-/erste-Tick-/Normal-/Fatal-Schadenskette. Neue Bedingung, alte Inputfree-/Coltverträge unverändert. |
 | A3 Schwierigkeitsstufen | offen | STARK>MITTEL und menschliches Spielniveau noch nicht belegt; Waffenversorgung unzureichend. |
 | A4 Reset031 | geschlossen, begrenzt bestanden | 24/24 aktive Slotphasen; Vollauswertung 145 Leben, weiterhin 49,4s Waffenlücke. Reset030 bleibt 22/24 FAIL. |
 | A4 Hole031 | geschlossen, vollständig ausgewertet | 206 Leben/204 zusätzliche Waffen-Gewinne/172 erkannte Spieler-Killzeilen; 79,43s und 57,85s ohne brauchbare Zusatzwaffe verhindern Freigabe. |
-| A4 Trouble031 | geschlossen; neuer Vollfunktionsaudit läuft | 600,074s, acht technische Aktivitätsgates, 0BAD/0Disconnect; Root 640 Dateien/0 Absenzen/4 Closedlogs/beide Zeitstempel restauriert. Kein A4-Pass. |
+| A4 Trouble031 | geschlossen, vollständig ausgewertet | 600,074s/292 Leben/205 Gains/259 Spielerkillmeldungen; 38,45s Versorgungslücke. Root-Restore und Auditdateihashes geprüft; kein A4-Pass. |
 | A4 Karten/Spezialübergänge | offen | Neue gezielte Gameplaykorrektur aus belegter Versorgungslücke ableiten; übrige Karten und Übergänge kausal prüfen. Desert Temple gesperrt, Welt fehlt. |
 | A5 formale Stabilität | nicht begonnen | Funktional geeigneter Kandidat erforderlich; 1/4/8 Bots für 60/60/120 Minuten. |
-| Sicherung/Veröffentlichung | Source104 / Delta097 vollständig geprüft | Remote-Fetch/Baum/Diff0; privater Vollrücklauf und zwei vollständige Perfile-Metadatenrestores. Neue Trouble-Rohdaten als nächstes sichern. |
+| Sicherung/Veröffentlichung | Source105 / Delta098 vollständig geprüft | Remote-Fetch/Baum/Diff0; privater Vollrücklauf und zwei vollständige Perfile-Metadatenrestores. Trouble-Rohdaten voll gesichert; neuer Recoverybackup separat geprüft. |
 | B Sessions/Chat | nicht begonnen | Erst nach nachgewiesenem Abschluss von A. |
 
 ## Unmittelbare Ausführung und Claims
 
-1. **Trouble031 abgeschlossen:** Rootjob36038 beendet0/abgeholt; unabhängiger Rootrestore15:49:50 PASS. A4-Agent im eigenen WT `/srv/tse-reset031-diag1-prepare-20261115` liest genau einmal die neuen vollständigen Closedbelege, wertet alle acht Bots/Leben aus und dokumentiert Grenzen. Keine neuen passiven Nativewiederholungen ohne konkrete neue Hypothese. Danach engste ursächliche Gameplaykorrektur mit messbarem Beschaffungs-/Bewegungsnachweis.
+1. **Trouble031 abgeschlossen:** Rootjob36038 beendet0/abgeholt; unabhängiger Rootrestore15:49:50 PASS. A4-Vollaudit022dee4 integriert, Root3TestsPASS und kanonische Dateihashes geprüft. A4-Agent im eigenen WT `/srv/tse-reset031-diag1-prepare-20261115` reproduziert nun die gesperrte Erstwaffensuche bei gehaltenem nicht dringendem Nebenitem und entwickelt nur nach echtem SDK-RED das atomische Wechseln zum vollständig validierten Ersatz. Keine neuen passiven Nativewiederholungen ohne konkrete neue Hypothese. Danach engste ursächliche Gameplaykorrektur mit messbarem Beschaffungs-/Bewegungsnachweis.
 2. **A1 gezielter normaler Respawn:** Candidate im eigenen WT `/srv/tse-build030-skulls-closed-audit-20261115` dokumentiert neue Bedingung/Plan und implementiert mit echten RED→GREEN-Tests. Rootentscheidung: expliziter DEAD_READY-Basisreader ohne optionale lebende Muzzlegeometrie zulässig; alte Coltreader-/Inputfreeguards unverändert. PID/World/Actor/Slot/MayRespawn2/Buttons/HP durch frische Doppelreads binden. Keine HP-/Positions-/Winkelwrites, kein Treffer aus Input ableiten. Vorbereitung nur regulär durch bestehenden Festziel030-Coltpfad, sonst begrenzter FAIL. Nach Arm genau ein normaler Fire-Down/Up; tatsächliche Hold-/Releasezeiten und serverseitige ACK/Init/erste-Tick-/Owner-/Schadenskette messen. Grenzen 10s/15sTTL/Queue64/Native16384/85s/90s/eight/.2 unverändert.
 3. **Root integriert und prüft:** Claims getrennt; ausschließlich Root baut, ändert Runtime und Live. Nach Source-/Pinreview und Sicherung genau passende neue uninstrumentierte Kontrolle und nur bei erfolgreichem Close/Restore passender Trace. Fehlende Ereignisse bleiben INCOMPLETE; kein blinder AI-only-Retry.
 4. **Ressourcen:** mindestens8GiB Disk erhalten, zusätzlich64MiB Schreibreserve vor vorbereitenden Schreibaktionen. Closedbelege nur nach vollständigem externem Backup und geprüfter ausführbarer Byte-/Metadatenrekonstruktion komprimieren/retiren; bestehende Originalarchive/Rollback051/qualifizierte Runtimes bleiben erhalten. Während Native keine Tests/Builds/Reader/Archive/Downloadsparallel.

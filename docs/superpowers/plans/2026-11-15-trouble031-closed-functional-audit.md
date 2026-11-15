@@ -1,0 +1,11 @@
+# Trouble031: genau ein geschlossener Funktionsaudit
+
+FesterCase/Read-/Output-/Disknenner imClaim. Aoffen/Bnichtbegonnen. KeineRuntimeoderweiteresDiagnosefenster; RootClosed-RawsnureinmalproStreamlesen,dannRAMableiten.
+
+1. KorrigiertenHole031-Reader475ddc0a alsvollständiggepinntenCommonbodywiederverwenden. NurCASE/PACKAGE/OUT/RESULT,RootHost-/RestorepfadeundMap-/Statuslabels exaktableiten; ganzeSourceinverse. Verhalten/64MiB128MiB/5MiB/Life-/Decimal-/Source-/Epoch-/Attemptgatesunverändert. BehavioralRED deractualParentCasebindung, dannengerWrapper/Puretest.
+2. CaseResult/Controller/Helperpins,viernormaleCloses undgesamteV3Raw-/Canonical-/Overlap-/Smokenennerprüfen. Alle8Slots/Leben/Zensierung/Usefulgewinne/Fireflags,beobachteteChords/Stationarität/NoUseful; keineTick/20fusion. PickergrammarundalleReacquire-/GroundReplan-/Flight-/Goal-/Supportereignissewiederverwenden.
+3. EchteKill-/Self-/UmwelttodesvorlagenauseigenenOriginalClosedlogsgetrenntvonNettoscore/SchadenACK; keineNamensnormalisierungoderunbelegteLifezuordnung. Spezialübergänge/Lava/FlightproposalnurzählenundtatsächlicheWitnessgrenzenerhalten. RootHost-/Restorebelegeseparat.
+4. GanzeLife-/SlotnennerundlangeNoUseful-/Stillstandsfoci,SamcallSupply/Normalpicker/Weapons/CombatvetoausRAMgegenüberstellen. DanachkleinsteSourcegestützteGameplayhypothese+engermessbarerSDKRepro-/Fixvorschlag,nichtnochblindesDIAGNative. FallsUrsachenichtbelegt,UNKNOWNpräziseundkeinenFixerfinden.
+5. Source/Tests/öffentlicherbereinigterReport+privatevollständigeReceipt/Sourceinverse/Log-/Inputhashescommitten,Rawhandlesnormalclose/Rootfreigeben/alleJobsbeenden. KeinRankingmitanderenMaps/048/018/keineA4vollabnahmeausGains.
+
+Abgeschlossen: echter Casebinding-RED, drei gezielte Tests finalPASS0,048s; genau ein schwerer Rawdurchlauf, vollständiger292-Life-/8-Slotnenner und4172Pickerbatches. Floorabbruch korrekt, danachRAM-onlyFortsetzung nach Rootreservefreigabe. AlleHandles/Reader Exit0. Report `docs/reports/2026-11-15-build031-trouble-closed-functional-audit.md` enthält vollständige Claims/Grenzen/SHAs. KeinA4vollpass. Getrennter nächsterClaim nur nach Rootauftrag: tatsächlicherSDK-RED für atomische Erstwaffenpriorität gegenüber gehaltenen nichturgenten Nebenitems; keine hiesige Implementierung.
