@@ -1,4 +1,41 @@
-# Aktueller Handoff — 15.11.2026, 01:22 UTC
+# Aktueller Handoff — 15.11.2026, 01:37 UTC
+
+## Stand 15.11.2026, 01:37 UTC – geschlossene Audits exakt reproduziert
+
+Root hat NoFireReader vollständig gelesen und unverändert ausgeführt:
+1949641B/7b7a56d3 byteexakt,alle310Raw/139InputActionpaare/59Nativepaare/
+8Requests/6Phasen. Y−12einControllerrequest→zweiOriginalGetCursorPos301/
+EngineY+3/+3→PitchACK+6. Nur ein echterXserverQueryreply301 undWarp313,
+danach sechsCenterreplies; keineperJSInvocationWireSequence, daher keine
+Winecache-/Queued-Recenterursachenbehauptung. AlterFAIL/UUNKNOWN bleiben.
+Integriertc7afd4d, statischesOptionspapier93a0b44. Getrennten normalenKeyboard-
+Geometriepfad planen; altePixelkalibrierung unverändert, keineEPS-/Budgetlockerung.
+VorCode bekannteOriginal-Yaw/Forwardsemantik inPlan berücksichtigen.
+
+Skulls Vollanalyse integriert904538f/3daa738:alle192Nativeleben eindeutig
+Sourcegebunden/201SourceSpawns/9UNKNOWNtail,0GroundReplans. Root las beide
+vollständigenReader+Report und reproduzierte65546be4/extendedc78c4bdb byteexakt.
+PrivatRoot `.codex/evidence/skulls024-root-replay-20261115` plus RootEV-
+`navigation024-skulls-root-analysis-review.json`. Der10sWatchdog bricht
+129→248 wegenno_hop_progress tatsächlich389.750Sourcezeit ab; danach221
+Snapshotzustände ohneZiel/Anker,0Sicht/Shotcounter534konstant,58Bewegungsaktionen.
+231,793427s regionaleWiederkehr, kein242sStillstandsclaim. ReacquiregrundUNKNOWN;
+nächsterpassiverEntscheidungsbeleg wird separat geplant, keineGameplayschwellen-
+änderung. [Vollreport](../reports/2026-11-15-build024-skulls-closed-functional-audit.md).
+
+726796930B Platz gewonnen durch ausschließlich acht temporäreDriveDownloads:
+alleParts gegen erhalteneOriginalparts frisch gehasht, Konkatenat gleich
+erhaltenemVollarchivSHA862af28e, frühereDrive-RoundtripsPASS, keineoffenenFDs,
+vierSharedlocks gehalten. Originalarchive/Originalparts/Rohdaten unverändert.
+RootEV `verified-readback-duplicate-cleanup.json`, frei9547300864B danach.
+KeinealtenRestores/Rawlogs/qualifiziertenDLLsgelöscht.
+
+Remote30602074 tatsächlich gefetched/Treeebfbec80 gleichRootc7afd4d;
+neuereOptions-/Skullsvollreportsnochpublizieren. KeinNativejobaktiv,
+keineLiveänderung, Aoffen/Bnichtbegonnen. NächsterRootschrittSources/Delta060
+mitallenNoFire-/Skullsraws,beidenvollständigenAnalysen+Replays unddrei
+weiterenRootfreezes vollständig extern sichern; danach einzelneKartenprüfung
+undbegründeteOfflineumsetzung, Sourcewriter vorNativefenstern quieszent halten.
 
 ## Stand 15.11.2026, 01:22 UTC – Skulls600 geschlossen, Versorgungslücke bestätigt
 
