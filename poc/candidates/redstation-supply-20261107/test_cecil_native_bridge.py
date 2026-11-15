@@ -87,7 +87,7 @@ int gameTimeReads=0;
 struct Network {CSessionProperties session;double time=0;double GetGameTime(){++gameTimeReads;return time;}const void* GetSessionProperties(){return &session;}} network,*_pNetwork=&network;
 struct Timer {double TickQuantum=.05;} timer,*_pTimer=&timer;
 int _botRayBudget=20,bot_iRosterOffset=0;
-bool bot_bDiagnostics=false;int supplyDiagLines=0;std::string supplyDiagText;
+bool bot_bDiagnostics=false;int supplyDiagLines=0,supplyDiagMaxLength=0;std::string supplyDiagText;
 int reacquireDiagLines=0,reacquireDiagMaxLength=0;std::string reacquireDiagText;
 long _botSupplyMapSerial=7,_botSupplyMapReady=1;bool bot_bEnabled=true,bot_bSupplyNavigation=true;
 long InterlockedCompareExchange(long* p,long,long){return *p;}
@@ -95,7 +95,7 @@ int hopCheckpointEvents=0;
 int lockApproachEvents=0,lastApproachNode=-1,lastApproachHop=-1;unsigned long lastApproachRef=0;int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0,groundReplanEvents=0;char lastEnd[32]={0};
 void BotLog(const char* format,...){
  if(std::strstr(format,"[CecilReacquireDecision]")){++reacquireDiagLines;char text[2048];va_list a;va_start(a,format);const int length=std::vsnprintf(text,sizeof(text),format,a);va_end(a);reacquireDiagMaxLength=std::max(reacquireDiagMaxLength,length);reacquireDiagText+=text;}
- if(std::strstr(format,"[CecilSupplyDiag")){++supplyDiagLines;char text[2048];va_list a;va_start(a,format);std::vsnprintf(text,sizeof(text),format,a);va_end(a);supplyDiagText+=text;}
+ if(std::strstr(format,"[CecilSupplyDiag")){++supplyDiagLines;char text[2048];va_list a;va_start(a,format);const int length=std::vsnprintf(text,sizeof(text),format,a);va_end(a);supplyDiagMaxLength=std::max(supplyDiagMaxLength,length);supplyDiagText+=text;}
  if(std::strstr(format,"[CecilHopCheckpoint]"))++hopCheckpointEvents;
  if(std::strstr(format,"[CecilGroundReplan]"))++groundReplanEvents;
  if(std::strstr(format,"[CecilLockApproach]")){
@@ -3968,7 +3968,85 @@ unsigned localSupplyChoose(double now=.05,double commonNow=-1,int budget=40){
  BotCecilChooseMappedWeapon(&player,far,BotCecilItemInput(&player,far,1000),0,(int)(now/.05),now);
  return far.goalEntity;
 }
+void localSupplyReceiptDiagnostics(){
+ localSupplyFixture();SCecilSupplyClaimReceipt receipt;
+ const auto& claim=BotSupplyState(1).localSupply;const int lookups=worldLookups,rays=rayCount,clock=gameTimeReads;
+ check(BotCecilNearerLocalSupply(&player,0,9901,40,.05,&receipt)&&receipt.valid&&receipt.local==1&&
+   receipt.map==claim.map&&receipt.entity==102&&receipt.generation==1&&receipt.item==9901&&receipt.goal==2&&
+   receipt.cost==claim.cost&&receipt.seen==claim.seen&&receipt.localTime==claim.localTime&&
+   receipt.progress==claim.progress&&receipt.attempt==claim.attempt&&receipt.deadline==claim.deadline,
+   "qualified receipt copies the exact first admitted owner scalar claim and separate clock domains");
+ check(worldLookups-lookups==1&&rayCount==rays&&gameTimeReads==clock,
+   "receipt uses original owner lookup and introduces no ray or clock read");
+ const double copiedCost=receipt.cost;BotSupplyState(1).localSupply.cost+=7;
+ check(receipt.cost==copiedCost,"receipt is immutable scalar snapshot rather than later owner reread");
+ for(int mode=0;mode<26;++mode){
+  localSupplyFixture();auto& peer=BotSupplyState(1);CWorld foreign;double cost=40,observed=.05;unsigned item=9901;
+  if(mode==0)supplyPeer.health=0;
+  if(mode==1)peer.Reset();
+  if(mode==2)peer.ClearGoal();
+  if(mode==3)++peer.generation;
+  if(mode==4)++_botSupplyMapSerial;
+  if(mode==5)supplyPeer.worldOverride=&foreign;
+  if(mode==6)++supplyPeer.en_ulID;
+  if(mode==7)observed=.35;
+  if(mode==8)observed=.04;
+  if(mode==9)peer.groundStalled=true;
+  if(mode==10)peer.goalDeadline=.05;
+  if(mode==11)supplyPeer.cls.name="Classes/MovingBrush.ecl";
+  if(mode==12)supplyPeer.w.usable=supplyPeer.w.m_iAvailableWeapons=11;
+  if(mode==13)peer.goalSince=.025;
+  if(mode==14)cost=NAN;
+  if(mode==15)observed=NAN;
+  if(mode==16)player.hasWorld=false;
+  if(mode==17)item=9999;
+  if(mode==18)peer.localSupply.goal=3;
+  if(mode==19)supplyPeer.flags=ENF_DELETED;
+  if(mode==20)supplyPeer.m_penWeapons=nullptr;
+  if(mode==21)peer.localSupply.cost=INFINITY;
+  if(mode==22)peer.localSupply.localTime=peer.localSupply.progress+5;
+  if(mode==23)peer.localSupply.deadline=peer.localSupply.localTime;
+  if(mode==24)peer.localSupply.seen=-1;
+  if(mode==25)cost=peer.localSupply.cost+1;
+  receipt.valid=true;receipt.local=3;receipt.entity=999;receipt.cost=100;
+  check(!BotCecilNearerLocalSupply(&player,0,item,cost,observed,&receipt)&&!receipt.valid&&
+    receipt.local==-1&&receipt.entity==0&&receipt.generation==0&&receipt.item==0&&receipt.goal==-1&&
+    receipt.cost==0&&receipt.seen==0&&receipt.localTime==0&&receipt.progress==0&&receipt.attempt==0&&receipt.deadline==0,
+    "every failed or unqualified owner evaluation clears stale receipt without relaxing original guards");
+ }
+ // Existing first-qualifying-owner order remains unchanged, no global cheapest claim.
+ localSupplyFixture();auto& second=BotSupplyState(2);second=BotSupplyState(1);second.localSupply.cost=1;
+ check(BotCecilNearerLocalSupply(&player,0,9901,40,.05,&receipt)&&receipt.local==1,
+   "receipt preserves first qualifying owner order despite later cheaper local claim");
+ int casts[2],queries[2],clocks[2],budgets[2];unsigned random[2],goals[2];double deadlines[2];
+ for(int mode=0;mode<2;++mode){
+  bot_bDiagnostics=false;localSupplyFixture();bot_bDiagnostics=mode;supplyDiagText.clear();supplyDiagLines=0;
+  const int beforeCasts=rayCount,beforeQueries=worldLookups,beforeClocks=gameTimeReads;
+  goals[mode]=localSupplyChoose();casts[mode]=rayCount-beforeCasts;queries[mode]=worldLookups-beforeQueries;
+  clocks[mode]=gameTimeReads-beforeClocks;budgets[mode]=_botRayBudget;random[mode]=BotSupplyState(0).rng;deadlines[mode]=BotSupplyState(0).goalDeadline;
+ }
+ check(goals[0]==goals[1]&&casts[0]==casts[1]&&queries[0]==queries[1]&&clocks[0]==clocks[1]&&
+   budgets[0]==budgets[1]&&random[0]==random[1]&&deadlines[0]==deadlines[1],
+   "receipt diag0 and diag1 preserve actual goals ray budget lookups clocks RNG and original deadline");
+ bot_bDiagnostics=false;localSupplyFixture(false);bot_bDiagnostics=true;supplyDiagText.clear();supplyDiagLines=0;
+ check(localSupplyChoose()==9901&&supplyDiagText.find("prefer_uncontested=1 contested=1 owner_valid=1 owner_local=1")!=std::string::npos&&
+   supplyDiagText.find("owner_entity=102 owner_generation=1 owner_item=9901 owner_goal=2")!=std::string::npos,
+   "sole contested fallback records actual qualified winner rather than blacklisting it");
+ bot_bDiagnostics=false;localSupplyFixture();bot_bDiagnostics=true;supplyDiagText.clear();
+ check(localSupplyChoose(.05,-1,3)==9901&&supplyDiagText.find("preference_evaluated=0 contested=0 owner_valid=0 owner_local=-1")!=std::string::npos&&
+   supplyDiagText.find("prefer_uncontested=0 contested=0 owner_valid=0 owner_local=-1")!=std::string::npos,
+   "budget fallback labels unevaluated contention unknown instead of falsely claiming no owner");
+ check(supplyDiagMaxLength>0&&supplyDiagMaxLength<2048,"observed complete contention rows fit original log buffer");
+ bot_bDiagnostics=false;BotSupplyState(2).Reset();
+}
 void localSupplyContention(){
+ localSupplyFixture();bot_bDiagnostics=true;supplyDiagLines=0;supplyDiagText.clear();
+ check(localSupplyChoose()==9902,"diagnostic fixture retains actual preferred alternative");
+ check(supplyDiagText.find("preference_evaluated=1 contested=1 owner_valid=1 owner_local=1")!=std::string::npos,
+   "actual candidate records qualified competing owner instead of inferring contention from scores");
+ check(supplyDiagText.find("prefer_uncontested=1 contested=0 owner_valid=0 owner_local=-1")!=std::string::npos,
+   "actual winning selection clears the replaced candidate owner snapshot");
+ bot_bDiagnostics=false;
  localSupplyFixture();
  check(localSupplyChoose()==9902,"far local bot prefers reachable alternative to nearer live mapped pursuer");
  check(!BotSupplyState(0).ItemRejected(9901,.05,false),"local contention never blacklists obtainable weapon");
@@ -4657,6 +4735,7 @@ int main(){
  itemConnectorRadiusContinuity();
  healthConnectorContinuityGuards();
  localSupplyContention();
+ localSupplyReceiptDiagnostics();
  liveItemFlightLockReplanPriority();
  liveItemFlightArrivalPriority();
  liveItemFlightPriorityGuards();

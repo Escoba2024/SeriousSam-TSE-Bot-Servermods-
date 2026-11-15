@@ -724,7 +724,15 @@ static void BotCecilObserveLocalSupply(CPlayer* player,SSupplyState& s,
   claim.item=s.goalEntity;claim.goal=s.goal;claim.attempt=s.goalSince;claim.deadline=s.goalDeadline;
   claim.seen=observedAt;claim.localTime=now;claim.cost=cost;
 }
-static bool BotCecilNearerLocalSupply(CPlayer* player,INDEX slot,uint32_t item,double cost,double observedAt){
+// Scalar receipt of the existing first qualifying local owner; no pointers escape.
+// Unknown means not qualified in this evaluation, never proof of no contender.
+struct SCecilSupplyClaimReceipt {
+  bool valid=false;INDEX local=-1;long map=0;uint32_t entity=0,generation=0,item=0;int goal=-1;
+  double cost=0,seen=0,localTime=0,progress=0,attempt=0,deadline=0;
+};
+static bool BotCecilNearerLocalSupply(CPlayer* player,INDEX slot,uint32_t item,double cost,double observedAt,
+    SCecilSupplyClaimReceipt* receipt=NULL){
+  if(receipt)*receipt=SCecilSupplyClaimReceipt();
   if(!std::isfinite(observedAt)||!std::isfinite(cost)||!player->GetWorld())return false;
   const long map=InterlockedCompareExchange(&_botSupplyMapSerial,0,0);
   for(INDEX other=0;other<4;++other){
@@ -743,6 +751,12 @@ static bool BotCecilNearerLocalSupply(CPlayer* player,INDEX slot,uint32_t item,d
     CPlayer* owner=static_cast<CPlayer*>(entity);
     if(owner->GetWorld()!=player->GetWorld()||!std::isfinite(owner->GetHealth())||owner->GetHealth()<=0||
        !owner->m_penWeapons||BotCecilHasRanged(BotCecilItemInput(owner,peer,1000)))continue;
+    if(receipt){
+      receipt->valid=true;receipt->local=other;receipt->map=claim.map;
+      receipt->entity=claim.entity;receipt->generation=claim.generation;receipt->item=claim.item;receipt->goal=claim.goal;
+      receipt->cost=claim.cost;receipt->seen=claim.seen;receipt->localTime=claim.localTime;
+      receipt->progress=claim.progress;receipt->attempt=claim.attempt;receipt->deadline=claim.deadline;
+    }
     return true;
   }
   return false;
@@ -763,6 +777,7 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
     const bool preferUncontested=_botRayBudget>3&&attempt<7;
     unsigned eligible=0,emitted=0;
     int best=-1;bool bestContested=false;double bestScore=std::numeric_limits<double>::infinity(),bestCost=0;botcore::CecilItem chosen;
+    SCecilSupplyClaimReceipt bestReceipt;double bestClaimCost=0;
     for(size_t i=0;i<graph.points.size();++i){
       const auto& point=graph.points[i];if(point.important_entity<0||s.blocked[i]||!std::isfinite(s.goals.Distance((int)i)))continue;
       CEntity* entity=player->GetWorld()->EntityFromID((ULONG)point.important_entity);botcore::CecilItem item;
@@ -778,14 +793,16 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
       // This ranks items only; graph costs/topology and physical deadlines stay unchanged.
       const FLOAT3D displacement((FLOAT)(item.x-input.x),(FLOAT)(item.y-input.y),(FLOAT)(item.z-input.z));
       const double score=cost+3*std::fabs(BotCecilHeight(player,displacement));
-      const bool contested=preferUncontested&&BotCecilNearerLocalSupply(player,slot,item.id,cost-length,observedAt);
+      SCecilSupplyClaimReceipt candidateReceipt;
+      const bool contested=preferUncontested&&BotCecilNearerLocalSupply(player,slot,item.id,cost-length,observedAt,diagnostics?&candidateReceipt:NULL);
       if(diagnostics){
         ++eligible;
         if(attempt==0&&emitted<16){
           int from,to;unsigned flags;BotCecilSupplyDiagPath(s,(int)i,from,to,flags);++emitted;
-          BotLog("[CecilSupplyDiagCandidate] local=%d tick=%d generation=%lu entity=%lu weapon=%d anchor=%d path_distance=%.6f connector=%.6f vertical=%.6f total=%.6f special_from=%d special_to=%d special_flags=%lu\n",
+          BotLog("[CecilSupplyDiagCandidate] local=%d tick=%d generation=%lu entity=%lu weapon=%d anchor=%d path_distance=%.6f connector=%.6f vertical=%.6f total=%.6f special_from=%d special_to=%d special_flags=%lu preference_evaluated=%d contested=%d owner_valid=%d owner_local=%d claim_cost=%.17g owner_cost=%.17g\n",
             slot,tick,(unsigned long)s.generation,(unsigned long)item.id,item.weapon,(int)i,s.goals.Distance((int)i),length,
-            std::fabs(BotCecilHeight(player,displacement)),score,from,to,(unsigned long)flags);
+            std::fabs(BotCecilHeight(player,displacement)),score,from,to,(unsigned long)flags,
+            (int)preferUncontested,(int)contested,(int)candidateReceipt.valid,candidateReceipt.local,cost-length,candidateReceipt.cost);
         }
       }
       // Prefer another live eligible route, but never blacklist or exclude the
@@ -793,12 +810,17 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
       // subsequent attempts can still select the original obtainable weapon.
       if(best<0||(bestContested&&!contested)||(bestContested==contested&&score<bestScore)){
         best=(int)i;bestContested=contested;bestScore=score;bestCost=cost;chosen=item;
+        if(diagnostics){bestReceipt=candidateReceipt;bestClaimCost=cost-length;}
       }
     }
     if(diagnostics){
       int from,to;unsigned flags;BotCecilSupplyDiagPath(s,best,from,to,flags);
-      BotLog("[CecilSupplyDiagSelection] local=%d tick=%d attempt=%d eligible=%u emitted=%u chosen=%lu weapon=%d anchor=%d path_distance=%.6f cost=%.6f score=%.6f special_from=%d special_to=%d special_flags=%lu\n",
-        slot,tick,attempt,eligible,emitted,(unsigned long)(best<0?0:chosen.id),best<0?0:chosen.weapon,best,s.goals.Distance(best),bestCost,bestScore,from,to,(unsigned long)flags);
+      BotLog("[CecilSupplyDiagSelection] local=%d tick=%d attempt=%d eligible=%u emitted=%u chosen=%lu weapon=%d anchor=%d path_distance=%.6f cost=%.6f score=%.6f special_from=%d special_to=%d special_flags=%lu generation=%lu prefer_uncontested=%d contested=%d owner_valid=%d owner_local=%d claim_cost=%.17g observed_common=%.17g owner_map=%ld owner_entity=%lu owner_generation=%lu owner_item=%lu owner_goal=%d owner_cost=%.17g owner_seen_common=%.17g owner_local_time=%.17g owner_progress_local=%.17g owner_attempt_local=%.17g owner_deadline_local=%.17g\n",
+        slot,tick,attempt,eligible,emitted,(unsigned long)(best<0?0:chosen.id),best<0?0:chosen.weapon,best,s.goals.Distance(best),bestCost,bestScore,from,to,(unsigned long)flags,
+        (unsigned long)s.generation,(int)preferUncontested,(int)bestContested,(int)bestReceipt.valid,bestReceipt.local,
+        bestClaimCost,observedAt,bestReceipt.map,(unsigned long)bestReceipt.entity,(unsigned long)bestReceipt.generation,
+        (unsigned long)bestReceipt.item,bestReceipt.goal,bestReceipt.cost,bestReceipt.seen,bestReceipt.localTime,
+        bestReceipt.progress,bestReceipt.attempt,bestReceipt.deadline);
     }
     if(best<0)return;
     CEntity* entity=player->GetWorld()->EntityFromID(chosen.id);const auto& point=graph.points[best];
