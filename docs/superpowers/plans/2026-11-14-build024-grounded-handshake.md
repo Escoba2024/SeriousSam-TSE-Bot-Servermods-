@@ -51,3 +51,6 @@ veraltete/ungültige Support- und Sperrzustände; unveränderte Zielzeit und
 Radiusankunft; begrenztes Querybudget; Nativeunbekannte nicht nachträglich als
 SDK-Eingaben behaupten. Formal1/4/8-Bot-Stunden bleiben offen und beginnen erst
 für einen dazu geeigneten Kandidaten. A offen, B nicht begonnen.
+
+
+15.11.2026,00:23UTC: Red600 tatsächlich geschlossen (Resultc6bcb9ae), Rootrestore640+4PASS und685äußereHostproben. Vollständige native Wirkungsanalyse noch offen; keinePromotion. Siehe geschlossenen Build024-Bericht. Neue024-Rohdaten benötigen058,057sicherte nur Vorbereitung.
