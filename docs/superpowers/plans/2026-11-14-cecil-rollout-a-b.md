@@ -48,7 +48,7 @@ Stand 15.11.2026, 12:50 UTC. Der aktuelle Handoff enthält die genaue private Be
 | A1 echter KI-Schütze | isolierte Quellenumsetzung | exakt ein eigener Bot030 gegen unveränderten Originalclient; neue passende Kontrolle und Trace erst nach Rollen-/Ownership-/Configprüfung |
 | A3 Schwierigkeitsstufen | offen | bisherige Vergleiche belegen STARK>MITTEL noch nicht; menschliches Spielniveau ebenfalls offen |
 | A4 Reset030 | geschlossen, fehlgeschlagen | 22/24 Slotphasen aktiv; fehlende Waffenbeschaffung und Fernwaffenaktivität nicht umetikettiert |
-| A4 Diagnose031 | gebaut, noch kein Native | passive Picker-/Same-call-Quittungen; 81 Buildpins geprüft, portable Source-/SDK-Tests bestanden; ein isoliertes Red→Red→Red-DIAG1-Fenster als Nächstes |
+| A4 Diagnose031 | geschlossen, begrenzt bestanden | 425,43s/24aktiveSlotphasen/0BAD; Root643Dateien/5Absenzen/4Logs-Restore geprüft; vollständige Picker-/Lifeauswertung läuft, noch kein Fixnachweis |
 | A4 Karten und Übergänge | teilweise geprüft | vorhandene Red/Skulls/Trouble-Beobachtungen genügen keiner vollständigen Matrix; übrige Karten und Spezialübergänge offen, fehlende Welt ausdrücklich sperren |
 | A5 formale Stabilität | noch nicht begonnen | erst funktional geeigneter Kandidat: 1/4/8 Bots für 60/60/120 Minuten; geeignete Laufzeitbeobachtungen nutzen |
 | Sicherung und Veröffentlichung | Source096 / Delta089 geprüft | tatsächlicher Remote-Fetch und identischer Baum; privater Vollrücklauf und zweimalige vollständige Perfile-Wiederherstellung; ursprüngliche Archive und Live-Rollback erhalten |

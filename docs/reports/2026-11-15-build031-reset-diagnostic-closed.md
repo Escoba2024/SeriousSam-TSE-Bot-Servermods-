@@ -1,0 +1,11 @@
+# Build031: geschlossenes Red-Station-Diagnosefenster
+
+Ein isoliertes Fenster über 425,430967 Sekunden ist geschlossen. Alle 24 Slotphasen (acht Bots × drei Runden) liefern die bestehenden Aktivitätsbelege; zwei reguläre Rundenwechsel wurden beobachtet. Der Controller startete den eigenen Originalclient für jede Runde regulär neu; eine automatische Originalclient-Wiederverbindung ist ausdrücklich nicht belegt (`original_auto_rejoin_proven=false`). Der technische Status lautet `PASS_LIMITED_BOT_RESET_FRESH_OBSERVER_REVIEW_REQUIRED`. Es ist keine A4-Freigabe und kein Nachweis eines behobenen Waffenfehlers: Build031 ergänzt ausschließlich passive Diagnose, und die vollständige Picker-/Lifeauswertung läuft noch. Frühere Reset030-Fehler mit 22/24 bleiben fehlgeschlagen.
+
+Bedingungen: Red Station→Red Station→Red Station, Hard2, acht DEMON3-Bots mit tatsächlicher Bot-DLL `5c5c21d651f5513bcba4c1c3cc8ddc6495fbfbe7cdbbee506c70853bd15bbb0b`, eigene unveränderte Originalserver-/Observerrollen, Original30FPS, DIAG1, feste480s-Obergrenze und Zeitlimits2/2/0. Keine Wiederholung und keine Liveinstallation. Das neue Logging ist eine eigenständige Messbedingung.
+
+Nach regulärem Schließen aller Rollen und vier normalen geschlossenen Logs prüfte Root am15.11.2026 um13:12:15UTC unabhängig643Dateien,5Absenzen, beide Snapshotzeitstempel, eigene Prozesse/Units/Displays und vier Sperren: `PASS_RESTORE`. Der äußere Prozess wurde mit Exit0 abgeholt. Der originale Result-SHA256 ist `848c701b029969d4431b92a39add588eabd0bfac7fc68271ec4b7200fd136fc0`.
+
+Alle vier Rollenlogs meldeten0BAD/0SyncDisconnect. 491 äußere Host-Samples ergaben maximal60,6218%CPU, mindestens2.584.506.368Bytes verfügbarenRAM und8.684.351.488Bytes freienDatenträger; größter Sampleabstand1,00221s. Dies ist eine begrenzte Messung, keine übertragene formale Stabilitäts-/B-Budgetfreigabe; der ursprüngliche `budget_pass_claim=false` bleibt erhalten.
+
+Der folgende Audit wertet alle24Slotphasen und alle Leben aus, einschließlich langer Phasen ohne brauchbare Waffen. Picker/Veto/Reachability/Goal und Same-call-Arbitration werden von tatsächlicher Bewegung und Inventargewinn getrennt. Fehlende oder gedrosselte Beobachtungen bleiben unbekannt; Sourcezeit wird nicht in Nativezeit umgerechnet. Die öffentlichen Server bleiben auf dem vom Nutzer bestätigten Mischstand.
