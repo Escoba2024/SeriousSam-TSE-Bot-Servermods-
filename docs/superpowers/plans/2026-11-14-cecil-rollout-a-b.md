@@ -1,5 +1,35 @@
 # Cecil-Flottenrollout und Abschluss A → B
 
+## Aktuell 15.11.2026, 01:22 UTC
+
+- [x] Skulls024600 geschlossen b22aba0a; RootRestore640Dateien/4Logs und
+  unveränderteV3-Lifeauswertung vollständig geprüft.
+- [ ] Skullsfunktional offen/fehlgeschlagen: Slot0 über242,490814beobachtete
+  Sekunden ohneUseful bisFensterende. VollständigeRecovery-/Routenanalyse läuft.
+- [x] Dreiweitere024Rootfreezes separat vorbereitet/allePins+Inverse geprüft,
+  unabhängigerSammelreviewbb159f50PASS_SCOPE. KeinNative-/Karten-PASS daraus.
+- [ ] Quellen/Delta060 vollständig extern sichern; nächste einzelne Karte
+  nach geschlossenemRestore undbeendetemparallelemCPU-Review prüfen.
+- [ ] NoFireaktuellenPitchdoppelverbrauch vollständig kausal auswerten;
+  historischesGainFAIL/UUNKNOWN und A1offen beibehalten.
+
+Kein weiterer Livewechsel, B erstnachA. BestehendeDauergates nichtgestartet.
+
+## Aktuell 15.11.2026, 01:06 UTC
+
+- [x] Neue eigene Lifecyclemethode geschlossen und Attribution rein reproduziert.
+- [x] Genau ein Original-NoFire mit neuem Collector: FAIL3e4398c9 bei Pitchgain;
+  RootRestore664Dateien/9Abwesenheiten/3Logs bestanden, keine A1-Abnahme.
+- [x] Quellenremote bf0c8bae tatsächlich gleich Rootfff0b2a gefetched;
+  Delta059 vollständig extern rückgelesen und zweifach restauriert geprüft.
+- [ ] Skulls024600: seit01:05:31 eigener gepinnter ParentPID1563472 läuft,
+  achtDEMON/Hard2/Original20FPS/diag0, Manifest8e25263c; Ergebnis offen.
+- [ ] Nach Close Restore/Lifes/Navigation auswerten, vollständige geschlossene
+  Pitchanalyse reproduzieren, neue Rohdaten und Quellen als Delta060 sichern.
+
+Live gemäß letzter Nutzerentscheidung behalten:Dev048/RedGen2/vierPublic018.
+A bleibt offen, B beginnt danach. Historische FAILs bleiben unverändert.
+
 ## Stand 15.11.2026, 00:53 UTC – Lifecyclemethode bestanden, NoFire/Skulls vor Start
 
 Eigene inputfreie167-Methode tatsächlich geschlossenPASS1642b145:

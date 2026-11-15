@@ -1,4 +1,69 @@
-# Aktueller Handoff — 15.11.2026, 00:53 UTC
+# Aktueller Handoff — 15.11.2026, 01:22 UTC
+
+## Stand 15.11.2026, 01:22 UTC – Skulls600 geschlossen, Versorgungslücke bestätigt
+
+Skulls024600 geschlossenb22aba0a:600,110787308s/170Killzeilen/192Lives/
+95UsefulLives/113Gains, alle8Slots im Gesamtfenster Aktivitätsmerkmale.
+Konkreter Gegenbefund:Slot0Spawn358,136078 lebend358,186066..600,676880,
+242,490814s ohneUseful, links/rechtszensiert,maxGap0,399902s. Kein242s-
+Stillstandsclaim:zeitweiseBewegung. VollständigeSource-/Recoveryanalyse beim
+A4worker in neuemAudit-WT; keinGroundReplanmarker inbeidenBotlogs.
+RootV3LifeSummaryunverändertvollPASS:14040Versuche/541Fehler behalten,
+96linkszensiert/6rechtszensiert/4HPmehrdeutig. KeinefunktionaleKartenfreigabe.
+RootRestore01:17:18 PASS640Dateien/4geschlosseneLogs/Units/PIDs/Display154/
+Sperren. Alle4normaleCloses/0neue6Fehlerklassen. Outer683Samples,
+maxGap1,002483/CPU63,427110/RAM2520137728/Disk9047359488/0Verletzungen,
+KindExit0/Reaped/Quellenposthashgleich, nurPASS_HOST_OBSERVATION_ONLY.
+[Bericht](../reports/2026-11-15-build024-skulls-closed.md).
+
+Candidateworker analysiert geschlossenNoFire005628 in getrenntemWT,
+aktuellePitchdoppellesungbelegt; genaueWire↔JSZwischenordnungoffen.
+KeineGain-/Toleranzlockerung, kein neuerAdapter-/Runtimewrite.
+
+Drei weitereRootfreezes einzeln vorbereitet: Trouble58faf8c7/Runner7e012b0f,
+Hole903d465c/Runnerfe6a0fa8,Yodelleracbf51f6/Runnerf573a35a,
+je140/81/48Pins/74Parentquellenbytegleich+2exakteInverse.
+UnabhängigeSammelquittungbb159f50PASS_SCOPE/keineC/I, keineFunktionalqualifikation.
+NeueWrapper einzeln600s/diag0/Original20FPS, verlangen Delta060vollDrive und
+vorherigenRootRestorePASS; keineAutoSequence. TroubleReadonlyPreflightbisvor
+Backup/Owner/Locks tatsächlichPASS. Für folgendeRestorequittungen unbedingt
+`case_result` mit absolutem result.json-Pfad ergänzen (Hole/YodelWrapperbindung).
+Noch kein neuer Nativejob gestartet, alle Skullsprozesse beendet.
+
+NächsterRootschritt: geschlosseneBerichte/Remote+Sourcebundle, Delta060mit
+NoFire-/Skullsrohlogs+3Mapfreezes/Wrapper vollständig extern rücklesen;
+Workerergebnisse prüfen/reproduzieren und nächste isolierte Kartenprüfung.
+Live behaltenDev048/RedGen2/vierPublic018. A offen, B nicht begonnen.
+
+## Stand 15.11.2026, 01:06 UTC – NoFire geschlossen FAIL, Skulls024 läuft
+
+Der neue Original-NoFire-Fall005628 ist geschlossen FAIL3e4398c9:
+`opposite pitch gain does not reproduce`. Sechs Phasen/acht Einzelrequests,
+Hold-/Releasezeiten0,124862–0,265492s. Kein Schuss-/Schadens-/A1-PASS.
+Lifecyclecollector310Records/175124B, zwei Snapshots/28PIDqueries, Arrays alle
+frei; Rootattributionsreplay exakt:238 aktuelle eigene Originalrequests,
+12unbekannt, keine historische U-Zuordnung. Drei normale Spielrollencloses;
+lesender Collector SIGTERM/reaped−15. RootRestore00:59:07 PASS664Dateien/
+9Abwesenheiten/3Logs/Prozessgenerationen/Units/Displays154155/Sperren.
+Outer behält FAIL_HOST_OBSERVATION wegen KindExit1,50Proben/0Budgetverletzungen.
+[Geschlossener Bericht](../reports/2026-11-15-a1-lifecycle-original-nofire-closed.md).
+
+Skulls024600 tatsächlich gestartet01:05:31 unter eigenem Outerhostbeobachter,
+ParentPID1563472/Startticks133112967. Owner `navigation024-skulls-owner.json`,
+Sitzung7335, eigener Unitpräfixssam-nav20-024-skulls-root-skulls-20261114.
+Manifest8e25263c/Parent662afad5/OuterC585 wie geprüft; achtDEMON/Hard2/
+Original20FPS/diag0. Noch kein geschlossenes Ergebnis oder A4-PASS.
+Beide bestehenden Worker STATICONLY, keine parallelen Test-/Generatorjobs.
+Nach Close: unabhängiger Restorecheck, unveränderte Lifeauswertung,
+funktionale Kartenanalyse, vollständige NoFire-Pitchanalyse, Delta060.
+
+Remote bf0c8bae4e05ffb1c66fd192cfcf70be7ea34fee tatsächlich gefetched,
+Tree046b7eaac3482b1ce0c6c47f1edde69f3193f5ff gleich Rootfff0b2a.
+Delta059 komplett:6697215B/SHA332d1120f2e02d3bc919031dca94319be27f7d5fa9aa4be87ddc8c91365c068c,
+Drive1cFdvQfHdkgKbQI-zLJ3Y7Id_Oqf357JS,499Files/17897004B,
+voller Rücklesehash und zweite vollständige Hash-/Metadatenprüfung PASS.
+Enthält Methodenraw+NoFire-/Skullsfreeze und Sourcebundlefff, noch keine
+neuen NoFire-/Skullsraws. Keine Liveänderung; A offen/B nicht begonnen.
 
 ## Stand 15.11.2026, 00:53 UTC – Lifecyclemethode bestanden, NoFire/Skulls vor Start
 

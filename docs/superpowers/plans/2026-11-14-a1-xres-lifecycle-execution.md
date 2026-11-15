@@ -52,21 +52,24 @@ dem Original gleichgesetzt werden. Alte U bleibt UNKNOWN.
 ## Umsetzung / TDD
 
 - [x] Reine Attributionsregeln als zuerst fehlendes Modul RED protokolliert.
-- [ ] Pure GREEN; echte serverbasierte0-Hintergrundrow, zweiSnapshots,
+- [x] Pure GREEN; echte serverbasierte0-Hintergrundrow, zweiSnapshots,
   Prozessgeneration/Namespace, strikte Queries/Freezähler, Raw-Replay und alle
   Lifecycle-/Drain-Negativfälle. Keine Clockfusion oder günstigen Randzuschnitte.
-- [ ] Fake-C-/Lifecyclebounds vor Workerimplementation RED, danach GREEN.
-- [ ] Explizite Recorderableitung: kopierter enger Armkörper mit nachvollziehbarer
+- [x] Fake-C-/Lifecyclebounds vor Workerimplementation RED, danach GREEN.
+- [x] Explizite Recorderableitung: kopierter enger Armkörper mit nachvollziehbarer
   Rangefactory-/Metadatenabweichung; ursprünglicher Close im finally weiterwirksam.
-- [ ] Separat deaktivierten inputfreien167-Methodenfall mit bekannten Kindrollen
+- [x] Separat deaktivierten inputfreien167-Methodenfall mit bekannten Kindrollen
   und dieselben tatsächlichen Worker-/Fingerprintdateien vorbereiten.
-- [ ] Engsten A1-Fork aus tatsächlichem XTest-Preparation-Rootparent ableiten,
+- [x] Engsten A1-Fork aus tatsächlichem XTest-Preparation-Rootparent ableiten,
   eigener Namespace/Gatesfalse/Pins. Retailarm verlangt später echte erfolgreiche
   neue Lifecyclemethodenquittung mit passenden Sourcefingerprints.
-- [ ] Bericht/echte RED-/GREENlogs/Pinquittung/saubere Commits; Rootreview.
+- [x] Bericht/echte RED-/GREENlogs/Pinquittung/saubere Commits; Rootreview.
 
 Aktualisierung nach geschlossenem Root024-Messfenster: reine Adapter-/Worker- und
-Methoden-/Buildertests RED→GREEN, 58 gezielte Fälle ohne Skips. Neue Pakete bleiben
-deaktiviert; echter Lifecyclemethodenbeleg und Rootreview fehlen weiterhin.
+Methoden-/Buildertests RED→GREEN, 58 gezielte Fälle ohne Skips. Die ursprünglichen
+Pakete bleiben deaktiviert. Inzwischen Rootreview und enger echter Methodenbeleg
+1642b145 bestanden; neuer qualifizierter Rootfork einmal nativ geprüft.
+Der neue Original-NoFire-Fall3e4398c9 scheitert am entgegengesetzten Pitchgain;
+Attributionsreplay und unabhängiger Restore bestanden. Keine A1-/Gainfreigabe.
 Der ursprüngliche23-Fall-Quellcheckpoint bleibt als historischer Zwischenstand
 erhalten. Näheres im Abschlussbericht vom15.11.
