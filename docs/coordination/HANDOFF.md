@@ -1,4 +1,4 @@
-# Aktueller Handoff – 15.11.2026, 03:40 UTC
+# Aktueller Handoff – 15.11.2026, 04:01 UTC
 
 Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker:
 reguläres lokales Terminal auf dem Host funktioniert. RDC bleibt gesperrt und
@@ -40,13 +40,21 @@ PASS_SCOPE für Rootdelta/Pins, ausdrücklich keine unabhängige eigenePolicypr�
 sechsInstrumentgates+CollectorManifestFalse. EineMainfreigabe, keinFire.
 Rootwrapper run-a1-pitch-feedback-original.py adc98dfe85435fd763527580ec67136ad2ecd75df44afe218b114ae777282ac9,
 Outer c7d7b0bb89318dff86597f6a680bbca157ef4a7e1084461855d13a2148158791.
-Einmal90s, verlangt064vollDrive vorher; noch nicht gestartet.
+Einmal90s geplant, nach064vollDrive tatsächlich034224 ausgeführt: FAIL vorerster
+Emission, Guard clienttargetEyesdelta0,00102027267>EPS0,001, Serverdelta
+0,00095873693 darunter. Rootguardreplay6Frames;0Attempts/Emissionen/ACKs.
+Result5f76c6f4; Rootrestore034328 PASS664Dateien9Abwesenheiten3Logs, Units/
+PIDs/Displays/vierLocksfrei. Outer42SamplesCPU58,8689%/RAM2893430784B/
+Disk8882692096B, keineBudgetverletzung, Child1→FAIL_HOST_OBSERVATION. KeinRetry.
+[Bericht](../reports/2026-11-15-original-pitch-feedback-closed.md).
 
 ## Zugriff, Arbeitsbereiche und Sperren
 
 Root allein integriert und verändert Runtime. Zwei bestehende Worker:
-`a4_diagnosis` prüft nur lesend die A1-Feasibility Originalclient als Opfer/
-normaler AI-Shooter; `candidate_audit` hat Feedbackfreeze-Review beendet, keine Jobs.
+`a4_diagnosis` implementiert deaktivierten FirstStateV2-Methodenadapter
+(Getterfunction/admission-idle-stop/FreshExec-Transport, Registryweitergenau2);
+`candidate_audit` implementiert ausschließlich eigenenCombat-Recovery-Optin
+(Header/Driver/zweiTests+Docs). Beide vorhandene getrennteWorktrees, keinNative.
 Getrennte Worktrees/Claims, keine Writer im Rootworktree. Vor Native alle
 Workerjobs beenden und STATICONLY ausdrücklich bestätigen lassen.
 
@@ -69,8 +77,8 @@ exklusive Ownerquittungen; neue Fälle brauchen neue Namen, keine Retrieschleife
 
 ## Tatsächlich live
 
-Frisch02:48:00UTC: alle18 geladenen Rollen/Datei-/Configtargets gleich dem
-Mischrollback051. Jede Instanz acht eigene Bots. Zusätzlich Yodeller eine
+Frisch03:56:11UTC: alle18 geladenen Rollen/Datei-/Configtargets gleich dem
+Mischrollback051. Jede Instanz acht eigene Bots. Zusätzlich LittleTrouble eine
 ungeklärte Verbindung, andere keine. Das ist eine aktuelle Modul-/Queryprüfung,
 kein neues Kampf- oder Syncqualifikationsfenster.
 
@@ -83,7 +91,7 @@ kein neues Kampf- oder Syncqualifikationsfenster.
 |Little Trouble|25630|Little Trouble|Build018 `6db89204`|nicht implementiert|
 |Hole|25640|Hole|Build018 `6db89204`|nicht implementiert|
 
-Vollhashes in RootEV/fleet-current-after-build026-private.json; tatsächliche
+Vollhashes in RootEV/fleet-current-after-feedback-private.json; tatsächliche
 Dedicatedrollen separat: Public Original`1c41da35…`, Dev Powerupmod`fe4a77bd…`.
 Keine pauschale Bot-DLL-Ersetzung der Dedicatedrolle. Vier Publics haben
 historisch Serious3 statt gewünschtem Hard2; erhalten, bis ein geprüfter
@@ -209,13 +217,13 @@ RUerstEncodingtest. WeitereAbnahme im ursprünglichen A/B-Plan.
 
 ## Veröffentlichung, Backups und nächster Schritt
 
-Letzter tatsächlich gefetchter Remotee0fd869f847371e8f96e3783a2eace03e2cbece8,
-Treec3d8795b58c4c377d34a06d6e838c0390cf9e8dd exaktRootb28e972.
+Letzter tatsächlich gefetchter Remoteaed02cd6926d3e88e2b6b24a194ffb39ca42a719,
+Treee06e97231deee95e0a10d184931b145f80c9368d exaktRoot7a4bf42.
 NeuereCommits/aktuelleHEAD noch veröffentlichen. GitHubAPI mit expected_sha,
 forcefalse; tatsächlicherFetch+Tree-/Diffvergleich, keineForcePushes.
 main/PR99 unvollständig, keine abschließende Integration behauptet.
 
-Driveprojekt14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2. Deltas022–063 vollständig
+Driveprojekt14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2. Deltas022–064 vollständig
 extern rückgelesen, alle Inhalte/Metadaten rekonstruiert; ursprüngliche Archive
 und050/051Rollback nicht löschen. Aktueller Mischrollback051:
 83540880B/SHA85249af2c74e465a74c3bdb0a8f636936a9033d6f20e48316963f8a9b4de5a06,
@@ -227,13 +235,15 @@ Drive1J5j9k012p2_O3IuzmaPK37YxcrTLAILK,332Files/16737176entpackteBytes,
 vollerDrivehash+zweifachalleDatei-SHA/UID/GID/Mode/mtime_ns PASS03:07:16.
 Enthält026Vorbereitung/DevSyncdeltas/Powerupclosure/Sourcebundleb28e972,
 benötigt75ba3bb aus062; dieses067dda4 aus061; jenes6f4fbbd aus060.
-NativeVollrestoreStart NICHT geprüft. 064 für geschlossenen026Fall, Audit und
-A1Feedbackpaket/Wrapper/Sourcebundle ausstehend.
+NativeVollrestoreStart NICHT geprüft. 064 e93e5ddf/24063346B/1022Dateien90395513B vollständigDrive+zweifach
+MetadatenPASS034135, Drive1WzItQF8GqgIce3s2ihkfhLiS-yo10Yy_.
+Enthält geschlossenen026Fall/Audit undFeedbackvorbereitung, Bundle7a4bf42
+benötigtb28e972 aus063. NeuesterFeedback-FAILrawlauf nochzusichern.
 
 Speicher: nur geschlossene eigene Belege verlustfrei gzip-komprimiert, jedeDatei
 vorOriginalentfernung vollständig auf SHA/UID/GID/Mode/mtime_ns rekonstruiert.
 024Red/Trouble18Dateien250224378→18064685B (Originale zusätzlich058/061Drive),
-026+Rootreplay13Dateien187370676→14331994B (extern erst064).
+026+Rootreplay13Dateien187370676→14331994B (inzwischen064vollDrive).
 RootEV/compressed-closed024-red-trouble-index.json und
 compressed-closed026-and-root-replay-index.json pinnen sämtlicheOriginalmetadaten.
 AusführbareRestorehelfer restore-compressed024-red-trouble.py --map redstation|trouble
@@ -245,15 +255,26 @@ waren; vorhandenenRestorehelfer wiederverwenden, keineDoppelkompression.
 
 Nächste konkrete Reihenfolge:
 
-1.NeuesteQuellen073publish/fetch undSourcebundle (Basisb28e972 aus063).
-2.026geschlosseneBelege/Audit/Kompressionsindex+Restorehelfer undFeedbackpaket/
-  Rootreview/Peer/Wrapper/Sourcebundle in064 externvollrücklesen.
-3.WorkerSTATICONLY/quiescent/vierSperren frisch, Feedbackwrapper --preflight,
-  genau ein90sOriginal-Pitchfeedbackfall unterHostobserver, anschließend
-  Root-Datei-/Prozessrestore und vollständigerACK-/Journal-/Nativeaudit.
-4.A1 normaleDamage-/FirstStatekette undOriginalopfer-Feasibility; A4 konkrete
-  Proposal→finalSafety-/Arbitrationbindung vor kausaler Korrektur.
-5.ÜbrigeKarten/A3/A5 abschließen, erst dannB; Live nur nach belegter Verbesserung.
+1.Feedback-FAILraw/Rootguardreplay/Restorebericht undSource-Reproducerfortlaufend
+  publizieren+sichern. Source073/064bereitsvollbelegt, neuereCommitsnochlokal.
+2.A1 engerMethodenadapterinArbeit: alter18Call/38Binding-I1I2-/Drainvertrag
+  Registrygenau2/unveränderteLimits. EchterGetterFunctioncallback, admission-only
+  stop+outside-callbackIdle/finishstop, admittedLeavesunteraltenTTL. Separate
+  status-RPCs, Drainpayloadunverändert. LegacyPortsadaptermitFreshExec3Rollen
+  server/vanilla/botA, 2MiBpayload+16KiBfesteIPChülle, keineTruncierung; alter
+  Runnerdeaktiviert/unverändert. KeineAI-/Populations- oderWaffenvertragserweiterung.
+3.A4 Source-Reproducerintegriert8554080/16a3095/9b94a45: einnormalerBridge-Lauf
+  3541Checks/0FAIL,9neueAssertions. 70gleichePoseProposals: visibleCombat0Owner/
+  0Stall/0Escape, novis70Owner/30Stall/12Escape; nurfalschesStandOn70/30/0.
+  KeineEpisodekausalität. FolgenderOptin-RecoveryfixjetztimWorker: getrennte
+  combatRecoveryRequested nurautomatic/humanMode/visible/nonneutral/up0/noSupply,
+  gleichefrischeObservation/Support/Map/Life/Contactpins, keineNavhint-/Flightgrant.
+  EchteRED3544Checks/2FAILvorCode,0.5Normale/2s/.25m/.25gap/.3/.6/unveränderte
+  Budgets. KeineNormallockerung; neuerMetadatencaptureexplizitproduktivesDelta,
+  nichtinderpassivenDiag-Inverseverstecken. Header/Driver+Bridge+ActionNativeTest.
+4.Disk≥8GiB/64MiBReserve, keineaktiveRuntime. RootmussÄnderungenreviewen,
+  getrenntePakete/eigeneFreeze-/Pinnachweise/Backup, erstbeiechterEignung
+  neuenKandidatenbauen+isoliertNativeprüfen. A3/A5/Karten/Bweiteroffen.
 
 Keine unbeaufsichtigten Prozesse behaupten: gestartete Aufgaben/Jobs und
 Eigentum müssen vor Fortsetzung erneut tatsächlich geprüft werden.

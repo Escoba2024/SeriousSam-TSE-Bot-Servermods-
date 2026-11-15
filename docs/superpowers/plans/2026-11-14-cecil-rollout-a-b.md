@@ -22,7 +22,7 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 |026passiveDiagnose|Build/Portable bestanden|15MSVC+Link/77Closure,3532normal+ASan, keinRuntime-/Skullsfixclaim|
 |026Skulls600diag1|geschlossen, A4 weiter offen|Root640Dateien/4LogsRestore; vierstufigerAudit bytegleich, bewaffneter16,546sStillstand; keinePromotion|
 |A1Maus/Keyboard|historischeFAILs|MousevariableAntwort,Keyboard7,5°Rückkehrfehler; Rootclosedaudit vollständig|
-|A1Pitchfeedback|Code/Rootreview/Freeze fertig, Native ausstehend|nur+12Detour/1pxFeedback/0,75°diagnostischeRückkehr,keinSchuss/A1pass|
+|A1Pitchfeedback|Native034224 FAIL vor ersterEmission|nur+12Detour/1pxFeedback/0,75°diagnostischeRückkehr,keinSchuss/A1pass|
 |A3Tiernachweis|offen|020STARK13:3,Swap5:6; keinbelegtesSTARK>MITTELüberbeide|
 |A4Karten|teilweiseBeobachtung|024Red/Skulls/Trouble600geschlossen, Skulls242,49sNoUseful; weitereMaps/Transitions/Resetoffen|
 |A5Formalgates|nichtbegonnen|nachfunktionalgeeignetemKandidaten1/4/8Bots60/60/120min|
@@ -34,17 +34,26 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
    Finalquittung298253fd; 188Leben/111Gewinne/515ReadFAIL, 871Decisions/19UNKNOWN.
    52,303sNoUseful und16,546s exakteStillstandsphase verhindernA4-Freigabe.
    Keine pauschaleGuardlockerung; vorKorrektur Proposal→finalAction/Safety binden.
-2. **Feedbackquellen veröffentlichen und064 sichern.** Root24/0portableTests,
+2. **Feedbackquellen073 veröffentlicht und064 vollständig gesichert.** Root24/0portableTests,
    neuePolicy/Journal/Builder integriert, direktePitchdistanz2RED→GREEN,
    Freeze a2fa6509/Controller5b348963, Peer f8c9b366PASS_SCOPE nurRootdelta/Pins.
    106/88/14Pins;6Instrumentgates+cmFalse/vierCoregleich. VollDrive-Rücklesen und
-   Dateimetadatenrekonstruktion vor dem vorbereiteten90s-Fenster, keineRetry.
-3. **Einmal begrenzterOriginal-Pitchfeedbacktest.** +12Detour, reale±1px-Korrekturen,
+   Dateimetadatenrekonstruktion abgeschlossen034135, dannEinzelfall ohneRetry.
+3. **BegrenzterOriginal-Pitchfeedbacktest geschlossen FAIL.** +12Detour, reale±1px-Korrekturen,
    bestehende0,75°Rückkehrgrenze, max48/96 und20/85/90s, 2,35sInputreserve.
-   KeinFire, keineGain-/A1Qualifikation. DanachRootrestore/volleACK-/Journalprüfung.
+   034224 Guardabbruch vorInput: clienttargetEyeoffsetdelta0,00102027>EPS0,001.
+   KeineEmission/ACK, Rootrestore664Dateien9Abwesenheiten3LogsPASS. KeinRetry.
+   KeinFire/Gain-/A1Pass. DirektenOriginalopferweg getrenntqualifizieren.
 4. **A1 Erstzustandsschaden** nach tatsächlicherLife-/State-/Bulletordnung weiterführen;
-   getrenntnurlesendOriginalopfer+normalerAI-Shooter prüfen, keineproximityBeweise.
-5. **A4/A3/A5 anschließend abschließen.** KeineWiederholung bereitsgeschlossener
+   Originalopferwegquellseitigbestätigt, keineproximityBeweise. Jetztgetrennt
+   deaktiviertenMethodenadapterqualifizieren:18Hooks/38Bindings/Registry2behalten,
+   Getterfunction/admission-idle-stop/FreshExecPorts. KeineOriginalaimvoraussetzung
+   aufaltenFAILumlabeln; AI-/Populations-/Waffenadaptererstdanach.
+5. **A4Combat-Recoveryfix entwickeln.** Source-Reproducer3541/0belegt
+   fehlendePositionszeitbeieigenerCombatownership mitKontaktgegenprobe. Neuer
+   separaterOptin, allealtenSafety-/Navownershipgrenzen undfrischeMetadatenpins;
+   aktuelle3544/2REDvorProduktivänderung. Rootreview/neuerBuild/isolierter
+   Nativevergleich vorPromotion. **A3/A5 anschließend abschließen.** KeineWiederholung bereitsgeschlossener
    048/018/020OriginalDedicated-600s; DevPowerupoff/on bleibt separat unvorbereitet.
    B weiterhin erst nach belegtem A. LiveMischstand erhalten.
 

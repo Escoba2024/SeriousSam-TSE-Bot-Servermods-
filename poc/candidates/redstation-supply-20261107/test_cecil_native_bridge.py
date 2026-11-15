@@ -1426,10 +1426,14 @@ void groundProgressFixture(bool neutral=false){
  floorMode=2;BotCecilSettings().bAvoidPits=1;
 }
 double groundF=0,groundSt=0,groundU=0;
-int groundProgressTick(int tick,bool accepted=true,double maxStrafe=1,int budget=16){
+SCecilMove groundProposal;bool groundDriverOwned=false;
+int groundProgressTick(int tick,bool accepted=true,double maxStrafe=1,int budget=16,
+                       bool actualDriverArbitration=false,bool targetVisible=false){
  _botRayBudget=budget;const auto move=BotSupplyTick(&player,0,tick,1000);
+ groundProposal=move;
+ groundDriverOwned=actualDriverArbitration?bridgeDriverOwns(true,move,&player,targetVisible):accepted;
  double f=move.forward,st=move.strafe,u=move.up;
- const int status=BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,move.yaw_delta,maxStrafe,accepted);
+ const int status=BotCecilSafeMotion(&player,BotSupplyState(0),tick*.05,f,st,u,move.yaw_delta,maxStrafe,groundDriverOwned);
  groundF=f;groundSt=st;groundU=u;return status;
 }
 
@@ -2054,6 +2058,44 @@ template<class P>auto nativeProof(P* p,const CCastRay& ray,double length,int)->d
  return BotCecilNativeContactFloor(p,ray,length);
 }
 template<class P>bool nativeProof(P*,const CCastRay&,double,long){return false;}
+void frozenContactOwnershipMechanism(){
+ // Source mechanism only: the false-owner arm deliberately passes the SAME
+ // proposed vector into Safety. It does not pretend to reconstruct Human AI.
+ // The only paired-arm difference is actual Driver targetVisible ownership.
+ int proposals[3]={0},owners[3]={0},stalls[3]={0},escapes[3]={0},normalVetoes[3]={0};
+ double stationary[3]={0};
+ for(int arm=0;arm<3;++arm){
+  nativeContactFixture();auto& s=BotSupplyState(0);
+  CBrushPolygon other=floorPolygon;
+  if(arm==2)player.en_pbpoStandOn=&other; // Same world/casts, wrong exact contact identity.
+  const FLOAT3D frozen=player.pl.pl_PositionVector;
+  const double originalSince=.05;
+  bool poseStable=true,currentContact=true,fixedDeadline=true,bounded=true;
+  for(int tick=1;tick<=70;++tick){
+   const int status=groundProgressTick(tick,true,1,16,true,arm==0);
+   proposals[arm]+=groundProposal.active;owners[arm]+=groundDriverOwned;
+   stalls[arm]+=s.groundStalled;escapes[arm]+=status==2;
+   normalVetoes[arm]+=(s.probe.reasonMask&(1u<<SCecilProbe::reasonUnsupportedNormal))!=0;
+   for(int i=1;i<=3;++i)poseStable&=player.pl.pl_PositionVector(i)==frozen(i)&&player.en_vCurrentTranslationAbsolute(i)==0;
+   currentContact&=player.en_penReference==&floorEntity&&floorEntity.en_pwoWorld==&player.world&&
+     floorHitPolygon==&floorPolygon&&floorPolygon.bpo_pbscSector->bsc_pbmBrushMip->bm_pbrBrush->br_penEntity==&floorEntity;
+   fixedDeadline&=s.reacquireNode==0&&near(s.reacquireSince,originalSince);
+   bounded&=_botRayBudget>=0&&std::hypot(groundF,groundSt)<=.300001&&groundU==0;
+  }
+  stationary[arm]=s.groundProgress.StationarySeconds();
+  check(poseStable&&currentContact&&fixedDeadline&&bounded,
+    "ownership mechanism retains identical frozen pose current world contact rays original hint deadline and safety caps");
+  check(proposals[arm]==70,"ownership mechanism denominator is seventy actual accepted Reacquire proposals over3.5s");
+  std::printf("OwnershipContactMechanism arm=%d ticks=70 proposals=%d owners=%d stalled=%d escapes=%d unsupported_calls=%d stationary=%.3f\n",
+    arm,proposals[arm],owners[arm],stalls[arm],escapes[arm],normalVetoes[arm],stationary[arm]);
+ }
+ check(owners[0]==0&&stalls[0]==0&&escapes[0]==0&&stationary[0]==0,
+   "actual ordinary visible combat ownership loss resets accepted-ground watchdog despite repeated Reacquire proposals");
+ check(owners[1]==70&&stalls[1]>0&&escapes[1]>0&&stationary[1]>2,
+   "same proposals pose and contact without visible combat retain actual Driver ownership and enable bounded current-contact recovery");
+ check(owners[2]==70&&stalls[2]>0&&stationary[2]>2&&escapes[2]==0&&normalVetoes[2]>0,
+   "countercase wrong StandOn identity preserves ownership stall denominator but cannot borrow native contact-floor authority");
+}
 void nativeContactRecovery(){
  nativeContactFixture();check(!BotCecilFloor(&player,.3,0,0,0),"same native steep polygon never widens ordinary floor normal policy");
  check(contactFloor(&player,true,0),"explicit current recovery can use native contacted slope within actual stepDn");
@@ -4446,6 +4488,7 @@ void reacquireDecisionBounds(){
 }
 
 int main(){
+ frozenContactOwnershipMechanism();
  reacquireDecisionTests();
  reacquireDecisionOperationalPairs();
  reacquireDecisionBounds();
