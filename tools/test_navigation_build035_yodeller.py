@@ -17,12 +17,12 @@ class Contract(unittest.TestCase):
             with self.subTest(args=args),self.assertRaises(ValueError):policy.options(*args)
 
 class Source(unittest.TestCase):
-    def test_current_parent_two_whole_inverses_and_mutations(self):
+    def test_current_parent_three_whole_inverses_and_mutations(self):
         import prepare_navigation_build035_yodeller as h
         for name in h.CHANGED:
             raw=h.read(h.PARENT/name).decode();new=h.apply(name,raw)
             self.assertEqual(h.apply(name,new,True),raw)
-            for bad in [raw+'\n',new,raw.replace('035','036',1)]:
+            for bad in [raw+'\n',new,raw.replace('def ','def changed_',1)]:
                 with self.subTest(name=name),self.assertRaises(ValueError):h.apply(name,bad)
         text=h.apply('run-a4.py',h.read(h.PARENT/'run-a4.py').decode())
         self.assertIn('RUNTIME_REVIEWED=False',text)
@@ -58,7 +58,7 @@ class Source(unittest.TestCase):
         import prepare_navigation_build035_yodeller as h
         d=h.DESTINATION;m=h.load(d/'source-manifest.json');parent=h.load(h.PARENT/'source-manifest.json')
         h.verify_pins(m,d)
-        self.assertEqual([len(m[k])for k in ['runtime_dependencies','sources','draft_source_sha256']],[160,146,79])
+        self.assertEqual([len(m[k])for k in ['runtime_dependencies','sources','draft_source_sha256']],[160,147,79])
         for name in h.CHANGED:self.assertEqual(h.apply(name,h.read(d/name).decode(),True).encode(),h.read(h.PARENT/name))
         for name in ['transaction.py','strict_backend.py','navigation_comparison_policy.py','map-catalog.json','canonical.ini','a4_ordered_memory_v3.py','audit_a4_ordered_memory_v3.py','host_budget.py']:
             self.assertEqual(h.read(d/name),h.read(h.PARENT/name))

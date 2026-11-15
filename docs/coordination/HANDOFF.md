@@ -1,3 +1,33 @@
+## Maßgeblich — Yodeller-Startfehler korrigiert, noch kein600s-Lauf — 2026-11-15T21:13:57.610276+00:00
+
+A offen/B nicht begonnen, Live Mixed unverändert. Kein Spiel-/Compiler-/Readerprozess aktiv.
+ErsterYodellerController21:05:20 FAIL vorCase/Snapshot/Spielrollen: zweite tatsächlicheHardmap-
+Optionsprüfung verlangte300DIAG1. Hostchildexit1/reaped, kein600s-Fenster/keinA4PASS.
+RootE/navigation035-yodeller-failed-before-runtime-root-check.json bestätigtalle4Sperrenfrei,
+Unitsleer/X154abwesend/640Dateiinhalte+Rechte+mtimegleichletztem035Snapshot. ElfNav-Atimes
+lagenbereits20:36:12vorStartanders; HerkunftUNKNOWN/nichtrepariert. Keinevollständigehistorische
+Atime-Restoreabnahmebehauptet. Fehler-/Owner-/Host-/LogquittungenbleibenFAILunverändert.
+
+EngeHardmapkorrektur Author61fb85→Root9772de1, tatsächlicherProductionOptionsRED reproduziert;
+Root7Tests0.125s +3beideActualOptions/CLI0.041sPASS. DreiSourceinversen/140Parentfilesgleich,
+keineRessourcen-/Reader-/Clock-/Gameplayänderung. D-v2Manifest
+9b2b2facc104f99a478864c4a65d55dca34ec09419f428f97fc34c1cd5b431e0.
+FrischerRootFv3 /srv/tse-nav20-035-yodeller600-diag0-root-v3-frozen-20261115 Manifest
+47432877967beeaa040f371c0d06db9fed9394752cba76cced5126bfaf2d1ef6,
+Runner28a18d3a368a064e454e0907d44315f3f91913536b2ae69338c744d7aabb5642.
+Alle160/147/79+81Pins/148Dfilesgleich; beideactualFv3OptionsfürfinaleCLIjetztPASS.
+NeueRootWrapper-/Host-/Restorepfade navigation035-yodeller-v3*, WrapperSHAd4f528412968d21ba97c5bfe49687d48eacc26bbd58963cc781138f0d4c85742.
+Rootanwendungspeerläuft; anschließendSource117/gesicherterFULL109vorneuemEinzelstart.
+
+Source116 remote80c0f46fe83e3af7cd5ac01bd6dd021693d6867e/local927265e6f920036a9e4c0193e95392ad690d21a3/tree3abf54a5c162c0e9c043867820bf7938d9668c08 fetch/lsremote/diff0PASS.
+FULL108v2 B/delta108v2-build035-and-colt-trouble-control-closed.tar.gz1669499B/
+72bb73674fbe0c261e7e0b697d6a95d79153b015ec170af0ab6e5b44bbbf8e59,
+Drive1b7QrcXBpHlP3kqC-GKFy5JgMeam8BP0g/473Dateien4488112B/fullReturn+2Restores
+PASS21:04:50.534002. Enthältauchursprünglicheslokales108Archiv+Fehlvorbereitungen;
+neuerFehlstart/Hardmapfix/Fv3folgen109. StandaloneOriginal-W-Entwurf fertig/26Tests,
+Author4Commits48b6c2b/0daf896/194a9cf/a4563b3; Root hat369-ZeilenForwardkernstatischgelesen,
+Builder/Restreview/Rootfreeze/Nativeausstehend. KeinA1Erfolg. BeideWorkerbisReviewfragenquieszent.
+
 ## Bereit zur gesicherten Einzelprüfung Yodeller — 2026-11-15T21:00:17.820129+00:00
 
 Live Mixed bleibt erhalten; A offen/B nicht begonnen. Kein Nativeprozess läuft.
