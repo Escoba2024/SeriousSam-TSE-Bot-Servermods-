@@ -1,3 +1,41 @@
+# Aktueller Handoff – 15.11.2026 09:48 UTC
+
+**A offen/B nicht begonnen. Kein Native aktiv, Live unverändert.**
+030vorbereitetundunabhängigRootfreeze-geprüft: disabled2b910ac7,
+Roota97796ac03f939b259695073b9627f80e4ac1a5cba825aab56ed07df3f697ff8,
+Runner4131d0486e0af5da4e11254859c9f8f22b0201d3323afe706c4f9568f12fc1b3,
+145/116/67Pins/79Buildtargets/115Sourcesgleich. Peercd2dea36_SCOPE ohneC/I.
+030DLLbf705857/454144B, Source7aedcdb/Treee4873624. NächsteSource090/081
+vollständig sichern, dann genauEINSkulls600Hard2/8DEMON3/Original20FPS/diag1.
+Rootwrapperb34585fa, Outerhostobservervorhanden13Tests, keine automatischePromotion.
+
+NeuerA1Control093301limitedPASS/reaped0/Root664beideNS+3LogsPASS093358.
+Trace093359weiterhinFAIL: HostCPU77,50556793% im1,159276761sIntervall;
+Root664beideNS/9Abwesenheiten/3normalLogs/RollenUnitsDisplays4LocksPASS093448,
+Execreaped1. KompletterWire-/Rawaudit203vollständigeCalls/406Events/28Pakete
+S27F28/0FaultDropAbort; alle38Originalregionenidentisch undUnloadDetachTrue.
+14von18Kinds0, keineInit-/Bullet-/Receiveevents. KeinA1-/Getterursachenbeleg.
+[UnveränderterCPU-FAIL und Audit](../reports/2026-11-15-a1-getter-receipt-cpu-closed-audit.md).
+Keine unveränderte Wiederholung; vor weiteremTrace Lastursache begründet eingrenzen.
+
+Freshfleet093710: sechs×8eigeneBots/keineZusätzlichen/alle18Targets051gleich.
+Dev048/RedGen2/vierPublic018 bleiben. Devlog073651→093702:0BAD/0SyncDisconnect/
+19134OK, eigeneBotlogs0BAD. Frühere70+23BAD/3+2Disconnect bleibenoffen.
+Zwei paralleleRoot-Nurlesechecks kollidiertenamgemeinsamenLock vorInventar;
+sequentiellgeschlossen undanschließend erfolgreich, keineRuntimeänderung.
+
+Source089actualfetch77d4c945c68259c8f4689504a4b0e57b608db29b,
+lokalcf1402404e1659f880eedfa140fd9e31d3c9ae97/Treed5d15940c05d11c513be179785483f82abdb914e.
+Delta080vollDrive+zweiteDateimetadataPASS093219:16521714B/F2204863,
+1883Dateien147222061B/Drive1jZE_Zi310eogs65NNfV3jAtntPq4HEPx.
+02914geschlosseneRaw-/Auditdateien230128033B verlustfreiin19519315Bgzip,
+volle Testwiederherstellung SHA/Rechte/mtimePASS; Originale079/080externgeprüft,
+neueGzips+Restorehelperin081aufnehmen. Restore:
+RootE/restore-compressed029-and-author-audit.py --scope native|audit|all.
+Originalresultate/Fehler bleiben unverändert, keinegesamteRuntimeRestoreStartbehauptung.
+
+## Frühere belegte Stände (historisch)
+
 # Aktueller Handoff – 15.11.2026 09:30 UTC
 
 **A offen, B nicht begonnen. Live-Mischstand unverändert. Kein Native aktiv.**
