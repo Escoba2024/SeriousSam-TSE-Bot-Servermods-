@@ -38,6 +38,7 @@
 #include "bot_human.h"
 #include "cecil_rules.h"
 #include "BotCecilItems.h"
+#include "driver_final_decision.h"
 #include <Engine/World/WorldRayCasting.h>
 #include "SessionProperties.h"
 #include <cstdarg>
@@ -1168,6 +1169,11 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
       BotCecilNeutralAction(ppls);bActed=TRUE;
       continue;
     }
+    // Passive invocation receipt only; cached map pin is NOT current-map proof.
+    botcore::CecilDriverFinal finalDecision;
+    botcore::CecilDriverFinalBegin(finalDecision,
+      botcore::CecilDriverFinalDue(bot_bDiagnostics!=FALSE,bot_bSupplyNavigation!=FALSE,player!=NULL,bs.bs_iTick),
+      iLP,bs.bs_iTick,entityId,BotSupplyState(iLP).generation,bs.bs_rotationMapSerial);
     // ponytail: fixed-target action test; walls still need a suitable test arena.
     CPlayer *target = bot_iTestTarget>=0 && bot_iTestTarget<16
       ? (CPlayer *)CEntity::GetPlayerEntity(bot_iTestTarget) : NULL;
@@ -1437,6 +1443,11 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
       bs.bs_aHeading += bot_fYawSpeed*fTick;
     }
 
+    if(finalDecision.admitted){
+      finalDecision.preSupplyModeBits=(unsigned)(automatic!=FALSE)|((unsigned)(humanMode!=FALSE)<<1)|((unsigned)(combatDeathmatch!=FALSE)<<2)|
+        ((unsigned)(targetVisible!=FALSE)<<3)|((unsigned)(combatHold!=FALSE)<<5)|((unsigned)(testAimReady!=FALSE)<<6)|((unsigned)(humanFire!=FALSE)<<7);
+      finalDecision.cachedTargetIndex=automatic?bs.bs_iCombatTarget:bot_iTestTarget;
+    }
     if(bot_bSupplyNavigation&&automatic&&combatDeathmatch){
       const bool ready=InterlockedCompareExchange(&_botSupplyMapReady,0,0)!=0;
       SCecilMove supply;
@@ -1445,10 +1456,11 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         supply=BotSupplyTick(player,iLP,bs.bs_iTick,targetVisible?humanTargetDistance:1000,&navFollow);
         cecilUseControl=supply.useControl;cecilButtons=supply.buttons;
       }
+      botcore::CecilDriverFinalSupply(finalDecision,ready,supply,BotSupplyState(iLP).generation,BotSupplyState(iLP).entity);
       // Keep a feasible visible fight unless an urgent item or traversal
       // control owns movement. Distance alone must not turn an ordinary pickup
       // into a reason to drop aim/fire. First ranged weapons remain urgent.
-      if(ready&&(supply.active||supply.ownsMovement)&&player&&player->m_penWeapons&&
+      if(ready&&(supply.active||supply.ownsMovement)&&player&&botcore::CecilDriverFinalPresence(finalDecision,player->m_penWeapons!=NULL)&&
          (supply.flightGoal||supply.activeFlight||supply.useControl||!targetVisible||(supply.itemGoal&&supply.urgent))){
         bs.bs_aHeading=player->m_aLastRotation(1)+(FLOAT)supply.yaw_delta;
         bs.bs_aPitch=player->m_aLastRotation(2)+(FLOAT)supply.pitch_delta;
@@ -1457,14 +1469,22 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         combatHold=FALSE;testAimReady=FALSE;humanFire=FALSE;supplyActive=TRUE;
       }else if(!ready){moveFactor=0;humanStrafe=0;testAimReady=FALSE;}
     }
+    if(finalDecision.admitted){
+      finalDecision.arbitration[0]=moveFactor;finalDecision.arbitration[1]=humanStrafe;finalDecision.arbitration[2]=cecilUp;
+      finalDecision.arbitration[3]=bs.bs_aHeading;finalDecision.arbitration[4]=bs.bs_aPitch;
+      finalDecision.arbitrationFlags=cecilFlags;
+    }
 
     // Stateful native selection is polled exactly once after arbitration.
     if(automatic&&player!=NULL&&player->m_penWeapons!=NULL){
       const bool travelKnife=botcore::CecilTravelKnife(bs.bs_iTick*fTick,bs.bs_lastSeen,supplyActive!=FALSE,targetVisible!=FALSE);
       const INDEX finalWeapon=botcore::ResolveSupplyWeapon(combatWeapon,travelKnife);
+      if(finalDecision.admitted){finalDecision.weaponPolled=true;finalDecision.travelKnife=travelKnife;
+        finalDecision.preWeapon=combatWeapon;finalDecision.finalWeapon=finalWeapon;}
       combatWeapon=finalWeapon;
       combatSelect=bs.bs_weaponInput.Poll(bs.bs_iTick,finalWeapon,
-        player->GetPlayerWeapons()->m_iWantedWeapon,player->m_ulLastButtons);
+        botcore::CecilDriverFinalValue(finalDecision,finalDecision.pollWanted,player->GetPlayerWeapons()->m_iWantedWeapon),
+        botcore::CecilDriverFinalValue(finalDecision,finalDecision.pollLastButtons,player->m_ulLastButtons));
       if(supplyActive&&bs.bs_iTick%40==0)BotLog("[BotSupplyWeapon] local=%d tick=%d desired=%d current=%d wanted=%d buttons=%lu\n",iLP,bs.bs_iTick,finalWeapon,player->GetPlayerWeapons()->m_iCurrentWeapon,player->GetPlayerWeapons()->m_iWantedWeapon,(unsigned long)combatSelect);
     }
 
@@ -1535,7 +1555,10 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         bs.bs_cecilFire.Reset();
       }else{
         bs.bs_deadSince=-1;
-        bFire=bs.bs_cecilFire.Poll(now,w->m_iCurrentWeapon,w->m_iWantedWeapon,combatWeapon,
+        if(finalDecision.admitted)finalDecision.firePolled=true;
+        bFire=bs.bs_cecilFire.Poll(now,
+          botcore::CecilDriverFinalValue(finalDecision,finalDecision.fireCurrent,w->m_iCurrentWeapon),
+          botcore::CecilDriverFinalValue(finalDecision,finalDecision.fireWanted,w->m_iWantedWeapon),combatWeapon,
           humanFire&&testAimReady&&!cecilUseControl,targetVisible,true,humanTargetDistance,BotCecilSettings());
         if(cecilUseControl)bFire=FALSE;
         if(!cecilUseControl&&w->m_iCurrentWeapon==combatWeapon&&w->m_iWantedWeapon==combatWeapon)
@@ -1547,8 +1570,14 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           continue;
         }
         const double maxStrafe=BotCecilSettings().bStrafe?Clamp(bot_fStrafeScale,0.0f,1.0f):0;
+        if(finalDecision.admitted){finalDecision.safeCalled=true;finalDecision.safeReacquire=supplyActive!=FALSE;
+          finalDecision.safeArgs[0]=now;finalDecision.safeArgs[1]=moveFactor;finalDecision.safeArgs[2]=humanStrafe;
+          finalDecision.safeArgs[3]=cecilUp;finalDecision.safeArgs[4]=finalYaw;finalDecision.safeArgs[5]=maxStrafe;}
         cecilFloorStatus=BotCecilSafeMotion(player,BotSupplyState(iLP),now,moveFactor,humanStrafe,cecilUp,finalYaw,maxStrafe,supplyActive!=FALSE,
-          BotCecilCombatRecoveryRequested(automatic!=FALSE,humanMode!=FALSE,targetVisible!=FALSE,supplyActive!=FALSE,moveFactor,humanStrafe,cecilUp));
+          botcore::CecilDriverFinalValue(finalDecision,finalDecision.safeCombat,
+            BotCecilCombatRecoveryRequested(automatic!=FALSE,humanMode!=FALSE,targetVisible!=FALSE,supplyActive!=FALSE,moveFactor,humanStrafe,cecilUp)));
+        if(finalDecision.admitted){finalDecision.safeStatus=cecilFloorStatus;
+          finalDecision.safeAfter[0]=moveFactor;finalDecision.safeAfter[1]=humanStrafe;finalDecision.safeAfter[2]=cecilUp;}
       }
     }
 
@@ -1600,6 +1629,15 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     }
     // 4) hand it to the network player source (stamps pa_llCreated internally)
     ppls->SetAction(pa);
+    if(finalDecision.admitted){
+      finalDecision.modeBits=(unsigned)(automatic!=FALSE)|((unsigned)(humanMode!=FALSE)<<1)|((unsigned)(combatDeathmatch!=FALSE)<<2)|
+        ((unsigned)(targetVisible!=FALSE)<<3)|((unsigned)(supplyActive!=FALSE)<<4)|((unsigned)(combatHold!=FALSE)<<5)|
+        ((unsigned)(testAimReady!=FALSE)<<6)|((unsigned)(humanFire!=FALSE)<<7)|((unsigned)(bFire!=FALSE)<<8)|((unsigned)(cecilUseControl!=FALSE)<<9);
+      finalDecision.combatSelect=combatSelect;finalDecision.cecilButtons=cecilButtons;
+      botcore::CecilDriverFinalSubmit(finalDecision,pa,BotSupplyState(iLP).generation,BotSupplyState(iLP).entity);
+      char finalText[2048];const int finalLength=botcore::CecilDriverFinalFormat(finalText,sizeof(finalText),finalDecision);
+      if(finalLength>0&&finalLength<(int)sizeof(finalText))BotLog("%s",finalText);
+    }
     if(aimTraceCaptured && player){
       const botcore::AimTrace& a=aimTrace.aim;
       const botcore::TrackState& t=aimTrace.track;

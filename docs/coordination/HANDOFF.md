@@ -1,4 +1,4 @@
-# Aktueller Handoff – 15.11.2026 07:29 UTC
+# Aktueller Handoff – 15.11.2026 07:51 UTC
 
 **A offen, B nicht begonnen; kein externer Zugriffsblocker.** Kein Nativejob aktiv.
 Die spätere Nutzerentscheidung gilt: **gemischten Livezustand behalten, isoliert
@@ -37,12 +37,23 @@ Root allein integriert/buildet/verändert Runtime. Keine anderen Agenten.
 
 Root integrierte Monitorcommits0084f74/901462b/fce7f1c; Root10Tests8,374sPASS
 (Author22inkl12alterMethodWindowtests separat). Neuer gepaarter Control erforderlich.
-Source085/Delta076 als nächstes: Monitorquellen, ONfullRaw/Rootrestore,
-aktuellen Plan/Handoff und privaten Driverdesignmemo veröffentlichen/sichern.
+Source085 veröffentlicht und frisch fetch/diff0: Remote8c19d0cd5898eda36ddb486e6bdd9cd7a05ba19d,
+Root9f41c6b89abf16eda6b8808699bfb0f58b56c451, Treeb9b1e4540bf7aafcdc42347051c03d42b7641e9c.
+Delta076 vollständig Drive-rückgelesen/zweiteHashMetadatenprüfung07:31:01PASS:
+Drive1Oso4G3cau4R0zJJ5J5xsCgKEbwBzEH4I,9766568B,
+SHA61f8a3ce36ed46bf4376a71d006cf0b481d178a5a78578946ae3d5c8db4890ed,
+814Dateien126974986B. Enthält ONfullRaw/Rootrestore/Monitorcheckpoint/
+Driverdesign/Source085bundle(requiresa0f5feain075). Kein RuntimeRestoreStart.
+
+Root hat die tatsächliche Backend-empty()-TOCTOU-Fehlerklasse reproduziert:
+exists→Dateiunlink→read wirft FileNotFoundError. Neue reine Quelltransformation,
+8Tests0,041sPASS/ganzeInverse; keine alten Pakete geändert, kein Nativejob.
+Konkrete ON-Fehlerstelle weiterhin unbekannt. Reportnative-cgroup-exit-source-check.
+Nächster Source086/Delta077 nach reviewbaren weiteren Integrationsständen.
 
 ## Tatsächlicher Live-Stand
 
-Rootprüfung06:29:43UTC: sechs×8eigeneBots, keinezusätzlichenTeilnehmer,
+Rootprüfung07:36:08UTC: sechs×8eigeneBots, Dev ein zusätzlicher ungeklärterTeilnehmer,
 alle18geladenenModule und Konfigurationen exakt zum gesichertenMischstand051.
 KeinLiveeingriff. Ports25600RedGen2/7fc94a39,25610Yodeller/25620Skulls/
 25630Trouble/25640HoleBuild018/6db89204;25650DevRedCecil048/ec820d04.
@@ -51,26 +62,51 @@ PublicDedicatedOriginal1c41, DevDedicatedFilterfe4. LetztegeprüfteNamenbasis:
 Der Nutzer ist nichtmehrverbunden; unbekanntePeers niemalsihmzuordnen.
 DieFlottenprüfung ist keinGameplay-/Sync-Gate.
 
-DevSync weiter **FAIL/Ursache offen**: letztervollerDelta02:49:28 seit
-14.11.23:54:70neueBAD/3SyncDisconnect, eigeneBotclients0. KeineGrenzwertänderung,
+DevSync weiter **FAIL/Ursache offen**: seit02:49:28 bis07:36:51 zusätzlich
+23BAD/2SyncDisconnect/45007OK, eigeneBotclients0. FrühererDelta seit14.11.23:54
+bis02:49:28:70BAD/3SyncDisconnect bleibt separat erhalten. KeineGrenzwertänderung,
 keineFilterursacheausSourcebehaupten. AlteDetailberichte/Rohdaten063gesichert.
 
 ## Nächste Schritte
 
-1. Source085/Delta076 vollständig veröffentlichen, tatsächlich fetch/rücklesen,
-   alle Datei-/Metadaten prüfen. Vorherige Source084: Remoteb2acc21685f07d16cb76298729fa160f2abc9e83,
-   lokala0f5fea1581877170eb6fd2cce7dd0deb45d92f5, Tree0ab968c1823f516bd4ff44a0e7a2aa2ecc5a59d3.
-2. Delta075 bereits vollständig verifiziert07:07:16: Drive1gYRRNUtvwBmwSGagdtFsIP-OX_hFoiWq,
-   9469727B/SHA0f8c8c23a81253ec7d130bd33b652ece1e21403ee030b3d4348b4d0f4bff2372,
-   715Dateien/126304232B dualHash-/Metadatenrekonstruktion. Enthält OFFfullRaw,
-   A1NaturalAI-Rollenentwurf und Source084bundle(requires45d6f44in074).
-3. Cleanupfehler in eigener schmaler reproduzierbarer Probe lokalisieren; keine
-   pauschale FileNotFoundError-Unterdrückung, keine fehlenden Logs erfinden.
-4. Beide aktiven Writer-Ergebnisse reviewen/TDD-/Inversenbelege prüfen, integrieren.
-   Danach erst Rootfreeze, unabhängiger Review, Vollbackup und einzelne Nativefälle.
-   Kein automatischer Retry. A1Control neu gepaart; keine alteMethodenfreigabe.
-5. Funktional geeigneten Kandidaten über Maps/Tiers abnehmen; formale
-   1/4/8-Bot-Gates60/60/120min bleiben unverändert offen. B erst nach A-Abschluss.
+1. Source086/Delta077: geschlossene Driverquellen/Rootreview/Build029 vollständige
+   Quelle, Overlay, Buildlogs, Manifest/DLL und neue private Livepräfixe sichern.
+2. A1-Worker weiterhin aktiv: tatsächliche autonome Capture-/Transportintegration;
+   zuletzt30fokussierte Fälle PASS, aber noch keine vollständige Session-/Builder-
+   Abschlussfreigabe. Root-Reviewfelder Memory/F-Nenner/Expiry-Busyloop mit REDs
+   korrigiert; kein Native. Neuer passender uninstrumentierter Control erforderlich.
+3. Kandidatenworker NEUER Auftrag/WT `/srv/tse-navigation029-skulls-20261115`
+   abRoot7dfda985: genau ein deaktivierter029Skulls600-Retarget, zusätzlich
+   Cgroup-onlyBackenddelta und begrenzter privater Cleanupfehlerbeleg.
+   Auftrag tatsächlich viafollowup_task ausgelöst; Abschluss/GREEN noch offen.
+4. Nach vollständigem Rootreview/Freeze/Peer/Vollsicherung: gezielte einzelne
+   Nativefälle. Kein automatischer Retry. Keinen fehlenden alten Close-/Logbeleg
+   nachträglich erfinden. Funktional geeigneter Kandidat erst dann für formale
+   1/4/8-Bot-Gates60/60/120min. B erst nach A-Abschluss.
+
+## Neuer Diagnosekandidat029
+
+Quellcommit7dfda985fe547cf6496cc18aaa713568fafcc9fa,
+Treea8aa60561d0c642346eaac4f6784e85eb0546427. DLL
+ a043de1e0fc647d2805c20ea01e9f52eada3fdaa0b55caad8be6df5302ded971,
+451584B; Manifestaed7a9325b1cfe3af3cb77ca897901e48236de83d9b5ff0bb5d48eab23e046a9.
+15MSVC+Linkexit0, Root48Source+29Overlay+ManifestDLL=79HashpinsPASS07:50:02.
+Exec39455/Rootbuild beendet/reaped0. Keine Runtime-/Verbesserungsabnahme.
+Gegen028 nurDriver geändert+driver_final_decision.h hinzu; SupplyHeader028gleich.
+Driver7af47d87aaaf4c51ebaca6f65d628cfec3c2544419be07e39b65e52b370eb386,
+Formatter5286aaca6d3ea407a8f2f91b50e571522368a9a8595c27798cee573df2eac9bb.
+Zwölf exakte Sourceinversen rekonstruieren ganzenDriver028/027, Root9Tests0,323s
+PASS/14extrahierte Driverfälle/28Diag0/1Wertegleich;12Mutanten+.5Headernegativ.
+Erster RootcommandfehlendesPYTHONPATH-ImportFAIL getrennt erhalten.
+Rootreview /RootE/driver-final-root-source-review.json; Buildclosure029entsprechend.
+Root schloss vier MissingFacts vorBuild; keine Zusatzabfragen/Polls/Rays/RNG/Clock.
+%.17g Extrem1207B/konservativeNUL-Grenze1394. MapKnown=false, Generationwechsel
+UNKNOWN, submittedArgument ist keinACK/Bewegungsbeweis. KeinLiveeingriff.
+
+Cgroupquellpatch unabhängigerPeer75b205821e81cd11056eb970fec70303be08f4528a3e9b6f8d6f96f1599e59ab
+PASS_SCOPE/noC/I/Minor, nurBackendSource-/Disabledinverse, Tests nurreviewed.
+PrivateQuittung /srv/tse-driver-final-decision-evidence-20261115/native-cgroup-exit-peer-review.json.
+Konkrete ON-Ausnahmestelle bleibtUNKNOWN. KeinNative-ON-Fixclaim.
 
 ## Neue KI-Diagnose und Kandidat028
 
@@ -113,28 +149,22 @@ verwenden. Frühere028-freieBuilds/FAILsbleibenunverändert, keinePromotion.
 
 ## Sicherung und Veröffentlichung
 
-Source082Remote8b1eb5c1d632b10fca50e314ac470254f6ebb9ac tatsächlicherFetch/diff0
-zuRootd1fad4ca3572bc78b7832cde05254d898cf383f2,
-Tree3a572e29680047b1b2ed965ff6b68afab4493456. NeuereRootquellenbis672de07
-lokalintegriert; Source083stehtunmittelbaran.
+Source085 tatsächlich fetch/diff0: Remote8c19d0cd5898eda36ddb486e6bdd9cd7a05ba19d,
+Local9f41c6b89abf16eda6b8808699bfb0f58b56c451, Treeb9b1e4540bf7aafcdc42347051c03d42b7641e9c.
+Delta076 vollständig Drive+zweiteDateiMetadatenprüfungPASS07:31:01:
+Drive1Oso4G3cau4R0zJJ5J5xsCgKEbwBzEH4I,9766568B,
+SHA61f8a3ce36ed46bf4376a71d006cf0b481d178a5a78578946ae3d5c8db4890ed,
+814Dateien126974986B. ONfullRaw/Rootrestore/Monitorcheckpoint/Driverdesign/
+Source085bundle(requiresa0f5feain075). FrühereArchive022–076vollrückgelesen,
+alleDateihashes/UID/GID/Mode/mtime_nsgeprüft. Kein RuntimeRestoreStartbehauptet.
+Source086/Delta077 jetzt vorbereiten; neuere lokale Driver-/Cgroupquellen und
+Build029 bisher noch nicht Bestandteil des zuletzt bestätigten externen Archivs.
 
-Delta073Drive1kJ4zZFlelZHlgEChE2Z3o_O5h-ah6o1S,3606612B,
-SHA8160385a661df87e7f07687d36b71f3245962a85c2ec4d021fb8d2dd0abb921e.
-1436Dateien/22815933B, vollDrive-rückgelesen undzweimalSHA/UID/GID/mode/
-mtime_nsrekonstruiertPASS06:29:42. Enthält060723/061540fullRaw+Rootrestores,
-beideStaticdesignmemos,Sourcebundled1fad4c benötigt1698420in072.
-072Drive1Y3U2b8DoVOSGQyeA_FUl0zK6SyT2gsht,1375011B,
-SHA24215cd6e78e8a42910fde9611d1836efe330611ccbc98c858509e031e20294a,
-518Dateien4910764BdualMetadatenPASS; Bundle1698420benötigtbc11b1bin071.
-PrivateBackupbasis `/srv/tse-cecil-rollout-backup-20261114`,
-RootE `/srv/tse-cecil-rollout-evidence-20261114`,
-Native `/srv/tse-milestone-a-evidence-20261111`.
-
-022–075bereitsvollDrive-rückgelesen/Dateimetadatengeprüft. Mischrollback051
-mit5573Dateien/898964677B gesichert, tatsächlicheLivebasis
+Mischrollback0515573Dateien898964677B gesichert, Livebasis
 `/srv/tse-current-mixed-fleet-backup-20261114` schützen.
-KeineRetaildateien/privatenRohidentitäten insöffentlicheRepo.
-EswurdekeinvollständigerNativeRuntimeRestoreStartausArchivbehauptet.
+Backup `/srv/tse-cecil-rollout-backup-20261114`, Evidence
+`/srv/tse-cecil-rollout-evidence-20261114`, Native
+`/srv/tse-milestone-a-evidence-20261111`. KeineRetaildateien/Rohidentitäten insGit.
 
 ## Sperren, Grenzen und restliche Abnahme
 

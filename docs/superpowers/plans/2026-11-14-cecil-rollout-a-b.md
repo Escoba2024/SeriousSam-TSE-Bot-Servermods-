@@ -18,7 +18,7 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 |---|---|---|
 |Tatsächliche Flotte|geprüft06:29|sechs×8eigeneBots/18Targets051gleich,Dev048/RedGen2/4Public018;keineZusätzlichen|
 |Namen/Identitäten erhalten|Bestand geprüft|458Pool/48Anzeigenamen/Profile051gleich, Instanz+ID verwenden|
-|Dev-Sync|**FAIL/Ursache offen**|70neueBAD/3Kick seit23:54, eigeneBotclients0; unverändert048+PowerupDedicated|
+|Dev-Sync|**FAIL/Ursache offen**|bis02:49 70BAD/3Kick; zusätzlichbis07:36 23BAD/2Kick, eigeneBotclients0; unverändert048+PowerupDedicated|
 |026passiveDiagnose|Build/Portable bestanden|15MSVC+Link/77Closure,3532normal+ASan, keinRuntime-/Skullsfixclaim|
 |026Skulls600diag1|geschlossen, A4 weiter offen|Root640Dateien/4LogsRestore; vierstufigerAudit bytegleich, bewaffneter16,546sStillstand; keinePromotion|
 |A1Maus/Keyboard|historischeFAILs|MousevariableAntwort,Keyboard7,5°Rückkehrfehler; Rootclosedaudit vollständig|
@@ -27,6 +27,7 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 |A1Methodwindow|Control begrenzt bestanden; neuerTrace060723FAIL|Getter/TLS/21Calls zuerstvalide, dannLegacy-Colt-ownHook-Konflikt+NachlaufQueueoverflow; Monitor-/Drainfix undneuerControl nötig|
 |DevPowerup-Kontrast|V2OFF600begrenzt; ON600FAILcleanup|OFF600,135s/4Logs; ON600,0495s/0BADobserved, ServercleanupFileNotFound/3Logs; Root640FileRestorePASS;076sichern, Cleanupursacheklären;keinCRC-Ursachenclaim|
 |028Contentiondiagnose|gebaut/portabelbelegt;keineNativeabnahme|3733Bridge/3SourceformatPASS/77Buildpins;Headeronly/Drivergleich;OwnerUNKNOWNkorrekt|
+|029Endaktionsdiagnose|gebaut/Root9Tests+79Buildpins;keinNative|sameCallProposal→Arbitration→Poll→SafeMotion→SetActionArgument;keineVerhaltensänderung;SkullscontrollerWIP|
 |A3Tiernachweis|offen|020STARK13:3,Swap5:6; keinbelegtesSTARK>MITTELüberbeide|
 |A4Karten|teilweiseBeobachtung|024Red/Skulls/Trouble600geschlossen, Skulls242,49sNoUseful; weitereMaps/Transitions/Resetoffen|
 |A5Formalgates|nichtbegonnen|nachfunktionalgeeignetemKandidaten1/4/8Bots60/60/120min|

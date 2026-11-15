@@ -9,6 +9,7 @@ import tempfile
 import unittest
 
 from verify_contention_diag_source import BASE_HEADER_SHA256, verify
+from verify_driver_final_source import verify as verify_driver_final
 
 ROOT=Path(__file__).resolve().parents[1]
 HEADER=ROOT/'poc/candidates/redstation-supply-20261107/BotSupplyNative.h'
@@ -17,7 +18,7 @@ class ContentionSourceTests(unittest.TestCase):
     def test_whole_header_inverse_and_driver_unchanged(self):
         self.assertEqual(hashlib.sha256(verify(HEADER.read_text()).encode()).hexdigest(),BASE_HEADER_SHA256)
         driver=HEADER.with_name('BotDriver.cpp')
-        self.assertEqual(hashlib.sha256(driver.read_bytes()).hexdigest(),'ebb2c4cc694ebdc1ee8f9e2e1aa88a2cb587afae5adc649bfcae84ff244c6c55')
+        self.assertEqual(hashlib.sha256(verify_driver_final(driver.read_text(),HEADER.read_bytes()).encode()).hexdigest(),'ebb2c4cc694ebdc1ee8f9e2e1aa88a2cb587afae5adc649bfcae84ff244c6c55')
 
     def test_gameplay_guard_and_diagnostic_receipt_mutations_rejected(self):
         source=HEADER.read_text()

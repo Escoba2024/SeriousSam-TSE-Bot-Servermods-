@@ -1,0 +1,27 @@
+"""Exact enumerated passive Driver inverse to built028; no normalization."""
+import hashlib
+from pathlib import Path
+
+BASE_DRIVER_SHA256="ebb2c4cc694ebdc1ee8f9e2e1aa88a2cb587afae5adc649bfcae84ff244c6c55"
+BASE_HEADER_SHA256='72cea9c22d1a781bac8e1b733f63c22368f4cee8e0f3c3677067e571af8040bd'
+PAIRS = [('', '#include "driver_final_decision.h"\n'), ('', '    // Passive invocation receipt only; cached map pin is NOT current-map proof.\n    botcore::CecilDriverFinal finalDecision;\n    botcore::CecilDriverFinalBegin(finalDecision,\n      botcore::CecilDriverFinalDue(bot_bDiagnostics!=FALSE,bot_bSupplyNavigation!=FALSE,player!=NULL,bs.bs_iTick),\n      iLP,bs.bs_iTick,entityId,BotSupplyState(iLP).generation,bs.bs_rotationMapSerial);\n'), ('', '    if(finalDecision.admitted){\n      finalDecision.preSupplyModeBits=(unsigned)(automatic!=FALSE)|((unsigned)(humanMode!=FALSE)<<1)|((unsigned)(combatDeathmatch!=FALSE)<<2)|\n        ((unsigned)(targetVisible!=FALSE)<<3)|((unsigned)(combatHold!=FALSE)<<5)|((unsigned)(testAimReady!=FALSE)<<6)|((unsigned)(humanFire!=FALSE)<<7);\n      finalDecision.cachedTargetIndex=automatic?bs.bs_iCombatTarget:bot_iTestTarget;\n    }\n'), ('', '      botcore::CecilDriverFinalSupply(finalDecision,ready,supply,BotSupplyState(iLP).generation,BotSupplyState(iLP).entity);\n'), ('      if(ready&&(supply.active||supply.ownsMovement)&&player&&player->m_penWeapons&&\n', '      if(ready&&(supply.active||supply.ownsMovement)&&player&&botcore::CecilDriverFinalPresence(finalDecision,player->m_penWeapons!=NULL)&&\n'), ('', '    if(finalDecision.admitted){\n      finalDecision.arbitration[0]=moveFactor;finalDecision.arbitration[1]=humanStrafe;finalDecision.arbitration[2]=cecilUp;\n      finalDecision.arbitration[3]=bs.bs_aHeading;finalDecision.arbitration[4]=bs.bs_aPitch;\n      finalDecision.arbitrationFlags=cecilFlags;\n    }\n'), ('', '      if(finalDecision.admitted){finalDecision.weaponPolled=true;finalDecision.travelKnife=travelKnife;\n        finalDecision.preWeapon=combatWeapon;finalDecision.finalWeapon=finalWeapon;}\n'), ('        player->GetPlayerWeapons()->m_iWantedWeapon,player->m_ulLastButtons);\n', '        botcore::CecilDriverFinalValue(finalDecision,finalDecision.pollWanted,player->GetPlayerWeapons()->m_iWantedWeapon),\n        botcore::CecilDriverFinalValue(finalDecision,finalDecision.pollLastButtons,player->m_ulLastButtons));\n'), ('        bFire=bs.bs_cecilFire.Poll(now,w->m_iCurrentWeapon,w->m_iWantedWeapon,combatWeapon,\n', '        if(finalDecision.admitted)finalDecision.firePolled=true;\n        bFire=bs.bs_cecilFire.Poll(now,\n          botcore::CecilDriverFinalValue(finalDecision,finalDecision.fireCurrent,w->m_iCurrentWeapon),\n          botcore::CecilDriverFinalValue(finalDecision,finalDecision.fireWanted,w->m_iWantedWeapon),combatWeapon,\n'), ('', '        if(finalDecision.admitted){finalDecision.safeCalled=true;finalDecision.safeReacquire=supplyActive!=FALSE;\n          finalDecision.safeArgs[0]=now;finalDecision.safeArgs[1]=moveFactor;finalDecision.safeArgs[2]=humanStrafe;\n          finalDecision.safeArgs[3]=cecilUp;finalDecision.safeArgs[4]=finalYaw;finalDecision.safeArgs[5]=maxStrafe;}\n'), ('          BotCecilCombatRecoveryRequested(automatic!=FALSE,humanMode!=FALSE,targetVisible!=FALSE,supplyActive!=FALSE,moveFactor,humanStrafe,cecilUp));\n', '          botcore::CecilDriverFinalValue(finalDecision,finalDecision.safeCombat,\n            BotCecilCombatRecoveryRequested(automatic!=FALSE,humanMode!=FALSE,targetVisible!=FALSE,supplyActive!=FALSE,moveFactor,humanStrafe,cecilUp)));\n        if(finalDecision.admitted){finalDecision.safeStatus=cecilFloorStatus;\n          finalDecision.safeAfter[0]=moveFactor;finalDecision.safeAfter[1]=humanStrafe;finalDecision.safeAfter[2]=cecilUp;}\n'), ('', '    if(finalDecision.admitted){\n      finalDecision.modeBits=(unsigned)(automatic!=FALSE)|((unsigned)(humanMode!=FALSE)<<1)|((unsigned)(combatDeathmatch!=FALSE)<<2)|\n        ((unsigned)(targetVisible!=FALSE)<<3)|((unsigned)(supplyActive!=FALSE)<<4)|((unsigned)(combatHold!=FALSE)<<5)|\n        ((unsigned)(testAimReady!=FALSE)<<6)|((unsigned)(humanFire!=FALSE)<<7)|((unsigned)(bFire!=FALSE)<<8)|((unsigned)(cecilUseControl!=FALSE)<<9);\n      finalDecision.combatSelect=combatSelect;finalDecision.cecilButtons=cecilButtons;\n      botcore::CecilDriverFinalSubmit(finalDecision,pa,BotSupplyState(iLP).generation,BotSupplyState(iLP).entity);\n      char finalText[2048];const int finalLength=botcore::CecilDriverFinalFormat(finalText,sizeof(finalText),finalDecision);\n      if(finalLength>0&&finalLength<(int)sizeof(finalText))BotLog("%s",finalText);\n    }\n')]
+
+def inverse(source):
+    for old,new in reversed(PAIRS):
+        if not new or source.count(new)!=1:
+            raise ValueError('exact unique Driver diagnostic inverse required')
+        source=source.replace(new,old,1)
+    return source
+
+def verify(source,header):
+    if hashlib.sha256(header).hexdigest()!=BASE_HEADER_SHA256:
+        raise ValueError('Build028 Header changed')
+    original=inverse(source)
+    if hashlib.sha256(original.encode()).hexdigest()!=BASE_DRIVER_SHA256:
+        raise ValueError('Driver changed outside exact passive additions')
+    return original
+
+if __name__=='__main__':
+    c=Path(__file__).resolve().parents[1]/'poc/candidates/redstation-supply-20261107'
+    verify((c/'BotDriver.cpp').read_text(),(c/'BotSupplyNative.h').read_bytes())
+    print('PASS_EXACT_FULL_DRIVER028_INVERSE_HEADER_UNCHANGED')

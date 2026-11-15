@@ -25,6 +25,8 @@ STUB = r'''
 #include <cassert>
 #include <cmath>
 #include <limits>
+#include "driver_final_decision.h"
+botcore::CecilDriverFinal finalDecision; // Neutral passive receipt for actual extracted calls.
 using FLOAT=float;using ULONG=unsigned long;using INDEX=int;using BOOL=int;
 const BOOL TRUE=1,FALSE=0;
 struct FLOAT3D {float v[3];FLOAT3D(float x=0,float y=0,float z=0):v{x,y,z}{}float& operator()(int i){return v[i-1];}
