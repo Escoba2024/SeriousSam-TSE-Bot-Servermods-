@@ -1,4 +1,44 @@
-# Aktueller Handoff — 15.11.2026, 02:03 UTC
+# Aktueller Handoff — 15.11.2026, 02:22 UTC
+
+## Stand 15.11.2026, 02:22 UTC – geprüfte Quellen, Keyboard vor Einzelfall
+
+Keyboardquellen integriert c2d8314/1754e1b/7429188/c9ce7f7/f2767f9/da2ffb7/
+948661c. Root las alle neuen Adapter-/Policy-/Builder- und Testtexte;
+20 gezielte Tests Root1,189s/0Fehler, Log6957284b. Release-/Zähl-/ABI-/Bitmap-
+Befunde mit echten REDs vor Fix. Root fand anschließend CollectorManifestTrue
+bei CodeFalse: Autor enger RED→False, frisches Paket a14749e6, altes2b9a-Paket
+und alle Fehler erhalten. Kein Collector wurde ausgeführt.
+
+Rootkeyboardfreeze `/srv/tse-a1-keyboard-root-frozen-20261115`, Manifest
+eaa83f51049adcab08b1145fa6b1621996e8594e92c96d9a69df7e3fd5addf4f,
+Controller467c556076e74f9053c98bd018860b1c1874b354f054b226c175a24a05c1952a.
+Nur Maingate/2Namespaces/ungenutzterCollectorprivatepath/Repins verändert.
+Peerquittung2e804d97 prüft107/90/14Pins und127andereDateienbytegleich;
+Scope ausdrücklich nur unabhängiger Rootfreezedelta, kein unabhängiger Review
+der eigenen Keyboardpolicy. Alle6Instrumentierungscodegates/CollectorManifest
+False, vierCoredateiengleich. Root selbst prüfte den vollständigen neuen Code.
+Einzelfall6Actions/12DownUp/noFire/noFrida/noRECORD, alteACK/EPS/Hold/Budgets.
+Noch kein Nativekeyboard-/Schuss-/A1-Erfolg. Parent31a528b6/Outerfa601b18
+vorbereitet; verlangt Delta061 vollständig extern rückgelesen. Äußerer Starter
+hatte einen vor Ausführung erkannten Syntaxfehler; korrigierter ASTcheck PASS.
+
+Reacquirediagnose integriert861d72b/8cbf741/2d2963e. Root las kompletten Header-
+und Testdiff, tatsächlicher alter Rootbody88950482/c32160c8 frisch gebunden,
+neuer Header6f7f8adb/Testdbdd2871 bytegleich Autor. Root SDK3532/0; Autor
+normal/ASan3532/0 und16Parentprogramme Exit0 mit Quell-/Loghashvergleich geprüft.
+Rootquittung `reacquire-root-source-review.json`: keine C/I. Supportlocals nur
+aus erreichten Originalberechnungen; keine zusätzlichen Probes/Getter außer
+einem Nativeclockread je fälliger Diagnosezeile. Formatgrenze konservativ2029B,
+synthetischer Extremfall1540B unter2048. Kein Retailbuild/Skullsfix-/A4-Claim.
+
+Beide Worker sauber/quieszent; keine Nativeprozesse aktiv. Frische Flotte
+02:05:48 sechs×8eigene/0zusätzliche, alle18Targets gleichRollback051.
+Sourcepublikation069 remote2d2ba9eb/Tree361c10d9 tatsächlich gleichRootd2b4141;
+neuere Quellen dieses Abschnitts nochpublizieren und alsSourcebundle sichern.
+Nächste Reihenfolge: Delta061 mit TroubleRaw/Keyboardpaketen/Review/Quellen
+vollständig extern rücklesen, eigenerKeyboard90-Einzelfall, Close/Restore und
+echte Daten bewerten. Danach verbleibende Kartenfälle und separater neuer
+Retaildiagnosekandidat. Live unverändert, A offen/B nicht begonnen.
 
 ## Stand 15.11.2026, 02:03 UTC – Trouble024 geschlossen
 

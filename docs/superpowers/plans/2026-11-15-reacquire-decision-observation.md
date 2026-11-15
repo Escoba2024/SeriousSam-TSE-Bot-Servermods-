@@ -77,5 +77,39 @@ Lograte und fixed-size-Ausgabe dürfen weder Speicherwachstum noch Burst erlaube
 - [ ] Bericht/RED→GREEN/Quelle/Tests/Hashes committen, alle Jobs beenden. Root
   integriert/reviewt/baut separat. Kein Nativeerfolg/ursächlicherSkullsfixclaim.
 
-Aktueller Abschluss dieses Auftrags: ausschließlich Design und Plan geschrieben;
-alle obigen Implementierungs-/Testschritte sind noch offen.
+## Writerfortschritt 15.11.
+
+- Task1 tatsächlich RED: zuerst3445/4, anschließend3464/23; nur die neuen
+  Diagnoseerwartungen fehlten, die ursprünglichen3440Checks bestanden.
+- Task2 umgesetzt: fester Datensatz, explizite normale Returns, optionaler
+  bestehender LOSdetailpfad,1Hz ohne ClearGoal-Burst, UNKNOWN bei fehlendem
+  Cast-/Nativezeitbeleg. Keine Änderung anderer Quelldateien.
+- Rootreview-Korrektur: fünf Supportlocal-REDs3532/5; vorhandene Locals mit
+  Knownbits an ihren tatsächlich erreichten Stellen ergänzt.3532/1 enthielt
+  allein eine Stringerwartung `0` gegen tatsächliches `-0`; numerischer exakter
+  Nullvergleich ohne EPS und protokollierte synthetische Vollzeile lösen diese
+  Testdarstellungsannahme, kein Produktionsguard wurde verändert.
+- Final normal und ASan/UBSan je3532/0 gegen Source-/Testcommitdd42a7b;
+ 16 bekannte Parentprogramme seriellnice15 abgeschlossen. Die abschließenden
+ Läufe enthalten die präzisen Hint-Probe-Statuskombinationen; die konservative
+ Formatobergrenze wurde ebenfalls tatsächlich geprüft.
+- Byteinverse des gesamten Original-Reacquirebodys samt Heightguardmutation
+  bestanden. Tatsächliche extreme Vollzeile1540Bytes; konservative Hülle mit
+  sogar64BitUnsigned-/vollenInt-/32ByteEnumzulagen2029Bytes+NUL<2048.
+
+Ruling: Height wird nur aus dem tatsächlich vorhandenen Local nach klarem LOS
+kopiert; unversuchte/blockierte Hint-Height bleibt mit Knownbit UNKNOWN. Dafür
+keine zusätzliche Geometrieberechnung oder Änderung des Selector-Ausdrucks.
+Kosten: die Diagnose kann Height eines vorher ausgeschiedenen Hints nicht
+nachträglich erklären; das darf nicht als bewiesenes Höhenveto gelesen werden.
+
+Ruling: Rückkehr einer RayLength-Prüfung und deren vorhandenes Lengthlocal
+werden gemeinsam passiv erfasst. Die Referenz auf Length wird erst im Setter
+nach der ursprünglichen einzelnen Funktionsauswertung gelesen; Ergebnisbool
+und ursprünglicher Guard werden unverändert zurückgegeben. Keine zweite Probe.
+
+Abschlussbericht:
+`docs/reports/2026-11-15-reacquire-decision-observation-implementation.md`.
+PrivateQuittungSHA256c72ace674454fe43411d3957ed89e9b3346b9103376f872715a5d0634cd916f6.
+Alle eigenen Jobs regulär beendet, keine weitere Hintergrundarbeit.
+Noch keine native Beobachtung dieses Datensatzes, kein Skullsfix-/A4-PASS.

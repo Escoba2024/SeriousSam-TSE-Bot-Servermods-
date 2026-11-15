@@ -1,5 +1,24 @@
 # Cecil-Flottenrollout und Abschluss A → B
 
+## Aktuell 15.11.2026, 02:22 UTC
+
+- [x] Keyboardadapter/Policy/Builder vollständig Root reviewed/integrated;
+  20 gezielte Rootprüfungen bestanden. Collector-Metadatenfehler mit RED→Fix
+  und frischem Paket a14749e6 erledigt; alter Fehlercheckpoint bleibt erhalten.
+- [x] Rootfreeze eaa83f51/Controller467c5560, unabhängiger Freeze-delta-/Pinreview
+  2e804d97:107/90/14Pins,127andereDateienbytegleich, Instrumentierung deaktiviert.
+- [x] Passive Reacquirediagnose Root reviewed/integrated: SDK3532/0 auf Root;
+  Autor3532/0 normal+ASan und16Parentprogramme mit Quellen-/Logpins geprüft.
+- [ ] Neue integrierte Quellen tatsächlich remote publizieren/verifizieren.
+- [ ] Delta061 mit Trouble-Rohbelegen, Keyboardpaketen/Rootfreeze/Review,
+  Diagnosebelegen und Sourcebundle vollständig extern rücklesen.
+- [ ] Genau ein Keyboard90-Originalfall, sechs Aktionen ohne Fire/Hook/RECORD;
+  danach alle Closes/Dateien/Logs unabhängig prüfen, Fehler ehrlich beibehalten.
+- [ ] Hole/Yodeller einzeln und neuer Retaildiagnosekandidat für Skullsursache.
+
+Keine parallelen Workerjobs oder Nativeprozesse mehr aktiv. Live beibehalten;
+A offen/B nicht begonnen, alte Mouse- und Skullsfehler unverändert offen.
+
 ## Aktuell 15.11.2026, 02:03 UTC
 
 - [x] Trouble024600 geschlossen/Rootrestore640Dateien/4Logs/PIDgenerationen/

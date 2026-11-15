@@ -191,3 +191,29 @@ diesenFall, bewahrt dieDaten und führt nichtautomatisch zumRetry.
 Dieser Plan wurde nur lesend vorbereitet; keine Tests oder Implementierung.
 Root prüft den konkreten Scope vorCode. Keine erneuteNutzerfreigaberunde für
 bereits beauftragteRoutineentwicklung ableiten.
+# Offline implementation checkpoint — 15 November 2026
+
+Exclusive implementation claim: new `a1_keyboard_input.py`,
+`a1_keyboard_geometry.py`, `prepare_a1_keyboard_qualification.py`, their three
+matching test files, this plan status and the own preparation report. No shared
+Core, old package, runtime or live file was modified.
+
+Tasks 1–3 are implemented and targeted offline tests pass: 20 cases, no skips.
+Each task began with an observed missing-module RED; subsequent release,
+counter-ABI, typed metadata and evidence findings also have preserved RED and
+GREEN logs. The private receipt records all outputs, including a retained
+synthetic floating-point fixture error. Root's Trouble measurement window was
+respected; no tests or generators ran until its explicit CLOSED message.
+
+The fresh disabled package is
+`/srv/tse-a1-keyboard-qualification-gates-disabled-20261115`, manifest
+`a14749e6a55f7001899f2a961fab3c15ff6c4fb7032ee121603d31e0972f3951`.
+Its 107 runtime, 90 diagnostic and 14 collector pins are verified. Four immutable
+Core files and twelve inherited controller function ASTs are unchanged.
+The previous package is preserved with its collector-manifest status mismatch;
+an observed targeted RED and two GREEN builder cases cover the corrected
+`runtime_reviewed=False` field in this new package. No collector was executed.
+
+Next step: Root independently reviews and integrates the fixed source, then
+creates its own gated freeze and wrapper for exactly one Original NoFire case.
+No native keyboard qualification or A1 completion is claimed by this checkpoint.

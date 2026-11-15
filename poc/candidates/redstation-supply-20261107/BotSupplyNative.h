@@ -82,6 +82,7 @@ struct SSupplyState {
   SCecilProbe probe;
   // Diagnostic clocks are not consulted by any decision or movement gate.
   double diagSelectionLast=-1,diagUnavailableLast=-1,diagTerminalLast=-1;
+  double diagReacquireLast=-1; // Passive rate only; never a decision clock.
   botcore::CecilNavigator navigator;
   botcore::CecilGroundProgress groundProgress;
   // Observation and default-policy movement context never substitute for the
@@ -191,6 +192,7 @@ struct SSupplyState {
   void Reset() {
     approach=SCecilApproachDiagnostic();
     diagSelectionLast=diagUnavailableLast=diagTerminalLast=-1;
+    diagReacquireLast=-1;
     ClearAirMovement();ClearGroundProgress();probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
     itemScanAfter=scanTick=spawnTick=0;searchAfter=goalSince=0;deadSince=-1;
     playable=hadUpgrade=levelSwimView=reacquiring=false;useReleaseTick=-1;lastUseEntity=0;useAfter=0;++generation;
@@ -929,9 +931,77 @@ static void BotCecilSwimMotion(CPlayer* player,const FLOAT3D& delta,double yaw,d
   if(std::fabs(local.x)+std::fabs(local.z)>1e-6)
     move.yaw_delta=botcore::TestTurnDelta(yaw,std::atan2(-local.x,-local.z)*180/3.141592653589793,180*dt);
 }
+// One fixed, explicit normal-return observation of the existing Reacquire body.
+// No destructor emitter, search, lookup, RNG or physical query lives here.
+struct SCecilReacquireDiagnostic {
+  struct Hint {
+    int slot=-1;double distance2=0,height=0,length=0,hitDistance=0;
+    bool heightKnown=false,probeValid=false,cast=false;
+    const char* probe="unattempted";const char* result="unattempted";
+  } hint[3];
+  CPlayer* player;SSupplyState& state;double now;bool active=false,contextOnly;
+  int budgetBefore=0,anchorBefore=-1,goalBefore=-1,nodeBefore=-1,rejectedBefore=-1;
+  uint32_t itemBefore=0;double sinceBefore=0,retryBefore=0,deadlineBefore=0;
+  bool ground=false,shape=false,metadata=false,air=false,liquid=false;
+  bool geometryChecked=false,localPoint=false,farHint=false,selectionKnown=false,positionKnown=false;
+  bool motionKnown=false,motionValid=false,segmentKnown=false,segmentValid=false,hitKnown=false,normalKnown=false;
+  double verticalSpeed=0,supportLength=0,supportDistance=0,supportNormal=0;
+  double position[3]={0,0,0},retainedDistance2=0;
+  const char* support="not_required";
+  SCecilReacquireDiagnostic(CPlayer* p,SSupplyState& s,double t,bool context)
+    :player(p),state(s),now(t),contextOnly(context){
+    if(!bot_bDiagnostics||!std::isfinite(t)||t<0||
+       (s.diagReacquireLast>=0&&(t<s.diagReacquireLast||t-s.diagReacquireLast<1)))return;
+    active=true;s.diagReacquireLast=t;budgetBefore=_botRayBudget;
+    anchorBefore=s.anchor;goalBefore=s.goal;itemBefore=s.goalEntity;
+    nodeBefore=s.reacquireNode;rejectedBefore=s.reacquireRejected;
+    sinceBefore=s.reacquireSince;retryBefore=s.reacquireRetryAfter;deadlineBefore=s.goalDeadline;
+  }
+  void Inputs(bool g,bool sh,bool m,bool a,bool l){if(active){ground=g;shape=sh;metadata=m;air=a;liquid=l;}}
+  void Position(const FLOAT3D& p){if(active){positionKnown=true;for(int i=0;i<3;++i)position[i]=p(i+1);}}
+  void Geometry(bool checked,bool local,bool far){if(active){geometryChecked=checked;localPoint=local;farHint=far;}}
+  void Slots(const int* slots,const double* distances){if(active){selectionKnown=true;
+    for(int i=0;i<3;++i){hint[i].slot=slots[i];hint[i].distance2=distances[i]<0?retainedDistance2:distances[i];}}}
+  void Probe(int k,bool valid,const SCecilSupplyCastDetail& detail){if(active){
+    auto& h=hint[k];h.probeValid=valid;h.cast=valid&&detail.length>0;
+    h.length=detail.length;h.hitDistance=detail.distance;
+    h.probe=!valid?"probe_unknown":!h.cast?"empty_segment":detail.clear?"clear":"blocked";
+    h.result=h.probe;
+  }}
+  void Height(int k,double value){if(active){hint[k].heightKnown=true;hint[k].height=value;}}
+  void Result(int k,const char* value){if(active)hint[k].result=value;}
+  void Motion(bool valid,double speed){if(active){motionKnown=true;motionValid=valid;verticalSpeed=speed;}}
+  // The second argument binds a reference, not an eager value copy: the one
+  // original RayLength call has completed before its result/local are copied.
+  bool Segment(bool valid,const double& length){if(active){segmentKnown=true;segmentValid=valid;supportLength=length;}return valid;}
+  void Hit(double distance){if(active){hitKnown=true;supportDistance=distance;}}
+  void Normal(double value){if(active){normalKnown=true;supportNormal=value;}}
+  void End(const char* reason){
+    if(!active)return;
+    double nativeTime=0;bool nativeValid=false;
+    if(_pNetwork){nativeTime=(double)_pNetwork->GetGameTime();nativeValid=std::isfinite(nativeTime)&&nativeTime>=0;}
+    if(!nativeValid)nativeTime=0;
+    const auto& a=hint[0];const auto& b=hint[1];const auto& c=hint[2];
+    // Scientific geometry/clock fields keep even extreme finite input bounded.
+    // native_time alone preserves the existing nine-decimal Retail clock form.
+    BotLog("[CecilReacquireDecision] entity=%lu generation=%lu time=%.6g native_time=%.9f native_time_valid=%d reason=%s proposal=%d context_only=%d ground=%d shape=%d metadata=%d air=%d liquid=%d support_stage=%s support_motion_known=%d support_valid=%d vertical_speed=%.6g segment_known=%d segment_valid=%d support_length=%.6g support_hit_known=%d support_distance=%.6g support_normal_known=%d support=%.6g budget=(%d,%d) anchor=(%d,%d) goal=(%d,%d) item=(%lu,%lu) deadline=(%.6g,%.6g) hint=(%d,%d) since=(%.6g,%.6g) rejected=(%d,%d) retry=(%.6g,%.6g) position_known=%d pos=(%.6g,%.6g,%.6g) geometry_checked=%d local_point=%d far_hint=%d selection_known=%d h0=(%d,%.6g,%d,%.6g,%s,%s,%d,%d,%.6g,%.6g) h1=(%d,%.6g,%d,%.6g,%s,%s,%d,%d,%.6g,%.6g) h2=(%d,%.6g,%d,%.6g,%s,%s,%d,%d,%.6g,%.6g)\n",
+      (unsigned long)player->en_ulID,(unsigned long)state.generation,now,nativeTime,nativeValid,reason,
+      !std::strcmp(reason,"accepted_proposal"),contextOnly,ground,shape,metadata,air,liquid,support,
+      motionKnown,motionValid,verticalSpeed,segmentKnown,segmentValid,supportLength,hitKnown,supportDistance,normalKnown,supportNormal,
+      budgetBefore,_botRayBudget,
+      anchorBefore,state.anchor,goalBefore,state.goal,(unsigned long)itemBefore,(unsigned long)state.goalEntity,
+      deadlineBefore,state.goalDeadline,nodeBefore,state.reacquireNode,sinceBefore,state.reacquireSince,
+      rejectedBefore,state.reacquireRejected,retryBefore,state.reacquireRetryAfter,positionKnown,position[0],position[1],position[2],
+      geometryChecked,localPoint,farHint,selectionKnown,
+      a.slot,a.distance2,a.heightKnown,a.height,a.probe,a.result,a.probeValid,a.cast,a.length,a.hitDistance,
+      b.slot,b.distance2,b.heightKnown,b.height,b.probe,b.result,b.probeValid,b.cast,b.length,b.hitDistance,
+      c.slot,c.distance2,c.heightKnown,c.height,c.probe,c.result,c.probeValid,c.cast,c.length,c.hitDistance);
+  }
+};
 // The pure navigator reports its source when an UNREACHABLE next hop requests stay.
 // Recover that concrete hop using the same prepared directed search, without allocation.
 static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCecilMove& out,bool contextOnly=false){
+  SCecilReacquireDiagnostic diagnostic(player,state,now,contextOnly); // REACQUIRE_DIAGNOSTIC
   const bool liquid=BotCecilLiquid(player);
   bool groundEligible=BotCecilFrameReady(player)&&player->GetWorld()&&!liquid&&
     (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
@@ -947,6 +1017,7 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
     BotCecilFrameReady(player)&&player->GetWorld()&&player->GetHealth()>0&&player->m_penWeapons&&
     std::isfinite(now)&&now>=0&&graphMetadataValid;
   for(int i=1;airContext&&i<=3;++i)airContext=std::isfinite(player->en_vCurrentTranslationAbsolute(i));
+  diagnostic.Inputs(groundEligible,graphShapeValid,graphMetadataValid,airContext,liquid); // REACQUIRE_DIAGNOSTIC
   // Observing an accepted frozen ground pose does not prove current support.
   // Reference flicker or a deferred query cannot erase passive position time.
   if(groundEligible&&graphMetadataValid)state.groundObservationTime=now;
@@ -957,52 +1028,60 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
       player->GetWorld()->EntityFromID(ref->en_ulID)==ref;
     if(groundEligible&&graphMetadataValid)state.recoveryMovementTime=now;
   }
+  if(diagnostic.active)diagnostic.ground=groundEligible; // REACQUIRE_DIAGNOSTIC
   // A NULL reference can coexist with native brush contact. Only a near-foot
   // hit substitutes for support authority; default-policy stalled movement is
   // separate and still requires its own current wall validation.
   if(!airContext&&!liquid&&player->en_penReference==NULL){
+    if(diagnostic.active)diagnostic.support="pending"; // REACQUIRE_DIAGNOSTIC
     const bool trace=((int)std::floor(now*20+.5))%20==0;
     if(trace)BotLog("[CecilReacquireSupport] entity=%lu generation=%lu time=%.3f stage=begin state=%d physics=%lu velocity=(%.5f,%.5f,%.5f) budget=%d\n",(unsigned long)player->en_ulID,(unsigned long)state.generation,now,(int)player->m_pstState,(unsigned long)player->GetPhysicsFlags(),player->en_vCurrentTranslationAbsolute(1),player->en_vCurrentTranslationAbsolute(2),player->en_vCurrentTranslationAbsolute(3),_botRayBudget);
     // One support cast, at least one LOS cast and the final two safety probes.
-    if(_botRayBudget<4)return; // Unknown support must not erase a deferred LOS sweep.
+    if(_botRayBudget<4)return diagnostic.End("support_budget_deferred"); // Unknown support must not erase a deferred LOS sweep.
     const FLOAT3D& velocity=player->en_vCurrentTranslationAbsolute;
     bool valid=(player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
       (player->GetPhysicsFlags()&EPF_TRANSLATEDBYGRAVITY);
     double verticalSpeed=0;
     for(int i=1;i<=3;++i){valid=valid&&std::isfinite(velocity(i));verticalSpeed+=double(velocity(i))*player->en_vGravityDir(i);}
-    if(!valid||!std::isfinite(verticalSpeed)||std::fabs(verticalSpeed)>.1){state.ClearReacquireScan();return;}
+    diagnostic.Motion(valid,verticalSpeed); // REACQUIRE_DIAGNOSTIC
+    if(!valid||!std::isfinite(verticalSpeed)||std::fabs(verticalSpeed)>.1){state.ClearReacquireScan();return diagnostic.End("support_motion_guard");}
     if(groundEligible&&graphMetadataValid)state.recoveryMovementTime=now; // Movement context, never a support proof.
     const FLOAT3D foot=player->GetPlacement().pl_PositionVector;
     const FLOAT3D from=foot-player->en_vGravityDir*.25f,to=foot+player->en_vGravityDir*.05f;
     double length=0;
-    if(!BotCecilRayLength(from,to,length)||length==0){state.ClearReacquireScan();return;}
+    if(!diagnostic.Segment(BotCecilRayLength(from,to,length),length)||length==0){state.ClearReacquireScan();return diagnostic.End("support_segment_unknown");}
     CCastRay supportRay(player,from,to);
     --_botRayBudget;supportRay.cr_bPhysical=TRUE;supportRay.cr_bAllowOverHit=FALSE;
     supportRay.cr_ttHitModels=CCastRay::TT_NONE;
-    if(!BotCecilPhysicalCast(supportRay,player->GetWorld())){state.ClearReacquireScan();return;}
+    if(!BotCecilPhysicalCast(supportRay,player->GetWorld())){state.ClearReacquireScan();return diagnostic.End("support_probe_unknown");}
+    diagnostic.Hit(supportRay.cr_fHitDistance); // REACQUIRE_DIAGNOSTIC
     const CBrushPolygon* polygon=supportRay.cr_pbpoBrushPolygon;
     if(!supportRay.cr_penHit||(supportRay.cr_penHit->GetFlags()&ENF_DELETED)||
        supportRay.cr_penHit->GetRenderType()!=CEntity::RT_BRUSH||!polygon||
        (polygon->bpo_ulFlags&BPOF_PASSABLE)||!polygon->bpo_pbplPlane||
        !std::isfinite(supportRay.cr_fHitDistance)||supportRay.cr_fHitDistance<.25f||supportRay.cr_fHitDistance>.30f){
       if(trace)BotLog("[CecilReacquireSupport] entity=%lu generation=%lu time=%.3f stage=geometry_rejected hit=%lu type=%d distance=%.7f polygon=%d passable=%d budget=%d\n",(unsigned long)player->en_ulID,(unsigned long)state.generation,now,supportRay.cr_penHit?(unsigned long)supportRay.cr_penHit->en_ulID:0,supportRay.cr_penHit?(int)supportRay.cr_penHit->GetRenderType():-1,supportRay.cr_fHitDistance,polygon!=NULL,polygon&&(polygon->bpo_ulFlags&BPOF_PASSABLE),_botRayBudget);
-      state.ClearReacquireScan();return;
+      state.ClearReacquireScan();return diagnostic.End("support_geometry_rejected");
     }
     const auto& normal=polygon->bpo_pbplPlane->bpl_plAbsolute;
     const double support=-(double(normal(1))*player->en_vGravityDir(1)+double(normal(2))*player->en_vGravityDir(2)+double(normal(3))*player->en_vGravityDir(3));
+    diagnostic.Normal(support); // REACQUIRE_DIAGNOSTIC
     if(!std::isfinite(support)||support<=.5){
       if(trace)BotLog("[CecilReacquireSupport] entity=%lu generation=%lu time=%.3f stage=normal_rejected distance=%.7f support=%.7f budget=%d\n",(unsigned long)player->en_ulID,(unsigned long)state.generation,now,supportRay.cr_fHitDistance,support,_botRayBudget);
-      state.ClearReacquireScan();return;
+      state.ClearReacquireScan();return diagnostic.End("support_normal_rejected");
     }
     if(trace)BotLog("[CecilReacquireSupport] entity=%lu generation=%lu time=%.3f stage=verified distance=%.7f support=%.7f budget=%d\n",(unsigned long)player->en_ulID,(unsigned long)state.generation,now,supportRay.cr_fHitDistance,support,_botRayBudget);
+    if(diagnostic.active)diagnostic.support="verified"; // REACQUIRE_DIAGNOSTIC
   }
   const FLOAT3D position=player->GetPlacement().pl_PositionVector;
-  if(!graphShapeValid)return;
+  diagnostic.Position(position); // REACQUIRE_DIAGNOSTIC
+  if(!graphShapeValid)return diagnostic.End("graph_shape_invalid");
   // This remains a separate same-update support authorization. Unknown support
   // and deferred queries may never authorize opt-in floor/contact recovery.
   groundEligible=groundEligible&&graphMetadataValid;
+  if(diagnostic.active)diagnostic.ground=groundEligible; // REACQUIRE_DIAGNOSTIC
   if(groundEligible&&_botRayBudget>=2)state.groundRecoveryTime=now;
-  if(contextOnly)return; // Observe/support-check neutral ownership without inventing a NAV target.
+  if(contextOnly)return diagnostic.End("context_only"); // Observe/support-check neutral ownership without inventing a NAV target.
   BotCecilLocks(player,state,now);
   if(state.reacquireNode>=0&&(now<state.reacquireSince||now-state.reacquireSince>=6)){
     state.reacquireRejected=state.reacquireNode;state.reacquireRetryAfter=now+6;
@@ -1029,11 +1108,13 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
   // Mode validation is metadata-only; a deferred ray budget must not erase or
   // renew an existing attempt. The unchanged LOS loop reserves two safety rays.
   const bool farHint=groundEligible&&!liquid&&!localPoint;
+  diagnostic.Geometry(groundEligible,localPoint,farHint); // REACQUIRE_DIAGNOSTIC
   const double limit=farHint?std::numeric_limits<double>::infinity():1024.000001;
   int slots[3]={-1,-1,-1};double distance[3]={limit,limit,limit};
   if(state.reacquireNode>=0&&(size_t)state.reacquireNode<graph.points.size()){
     const auto& point=graph.points[state.reacquireNode];const FLOAT3D delta(point.x-position(1),point.y-position(2),point.z-position(3));
     const double d=double(delta(1))*delta(1)+double(delta(2))*delta(2)+double(delta(3))*delta(3);
+    if(diagnostic.active)diagnostic.retainedDistance2=d; // REACQUIRE_DIAGNOSTIC
     if(!state.blocked[state.reacquireNode]&&std::isfinite(d)&&(farHint?d>1024:d<=1024)&&
        (liquid||std::fabs(BotCecilHeight(player,delta))<=8)){slots[0]=state.reacquireNode;distance[0]=-1;}
     else if(d>1024){state.reacquireNode=-1;state.reacquireSince=-1;state.ClearEscape();}
@@ -1049,20 +1130,24 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
   }
   // A complete failed sweep is retried, so changing physical LOS is never a
   // permanent blacklist. Ordinary scanTick expiry does not restart the sweep.
-  if(slots[0]<0){state.ClearReacquireScan();return;}
+  diagnostic.Slots(slots,distance); // REACQUIRE_DIAGNOSTIC
+  if(slots[0]<0){state.ClearReacquireScan();return diagnostic.End("no_candidate_after_filters");}
   for(int k=0;k<3&&_botRayBudget>2;++k){
     if(slots[k]<0)continue;
     const auto& point=graph.points[slots[k]];const FLOAT3D target(point.x,point.y,point.z),lift=player->en_vGravityDir*-.8f;
-    const bool clear=BotSupplyClear(player,position+lift,target+lift)!=FALSE;
+    bool diagnosticProbeValid=false;SCecilSupplyCastDetail diagnosticCast; // REACQUIRE_DIAGNOSTIC
+    const bool clear=BotSupplyClear(player,position+lift,target+lift,NULL,diagnostic.active?&diagnosticProbeValid:NULL,diagnostic.active?&diagnosticCast:NULL)!=FALSE;
+    diagnostic.Probe(k,diagnosticProbeValid,diagnosticCast); // REACQUIRE_DIAGNOSTIC
     if(!clear){
       state.reacquireTried[slots[k]/8]|=(unsigned char)(1u<<(slots[k]%8));
       if(state.reacquireNode==slots[k]){state.reacquireNode=-1;state.reacquireSince=-1;state.ClearEscape();}
       continue;
     }
     const FLOAT3D delta=target-position;const double height=BotCecilHeight(player,delta);
+    diagnostic.Height(k,height); // REACQUIRE_DIAGNOSTIC
     const auto local=BotCecilBodyFrame(player).ToLocal(delta(1)+player->en_vGravityDir(1)*-height,
       delta(2)+player->en_vGravityDir(2)*-height,delta(3)+player->en_vGravityDir(3)*-height);
-    if(!liquid&&local.x*local.x+local.z*local.z<.25){state.reacquireTried[slots[k]/8]|=(unsigned char)(1u<<(slots[k]%8));continue;}
+    if(!liquid&&local.x*local.x+local.z*local.z<.25){state.reacquireTried[slots[k]/8]|=(unsigned char)(1u<<(slots[k]%8));diagnostic.Result(k,"planar_short");continue;}
     const auto aim=botcore::AimAt(local.x,0,local.z);const double yaw=player->en_plViewpoint.pl_OrientationAngle(1);
     const double error=std::remainder(aim.yaw_deg-yaw,360.0)*3.141592653589793/180;
     out.forward=.3*std::cos(error);out.strafe=BotCecilSettings().bStrafe?-.3*std::sin(error):0;
@@ -1074,8 +1159,12 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
     if(airContext){state.airMovementTime=now;state.airMovementEntity=player->en_ulID;
       state.airMovementGeneration=state.generation;state.airMovementNode=slots[k];
       for(int i=0;i<3;++i)state.airMovementGravity[i]=player->en_vGravityDir(i+1);}
-    return;
+    diagnostic.Result(k,"accepted"); // REACQUIRE_DIAGNOSTIC
+    return diagnostic.End("accepted_proposal");
   }
+  bool diagnosticDeferred=false; // REACQUIRE_DIAGNOSTIC
+  for(int k=0;diagnostic.active&&k<3;++k)if(diagnostic.hint[k].slot>=0&&!std::strcmp(diagnostic.hint[k].probe,"unattempted"))diagnosticDeferred=true; // REACQUIRE_DIAGNOSTIC
+  diagnostic.End(diagnosticDeferred?"hint_budget_deferred":"hints_exhausted"); // REACQUIRE_DIAGNOSTIC
 }
 static int BotCecilTravelHop(SSupplyState& state,const botcore::CecilMotion& move,const FLOAT3D& position,const FLOAT3D& gravity){
   const auto& graph=BotSupplyGraph();int hop=move.hop;

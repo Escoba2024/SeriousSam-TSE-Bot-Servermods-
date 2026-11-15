@@ -83,15 +83,18 @@ struct CPlayer:CEntity {
  CWorld* GetWorld(){return hasWorld?(worldOverride?worldOverride:&world):nullptr;}
 };
 struct CSessionProperties {BOOL sp_bInfiniteAmmo=FALSE,sp_bWeaponsStay=TRUE;};
-struct Network {CSessionProperties session;double time=0;double GetGameTime(){return time;}const void* GetSessionProperties(){return &session;}} network,*_pNetwork=&network;
+int gameTimeReads=0;
+struct Network {CSessionProperties session;double time=0;double GetGameTime(){++gameTimeReads;return time;}const void* GetSessionProperties(){return &session;}} network,*_pNetwork=&network;
 struct Timer {double TickQuantum=.05;} timer,*_pTimer=&timer;
 int _botRayBudget=20,bot_iRosterOffset=0;
 bool bot_bDiagnostics=false;int supplyDiagLines=0;std::string supplyDiagText;
+int reacquireDiagLines=0,reacquireDiagMaxLength=0;std::string reacquireDiagText;
 long _botSupplyMapSerial=7,_botSupplyMapReady=1;bool bot_bEnabled=true,bot_bSupplyNavigation=true;
 long InterlockedCompareExchange(long* p,long,long){return *p;}
 int hopCheckpointEvents=0;
 int lockApproachEvents=0,lastApproachNode=-1,lastApproachHop=-1;unsigned long lastApproachRef=0;int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0,groundReplanEvents=0;char lastEnd[32]={0};
 void BotLog(const char* format,...){
+ if(std::strstr(format,"[CecilReacquireDecision]")){++reacquireDiagLines;char text[2048];va_list a;va_start(a,format);const int length=std::vsnprintf(text,sizeof(text),format,a);va_end(a);reacquireDiagMaxLength=std::max(reacquireDiagMaxLength,length);reacquireDiagText+=text;}
  if(std::strstr(format,"[CecilSupplyDiag")){++supplyDiagLines;char text[2048];va_list a;va_start(a,format);std::vsnprintf(text,sizeof(text),format,a);va_end(a);supplyDiagText+=text;}
  if(std::strstr(format,"[CecilHopCheckpoint]"))++hopCheckpointEvents;
  if(std::strstr(format,"[CecilGroundReplan]"))++groundReplanEvents;
@@ -4223,7 +4226,229 @@ void blockedOriginReproduction(){
  BotCecilSafeMotion(&player,BotSupplyState(0),1169*.05,f,st,u,0,1,true);
  check(f==0&&st==0&&u==0&&rayCount>casts,"actual restored route still submits to physical wall/floor safety veto");
 }
+
+void reacquireDecisionFixture(){
+ setup();auto& s=BotSupplyState(0);s.anchor=-1;s.entity=player.en_ulID=42;
+ floorEntity.en_ulID=7;floorEntity.type=CEntity::RT_BRUSH;
+ player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
+ for(int i=0;i<3;++i)BotSupplyGraph().points[i].z=-5.f*(i+1);
+ gameTimeReads=reacquireDiagLines=reacquireDiagMaxLength=0;reacquireDiagText.clear();network.time=123.25;
+}
+void reacquireDecisionTests(){
+ reacquireDecisionFixture();bot_bDiagnostics=false;SCecilMove off;_botRayBudget=8;
+ BotCecilReacquire(&player,BotSupplyState(0),0,off);
+ check(reacquireDiagLines==0&&gameTimeReads==0&&off.active,"reacquire NoDiag emits nothing and reads no new native clock");
+ reacquireDecisionFixture();bot_bDiagnostics=true;SCecilMove on;_botRayBudget=8;
+ BotCecilReacquire(&player,BotSupplyState(0),0,on);
+ check(reacquireDiagLines==1&&gameTimeReads==1&&on.active&&reacquireDiagText.find("reason=accepted_proposal")!=std::string::npos,
+   "RED real Reacquire accepted proposal emits one diagnostic and one actual native clock");
+ reacquireDecisionFixture();bot_bDiagnostics=true;player.en_penReference=nullptr;SCecilMove support;_botRayBudget=3;
+ BotCecilReacquire(&player,BotSupplyState(0),0,support);
+ check(reacquireDiagLines==1&&rayCount==0&&reacquireDiagText.find("reason=support_budget_deferred")!=std::string::npos,
+   "RED null-reference support budget remains unknown without physical ray");
+ reacquireDecisionFixture();bot_bDiagnostics=true;wallMode=2;SCecilMove blocked;_botRayBudget=3;
+ BotCecilReacquire(&player,BotSupplyState(0),0,blocked);
+ check(reacquireDiagLines==1&&rayCount==1&&_botRayBudget==2&&reacquireDiagText.find("reason=hint_budget_deferred")!=std::string::npos&&
+   reacquireDiagText.find(",blocked,blocked,1,1,")!=std::string::npos&&reacquireDiagText.find("unattempted,unattempted,0,0")!=std::string::npos,
+   "RED one known blocked hint cannot classify two budget-deferred hints as blocked");
+ reacquireDecisionFixture();bot_bDiagnostics=true;invalidHitDistance=true;SCecilMove invalid;_botRayBudget=3;
+ BotCecilReacquire(&player,BotSupplyState(0),0,invalid);
+ check(reacquireDiagLines==1&&rayCount==1&&reacquireDiagText.find(",probe_unknown,probe_unknown,0,0,")!=std::string::npos&&
+   reacquireDiagText.find("blocked")==std::string::npos,
+   "RED false invalid native probe is unknown rather than physical obstruction");
+ // Each case executes the actual unchanged Reacquire body; these expectations
+ // describe observation only, not additional support or movement permission.
+ for(int kind=0;kind<8;++kind){
+  reacquireDecisionFixture();bot_bDiagnostics=true;player.en_penReference=nullptr;nearFootMode=2;_botRayBudget=8;
+  const char* reason="support_geometry_rejected";
+  if(kind==0){player.en_vCurrentTranslationAbsolute(2)=1;reason="support_motion_guard";}
+  if(kind==1){player.en_vGravityDir=FLOAT3D();reason="support_segment_unknown";}
+  if(kind==2){invalidHitDistance=true;reason="support_probe_unknown";}
+  if(kind==3)nearFootMode=0;
+  if(kind==4)nearFootMode=1;
+  if(kind==5)floorPolygon.bpo_pbplPlane=nullptr;
+  if(kind==6)nearFootDistance=.3001f;
+  if(kind==7){floorPlane.bpl_plAbsolute=FLOAT3D(0,0,1);reason="support_normal_rejected";}
+  SCecilMove move;BotCecilReacquire(&player,BotSupplyState(0),.05,move);
+  check(reacquireDiagLines==1&&!move.active&&reacquireDiagText.find(std::string("reason=")+reason)!=std::string::npos,
+    "RED actual support early return preserves its distinct known or unknown reason");
+  if(kind==0)check(reacquireDiagText.find("support_motion_known=1 support_valid=1 vertical_speed=-1")!=std::string::npos&&
+    reacquireDiagText.find("segment_known=0")!=std::string::npos,
+    "RED motion return copies the actual completed valid and verticalSpeed locals but no later segment");
+  if(kind==1)check(reacquireDiagText.find("segment_known=1 segment_valid=1 support_length=0")!=std::string::npos&&
+    reacquireDiagText.find("support_hit_known=0")!=std::string::npos,
+    "RED collapsed support segment copies zero length and valid helper result without a physical hit claim");
+  if(kind==2)check(reacquireDiagText.find("support_hit_known=0")!=std::string::npos&&
+    reacquireDiagText.find("support_normal_known=0")!=std::string::npos,
+    "RED invalid physical result leaves unaccepted support hit and normal unknown");
+  if(kind==6)check(reacquireDiagText.find("support_hit_known=1 support_distance=0.3001")!=std::string::npos&&
+    reacquireDiagText.find("support_normal_known=0")!=std::string::npos,
+    "RED geometry return retains the actual valid-cast distance and no unreached normal calculation");
+  if(kind==7){
+   const auto at=reacquireDiagText.find("support_normal_known=1 support=");double observed=999;
+   const bool parsed=at!=std::string::npos&&std::sscanf(reacquireDiagText.c_str()+at,"support_normal_known=1 support=%lf",&observed)==1;
+   std::printf("reacquire actual normal row: %s",reacquireDiagText.c_str());
+   check(parsed&&observed==0,"RED normal return retains its exact computed zero support dot product including signed zero");
+  }
+ }
+ reacquireDecisionFixture();bot_bDiagnostics=true;BotSupplyState(0).blocked.clear();_botRayBudget=8;SCecilMove shape;
+ BotCecilReacquire(&player,BotSupplyState(0),.05,shape);
+ check(reacquireDiagLines==1&&rayCount==0&&reacquireDiagText.find("reason=graph_shape_invalid")!=std::string::npos,
+   "RED invalid graph shape is reported at its original return");
+ reacquireDecisionFixture();bot_bDiagnostics=true;_botRayBudget=8;SCecilMove context;
+ BotCecilReacquire(&player,BotSupplyState(0),.05,context,true);
+ check(reacquireDiagLines==1&&rayCount==0&&!context.active&&reacquireDiagText.find("reason=context_only")!=std::string::npos,
+   "RED context-only support observation creates no target or physical LOS query");
+ reacquireDecisionFixture();bot_bDiagnostics=true;BotSupplyGraph().points[2].radius=0;_botRayBudget=8;SCecilMove metadata;
+ BotCecilReacquire(&player,BotSupplyState(0),.05,metadata);
+ check(metadata.active&&reacquireDiagLines==1&&reacquireDiagText.find("metadata=0")!=std::string::npos&&
+   reacquireDiagText.find("reason=accepted_proposal")!=std::string::npos,
+   "RED metadata invalidity stays descriptive and does not invent an early return");
+ reacquireDecisionFixture();bot_bDiagnostics=true;wallMode=2;_botRayBudget=8;SCecilMove exhausted;
+ BotCecilReacquire(&player,BotSupplyState(0),.05,exhausted);
+ check(reacquireDiagLines==1&&rayCount==3&&!exhausted.active&&reacquireDiagText.find("reason=hints_exhausted")!=std::string::npos,
+   "RED three actual blocked probes are distinct from budget-deferred candidates");
+ reacquireDecisionFixture();bot_bDiagnostics=true;BotSupplyGraph().points[0].z=0;_botRayBudget=8;SCecilMove empty;
+ BotCecilReacquire(&player,BotSupplyState(0),.05,empty);
+ check(reacquireDiagLines==1&&empty.active&&rayCount==1&&reacquireDiagText.find(",empty_segment,planar_short,1,0,")!=std::string::npos,
+   "RED zero-length clear segment is not mislabeled as an executed native cast");
+ reacquireDecisionFixture();bot_bDiagnostics=true;auto& rate=BotSupplyState(0);
+ for(double now:{0.,.05,.95,1.}){SCecilMove move;_botRayBudget=8;BotCecilReacquire(&player,rate,now,move);}
+ check(reacquireDiagLines==2&&gameTimeReads==2,"RED new decision diagnostics are limited to one line and native clock read per policy second");
+ rate.ClearGoal();rate.ClearAvoidance();SCecilMove cleared;_botRayBudget=8;BotCecilReacquire(&player,rate,1.05,cleared);
+ check(reacquireDiagLines==2&&gameTimeReads==2,"RED goal hint and scan clear do not reopen diagnostic rate");
+ for(double now:{.5,double(NAN),std::numeric_limits<double>::infinity()}){SCecilMove move;_botRayBudget=8;BotCecilReacquire(&player,rate,now,move,true);}
+ check(reacquireDiagLines==2&&gameTimeReads==2,"RED backward and nonfinite policy clocks cannot create diagnostic bursts");
+ rate.Reset();SCecilMove reset;_botRayBudget=8;BotCecilReacquire(&player,rate,1.1,reset,true);
+ check(reacquireDiagLines==3&&gameTimeReads==3,"RED explicit state reset begins a new diagnostic lifecycle");
+ reacquireDecisionFixture();bot_bDiagnostics=true;network.time=NAN;_botRayBudget=8;SCecilMove badClock;
+ BotCecilReacquire(&player,BotSupplyState(0),0,badClock);
+ check(badClock.active&&reacquireDiagLines==1&&gameTimeReads==1&&reacquireDiagText.find("native_time_valid=0")!=std::string::npos,
+   "RED nonfinite native clock remains unknown and cannot change the movement proposal");
+ reacquireDecisionFixture();bot_bDiagnostics=true;_pNetwork=nullptr;_botRayBudget=8;SCecilMove noNetwork;
+ BotCecilReacquire(&player,BotSupplyState(0),0,noNetwork);_pNetwork=&network;
+ check(noNetwork.active&&reacquireDiagLines==1&&gameTimeReads==0&&reacquireDiagText.find("native_time_valid=0")!=std::string::npos,
+   "RED absent native clock source emits unknown without an invented time or getter call");
+ bot_bDiagnostics=false;
+}
+
+bool sameReacquireOperationalState(const SSupplyState& a,const SSupplyState& b){
+ bool equal=a.blocked==b.blocked&&a.worldLock==b.worldLock&&a.anchor==b.anchor&&a.goal==b.goal&&a.hop==b.hop&&
+   a.entity==b.entity&&a.generation==b.generation&&a.rng==b.rng&&a.owned==b.owned&&a.goalEntity==b.goalEntity&&
+   a.goalSince==b.goalSince&&a.goalDeadline==b.goalDeadline&&a.scanTick==b.scanTick&&a.spawnTick==b.spawnTick&&
+   a.reacquireNode==b.reacquireNode&&a.reacquireRejected==b.reacquireRejected&&
+   a.reacquireSince==b.reacquireSince&&a.reacquireRetryAfter==b.reacquireRetryAfter&&
+   a.reacquireScanTime==b.reacquireScanTime&&a.reacquireScanLiquid==b.reacquireScanLiquid&&a.reacquiring==b.reacquiring&&
+   a.groundRecoveryTime==b.groundRecoveryTime&&a.groundObservationTime==b.groundObservationTime&&a.recoveryMovementTime==b.recoveryMovementTime&&
+   a.airMovementTime==b.airMovementTime&&a.airMovementEntity==b.airMovementEntity&&a.airMovementGeneration==b.airMovementGeneration&&
+   a.airMovementNode==b.airMovementNode&&a.escapeUntil==b.escapeUntil&&a.escapeAfter==b.escapeAfter&&
+   a.escapeClock==b.escapeClock&&a.escapeSide==b.escapeSide&&a.escapeReverseUsed==b.escapeReverseUsed&&
+   a.avoidNode==b.avoidNode&&a.avoidUntil==b.avoidUntil&&a.heldNode==b.heldNode&&
+   a.navigator.ResetSerial()==b.navigator.ResetSerial()&&a.navigator.SourceSlot(a.goal)==b.navigator.SourceSlot(b.goal)&&
+   a.navigator.HasCommittedEdge(a.goal)==b.navigator.HasCommittedEdge(b.goal);
+ for(int i=0;i<3;++i)equal=equal&&a.reacquireScanPosition[i]==b.reacquireScanPosition[i]&&
+   a.reacquireScanGravity[i]==b.reacquireScanGravity[i]&&a.airMovementGravity[i]==b.airMovementGravity[i]&&
+   a.escapeWorld[i]==b.escapeWorld[i]&&a.escapeOrigin[i]==b.escapeOrigin[i]&&
+   a.escapeBlockPosition[i]==b.escapeBlockPosition[i]&&a.escapeRequest[i]==b.escapeRequest[i];
+ for(size_t i=0;i<sizeof(a.reacquireTried);++i)equal=equal&&a.reacquireTried[i]==b.reacquireTried[i];
+ return equal;
+}
+void reacquireDecisionOperationalPairs(){
+ for(int kind=0;kind<18;++kind){
+  SSupplyState result[2];SCecilMove moves[2];int counts[2][9];
+  for(int mode=0;mode<2;++mode){
+   reacquireDecisionFixture();bot_bDiagnostics=mode;auto& s=BotSupplyState(0);_botRayBudget=8;
+   s.goal=2;s.goalEntity=991;s.goalSince=.25;s.goalDeadline=17;s.rng=1234;
+   if(kind>=1&&kind<=8){player.en_penReference=nullptr;nearFootMode=2;}
+   if(kind==1)_botRayBudget=3;
+   if(kind==2)player.en_vCurrentTranslationAbsolute(2)=1;
+   if(kind==3)player.en_vGravityDir=FLOAT3D();
+   if(kind==4)invalidHitDistance=true;
+   if(kind==5)nearFootMode=0;
+   if(kind==6)floorPolygon.bpo_ulFlags=BPOF_PASSABLE;
+   if(kind==7)floorPlane.bpl_plAbsolute=FLOAT3D(0,0,1);
+   if(kind==9){wallMode=2;_botRayBudget=3;}
+   if(kind==10)wallMode=2;
+   if(kind==11)invalidHitDistance=true;
+   if(kind==12)BotSupplyGraph().points[0].z=0;
+   if(kind==13)BotSupplyGraph().points[2].radius=0;
+   if(kind==14){for(auto& p:BotSupplyGraph().points)p.z-=100;}
+   if(kind==15){player.m_pstState=PST_FALL;player.en_penReference=nullptr;BotCecilSettings().bAvoidPits=0;}
+   if(kind==16){player.m_pstState=PST_SWIM;player.en_fImmersionFactor=1;}
+   if(kind==17){s.reacquireNode=0;s.reacquireSince=-6;}
+   BotCecilReacquire(&player,s,.05,moves[mode]);result[mode]=s;
+   counts[mode][0]=_botRayBudget;counts[mode][1]=rayCount;counts[mode][2]=worldLookups;
+   counts[mode][3]=normalizeCalls;counts[mode][4]=sectorTests;counts[mode][5]=worldTests;
+   counts[mode][6]=rayConstructions;counts[mode][7]=legacyCastCalls;counts[mode][8]=gameTimeReads;
+  }
+  const auto& a=moves[0];const auto& b=moves[1];
+  check(a.active==b.active&&a.ownsMovement==b.ownsMovement&&a.itemGoal==b.itemGoal&&a.urgent==b.urgent&&
+    a.followGoal==b.followGoal&&a.useControl==b.useControl&&a.flightGoal==b.flightGoal&&a.activeFlight==b.activeFlight&&
+    a.itemKind==b.itemKind&&a.forward==b.forward&&a.strafe==b.strafe&&a.up==b.up&&a.yaw_delta==b.yaw_delta&&
+    a.pitch_delta==b.pitch_delta&&a.flags==b.flags&&a.buttons==b.buttons,
+    "diagnostic on/off actual Reacquire movement output is identical");
+  check(sameReacquireOperationalState(result[0],result[1]),
+    "diagnostic on/off retains all Reacquire-touched operational fields bitmaps navigator and goal deadlines");
+  bool queries=true;for(int i=0;i<8;++i)queries=queries&&counts[0][i]==counts[1][i];
+  check(queries&&counts[0][8]==0&&counts[1][8]==1,
+    "diagnostic adds exactly one native clock read and no casts lookups normalization or budget change");
+ }
+ bot_bDiagnostics=false;
+}
+
+void reacquireDecisionBounds(){
+ reacquireDecisionFixture();bot_bDiagnostics=true;auto& s=BotSupplyState(0);SCecilMove first;_botRayBudget=8;
+ BotCecilReacquire(&player,s,0,first);const int initial=s.reacquireNode;
+ for(double now:{5.,6.}){SCecilMove move;_botRayBudget=2;BotCecilReacquire(&player,s,now,move);
+  check(!move.active&&_botRayBudget==2,"diagnostic cannot release motion when original LOS reserve is exhausted");
+  if(now==5)check(s.reacquireNode==initial&&s.reacquireSince==0,"diagnostic does not renew the retained hint's original six-second attempt");
+ }
+ check(s.reacquireNode==-1&&s.reacquireSince==-1&&s.reacquireRejected==initial&&s.reacquireRetryAfter==12,
+   "actual six-second expiry retains the unchanged six-second rejection deadline");
+ SCecilMove backedOff;_botRayBudget=8;BotCecilReacquire(&player,s,7,backedOff);
+ check(backedOff.active&&s.reacquireNode!=initial&&s.reacquireRetryAfter==12,
+   "diagnostic does not erase rejection when a different original hint is proposed");
+ reacquireDecisionFixture();bot_bDiagnostics=true;auto& tried=BotSupplyState(0);
+ tried.reacquireTried[0]=7;tried.reacquireScanTime=0;
+ for(int i=0;i<3;++i){tried.reacquireScanPosition[i]=player.pl.pl_PositionVector(i+1);tried.reacquireScanGravity[i]=player.en_vGravityDir(i+1);}
+ SCecilMove noCandidate;_botRayBudget=8;BotCecilReacquire(&player,tried,.05,noCandidate);
+ check(!noCandidate.active&&rayCount==0&&reacquireDiagText.find("reason=no_candidate_after_filters")!=std::string::npos&&
+   reacquireDiagText.find("geometry_checked=1 local_point=1 far_hint=0")!=std::string::npos&&tried.reacquireTried[0]==0,
+   "complete tried sweep is not relabeled as absent local geometry and keeps its original reset");
+ farHintFixture();bot_bDiagnostics=true;gameTimeReads=reacquireDiagLines=0;reacquireDiagText.clear();_botRayBudget=8;
+ SCecilMove far;BotCecilReacquire(&player,BotSupplyState(0),0,far);
+ check(far.active&&reacquireDiagLines==1&&reacquireDiagText.find("geometry_checked=1 local_point=0 far_hint=1")!=std::string::npos,
+   "actual far-hint control records geometric absence without manufacturing it from failed LOS");
+ reacquireDecisionFixture();bot_bDiagnostics=true;reacquireDiagText.reserve(4096);const size_t before=allocations;
+ _botRayBudget=8;SCecilMove allocation;measuring=true;BotCecilReacquire(&player,BotSupplyState(0),0,allocation);measuring=false;
+ check(allocations==before&&allocation.active,"new fixed decision observation and existing proposal allocate no heap memory");
+ reacquireDecisionFixture();bot_bDiagnostics=true;auto& extreme=BotSupplyState(0);
+ extreme.entity=extreme.generation=extreme.goalEntity=std::numeric_limits<uint32_t>::max();
+ player.en_ulID=std::numeric_limits<uint32_t>::max();
+ extreme.anchor=extreme.goal=extreme.reacquireNode=extreme.reacquireRejected=std::numeric_limits<int>::min();
+ extreme.goalDeadline=extreme.reacquireSince=extreme.reacquireRetryAfter=std::numeric_limits<double>::max();
+ network.time=std::numeric_limits<double>::max();_botRayBudget=std::numeric_limits<int>::max();
+ SCecilReacquireDiagnostic maximum(&player,extreme,std::numeric_limits<double>::max(),true);
+ maximum.Position(FLOAT3D(std::numeric_limits<float>::max(),-std::numeric_limits<float>::max(),std::numeric_limits<float>::max()));
+ maximum.Geometry(true,true,true);maximum.support="support_geometry_rejected";
+ maximum.Motion(true,-std::numeric_limits<double>::max());
+ const double maximumLength=-std::numeric_limits<double>::max();maximum.Segment(true,maximumLength);
+ maximum.Hit(maximumLength);maximum.Normal(maximumLength);
+ for(int k=0;k<3;++k){auto& h=maximum.hint[k];h.slot=std::numeric_limits<int>::min();
+  h.distance2=h.height=h.length=h.hitDistance=-std::numeric_limits<double>::max();
+  h.heightKnown=h.probeValid=h.cast=true;h.probe="probe_unknown";h.result="probe_unknown";}
+ maximum.End("support_geometry_rejected");
+ check(reacquireDiagLines==1&&reacquireDiagMaxLength>0&&reacquireDiagMaxLength<2048&&
+   reacquireDiagText.size()==size_t(reacquireDiagMaxLength)&&reacquireDiagText.back()=='\n',
+   "all three fixed hint records and extreme finite numbers fit complete original 2048-byte BotLog buffer");
+ std::printf("reacquire diagnostic extreme formatted bytes=%d\n",reacquireDiagMaxLength);
+ bot_bDiagnostics=false;
+}
+
 int main(){
+ reacquireDecisionTests();
+ reacquireDecisionOperationalPairs();
+ reacquireDecisionBounds();
  groundedAcquireHandshakeReproduction();
  groundedRetainedAnchorGuards();
  blockedOriginReproduction();
@@ -5377,6 +5602,49 @@ int main(){
 }
 '''
 
+REACQUIRE_ORIGINAL_SHA256 = "88950482f46137a5af41a6214451221855be8aa5c4c41ac25f443ddea06493df"
+
+def reacquire_original_body(source):
+    start = source.index("static void BotCecilReacquire(")
+    return source[start:source.index("static int BotCecilTravelHop(", start)]
+
+def reverse_reacquire_diagnostic(body):
+    """Undo ONLY named passive additions; retain every original guard byte."""
+    body = "".join(line for line in body.splitlines(keepends=True)
+                   if not line.rstrip().endswith("// REACQUIRE_DIAGNOSTIC"))
+    reasons = ("support_budget_deferred", "support_motion_guard", "support_segment_unknown",
+               "support_probe_unknown", "support_geometry_rejected", "support_normal_rejected",
+               "graph_shape_invalid", "context_only", "no_candidate_after_filters", "accepted_proposal")
+    for reason in reasons:
+        body = body.replace('return diagnostic.End("'+reason+'");', "return;")
+    body = body.replace(';diagnostic.Result(k,"planar_short");continue;', ';continue;')
+    body = body.replace("BotSupplyClear(player,position+lift,target+lift,NULL,diagnostic.active?&diagnosticProbeValid:NULL,diagnostic.active?&diagnosticCast:NULL)",
+                        "BotSupplyClear(player,position+lift,target+lift)")
+    body = body.replace("diagnostic.Segment(BotCecilRayLength(from,to,length),length)",
+                        "BotCecilRayLength(from,to,length)")
+    return body
+
+def verify_reacquire_source(source):
+    body = reacquire_original_body(source)
+    restored = reverse_reacquire_diagnostic(body)
+    assert hashlib.sha256(restored.encode()).hexdigest() == REACQUIRE_ORIGINAL_SHA256, "original Reacquire body changed beyond passive diagnostic additions"
+    # Removing an actual gameplay guard must remain visible to this proof.
+    mutant = body.replace("std::fabs(height)<=8", "std::fabs(height)<=9", 1)
+    assert mutant != body
+    assert hashlib.sha256(reverse_reacquire_diagnostic(mutant).encode()).hexdigest() != REACQUIRE_ORIGINAL_SHA256
+    # Conservative bound, independent of the concrete extreme-value C++ row:
+    # even booleans receive a full signed-int allowance and unsigned fields a
+    # full 64-bit allowance (Retail IDs are32bit). Finite double6g needs<=14,
+    # valid nonnegative native9f<=320; allow32 for each internal enum (max26).
+    line = re.search(r'BotLog\("(\[CecilReacquireDecision\][^"\n]+)', source)[1].replace(r"\n", "\n")
+    widths = {"%lu":20, "%d":11, "%.6g":14, "%.9f":320, "%s":32}
+    parts = re.split(r"(%lu|%d|%\.6g|%\.9f|%s)", line)
+    assert all("%" not in part or part in widths for part in parts)
+    bound = sum(widths.get(part, len(part)) for part in parts)
+    assert bound < 2048, "decision diagnostic could truncate original BotLog buffer"
+    assert all(len(reason)<=32 for reason in re.findall(r'End\("([a-z_]+)"\)', body))
+    print("Reacquire diagnostic conservative format bound", bound, "bytes + NUL <2048", flush=True)
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--support-dir", type=Path)
@@ -5409,6 +5677,8 @@ def main():
     here = Path(__file__).resolve().parent
     support = args.support_dir or here
     source = (here / "BotSupplyNative.h").read_text()
+    verify_reacquire_source(source)
+    print("Reacquire original body inverse", REACQUIRE_ORIGINAL_SHA256, "height-guard mutation rejected", flush=True)
     # Keep actual function bodies; remove only the platform loader and includes.
     start = source.index("static void BotSupplyUpdateNavigation(")
     end = source.index("static botcore::CecilFrame BotCecilBodyFrame(", start)
