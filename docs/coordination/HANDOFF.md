@@ -1,4 +1,4 @@
-# Aktueller Handoff – 15.11.2026, 05:43 UTC
+# Aktueller Handoff – 15.11.2026, 06:04 UTC
 
 Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker.
 Reguläres lokales Terminal funktioniert; RDC bleibt gesperrt und unbenutzt.
@@ -17,10 +17,47 @@ maxGap1,001422s; keine Budgetverletzung, Child1→FAIL_HOST_OBSERVATION.
 RootEVfirst-state-wine-identity-trace-root-restore.json und
 first-state-wine-identity-trace-closed-region-audit.json.
 
-Nächste getrennte Arbeiten: a4_diagnosis prüft tatsächliche verzögerte
-Getterrestaurierung/korrekten Guardzeitpunkt mit VM-RED, erstDesignruling;
-candidate_audit bereitet gleichenDevDedicatedfe4 beiPowerupflag0/1 isoliert
-vor. Root allein Native/Integration. NeueTrace054021-Rohdaten noch071sichern.
+Aktuelle Vorbereitung, beide Workerquieszent/keine Native-/Buildjobs:
+- Getterboundary100ce84/6fad2b3/aff8ac3 integriert7f446ac/b80994f/8e201a1.
+  Root35Tests12,553sPASS; alterGetterfault und remove-onlyLücken echteVM-RED.
+  Rootfreeze `/srv/tse-a1-first-state-getter-boundary-root-frozen-20261115`,
+  Manifest3a93993f73667bab7d2e04d7a50424e2444d1ab7ae79cfe4348cc9271c7bbbd8,
+  Runnerdce67282253c950b862923e8dcf0c994cd507e5029497ee45c08bb54066576c8,
+  nestede7c373a5d440c77f8ae7424415e125ebb7303f2ea34ae031575ce03751e35242.
+  151/72Pins,5Changed/90same, Peer51d2b1ca PASS_SCOPE nurRootdelta.
+  ErsterFreezescript-Entwurf scheiterte vorScript-/Paketwrite anüberlappender
+  Ersatzassertion; korrigiert/offengelegt. RootControlreuse06:01:48 enger
+  unveränderterRunner/10Helfer/Fixturepinsbeleg, keine neueKontrollbeobachtung.
+  Wrapper1f4818a4/Outerc1776495 braucht072vollDrive; noch nicht ausgeführt.
+- Powerup-OFF0/ON1 neueVorbereitung, tatsächlicherWriter-WT
+  `/srv/tse-powerup-contrast-20261115`, Branchcodex/20261115-powerup-contrast,
+  Base30dfef2. AlterPitchWT unverändert. 57d30dd6/8730c3e9 integriertcc60fba/fd42815.
+  Root15Tests0,361sPASS/volle2Sourceinversen/alle221+67+43 erwarteten Hashwerte
+  ausParent/Rootsourcesabgeleitet,81fe4Pins. Genaugleichefe4Dedicated/048Bots/
+  Original20FPS/Hard2/Red600diag0, Profile048ExpertRifle/Tier5/marksman erhalten
+  (altesMemoDemon falsch). GenauFilterflag0/1alsGameplaykontrast, Censuspflicht.
+  RootOFF0 `/srv/tse-powerup-off0-048-red600-root-frozen-20261115` Manifest
+  a77a93a5f539e064df56aaa9d62fd4a9d24d66ff95496ce9e9dea0ee1d1f7339,
+  Runner54e3761d72794baa334c78226c08a83e9eeaecf952784361c491d070000c12c9.
+  RootON1 entsprechenderon1-Pfad, Manifeste1930b8b642c416f7b565affc53c554bf798478faa0dae3870898b973008d384,
+  Runner39c796163a86a8e45ac0a5311111090ed85c4f0d58565bc76392967f011177f2.
+  Peerba4240dd PASS_SCOPE ausschließlichRootdelta/Pins,2Changed/68samejeArm,
+  keineunabhängigeeigenePolicyprüfung. WrapperOFFe3146f43/Outer86720029,
+  ONf4589a74/Outerc563fff2, jeweils600s/keineautomatischeSequenz/Retry.
+  Diese beiden Nativearme noch NICHT ausgeführt.
+
+Nächste ausführbare Folge: Source081veröffentlichen/tatsächlichfetchdiffprüfen,
+072allePakete/Reviews/WrappervollDrive+Dateimetadaten sichern; frischePreflights/
+Quieszenz/Locks; kurzerGettertrace; vollständigeRootrestore; danachOFF600 und
+nachvollständigemRootrestoreON600 einzeln. Keine unveränderten Langzeittests
+wiederholen. Bei neuen Fehlern konkreteUrsache prüfen, keinenPASSumetikettieren.
+
+NeueTrace054021-Rohdaten in071 vollständig gesichert:2823603B,
+SHAc5122d0b6d519fda97377467f941ec6868953c02e1321170383292e722637ddd,
+Drive1tHtJv1Ap4YCV3tm1P68-NZL4cXki2NzS. Vollrücklesen+751Dateien/21406111B
+zweimalSHA/UID/GID/mode/mtime_nsPASS05:49:06, enthält auchgezielte027Diagnose/
+Enumerratum. Source080 tatsächlichgefetchterRemote1cb1abc7213f26935b967e43e90ecdcf64a88e58,
+exaktlokalerbc11b1b/Tree1c33c323. Bundlebc11b1bbenötigt30dfef2in070.
 
 Beide First-State-Methodenarme sind
 beendet, inklusive Worker und aller drei regulär geschlossenen Spielrollen.
