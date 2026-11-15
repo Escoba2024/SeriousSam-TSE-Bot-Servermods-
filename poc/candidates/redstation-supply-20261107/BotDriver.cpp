@@ -1547,7 +1547,8 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
           continue;
         }
         const double maxStrafe=BotCecilSettings().bStrafe?Clamp(bot_fStrafeScale,0.0f,1.0f):0;
-        cecilFloorStatus=BotCecilSafeMotion(player,BotSupplyState(iLP),now,moveFactor,humanStrafe,cecilUp,finalYaw,maxStrafe,supplyActive!=FALSE);
+        cecilFloorStatus=BotCecilSafeMotion(player,BotSupplyState(iLP),now,moveFactor,humanStrafe,cecilUp,finalYaw,maxStrafe,supplyActive!=FALSE,
+          BotCecilCombatRecoveryRequested(automatic!=FALSE,humanMode!=FALSE,targetVisible!=FALSE,supplyActive!=FALSE,moveFactor,humanStrafe,cecilUp));
       }
     }
 

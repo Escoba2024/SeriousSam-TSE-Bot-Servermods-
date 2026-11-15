@@ -2058,6 +2058,161 @@ template<class P>auto nativeProof(P* p,const CCastRay& ray,double length,int)->d
  return BotCecilNativeContactFloor(p,ray,length);
 }
 template<class P>bool nativeProof(P*,const CCastRay&,double,long){return false;}
+template<class T>auto combatRecoveryRequest(bool automatic,bool human,bool visible,bool owner,T f,T st,T up,int)
+ ->decltype(BotCecilCombatRecoveryRequested(automatic,human,visible,owner,f,st,up)){
+ return BotCecilCombatRecoveryRequested(automatic,human,visible,owner,f,st,up);
+}
+template<class T>bool combatRecoveryRequest(bool,bool,bool,bool,T,T,T,long){return false;}
+template<class T>auto combatRecoverySafety(double now,T& f,T& st,T& up,bool request,int,double maxStrafe=1,double yaw=0)
+ ->decltype(BotCecilSafeMotion(&player,BotSupplyState(0),now,f,st,up,0,1,false,request)){
+ return BotCecilSafeMotion(&player,BotSupplyState(0),now,f,st,up,yaw,maxStrafe,false,request);
+}
+template<class T>int combatRecoverySafety(double now,T& f,T& st,T& up,bool,long,double maxStrafe=1,double yaw=0){
+ return BotCecilSafeMotion(&player,BotSupplyState(0),now,f,st,up,yaw,maxStrafe,false);
+}
+void automaticCombatRecovery(){
+ nativeContactFixture();bool escaped=false,preStall=false,capped=true,navUntouched=true;
+ for(int tick=1;tick<=70;++tick){
+  _botRayBudget=16;const auto proposal=BotSupplyTick(&player,0,tick,1000);
+  const bool navOwner=bridgeDriverOwns(true,proposal,&player,true);
+  double f=.8,st=.4,up=0;
+  const int result=combatRecoverySafety(tick*.05,f,st,up,true,0);
+  escaped|=result==2;if(tick<41)preStall|=result==2;
+  if(result==2)capped&=std::hypot(f,st)<=.300001&&up==0;
+  auto& s=BotSupplyState(0);navUntouched&=!navOwner&&s.reacquireNode==0&&near(s.reacquireSince,.05)&&
+    s.reacquireTried[0]==0&&s.reacquireRejected==-1&&s.flightAccepted<0;
+ }
+ check(escaped&&!preStall&&capped&&navUntouched,
+   "RED separate opt-in own automatic combat reaches bounded current-contact ground recovery without acquiring NAV authority");
+ check(combatRecoveryRequest(true,true,true,false,.8,.4,0.,0),
+   "RED actual production combat request helper admits only its own ordinary visible nonneutral ground request");
+ nativeContactFixture();floorPlane.bpl_plAbsolute=FLOAT3D(0,1,0);
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);double f=.8,st=.4,up=0;
+ const int fast=combatRecoverySafety(.05,f,st,up,true,0);
+ check(fast==1&&near(f,.8)&&near(st,.4),"nonstalled combat request retains ordinary speed instead of blanket recovery cap");
+}
+int warmCombatRecovery(){
+ nativeContactFixture();
+ for(int tick=1;tick<=70;++tick){
+  _botRayBudget=16;BotSupplyTick(&player,0,tick,1000);double f=.8,st=.4,up=0;
+  if(combatRecoverySafety(tick*.05,f,st,up,true,0)==2)return tick;
+ }
+ return -1;
+}
+void negativeMapCombatRecovery(){
+ nativeContactFixture();_botSupplyMapSerial=-1;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ auto& s=BotSupplyState(0);
+ check(!s.combatGroundFresh.valid,"negative map serial before actual planner capture cannot create combat ground authority");
+ double f=.8,st=.4,up=0;combatRecoverySafety(.05,f,st,up,true,0);
+ check(!s.combatGroundOwned&&!s.groundStalled&&!s.groundEscapeActive,
+   "negative map serial before capture denies new combat recovery domain");
+ nativeContactFixture();_botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ auto& fresh=BotSupplyState(0);
+ check(fresh.combatGroundFresh.valid,"negative map adversary starts from genuinely captured fresh support");
+ _botSupplyMapSerial=-1;fresh.combatGroundFresh.map=-1;
+ f=.8;st=.4;up=0;combatRecoverySafety(.05,f,st,up,true,0);
+ check(!fresh.combatGroundOwned&&!fresh.groundStalled&&!fresh.groundEscapeActive,
+   "fresh combat validator independently rejects matching negative map serial");
+}
+void automaticCombatRecoveryGuards(){
+ for(int bits=0;bits<16;++bits)
+  check(combatRecoveryRequest((bits&1)!=0,(bits&2)!=0,(bits&4)!=0,(bits&8)!=0,.8,.4,0.,0)==(bits==7),
+    "actual combat helper requires automatic human policy visible target and rejected NAV owner");
+ for(int invalid=0;invalid<5;++invalid){
+  const double f=invalid==0?0:invalid==1?.049999:invalid==2?NAN:.8;
+  const double st=invalid==3?INFINITY:0,up=invalid==4?.1:0;
+  check(!combatRecoveryRequest(true,true,true,false,f,st,up,0),"neutral small nonfinite or vertical combat input cannot request recovery");
+ }
+ check(combatRecoveryRequest(true,true,true,false,.05,0.,0.,0),"existing exact nonneutral .05 boundary unchanged");
+ // Each invalidation occurs after this tick's actual planner captured its pin.
+ for(int invalid=0;invalid<27;++invalid){
+  const int first=warmCombatRecovery();check(first>40,"combat guard fixture has an actual2s stall and authorized escape");
+  auto& s=BotSupplyState(0);_botRayBudget=16;BotSupplyTick(&player,0,first+1,1000);
+  CWorld foreignWorld;CEntity foreignRef;CBrushPolygon foreignPolygon=floorPolygon;
+  double now=(first+1)*.05,f=.8,st=.4,up=0;bool request=true;
+  switch(invalid){
+   case 0:s.groundObservationTime-=.05;break;
+   case 1:s.recoveryMovementTime-=.05;break;
+   case 2:s.groundRecoveryTime-=.05;break;
+   case 3:s.groundRecoveryTime=NAN;break;
+   case 4:s.combatGroundFresh.valid=false;break;
+   case 5:++player.en_ulID;break;
+   case 6:++s.generation;break;
+   case 7:s.combatGroundFresh.world=&foreignWorld;break;
+   case 8:++_botSupplyMapSerial;break;
+   case 9:player.en_penReference=&foreignRef;break;
+   case 10:player.en_pbpoStandOn=&foreignPolygon;break;
+   case 11:floorEntity.flags=ENF_DELETED;break;
+   case 12:player.world.wo_cenEntities.clear();break;
+   case 13:player.health=0;break;
+   case 14:player.m_pstState=PST_FALL;break;
+   case 15:player.en_vGravityDir=FLOAT3D(0,1,0);break;
+   case 16:now-=.01;break;
+   case 17:f=st=0;break;
+   case 18:up=.1;break;
+   case 19:request=false;break;
+   case 20:player.body.m[0][0]=2;break;
+   case 21:++s.combatGroundFresh.referenceID;break;
+   case 22:s.combatGroundFresh.time=NAN;break;
+   case 23:s.combatGroundFresh.time-=.05;break;
+   case 24:player.health=NAN;break;
+   case 25:player.m_penWeapons=nullptr;break;
+   case 26:player.flags=ENF_DELETED;break;
+  }
+  combatRecoverySafety(now,f,st,up,request,0);
+  check(!s.combatGroundOwned&&!s.groundStalled&&!s.groundEscapeActive&&s.escapeUntil==0,
+    "stale support unknown pin changed life world reference contact gravity clock nointent owner or invalidframe revokes combat episode");
+  check(s.reacquireTried[0]==0&&s.reacquireRejected==-1&&s.flightAccepted<0,
+    "invalid combat input cannot mutate NAV hint rejection or grant flight acceptance");
+ }
+ // A new fresh context is not allowed to inherit the old context's stationary time.
+ for(int change=0;change<3;++change){
+  int tick=warmCombatRecovery();auto& s=BotSupplyState(0);
+  if(change==0)++_botSupplyMapSerial;
+  else if(change==1)++s.generation;
+  else player.en_ulID=101;
+  _botRayBudget=16;BotSupplyTick(&player,0,++tick,1000);double f=.8,st=.4,up=0;
+  combatRecoverySafety(tick*.05,f,st,up,true,0);
+  check(s.combatGroundOwned&&!s.groundStalled&&!s.groundEscapeActive,
+    "fresh changed map generation or entity restarts combat timer rather than inheriting2s stall");
+ }
+ int tick=warmCombatRecovery();auto& held=BotSupplyState(0);const double until=held.escapeUntil;
+ const FLOAT3D oldWorld(held.escapeWorld[0],held.escapeWorld[1],held.escapeWorld[2]);
+ _botRayBudget=16;BotSupplyTick(&player,0,++tick,1000);double f=-.7,st=.3,up=0;
+ check(combatRecoverySafety(tick*.05,f,st,up,true,0,1,90)==2&&near(held.escapeUntil,until)&&
+   near(held.escapeWorld[0],oldWorld(1))&&near(held.escapeWorld[1],oldWorld(2))&&near(held.escapeWorld[2],oldWorld(3))&&std::hypot(f,st)<=.300001,
+   "combat verified world-direction hold survives changed combat intent and yaw without renewing fixed .6s expiry");
+ _botRayBudget=16;BotSupplyTick(&player,0,++tick,1000);f=.8;st=.4;up=0;
+ BotCecilSafeMotion(&player,held,tick*.05,f,st,up,0,1,true);
+ check(!held.combatGroundOwned&&!held.groundStalled&&!held.groundEscapeActive,
+   "switch from combat recovery to real NAV owner cannot inherit combat stall or held action");
+ tick=warmCombatRecovery();auto& gap=BotSupplyState(0);tick+=6;
+ _botRayBudget=16;BotSupplyTick(&player,0,tick,1000);f=.8;st=.4;up=0;combatRecoverySafety(tick*.05,f,st,up,true,0);
+ check(!gap.groundStalled&&!gap.groundEscapeActive,"existing .25s observation-gap bound resets combat held recovery");
+ tick=warmCombatRecovery();player.health=0;_botRayBudget=16;BotSupplyTick(&player,0,tick+1,1000);
+ check(!BotSupplyState(0).combatGroundFresh.valid&&!BotSupplyState(0).combatGroundOwned,
+   "death clears combat metadata even when Driver correctly skips final dead-player safety");
+ tick=warmCombatRecovery();BotSupplyState(0).Reset();
+ check(!BotSupplyState(0).combatGroundFresh.valid&&!BotSupplyState(0).combatGroundHistory.valid&&!BotSupplyState(0).combatGroundOwned,
+   "map reset clears fresh and held combat metadata");
+ for(int mode=0;mode<4;++mode){
+  nativeContactFixture();bool bounded=true,escaped=false,navClean=true;const double cap=mode==0?0:mode==1?.1:1;
+  if(mode==0)BotCecilSettings().bStrafe=0;
+  if(mode==2)floorMode=0; // Definite NoFloor must NEVER reject a NAV hint in combat.
+  for(int t=1;t<=80;++t){
+   _botRayBudget=16;BotSupplyTick(&player,0,t,1000);if(mode==3)_botRayBudget=0;
+   const int before=rayCount;f=.8;st=.4;up=0;
+   const int result=combatRecoverySafety(t*.05,f,st,up,true,0,cap);
+   escaped|=result==2;
+   bounded&=_botRayBudget>=0&&rayCount-before<=16;
+   if(result==2)bounded&=std::hypot(f,st)<=.300001&&std::fabs(st)<=cap&&up==0;
+   navClean&=BotSupplyState(0).reacquireTried[0]==0&&BotSupplyState(0).reacquireRejected==-1&&BotSupplyState(0).flightAccepted<0;
+  }
+  check(bounded&&navClean&&(mode<2?escaped:!escaped),
+    "combat recovery retains noStrafe/cap/ray bounds and cannot borrow uncertain floor budget or mutate NAV on NoFloor");
+ }
+}
 void frozenContactOwnershipMechanism(){
  // Source mechanism only: the false-owner arm deliberately passes the SAME
  // proposed vector into Safety. It does not pretend to reconstruct Human AI.
@@ -4488,6 +4643,9 @@ void reacquireDecisionBounds(){
 }
 
 int main(){
+ negativeMapCombatRecovery();
+ automaticCombatRecovery();
+ automaticCombatRecoveryGuards();
  frozenContactOwnershipMechanism();
  reacquireDecisionTests();
  reacquireDecisionOperationalPairs();
@@ -5669,6 +5827,15 @@ def reverse_reacquire_diagnostic(body):
 
 def verify_reacquire_source(source):
     body = reacquire_original_body(source)
+    # Productive COMBAT_RECOVERY delta, explicitly separate from passive
+    # diagnostic inversion. Undo exactly this metadata-only call; retain every
+    # existing decision/support/ray guard and its original historical hash.
+    capture = "  BotCecilCaptureCombatGround(player,state,now); // COMBAT_RECOVERY_CAPTURE\n"
+    if capture in body:
+        assert body.count(capture) == 1
+        anchor = "  if(groundEligible&&_botRayBudget>=2)state.groundRecoveryTime=now;\n"
+        assert anchor + capture in body
+        body = body.replace(capture, "", 1)
     restored = reverse_reacquire_diagnostic(body)
     assert hashlib.sha256(restored.encode()).hexdigest() == REACQUIRE_ORIGINAL_SHA256, "original Reacquire body changed beyond passive diagnostic additions"
     # Removing an actual gameplay guard must remain visible to this proof.

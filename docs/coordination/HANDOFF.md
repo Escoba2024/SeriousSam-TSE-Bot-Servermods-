@@ -1,4 +1,4 @@
-# Aktueller Handoff – 15.11.2026, 04:01 UTC
+# Aktueller Handoff – 15.11.2026, 04:28 UTC
 
 Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker:
 reguläres lokales Terminal auf dem Host funktioniert. RDC bleibt gesperrt und
@@ -217,28 +217,24 @@ RUerstEncodingtest. WeitereAbnahme im ursprünglichen A/B-Plan.
 
 ## Veröffentlichung, Backups und nächster Schritt
 
-Letzter tatsächlich gefetchter Remoteaed02cd6926d3e88e2b6b24a194ffb39ca42a719,
-Treee06e97231deee95e0a10d184931b145f80c9368d exaktRoot7a4bf42.
-NeuereCommits/aktuelleHEAD noch veröffentlichen. GitHubAPI mit expected_sha,
-forcefalse; tatsächlicherFetch+Tree-/Diffvergleich, keineForcePushes.
+Letzter tatsächlich gefetchter Remote c57467c4acd2a9f7f971ee6c1649badf64f3a5b7,
+Tree e30e0b6b374720182f5d140ec50690fce01b0be5 exakt Root e54282c.
+Source074 vorbereitet+Remote tatsächlicher Fetch/Diff0. Neuere Commitgruppe
+4b8317d–600e3f6 (MethodAPI), 8a17350/1b6dd35/692b0d0 (Combatfix) noch publizieren.
 main/PR99 unvollständig, keine abschließende Integration behauptet.
 
-Driveprojekt14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2. Deltas022–064 vollständig
-extern rückgelesen, alle Inhalte/Metadaten rekonstruiert; ursprüngliche Archive
-und050/051Rollback nicht löschen. Aktueller Mischrollback051:
-83540880B/SHA85249af2c74e465a74c3bdb0a8f636936a9033d6f20e48316963f8a9b4de5a06,
+Driveprojekt14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2. Deltas022–065 vollständig
+extern rückgelesen, alle Inhalte/Metadaten rekonstruiert. 065:
+2842626B/SHA d4bb3b7e203ff27356a3a8c45750b95e38d0c3627dc3010535226e38ee4d2f0e,
+Drive1ZS2s_f6WiQtNmAL_jjyUEg88G8wG0p1J,724Files/19854093entpackteBytes,
+Drivehash+zweifach alleDateimetadaten PASS04:04:21. Enthält Feedback034224
+vollRaw/Rootaudit/Restore, Source-Reproducer, Sourcebundle e54282c benötigt
+7a4bf42 aus064→b28e972 aus063→75ba3bb aus062→067dda4 aus061→6f4fbbd aus060.
+KeinNativeVollrestoreStart aus Dateirekonstruktion ableiten.
+Aktueller Mischrollback051:83540880B/
+SHA85249af2c74e465a74c3bdb0a8f636936a9033d6f20e48316963f8a9b4de5a06,
 Drive1XX2UTI3VigXY-AdSW2Ep0HwkhJ54Kz3L,
 `/srv/tse-current-mixed-fleet-backup-20261114`.
-
-Neueste063:12093715B/SHAaf1803a745acc71c8ffe758afa57685069ed4bb1740da2fe3695ec22387f2f6a,
-Drive1J5j9k012p2_O3IuzmaPK37YxcrTLAILK,332Files/16737176entpackteBytes,
-vollerDrivehash+zweifachalleDatei-SHA/UID/GID/Mode/mtime_ns PASS03:07:16.
-Enthält026Vorbereitung/DevSyncdeltas/Powerupclosure/Sourcebundleb28e972,
-benötigt75ba3bb aus062; dieses067dda4 aus061; jenes6f4fbbd aus060.
-NativeVollrestoreStart NICHT geprüft. 064 e93e5ddf/24063346B/1022Dateien90395513B vollständigDrive+zweifach
-MetadatenPASS034135, Drive1WzItQF8GqgIce3s2ihkfhLiS-yo10Yy_.
-Enthält geschlossenen026Fall/Audit undFeedbackvorbereitung, Bundle7a4bf42
-benötigtb28e972 aus063. NeuesterFeedback-FAILrawlauf nochzusichern.
 
 Speicher: nur geschlossene eigene Belege verlustfrei gzip-komprimiert, jedeDatei
 vorOriginalentfernung vollständig auf SHA/UID/GID/Mode/mtime_ns rekonstruiert.
@@ -255,26 +251,44 @@ waren; vorhandenenRestorehelfer wiederverwenden, keineDoppelkompression.
 
 Nächste konkrete Reihenfolge:
 
-1.Feedback-FAILraw/Rootguardreplay/Restorebericht undSource-Reproducerfortlaufend
-  publizieren+sichern. Source073/064bereitsvollbelegt, neuereCommitsnochlokal.
-2.A1 engerMethodenadapterinArbeit: alter18Call/38Binding-I1I2-/Drainvertrag
-  Registrygenau2/unveränderteLimits. EchterGetterFunctioncallback, admission-only
-  stop+outside-callbackIdle/finishstop, admittedLeavesunteraltenTTL. Separate
-  status-RPCs, Drainpayloadunverändert. LegacyPortsadaptermitFreshExec3Rollen
-  server/vanilla/botA, 2MiBpayload+16KiBfesteIPChülle, keineTruncierung; alter
-  Runnerdeaktiviert/unverändert. KeineAI-/Populations- oderWaffenvertragserweiterung.
-3.A4 Source-Reproducerintegriert8554080/16a3095/9b94a45: einnormalerBridge-Lauf
-  3541Checks/0FAIL,9neueAssertions. 70gleichePoseProposals: visibleCombat0Owner/
-  0Stall/0Escape, novis70Owner/30Stall/12Escape; nurfalschesStandOn70/30/0.
-  KeineEpisodekausalität. FolgenderOptin-RecoveryfixjetztimWorker: getrennte
-  combatRecoveryRequested nurautomatic/humanMode/visible/nonneutral/up0/noSupply,
-  gleichefrischeObservation/Support/Map/Life/Contactpins, keineNavhint-/Flightgrant.
-  EchteRED3544Checks/2FAILvorCode,0.5Normale/2s/.25m/.25gap/.3/.6/unveränderte
-  Budgets. KeineNormallockerung; neuerMetadatencaptureexplizitproduktivesDelta,
-  nichtinderpassivenDiag-Inverseverstecken. Header/Driver+Bridge+ActionNativeTest.
-4.Disk≥8GiB/64MiBReserve, keineaktiveRuntime. RootmussÄnderungenreviewen,
-  getrenntePakete/eigeneFreeze-/Pinnachweise/Backup, erstbeiechterEignung
-  neuenKandidatenbauen+isoliertNativeprüfen. A3/A5/Karten/Bweiteroffen.
+1. **Combatfix fertig, noch kein Retailbuild/Runtimebeleg.** Root Source-/Testreview,
+   3663Checks/0FAIL, Author6Logpins/5Sourcepins geprüft. Reale ersteRED3544/2,
+   später Rootfund negativeMap RED4/3→GREEN4/0; finaleHeader5530062b/Driverebb2c4cc.
+   Neuer ausdrücklicher produktiver Capturecall in Reacquire; alteBodyinverse
+   88950482 bleibt nach gesonderter Entfernung exakt. Normalbewegung ungebremst,
+   nur frische eigeneCombatownership+Stall+unveränderteSafetyguards erlaubenEscape.
+   KeinBeweis für Ursache der026Episode. Rootreview in privatem
+   RootEV/combat-recovery-root-source-review.json, öffentlicher Bericht
+   [Combat-Recovery](../reports/2026-11-15-automatic-combat-ground-recovery.md).
+   Jetzt027 mit sauberemExactHEAD/quiescent/Buildlock/8GiB+256MiB bauen.
+2. **MethodAPI fertig, nur offline.** Root35/0Tests und vollständigerSource-/Testreview;
+   disabledManifest1e59d326/72Pins, alterRunnerFalse. Getterfunction/admission-only
+   Stop/idleoutsidecallback/finishstop,18Hooks38BindingsRegistry2/alteI1I2-Drain-
+   Grenzen unverändert. FreshExec/LegacyPorts+rawJournal vorParsing, Ownerreceipt
+   vorIPC, reap erst nach3normalenCloses. Rootreview FirstStateMethod in RootEV.
+   [Bericht](../reports/2026-11-15-first-state-v2-method-adapter.md).
+3. Worker a4_diagnosis baut jetzt getrennt deaktivierten inputfreienMethodWindow:
+   fest eine Control+Trace-Paarung, je10saktiveBeobachtung/max90sRunner,
+   ObserverTTL15s/absolutmin(parent+85,arm+15). KeinFire/Mouse/AI, alle6Inputgates
+   undalterRunnerFalse. Control ohneFrida; TraceRegistry2/18Hooks38Restore;
+   TLS+Tickpaar erlaubt nur Methodenbeobachtungsstatus, keineA1/18ABI-Freigabe.
+   AlteFeedbackFAIL ist keineControl. Root integriert/freezt/prüft/sichert/startet.
+4. candidate_audit ist nach Combatfix quiescent; nach027Manifest enges
+   disabledSkulls600diag1-Retarget, keinNative/CppdurchWorker. Root alleine
+   integriert und nutzt Live/Native. Neue Quellen/Privatebelege/Kompressionen
+   in066 sichern, Source075 tatsächlich publizieren/fetchen, dann isolierteTests.
+5. A1 echteOriginalopfer-Schadenskette, A3Tiernachweis, A4Restmaps/Spezialübergänge,
+   A5formaleGates erst nach funktionalem Kandidaten. B erst nach A. LiveMischstand
+   behalten; kein Promotion allein ausBuild/Portablepass.
+
+Neue verlustfreie Kompression nach065:024Skulls9Dateien121495597→8411831B,
+RootEV/compressed-closed024-skulls-index.json und restore-compressed024-skulls.py;
+Originale060Drive. 022+023Red18Dateien242582133→17268030B, Index
+compressed-closed022-023-red-index.json, Restorehelfer
+restore-compressed022-023-red.py --build 022|023; Originale050/053Drive.
+Vor Entfernung jedesOriginals vollständigesTestrestoreSHA/UID/GID/Mode/mtime_ns
+geprüft; Archive vorKompression gegen frühereManifeste undDrivebelege verifiziert.
+Neue Gzip/index/Helper noch in066sichern; derzeit ~9,087GB frei, 8GiBFloor bleibt.
 
 Keine unbeaufsichtigten Prozesse behaupten: gestartete Aufgaben/Jobs und
 Eigentum müssen vor Fortsetzung erneut tatsächlich geprüft werden.

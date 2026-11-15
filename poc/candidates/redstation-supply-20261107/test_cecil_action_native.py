@@ -42,9 +42,9 @@ void BotLog(const char*,...){}
 struct State {int bs_iTick=20;};
 struct SafetyState {};
 SafetyState& BotSupplyState(INDEX){static SafetyState state;return state;}
-static bool safetyRecovery=true;
-template<class T>int BotCecilSafeMotion(CPlayer*,SafetyState&,double,T&,T&,T&,double,double,bool recovery=true){
- safetyRecovery=recovery;return 17;
+static bool safetyRecovery=true,safetyCombat=false;
+template<class T>int BotCecilSafeMotion(CPlayer*,SafetyState&,double,T&,T&,T&,double,double,bool recovery=true,bool combat=false){
+ safetyRecovery=recovery;safetyCombat=combat;return 17;
 }
 '''
 TEST = r'''
@@ -194,13 +194,15 @@ static void acquisition_combat_paths(){
     if not final_call:raise ValueError("native final safety call missing")
     # Compile the actual final call. Its default argument deliberately models
     # existing callers so omission of final movement ownership is a behavioral RED.
-    safety=r'''
+    safety=function(native_source,'BotCecilCombatRecoveryRequested')+r'''
 static void safety_owner_paths(){
  CPlayer actual;CPlayer* player=&actual;int iLP=0,cecilFloorStatus=0;
+ BOOL automatic=TRUE,humanMode=TRUE,targetVisible=TRUE;
  double now=0,finalYaw=0,maxStrafe=1;FLOAT moveFactor=.64f,humanStrafe=0,cecilUp=0;
  for(BOOL supplyActive:{FALSE,TRUE}){
  '''+final_call[0]+r'''
  assert(cecilFloorStatus==17);assert(safetyRecovery==(supplyActive!=FALSE));
+ assert(safetyCombat==(supplyActive==FALSE));
  }
 }
 '''

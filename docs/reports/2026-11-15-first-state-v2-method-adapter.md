@@ -1,0 +1,26 @@
+# FirstStateV2: deaktivierter Methodenadapter
+
+Status: **DISABLED_METHOD_ADAPTER_API_ONLY**, keine Native-/A1-Abnahme, keine AI-/Populationsintegration. Der alte Runner ist unverändert und weiterhin gesperrt. Root integriert und entscheidet über ein eigenes inputfreies Methodenfenster separat.
+
+Der gepinnte Zwei-Originalspieler-Observer erhält ausschließlich Getter+15 als echte function-Probe, admission-only Stop und separate status/finishstop-RPCs. Bereits zugelassene Returns dürfen unter unveränderten TTL-/Identitätsregeln auslaufen. Finishstop detacht erst nach Idle außerhalb aller Callbacks. Drops, Fehler und abgebrochene Leaves bleiben sticky. Eine während onEnter geschlossene Admission bleibt ausdrücklich unvollständig: die VM belegt dropped=1, aborted_leaves=1 und das terminale Enter; daraus entsteht kein qualifizierter Trace.
+
+Die vollständige Sourceinverse ergibt den alten Observerkörper SHA256 `38275a9f15d9f867bccbefb1f523352c74aad78c8c5ff559da1b1589894fde71`. Die 18 Calllistener, 38 Originalregionen, 11 Importbindungen, zwei Registryakteure, I1/I2-Felder und Grenzwerte bleiben unverändert. Drain hat exakt das alte Schema. Colt-I2 wird nicht auf andere Waffen ausgeweitet.
+
+Der Rollenparent importiert kein Frida. Ein frischer Exec-Worker besitzt attach/load/RPC/unload/detach und rekonstruiert den unveränderten NativeContext. Eigene Parent-/Lock-/PID-/Start-/CWD-/Unit-/Netzbindungen werden separat geprüft. Vor der ersten IPC wird seine private, exklusive PID-/Startquittung persistiert. Begrenztes IPC und sticky Fehler lassen normale Rollenbereinigung beim Parent; erst danach darf dessen eigener Worker identitätsgebunden beendet und gereapt werden. Rawantworten werden vor JSON-/Schema-/IDvalidation archiviert. Die Payloadgrenze bleibt 2 MiB; die IPC-Hülle hat zusätzlich höchstens 16 KiB. Übergröße ist FAIL, niemals ein abgeschnittener gültiger Datensatz; ein unzulässig übergroßer Stream wird als unvollständige begrenzte Fehlerquittung markiert.
+
+LegacyWorkerPorts stellt die bisherige ObserverSession-Schnittstelle bereit. stop antwortet erst nach admission→Idle innerhalb der bestehenden absoluten Deadline→finishstop. status/finishstop erweitern weder Drain noch dessen strikten Validator. Unerwartete Nachrichten oder Journalfehler bleiben Fehler, blockieren bei belegter Idle-Lage jedoch nicht die sichere Bereinigung. `finish_after_roles_closed(roles_closed=True)` ist eine explizite spätere Integrationspflicht. Der bestehende `run_first_state.py` wird nicht umgeschrieben oder durch das Paket startfähig erklärt.
+
+Privater Fork: `/srv/tse-a1-first-state-method-adapter-final-disabled-20261115`, Manifest SHA256 `1e59d3268806f0ce92780c42548c876eb0ee4a09b25cb08d46532f091f86f707`; 72 Pins, 37 übernommene Dateien bytegleich, eine modifizierte generierte Observerdatei mit exakter Inverse. Alle Gates bleiben false. Auch der ungenutzte alte Worker-CLI bleibt false: die importierte Lifecycle-Basis SHA256 `acf3fa017447c9eea0431c996196d01d0d7d04a8f9029c81caeec3af23c4015b` ist exakt die qualifizierte A3-Quelle `806d4c33a3db0f5c208ee235319850513715c6144ed30912e95cf554e38b677c` mit ausschließlich True→False am Gate. Die spätere Rootableitung darf diesen ungenutzten CLI oder den alten Runner nicht aktivieren. Bindings und Retailbytes sind ausschließlich privat. Herkunftsmanifeste: Controller `fdd1b2598e21b4367e8a406d13ba3b64a22814fc40072e9377f05cbf20c8a8b3`, Observer `766485c5b28200b8523e74b1c597146eb2dfc905c087855d1dcc8c7f39701c00`.
+
+Reproduktion (nur offline):
+
+```sh
+python3 -m unittest tools/test_first_state_method_patch.py tools/test_first_state_method_transport.py tools/test_prepare_first_state_method_adapter.py
+python3 tools/prepare_first_state_method_adapter.py --output /NEUER/PRIVATER/PFAD
+```
+
+35/35 gezielte Prüfungen bestanden in 3,189 Sekunden: 11 tatsächliche Observer-VM-Fälle, 17 Transport-/OS-Fixturen und sieben Paketfälle. Vorher tatsächliche REDs: alter Observer 9/10, fehlender Transport 12/12, fehlender Builder 5/5; zusätzliche adversariale REDs für vorzeitige Idleannahme, Journalfehler, fehlende Closure und fehlgeschlagene Workerowner-Persistenz sowie unzulässige Reaktivierung des ungenutzten alten Worker-CLI trotz Repin. Die tatsächliche Colt-Kette bleibt im VM-Test auch nach Stop innerhalb Receive bis zum ursprünglichen Return konsistent. Tests umfassen echte eigene Socketpaare/Kinder/FLOCK, PIDwechsel, Timeout, private O_EXCL-Dateien, >1-MiB-/exakte 2-MiB-/Übergrößenantworten und unveränderte I1/I2-Payloads.
+
+Private vollständige Logs, Pins und Quittung: `.codex/evidence/first-state-method/`. Kein Fridaimport, Originalprozess, Display, Spiel, Hook, Compiler oder Nativefenster wurde ausgeführt. Neue Transport-/Cleanupkosten und tatsächliche Retail-ABI sind noch nicht methodisch abgenommen. Dieser Adapter liefert weder Erstzustandsschaden noch einen Gameplay-/Gainfix und schließt A1 nicht ab.
+
+Das erste vorbereitende Paket Manifest `65453847…` bleibt unverändert erhalten; das finale Paket ergänzt dessen explizite CLI-Gate-Provenienz und Validator. Für einen späteren inputfreien Zweier-Original-Methodensmoke wären ausschließlich tatsächlich aufgerufene Tick/Apply/PostMoving/TLS-Callbacks qualifizierbar, keinesfalls alle 18 ABIs, Init oder die Bulletkette.

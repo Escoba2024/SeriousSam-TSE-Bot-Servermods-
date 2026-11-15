@@ -72,6 +72,13 @@ struct SCecilImportantOrigin {
   int node=-1,goal=-1;uint64_t resetSerial=0;double start=-1,last=-1,until=0,attempt=0,deadline=0,rawDeadline=0,gravity[3]{};
   SCecilOriginPoint source,target;
 };
+// Same-tick combat-only provenance; never NAV, support or movement authority alone.
+struct SCecilCombatGroundPin {
+  bool valid=false;CPlayer* player=NULL;CWorld* world=NULL;CEntity* reference=NULL;
+  const CBrushPolygon* standOn=NULL;
+  long map=-1;uint32_t entity=0,generation=0,referenceID=0;
+  double time=-1,gravity[3]{};
+};
 struct SSupplyState {
   SCecilImportantOrigin importantOrigin;bool currentImportantOriginRecovery=false;
   SCecilHealthConnector healthConnector;
@@ -89,6 +96,8 @@ struct SSupplyState {
   // separate current-support stamp used by opt-in floor/contact authorization.
   double groundRecoveryTime=-1,groundObservationTime=-1,recoveryMovementTime=-1,groundEscapeAfter=0;
   uint32_t groundProgressEntity=0,groundProgressGeneration=0;
+  SCecilCombatGroundPin combatGroundFresh,combatGroundHistory;
+  bool combatGroundOwned=false;
   double airMovementTime=-1,airMovementGravity[3]={0,0,0};
   uint32_t airMovementEntity=0,airMovementGeneration=0;
   int airMovementNode=-1; // Original hint only; never an anchor or support stamp.
@@ -187,7 +196,8 @@ struct SSupplyState {
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ClearAirMovement(){airMovementTime=-1;airMovementEntity=airMovementGeneration=0;airMovementNode=-1;}
   void ClearGroundSweep(){groundEscapeTried=groundEscapeCursor=0;groundSweepReady=false;}
-  void ClearGroundProgress(){if(groundEscapeActive)ClearEscape();groundProgress.Reset();groundRecoveryTime=groundObservationTime=recoveryMovementTime=-1;ClearGroundSweep();groundEscapeAfter=0;groundStalled=groundEscapeActive=false;groundProgressEntity=groundProgressGeneration=0;}
+  void ClearCombatGroundEpisode(){if(groundEscapeActive)ClearEscape();groundProgress.Reset();ClearGroundSweep();groundEscapeAfter=0;groundStalled=groundEscapeActive=false;combatGroundHistory=SCecilCombatGroundPin();combatGroundOwned=false;}
+  void ClearGroundProgress(){if(groundEscapeActive)ClearEscape();groundProgress.Reset();groundRecoveryTime=groundObservationTime=recoveryMovementTime=-1;ClearGroundSweep();groundEscapeAfter=0;groundStalled=groundEscapeActive=false;groundProgressEntity=groundProgressGeneration=0;combatGroundFresh=SCecilCombatGroundPin();combatGroundHistory=SCecilCombatGroundPin();combatGroundOwned=false;}
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
     approach=SCecilApproachDiagnostic();
@@ -1000,6 +1010,24 @@ struct SCecilReacquireDiagnostic {
 };
 // The pure navigator reports its source when an UNREACHABLE next hop requests stay.
 // Recover that concrete hop using the same prepared directed search, without allocation.
+static void BotCecilCaptureCombatGround(CPlayer* player,SSupplyState& state,double now){
+  state.combatGroundFresh=SCecilCombatGroundPin();
+  // Called only after the existing Reacquire support/reference validation. A
+  // mere observation or default movement stamp must not become support proof.
+  if(!BotCecilFrameReady(player)||!state.playable||state.entity!=player->en_ulID||!state.generation||
+     !player->GetWorld()||player->GetHealth()<=0||!player->m_penWeapons||
+     !std::isfinite(now)||now<0||!std::isfinite(state.groundObservationTime)||
+     !std::isfinite(state.recoveryMovementTime)||!std::isfinite(state.groundRecoveryTime)||std::fabs(state.groundObservationTime-now)>1e-6||
+     std::fabs(state.recoveryMovementTime-now)>1e-6||std::fabs(state.groundRecoveryTime-now)>1e-6)return;
+  const long map=InterlockedCompareExchange(&_botSupplyMapSerial,0,0);if(map<0)return;
+  auto& p=state.combatGroundFresh;p.valid=true;p.player=player;p.world=player->GetWorld();
+  p.map=map;p.entity=player->en_ulID;p.generation=state.generation;
+  p.reference=player->en_penReference;
+  // Non-NULL reference was already checked against this world's EntityFromID
+  // by the unchanged Reacquire branch before the fresh support stamp was set.
+  p.referenceID=p.reference?p.reference->en_ulID:0;p.standOn=player->en_pbpoStandOn;p.time=now;
+  for(int i=0;i<3;++i)p.gravity[i]=player->en_vGravityDir(i+1);
+}
 static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCecilMove& out,bool contextOnly=false){
   SCecilReacquireDiagnostic diagnostic(player,state,now,contextOnly); // REACQUIRE_DIAGNOSTIC
   const bool liquid=BotCecilLiquid(player);
@@ -1081,6 +1109,7 @@ static void BotCecilReacquire(CPlayer* player,SSupplyState& state,double now,SCe
   groundEligible=groundEligible&&graphMetadataValid;
   if(diagnostic.active)diagnostic.ground=groundEligible; // REACQUIRE_DIAGNOSTIC
   if(groundEligible&&_botRayBudget>=2)state.groundRecoveryTime=now;
+  BotCecilCaptureCombatGround(player,state,now); // COMBAT_RECOVERY_CAPTURE
   if(contextOnly)return diagnostic.End("context_only"); // Observe/support-check neutral ownership without inventing a NAV target.
   BotCecilLocks(player,state,now);
   if(state.reacquireNode>=0&&(now<state.reacquireSince||now-state.reacquireSince>=6)){
@@ -1704,7 +1733,7 @@ static bool BotCecilRecoverImportantOrigin(CPlayer* player,SSupplyState& s,INDEX
   return true;
 }
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
-  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;result.useControl=tick<=s.useReleaseTick;
+  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;s.combatGroundFresh.valid=false;result.useControl=tick<=s.useReleaseTick;
   s.patrolProposalTime=-1;
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
   s.currentHealthConnector=false;s.currentImportantOriginRecovery=false;
@@ -2177,9 +2206,40 @@ static bool BotCecilHopCheckpoint(CPlayer* player,SSupplyState& s,double now,boo
 }
 // 1 original, 2 verified escape, 0 neutral. Hold world direction for 0.6s so a
 // one-tick reverse does not immediately undo itself. No progress earns a cooldown.
+static bool BotCecilCombatRecoveryRequested(bool automatic,bool humanMode,bool targetVisible,bool supplyActive,
+    double forward,double strafe,double up){
+  return automatic&&humanMode&&targetVisible&&!supplyActive&&std::isfinite(forward)&&std::isfinite(strafe)&&
+    std::isfinite(up)&&up==0&&std::fabs(forward)+std::fabs(strafe)>=.05;
+}
+static bool BotCecilSameCombatGround(const SCecilCombatGroundPin& a,const SCecilCombatGroundPin& b){
+  if(!a.valid||!b.valid||a.player!=b.player||a.world!=b.world||a.map!=b.map||a.entity!=b.entity||
+     a.generation!=b.generation||a.reference!=b.reference||a.referenceID!=b.referenceID||a.standOn!=b.standOn)return false;
+  for(int i=0;i<3;++i)if(a.gravity[i]!=b.gravity[i])return false;
+  return true;
+}
+static bool BotCecilFreshCombatGround(CPlayer* player,const SSupplyState& state,double now){
+  const auto& p=state.combatGroundFresh;
+  if(!p.valid||p.player!=player||p.world!=player->GetWorld()||!p.world||
+     (player->GetFlags()&ENF_DELETED)||!std::isfinite(player->GetHealth())||player->GetHealth()<=0||!player->m_penWeapons||
+     BotCecilLiquid(player)||(player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH)||
+     p.map<0||p.map!=InterlockedCompareExchange(&_botSupplyMapSerial,0,0)||!state.playable||
+     p.entity!=player->en_ulID||state.entity!=p.entity||p.generation!=state.generation||!p.generation||
+     !std::isfinite(p.time)||!std::isfinite(state.groundObservationTime)||
+     !std::isfinite(state.recoveryMovementTime)||!std::isfinite(state.groundRecoveryTime)||std::fabs(now-p.time)>1e-6||
+     std::fabs(now-state.groundObservationTime)>1e-6||std::fabs(now-state.recoveryMovementTime)>1e-6||
+     std::fabs(now-state.groundRecoveryTime)>1e-6||p.reference!=player->en_penReference||p.standOn!=player->en_pbpoStandOn)return false;
+  if(p.reference){
+    // Resolve the previously validated ID before dereferencing a retained pointer.
+    if(!p.referenceID||p.world->EntityFromID(p.referenceID)!=p.reference||p.reference->en_ulID!=p.referenceID||
+       (p.reference->GetFlags()&ENF_DELETED)||p.reference->en_pwoWorld!=p.world||
+       (p.reference->GetRenderType()!=CEntity::RT_BRUSH&&p.reference->GetRenderType()!=CEntity::RT_TERRAIN))return false;
+  }else if(p.referenceID)return false;
+  for(int i=0;i<3;++i)if(p.gravity[i]!=player->en_vGravityDir(i+1))return false;
+  return true;
+}
 template<class T>
 static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& forward,T& strafe,T& up,
-                             double finalBodyYaw,double maxStrafe,bool useReacquire=true){
+                             double finalBodyYaw,double maxStrafe,bool useReacquire=true,bool combatRecoveryRequested=false){
   state.flightAccepted=-1;
   state.probe=SCecilProbe();state.probe.inputForward=forward;state.probe.inputStrafe=strafe;
   state.probe.inputUp=up;state.probe.finalYaw=finalBodyYaw;
@@ -2189,6 +2249,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     BotCecilRejectedProbe(&state.probe,SCecilProbe::reasonInvalid,player);
     forward=strafe=up=0;state.ClearImportantOrigin();state.ClearHealthConnector();state.ClearEscape();state.ClearAirMovement();state.ClearGroundProgress();state.ClearHopCheckpoint();state.ClearItemTransit();state.ClearPatrolEpisode();state.acquiredAnchorTime=-1;state.acquiredAnchor=-1;return 0;
   }
+  if(useReacquire&&state.combatGroundOwned)state.ClearCombatGroundEpisode();
   if(!useReacquire){state.ClearImportantOrigin();state.ClearHealthConnector();state.ClearPatrolEpisode();state.ClearItemTransit();}
   if(state.patrolAlternate){
     BotCecilPatrolObserve(player,state,now,true);
@@ -2248,10 +2309,19 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   // The planner can propose recovery while visible combat owns the final input.
   // Recovery-only limits belong to accepted movement, not the retained proposal.
   const bool recoveryContext=state.anchor<0||(state.anchor<(int)nodes&&state.goal<0);
-  const bool groundEligible=useReacquire&&recoveryContext&&std::fabs(now-state.groundRecoveryTime)<=1e-6&&
+  bool combatContext=combatRecoveryRequested&&!useReacquire&&recoveryContext&&
+    std::fabs(forward)+std::fabs(strafe)>=.05&&up==0&&BotCecilFreshCombatGround(player,state,now);
+  if(combatContext&&state.combatGroundHistory.valid&&now<state.combatGroundHistory.time)combatContext=false;
+  if(state.combatGroundOwned!=combatContext||(combatContext&&
+     !BotCecilSameCombatGround(state.combatGroundFresh,state.combatGroundHistory))){
+    state.ClearCombatGroundEpisode();
+  }
+  state.combatGroundOwned=combatContext;
+  state.combatGroundHistory=combatContext?state.combatGroundFresh:SCecilCombatGroundPin();
+  const bool groundEligible=(useReacquire||combatContext)&&recoveryContext&&std::fabs(now-state.groundRecoveryTime)<=1e-6&&
     _botRayBudget>=2&&player->GetHealth()>0&&player->m_penWeapons&&
     (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH);
-  const bool groundObserved=useReacquire&&recoveryContext&&std::fabs(now-state.groundObservationTime)<=1e-6&&
+  const bool groundObserved=(useReacquire||combatContext)&&recoveryContext&&std::fabs(now-state.groundObservationTime)<=1e-6&&
     player->GetHealth()>0&&player->m_penWeapons&&
     (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH);
   if(state.groundProgressEntity!=player->en_ulID||state.groundProgressGeneration!=state.generation){
@@ -2288,15 +2358,16 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
     forward=strafe=up=0;return 0;
   }
   const bool actualReacquire=useReacquire&&(state.reacquiring||stalled||(recoveryEligible&&state.groundEscapeActive));
+  const bool combatRecovery=combatContext&&(stalled||state.groundEscapeActive);
   const bool allowCurrentContact=groundEligible&&(stalled||state.groundEscapeActive);
   const bool defaultRecovery=defaultMovement&&(stalled||state.groundEscapeActive);
-  const bool requireFloor=!BotCecilLiquid(player)&&((actualReacquire&&!defaultRecovery)||(BotCecilSettings().bAvoidPits&&!currentPoint));
-  const double maxForward=actualReacquire?.3:1;
-  if(actualReacquire)maxStrafe=std::fmin(maxStrafe,.3);
+  const bool requireFloor=!BotCecilLiquid(player)&&(((actualReacquire||combatRecovery)&&!defaultRecovery)||(BotCecilSettings().bAvoidPits&&!currentPoint));
+  const double maxForward=(actualReacquire||combatRecovery)?.3:1;
+  if(actualReacquire||combatRecovery)maxStrafe=std::fmin(maxStrafe,.3);
   auto capMotion=[&](double& f,double& st){
     f=std::fmax(-maxForward,std::fmin(maxForward,f));st=std::fmax(-maxStrafe,std::fmin(maxStrafe,st));
     const double length=std::hypot(f,st);
-    if(actualReacquire&&length>.3){f*=.3/length;st*=.3/length;}
+    if((actualReacquire||combatRecovery)&&length>.3){f*=.3/length;st*=.3/length;}
   };
   if(now<state.escapeClock)state.ClearEscape();
   state.escapeClock=now;
@@ -2410,7 +2481,7 @@ static int BotCecilSafeMotion(CPlayer* player,SSupplyState& state,double now,T& 
   auto rejectOriginal=[&](){
     const unsigned uncertain=(1u<<SCecilProbe::reasonBudget)|(1u<<SCecilProbe::reasonInvalid);
     const int node=state.reacquireNode;
-    if(originalNoFloor&&actualReacquire&&(player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
+    if(useReacquire&&originalNoFloor&&actualReacquire&&(player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
        state.probe.primaryReason==SCecilProbe::reasonNoFloor&&
        !(state.probe.reasonMask&uncertain)&&nodes<=botcore::CecilNavGraph::kMaxPoints&&
        node>=0&&(size_t)node<nodes&&state.blocked.size()==nodes&&!state.blocked[node]){

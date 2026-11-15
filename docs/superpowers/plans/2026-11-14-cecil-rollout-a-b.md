@@ -1,6 +1,6 @@
 # SSAM.AI – ausführbarer Gesamtplan A → B
 
-Stand15.11.2026,03:03UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
+Stand15.11.2026,04:28UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
 Maßgeblich sind der vollständige Nutzerauftrag, ursprüngliche
 [Milestonespezifikation](2026-11-11-milestones-a-b.md),
 [Toolchainrichtlinie](../../decisions/2026-10-17-tse-ai-tools-mcp-policy.md)
@@ -16,7 +16,7 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 
 | Arbeit | Status | Nachweis bzw. nächste konkrete Aktion |
 |---|---|---|
-|Tatsächliche Flotte|geprüft02:48|sechs×8eigeneBots/18Targets051gleich,Dev048/RedGen2/4Public018;Yodeller+1ungeklärt|
+|Tatsächliche Flotte|geprüft03:56|sechs×8eigeneBots/18Targets051gleich,Dev048/RedGen2/4Public018;LittleTrouble+1ungeklärt|
 |Namen/Identitäten erhalten|Bestand geprüft|458Pool/48Anzeigenamen/Profile051gleich, Instanz+ID verwenden|
 |Dev-Sync|**FAIL/Ursache offen**|70neueBAD/3Kick seit23:54, eigeneBotclients0; unverändert048+PowerupDedicated|
 |026passiveDiagnose|Build/Portable bestanden|15MSVC+Link/77Closure,3532normal+ASan, keinRuntime-/Skullsfixclaim|
@@ -49,13 +49,14 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
    deaktiviertenMethodenadapterqualifizieren:18Hooks/38Bindings/Registry2behalten,
    Getterfunction/admission-idle-stop/FreshExecPorts. KeineOriginalaimvoraussetzung
    aufaltenFAILumlabeln; AI-/Populations-/Waffenadaptererstdanach.
-5. **A4Combat-Recoveryfix entwickeln.** Source-Reproducer3541/0belegt
-   fehlendePositionszeitbeieigenerCombatownership mitKontaktgegenprobe. Neuer
-   separaterOptin, allealtenSafety-/Navownershipgrenzen undfrischeMetadatenpins;
-   aktuelle3544/2REDvorProduktivänderung. Rootreview/neuerBuild/isolierter
-   Nativevergleich vorPromotion. **A3/A5 anschließend abschließen.** KeineWiederholung bereitsgeschlossener
-   048/018/020OriginalDedicated-600s; DevPowerupoff/on bleibt separat unvorbereitet.
-   B weiterhin erst nach belegtem A. LiveMischstand erhalten.
+5. **A4Combat-Recoveryfix integriert692b0d0.** Root3663/0 plus vollständiger
+   Source-/Testreview, negativeMapRootfund reale4/3RED→4/0GREEN. AlteGrenzen
+   bleiben; separaterfrischerCombatpin/Produktivcapture explizit. NochkeineNative-
+   Verbesserung. Jetzt027Build, danach disabledSkulls600Retarget/Review/Backup,
+   isoliert tatsächlich testen und vollauswerten. A1MethodAPI Root35/0integriert,
+   aktuellerWorker baut inputfreiesControl+TraceMethodwindow; beide10saktiv,
+   keinA1Schadenspass/18ABIclaim. DetailsundAusführung im aktuellenHandoff.
+   A3/A5 erst nach funktionalgeeignetemKandidaten. B weiterhin nach A.
 
 ## Verbindliche A-Abnahme
 
@@ -99,12 +100,13 @@ mitMindestziel/Zielzahl/eigenenBots/MenschenungeklärtenTeilnehmern,keinpauschal
 
 ## Sicherung, Veröffentlichung und Abschluss
 
-AktuellSource072Remotee0fd869f/Treec3d8795b exaktRootb28e972,
-neuereCommitsnochpublish/fetch. Delta022–063 vollDrive-/Dateimetadatengeprüft,
-aktuell063af1803a7/12093715B/332Files16737176B,
-Drive1J5j9k012p2_O3IuzmaPK37YxcrTLAILK. 051istMischrollback;
-ursprünglicheArchive/qualifizierteRetaildateien/Identitätenerhalten.
-Sourcebundles benötigenBasis061067dda4 und0606f4fbbd.
+Aktuell Source074 Remote c57467c4acd2a9f7f971ee6c1649badf64f3a5b7,
+Treee30e0b6b374720182f5d140ec50690fce01b0be5 exaktRoote54282c, Fetch/Diff0;
+neuereMethod-/CombatcommitsnochSource075publizieren. Delta022–065 vollDrive/
+Dateimetadatengeprüft,065d4bb3b7e/2842626B/724Files19854093B,
+Drive1ZS2s_f6WiQtNmAL_jjyUEg88G8wG0p1J. 051istMischrollback.
+NeueKompression024Skulls/022023Red vollständigDateimetadaten-testrestored,
+066externeSicherung noch ausstehend, Originalarchive060/050/053bleiben.
 
 NeueBelege/Quellen/Config/Navmetadatenbereinigtcommitten/publizieren,
 Remote tatsächlichabholen/diffen, ZielbranchintegrationnachReviewregeln.
