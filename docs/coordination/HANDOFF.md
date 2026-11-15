@@ -1,8 +1,18 @@
-# Aktueller Handoff – 15.11.2026, 04:32 UTC
+# Aktueller Handoff – 15.11.2026, 05:06 UTC
 
 Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker:
 reguläres lokales Terminal auf dem Host funktioniert. RDC bleibt gesperrt und
-wurde nicht erneut benutzt. Aktuell kein Nativeversuch und kein Build aktiv. Build027 ist abgeschlossen; isolierte Runner werden vorbereitet.
+wurde nicht erneut benutzt. Aktuell kein Nativeversuch und kein Build aktiv.027Skulls600diag1 geschlossen:
+Case`/srv/tse-milestone-a-evidence-20261111/nav20-027-skulls-root-skulls-20261115-043608`,
+RootwrapperPID1602465/Startticks134376605 beendet/Execsession25129geschlossen.
+Result55954ed68802b99c8d2d4004e0840d94931b92975ee6698685d440a9c48dcb2b,
+600,052021s/PASS_LIMITED_REACQUIRE_DIAGNOSTIC_OBSERVATION_ONLY, vierNormalcloses,
+keineSyncabweichung/Disconnect in vierRollen. Rootrestore04:48:07PASS640Dateien/
+4Closedlogs/PIDsUnitsDisplaysvierLocksfrei. Outer683SamplesCPUmax63,7975%,
+RAMmin2429173760B/Diskmin8778379264B/maxGap1,002075s/keineVerletzung,
+nurHostbeobachtungkeinFormalpass. Funktionalauditjetztcandidate_audit; nochkeine
+027Promotion. a4_diagnosis beendet nachRootHashVerifierfinding gezielteKorrektur/
+Finalpaket/Report. BeideWorkerCPUfreigegeben, keineNativebefugnis.
 Der Nutzer hat den Mischstand ausdrücklich bestätigt: **live behalten, isoliert
 entwickeln, erst belegte Verbesserungen wieder ausrollen**. Seine spätere
 Rückmeldung: Originalclient nicht mehr verbunden. Unbekannte Peers nicht ihm
@@ -252,6 +262,17 @@ waren; vorhandenenRestorehelfer wiederverwenden, keineDoppelkompression.
 
 Nächste konkrete Reihenfolge:
 
+0.027Skulls geschlossen und vollständig ausgewertet:190AI-Leben/182Tode/
+  97Usefulleben/118Gewinne/3892nativeFIRErequests/558ReadFAIL(500state58tick),
+  125linkszensiert/8rechts/2ambiguous. Exactstill5,150s vs02616,546s;
+  längsterneverUseful52,087s vs52,303s. KeinallgemeinerVerbesserungs-/Kausal-/A4pass.
+  4Reader exaktinverse/sixHelpersgleich, Root alleOutputhashes/Sourceinversen
+  geprüft;keinwiederholterVollreplayohnePrüfgrund. Handoffec6d9ece/Finalb2917132.
+  [027Audit](../reports/2026-11-15-build027-skulls-closed-audit.md).
+  067376159B/5ebb6c9d/Drive13W-zlZG2Y-ig7RQVWXfy94Z0gq4aa-Js,
+  210Files1489467B vollDrive+zweifachMetadatenPASS04:35:27. Source07638d803a
+  gefetcht exakt1a0ad0b/Tree956a978, Bundle1a0ad0bbenötigt13896f5 aus066.
+
 1. **Combatfix fertig, noch kein Retailbuild/Runtimebeleg.** Root Source-/Testreview,
    3663Checks/0FAIL, Author6Logpins/5Sourcepins geprüft. Reale ersteRED3544/2,
    später Rootfund negativeMap RED4/3→GREEN4/0; finaleHeader5530062b/Driverebb2c4cc.
@@ -270,16 +291,24 @@ Nächste konkrete Reihenfolge:
    Grenzen unverändert. FreshExec/LegacyPorts+rawJournal vorParsing, Ownerreceipt
    vorIPC, reap erst nach3normalenCloses. Rootreview FirstStateMethod in RootEV.
    [Bericht](../reports/2026-11-15-first-state-v2-method-adapter.md).
-3. Worker a4_diagnosis baut jetzt getrennt deaktivierten inputfreienMethodWindow:
-   fest eine Control+Trace-Paarung, je10saktiveBeobachtung/max90sRunner,
-   ObserverTTL15s/absolutmin(parent+85,arm+15). KeinFire/Mouse/AI, alle6Inputgates
-   undalterRunnerFalse. Control ohneFrida; TraceRegistry2/18Hooks38Restore;
-   TLS+Tickpaar erlaubt nur Methodenbeobachtungsstatus, keineA1/18ABI-Freigabe.
-   AlteFeedbackFAIL ist keineControl. Root integriert/freezt/prüft/sichert/startet.
-4. candidate_audit ist nach Combatfix quiescent; nach027Manifest enges
-   disabledSkulls600diag1-Retarget, keinNative/CppdurchWorker. Root alleine
-   integriert und nutzt Live/Native. Neue Quellen/Privatebelege/Kompressionen
-   in066 sichern, Source075 tatsächlich publizieren/fetchen, dann isolierteTests.
+3. **InputfreiesMethodwindow fertig/inRoot integriert.** Root21/0 undvoller
+   Source-/Testreview. EchteR1-Verifierlücke durch5REDs Body/Policy/NestedHash/
+   Path/Helpergeschlossen; erwartetevolleHashwertejetztgeprüft. Finaldisabled
+   51e1bc45/151Pins72Methoden. AlterCheckpointf2cae1f7 bleibtunverändert.
+   ErstesRootfreeze26d62d26 hatbewusstnochdeaktivierteMethodpfade, niegestartet.
+   TatsächlichesneuesEnabledRootfreeze b86615c13475f9e7dd430c4f1154b025f83fef8061865d1f7c9990de7f1c9336,
+   Runner6a33221a/Nested0c4ab262, RootEV/first-state-window-enabled-root-source-review-freeze.json.
+   ExaktMainGate+zweiNamespaces+Transport-/compiledJSGate+NestedmanifestAdmission;
+   sonst90Filesbytegleich, Sourcebody/Policy/18Hooks38Regions11Bindings/alleGrenzen
+   gleich. Bindungsmetadata/ACK bleibenfalse, alte6Input-/BaseCLI-/FirstStategatesfalse.
+   Peer3f787786 ScopeRootdelta/PinsPASS151+72, keinePolicyUnabhängigkeitbehauptet.
+   Rootwrappercontrol6d8a3a64/traceb9756aa1, Outer8431bdf2/4fa18d2e.
+   Fest1Control+1Trace je10saktiv,85/90sAdmissionkeinHardwatchdog; Traceabhängigvon
+   bestandenemControl+Rootrestore. KeinFire/Maus/AI, TLS+echtesTickpaar+voll38Restore
+   gibtmaxnurObservedCallbacksstatus, keineA1/18ABIqualifikation.
+4. VorControlNative:068sichern+vollDriveprüfen/Source077publizieren, beideWorker
+   quiescent/fresh4Locks/PID-/Unit-/Display-/Diskvorprüfung. RootaloneNative;
+   normaler3Rollenclose+unabhängigerRestore nachjedemArm. KeinAutomatikretry.
 5. A1 echteOriginalopfer-Schadenskette, A3Tiernachweis, A4Restmaps/Spezialübergänge,
    A5formaleGates erst nach funktionalem Kandidaten. B erst nach A. LiveMischstand
    behalten; kein Promotion allein ausBuild/Portablepass.
@@ -299,3 +328,17 @@ benötigte54282c aus065. Aktuell~8,98GBfrei;8GiBFloor bleibt.
 
 Keine unbeaufsichtigten Prozesse behaupten: gestartete Aufgaben/Jobs und
 Eigentum müssen vor Fortsetzung erneut tatsächlich geprüft werden.
+
+Speicher05:03:14Files geschlossene027Raw+Audit193483370→14576757B verlustfrei,
+jedesFilevollTestrestoreSHA/UID/GID/Mode/mtime_ns vorOriginalentfernung.
+IndexRootEV/compressed-closed027-and-author-audit-index.json, Restorehelfer
+restore-compressed027-and-author-audit.py --scope native|audit|all. ErsterVersuch
+stopptevorMutationwegen64MiBReserve; Reserve/Floornichtgesenkt. Erst16bereitsvoll
+Drive-/Archiv-/MetadatenverifizierteDoppeldateien(15alteGitHubAPI-Payloads+ein
+Root023Duplikat)lokalretired15440600B, keineArchive/Runtimefilesentfernt.
+Indexretired-verified-transport-and-duplicate-replay-index.json, ausführbar
+restore-retired-verified-copies.py --restore-name NAME; tatsächlichesTempTestrestore
+aller16Files samtNSMetadaten bestanden, anschließendnurverifizierteTempfilesentfernt.
+EininitialerPAXfloat-nsCheckstopptevorEntfernung; maßgeblichesexaktesNSstehtim
+archiviertenManifestundwurdemitgeprüft. 068enthältneueGzip/Indizes/Helper.
+8GiBFloor/64MiBReserve bleiben, aktuell~8,84GBfrei. KeineNativegeradeaktiv.

@@ -1,6 +1,6 @@
 # SSAM.AI – ausführbarer Gesamtplan A → B
 
-Stand15.11.2026,04:28UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
+Stand15.11.2026,05:06UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
 Maßgeblich sind der vollständige Nutzerauftrag, ursprüngliche
 [Milestonespezifikation](2026-11-11-milestones-a-b.md),
 [Toolchainrichtlinie](../../decisions/2026-10-17-tse-ai-tools-mcp-policy.md)
@@ -23,6 +23,8 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 |026Skulls600diag1|geschlossen, A4 weiter offen|Root640Dateien/4LogsRestore; vierstufigerAudit bytegleich, bewaffneter16,546sStillstand; keinePromotion|
 |A1Maus/Keyboard|historischeFAILs|MousevariableAntwort,Keyboard7,5°Rückkehrfehler; Rootclosedaudit vollständig|
 |A1Pitchfeedback|Native034224 FAIL vor ersterEmission|nur+12Detour/1pxFeedback/0,75°diagnostischeRückkehr,keinSchuss/A1pass|
+|027Combat-Recovery|gebaut/Skulls600geschlossen;keineA4Abnahme|190Leben97Useful118Gain;Exactstill5,15s;neverUseful52,09soffen|
+|A1Methodwindow|Root21/0/frozen151+72Pins|Control+Traceje10sinputfrei nach068Backup, nurMethodenbeobachtung|
 |A3Tiernachweis|offen|020STARK13:3,Swap5:6; keinbelegtesSTARK>MITTELüberbeide|
 |A4Karten|teilweiseBeobachtung|024Red/Skulls/Trouble600geschlossen, Skulls242,49sNoUseful; weitereMaps/Transitions/Resetoffen|
 |A5Formalgates|nichtbegonnen|nachfunktionalgeeignetemKandidaten1/4/8Bots60/60/120min|
@@ -52,9 +54,9 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 5. **A4Combat-Recoveryfix integriert692b0d0.** Root3663/0 plus vollständiger
    Source-/Testreview, negativeMapRootfund reale4/3RED→4/0GREEN. AlteGrenzen
    bleiben; separaterfrischerCombatpin/Produktivcapture explizit. NochkeineNative-
-   Verbesserung. Jetzt027Build, danach disabledSkulls600Retarget/Review/Backup,
-   isoliert tatsächlich testen und vollauswerten. A1MethodAPI Root35/0integriert,
-   aktuellerWorker baut inputfreiesControl+TraceMethodwindow; beide10saktiv,
+   Verbesserung. 027gebaut/77Pins;Skulls600geschlossen/vollausgewertet,Result55954ed6,
+   Exactstill5,15saberneverUseful52,09sweiteroffen;keinA4pass. A1MethodAPI Root35/0integriert,
+   inputfreiesControl+TraceMethodwindow fertig/Root21TestsPASS; beide10saktiv,
    keinA1Schadenspass/18ABIclaim. DetailsundAusführung im aktuellenHandoff.
    A3/A5 erst nach funktionalgeeignetemKandidaten. B weiterhin nach A.
 
