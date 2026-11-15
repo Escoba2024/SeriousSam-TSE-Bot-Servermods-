@@ -1,3 +1,54 @@
+## Bereit zur gesicherten Einzelprüfung Yodeller — 2026-11-15T21:00:17.820129+00:00
+
+Live Mixed bleibt erhalten; A offen/B nicht begonnen. Kein Nativeprozess läuft.
+035YodellerSourceAuthor4baf5df→Root30d162e integriert, Root7Tests0.121sPASS.
+D /srv/tse-nav20-035-yodeller600-diag0-disabled-20261115 Manifest
+623b4920dc2bfa152113b36c365ed855a1c25530be6371165ed69a59ec704403;
+aktuellerD035Trouble-Parent,2ganzeSourceinversen/141andereParentfilesbytegleich.
+Alle160Runtime-/146Source-/79Python-/81Buildpins geprüft; aktuelleTimestamp-Transaction/
+CgroupBackend/Reader/Nav/DLL035 bleiben erhalten, expliziterMap/Dauer/diagWechsel.
+
+RootFv2 /srv/tse-nav20-035-yodeller600-diag0-root-v2-frozen-20261115 Manifest
+`a6f1eeb82cc832ee6127f5eedef95e32c4b86763d415b6a45e37d9ec0ccae346`,
+Runner `cc63b5fe623852f5b2daf0e7c9a1e34b9f332035993a179c09d95cddee20899c`.
+NurGate+2Namespaces+Manifest,147andereD-Dateienbytegleich. ScopedPeer
+RootE/navigation035-yodeller-root-peer-review.json SHA
+`8fb83bf54d64237cbd35729594ecc44c1f4528eeda81903394a6b590eb25b618`,
+PASS_SCOPE/noC/I; unabhängig fürRootanwendung, nichtfürAuthor-D-/Template-/Policyimplementierung.
+V1privateFreeze scheiterte aufzweitemexklusivemRunnerwritevorManifest/Runtime;
+Fehlkopie/Helper/Quittungbewahrt. V2lässtdieRunnerkopieausundschreibtTransformeinmalfrischexklusiv.
+
+Root publiziertSource116, erstelltBundle ^d28ba47 in107 undFULL108mitD/Fv2/Authorproof/
+Fehlkopie/Source116Bundle/allenQuittungen; vollständigerDriveReturn+2PerfileRestoresvorNative.
+Dann RootE/run-navigation035-yodeller.py --preflight und genaueinStart unter
+RootE/observe-navigation035-yodeller.py; Yodeller600/diag0/Hard2/8DEMON3/Original20FPS,
+isolierte27850/X154. KeineArchive/Git/Downloads/Tests/Compilerparallel; WorkerSTATICONLY.
+NachEndeExecabholen/RootE/check-navigation035-yodeller-closed.py/unabhängigerRestore,
+erstdanacheinClosedauditmittatsächlichenCasepins. KeinautomatischerRetry/keinLiveRollout.
+Original-W-Vorbereitungläuftisoliertweiter; vorNativealleTestjobspausieren.
+
+## Veröffentlichung/Sicherung abgeschlossen — 2026-11-15 20:49:37 UTC
+
+Source115 remote `4e2e604c1f58835469f89d3e1a7b5f1ba943cabf`, local
+`d28ba47d8272f5b11d821cfd50e9126b8e81d7ca`, tree `b4a7cbdcbfeb6e632ebaad02aca7b02387efcd2b`.
+TatsächlicherFetch, Branchlsremote, Treegleichheit undDiff0 PASS20:47:43.070792.
+Bundle B/source-through-closed035-audit.bundle benötigt0db394b in106, verifyPASS.
+FULL107 B/delta107-build035-and-colt-trouble-control-closed.tar.gz13157030B,
+SHA `833538e8c06b36ba37eab06711505570bdb1940eda9d9c940e83f261484a9720`,
+Drive `1Qpfoe2KKe8yC9MccZbO4WU3ebxiqcd04`: vollständigerReturn und zwei komplette
+Perfile-Rekonstruktionen756Dateien/95947712B/UID/GID/Mode/mtime_ns PASS20:49:37.071305.
+Enthältgesamten035Case/finalenAudit/Authorproofs/final-closurea5bdb1a4…/Source115Bundle/
+96MiBTransportrecovery undfrischeDriveReturnbelege. Originaldeltas/Recoveryarchive/Rollback051
+bleibenBasis. KeineRuntime-Restore-StartabnahmeausDateirekonstruktionenbehauptet.
+
+A offen/B unbegonnen, LiveMixed erhalten, keineNative-/Compiler-/Readerprozesse.
+Zwei isolierte Vorbereitungen laufen: aktuellerD035Trouble→Yodeller600diag0 mitaktuellen
+Timestamp-/Cgroup-/Readerquellen; minimalerOriginal-W-Impuls/Serious3mitpersistenterEvidenz.
+Der alte024YodellerParent ist wegenveralteterTransaction/BackendkeineRuntimebasis.
+Root arbeitet nach Vorbereitung/Pinreview/erneuterSicherung eigenständig weiter.
+Eine additiveRootfinalreview-Quittung nach107Capture wird in108 ergänzt; vollständiger
+Authorabschlussundallefür035benötigtenQuellen/Rawbelege sind bereits107gesichert.
+
 ## Maßgeblicher Stand — 2026-11-15T20:45:36.372539+00:00
 
 Build035-Auswertung abgeschlossen, A offen/B nicht begonnen; kein externer Blocker.
