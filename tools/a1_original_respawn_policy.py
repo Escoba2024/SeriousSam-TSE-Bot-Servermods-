@@ -141,6 +141,15 @@ def complete_chain(events,*,cutoff,dead_pin,row_floor):
         need(number(v['health'])and number(w['health'])and v['health']>0 and v['health']>w['health'],'actual live HP loss')
         (fatal if v['health']>0>=w['health']else normal).append(a['call_id'])
     need(normal and fatal,'both actual normal and fatal Colt damage examples INCOMPLETE')
+    first_damage=min((calls[c]['enter']for c in normal+fatal),key=lambda e:e['sequence'])
+    def point(e):return {'call_id':e['call_id'],'sequence':e['sequence'],'row_sequence':e['row_sequence'],
+      'tick_ordinal':e['tick']['ordinal'],'native_tick':e['tick']['value']}
     return {'status':'LIMITED_BOUND_ORIGINAL_RESPAWN_COLT_EXAMPLES_ONLY','a1_accepted':False,
       'qualified':False,'init_call_id':init['call_id'],'first_valid_game_tick_call':first['call_id'],
-      'normal_damage_calls':normal,'fatal_damage_calls':fatal,'row_floor':row_floor,'positive_cutoff':cutoff}
+      'normal_damage_calls':normal,'fatal_damage_calls':fatal,'row_floor':row_floor,'positive_cutoff':cutoff,
+      'init':point(init),'valid_anchor':copy.deepcopy(anchor),'first_post_init_tick':point(first),
+      'first_damage':point(first_damage),'damage_minus_anchor_native_sequence':first_damage['sequence']-anchor['sequence'],
+      'damage_minus_first_tick_native_time':first_damage['tick']['value']-first['tick']['value'],
+      'first_damage_in_first_post_init_tick':first_damage['tick']['call_id']==first['call_id'],
+      'first_valid_state_damage_proven':False,
+      'first_state_limit':'Bound examples only; timing/sequence metadata never proves damage at the first valid state.'}

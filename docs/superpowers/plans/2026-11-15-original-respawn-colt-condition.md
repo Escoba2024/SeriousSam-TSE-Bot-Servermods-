@@ -26,7 +26,8 @@ Config-/Runner-/Ownershippfade; alte Methods/Core/Observer bytegleich.
   Boolwerte/Predictor/stale/Reserve fatal. Vollständige synthetische echte Rowform
   positiv; fehlenderInit/Anchor/Owner/Leave/normal+fatal/S-Cutoff negativ.
 - [ ] Kleinste Policy; tatsächliche Registered-Tracevalidatoren bleiben vorgeschaltet.
-- [ ] Gezieltes GREEN,Log/Quellcommit. Keine alten Raws oder Gesamtsuiten.
+- [x] Gezieltes GREEN,Log/Quellcommits5b13c3d/f6f4a3c.6Tests, tatsächliches
+  Callbackmodell+unveränderter StrictTraceValidator. Keine alten Raws/Gesamtsuiten.
 
 ## Task2 – eigene normale Fire-/Readiness-Methode
 
@@ -59,3 +60,56 @@ synthetisieren. Keine menschliche Freigaberunde nötig, Auftrag autorisiert.
 Reale Vorbereitungs-Tötung ist nicht garantiert; Fristablauf ehrlich FAIL.
 MayRespawn2 allein beweist keinen Respawn; Root verlangen echte Callbackkette.
 Statische Unvereinbarkeiten zuerst konkret melden,kein Interface-/Guardraten.
+
+## Ausführungsledger
+
+Task1 complete:6Tests0.205s. Private Logs unter
+/srv/tse-original-respawn-colt-evidence-20261115. Erste Syntaxfehler in neuen
+Testtexten ausdrücklich keine Verhaltens-REDs; korrigierte fehlendePolicy-REDs,
+Direct/Cast-player=null-Form und echter negativer Dead-Damage-RED erhalten.
+Callbackfixture zuerst zu großer Burst mit Queue64-Fehler, danach echte Drains
+zwischen Schüssen statt Grenzänderung. Zweiter Fixturefehler: ursprüngliche
+zweiteVanillarolle, explizit zur neuen Botrolle geändert, keine Runtimeattribution.
+Eine kleine rg-Quellenlektüre des externen portablen observer_harness.js erfolgte
+ohne NOATIME; dessen frühere atime war nicht gepinnt, daher kein unverändert-
+Metadatenclaim für diese Hilfsquelle. Alle weiteren externen Reads NOATIME.
+
+Task2 underway:5 gezielte Fire-/Journaltests GREEN0.009s nach tatsächlichem
+fehlendemAdapter-RED. Window-/Staging-/End-to-Endbedingungen noch NICHT fertig.
+Ruling: neue Kettenpolicy liefert Init-/Anchor-/FirstTick-/FirstDamage-Seq/Native-
+Tick/Delta getrennt und first_valid_state_damage_proven immerFalse; keine
+Erstzustandsqualifikation aus irgendwann beobachteten Schadensbeispielen.
+
+Task2 Source checkpoint:13/13 GREEN0.214s (method-live-flag-green.log).
+Echter fehlender Window-/Replica-/Namespace-RED und echter positiveHP-ohneAlive-
+RED erhalten. Tatsächlicher alter Control10s-Loop mit Fake-C-Port, realer
+Journal-/Flush-/Releaseausführung, 38-Context-AST byteidentisch gepinnt.
+Neue Gegenfälle noDeath/missingDown/World/Shooterlife jeweils fatal; das sind
+gezielte bestehende-Guard-Prüfungen, keine erfundenen neuen Verhaltens-REDs.
+Ruling: Original-Replik und Server werden strikt auf Entity/Life/Health und
+beobachtete FIRE-Zustände gebunden. last_buttons und buttons_now liegen an
+verschiedenen Enginefeldern; Gleichheit wird als zusätzliche tatsächliche
+Beobachtungsbedingung verlangt, nicht als garantierte zeitliche ABIäquivalenz.
+Keine Pointergleichheit über Prozessräume. Replikationsabweichung fatal.
+Task3 fehlender Builder erzeugte3 echte REDs; tatsächliche Parent-Einrückung
+und vollständige Cleanupzeile mussten als Fixturefragments korrigiert werden
+(Builderausführungsfehler erhalten, keine Verhaltens-RED-Umwertung).
+Danach3/3 Source-/Manifesttests GREEN0.031s. Zu diesem Zeitpunkt noch kein
+Paket/NativeReady.
+
+Task2/3 complete (offline): zusätzlicher echter LateRead-RED am tatsächlichen
+neuen `_sample`→ACK-Pfad; .02s frischer Read nach1.99s Guardarbeit muss dennoch
+an der unveränderten2s-Gesamtfrist scheitern. Commit6adfe0f ergänzt ausschließlich
+den Nachread-Fristguard. 20Policy/Method+3Buildertests GREEN .408s/.041s.
+Native10s/15TTL/Workergrenzen werden durch unveränderte Parentmethodenquelle
+und exakte Runnerinversen erhalten; kein neuer tatsächlicher Trace-/TTL-Test
+oder nativer Retailnachweis wird aus den Fakeports abgeleitet.
+
+Finaler D-v3 /srv/tse-a1-original-respawn-fixedtarget030-v3-disabled-20261115,
+Manifest57c65e12ac413ca3231bc9141dc428e44563fe70bc1d86c1811f122ff2bf7177,
+1636537Bytes,280/77/14Pinsvollständiggeprüft,7Parentdateiengeändert und130gleich.
+Keine Sourcegates aktiviert. D/D-v2 unverändert superseded/NEVER_NATIVE.
+Private finaleQuittung disabled-v3-final-receipt.json SHA17302d53a6276889f32166072ffe888346a43fcab2915d487a58b80f943e75ec
+im obenbenannten Evidenceverzeichnis. Rootreview/Integration/Freeze/Native
+bleiben allein Rootaufgabe. Keine offene Implementierungsaufgabe in diesemClaim;
+FirstStateabnahme/Botopfer/Aim/Gain bleiben ausdrücklich außerhalb.

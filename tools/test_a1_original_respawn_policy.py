@@ -104,6 +104,11 @@ class RespawnPolicy(unittest.TestCase):
         self.assertEqual(result['status'],'LIMITED_BOUND_ORIGINAL_RESPAWN_COLT_EXAMPLES_ONLY')
         self.assertEqual(result['normal_damage_calls'],[16]);self.assertEqual(result['fatal_damage_calls'],[26])
         self.assertFalse(result['a1_accepted'])
+        self.assertFalse(result['first_valid_state_damage_proven'])
+        self.assertEqual(result['first_damage']['call_id'],16)
+        self.assertEqual(result['first_damage']['native_tick'],2.)
+        self.assertEqual(result['init']['call_id'],5)
+        self.assertEqual(result['valid_anchor']['call_id'],5)
 
     def test_original_direct_callback_has_no_player_snapshot(self):
         es=events()

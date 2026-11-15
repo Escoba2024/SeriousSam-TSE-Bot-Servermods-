@@ -1,6 +1,6 @@
 # SSAM.AI – ausführbarer Gesamtplan A → B
 
-Stand 15.11.2026, 16:25 UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
+Stand 15.11.2026, 16:59 UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
 Maßgeblich sind der vollständige Nutzerauftrag, ursprüngliche
 [Milestonespezifikation](2026-11-11-milestones-a-b.md),
 [Toolchainrichtlinie](../../decisions/2026-10-17-tse-ai-tools-mcp-policy.md)
@@ -14,7 +14,7 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 
 ## Aktueller Zustand und Priorität
 
-Stand 15.11.2026, 16:25 UTC. Exakte private Pfade/Hashes und frühere Fehler stehen im Handoff; ältere Planstände bleiben in Git erhalten.
+Stand 15.11.2026, 16:59 UTC. Exakte private Pfade/Hashes und frühere Fehler stehen im Handoff; ältere Planstände bleiben in Git erhalten.
 
 | Arbeit | Status | Beleg und nächster Schritt |
 |---|---|---|
@@ -23,20 +23,20 @@ Stand 15.11.2026, 16:25 UTC. Exakte private Pfade/Hashes und frühere Fehler ste
 | Dev-Sync | frühere Ursache offen | 14:50–15:59 weitere 9.987 OK/0BAD/0Disconnect; ältere 23BAD/2Disconnect und 70BAD/3Disconnect bleiben FAIL. |
 | A1 Eingabekalibrierung | offen | Maus-/Tastatur-/Pitchbefunde fehlgeschlagen; keine Toleranzänderung. |
 | A1 neue Messmethode | begrenzt bestanden | Kontroll-/Traceprobe geschlossen und voll ausgewertet: 414 tatsächlich beendete exkludierte Weltcasts, 207 GameTickpaare bis F, 38 Originalbereiche restauriert; Init/Colt/Schaden jeweils 0. Kein A1-Pass. |
-| A1 normaler Originalrespawn | Source/TDD in eigenem Worktree | Echter regulärer Tod vor Arm/MayRespawn2; danach ein normaler Fire-Release und tatsächliche Init-/erste-Tick-/Normal-/Fatal-Schadenskette. Neue Bedingung, alte Inputfree-/Coltverträge unverändert. |
+| A1 normaler Originalrespawn | Source/Fristfix integriert, 23 portable Tests bestanden; Rootfreeze geprüft, noch nicht nativ | Echter regulärer Tod vor Arm/MayRespawn2; danach ein normaler Fire-Release und tatsächliche Init-/erste-Tick-/Normal-/Fatal-Schadenskette. Neue Bedingung, alte Inputfree-/Coltverträge unverändert. |
 | A3 Schwierigkeitsstufen | offen | STARK>MITTEL und menschliches Spielniveau noch nicht belegt; Waffenversorgung unzureichend. |
 | A4 Reset031 | geschlossen, begrenzt bestanden | 24/24 aktive Slotphasen; Vollauswertung 145 Leben, weiterhin 49,4s Waffenlücke. Reset030 bleibt 22/24 FAIL. |
 | A4 Hole031 | geschlossen, vollständig ausgewertet | 206 Leben/204 zusätzliche Waffen-Gewinne/172 erkannte Spieler-Killzeilen; 79,43s und 57,85s ohne brauchbare Zusatzwaffe verhindern Freigabe. |
 | A4 Trouble031 | geschlossen, vollständig ausgewertet | 600,074s/292 Leben/205 Gains/259 Spielerkillmeldungen; 38,45s Versorgungslücke. Root-Restore und Auditdateihashes geprüft; kein A4-Pass. |
-| A4 Karten/Spezialübergänge | gezielter Fix032 gebaut, nativ ungeprüft | Atomischer Erstwaffenwechsel SDK4175/0;032/81Pins geprüft, neuer Trouble600-Fork in Vorbereitung. Übrige Karten/Übergänge offen; Desert Temple gesperrt, Welt fehlt. |
+| A4 Build032 Trouble | geschlossen, vollständig ausgewertet | 600,053s/0BAD/0Disconnect in vier Logs, Rootrestore640Dateien PASS; 311Leben/194Gains/0neue first_weapon-Marker/44,24s NoUseful; keine Verbesserung belegt. Atomischer Erstwaffenwechsel SDK4175/0. Übrige Karten/Übergänge offen; Desert Temple gesperrt, Welt fehlt. |
 | A5 formale Stabilität | nicht begonnen | Funktional geeigneter Kandidat erforderlich; 1/4/8 Bots für 60/60/120 Minuten. |
-| Sicherung/Veröffentlichung | Source105 / Delta098 vollständig geprüft | Remote-Fetch/Baum/Diff0; privater Vollrücklauf und zwei vollständige Perfile-Metadatenrestores. Trouble-Rohdaten voll gesichert; neuer Recoverybackup separat geprüft. |
+| Sicherung/Veröffentlichung | Source108 / Delta100 vollständig geprüft | Remote-Fetch/Baum/Diff0; privater Vollrücklauf und zwei vollständige Perfile-Metadatenrestores. 032Build/Freeze gesichert; neue032Rohdaten erst mit nächstem Backup101. |
 | B Sessions/Chat | nicht begonnen | Erst nach nachgewiesenem Abschluss von A. |
 
 ## Unmittelbare Ausführung und Claims
 
-1. **Trouble031 abgeschlossen:** Rootjob36038 beendet0/abgeholt; unabhängiger Rootrestore15:49:50 PASS. A4-Vollaudit022dee4 integriert, Root3TestsPASS und kanonische Dateihashes geprüft. A4-Agent im eigenen WT `/srv/tse-reset031-diag1-prepare-20261115` reproduziert nun die gesperrte Erstwaffensuche bei gehaltenem nicht dringendem Nebenitem und entwickelt nur nach echtem SDK-RED das atomische Wechseln zum vollständig validierten Ersatz. Keine neuen passiven Nativewiederholungen ohne konkrete neue Hypothese. Danach engste ursächliche Gameplaykorrektur mit messbarem Beschaffungs-/Bewegungsnachweis.
-2. **A1 gezielter normaler Respawn:** Candidate im eigenen WT `/srv/tse-build030-skulls-closed-audit-20261115` dokumentiert neue Bedingung/Plan und implementiert mit echten RED→GREEN-Tests. Rootentscheidung: expliziter DEAD_READY-Basisreader ohne optionale lebende Muzzlegeometrie zulässig; alte Coltreader-/Inputfreeguards unverändert. PID/World/Actor/Slot/MayRespawn2/Buttons/HP durch frische Doppelreads binden. Keine HP-/Positions-/Winkelwrites, kein Treffer aus Input ableiten. Vorbereitung nur regulär durch bestehenden Festziel030-Coltpfad, sonst begrenzter FAIL. Nach Arm genau ein normaler Fire-Down/Up; tatsächliche Hold-/Releasezeiten und serverseitige ACK/Init/erste-Tick-/Owner-/Schadenskette messen. Grenzen 10s/15sTTL/Queue64/Native16384/85s/90s/eight/.2 unverändert.
+1. **Trouble032 geschlossen:** Root43288 beendet0/abgeholt; unabhängiger Rootrestore16:46:48 PASS640Dateien/beideSnapshotNS/vierLogs/PIDsUnitsDisplay/vierLocks. Audit0459c58 integriert/3RootTests/kanonischeHashes geprüft. BeideAgenten jetzt quieszent. Der nächste A4-Prüffokus ist der unverändert lang gehaltene mapped Weapon220-Versuch; kein weiterer Sideitem-Diagnoselauf. Vorhandene031Aggregate dienen dem Vergleich; kein alterRawreplay. Keine weiteren Gameplayänderungen oder Nativewiederholung vor Auswertung.
+2. **A1 gezielter normaler Respawn:** Candidate im eigenen WT `/srv/tse-build030-skulls-closed-audit-20261115` hat den konkreten Nachread-ACK-Fristguard per RED→GREEN abgeschlossen, Source932a119/63dfe2c integriert/23Roottests. D-v1/D-v2 bleiben NEVER_NATIVE; D-v3/F eingefroren und Rootdelta separat geprüft. Nächster echter Schritt ist nach voller Sicherung die passende Kontrolle und bedingter Trace. Rootentscheidung: expliziter DEAD_READY-Basisreader ohne optionale lebende Muzzlegeometrie zulässig; alte Coltreader-/Inputfreeguards unverändert. PID/World/Actor/Slot/MayRespawn2/Buttons/HP durch frische Doppelreads binden. Keine HP-/Positions-/Winkelwrites, kein Treffer aus Input ableiten. Vorbereitung nur regulär durch bestehenden Festziel030-Coltpfad, sonst begrenzter FAIL. Nach Arm genau ein normaler Fire-Down/Up; tatsächliche Hold-/Releasezeiten und serverseitige ACK/Init/erste-Tick-/Owner-/Schadenskette messen. Grenzen 10s/15sTTL/Queue64/Native16384/85s/90s/eight/.2 unverändert.
 3. **Root integriert und prüft:** Claims getrennt; ausschließlich Root baut, ändert Runtime und Live. Nach Source-/Pinreview und Sicherung genau passende neue uninstrumentierte Kontrolle und nur bei erfolgreichem Close/Restore passender Trace. Fehlende Ereignisse bleiben INCOMPLETE; kein blinder AI-only-Retry.
 4. **Ressourcen:** mindestens8GiB Disk erhalten, zusätzlich64MiB Schreibreserve vor vorbereitenden Schreibaktionen. Closedbelege nur nach vollständigem externem Backup und geprüfter ausführbarer Byte-/Metadatenrekonstruktion komprimieren/retiren; bestehende Originalarchive/Rollback051/qualifizierte Runtimes bleiben erhalten. Während Native keine Tests/Builds/Reader/Archive/Downloadsparallel.
 5. **A abschließen:** A1 beide Opferrollen/Neustart/Mapwechsel; A3 direkte Tiervergleiche; A4 funktionale Kartenmatrix/Spezialübergänge und konkrete Waffenlücken beheben. Erst geeigneten Kandidaten in formale A5-Gates nehmen, danach Dev→Public seriell. Anschließend B ohne erneute Aufforderung beginnen. Ein Build, Audit oder Commit beendet den Gesamtauftrag nicht.
@@ -83,16 +83,16 @@ mitMindestziel/Zielzahl/eigenenBots/MenschenungeklärtenTeilnehmern,keinpauschal
 
 ## Sicherung, Veröffentlichung und Abschluss
 
-Source104: remote `56209ff331deb82f7a722a34470c881c0bee1378`, lokal
-`cd70501026e42a33f0e6d25106d2ccd9e2198b3f`, Baum
-`0031d66207c664d58bd5177a8035e11b1cbb16fb`; tatsächlich gefetcht und Diff0 am
-15.11.15:35:43. Delta097: 9.128.045B, SHA256
-`ff19e2ef0538e190b9b444c34c7bc8c9322577a975ccdcd5ddb8ccda9fdf516f`,
-Drive `1T_p93-BlSn62AD_Ms3d8HlHSb4ztA6si`; Vollrücklauf+zwei vollständige
-Datei-/Metadatenrekonstruktionen 1.613 Dateien/65.273.762B PASS15:38.
-Historische Sync-Recovery eigenständig archiviert und vollständig extern geprüft;
-Originalarchive und Mischrollback051 bleiben erforderlich. Keine Rohidentitäten,
-Zugangsdaten oder Retaildateien öffentlich veröffentlichen.
+Source108: remote `ca2fc93a23df88c4c9ad80dc2763d2c5e37e91a2`, lokal
+`7a576d31dbaac34710376a5609376e9704849874`, Baum
+`f3bc0dabfb636459d31386da6a6f99a206ac1912`; tatsächlich gefetcht und Diff0 am
+15.11.16:32:27. Delta100: 2.239.537B, SHA256
+`37bfdc47695c224251a1777df269ce99ffd1add502fa7535f234d17a2dd46c20`,
+Drive `1U2EMTQNUBujCkDffxNCQYUivBx6v4T0D`; Vollrücklauf+zwei vollständige
+Datei-/Metadatenrekonstruktionen 576 Dateien/8.806.707B PASS16:33:55.
+Historische Sync-/Trouble031-/22Mapstream-Recoveries eigenständig archiviert und
+vollständig extern geprüft; Originalarchive und Mischrollback051 bleiben erforderlich.
+Keine Rohidentitäten, Zugangsdaten oder Retaildateien öffentlich veröffentlichen.
 
 Neue Quellen/Configs/Navmetadaten/Tests/bereinigte Berichte committen und pushen,
 Remote tatsächlich rückprüfen. Private vollständige Belege und Restorearchive im
