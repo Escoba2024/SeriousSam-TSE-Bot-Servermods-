@@ -1,0 +1,81 @@
+{
+  "parent_sha256": "49229af92892fe030f74b7a09815647c90ec0572f4a1065c1ed20fc4f0590b3d",
+  "replacements": [
+    [
+      "// TRANSIT_CUSTODY: diagnostic storage/output only; never motion authority.\n// New process-lifetime bound; no life/map reset and no heap allocation here.\nstatic void BotCecilTransitHistoryRow(const char* event,const char* reason,\n    uint32_t actor,uint32_t generation,uint32_t item,int goal,double attempt,double deadline,\n    bool worldKnown,CWorld* world,bool mapKnown,long map,int source,int hop,unsigned edges,\n    double last,double since,bool timeKnown,double now,int accepted=-1,int currentPoint=-1){\n  if(!bot_bDiagnostics)return;\n  static unsigned rows=0;if(rows>=1024)return;\n  const unsigned serial=++rows;\n  if(serial==1024){BotLog(\"[CecilItemTransitHistory] event=CAP_REACHED reason=row_limit coverage=incomplete serial=%u\\n\",serial);return;}\n  char line[1024];\n  const int length=std::snprintf(line,sizeof(line),\n    \"[CecilItemTransitHistory] event=%s reason=%s coverage=bounded serial=%u entity=%lu entity_known=%d generation=%lu item=%lu goal=%d attempt=%.9g deadline=%.9g world_known=%d world=%p map_known=%d map=%ld source=%d hop=%d edges=%u cached_last=%.9g cached_since=%.9g event_time_known=%d time=%.9g accepted_known=%d accepted=%d current_point_known=%d current_point=%d clock=source\\n\",\n    event,reason,serial,(unsigned long)actor,(int)(actor!=0),(unsigned long)generation,(unsigned long)item,goal,attempt,deadline,\n    (int)worldKnown,(void*)world,(int)mapKnown,map,source,hop,edges,last,since,(int)timeKnown,timeKnown?now:0,\n    (int)(accepted>=0),accepted,(int)(currentPoint>=0),currentPoint);\n  if(length<0||(size_t)length>=sizeof(line)){\n    BotLog(\"[CecilItemTransitHistory] event=FORMAT_FAULT reason=format_bounds coverage=incomplete serial=%u\\n\",serial);return;\n  }\n  BotLog(\"%s\",line);\n}\n// Separate pre-admission cache: an unsuccessful shortcircuit must never bind\n// gameplay history or dereference player merely to complete a diagnostic row.\nstruct SCecilTransitUnadmitted {\n  uint32_t actor=0,generation=0,item=0;int goal=-1;double attempt=0,deadline=0;bool recorded=false;\n  void Record(uint32_t a,uint32_t g,uint32_t i,int target,double start,double end,double now,\n      bool worldKnown,CWorld* world,int source,int hop,bool accepted,bool currentPoint){\n    if(!bot_bDiagnostics)return;\n    if(actor!=a||generation!=g||item!=i||goal!=target||std::memcmp(&attempt,&start,sizeof(attempt))||std::memcmp(&deadline,&end,sizeof(deadline))){\n      *this=SCecilTransitUnadmitted();actor=a;generation=g;item=i;goal=target;attempt=start;deadline=end;\n    }\n    if(recorded)return;\n    recorded=true;\n    BotCecilTransitHistoryRow(\"UNADMITTED\",\"eligibility_false\",a,g,i,target,start,end,worldKnown,world,\n      false,-1,source,hop,0,-1,-1,std::isfinite(now),now,(int)accepted,(int)currentPoint);\n  }\n};\n// One mapped-weapon attempt may revisit ordinary edges after genuine nearest\n",
+      "// One mapped-weapon attempt may revisit ordinary edges after genuine nearest\n"
+    ],
+    [
+      "  // TRANSIT_CUSTODY: flags are never read by a gameplay decision.\n  bool diagnosticArm=false,diagnosticDisarm=false,diagnosticEnd=false;int diagnosticSource=-1,diagnosticHop=-1;\n  bool ContainsAttempt(uint32_t a,uint32_t g,uint32_t i,int target,double start,double end)const{\n    return count&&actor==a&&generation==g&&item==i&&goal==target&&attempt==start&&deadline==end;\n  }\n  void Diagnostic(const char* event,const char* reason,bool timeKnown,double now,int accepted=-1,int currentPoint=-1){\n    BotCecilTransitHistoryRow(event,reason,actor,generation,item,goal,attempt,deadline,true,world,true,map,\n      diagnosticSource,diagnosticHop,count,last,since,timeKnown,now,accepted,currentPoint);\n  }\n  void DiagnosticDisarm(const char* reason,bool timeKnown,double now,int accepted=-1,int currentPoint=-1){\n    if(bot_bDiagnostics&&count&&!diagnosticDisarm){diagnosticDisarm=true;Diagnostic(\"DISARM\",reason,timeKnown,now,accepted,currentPoint);}\n  }\n  void End(const char* reason=\"goal_clear\",bool timeKnown=false,double now=0){\n    if(bot_bDiagnostics&&count&&!diagnosticEnd){diagnosticEnd=true;Diagnostic(\"END\",reason,timeKnown,now);}\n  }\n  void Disarm(const char* reason=\"external_unknown\",bool timeKnown=false,double now=0,int accepted=-1,int currentPoint=-1){\n    if(world)disarmed=true;\n    DiagnosticDisarm(reason,timeKnown,now,accepted,currentPoint);\n  }",
+      "  void Disarm(){if(world)disarmed=true;}"
+    ],
+    [
+      "    if(!same){\n      End(\"domain_changed\",std::isfinite(now),now); // TRANSIT_CUSTODY\n      *this=SCecilItemTransitHistory();world=w;",
+      "    if(!same){\n      *this=SCecilItemTransitHistory();world=w;"
+    ],
+    [
+      "    if(bot_bDiagnostics){diagnosticSource=source;diagnosticHop=hop;} // TRANSIT_CUSTODY\n    if(disarmed)return false;",
+      "    if(disarmed)return false;"
+    ],
+    [
+      "    for(int k=0;k<3;++k)if(gravity[k]!=down(k+1)){disarmed=true;DiagnosticDisarm(\"gravity_changed\",std::isfinite(now),now);return false;}\n    if(last>=0&&(now<last||now-last>.25)){disarmed=true;DiagnosticDisarm(now<last?\"time_back\":\"gap\",std::isfinite(now),now);return false;}",
+      "    for(int k=0;k<3;++k)if(gravity[k]!=down(k+1)){disarmed=true;return false;}\n    if(last>=0&&(now<last||now-last>.25)){disarmed=true;return false;}"
+    ],
+    [
+      "      if(count==8){disarmed=true;DiagnosticDisarm(\"history_full\",std::isfinite(now),now);return false;}",
+      "      if(count==8){disarmed=true;return false;}"
+    ],
+    [
+      "         edge.to[0]!=to.x||edge.to[1]!=to.y||edge.to[2]!=to.z||edge.toRadius!=to.radius){disarmed=true;DiagnosticDisarm(\"edge_metadata_changed\",std::isfinite(now),now);return false;}",
+      "         edge.to[0]!=to.x||edge.to[1]!=to.y||edge.to[2]!=to.z||edge.toRadius!=to.radius){disarmed=true;return false;}"
+    ],
+    [
+      "    if(bot_bDiagnostics&&!diagnosticArm){diagnosticArm=true;Diagnostic(\"ARM\",\"first_entry\",std::isfinite(now),now);} // TRANSIT_CUSTODY\n    return now-since+1e-9>=10;\n  }\n};",
+      "    return now-since+1e-9>=10;\n  }\n};"
+    ],
+    [
+      "  SCecilItemTransitHistory itemTransitHistory;\n  SCecilTransitUnadmitted itemTransitUnadmitted; // TRANSIT_CUSTODY; survives ClearItemTransit.",
+      "  SCecilItemTransitHistory itemTransitHistory;"
+    ],
+    [
+      "  void ClearItemTransit(const char* reason=\"external_unknown\",bool timeKnown=false,double now=0,int accepted=-1,int currentPoint=-1){itemTransitHistory.Disarm(reason,timeKnown,now,accepted,currentPoint);itemTransitWorld=NULL;",
+      "  void ClearItemTransit(){itemTransitHistory.Disarm();itemTransitWorld=NULL;"
+    ],
+    [
+      "ClearItemTransit(\"goal_clear\");itemTransitHistory.End();itemTransitHistory=SCecilItemTransitHistory();itemTransitUnadmitted=SCecilTransitUnadmitted();ClearPatrolEpisode();",
+      "ClearItemTransit();itemTransitHistory=SCecilItemTransitHistory();ClearPatrolEpisode();"
+    ],
+    [
+      "s.flightFinishing=true;s.goalEntity=0;s.ClearItemTransit(\"flight_finish\",std::isfinite(now),now);s.ClearHopCheckpoint();",
+      "s.flightFinishing=true;s.goalEntity=0;s.ClearItemTransit();s.ClearHopCheckpoint();"
+    ],
+    [
+      "  CWorld* observedWorld=NULL; // Capture the existing eligibility read, not a new Engine call.\n  bool diagnosticWorldKnown=false; // TRANSIT_CUSTODY; assignment only at the original read.",
+      "  CWorld* observedWorld=NULL; // Capture the existing eligibility read, not a new Engine call."
+    ],
+    [
+      "    (diagnosticWorldKnown=true,observedWorld=player->GetWorld())&&player->GetHealth()>0",
+      "    (observedWorld=player->GetWorld())&&player->GetHealth()>0"
+    ],
+    [
+      "  if(!eligible){\n    // TRANSIT_CUSTODY: only already-read state/locals, including NULL-player shortcircuits.\n    if(bot_bDiagnostics&&s.mappedWeaponGoal&&s.goalKind==botcore::CecilItemKind::Weapon&&s.goalEntity&&\n        !s.itemTransitHistory.ContainsAttempt(s.entity,s.generation,s.goalEntity,s.goal,s.goalSince,s.goalDeadline))\n      s.itemTransitUnadmitted.Record(s.entity,s.generation,s.goalEntity,s.goal,s.goalSince,s.goalDeadline,now,\n        diagnosticWorldKnown,observedWorld,source,hop,accepted,currentPoint);\n    s.ClearItemTransit(\"eligibility_false\",std::isfinite(now),now,(int)accepted,(int)currentPoint);return false;\n  }",
+      "  if(!eligible){s.ClearItemTransit();return false;}"
+    ],
+    [
+      "  }else s.itemTransitHistory.Disarm(\"not_mapped_weapon\",std::isfinite(now),now);",
+      "  }else s.itemTransitHistory.Disarm();"
+    ],
+    [
+      "state.ClearHopCheckpoint();state.ClearItemTransit(\"invalid_final\",std::isfinite(now),now);state.ClearPatrolEpisode();state.acquiredAnchorTime",
+      "state.ClearHopCheckpoint();state.ClearItemTransit();state.ClearPatrolEpisode();state.acquiredAnchorTime"
+    ],
+    [
+      "if(!useReacquire){state.ClearImportantOrigin();state.ClearHealthConnector();state.ClearPatrolEpisode();state.ClearItemTransit(\"owner_lost\",std::isfinite(now),now);}",
+      "if(!useReacquire){state.ClearImportantOrigin();state.ClearHealthConnector();state.ClearPatrolEpisode();state.ClearItemTransit();}"
+    ],
+    [
+      "state.ClearGroundProgress();state.ClearEscape();state.ClearHopCheckpoint();state.ClearItemTransit(\"air_owner\",std::isfinite(now),now); // Accepted air",
+      "state.ClearGroundProgress();state.ClearEscape();state.ClearHopCheckpoint();state.ClearItemTransit(); // Accepted air"
+    ]
+  ]
+}

@@ -91,7 +91,7 @@ int gameTimeReads=0;
 struct Network {CSessionProperties session;double time=0;double GetGameTime(){op("game_time");++gameTimeReads;return time;}const void* GetSessionProperties(){op("session");return &session;}} network,*_pNetwork=&network;
 struct Timer {double TickQuantum=.05;} timer,*_pTimer=&timer;
 int _botRayBudget=20,bot_iRosterOffset=0;
-std::string pickerText;std::string goalLifecycleText;
+std::string pickerText;std::string goalLifecycleText;std::string transitHistoryText;int transitHistoryMaxLength=0;
 bool bot_bDiagnostics=false;int supplyDiagLines=0,supplyDiagMaxLength=0;std::string supplyDiagText;
 int reacquireDiagLines=0,reacquireDiagMaxLength=0;std::string reacquireDiagText;
 long _botSupplyMapSerial=7,_botSupplyMapReady=1;bool bot_bEnabled=true,bot_bSupplyNavigation=true;
@@ -99,7 +99,7 @@ long InterlockedCompareExchange(long* p,long,long){return *p;}
 int hopCheckpointEvents=0;
 int lockApproachEvents=0,lastApproachNode=-1,lastApproachHop=-1;unsigned long lastApproachRef=0;int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0,groundReplanEvents=0;char lastEnd[32]={0};
 void BotLog(const char* format,...){
- {char text[1024];va_list a;va_start(a,format);std::vsnprintf(text,sizeof(text),format,a);va_end(a);if(std::strstr(text,"[CecilPicker"))pickerText+=text;if(std::strstr(text,"[CecilGoal] ")||std::strstr(text,"[CecilGoalEnd] "))goalLifecycleText+=text;}
+ {char text[1024];va_list a;va_start(a,format);const int length=std::vsnprintf(text,sizeof(text),format,a);va_end(a);if(std::strstr(text,"[CecilPicker"))pickerText+=text;if(std::strstr(text,"[CecilGoal] ")||std::strstr(text,"[CecilGoalEnd] "))goalLifecycleText+=text;if(std::strstr(text,"[CecilItemTransitHistory]")){transitHistoryText+=text;transitHistoryMaxLength=std::max(transitHistoryMaxLength,length);}}
  if(std::strstr(format,"[CecilReacquireDecision]")){++reacquireDiagLines;char text[2048];va_list a;va_start(a,format);const int length=std::vsnprintf(text,sizeof(text),format,a);va_end(a);reacquireDiagMaxLength=std::max(reacquireDiagMaxLength,length);reacquireDiagText+=text;}
  if(std::strstr(format,"[CecilSupplyDiag")){++supplyDiagLines;char text[2048];va_list a;va_start(a,format);const int length=std::vsnprintf(text,sizeof(text),format,a);va_end(a);supplyDiagMaxLength=std::max(supplyDiagMaxLength,length);supplyDiagText+=text;}
  if(std::strstr(format,"[CecilHopCheckpoint]"))++hopCheckpointEvents;
@@ -5125,7 +5125,86 @@ void mapped220HistoryBoundaries(){
   "real ClearGoal releases all cross-edge attempt facts and disabled state");
 }
 
+size_t transitHistoryRows(const char* token){
+ size_t count=0,at=0;while((at=transitHistoryText.find(token,at))!=std::string::npos){++count;at+=std::strlen(token);}return count;
+}
+void transitHistoryCustodyReproduction(){
+ setup(3);bot_bDiagnostics=true;transitHistoryText.clear();transitHistoryMaxLength=0;
+ auto& state=BotSupplyState(0);auto& graph=BotSupplyGraph();
+ state.ClearGoal();state.ClearGoal();check(transitHistoryText.empty(),"transit custody never emits END for an empty unadmitted history");
+ auto arm=[&](unsigned actor,double now){
+  return state.itemTransitHistory.Observe(player.GetWorld(),7,actor,39,220,2,0,20,player.en_vGravityDir,now,0,1,10,graph.points[0],graph.points[1]);};
+ // The old accepted=false shortcircuit permits NULL: telemetry may not
+ // resolve Actor/World/Map through the player on this unadmitted path.
+ state.entity=1900;state.generation=39;state.goalEntity=220;state.goal=2;state.goalSince=0;state.goalDeadline=20;state.mappedWeaponGoal=true;state.goalKind=botcore::CecilItemKind::Weapon;
+ BotCecilItemTransitFailed(nullptr,state,.01,false,false);
+ BotCecilItemTransitFailed(nullptr,state,.02,false,false);
+ check(transitHistoryRows("event=UNADMITTED ")==1&&transitHistoryText.find("world_known=0 ")!=std::string::npos&&
+  transitHistoryText.find("map_known=0 ")!=std::string::npos&&transitHistoryText.find("accepted=0 ")!=std::string::npos,
+  "real NULL accepted-false path records one unadmitted attempt without dereferencing player or inventing world/map");
+ arm(1900,.05);arm(1900,.10);
+ check(transitHistoryRows("event=ARM ")==1&&transitHistoryText.find("entity=1900 ")!=std::string::npos,
+  "actual admitted history emits exactly one ARM with its copied actor domain");
+ state.itemTransitHistory.Disarm();state.itemTransitHistory.Disarm();
+ check(transitHistoryRows("event=DISARM ")==1&&transitHistoryText.find("event_time_known=0 ")!=std::string::npos&&
+  transitHistoryText.find("reason=external_unknown ")!=std::string::npos,
+  "actual external Disarm preserves one unknown-timed first-reason receipt");
+ state.ClearGoal();state.ClearGoal();
+ check(transitHistoryRows("event=END ")==1,"actual ClearGoal ends the admitted history before destroying its cached domain");
+ // No END for a cache that was never admitted, including repeated clears.
+ const auto endsBefore=transitHistoryRows("event=END ");
+ state.entity=1901;state.generation=39;state.goalEntity=220;state.goal=2;state.goalSince=0;state.goalDeadline=20;state.mappedWeaponGoal=true;
+ BotCecilItemTransitFailed(nullptr,state,.01,false,false);state.ClearGoal();state.ClearGoal();
+ check(transitHistoryRows("event=END ")==endsBefore,"unadmitted-only ClearGoal never invents admitted END custody");
+ // Direct goal assignments exist: an old admitted count is not proof that
+ // this different SSupplyState attempt was ever admitted.
+ state.entity=1940;state.generation=39;state.goalEntity=220;state.goal=2;state.goalSince=0;state.goalDeadline=20;state.mappedWeaponGoal=true;
+ arm(1940,.05);const auto beforeStale=transitHistoryText.size();
+ state.goalEntity=221;state.goal=1;state.goalSince=.25;state.goalDeadline=20.25;
+ BotCecilItemTransitFailed(nullptr,state,.26,false,false);BotCecilItemTransitFailed(nullptr,state,.27,false,false);
+ const auto staleRows=transitHistoryText.substr(beforeStale);
+ check(staleRows.find("event=UNADMITTED ")!=std::string::npos&&staleRows.find("event=UNADMITTED ")==staleRows.rfind("event=UNADMITTED ")&&
+  staleRows.find("item=221 ")!=std::string::npos&&staleRows.find("event=DISARM ")!=std::string::npos&&staleRows.find("item=220 ")!=std::string::npos,
+  "old admitted history cannot hide a new never-admitted SS attempt and still records the old history disarm");
+ state.ClearGoal();
+ // First reason is sticky and a restored scalar/geometry cannot erase it.
+ for(int kind=0;kind<5;++kind){
+  const auto before=transitHistoryText.size();arm(1910+kind,.05);
+  if(kind==0)arm(1910+kind,.31);
+  if(kind==1)arm(1910+kind,.01);
+  if(kind==2){player.en_vGravityDir(2)=1;arm(1910+kind,.10);player.en_vGravityDir(2)=-1;}
+  if(kind==3){graph.points[1].x+=1;arm(1910+kind,.10);graph.points[1].x-=1;}
+  if(kind==4){for(int i=1;i<=8;++i)state.itemTransitHistory.Observe(player.GetWorld(),7,1910+kind,39,220,2,0,20,
+    player.en_vGravityDir,.05+i*.01,i,i+1,10,graph.points[0],graph.points[1]);}
+  const char* reasons[]={"gap","time_back","gravity_changed","edge_metadata_changed","history_full"};
+  state.itemTransitHistory.Disarm();state.ClearItemTransit();state.ClearGoal();
+  const auto rows=transitHistoryText.substr(before);
+  check(rows.find(std::string("event=DISARM reason=")+reasons[kind]+" ")!=std::string::npos&&
+    rows.find("event=DISARM ")==rows.rfind("event=DISARM "),"actual Observe veto keeps its first reason through external clear and emits only one DISARM");
+ }
+ const auto beforeDomain=transitHistoryText.size();arm(1920,.05);arm(1921,.10);state.ClearGoal();
+ const auto domainRows=transitHistoryText.substr(beforeDomain);
+ check(domainRows.find("event=END reason=domain_changed ")!=std::string::npos&&domainRows.find("entity=1920 ")!=std::string::npos&&
+  domainRows.find("entity=1921 ")!=std::string::npos,"actual different admitted domain ends preceding custody before replacement");
+ // Extreme numeric fields exercise the actual bounded formatter, not a mirror.
+ state.itemTransitHistory.Observe(player.GetWorld(),2147483647L,0xffffffffu,0xffffffffu,0xffffffffu,-2147483647,
+  -1e300,1e300,player.en_vGravityDir,1e300,-2147483647,2147483647,10,graph.points[0],graph.points[1]);state.ClearGoal();
+ check(transitHistoryMaxLength<1024&&transitHistoryText.find("event=FORMAT_FAULT ")==std::string::npos,
+  "actual extreme-width fields fit fixed formatter without truncation or suppressed fault");
+ const auto diagBytes=transitHistoryText.size();bot_bDiagnostics=false;arm(1930,.05);state.itemTransitHistory.Disarm();state.ClearGoal();bot_bDiagnostics=true;
+ check(transitHistoryText.size()==diagBytes,"DIAG0 performs no transit history logging even on admit disarm and clear");
+ // Process lifetime row cap must survive every per-life/goal reset, not a ring.
+ for(unsigned actor=2000;actor<2500;++actor){arm(actor,.05);state.itemTransitHistory.Disarm();state.ClearGoal();}
+ check(transitHistoryRows("[CecilItemTransitHistory]")==1024&&transitHistoryRows("event=CAP_REACHED ")==1&&
+  transitHistoryText.find("coverage=incomplete")!=std::string::npos,
+  "transit custody reserves its process-lifetime1024th row for explicit incomplete coverage");
+ const auto bytes=transitHistoryText.size();for(unsigned actor=3000;actor<3010;++actor){arm(actor,.05);state.ClearGoal();}
+ check(transitHistoryText.size()==bytes&&transitHistoryMaxLength<1024,"no new goal can reset global cap and no history row reaches one KiB");
+ bot_bDiagnostics=false;
+}
+
 int main(){
+ transitHistoryCustodyReproduction();
  mapped220Circulation();mapped220InterruptedEvidence();mapped220HistoryBoundaries();
  firstWeaponSideItemReproduction();firstWeaponSideItemGuards();firstWeaponAtomicCommitAndLimits();
 

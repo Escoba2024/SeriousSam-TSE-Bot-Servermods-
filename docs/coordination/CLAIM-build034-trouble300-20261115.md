@@ -1,0 +1,3 @@
+# Build034 Trouble300 diagnostic preparation
+
+Owner `/root/a4_diagnosis`, existing isolated WT `/srv/tse-reset031-diag1-prepare-20261115`, branch `codex/20261115-build034-trouble300-prepare`. New helper/policy/tests and own plan/report only. No Header/Driver/A1/Root/frozen/runtime/retail-build writes. Root supplies actual034 closure, integrates/freezes/backs up/runs alone. Parent exact disabled032Trouble600 c78fd326; old600 policies/packages immutable. No Raw replays. New duration300 is a prospective diagnostic condition, not an A4 acceptance window. Keep8GiB+64MiB per write, private files0600/fresh destinations. End jobs before Root Native signal.
