@@ -1,0 +1,176 @@
+{
+  "parent_sha256": {
+    "BotSupplyNative.h": "777d196e44d21dc8ac1e5b0cce8fb54247833d7665ef9329ca64f50d97676504",
+    "BotDriver.cpp": "7af47d87aaaf4c51ebaca6f65d628cfec3c2544419be07e39b65e52b370eb386"
+  },
+  "replacements": {
+    "BotSupplyNative.h": [
+      [
+        "#include <utility>\n#include \"picker_custody.h\" // PICKER_CUSTODY",
+        "#include <utility>"
+      ],
+      [
+        "  SCecilApproachDiagnostic approach; // Passive, bounded per-life action observer only.\n  botcore::CecilPickerCustody picker; // PICKER_CUSTODY: diagnostic only, not ClearGoal authority.",
+        "  SCecilApproachDiagnostic approach; // Passive, bounded per-life action observer only."
+      ],
+      [
+        "    approach=SCecilApproachDiagnostic();\n    picker=botcore::CecilPickerCustody(); // PICKER_CUSTODY",
+        "    approach=SCecilApproachDiagnostic();"
+      ],
+      [
+        "static botcore::CecilSettings &BotCecilSettings(){static botcore::CecilSettings settings=botcore::CecilPreset(2);return settings;}\n// PICKER_CUSTODY: scope holds no entity pointer and issues no Engine query.\nstruct SCecilPickerScope {\n  SSupplyState& s;\n  SCecilPickerScope(SSupplyState& state,int slot,int tick,double now):s(state){\n    auto& d=s.picker;d.Begin(bot_bDiagnostics!=FALSE,slot,tick,now,s.entity,s.generation);\n    if(d.active){d.anchorBefore=s.anchor;d.goalBefore=s.goal;d.itemBefore=s.goalEntity;\n      d.searchAfter=s.searchAfter;d.sinceBefore=s.goalSince;d.deadlineBefore=s.goalDeadline;d.budgetBefore=_botRayBudget;}\n  }\n  ~SCecilPickerScope(){\n    auto& d=s.picker;if(!d.active)return;\n    d.anchorAfter=s.anchor;d.goalAfter=s.goal;d.itemAfter=s.goalEntity;\n    d.sinceAfter=s.goalSince;d.deadlineAfter=s.goalDeadline;d.budgetAfter=_botRayBudget;\n    char text[1024];int n=botcore::CecilPickerFormat(text,sizeof(text),d);\n    if(n<0){BotLog(\"[CecilPickerFault] local=%d tick=%d reason=summary_format\\n\",d.local,d.tick);return;}BotLog(\"%s\",text);\n    for(int i=0;i<d.attempts&&i<8;++i){n=botcore::CecilPickerAttemptFormat(text,sizeof(text),d,i);\n      if(n<0){BotLog(\"[CecilPickerFault] local=%d tick=%d reason=attempt_format\\n\",d.local,d.tick);return;}BotLog(\"%s\",text);}\n  }\n};\n",
+        "static botcore::CecilSettings &BotCecilSettings(){static botcore::CecilSettings settings=botcore::CecilPreset(2);return settings;}"
+      ],
+      [
+        "SCecilSupplyCastDetail* detail=NULL,botcore::CecilPickerProbe* picker=NULL){",
+        "SCecilSupplyCastDetail* detail=NULL){"
+      ],
+      [
+        "  if(picker){picker->before=picker->after=_botRayBudget;picker->code=1;} // PICKER_CUSTODY\n  if(detail)*detail=SCecilSupplyCastDetail();",
+        "  if(detail)*detail=SCecilSupplyCastDetail();"
+      ],
+      [
+        "  if(_botRayBudget<=2){if(picker)picker->code=2;return FALSE;} // PICKER_CUSTODY",
+        "  if(_botRayBudget<=2)return FALSE;"
+      ],
+      [
+        "  --_botRayBudget;\n  if(picker){picker->after=_botRayBudget;picker->lengthKnown=true;picker->length=length;} // PICKER_CUSTODY\n  if(length==0)",
+        "  --_botRayBudget;\n  if(length==0)"
+      ],
+      [
+        "if(detail){detail->valid=detail->clear=true;detail->point=from;}if(picker)picker->code=3;return TRUE;",
+        "if(detail){detail->valid=detail->clear=true;detail->point=from;}return TRUE;"
+      ],
+      [
+        "  if(!BotCecilPhysicalCast(ray,player->GetWorld())){if(picker)picker->code=4;return FALSE;} // PICKER_CUSTODY",
+        "  if(!BotCecilPhysicalCast(ray,player->GetWorld()))return FALSE;"
+      ],
+      [
+        "  const bool clear=ray.cr_penHit==NULL||ray.cr_penHit==item||ray.cr_fHitDistance>length;\n  if(picker)picker->code=clear?6:5; // PICKER_CUSTODY",
+        "  const bool clear=ray.cr_penHit==NULL||ray.cr_penHit==item||ray.cr_fHitDistance>length;"
+      ],
+      [
+        "static int BotSupplyNearest(CPlayer *player,const FLOAT3D &position,BOOL fromPlayer,CEntity *item=NULL,botcore::CecilPickerNearest* picker=NULL){\n  if(picker)picker->end=\"input_guard\"; // PICKER_CUSTODY",
+        "static int BotSupplyNearest(CPlayer *player,const FLOAT3D &position,BOOL fromPlayer,CEntity *item=NULL){"
+      ],
+      [
+        "  if(picker){picker->geometry=true;picker->end=\"no_hint\";for(int k=0;k<3;++k){picker->slot[k]=slots[k];picker->distance2[k]=distances[k];}} // PICKER_CUSTODY\n  for(int k=0;k<3;++k)if(slots[k]>=0){",
+        "  for(int k=0;k<3;++k)if(slots[k]>=0){"
+      ],
+      [
+        "    if(picker)picker->end=\"probes_failed\"; // PICKER_CUSTODY\n    if(BotSupplyClear(player,fromPlayer?end:node,fromPlayer?node:end,item,NULL,NULL,picker?&picker->probe[k]:NULL)){if(picker){picker->end=\"chosen\";picker->result=slots[k];}return slots[k];}",
+        "    if(BotSupplyClear(player,fromPlayer?end:node,fromPlayer?node:end,item))return slots[k];"
+      ],
+      [
+        "  if(s.picker.Mapped(0,s.goalEntity!=0)||s.picker.Mapped(1,now<s.searchAfter)||s.picker.Mapped(2,!std::isfinite(input.enemy_distance))||s.picker.Mapped(3,input.enemy_distance<8)||\n     s.picker.Mapped(4,!input.settings.bItemSearch)||s.picker.Mapped(5,BotCecilHasRanged(input)))return;",
+        "  if(s.goalEntity||now<s.searchAfter||!std::isfinite(input.enemy_distance)||input.enemy_distance<8||\n     !input.settings.bItemSearch||BotCecilHasRanged(input))return;"
+      ],
+      [
+        "  SCecilPickerScope pickerScope(s,slot,tick,now); // PICKER_CUSTODY\n  const int acquired=BotSupplyNearest(player,position,TRUE,NULL,s.picker.active?&s.picker.origin:NULL);",
+        "  const int acquired=BotSupplyNearest(player,position,TRUE);"
+      ],
+      [
+        "  if(s.anchor<0){if(s.picker.active)s.picker.reason=\"no_anchor\";return;} // PICKER_CUSTODY",
+        "  if(s.anchor<0)return;"
+      ],
+      [
+        "  const auto input=BotCecilItemInput(player,s,enemyDistance);const auto& settings=input.settings;\n  s.picker.Input(input); // PICKER_CUSTODY",
+        "  const auto input=BotCecilItemInput(player,s,enemyDistance);const auto& settings=input.settings;"
+      ],
+      [
+        "  if(s.picker.Gate(0,!s.goalEntity)&&s.picker.Gate(1,now>=s.searchAfter)&&s.picker.Gate(2,settings.bItemSearch)){",
+        "  if(!s.goalEntity&&now>=s.searchAfter&&settings.bItemSearch){"
+      ],
+      [
+        "      const char* pickerReason=NULL; // PICKER_CUSTODY: reference argument reads only after the original call.\n      if(!s.picker.Read(BotCecilReadItem(player,&*iten,s.generation,input.owned,&item,s.picker.active?&pickerReason:NULL),pickerReason)||s.picker.Rejected(s.ItemRejected(item.id,now)))continue;",
+        "      if(!BotCecilReadItem(player,&*iten,s.generation,input.owned,&item)||s.ItemRejected(item.id,now))continue;"
+      ],
+      [
+        "      if(d>128){if(s.picker.active)++s.picker.farItems;continue;} // PICKER_CUSTODY",
+        "      if(d>128)continue;"
+      ],
+      [
+        "      if(enemyDistance<8&&!(item.kind==botcore::CecilItemKind::Health&&BotCecilUrgentItem(item,input))){if(s.picker.active)++s.picker.closeItems;continue;} // PICKER_CUSTODY",
+        "      if(enemyDistance<8&&!(item.kind==botcore::CecilItemKind::Health&&BotCecilUrgentItem(item,input)))continue;"
+      ],
+      [
+        "      if(s.picker.Single(botcore::CecilChooseItem(&item,1,input))<0)continue;",
+        "      if(botcore::CecilChooseItem(&item,1,input)<0)continue;"
+      ],
+      [
+        "      if(count==128){s.itemScanAfter=scanned;if(s.picker.active)s.picker.windowFull=true;break;} // PICKER_CUSTODY",
+        "      if(count==128){s.itemScanAfter=scanned;break;}"
+      ],
+      [
+        "    if(s.picker.active){s.picker.scanned=scanned;s.picker.count=count;} // PICKER_CUSTODY\n    for(int attempt=0;attempt<8&&_botRayBudget>3;++attempt){\n      int index=botcore::CecilChooseItem(items,count,input);\n      auto* pickerAttempt=s.picker.Next(index,_botRayBudget); // PICKER_CUSTODY\n      if(index<0){if(pickerAttempt){pickerAttempt->end=\"no_choice\";pickerAttempt->after=_botRayBudget;}break;}",
+        "    for(int attempt=0;attempt<8&&_botRayBudget>3;++attempt){\n      int index=botcore::CecilChooseItem(items,count,input);if(index<0)break;"
+      ],
+      [
+        "      auto& item=items[index];CEntity* entity=player->GetWorld()->EntityFromID(item.id);\n      if(pickerAttempt){pickerAttempt->item=item.id;pickerAttempt->kind=(int)item.kind;pickerAttempt->weapon=item.weapon;pickerAttempt->after=_botRayBudget;pickerAttempt->end=\"missing_entity\";} // PICKER_CUSTODY",
+        "      auto& item=items[index];CEntity* entity=player->GetWorld()->EntityFromID(item.id);"
+      ],
+      [
+        "      if(settings.bItemVisibility&&!BotSupplyClear(player,BotCombatEye(player).pl_PositionVector,target,entity,NULL,NULL,pickerAttempt?&pickerAttempt->visibility:NULL)){\n        if(pickerAttempt){pickerAttempt->end=\"visibility\";pickerAttempt->after=_botRayBudget;} // PICKER_CUSTODY",
+        "      if(settings.bItemVisibility&&!BotSupplyClear(player,BotCombatEye(player).pl_PositionVector,target,entity)){"
+      ],
+      [
+        "      int anchor=BotSupplyNearest(player,FLOAT3D((FLOAT)item.x,(FLOAT)item.y,(FLOAT)item.z),FALSE,entity,pickerAttempt?&pickerAttempt->nearest:NULL);\n      if(pickerAttempt){pickerAttempt->after=_botRayBudget;pickerAttempt->end=\"nearest\";} // PICKER_CUSTODY",
+        "      int anchor=BotSupplyNearest(player,FLOAT3D((FLOAT)item.x,(FLOAT)item.y,(FLOAT)item.z),FALSE,entity);"
+      ],
+      [
+        "      if(anchor<0&&_botRayBudget<=2){if(pickerAttempt)pickerAttempt->end=\"nearest_budget\";break;} // PICKER_CUSTODY",
+        "      if(anchor<0&&_botRayBudget<=2)break;"
+      ],
+      [
+        "      if(anchor<0||!(pickerAttempt?pickerAttempt->Finite(s.goals.Distance(anchor)):std::isfinite(s.goals.Distance(anchor)))){if(pickerAttempt)pickerAttempt->end=anchor<0?\"no_hint_or_probe\":\"unreachable_path\";item.reachable=false;s.RejectItem(item.id,now,true);continue;}",
+        "      if(anchor<0||!std::isfinite(s.goals.Distance(anchor))){item.reachable=false;s.RejectItem(item.id,now,true);continue;}"
+      ],
+      [
+        "      s.importantGoal=false;s.goalKind=item.kind;s.navigator.Reset();\n      if(pickerAttempt){pickerAttempt->end=\"committed\";pickerAttempt->after=_botRayBudget;} // PICKER_CUSTODY",
+        "      s.importantGoal=false;s.goalKind=item.kind;s.navigator.Reset();"
+      ],
+      [
+        "  BotCecilChooseMappedWeapon(player,s,input,slot,tick,now);\n  if(s.picker.active)s.picker.reason=\"normal_done\"; // PICKER_CUSTODY",
+        "  BotCecilChooseMappedWeapon(player,s,input,slot,tick,now);"
+      ],
+      [
+        "  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.picker.active=false;",
+        "  SCecilMove result;SSupplyState &s=BotSupplyState(slot);"
+      ],
+      [
+        "    const char* pickerRefresh=\"missing_entity\"; // PICKER_CUSTODY\n    if(!entity||!BotCecilReadItem(player,entity,s.generation,owned,&item,s.picker.active?&pickerRefresh:NULL)){if(s.picker.active){s.picker.refreshKnown=true;s.picker.refreshReason=botcore::CecilPickerReadReason(pickerRefresh);}BotCecilGoalEnd(slot,tick,s,\"unavailable\");s.ClearGoal();s.scanTick=0;return result;}\n    if(s.picker.active){s.picker.refreshKnown=true;s.picker.refreshReason=0;} // PICKER_CUSTODY",
+        "    if(!entity||!BotCecilReadItem(player,entity,s.generation,owned,&item)){BotCecilGoalEnd(slot,tick,s,\"unavailable\");s.ClearGoal();s.scanTick=0;return result;}"
+      ],
+      [
+        "    n=botcore::CecilPickerOriginFormat(text,sizeof(text),d);\n    if(n<0){BotLog(\"[CecilPickerFault] local=%d tick=%d reason=origin_format\\n\",d.local,d.tick);return;}BotLog(\"%s\",text);\n    for(int i=0;i<d.attempts&&i<8;++i){n=botcore::CecilPickerAttemptFormat(text,sizeof(text),d,i);",
+        "    for(int i=0;i<d.attempts&&i<8;++i){n=botcore::CecilPickerAttemptFormat(text,sizeof(text),d,i);"
+      ],
+      [
+        "pickerAttempt->item=item.id;pickerAttempt->kind=(int)item.kind;pickerAttempt->weapon=item.weapon;pickerAttempt->itemGeneration=item.generation;pickerAttempt->value=item.value;pickerAttempt->x=item.x;pickerAttempt->y=item.y;pickerAttempt->z=item.z;",
+        "pickerAttempt->item=item.id;pickerAttempt->kind=(int)item.kind;pickerAttempt->weapon=item.weapon;"
+      ]
+    ],
+    "BotDriver.cpp": [
+      [
+        "    botcore::CecilDriverFinal finalDecision;\n    botcore::CecilPickerArbitration pickerArbitration(bot_bDiagnostics!=FALSE); // PICKER_CUSTODY",
+        "    botcore::CecilDriverFinal finalDecision;"
+      ],
+      [
+        "      botcore::CecilDriverFinalSupply(finalDecision,ready,supply,BotSupplyState(iLP).generation,BotSupplyState(iLP).entity);\n      pickerArbitration.Supply(supply); // PICKER_CUSTODY",
+        "      botcore::CecilDriverFinalSupply(finalDecision,ready,supply,BotSupplyState(iLP).generation,BotSupplyState(iLP).entity);"
+      ],
+      [
+        "      if(pickerArbitration.Gate(0,ready)&&pickerArbitration.Gate(1,supply.active||supply.ownsMovement)&&pickerArbitration.Gate(2,player!=NULL)&&pickerArbitration.Gate(3,botcore::CecilDriverFinalPresence(finalDecision,player->m_penWeapons!=NULL))&&\n         (pickerArbitration.Gate(4,supply.flightGoal)||pickerArbitration.Gate(5,supply.activeFlight)||pickerArbitration.Gate(6,supply.useControl)||pickerArbitration.Gate(7,!targetVisible)||(pickerArbitration.Gate(8,supply.itemGoal)&&pickerArbitration.Gate(9,supply.urgent)))){\n        pickerArbitration.taken=true; // PICKER_CUSTODY",
+        "      if(ready&&(supply.active||supply.ownsMovement)&&player&&botcore::CecilDriverFinalPresence(finalDecision,player->m_penWeapons!=NULL)&&\n         (supply.flightGoal||supply.activeFlight||supply.useControl||!targetVisible||(supply.itemGoal&&supply.urgent))){"
+      ],
+      [
+        "    ppls->SetAction(pa);\n    {const auto& custody=BotSupplyState(iLP).picker; // PICKER_CUSTODY\n      if(custody.Matches(bot_bDiagnostics!=FALSE,bs.bs_iTick,BotSupplyState(iLP).entity,BotSupplyState(iLP).generation)){\n        char text[1024];const int n=botcore::CecilPickerArbitrationFormat(text,sizeof(text),custody,pickerArbitration,pa);\n        if(n<0)BotLog(\"[CecilPickerFault] local=%d tick=%d reason=arbitration_format\\n\",iLP,bs.bs_iTick);else BotLog(\"%s\",text);\n      }\n    }",
+        "    ppls->SetAction(pa);"
+      ],
+      [
+        "      pickerArbitration.Supply(ready,supply);",
+        "      pickerArbitration.Supply(supply);"
+      ]
+    ]
+  }
+}

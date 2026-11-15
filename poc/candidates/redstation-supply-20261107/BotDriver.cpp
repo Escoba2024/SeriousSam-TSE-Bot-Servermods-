@@ -1171,6 +1171,7 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     }
     // Passive invocation receipt only; cached map pin is NOT current-map proof.
     botcore::CecilDriverFinal finalDecision;
+    botcore::CecilPickerArbitration pickerArbitration(bot_bDiagnostics!=FALSE); // PICKER_CUSTODY
     botcore::CecilDriverFinalBegin(finalDecision,
       botcore::CecilDriverFinalDue(bot_bDiagnostics!=FALSE,bot_bSupplyNavigation!=FALSE,player!=NULL,bs.bs_iTick),
       iLP,bs.bs_iTick,entityId,BotSupplyState(iLP).generation,bs.bs_rotationMapSerial);
@@ -1457,11 +1458,13 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
         cecilUseControl=supply.useControl;cecilButtons=supply.buttons;
       }
       botcore::CecilDriverFinalSupply(finalDecision,ready,supply,BotSupplyState(iLP).generation,BotSupplyState(iLP).entity);
+      pickerArbitration.Supply(ready,supply); // PICKER_CUSTODY
       // Keep a feasible visible fight unless an urgent item or traversal
       // control owns movement. Distance alone must not turn an ordinary pickup
       // into a reason to drop aim/fire. First ranged weapons remain urgent.
-      if(ready&&(supply.active||supply.ownsMovement)&&player&&botcore::CecilDriverFinalPresence(finalDecision,player->m_penWeapons!=NULL)&&
-         (supply.flightGoal||supply.activeFlight||supply.useControl||!targetVisible||(supply.itemGoal&&supply.urgent))){
+      if(pickerArbitration.Gate(0,ready)&&pickerArbitration.Gate(1,supply.active||supply.ownsMovement)&&pickerArbitration.Gate(2,player!=NULL)&&pickerArbitration.Gate(3,botcore::CecilDriverFinalPresence(finalDecision,player->m_penWeapons!=NULL))&&
+         (pickerArbitration.Gate(4,supply.flightGoal)||pickerArbitration.Gate(5,supply.activeFlight)||pickerArbitration.Gate(6,supply.useControl)||pickerArbitration.Gate(7,!targetVisible)||(pickerArbitration.Gate(8,supply.itemGoal)&&pickerArbitration.Gate(9,supply.urgent)))){
+        pickerArbitration.taken=true; // PICKER_CUSTODY
         bs.bs_aHeading=player->m_aLastRotation(1)+(FLOAT)supply.yaw_delta;
         bs.bs_aPitch=player->m_aLastRotation(2)+(FLOAT)supply.pitch_delta;
         moveFactor=(FLOAT)supply.forward;humanStrafe=(FLOAT)supply.strafe;
@@ -1629,6 +1632,12 @@ BOOL BotDriver_HandleTimer(CGame *pgame)
     }
     // 4) hand it to the network player source (stamps pa_llCreated internally)
     ppls->SetAction(pa);
+    {const auto& custody=BotSupplyState(iLP).picker; // PICKER_CUSTODY
+      if(custody.Matches(bot_bDiagnostics!=FALSE,bs.bs_iTick,BotSupplyState(iLP).entity,BotSupplyState(iLP).generation)){
+        char text[1024];const int n=botcore::CecilPickerArbitrationFormat(text,sizeof(text),custody,pickerArbitration,pa);
+        if(n<0)BotLog("[CecilPickerFault] local=%d tick=%d reason=arbitration_format\n",iLP,bs.bs_iTick);else BotLog("%s",text);
+      }
+    }
     if(finalDecision.admitted){
       finalDecision.modeBits=(unsigned)(automatic!=FALSE)|((unsigned)(humanMode!=FALSE)<<1)|((unsigned)(combatDeathmatch!=FALSE)<<2)|
         ((unsigned)(targetVisible!=FALSE)<<3)|((unsigned)(supplyActive!=FALSE)<<4)|((unsigned)(combatHold!=FALSE)<<5)|

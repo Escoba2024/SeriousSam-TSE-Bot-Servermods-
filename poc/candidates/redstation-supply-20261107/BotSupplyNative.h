@@ -12,6 +12,7 @@
 #include <Engine/Base/Stream.h>
 #include <Engine/Brushes/Brush.h>
 #include <utility>
+#include "picker_custody.h" // PICKER_CUSTODY
 // Driver supplies a frozen perception snapshot; this bridge never resolves its entity.
 struct SCecilFollowGoal {
   bool valid=false;
@@ -85,6 +86,7 @@ struct SSupplyState {
   bool currentHealthConnector=false; // Fresh proposal only, not final accepted input.
   SCecilLocalSupply localSupply;
   SCecilApproachDiagnostic approach; // Passive, bounded per-life action observer only.
+  botcore::CecilPickerCustody picker; // PICKER_CUSTODY: diagnostic only, not ClearGoal authority.
 
   SCecilProbe probe;
   // Diagnostic clocks are not consulted by any decision or movement gate.
@@ -208,6 +210,7 @@ struct SSupplyState {
   void ResetLockSnapshot(){for(auto& value:worldLock)value=3;}
   void Reset() {
     approach=SCecilApproachDiagnostic();
+    picker=botcore::CecilPickerCustody(); // PICKER_CUSTODY
     diagSelectionLast=diagUnavailableLast=diagTerminalLast=-1;
     diagReacquireLast=-1;
     ClearAirMovement();ClearGroundProgress();probe=SCecilProbe();ClearGoal();ClearRejections();ClearAvoidance();ClearEscape();ResetLockSnapshot();entity=owned=0;anchor=-1;
@@ -225,6 +228,27 @@ struct SCecilMove {
 static SSupplyState &BotSupplyState(INDEX slot){static SSupplyState states[4];return states[slot&3];}
 static botcore::CecilNavGraph &BotSupplyGraph(){static botcore::CecilNavGraph graph;return graph;}
 static botcore::CecilSettings &BotCecilSettings(){static botcore::CecilSettings settings=botcore::CecilPreset(2);return settings;}
+// PICKER_CUSTODY: scope holds no entity pointer and issues no Engine query.
+struct SCecilPickerScope {
+  SSupplyState& s;
+  SCecilPickerScope(SSupplyState& state,int slot,int tick,double now):s(state){
+    auto& d=s.picker;d.Begin(bot_bDiagnostics!=FALSE,slot,tick,now,s.entity,s.generation);
+    if(d.active){d.anchorBefore=s.anchor;d.goalBefore=s.goal;d.itemBefore=s.goalEntity;
+      d.searchAfter=s.searchAfter;d.sinceBefore=s.goalSince;d.deadlineBefore=s.goalDeadline;d.budgetBefore=_botRayBudget;}
+  }
+  ~SCecilPickerScope(){
+    auto& d=s.picker;if(!d.active)return;
+    d.anchorAfter=s.anchor;d.goalAfter=s.goal;d.itemAfter=s.goalEntity;
+    d.sinceAfter=s.goalSince;d.deadlineAfter=s.goalDeadline;d.budgetAfter=_botRayBudget;
+    char text[1024];int n=botcore::CecilPickerFormat(text,sizeof(text),d);
+    if(n<0){BotLog("[CecilPickerFault] local=%d tick=%d reason=summary_format\n",d.local,d.tick);return;}BotLog("%s",text);
+    n=botcore::CecilPickerOriginFormat(text,sizeof(text),d);
+    if(n<0){BotLog("[CecilPickerFault] local=%d tick=%d reason=origin_format\n",d.local,d.tick);return;}BotLog("%s",text);
+    for(int i=0;i<d.attempts&&i<8;++i){n=botcore::CecilPickerAttemptFormat(text,sizeof(text),d,i);
+      if(n<0){BotLog("[CecilPickerFault] local=%d tick=%d reason=attempt_format\n",d.local,d.tick);return;}BotLog("%s",text);}
+  }
+};
+
 // Capture the existing navigator result before native adjustments. This state
 // is never consulted by the navigator, movement ownership or safety decisions.
 static void BotCecilApproachCapture(SSupplyState& s,int tick,double now,int source,int hop,
@@ -536,23 +560,26 @@ struct SCecilSupplyCastDetail {
   bool valid=false,clear=false;unsigned long hit=0,physics=0,polygon=0;
   int render=-1;double length=0,distance=0;FLOAT3D point=FLOAT3D(0,0,0);
 };
-static BOOL BotSupplyClear(CPlayer *player,const FLOAT3D &from,const FLOAT3D &to,CEntity *item=NULL,bool* validProbe=NULL,SCecilSupplyCastDetail* detail=NULL){
+static BOOL BotSupplyClear(CPlayer *player,const FLOAT3D &from,const FLOAT3D &to,CEntity *item=NULL,bool* validProbe=NULL,SCecilSupplyCastDetail* detail=NULL,botcore::CecilPickerProbe* picker=NULL){
+  if(picker){picker->before=picker->after=_botRayBudget;picker->code=1;} // PICKER_CUSTODY
   if(detail)*detail=SCecilSupplyCastDetail();
   if(validProbe)*validProbe=false;
   double length=0;
   if(!player||!player->GetWorld()||!BotCecilRayLength(from,to,length))return FALSE;
   // Reserve the final wall and floor probes for each action.
-  if(_botRayBudget<=2)return FALSE;
+  if(_botRayBudget<=2){if(picker)picker->code=2;return FALSE;} // PICKER_CUSTODY
   --_botRayBudget;
-  if(length==0){if(validProbe)*validProbe=true;if(detail){detail->valid=detail->clear=true;detail->point=from;}return TRUE;}
+  if(picker){picker->after=_botRayBudget;picker->lengthKnown=true;picker->length=length;} // PICKER_CUSTODY
+  if(length==0){if(validProbe)*validProbe=true;if(detail){detail->valid=detail->clear=true;detail->point=from;}if(picker)picker->code=3;return TRUE;}
   CCastRay ray(player,from,to);ray.cr_bAllowOverHit=FALSE;ray.cr_bPhysical=TRUE;
   ray.cr_ttHitModels=CCastRay::TT_COLLISIONBOX;
-  if(!BotCecilPhysicalCast(ray,player->GetWorld()))return FALSE;
+  if(!BotCecilPhysicalCast(ray,player->GetWorld())){if(picker)picker->code=4;return FALSE;} // PICKER_CUSTODY
   if(validProbe)*validProbe=true;
   // Retail107's segment constructor permits length+0.1 native test distance.
   // A floor beyond this requested connector endpoint is not an obstruction of
   // the connector. Preserve every finite in-segment/endpoint hit and the mask.
   const bool clear=ray.cr_penHit==NULL||ray.cr_penHit==item||ray.cr_fHitDistance>length;
+  if(picker)picker->code=clear?6:5; // PICKER_CUSTODY
   if(detail){
     detail->valid=true;detail->clear=clear;detail->length=length;detail->distance=ray.cr_fHitDistance;detail->point=ray.cr_vHit;
     if(ray.cr_penHit){detail->hit=(unsigned long)ray.cr_penHit->en_ulID;detail->render=(int)ray.cr_penHit->GetRenderType();detail->physics=(unsigned long)ray.cr_penHit->GetPhysicsFlags();}
@@ -560,7 +587,8 @@ static BOOL BotSupplyClear(CPlayer *player,const FLOAT3D &from,const FLOAT3D &to
   }
   return clear;
 }
-static int BotSupplyNearest(CPlayer *player,const FLOAT3D &position,BOOL fromPlayer,CEntity *item=NULL){
+static int BotSupplyNearest(CPlayer *player,const FLOAT3D &position,BOOL fromPlayer,CEntity *item=NULL,botcore::CecilPickerNearest* picker=NULL){
+  if(picker)picker->end="input_guard"; // PICKER_CUSTODY
   if(!BotCecilFrameReady(player)||!std::isfinite(position(1))||!std::isfinite(position(2))||!std::isfinite(position(3)))return -1;
   const auto& graph=BotSupplyGraph();int slots[3]={-1,-1,-1};
   const double limit=fromPlayer?144.0:64.0;double distances[3]={limit+1e-6,limit+1e-6,limit+1e-6};
@@ -572,10 +600,12 @@ static int BotSupplyNearest(CPlayer *player,const FLOAT3D &position,BOOL fromPla
     if(d>limit)continue;
     for(int k=0;k<3;++k)if(d<distances[k]){for(int j=2;j>k;--j){distances[j]=distances[j-1];slots[j]=slots[j-1];}slots[k]=(int)i;distances[k]=d;break;}
   }
+  if(picker){picker->geometry=true;picker->end="no_hint";for(int k=0;k<3;++k){picker->slot[k]=slots[k];picker->distance2[k]=distances[k];}} // PICKER_CUSTODY
   for(int k=0;k<3;++k)if(slots[k]>=0){
     const auto& p=graph.points[slots[k]];const FLOAT3D lift=player->en_vGravityDir*-.8f;
     FLOAT3D node=FLOAT3D(p.x,p.y,p.z)+lift,end=position+lift;
-    if(BotSupplyClear(player,fromPlayer?end:node,fromPlayer?node:end,item))return slots[k];
+    if(picker)picker->end="probes_failed"; // PICKER_CUSTODY
+    if(BotSupplyClear(player,fromPlayer?end:node,fromPlayer?node:end,item,NULL,NULL,picker?&picker->probe[k]:NULL)){if(picker){picker->end="chosen";picker->result=slots[k];}return slots[k];}
   }
   return -1;
 }
@@ -770,8 +800,8 @@ static bool BotCecilNearerLocalSupply(CPlayer* player,INDEX slot,uint32_t item,d
 }
 static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const botcore::CecilItemInput& input,
     INDEX slot,INDEX tick,double now){
-  if(s.goalEntity||now<s.searchAfter||!std::isfinite(input.enemy_distance)||input.enemy_distance<8||
-     !input.settings.bItemSearch||BotCecilHasRanged(input))return;
+  if(s.picker.Mapped(0,s.goalEntity!=0)||s.picker.Mapped(1,now<s.searchAfter)||s.picker.Mapped(2,!std::isfinite(input.enemy_distance))||s.picker.Mapped(3,input.enemy_distance<8)||
+     s.picker.Mapped(4,!input.settings.bItemSearch)||s.picker.Mapped(5,BotCecilHasRanged(input)))return;
   const auto& graph=BotSupplyGraph();
   const bool diagnostics=BotCecilSupplyDiagDue(now,s.diagSelectionLast);
   const double observedAt=_pNetwork->GetGameTime();
@@ -851,20 +881,22 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
 static void BotCecilChooseGoal(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,bool allowPatrol=true){
   SSupplyState& s=BotSupplyState(slot);const auto& graph=BotSupplyGraph();
   const FLOAT3D position=player->GetPlacement().pl_PositionVector;const double now=tick*_pTimer->TickQuantum;
-  const int acquired=BotSupplyNearest(player,position,TRUE);
+  SCecilPickerScope pickerScope(s,slot,tick,now); // PICKER_CUSTODY
+  const int acquired=BotSupplyNearest(player,position,TRUE,NULL,s.picker.active?&s.picker.origin:NULL);
   if(acquired>=0){s.anchor=acquired;s.acquiredAnchor=acquired;s.acquiredAnchorTime=now;}
   // Acquisition nodes are hints, not a requirement to fly through a valid edge.
   // Map/death/rejoin resets and goal identity invalidate this navigator context.
   else if(!s.patrolAlternate&&!s.navigator.HasCommittedEdge(s.goal))s.anchor=-1;
-  if(s.anchor<0)return;
+  if(s.anchor<0){if(s.picker.active)s.picker.reason="no_anchor";return;} // PICKER_CUSTODY
   BotCecilLocks(player,s,now);
   s.goals.Run(graph,s.anchor,s.blocked.data(),s.blocked.size());
   if(s.goal>=0&&(s.goal>=(int)graph.points.size()||!std::isfinite(s.goals.Distance(s.goal)))){
     BotCecilGoalEnd(slot,tick,s,"unreachable");s.RejectItem(s.goalEntity,now);s.ClearGoal();
   }
   const auto input=BotCecilItemInput(player,s,enemyDistance);const auto& settings=input.settings;
+  s.picker.Input(input); // PICKER_CUSTODY
   // A retained item is one attempt with one lifetime, not a new goal every scan.
-  if(!s.goalEntity&&now>=s.searchAfter&&settings.bItemSearch){
+  if(s.picker.Gate(0,!s.goalEntity)&&s.picker.Gate(1,now>=s.searchAfter)&&s.picker.Gate(2,settings.bItemSearch)){
     botcore::CecilItem items[128];int count=0,scanned=0;
     // Rotate the bounded snapshot window. Unusable prefix items never occupy it,
     // and eligible prefixes cannot hide later candidates on every scan.
@@ -873,33 +905,42 @@ static void BotCecilChooseGoal(CPlayer *player,INDEX slot,INDEX tick,double enem
       if(++scanned>8192)break;
       if(scanned<=skip)continue;
       botcore::CecilItem item;
-      if(!BotCecilReadItem(player,&*iten,s.generation,input.owned,&item)||s.ItemRejected(item.id,now))continue;
+      const char* pickerReason=NULL; // PICKER_CUSTODY: reference argument reads only after the original call.
+      if(!s.picker.Read(BotCecilReadItem(player,&*iten,s.generation,input.owned,&item,s.picker.active?&pickerReason:NULL),pickerReason)||s.picker.Rejected(s.ItemRejected(item.id,now)))continue;
       double d=std::fabs(item.x-input.x)+std::fabs(item.z-input.z)+3*std::fabs(item.y-input.y);
-      if(d>128)continue;
-      if(enemyDistance<8&&!(item.kind==botcore::CecilItemKind::Health&&BotCecilUrgentItem(item,input)))continue;
+      if(d>128){if(s.picker.active)++s.picker.farItems;continue;} // PICKER_CUSTODY
+      if(enemyDistance<8&&!(item.kind==botcore::CecilItemKind::Health&&BotCecilUrgentItem(item,input))){if(s.picker.active)++s.picker.closeItems;continue;} // PICKER_CUSTODY
       item.visible=item.reachable=true;
-      if(botcore::CecilChooseItem(&item,1,input)<0)continue;
+      if(s.picker.Single(botcore::CecilChooseItem(&item,1,input))<0)continue;
       items[count++]=item;
-      if(count==128){s.itemScanAfter=scanned;break;}
+      if(count==128){s.itemScanAfter=scanned;if(s.picker.active)s.picker.windowFull=true;break;} // PICKER_CUSTODY
     }}
+    if(s.picker.active){s.picker.scanned=scanned;s.picker.count=count;} // PICKER_CUSTODY
     for(int attempt=0;attempt<8&&_botRayBudget>3;++attempt){
-      int index=botcore::CecilChooseItem(items,count,input);if(index<0)break;
+      int index=botcore::CecilChooseItem(items,count,input);
+      auto* pickerAttempt=s.picker.Next(index,_botRayBudget); // PICKER_CUSTODY
+      if(index<0){if(pickerAttempt){pickerAttempt->end="no_choice";pickerAttempt->after=_botRayBudget;}break;}
       auto& item=items[index];CEntity* entity=player->GetWorld()->EntityFromID(item.id);
+      if(pickerAttempt){pickerAttempt->item=item.id;pickerAttempt->kind=(int)item.kind;pickerAttempt->weapon=item.weapon;pickerAttempt->itemGeneration=item.generation;pickerAttempt->value=item.value;pickerAttempt->x=item.x;pickerAttempt->y=item.y;pickerAttempt->z=item.z;pickerAttempt->after=_botRayBudget;pickerAttempt->end="missing_entity";} // PICKER_CUSTODY
       if(!entity){item.reachable=false;s.RejectItem(item.id,now);continue;}
       const FLOAT3D target=FLOAT3D((FLOAT)item.x,(FLOAT)item.y,(FLOAT)item.z)-player->en_vGravityDir*.5f;
-      if(settings.bItemVisibility&&!BotSupplyClear(player,BotCombatEye(player).pl_PositionVector,target,entity)){
+      if(settings.bItemVisibility&&!BotSupplyClear(player,BotCombatEye(player).pl_PositionVector,target,entity,NULL,NULL,pickerAttempt?&pickerAttempt->visibility:NULL)){
+        if(pickerAttempt){pickerAttempt->end="visibility";pickerAttempt->after=_botRayBudget;} // PICKER_CUSTODY
         item.visible=false;s.RejectItem(item.id,now,true);continue;
       }
-      int anchor=BotSupplyNearest(player,FLOAT3D((FLOAT)item.x,(FLOAT)item.y,(FLOAT)item.z),FALSE,entity);
-      if(anchor<0&&_botRayBudget<=2)break;
-      if(anchor<0||!std::isfinite(s.goals.Distance(anchor))){item.reachable=false;s.RejectItem(item.id,now,true);continue;}
+      int anchor=BotSupplyNearest(player,FLOAT3D((FLOAT)item.x,(FLOAT)item.y,(FLOAT)item.z),FALSE,entity,pickerAttempt?&pickerAttempt->nearest:NULL);
+      if(pickerAttempt){pickerAttempt->after=_botRayBudget;pickerAttempt->end="nearest";} // PICKER_CUSTODY
+      if(anchor<0&&_botRayBudget<=2){if(pickerAttempt)pickerAttempt->end="nearest_budget";break;} // PICKER_CUSTODY
+      if(anchor<0||!(pickerAttempt?pickerAttempt->Finite(s.goals.Distance(anchor)):std::isfinite(s.goals.Distance(anchor)))){if(pickerAttempt)pickerAttempt->end=anchor<0?"no_hint_or_probe":"unreachable_path";item.reachable=false;s.RejectItem(item.id,now,true);continue;}
       s.ClearGoal();s.goal=anchor;s.goalEntity=item.id;s.goalSince=now;s.searchAfter=now+settings.fItemSearchCD;
       s.importantGoal=false;s.goalKind=item.kind;s.navigator.Reset();
+      if(pickerAttempt){pickerAttempt->end="committed";pickerAttempt->after=_botRayBudget;} // PICKER_CUSTODY
       BotLog("[CecilGoal] local=%d tick=%d entity=%lu kind=%d weapon=%d anchor=%d pos=(%.3f,%.3f,%.3f)\n",
         slot,tick,(unsigned long)item.id,(int)item.kind,item.weapon,anchor,item.x,item.y,item.z);break;
     }
   }
   BotCecilChooseMappedWeapon(player,s,input,slot,tick,now);
+  if(s.picker.active)s.picker.reason="normal_done"; // PICKER_CUSTODY
   if(s.goal<0&&allowPatrol){
     s.ClearGoal();
     const bool preferImportant=(BotCecilRandom(s)%1000)<(unsigned)(settings.fImportantChance*1000);
@@ -1811,7 +1852,7 @@ static bool BotCecilHeldPositionProgress(CPlayer* player,SSupplyState& s,
   return progressed;
 }
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
-  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;s.combatGroundFresh.valid=false;result.useControl=tick<=s.useReleaseTick;
+  SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.picker.active=false;s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;s.combatGroundFresh.valid=false;result.useControl=tick<=s.useReleaseTick;
   s.patrolProposalTime=-1;
   const double now=tick*_pTimer->TickQuantum;const bool alive=player&&player->GetHealth()>0&&player->m_penWeapons!=NULL;
   s.currentHealthConnector=false;s.currentImportantOriginRecovery=false;
@@ -1905,7 +1946,9 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   // Refresh the typed result after a new selection in this tick.
   if(s.goalEntity){
     CEntity* entity=player->GetWorld()->EntityFromID(s.goalEntity);botcore::CecilItem item;
-    if(!entity||!BotCecilReadItem(player,entity,s.generation,owned,&item)){BotCecilGoalEnd(slot,tick,s,"unavailable");s.ClearGoal();s.scanTick=0;return result;}
+    const char* pickerRefresh="missing_entity"; // PICKER_CUSTODY
+    if(!entity||!BotCecilReadItem(player,entity,s.generation,owned,&item,s.picker.active?&pickerRefresh:NULL)){if(s.picker.active){s.picker.refreshKnown=true;s.picker.refreshReason=botcore::CecilPickerReadReason(pickerRefresh);}BotCecilGoalEnd(slot,tick,s,"unavailable");s.ClearGoal();s.scanTick=0;return result;}
+    if(s.picker.active){s.picker.refreshKnown=true;s.picker.refreshReason=0;} // PICKER_CUSTODY
     s.goalKind=item.kind;urgent=BotCecilUrgentItem(item,input);
   }
   result.followGoal=s.followEntity!=0;result.itemGoal=s.goalEntity!=0;result.urgent=result.itemGoal&&urgent;result.itemKind=s.goalKind;
