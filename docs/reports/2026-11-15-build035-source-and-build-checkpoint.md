@@ -1,0 +1,11 @@
+# Build035: gezielte Priorität für die erste brauchbare Schusswaffe
+
+Build035 ist ein neuer, noch nicht nativ abgenommener Retail-1.07-Kandidat. Die Änderung behebt den im SDK reproduzierten Widerspruch zwischen dringender Waffenbeschaffung und Nahkampfpriorität. Eine frisch geprüfte erste brauchbare Schusswaffe darf auf einem gewöhnlichen Laufweg weiter angesteuert werden. Die bestehenden Regeln für bewaffneten Kampf, Flug- und Spezialübergänge sowie die abschließende physische Bewegungsprüfung bleiben erhalten.
+
+Quellcommit `a3af688863da3c11122e441710602ea80ea24db7`, Baum `5700f0c281b0104567e0652a7d332be614071982`. DLL SHA256 `e76395a7cb9fc4ea436cc09e9d86b0774f64b8b8df100fa722f4790afe19cae5`, 468480 Bytes; Buildmanifest `942b4922d1b36b64e96ed998661d2ce23b9ce04508210639bf65425c5c98aa7b`. Alle 81 Herkunftspins sind geprüft: 49 Quelldateien, 30 Overlaydateien, Manifest und DLL. Alle 15 Compilerläufe und der Linker endeten erfolgreich. In beiden Eingabegruppen unterscheidet sich gegenüber Build034 ausschließlich `BotSupplyNative.h`.
+
+Die unabhängige SDK-Prüfung auf dem Integrationsbranch besteht 4.257 Checks ohne Fehler. Der Autor führte außerdem genau einen erfolgreichen ASan/UBSan-Lauf mit denselben 4.257 Checks aus. Alle neun privaten Autorenbelege wurden gegen ihre Hashes geprüft. Die drei vollständigen Rücktransformationen stellen den unveränderten Build034-Header wieder her. Die gezielt geänderten Verhaltenserwartungen und vorherigen Fehlversuche stehen im [Quellbericht](2026-11-15-first-useful-close-combat-source-fix.md).
+
+Als nächstes ist genau ein isolierter Little-Trouble-Lauf vorgesehen: 300 Sekunden, acht DEMON-Bots, Hard, DIAG1, Originalobserver mit konfigurierten 20 FPS. Karte, Navigation, Konfiguration, Leser und Wiederherstellungsverfahren entsprechen Build034. Der konkrete Fix begründet diesen Vergleich; eine neue Diagnosefunktion oder zusätzliche gleichartige Dauerschleifen sind nicht vorgesehen. Ausgewertet werden alle acht Botrollen, Leben, tatsächliche Waffenbesitzwechsel, Bewegung, längste beobachtete Phasen ohne brauchbare Schusswaffe sowie Fehler und Ressourcen. Vorschläge, Aktionsbits und Frags ersetzen keine Treffer-, Bewegungs- oder Pickupbelege.
+
+Die gemischte Liveflotte bleibt auf dem zuletzt bestätigten Stand. Build035 ist dort nicht installiert. Meilenstein A bleibt offen; B hat noch nicht begonnen.

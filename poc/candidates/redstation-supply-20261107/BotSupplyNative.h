@@ -2084,23 +2084,35 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   if(s.goal<0){BotCecilReacquire(player,s,now,result,true);return result;}
   if(s.goal>=(int)BotSupplyGraph().points.size())return result;
   // Refresh the typed result after a new selection in this tick.
+  bool firstUsefulWeapon=false;
   if(s.goalEntity){
     CEntity* entity=player->GetWorld()->EntityFromID(s.goalEntity);botcore::CecilItem item;
     const char* pickerRefresh="missing_entity"; // PICKER_CUSTODY
     if(!entity||!BotCecilReadItem(player,entity,s.generation,owned,&item,s.picker.active?&pickerRefresh:NULL)){if(s.picker.active){s.picker.refreshKnown=true;s.picker.refreshReason=botcore::CecilPickerReadReason(pickerRefresh);}BotCecilGoalEnd(slot,tick,s,"unavailable");s.ClearGoal();s.scanTick=0;return result;}
     if(s.picker.active){s.picker.refreshKnown=true;s.picker.refreshReason=0;} // PICKER_CUSTODY
     s.goalKind=item.kind;urgent=BotCecilUrgentItem(item,input);
+    firstUsefulWeapon=item.kind==botcore::CecilItemKind::Weapon&&
+      (botcore::CecilWeaponMask(item.weapon)&0x3df8u)&&((input.owned|input.usable)&0x3df8u)==0;
   }
   result.followGoal=s.followEntity!=0;result.itemGoal=s.goalEntity!=0;result.urgent=result.itemGoal&&urgent;result.itemKind=s.goalKind;
   const bool activeFlight=s.goalEntity!=0&&!s.flightFinishing&&
     BotCecilFlightFresh(player,s,now)&&BotCecilFlightEdge(s);
   const bool closeCombat=!s.flightFinishing&&enemyDistance<8&&
     !(result.urgent&&result.itemKind==botcore::CecilItemKind::Health);
+  // A first Useful weapon may PLAN an ordinary grounded route, not inherit
+  // flight/control authority. STAND/CROUCH is a self-state veto, never a floor.
+  const bool firstWeaponCandidate=result.urgent&&firstUsefulWeapon&&
+    (player->m_pstState==PST_STAND||player->m_pstState==PST_CROUCH)&&
+    !s.flightWorld&&!s.flightFinishing&&!s.importantGoal&&!s.followEntity&&
+    !s.patrolAlternate&&s.interactionPoint<0;
+  const uint32_t firstWeaponActor=s.entity,firstWeaponGeneration=s.generation,firstWeaponItem=s.goalEntity;
+  const int firstWeaponGoal=s.goal;
+  const double firstWeaponAttempt=s.goalSince,firstWeaponDeadline=s.goalDeadline;
   if(closeCombat){
-    // Only the final validated flight may retain this action. Early returns
-    // must not regain close-combat priority through an inactive urgent item.
+    // Keep legacy early-return ownership and the late activeFlight check.
+    // An ordinary first-weapon candidate gains ownership only at the late gate.
     result.ownsMovement=false;
-    if(!activeFlight){s.ClearHealthConnector();return result;}
+    if(!activeFlight&&!firstWeaponCandidate){s.ClearHealthConnector();return result;}
   }
   BotCecilLocks(player,s,now);
   if(s.flightFinishing&&!BotCecilFlightEdge(s)){BotCecilFlightEnd(s,slot,tick,now,"locked");return result;}
@@ -2207,7 +2219,15 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
   // Arrival, replanning, loss of identity or rejected movement grants no priority.
   result.activeFlight=activeFlight&&flightCarried&&move.active&&!move.arrived&&!move.stuck&&!move.relocated&&
     BotCecilFlightFresh(player,s,now)&&BotCecilFlightEdge(s)&&std::fabs(s.flightPlanned-now)<=1e-6;
-  if(closeCombat&&!result.activeFlight)return result;
+  // No early return, changed attempt, special plan, stale flight or neutral
+  // proposal can borrow this priority. Driver's fresh SafeMotion still decides
+  // physical acceptance; neither this proposal nor self-state stamps a floor.
+  const bool firstWeaponReady=firstWeaponCandidate&&move.active&&!move.stuck&&!move.relocated&&!move.flags&&
+    !s.flightWorld&&!s.flightFinishing&&s.entity==firstWeaponActor&&s.generation==firstWeaponGeneration&&
+    s.goalEntity==firstWeaponItem&&s.goal==firstWeaponGoal&&
+    s.goalSince==firstWeaponAttempt&&s.goalDeadline==firstWeaponDeadline;
+  if(closeCombat&&!result.activeFlight&&!firstWeaponReady)return result;
+  if(closeCombat&&firstWeaponReady)result.ownsMovement=true;
   result.active=move.active;result.forward=move.forward*BotCecilSettings().fSpeedMul;
   result.strafe=BotCecilSettings().bStrafe?move.strafe*BotCecilSettings().fSpeedMul:0;
   result.up=move.up;result.yaw_delta=move.yaw_delta;result.pitch_delta=move.pitch_delta;result.flags=move.flags;

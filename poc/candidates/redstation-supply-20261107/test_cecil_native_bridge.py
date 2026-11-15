@@ -2885,8 +2885,8 @@ void supplyDiagnosticsRetentionAndTerminal(){
    BotCecilSupplyDiagTerminal(&player,s,.15,true,true);check(supplyDiagLines==1,"terminal diagnostic has independent one-second bound");
   }else check(supplyDiagLines==0,"disabled terminal telemetry emits no output");
   _botRayBudget=16;after[mode]=BotSupplyTick(&player,0,3,7.9);
-  check(s.goalEntity==991&&s.goalSince==starts[mode]&&s.goalDeadline==deadlines[mode]&&!after[mode].ownsMovement,
-    "telemetry preserves retained goal and original deadline through close-combat action yield");
+  check(s.goalEntity==991&&s.goalSince==starts[mode]&&s.goalDeadline==deadlines[mode]&&after[mode].ownsMovement&&after[mode].active,
+    "telemetry preserves retained first Useful attempt through close-combat planning priority");
   weapon.pickable=false;supplyDiagLines=0;supplyDiagText.clear();_botRayBudget=16;
   BotSupplyTick(&player,0,4,7.9);
   check(s.goalEntity==0&&std::strcmp(lastEnd,"unavailable")==0,"telemetry preserves real unavailable ending");
@@ -3990,7 +3990,9 @@ void liveItemFlightPriorityGuards(){
   flightLossFixture(false);player.pl.pl_PositionVector=FLOAT3D(0,40,12);
   if(supported)player.m_pstState=PST_STAND;
   const auto move=flightDriverTick(101,true,6);
-  check(!move.activeFlight&&!bridgeDriverOwns(true,move,&player,true),"ordinary FALL or grounded pickup still yields close combat");
+  check(!move.activeFlight&&(!supported?!bridgeDriverOwns(true,move,&player,true):
+    move.active&&move.itemGoal&&move.urgent&&bridgeDriverOwns(true,move,&player,true)),
+    "ordinary FALL yields; self-reported STAND first Useful route may plan but never gains activeFlight or floor proof");
  }
  int rays[2],lookups[2];unsigned random[2];SCecilMove commands[2];
  for(int visible=0;visible<2;++visible){
@@ -5203,7 +5205,83 @@ void transitHistoryCustodyReproduction(){
  bot_bDiagnostics=false;
 }
 
+void retainedFirstUsefulCloseCombatReproduction(){
+ for(unsigned owned:{3u,7u}){
+  setup(3);player.w.m_iAvailableWeapons=player.w.usable=owned;
+  BotSupplyState(0).owned=owned;
+  auto& weapon=addItem(69901,0,-22,botcore::CecilItemKind::Weapon);
+  BotSupplyGraph().points[2].important_entity=69901;
+  _botRayBudget=16;BotSupplyTick(&player,0,1,1000);auto& s=BotSupplyState(0);
+  check(s.goalEntity==69901&&s.mappedWeaponGoal,
+    "close-combat first Useful fixture acquires a real mapped route before the threat");
+  const double since=s.goalSince,deadline=s.goalDeadline;
+  const auto input=BotCecilItemInput(&player,s,4);
+  check(BotCecilUrgentItem(weapon.item,input)&&((input.owned|input.usable)&0x3df8u)==0,
+    "actual typed urgency marks retained first Useful weapon with Knife/Colt or DoubleColt urgent");
+  _botRayBudget=16;const auto motion=BotSupplyTick(&player,0,2,4);
+  check(motion.active&&motion.ownsMovement&&motion.itemGoal&&motion.urgent,
+    "retained first Useful weapon must retain planning priority over close combat like urgent Health");
+  check(s.goalEntity==69901&&s.goalSince==since&&s.goalDeadline==deadline,
+    "first Useful close-threat planning cannot replace its attempt or extend the fixed deadline");
+ }
+}
+void retainedFirstUsefulCloseCombatGuards(){
+ for(int mode=0;mode<4;++mode){
+  setup(3);auto& weapon=addItem(69902,0,-22,botcore::CecilItemKind::Weapon);
+  BotSupplyGraph().points[2].important_entity=69902;
+  _botRayBudget=16;BotSupplyTick(&player,0,1,1000);auto& s=BotSupplyState(0);
+  const unsigned gun=botcore::CecilWeaponMask(mode==3?9:8);
+  player.w.m_iAvailableWeapons=3|(mode==1?0:gun);
+  player.w.usable=3|(mode==0||mode==1||mode==3?gun:0);
+  _botRayBudget=16;const auto motion=BotSupplyTick(&player,0,2,4);
+  check(!motion.active&&!motion.ownsMovement,
+    "owned or usable Useful weapon, including empty-ammo and unsafe-range grenade, keeps close combat priority");
+  (void)weapon;(void)s;
+ }
+ for(auto kind:{botcore::CecilItemKind::Armor,botcore::CecilItemKind::Ammo,botcore::CecilItemKind::AmmoPack}){
+  setup(3);addItem(69906,0,-10,kind);auto& s=BotSupplyState(0);
+  s.goal=1;s.goalEntity=69906;s.goalKind=kind;s.goalSince=0;s.goalDeadline=20;s.scanTick=999;
+  _botRayBudget=16;const auto motion=BotSupplyTick(&player,0,1,4);
+  check(!motion.active,"Armor and Ammo target types never borrow first Useful Weapon close-combat priority");
+ }
+ for(int weaponID:{1,2,3,10}){
+  setup(3);auto& item=addItem(69903,0,-22,botcore::CecilItemKind::Weapon);item.item.weapon=weaponID;
+  auto& s=BotSupplyState(0);s.goal=2;s.goalEntity=69903;s.goalKind=botcore::CecilItemKind::Weapon;
+  s.goalSince=0;s.goalDeadline=20;s.scanTick=999;
+  _botRayBudget=16;const auto motion=BotSupplyTick(&player,0,1,4);
+  check(!motion.active,"basic-pistol or melee target never receives first Useful close-combat priority");
+ }
+ for(int mode=0;mode<3;++mode){
+  setup(3);addItem(69904,0,-22,botcore::CecilItemKind::Weapon);
+  BotSupplyGraph().points[2].important_entity=69904;
+  _botRayBudget=16;BotSupplyTick(&player,0,1,1000);auto& s=BotSupplyState(0);
+  const double deadline=s.goalDeadline;_botRayBudget=16;
+  if(mode==0)player.m_penWeapons=NULL;
+  if(mode==1)items[0].pickable=false;
+  if(mode==2){s.goalDeadline=.075;}
+  const auto motion=BotSupplyTick(&player,0,2,4);
+  check(!motion.active,"invalid weapons context, unavailable item and expired deadline do not regain first Useful movement");
+  if(mode!=2)check(s.goalDeadline==0||s.goalDeadline==deadline,"rejected first Useful context cannot extend deadline");
+ }
+ setup(3);addItem(69905,0,-22,botcore::CecilItemKind::Weapon);
+ BotSupplyGraph().points[2].important_entity=69905;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);_botRayBudget=16;
+ const auto motion=BotSupplyTick(&player,0,2,4);auto& s=BotSupplyState(0);
+ wallMode=2;double f=motion.forward,st=motion.strafe,u=motion.up;
+ const int status=BotCecilSafeMotion(&player,s,.1,f,st,u,0,1,true);
+ check(motion.active&&status==0&&f==0&&st==0&&u==0,
+   "first Useful planning never bypasses the actual fresh final SafeMotion physical veto");
+ setup(3);addItem(69907,0,-22,botcore::CecilItemKind::Weapon);
+ BotSupplyGraph().points[2].important_entity=69907;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);SCecilMove stuck;
+ for(int tick=2;tick<=42;++tick){_botRayBudget=16;stuck=BotSupplyTick(&player,0,tick,4);}
+ check(!stuck.active&&!stuck.ownsMovement&&BotSupplyState(0).goalEntity==69907,
+   "actual Navigator two-second no-position-progress recovery cannot borrow ordinary first Weapon priority");
+}
+
 int main(){
+ retainedFirstUsefulCloseCombatReproduction();
+ retainedFirstUsefulCloseCombatGuards();
  transitHistoryCustodyReproduction();
  mapped220Circulation();mapped220InterruptedEvidence();mapped220HistoryBoundaries();
  firstWeaponSideItemReproduction();firstWeaponSideItemGuards();firstWeaponAtomicCommitAndLimits();
@@ -6029,17 +6107,20 @@ int main(){
   BotSupplyGraph().points[2].important_entity=998;
   _botRayBudget=16;BotSupplyTick(&player,0,1,1000);auto& s=BotSupplyState(0);
   const double since=s.goalSince,limit=s.goalDeadline;const int starts=goalEvents;
-  bool retained=true,yielded=true,resumed=true;
+  bool retained=true,prioritized=true,resumed=true;
   for(int tick=2;tick<=100;++tick){
+   // This is a priority/deadline control, not a stationary two-second recovery.
+   // Explicit synthetic SDK progress stays before the original first hop.
+   player.pl.pl_PositionVector(3)=-.04f*(tick-1);
    const bool close=(tick%4)<2;_botRayBudget=16;
    const auto motion=BotSupplyTick(&player,0,tick,close?7.9:8.1);
    retained&=s.goalEntity==998&&s.mappedWeaponGoal&&s.goalSince==since&&s.goalDeadline==limit;
-   if(close)yielded&=!motion.active&&!motion.ownsMovement&&motion.buttons==0;
+   if(close)prioritized&=motion.active&&motion.ownsMovement&&motion.itemGoal&&motion.urgent;
    else resumed&=motion.active&&motion.itemGoal&&motion.urgent;
   }
   check(retained&&goalEvents==starts&&endEvents==0,
    "repeated close-fight threshold crossings retain one mapped item attempt and its original deadline");
-  check(yielded&&resumed,"close combat owns its action while the same urgent mapped route resumes outside the threshold");
+  check(prioritized&&resumed,"first Useful mapped weapon keeps planning priority on both sides of the close threshold");
   if(finish==0){
    player.pl.pl_PositionVector=FLOAT3D(0,0,-22);
    player.w.m_iAvailableWeapons=player.w.usable=3|botcore::CecilWeaponMask(4);_botRayBudget=16;

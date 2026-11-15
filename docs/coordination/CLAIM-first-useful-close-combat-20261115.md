@@ -1,0 +1,7 @@
+# Retained first-useful Weapon close-combat priority
+
+Owner `/root/a4_diagnosis`; existing isolated worktree `/srv/tse-reset031-diag1-prepare-20261115`, no Root files or resources. Initial scope STATIC design and existing actual SDK bridge test preparation ONLY. Header production unchanged until real Source RED and Root's short-job/implementation ruling. Later writer claim is only `poc/candidates/redstation-supply-20261107/BotSupplyNative.h`, its real `test_cecil_native_bridge.py`, own spec/plan/report. No Driver, Native, build, runtime, frozen-package, deadline, threshold, lock, physics, sampler or live changes. No delegation. Stop all tests/compiler/Git on Root Native admission; never lift that pause by time.
+
+This is a concrete Source-policy inconsistency investigation, not a proven physical cause of the034 life. Existing owner_lost evidence is in closed audit outputs; no Raw replay is needed. Test fixtures use synthetic graph/poses/casts and the extracted production bodies, not a second movement implementation.
+
+Root admitted serial portable execution and the refined candidate/late-proof design after preserving naive26FAIL. Branch `codex/20261115-first-useful-close-combat`, RED commit76b5fed; final normal+one ASan/UBSan4257/0 Exit0. Header change is local Booleans/snapshots only; Driver/physics/nav implementations unchanged. All compiler processes ended; writer claim ends with final Source/report commits. No Native/DLL/build/rollout acceptance, no follow-on work under this claim.

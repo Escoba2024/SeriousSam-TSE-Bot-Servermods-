@@ -1,0 +1,23 @@
+# Preserve retained first-useful Weapon route priority in close combat
+
+## Evidence and bounded intent
+
+`BotCecilUrgentItem(Weapon)` says the first ranged weapon is urgent. `BotDriver.cpp`1463ff explicitly grants urgent item proposals movement priority even with a visible target. But `BotSupplyTick`2097ff returns inactive at enemy distance<8 unless urgent Health (or the existing validated flight continuation) applies. Driver then cannot take the inactive Weapon proposal; SafeMotion(useReacquire=false) clears transit history with owner_lost. This branch disagreement is Source-proven. The primary physical failure to acquire Weapon9 in the034 Native episode remains UNKNOWN; the two observed switches are only bracketed by1Hz Driver rows.
+
+## Chosen narrow design
+
+Use the already successful fresh typed Item refresh and existing captured `CecilItemInput`; cache a plain Boolean that identifies a useful Weapon target (`CecilWeaponMask(item.weapon)&0x3df8u`) while `(input.owned|input.usable)&0x3df8u` is zero. Preserve the original closeCombat Boolean, early ownership release and late activeFlight gate. Only an urgent ordinary candidate in STAND/CROUCH, without retained flight/finishing/important/follow/patrol/interaction context, may proceed to the existing planning body beside the old accepted-flight path. STAND/CROUCH is only a self-state veto, never a floor/support proof.
+
+Capture Actor/generation/item/goal/GoalSince/deadline before Navigator. After unchanged Locks/Navigator/connector checks, grant ordinary-first-Weapon ownership only when its move is active, unstuck, unrelocated and unflagged, no flight context has appeared, and the captured identity/attempt/deadline still match exactly. Every earlier return retains the original ownership behavior. Existing selected-item validity/retention, clocks, graph route, final Locks, Navigator, flight/control and Driver SafeMotion remain responsible for permission and actual movement. No duplicate Input/read/getter/ray/clock/RNG call; no new Engine call site. Newly admitted contexts naturally execute the existing planning calls formerly skipped by the early veto, so global dynamic query-count equality is not claimed.
+
+Using only `result.urgent && kind==Weapon` would admit basic pistols/Chainsaw or armed-but-range-unsafe weapons. Using `BotCecilHasRanged` alone tests usable/allowed weapons, not retained ownership, so a collected empty-ammo or disallowed ranged weapon could wrongly regain first-weapon authority. Both alternatives are rejected. Existing0x3df8 mask semantics stay unchanged; no new threshold or wider definition of a useful weapon.
+
+## Preserved boundaries and tests
+
+The exception must not admit Armor, Ammo/AmmoPack, basic Knife/Colt/DoubleColt/Chainsaw targets, invalid targets, or an actor that already owns ANY useful ranged weapon even if unusable or outside fire-safe range. Useful Grenade-target handling must be checked against existing typed retain/range logic; no independent grenade permission. Urgent Health remains unchanged; ordinary Health and armed combat keep yielding. No new authority for air/liquid, teleporter/lock/special transitions, stale identity, invalid snapshots, exhausted Ray budget, expired fixed deadlines or final physical rejection.
+
+An active navigation proposal is not an input ACK, safe floor, actual progress or pickup. Existing deadline/provenance assertions and real finalSafeMotion rejection controls remain. The old test expectation that a retained first-useful Weapon yields at7.9m is intentionally obsolete under this ruling; only that expectation changes, not its attempt identity, pickup, timeout, physical-block or fixed-deadline checks.
+
+## Reproduction and final Source state
+
+Real-bridge cases owned3 and7 first acquire a mapped Weapon route without an enemy, then the same attempt sees a4m enemy. Real Parent RED4239/2 proves the disagreement. A naive exception that made closeCombat false failed4253/26 because it also bypassed the existing late flight and early ownership protections; its complete diff/log are preserved privately, not accepted. The refined final source passes4257/0 normal and one ASan/UBSan run. Existing Flight/FALL/arrival/invalid-context tests remain; the explicitly grounded ordinary-tail expectation changes only under the new first-Weapon policy. Threshold continuity uses explicit small SDK position advances to isolate priority from the Navigator's independent two-second no-progress recovery; a separate truly stationary test proves that recovery does not gain ordinary-first-Weapon ownership. These are synthetic SDK mechanism proofs, not Native physical causality or observed improvement.
