@@ -1,0 +1,13 @@
+# QJS10-V2-Kontrolle geschlossen fehlgeschlagen; engste Folgeprobe
+
+15.11.2026,12:02 UTC. Die neue uninstrumentierte Kontrolle114913 bleibt FAIL an `invalid animator pointer` im Snapshot des eigenen Originalclients, vor MethodWindow/Worker/Trace. Der tatsächlich gelesene Animatorwert und Slot fehlen im alten Fehlertext. Ein vorheriger Server-Snapshot ist vollständig und zeigt den zweiten Spieler genau im ersten beobachteten Spawn-Tick; dies belegt keine Ursache des Clientfehlers. Kein automatischer Retry oder Guardlockerung.
+
+Alle drei gestarteten eigenen Rollen regulär beendet, drei geschlossene Logs ohne die geprüften Sync-/Crashmarker. Root prüfte664Dateien,9Absenzen, UID/GID/Modus/SHA256 und beide Snapshotzeitstempel sowie leere eigene Runtime-/Displayrollen. Result4572e06dde7c7c2bd5c63d3b34eca2d3a36a100a91aee7af5466cc7f84fa6a1b bleibt unverändert. Das kurze Hostintervallmaximum46,03% ist kein vollständiger Ressourcenpass.
+
+Der integrierte Fehlerkontextpatch9f5a753 ergänzt ausschließlich schon gelesene Werte in der vorhandenen fatalen Guardmeldung. Die vier gezielten Tests im vorgesehenen direkten Skriptaufruf bestehen; ein erster Rootaufruf als Modul ohne erforderlichen Toolsimportpfad scheiterte und ist kein Verhaltens-RED. Guard-AST, Readtraces und gültige Snapshotresultate bleiben gleich. Formatierungskosten werden nicht als identisch behauptet. Kein Nullpointer-/Startupfix ohne konkreten Rohwert.
+
+Neuer V3-Fork: unveränderte QJS-/konfiguriert10FPS-Bedingung plus genau dieser Meldungskontext, eigene Namen und eigene neue Kontrolle/gegebenenfalls ein dazu passender Trace. Äußerer Reader52ef1def71e642d9086e0703bc0ae477be92cb90b38e8529b20f4b9888969e9f; nested Legacyreader unverändert. Keine Readiness-/Retryänderung und kein Transfer alter Kontrollen. Rootmanifest8755083e45bc3fe871fe96bed4ed847645a714fa85cdbca7338a0237723f0d57;175/75Pins. Unabhängiger Paketanwendungsreview, Remote- und private Backupprüfung müssen vor Native abgeschlossen sein. Dies ist Diagnose, keine A1-Abnahme.
+
+Der frische Livebeleg11:52 bestätigt sechs×acht eigene Bots ohne zusätzliche Teilnehmer und unveränderte18 geladene Runtime-/Konfigurationsziele gegenüber rollback051. Dev=Cecil048, PublicRed=Gen2, übrigevierPublic=Build018. Dev seit10:47:03 bis11:52:02:9427SyncOK/0neueBAD/0SyncDisconnect. Alte fehlgeschlagene Fenster bleiben offen; keine allgemeine Sync- oder Dauerfreigabe.
+
+Auch die historische Delta018-Restorekopie ist nach vollständigem Originalvergleich, neuer exakter Drive-Sicherung mit Hashrücklauf und zwei frischen vollständigen Metadatenrestores entfernt. Originalarchive bleiben erhalten. A offen, B nicht begonnen; Picker-Custody-Diagnoseplan116b833/df1edd8 vor neuer A4-Quittungsimplementierung, kein blindes Resetretry.
