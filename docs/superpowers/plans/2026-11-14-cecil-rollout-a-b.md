@@ -164,3 +164,7 @@ Source093/Delta086 remotevollverifiziert. QJS10V2-Kontrolle FAILvorMethodWindow:
 ### Fortschritt15.11.,12:02UTC
 
 V3-Fehlerkontextsource/4Tests und Rootfreeze175/75Pins vorbereitet; keineNative. A4minimalDIAG1Quittung inisolierterSourceimplementierung. Source094/Delta087sichern, unabhängigenReviewabschließen, dann genau neu deklarierteV3Kontrolleundggf.passendenTrace. KeinealteFehlprobeumetikettieren.
+
+### Fortschritt 15.11., 12:22 UTC
+
+V3-Kontrolle liefert echten Nullanimator und bleibt FAIL, vollständig geschlossen/restauriert. Source bdb4949 und12Rootchecks ergänzen nur initiale PENDING-Zulassung innerhalb bestehender8/.2-Grenzen; nach erstem gültigem Paar keine neue Ausnahme. V4 neu deklariert mit177/75Pins und explizit geändertem Readinessverhalten; Native noch nicht gestartet. Source095/Delta088 und Anwendungsreview abschließen, dann eine neue Kontrolle/bedingter Trace. A4-Telemetrie in isolierter SDK-Gegenprüfung, noch kein Build. Drei weitere Restorekopien exakt gesichert und entfernt; Originalarchive bleiben. A/B-Abnahmen unverändert offen.
