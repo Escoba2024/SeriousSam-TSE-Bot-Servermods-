@@ -20,9 +20,9 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 |Namen/Identitäten erhalten|Bestand geprüft|458Pool/48Anzeigenamen/Profile051gleich, Instanz+ID verwenden|
 |Dev-Sync|**FAIL/Ursache offen**|70neueBAD/3Kick seit23:54, eigeneBotclients0; unverändert048+PowerupDedicated|
 |026passiveDiagnose|Build/Portable bestanden|15MSVC+Link/77Closure,3532normal+ASan, keinRuntime-/Skullsfixclaim|
-|026Skulls600diag1|vorbereitet/rootreviewed|4inverseDateien/77unverändert,77Alt→77Neu,11Roottests; Rootfreezeb82e1bd8/Peer87415519PASS_SCOPE,Backup/Native alsNächstes|
+|026Skulls600diag1|geschlossen, A4 weiter offen|Root640Dateien/4LogsRestore; vierstufigerAudit bytegleich, bewaffneter16,546sStillstand; keinePromotion|
 |A1Maus/Keyboard|historischeFAILs|MousevariableAntwort,Keyboard7,5°Rückkehrfehler; Rootclosedaudit vollständig|
-|A1Pitchfeedback|isolierteImplementierung|nur+12Detour/1pxFeedback/0,75°diagnostischeRückkehr,keinSchuss/A1pass|
+|A1Pitchfeedback|Code/Rootreview/Freeze fertig, Native ausstehend|nur+12Detour/1pxFeedback/0,75°diagnostischeRückkehr,keinSchuss/A1pass|
 |A3Tiernachweis|offen|020STARK13:3,Swap5:6; keinbelegtesSTARK>MITTELüberbeide|
 |A4Karten|teilweiseBeobachtung|024Red/Skulls/Trouble600geschlossen, Skulls242,49sNoUseful; weitereMaps/Transitions/Resetoffen|
 |A5Formalgates|nichtbegonnen|nachfunktionalgeeignetemKandidaten1/4/8Bots60/60/120min|
@@ -30,37 +30,23 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 
 ## Unmittelbare Ausführung
 
-1. **026Skullsdiagnose abschließen.** DeaktiviertesPaket
-   `/srv/tse-nav20-026-skulls600-diag1-disabled-20261115` cdb5b958,
-   Rootkopie `/srv/tse-nav20-026-skulls600-diag1-root-frozen-20261115`
-   b82e1bd8/Controller1e06b182. VollständigerRootreview+11Tests bereitsPASS.
-   Unabhängiger Peer prüft nur Root-Gate-/Namespace-/Pindelta; keine eigene
-   Policyprüfung als unabhängig ausgeben. Neue Quellen publish/fetch,
-   Paket/Wrapper/Syncdeltas/A1Spec in063 externvollrücklesen.
-2. **Genau ein026Skulls600s/diag1-Fenster.** AlleWorkerSTATICONLY und CPUjobs
-   beendet; Build/Fleet/Deploymentlocks plus Fixturelock exklusiv, keine
-   fremden Ressourcen. Hard2/8DEMON/Original20FPS/OriginalDedicated.
-   RootEV/observe-navigation026-skulls.py startet ausschließlich den gepinnten
-   Rootparent. KeinRetry/keineRolloutsequenz. CPU≤75%,RAM≥1,5GiB,Disk≥8GiB.
-3. **Geschlossenen Fall tatsächlich prüfen.** Vier normaleCloses, komplette
-   Inhalts-/Besitzer-/Modus-/Profile-/GUID-Restoration, gestarteteGenerationen/
-   Units/Displayende, geladeneDLL/Config/Map/Nav, Schlusslogdifferenzen.
-   AlleReadattempts/Leben/Zensierungen behalten. NeueReacquirezeilen an
-   tatsächlicheEntity-/World-/Life-/Nativezeit binden; unaufgezeichnete oder
-   throttledFelder UNKNOWN. Proposal≠Bewegung/Ankunft/Pickup.
-4. **Konkrete Ursache reproduzieren und korrigieren.** ErstbelegterSDK107RED,
-   kleinerFix, relevanteRegressionen/ASan, neuerseparaterRetailkandidat,
-   tatsächlichnativegleicheBedingungen. Keine Guard-/Toleranzlockerung nurfürPASS.
-5. **A1Pitchfeedback getrennt prüfen.** [Spec](../specs/2026-11-15-a1-closed-loop-original-input.md).
-   ReineTests/disabledBuilder/Rootreview/Freeze/Backup/einOriginalfall;
-   max48Aktionen96Attempts/.35sHold/2sACK/20saktiv/85sGesamt/90sRunner,
-   EPS.001 und2,35sReserve vorInput. AlteCP/Gain-/KeyboardFAILsunverändert.
-   Danach normale Original-Schuss-/Bullet-/FirstStatekette weiterentwickeln.
-6. **Dev-Sync getrennt eingrenzen.** Vorhandene048/018/020Originalserver-
-   Kontrollen600s bereits0neueSync; nichtunbegründetwiederholen. Filter-off/on-
-   Kontrolle mit bestehender PowerupDedicatedfe4a77 ist noch vorzubereiten;
-   identischeeigeneOriginal-/Bot-/Join-/Inputbedingungen, keineFremdspielerhooks.
-   Schwellwert10/CRC unverändert, keineUrsachenbehauptungausbloßemBAD.
+1. **026 geschlossen und vollständig ausgewertet.** Vier Readerstufen Rootreplay bytegleich,
+   Finalquittung298253fd; 188Leben/111Gewinne/515ReadFAIL, 871Decisions/19UNKNOWN.
+   52,303sNoUseful und16,546s exakteStillstandsphase verhindernA4-Freigabe.
+   Keine pauschaleGuardlockerung; vorKorrektur Proposal→finalAction/Safety binden.
+2. **Feedbackquellen veröffentlichen und064 sichern.** Root24/0portableTests,
+   neuePolicy/Journal/Builder integriert, direktePitchdistanz2RED→GREEN,
+   Freeze a2fa6509/Controller5b348963, Peer f8c9b366PASS_SCOPE nurRootdelta/Pins.
+   106/88/14Pins;6Instrumentgates+cmFalse/vierCoregleich. VollDrive-Rücklesen und
+   Dateimetadatenrekonstruktion vor dem vorbereiteten90s-Fenster, keineRetry.
+3. **Einmal begrenzterOriginal-Pitchfeedbacktest.** +12Detour, reale±1px-Korrekturen,
+   bestehende0,75°Rückkehrgrenze, max48/96 und20/85/90s, 2,35sInputreserve.
+   KeinFire, keineGain-/A1Qualifikation. DanachRootrestore/volleACK-/Journalprüfung.
+4. **A1 Erstzustandsschaden** nach tatsächlicherLife-/State-/Bulletordnung weiterführen;
+   getrenntnurlesendOriginalopfer+normalerAI-Shooter prüfen, keineproximityBeweise.
+5. **A4/A3/A5 anschließend abschließen.** KeineWiederholung bereitsgeschlossener
+   048/018/020OriginalDedicated-600s; DevPowerupoff/on bleibt separat unvorbereitet.
+   B weiterhin erst nach belegtem A. LiveMischstand erhalten.
 
 ## Verbindliche A-Abnahme
 
@@ -104,10 +90,10 @@ mitMindestziel/Zielzahl/eigenenBots/MenschenungeklärtenTeilnehmern,keinpauschal
 
 ## Sicherung, Veröffentlichung und Abschluss
 
-AktuellSource071Remote346a86f6/Tree4eea6687 exaktRoot75ba3bb,
-neuereCommitsnochpublish/fetch. Delta022–062 vollDrive-/Dateimetadatengeprüft,
-aktuell062e04fa98f/4782193B/945Files30425209B,
-Drive1fzNIffBqn92hvsS8m81L8PhfRK2bAETP. 051istMischrollback;
+AktuellSource072Remotee0fd869f/Treec3d8795b exaktRootb28e972,
+neuereCommitsnochpublish/fetch. Delta022–063 vollDrive-/Dateimetadatengeprüft,
+aktuell063af1803a7/12093715B/332Files16737176B,
+Drive1J5j9k012p2_O3IuzmaPK37YxcrTLAILK. 051istMischrollback;
 ursprünglicheArchive/qualifizierteRetaildateien/Identitätenerhalten.
 Sourcebundles benötigenBasis061067dda4 und0606f4fbbd.
 

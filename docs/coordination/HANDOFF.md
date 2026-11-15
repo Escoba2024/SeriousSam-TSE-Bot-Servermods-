@@ -1,4 +1,4 @@
-# Aktueller Handoff – 15.11.2026, 02:57 UTC
+# Aktueller Handoff – 15.11.2026, 03:40 UTC
 
 Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker:
 reguläres lokales Terminal auf dem Host funktioniert. RDC bleibt gesperrt und
@@ -12,32 +12,41 @@ Dieses Dokument ersetzt die angewachsene Zwischenstandschronologie. Deren
 vollständiger Inhalt bleibt in Git, zuletzt `d7bf1ae:docs/coordination/HANDOFF.md`,
 und den verifizierten Sourcebundles erhalten. Keine alten FAILs werden umgewertet.
 
-## Laufvorbereitung03:05UTC
+## Geschlossener026-Fall und nächste A1-Prüfung
 
-026Skullsdiag1-Builder/Plan/Claim/Report integriert (Autorc29fa93/ce7de6f/
-aa8471c/c8502bb). Root vollständigerSource-/Testreview und11gezielteTestsPASS;
-Rootfreeze b82e1bd823135c9cc409a5802c2077964ebd52662c0facdef5ae2d2546870806,
-Controller1e06b182ba838cbf07685bdd20d0af6b4985eb6692828381f55ce986d9d56089.
-UnabhängigerRootdeltareview87415519b1995c8421176429bc487ab47f46dcf3f67b017a9136306774ebd73b
-PASS_SCOPE/noC/I:einGate/zweiNamespaces exaktinvers,140/88/51Pins,
-88anderePayloadfilesgleich,77neue026/0aktive024Buildtargets.
-ScopeausdrücklichnurRootdelta/Pins,nichteigenePolicyunabhängiggeprüft.
+026-Skulls600diag1 ist geschlossen: `nav20-026-skulls-root-skulls-20261115-030720`,
+Resultat8bf66066a6736c6505d707644e0924a14562a8b0961f4f1d7723d54754b04100,
+600,098758s, vier normaleCloses, keine neuen sechsFehlerklassen. Rootrestore
+03:19:19:640Dateien/vierClosedlogs/PIDs/Units/Displays154155/vierLocks PASS.
+Outer688Samples/CPUmax63,2653%/RAMmin2470592512B/Diskmin8774942720B,
+max1,002606sLücke/keineVerletzung: nurHostbeobachtung, keineformalenGates.
 
-Rootwrapper RootEV/run-navigation026-skulls.py SHA
-b3b8ac82c30c7057ff5cd73611a3ba9ac32ec2f0ee4857b97506a8a043e49615,
-Outerobserve-navigation026-skulls.py SHA
-f2e46748a8bb5d49f06519dfb102a16129dff7d601814ddbef4f4e5d6892754b.
-BeideASTgeprüft; Parent verlangt063fullDrive/Rootrestores/Pins/Reviews,
-OwNS27850/Hard2/8DEMON/Original20FPS/diag1/600s,nurreinenSkullsfall.
-NochkeinNative gestartet. WorkerA4quieszent/STATICONLY, A1isoliertoffline.
-NeueQuellen072publish/fetch/Bundle und063externvollsichern, dannA1ebenfalls
-STATICONLY bestätigenlassen undeinmalstarten. KeinLivewechsel/Aoffen/Boffen.
+Vollständiger [Funktionsaudit](../reports/2026-11-15-build026-skulls-closed-functional-audit.md)
+integriert c176132 (Autorb6e50c6). Root hat alle vier Readerstufen selbst erneut
+auf den geschlossenen Rohdaten ausgeführt: vier Outputs bytegleich einschließlich
+Finalquittung298253fda7c3b4f29cde23b8c3840a7b8a30d5ddb046b47c3f847cc080acb9cf.
+188Leben/180Tode/90Usefulleben/111Gewinne/515ReadFAIL bleiben vollständig;
+871Decisions,852innenliegendeNative-Lebensbindungen/19UNKNOWN.
+LängstesNoUseful52,303s; bewaffnet24,494s in1m und16,546s exaktstill.
+AkzeptierterReacquirevorschlag ist kein Bewegungserfolg. Call-ID/Arbitration/
+finalerSafetyguard fehlen als Kausalbindung; keineGuardaufweitung/Skullsfreigabe.
+
+A1Feedbackcode integriert bis01ce526, Root vollständigerCode-/Testreview und
+24portableTests PASS. Separates Rootfreeze a2fa65092236f1b16a8fe3f2a93199e22a530ee7c61da82cfa9599e8e7d66aa7,
+Controller5b348963edd8333aa500bde864675fc167cc0d4fdae07445dae3de5c2fc0051a.
+Peer f8c9b36667df6e0ffd77ff05b4ad5134418c85499051d3d9e950f5a50c8811e4
+PASS_SCOPE für Rootdelta/Pins, ausdrücklich keine unabhängige eigenePolicyprüfung.
+106/88/14Pins,125weitereDateienbytegleich, vierCorebytegleich,
+sechsInstrumentgates+CollectorManifestFalse. EineMainfreigabe, keinFire.
+Rootwrapper run-a1-pitch-feedback-original.py adc98dfe85435fd763527580ec67136ad2ecd75df44afe218b114ae777282ac9,
+Outer c7d7b0bb89318dff86597f6a680bbca157ef4a7e1084461855d13a2148158791.
+Einmal90s, verlangt064vollDrive vorher; noch nicht gestartet.
 
 ## Zugriff, Arbeitsbereiche und Sperren
 
 Root allein integriert und verändert Runtime. Zwei bestehende Worker:
-`a4_diagnosis` bereitet nur den deaktivierten026-Skullsdiagnosefall vor;
-`candidate_audit` implementiert nur den getrennten A1-Pitchfeedbackfall.
+`a4_diagnosis` prüft nur lesend die A1-Feasibility Originalclient als Opfer/
+normaler AI-Shooter; `candidate_audit` hat Feedbackfreeze-Review beendet, keine Jobs.
 Getrennte Worktrees/Claims, keine Writer im Rootworktree. Vor Native alle
 Workerjobs beenden und STATICONLY ausdrücklich bestätigen lassen.
 
@@ -149,11 +158,6 @@ Rückkehr-/Support-/LOS-/Budgetursache UNKNOWN, deshalb026diag1.
 Red9GroundReplans und Trouble1 belegen die neue StaleAnchor-Verzweigung nicht:
 unmittelbarer alterAnchor UNKNOWN, frischerHint schon vorher gesehen.
 
-026-Skulls600diag1-Paket aktuell eigenerWorker, geplant vier enge inverse
-Retargetdateien, Hardmapdiag0-Guard tatsächlichRED→nurDiag1Policy. Root muss
-alle77altenBuilddeps entfernen/neue77prüfen, übrige Parentdateienbytegleich,
-Status-/Finalizergrenzen reviewen, einfrieren und unabhängig prüfen lassen.
-Keine Nativeausführung vor abgeschlossenem Source-/Pinaudit und Backup.
 024Hole/Yodeller600s sind separat vorbereitet, noch nicht ausgeführt;
 026belegt diese Karten nicht automatisch. NeunKartenmatrix:
 DesertTempleWorld fehlt/gesperrt; LostTomb/Fortress/Compound vorhanden,
@@ -179,8 +183,10 @@ Neue [Pitchfeedback-Spezifikation](../superpowers/specs/2026-11-15-a1-closed-loo
 +12Detour,dann tatsächliche1px-ACK-Korrekturen, unveränderte0,75°-Rückkehr;
 max48Aktionen/96Attempts/.35sHold/2sACK/20saktivePhase/85sGesamt/90sRunner,
 EPS.001, 2,35sReserve vorInput. KeinCP-Gain-/Toleranzrefactor/Memorywrite,
-keinFire. Worker bereitet neue reine Policy/Tests/deaktiviertenBuilder vor;
-Root erst nach Review/Freeze/Backup genau einen Fall. VierCoredateienbytegleich.
+keinFire. Policy/Journal/Builder fertig und Rootreviewed24/0; Rootfreeze und
+begrenzterWrapper fertig, 064Backup/Native noch ausstehend. VierCoredateienbytegleich.
+Rootbefund direktePitchdistanz statt zyklischemCP.same durch zwei echteREDs
+behoben; kopierterCP-ACK-AST unverändert. KeineGain-/Schuss-/A1-Abnahme.
 
 A3 gemeinsameTaktik/tatsächlicheMITTEL<STARK<DEMON/humanesNiveau offen.
 020STARKvsMITTEL13:3, Rollentausch5:6; Legacy-SwapanalyzerFAIL3Inventarleben
@@ -203,42 +209,51 @@ RUerstEncodingtest. WeitereAbnahme im ursprünglichen A/B-Plan.
 
 ## Veröffentlichung, Backups und nächster Schritt
 
-Letzter tatsächlich gefetchter Remote346a86f6934fe04a1bf866e8ff4a2f8eb0f1f10d,
-Tree4eea6687ab2b9e8aea1c28af222a84ee83eb6790 exaktRoot75ba3bb.
+Letzter tatsächlich gefetchter Remotee0fd869f847371e8f96e3783a2eace03e2cbece8,
+Treec3d8795b58c4c377d34a06d6e838c0390cf9e8dd exaktRootb28e972.
 NeuereCommits/aktuelleHEAD noch veröffentlichen. GitHubAPI mit expected_sha,
 forcefalse; tatsächlicherFetch+Tree-/Diffvergleich, keineForcePushes.
 main/PR99 unvollständig, keine abschließende Integration behauptet.
 
-Driveprojekt14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2. Deltas022–062 vollständig
+Driveprojekt14HBTUlfJvyE821KnoHJhNGZ__4Ge2-y2. Deltas022–063 vollständig
 extern rückgelesen, alle Inhalte/Metadaten rekonstruiert; ursprüngliche Archive
 und050/051Rollback nicht löschen. Aktueller Mischrollback051:
 83540880B/SHA85249af2c74e465a74c3bdb0a8f636936a9033d6f20e48316963f8a9b4de5a06,
 Drive1XX2UTI3VigXY-AdSW2Ep0HwkhJ54Kz3L,
 `/srv/tse-current-mixed-fleet-backup-20261114`.
 
-Neueste062:4782193B/SHAe04fa98fe737afbd7e5f594a56b897b8834480c8052e179fc3252e5733f2077c,
-Drive1fzNIffBqn92hvsS8m81L8PhfRK2bAETP,
-945Files/30425209entpackteBytes,vollständigerDrivehash+zweifachalleDatei-
-SHA/UID/GID/Mode/mtime_nsPASS02:47:12,TempRestoreerstanschließendentfernt.
-EnthältKeyboardRaw/Audit/025FAIL/026Kandidat und Sourcebundle75ba3bb,
-benötigt067dda4 aus061; jenesBundle benötigt6f4fbbd aus060.
-NativeVollrestoreStart aus diesenArchiven NICHT geprüft. Quellen-/Archiv-
-Rekonstruktionskommandos und Einzelpins in Backuproot/create-/verify-delta062.py,
-Manifesten/Quittungen und Gitbundles. KeineRetaildateien/Rawidentitätenpublizieren.
+Neueste063:12093715B/SHAaf1803a745acc71c8ffe758afa57685069ed4bb1740da2fe3695ec22387f2f6a,
+Drive1J5j9k012p2_O3IuzmaPK37YxcrTLAILK,332Files/16737176entpackteBytes,
+vollerDrivehash+zweifachalleDatei-SHA/UID/GID/Mode/mtime_ns PASS03:07:16.
+Enthält026Vorbereitung/DevSyncdeltas/Powerupclosure/Sourcebundleb28e972,
+benötigt75ba3bb aus062; dieses067dda4 aus061; jenes6f4fbbd aus060.
+NativeVollrestoreStart NICHT geprüft. 064 für geschlossenen026Fall, Audit und
+A1Feedbackpaket/Wrapper/Sourcebundle ausstehend.
+
+Speicher: nur geschlossene eigene Belege verlustfrei gzip-komprimiert, jedeDatei
+vorOriginalentfernung vollständig auf SHA/UID/GID/Mode/mtime_ns rekonstruiert.
+024Red/Trouble18Dateien250224378→18064685B (Originale zusätzlich058/061Drive),
+026+Rootreplay13Dateien187370676→14331994B (extern erst064).
+RootEV/compressed-closed024-red-trouble-index.json und
+compressed-closed026-and-root-replay-index.json pinnen sämtlicheOriginalmetadaten.
+AusführbareRestorehelfer restore-compressed024-red-trouble.py --map redstation|trouble
+und restore-compressed026-and-root-replay.py --scope native|replay|all.
+8GiBFloor und64MiBReserve nicht gesenkt; ein erster024Kompressionslauf stoppte
+korrekt vor zu großerTempdatei und wurde kleinsteDateien zuerst fortgesetzt.
+Alter045Retireversuch stoppte vorMutation, weil048/018/020 bereits komprimiert
+waren; vorhandenenRestorehelfer wiederverwenden, keineDoppelkompression.
 
 Nächste konkrete Reihenfolge:
 
-1.026Skullsdiag1-Paket vollständigRootreviewen, separateRootkopie einfrieren,
-   unabhängigesFreeze-/Pinreview, neueQuellen tatsächlichpublish/fetch.
-2.NeueSyncdeltas/Powerupclosure/A1Spec/Skullspaket/Rootwrapper mitSourcebundle
-   in063 externvollrücklesen;8GiBFloor einschließlichRestoreReserve erhalten.
-3.WorkerSTATICONLY/quiescent/sämtlicheSperren frisch, genauein026Skulls600-Fall
-   unterHostobserver, anschließend unabhängigerDatei-/Modul-/Prozessrestorecheck
-   undvollständiger konservativerLifecycle-/Diagnoseaudit. NeueFehler stoppen.
-4.A1Feedbackpaketreview/Freeze/Backup/Einzelfall und neue normale Schuss-/
-   FirstStatekette; Sync-Powerupoff/onKontrolle separat vorbereiten.
-5.BelegteNavigationkorrektur/übrigeKarten/A3/A5 abschließen, erst dannB;
-   Live nur nach tatsächlich nachgewiesener Verbesserung stufenweise ändern.
+1.NeuesteQuellen073publish/fetch undSourcebundle (Basisb28e972 aus063).
+2.026geschlosseneBelege/Audit/Kompressionsindex+Restorehelfer undFeedbackpaket/
+  Rootreview/Peer/Wrapper/Sourcebundle in064 externvollrücklesen.
+3.WorkerSTATICONLY/quiescent/vierSperren frisch, Feedbackwrapper --preflight,
+  genau ein90sOriginal-Pitchfeedbackfall unterHostobserver, anschließend
+  Root-Datei-/Prozessrestore und vollständigerACK-/Journal-/Nativeaudit.
+4.A1 normaleDamage-/FirstStatekette undOriginalopfer-Feasibility; A4 konkrete
+  Proposal→finalSafety-/Arbitrationbindung vor kausaler Korrektur.
+5.ÜbrigeKarten/A3/A5 abschließen, erst dannB; Live nur nach belegter Verbesserung.
 
 Keine unbeaufsichtigten Prozesse behaupten: gestartete Aufgaben/Jobs und
 Eigentum müssen vor Fortsetzung erneut tatsächlich geprüft werden.
