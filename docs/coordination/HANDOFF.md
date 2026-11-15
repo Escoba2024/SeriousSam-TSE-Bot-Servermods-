@@ -1,3 +1,94 @@
+## Maßgeblicher Stand — 2026-11-15T20:45:36.372539+00:00
+
+Build035-Auswertung abgeschlossen, A offen/B nicht begonnen; kein externer Blocker.
+Author0917a99→Root263c552. [Vollbericht](../reports/2026-11-15-build035-trouble-closed-functional-audit.md):
+134Leben/68Usefulpossession/92Gains/201fehlgeschlageneReadversuche; alleachtBots mitGains.
+LängsteNoUseful37.202263s bewegteLücke360.74m, kein generellerStillstandbeleg.
+18echteFirstUsefulCloseThreatSourcepfade in6Leben aus207Kandidaten/19samecallRows;
+1followGoal ausgeschlossen,189UNKNOWN.16nichtnullFinalaktionen;0UsefulGains in10konservativ
+gebundenenFolgefenstern/8UNKNOWN. KeinPickup-/physischerACK/Überlegenheits-/A4PASS.
+RootSource/Derivedreview16Output-/15Sourcepins und8+3focusedTestsPASS; keinRootRawreplay.
+RAMsession88044 normalexit0, alleRawhandleszu. KeineNative-/Reader-/Compilerjobs aktiv.
+
+Live20:36:13 unverändert6×8eigeneBots/alle18geladenenModule+Configs gleichRollback051;
+nurYodeller1weitererUNKNOWN. Dev19:33:39→20:36:20:0BAD/9780OK/0SyncDisconnect,
+beideBotlogs0BAD/Disconnect. FrühereSyncfehlerbleibenoffen; Userclientnichtzuordnen.
+AlleachtfrischenDriveTransportkopienvollzurückgelesen und kombiniert726796930B/SHA862af28e…;
+eigeneRAMkopienentfernt,694MB+14GBOriginalarchivephysischerhalten.
+
+Root veröffentlicht jetztSource115mit tatsächlichemFetch/Tree/Diff0 und sichertFULL107mit
+vollständigem035Case/Audit/privatenQuellbelegen/Transportrecovery; erstdanachneueNativezulassung.
+NächsteRuntimepriorität: einzelner035Yodeller600-Funktionsfall ausvorhandenem024Parent;
+a4_diagnosis bereitetnurdisabledinseparatemWTvor und kartiertdie9Kartenmatrix.
+candidate_audit bereitetseparat genauEINEN normalenW-ImpulsmitServerXYZ/Translationbelegvor.
+Alte45PairedFramesbelegenW/Release/Körperyaw, enthaltenaberkeineXYZ/Translation;
+keineerneuteLookserie/keineMemorywrites/keineToleranzlockerung/keinRetry.
+Root alleinintegriert/startetRuntime. FrühereCheckpointsdarunterbleibenHistorie.
+
+Update20:35UTC: Alle acht frischenDrive-Transportkopien vollständig zurückgelesen:
+726796930B und kombinierterSHA862af28e291c9425f71a9eb2ec7290488a7d20513e3e4a088990a9b3e8afe689
+entsprechen dem erhaltenenOriginalarchiv. RootE/runtime-96m-fresh-drive-verified-private.json
+enthältachtaktuelleIDs/Einzelhashes. Eigene abgeleiteteRAMkopien danach entfernt; beide
+vollständigenpersistentenOriginalarchive und externeMetadatensicherung bleiben erhalten.
+Kein Download-/Backupjob läuft weiter; der geschlossene035-RAMauditor läuft nachweisbar.
+
+## Aktuell — Build035 geschlossen, Auswertung läuft; Live Mixed erhalten
+
+Stand 2026-11-15 20:35 UTC. A offen, B nicht begonnen, kein externer Blocker.
+Kein nativer Testprozess läuft. Root führt die autorisierte Arbeit weiter; laufende Hilfsjobs
+sind der geschlossene035-RAMauditor und das vollständige Rücklesen acht frischer Drive-Transportteile.
+
+- Build035 Little Trouble / Hard2 / acht DEMON3 / DIAG1 / Originalobserver20FPS:
+  tatsächliches Fenster300.07370876683854s, Status ausschließlich
+  `PASS_LIMITED_REACQUIRE_DIAGNOSTIC_OBSERVATION_ONLY`, functional/qualified=false.
+  Case `N/nav20-035-trouble-root-trouble-20261115-200004`, Result
+  `7da99dace3e09fcd8ea843ed053f6cd0e7642265d85b318af10fb8259826fe9b`.
+  Alle vier geschlossenen Logs ohne neue BAD-/SyncDisconnect-/Crashmarker im Fenster.
+  Rootexec75831 exit0/reaped; unabhängiger Restore20:08:24.140631 PASS:
+  640Dateien,0Absenzen,4Logs, beideSnapshotzeitenNS, Rollen/Units/PIDgenerationen/Displays/vierLocks.
+  RootE/navigation035-trouble-root-restore.json SHA
+  `8c742566bdc45b2df1af19066edab3a652e5c318cc67e45712022a23766ab2e5`.
+- Host373Samples: CPUmax63.01020408163265%, RAMmin2553098240B,
+  Diskmin8633450496B, längsterSampleabstand1.001806985s.
+  `PASS_HOST_OBSERVATION_ONLY`, keine formale A5-Langzeit-/Ressourcenabnahme.
+  Tatsächlicher Hostbeleg RootE/navigation035-trouble-host/receipt.json SHA
+  `f70127dc83f17edfb75c28db05e043f1327310af06e22072a17e16594625a2bf`.
+- Enger035-Auditadapter d675f57→Rootfa77889 integriert; Root8/8 focusedTests0.087s PASS,
+  vollständige034-Koordinator-/korrigierteFinalizerinversen und tatsächliche035-Metadaten geprüft.
+  Root erlaubte genau einen analytischen Acquire. Auditor meldet63,695,670accountedBytes,
+  alle großenRaw-/Loghandles geschlossen, ein RAMprozess für Folgeableitungen erhalten.
+  Vorläufig134Lives/68Usefulpossession/92Gains/201failedReads; noch kein fertiger Audit-/Verbesserungspass.
+  Root hat vier geschlossene Logs zuvor unabhängig zum Hashnachweis gelesen; kleineFortschrittsreads
+  auf control-state/first-spawn/barrier bleiben separat. Kein globaler Niemals-gelesen-Claim.
+- Source114 tatsächlich veröffentlicht und fetch/tree/diff0 verifiziert:
+  local `0db394bcfec62958df503172abf887b09f057505`, remote
+  `c0880a92017bcade685de4818556ff4676c0de56`, tree
+  `cb881836e643bfb4684e0754080b06307bb1a0d6`.
+  FULL10611333760B SHA `57168aef9358ecdf64db6681dea21a2ef04b4f76505e0824a3b6b13cebe21d65`,
+  Drive `1-cQhsPJmcL9uahWYK2c4JATMjC92gxEb`, vollständigerReturn+zweiPerfileRestores
+  1306Dateien/40807927B PASS19:58:49.585042. Enthält035Build/D/F und F2FAIL/Audit;
+  tatsächlicher035Case und heutigeTransportrecovery folgen in107.
+- Acht redundante96MiB-Transportteile wurden20:18:56.199745 nach bytegenauerBereichsprüfung,
+  zweimaligerRekonstruktion, echterCLI alleracht und extern rückgeprüfterMetadatensicherung lokal
+  entfernt.726796930B frei; vollständiges694MiB-Ausgangsarchiv und14GB-Original bleiben persistent.
+  Restore RootE/restore-runtime-96m-transport-parts.py --output-dir FRESH_DIR oder --original-paths.
+  Metadatenarchiv7934B SHA `bdd99f0dff2a45aca6500dd612d8716151fc86c20a62b06e0e6159f1fe3a0ce7`,
+  Drive `1NR0bswld5vcCyE3feH3lpSjy9fG6l1Ge`, vollerReturn und dritterVolltreerestore PASS.
+  Historische achtDrive-Teile sind nur historisch rückgeprüft; aktuelle Suche konnte sie nicht
+  eindeutig lokalisieren, kein Löschungsbefund. Deshalb acht frischeKopien angelegt; deren aktueller
+  vollständigerReturn wird geprüft. SealedhistorischerIndex wird nicht nachträglich umetikettiert.
+
+Live zuletzt19:33:33: sechs×acht eigeneBots, DevCecil048/RedStationGen2/vierübrigePublicBuild018,
+18geladeneModule+Configs unverändert zuRollback051; RedStation/Hole je ein weiterer UNKNOWN.
+UserOriginalclient abgemeldet; UNKNOWN nicht demUser zuordnen. Kein035LiveRollout.
+
+Nächste ausführbare Schritte:035Einmal-Auswertung einschließlichFirstUsefulCloseCombat-Sourcepfad,
+allerachtSlotphasen/langerWaffenlücken/Nativegains abschließen und reviewen; Source115 veröffentlichen
+und FULL107 sichern/rückprüfen. AchtfrischeDriveReturns abschließen, ausschließlich eigene derivative
+RAMkopien danach entfernen. Parallel plant candidate_audit minimalen normalenOriginal-WASD-
+Kalibrierungsnachweis vor weitererA1Schadensprüfung; kein HP/Pose/Anglewrite, keinSpawnlottery/
+keineGuardlockerung. NurRoot integriert und benutztRuntime. Kein Abschluss an diesemCheckpoint.
+
 ## Bereit für einmaligen Build035-Betriebsvergleich — 2026-11-15T19:56:59.008950+00:00
 
 Kein Nativeprozess aktiv. Der vorgesehene Versuch ist Little Trouble/300s/acht DEMON3/Hard2/
