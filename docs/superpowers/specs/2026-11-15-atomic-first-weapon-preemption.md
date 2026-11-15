@@ -1,0 +1,9 @@
+# First useful weapon versus a held nonurgent side item
+
+Trouble audit37063d9 proves Goal0/goalEntity shortcircuits normal+mapped first-weapon search while ordinary Health/Armor is retained. It does not prove an alternative was reachable in the native interval. Reproduce conditional failure with actual SDK-extracted `BotCecilChooseGoal` and `BotCecilChooseMappedWeapon`, not a selector model.
+
+Allow replacement only of a currently live, typed, needed, ordinary nonurgent Health/Armor item; own actor/life/context valid, no usable allowed Useful weapon, existing item search on, cooldown satisfied, enemy distance finite and >=8, unexpired ordinary12s attempt, no important/follow/interaction/flight/escape/special traversal ownership. Preserve existing urgent-health semantics. Original current goal/source/destination physical locks and special Nav metadata veto replacement. No range/pit/floor/height/LOS/deadline/RNG changes.
+
+The mapped candidate uses the existing original mapped references, typed need, graph/path/lock filters, connector8m/height3, current ray budget and existing connector cast. Never clear/reset the retained goal, navigator, progress or its fixed attempt clock until a full replacement is selected and validated. No alternative, failed cast, exhausted budget or ineligible replacement leaves the retained goal and original deadline untouched. Existing candidate rejection bookkeeping may record actual failed candidate casts; never reject the retained side item merely to equip. No hidden pickups/item writes, no cross-process claims.
+
+After success the new weapon is a genuinely new attempt with the unchanged existing mapped deadline formula; subsequent scans retain it and never renew it. Final movement safety and original arrival remain authoritative. This is prospective Source-only gameplay correction, no native/promotion claim.

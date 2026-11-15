@@ -1,6 +1,6 @@
 # SSAM.AI – ausführbarer Gesamtplan A → B
 
-Stand 15.11.2026, 16:07 UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
+Stand 15.11.2026, 16:25 UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
 Maßgeblich sind der vollständige Nutzerauftrag, ursprüngliche
 [Milestonespezifikation](2026-11-11-milestones-a-b.md),
 [Toolchainrichtlinie](../../decisions/2026-10-17-tse-ai-tools-mcp-policy.md)
@@ -14,7 +14,7 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 
 ## Aktueller Zustand und Priorität
 
-Stand 15.11.2026, 16:07 UTC. Exakte private Pfade/Hashes und frühere Fehler stehen im Handoff; ältere Planstände bleiben in Git erhalten.
+Stand 15.11.2026, 16:25 UTC. Exakte private Pfade/Hashes und frühere Fehler stehen im Handoff; ältere Planstände bleiben in Git erhalten.
 
 | Arbeit | Status | Beleg und nächster Schritt |
 |---|---|---|
@@ -28,7 +28,7 @@ Stand 15.11.2026, 16:07 UTC. Exakte private Pfade/Hashes und frühere Fehler ste
 | A4 Reset031 | geschlossen, begrenzt bestanden | 24/24 aktive Slotphasen; Vollauswertung 145 Leben, weiterhin 49,4s Waffenlücke. Reset030 bleibt 22/24 FAIL. |
 | A4 Hole031 | geschlossen, vollständig ausgewertet | 206 Leben/204 zusätzliche Waffen-Gewinne/172 erkannte Spieler-Killzeilen; 79,43s und 57,85s ohne brauchbare Zusatzwaffe verhindern Freigabe. |
 | A4 Trouble031 | geschlossen, vollständig ausgewertet | 600,074s/292 Leben/205 Gains/259 Spielerkillmeldungen; 38,45s Versorgungslücke. Root-Restore und Auditdateihashes geprüft; kein A4-Pass. |
-| A4 Karten/Spezialübergänge | offen | Neue gezielte Gameplaykorrektur aus belegter Versorgungslücke ableiten; übrige Karten und Übergänge kausal prüfen. Desert Temple gesperrt, Welt fehlt. |
+| A4 Karten/Spezialübergänge | gezielter Fix032 gebaut, nativ ungeprüft | Atomischer Erstwaffenwechsel SDK4175/0;032/81Pins geprüft, neuer Trouble600-Fork in Vorbereitung. Übrige Karten/Übergänge offen; Desert Temple gesperrt, Welt fehlt. |
 | A5 formale Stabilität | nicht begonnen | Funktional geeigneter Kandidat erforderlich; 1/4/8 Bots für 60/60/120 Minuten. |
 | Sicherung/Veröffentlichung | Source105 / Delta098 vollständig geprüft | Remote-Fetch/Baum/Diff0; privater Vollrücklauf und zwei vollständige Perfile-Metadatenrestores. Trouble-Rohdaten voll gesichert; neuer Recoverybackup separat geprüft. |
 | B Sessions/Chat | nicht begonnen | Erst nach nachgewiesenem Abschluss von A. |

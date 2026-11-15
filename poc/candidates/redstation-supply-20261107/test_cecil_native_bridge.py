@@ -91,7 +91,7 @@ int gameTimeReads=0;
 struct Network {CSessionProperties session;double time=0;double GetGameTime(){op("game_time");++gameTimeReads;return time;}const void* GetSessionProperties(){op("session");return &session;}} network,*_pNetwork=&network;
 struct Timer {double TickQuantum=.05;} timer,*_pTimer=&timer;
 int _botRayBudget=20,bot_iRosterOffset=0;
-std::string pickerText;
+std::string pickerText;std::string goalLifecycleText;
 bool bot_bDiagnostics=false;int supplyDiagLines=0,supplyDiagMaxLength=0;std::string supplyDiagText;
 int reacquireDiagLines=0,reacquireDiagMaxLength=0;std::string reacquireDiagText;
 long _botSupplyMapSerial=7,_botSupplyMapReady=1;bool bot_bEnabled=true,bot_bSupplyNavigation=true;
@@ -99,7 +99,7 @@ long InterlockedCompareExchange(long* p,long,long){return *p;}
 int hopCheckpointEvents=0;
 int lockApproachEvents=0,lastApproachNode=-1,lastApproachHop=-1;unsigned long lastApproachRef=0;int lockEvents=0,lastLocked=-1,lastPresent=-1;int goalEvents=0,endEvents=0,groundReplanEvents=0;char lastEnd[32]={0};
 void BotLog(const char* format,...){
- {char text[1024];va_list a;va_start(a,format);std::vsnprintf(text,sizeof(text),format,a);va_end(a);if(std::strstr(text,"[CecilPicker"))pickerText+=text;}
+ {char text[1024];va_list a;va_start(a,format);std::vsnprintf(text,sizeof(text),format,a);va_end(a);if(std::strstr(text,"[CecilPicker"))pickerText+=text;if(std::strstr(text,"[CecilGoal] ")||std::strstr(text,"[CecilGoalEnd] "))goalLifecycleText+=text;}
  if(std::strstr(format,"[CecilReacquireDecision]")){++reacquireDiagLines;char text[2048];va_list a;va_start(a,format);const int length=std::vsnprintf(text,sizeof(text),format,a);va_end(a);reacquireDiagMaxLength=std::max(reacquireDiagMaxLength,length);reacquireDiagText+=text;}
  if(std::strstr(format,"[CecilSupplyDiag")){++supplyDiagLines;char text[2048];va_list a;va_start(a,format);const int length=std::vsnprintf(text,sizeof(text),format,a);va_end(a);supplyDiagMaxLength=std::max(supplyDiagMaxLength,length);supplyDiagText+=text;}
  if(std::strstr(format,"[CecilHopCheckpoint]"))++hopCheckpointEvents;
@@ -202,6 +202,7 @@ void check(bool yes,const char* name){++checks;if(!yes){++failures;std::printf("
 bool near(double a,double b){return std::fabs(a-b)<1e-5;}
 CPlayer player;std::vector<CEntity> items;
 void setup(int nodes=3){
+ goalLifecycleText.clear();
  liquidAxisQueries=0;liquidAxisBlocked=liquidAxisInvalid=false;captureWalls=false;capturedWalls=0;
  player=CPlayer();player.m_penWeapons=&player.w;items.clear();items.reserve(140);
  auto& g=BotSupplyGraph();g=botcore::CecilNavGraph();g.points.resize(nodes);
@@ -4843,7 +4844,136 @@ void reacquireDecisionBounds(){
  bot_bDiagnostics=false;
 }
 
+// Actual ChooseGoal + mapped candidate/connector path, not a selector model.
+void firstWeaponSideItemFixture(botcore::CecilItemKind kind,bool held=true){
+ setup(3);player.en_ulID=70000;auto& s=BotSupplyState(0);s.entity=player.en_ulID;
+ player.health=70;player.m_fArmor=0;
+ addItem(70001,0,-5,kind);addItem(70002,0,-20,botcore::CecilItemKind::Weapon);
+ BotSupplyGraph().points[2].important_entity=70002;
+ s.goals.Run(BotSupplyGraph(),0,s.blocked.data(),s.blocked.size());
+ if(held){s.goal=1;s.goalEntity=70001;s.goalKind=kind;s.goalSince=.1;s.goalDeadline=0;s.searchAfter=.2;}
+ else items[0].pickable=false;
+ _botRayBudget=16;
+}
+void firstWeaponSideItemGuards(){
+ for(int bad=0;bad<32;++bad){
+  firstWeaponSideItemFixture(botcore::CecilItemKind::Health);auto& s=BotSupplyState(0);
+  double now=1.05,enemy=1000;
+  if(bad==0)player.health=35;
+  if(bad==1)enemy=7.999;
+  if(bad==2)player.w.usable=player.w.m_iAvailableWeapons=3|botcore::CecilWeaponMask(4);
+  if(bad==3)s.searchAfter=2;
+  if(bad==4)s.playable=false;
+  if(bad==5)s.entity=player.en_ulID+1;
+  if(bad==6)player.health=0;
+  if(bad==7)BotCecilSettings().bItemSearch=false;
+  if(bad==8)now=.05;
+  if(bad==9)now=12.1;
+  if(bad==10)s.importantGoal=true;
+  if(bad==11)s.followEntity=123;
+  if(bad==12)s.interactionPoint=0;
+  if(bad==13)s.useReleaseTick=21;
+  if(bad==14)s.flightWorld=player.GetWorld();
+  if(bad==15)s.flightFinishing=true;
+  if(bad==16)s.patrolAlternate=true;
+  if(bad==17)s.escapeUntil=2;
+  if(bad==18)player.m_pstState=PST_FALL;
+  if(bad==19)BotSupplyGraph().points[1].flags=botcore::CECIL_JUMP;
+  if(bad==20)BotSupplyGraph().points[0].lock_entity=123;
+  if(bad==21)s.blocked[1]=1;
+  if(bad==22)items[1].pickable=false;
+  if(bad==23){items[1].pl.pl_PositionVector(1)=3;blockedItems=3;}
+  if(bad==24)_botRayBudget=2;
+  if(bad==25)s.healthConnector.world=player.GetWorld();
+  if(bad==26)items[0].pickable=false;
+  if(bad==27)items[0].item.kind=botcore::CecilItemKind::Powerup;
+  if(bad==28)player.flags=ENF_DELETED;
+  if(bad==29){BotSupplyGraph().points[2].links.clear();s.goals.Prepare(3);}
+  if(bad==30)enemy=NAN;
+  if(bad==31)s.goalKind=botcore::CecilItemKind::Weapon;
+  const auto reset=s.navigator.ResetSerial();const double since=s.goalSince,deadline=s.goalDeadline;
+  const int rayBefore=_botRayBudget;
+  auto input=BotCecilItemInput(&player,s,enemy);BotCecilChooseMappedWeapon(&player,s,input,0,21,now);
+  check(s.goalEntity==70001&&s.goal==1&&!s.mappedWeaponGoal&&s.goalSince==since&&
+    s.goalDeadline==deadline&&s.navigator.ResetSerial()==reset,
+    "failed or ineligible first-weapon replacement keeps original goal/attempt/deadline/navigator");
+  check(endEvents==0&&goalLifecycleText.empty(),"failed replacement emits no false first_weapon end or new attempt");
+  check(_botRayBudget>=2&&_botRayBudget<=rayBefore,"replacement guards and connector retain original ray cap/reserve");
+ }
+}
+
+void firstWeaponAtomicCommitAndLimits(){
+ for(int budget:{2,3,4,16}){
+  firstWeaponSideItemFixture(botcore::CecilItemKind::Armor);auto& s=BotSupplyState(0);
+  _botRayBudget=budget;const auto reset=s.navigator.ResetSerial();
+  const auto input=BotCecilItemInput(&player,s,1000);
+  BotCecilChooseMappedWeapon(&player,s,input,0,21,1.05);
+  check((budget==2?s.goalEntity==70001:s.goalEntity==70002)&&_botRayBudget>=2&&_botRayBudget<=budget,
+    "replacement uses original mapped connector minimum3 rays and leaves final2-ray reserve");
+  check((budget==2?s.navigator.ResetSerial()==reset:s.navigator.ResetSerial()!=reset),
+    "navigator resets only after a complete replacement, never on deferred search");
+ }
+ firstWeaponSideItemFixture(botcore::CecilItemKind::Health);auto& s=BotSupplyState(0);
+ BotCecilChooseGoal(&player,0,21,1000,false);const double since=s.goalSince,deadline=s.goalDeadline;
+ const auto reset=s.navigator.ResetSerial();_botRayBudget=16;BotCecilChooseGoal(&player,0,42,1000,false);
+ check(s.goalEntity==70002&&s.goalSince==since&&s.goalDeadline==deadline&&s.navigator.ResetSerial()==reset,
+   "successful first-weapon replacement is one fixed attempt, not renewed every scan");
+ firstWeaponSideItemFixture(botcore::CecilItemKind::Armor);BotSupplyTick(&player,0,21,1000);
+ check(BotSupplyState(0).goalEntity==70002&&BotSupplyState(0).mappedWeaponGoal,
+   "actual BotSupplyTick retains side item then atomically selects valid first Useful weapon");
+ for(int mode=0;mode<3;++mode){
+  firstWeaponSideItemFixture(botcore::CecilItemKind::Health);auto& held=BotSupplyState(0);
+  if(mode==0)items[1].pl.pl_PositionVector(1)=100;
+  if(mode==1)BotSupplyGraph().points[2].y=100;
+  if(mode==2){BotSupplyGraph().points[2].links.clear();held.blocked[2]=1;}
+  const auto before=held.navigator.ResetSerial();
+  BotCecilChooseMappedWeapon(&player,held,BotCecilItemInput(&player,held,1000),0,21,1.05);
+  check(held.goalEntity==70001&&held.goalSince==.1&&held.goalDeadline==0&&held.navigator.ResetSerial()==before,
+    "candidate connector length/height or destination lock rejection cannot erase retained side item");
+ }
+ // Explicit exact metadata/context guards; no unspecified special traversal is interrupted.
+ for(int mode=0;mode<12;++mode){
+  firstWeaponSideItemFixture(botcore::CecilItemKind::Armor);auto& held=BotSupplyState(0);
+  auto input=BotCecilItemInput(&player,held,1000);
+  if(mode==0)++input.generation;
+  if(mode==1)BotSupplyGraph().points[1].important_entity=70001;
+  if(mode==2)BotSupplyGraph().points[1].next_slot=2;
+  if(mode==3)BotSupplyGraph().points[0].flags=botcore::CECIL_TELEPORT;
+  if(mode==4)held.importantOrigin.player=&player;
+  if(mode==5)held.groundEscapeActive=true;
+  if(mode==6)held.groundStalled=true;
+  if(mode==7){held.avoidNode=0;held.avoidUntil=2;}
+  if(mode==8)held.goalSince=NAN;
+  if(mode==9)held.goalDeadline=NAN;
+  if(mode==10)held.searchAfter=NAN;
+  if(mode==11)input.health=NAN;
+  const auto reset=held.navigator.ResetSerial();const auto goal=held.goalEntity;
+  BotCecilChooseMappedWeapon(&player,held,input,0,21,1.05);
+  check(held.goalEntity==goal&&held.goal==1&&held.navigator.ResetSerial()==reset,
+    "fresh replacement fails closed on generation, ownership, special metadata and nonfinite attempt context");
+ }
+}
+
+void firstWeaponSideItemReproduction(){
+ for(auto kind:{botcore::CecilItemKind::Health,botcore::CecilItemKind::Armor}){
+  firstWeaponSideItemFixture(kind,false);BotCecilChooseGoal(&player,0,21,1000,false);
+  check(BotSupplyState(0).goalEntity==70002&&BotSupplyState(0).mappedWeaponGoal,
+    "first-weapon counterfactual has a real reachable original mapped alternative outside ordinary16m radius");
+  firstWeaponSideItemFixture(kind);BotCecilChooseGoal(&player,0,21,1000,false);
+  auto& s=BotSupplyState(0);
+  check(s.goalEntity==70002&&s.goal==2&&s.mappedWeaponGoal&&near(s.goalSince,1.05)&&s.goalDeadline>1.05,
+    kind==botcore::CecilItemKind::Health?
+    "nonurgent held Health cannot silently veto a fully valid first Useful weapon":
+    "nonurgent held Armor cannot silently veto a fully valid first Useful weapon");
+  const auto ended=goalLifecycleText.find("entity=70001 reason=first_weapon");
+  const auto begun=goalLifecycleText.find("[CecilGoal] local=0 tick=21 entity=70002");
+  check(endEvents==1&&ended!=std::string::npos&&begun!=std::string::npos&&ended<begun,
+    "successful replacement logs original side-item end before new weapon commit and before ClearGoal");
+ }
+}
+
 int main(){
+ firstWeaponSideItemReproduction();firstWeaponSideItemGuards();firstWeaponAtomicCommitAndLimits();
 
 
  { // Same unchanged SDK bodies, full ordered stub Engine/collision calls.

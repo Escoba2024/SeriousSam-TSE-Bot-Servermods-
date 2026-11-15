@@ -798,9 +798,45 @@ static bool BotCecilNearerLocalSupply(CPlayer* player,INDEX slot,uint32_t item,d
   }
   return false;
 }
+// A held side item is not a first-weapon embargo. Its existing attempt stays
+// intact until the ordinary mapped selector has validated a complete replacement.
+// This admits a search only, never movement, arrival, support or a renewed timer.
+static bool BotCecilFirstWeaponReplacement(CPlayer* player,const SSupplyState& s,
+    const botcore::CecilItemInput& input,INDEX tick,double now){
+  using botcore::CecilItemKind;
+  if(!player||!s.playable||!player->m_penWeapons||!player->GetWorld()||
+     (player->GetFlags()&ENF_DELETED)||s.entity!=player->en_ulID||!s.generation||
+     input.generation!=s.generation||!std::isfinite(input.health)||input.health<=0||
+     !input.settings.bItemSearch||BotCecilHasRanged(input)||
+     !std::isfinite(input.enemy_distance)||input.enemy_distance<8||
+     !std::isfinite(now)||!std::isfinite(s.goalSince)||!std::isfinite(s.goalDeadline)||
+     !std::isfinite(s.searchAfter)||now<s.searchAfter||now<s.goalSince||now-s.goalSince>=12||
+     !s.goalEntity||(s.goalKind!=CecilItemKind::Health&&s.goalKind!=CecilItemKind::Armor)||
+     s.mappedWeaponGoal||s.goalRelocationBudgeted||s.importantGoal||s.followEntity||
+     s.interactionPoint>=0||tick<=s.useReleaseTick||s.patrolAlternate||
+     s.flightWorld||s.flightFinishing||s.healthConnector.world||s.importantOrigin.player||
+     s.groundEscapeActive||s.groundStalled||now<s.escapeUntil||
+     (s.avoidNode>=0&&now<s.avoidUntil)||
+     (player->m_pstState!=PST_STAND&&player->m_pstState!=PST_CROUCH))return false;
+  const auto& graph=BotSupplyGraph();
+  if(s.anchor<0||s.goal<0||(size_t)s.anchor>=graph.points.size()||
+     (size_t)s.goal>=graph.points.size()||s.blocked.size()!=graph.points.size())return false;
+  // Do not interrupt a switch, important point, special edge or physical lock.
+  const int source=s.navigator.SourceSlot(s.goal);
+  const int points[4]={s.anchor,s.goal,source,s.hop};
+  for(int node:points){
+    if(node<0)continue;
+    if((size_t)node>=graph.points.size()||s.blocked[node])return false;
+    const auto& point=graph.points[node];
+    if(point.flags||point.important_entity>=0||point.lock_entity>=0||point.next_slot>=0)return false;
+  }
+  CEntity* entity=player->GetWorld()->EntityFromID(s.goalEntity);botcore::CecilItem item;
+  return entity&&BotCecilReadItem(player,entity,s.generation,input.owned,&item)&&
+    item.kind==s.goalKind&&botcore::CecilRetainItem(item,input)&&!BotCecilUrgentItem(item,input);
+}
 static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const botcore::CecilItemInput& input,
     INDEX slot,INDEX tick,double now){
-  if(s.picker.Mapped(0,s.goalEntity!=0)||s.picker.Mapped(1,now<s.searchAfter)||s.picker.Mapped(2,!std::isfinite(input.enemy_distance))||s.picker.Mapped(3,input.enemy_distance<8)||
+  if(s.picker.Mapped(0,s.goalEntity!=0&&!BotCecilFirstWeaponReplacement(player,s,input,tick,now))||s.picker.Mapped(1,now<s.searchAfter)||s.picker.Mapped(2,!std::isfinite(input.enemy_distance))||s.picker.Mapped(3,input.enemy_distance<8)||
      s.picker.Mapped(4,!input.settings.bItemSearch)||s.picker.Mapped(5,BotCecilHasRanged(input)))return;
   const auto& graph=BotSupplyGraph();
   const bool diagnostics=BotCecilSupplyDiagDue(now,s.diagSelectionLast);
@@ -869,6 +905,7 @@ static void BotCecilChooseMappedWeapon(CPlayer* player,SSupplyState& s,const bot
       slot,tick,attempt,(unsigned long)chosen.id,best,(int)detail.valid,(int)detail.clear,detail.hit,detail.render,detail.physics,detail.polygon,detail.length,detail.distance,
       (double)from(1),(double)from(2),(double)from(3),(double)to(1),(double)to(2),(double)to(3),(double)detail.point(1),(double)detail.point(2),(double)detail.point(3));
     if(!clear){s.RejectItem(chosen.id,now);continue;}
+    if(s.goalEntity)BotCecilGoalEnd(slot,tick,s,"first_weapon");
     s.ClearGoal();s.goal=best;s.goalEntity=chosen.id;s.goalKind=chosen.kind;s.goalSince=now;
     s.mappedWeaponGoal=true;s.goalDeadline=now+std::fmin(45.0,std::fmax(20.0,bestCost/6.0+5.0));
     s.searchAfter=now+input.settings.fItemSearchCD;
