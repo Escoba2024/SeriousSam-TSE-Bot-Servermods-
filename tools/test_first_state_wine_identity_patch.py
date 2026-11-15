@@ -64,6 +64,7 @@ class ActualWineIdentityVM(unittest.TestCase):
     def test_valid_header_does_not_bypass_full_original_body(self):self.run_case('body')
     def test_valid_header_does_not_bypass_iat(self):self.run_case('iat')
     def test_lifetime_header_mutation_stays_sticky(self):self.run_case('lifetime')
+    def test_header_failure_in_admitted_leave_after_stop_stays_failure(self):self.run_case('leavefault')
     def test_default_disabled(self):self.run_case('disabled')
 
     def test_entities_header_guards_also_precede_any_attach(self):

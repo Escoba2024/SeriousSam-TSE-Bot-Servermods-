@@ -70,7 +70,11 @@ This does not identify a successful recovery or explain the whole52.087s.
 The longest exact stillness is B:2/global7 generation6, native spawn clock
 0.9500001668930054:42.499637603759766–47.649559020996094,41 canonical witnesses
 at exactly the same position and zero translation. All own mask19, including a
-Useful weapon, while current weapon is1 at both endpoints. The second-largest
+Useful weapon, while current weapon is1 at both endpoints. In the SDK enum,1 is the knife,
+2 the Colt and5 the double shotgun; mask19 therefore shows additional weapon
+possession while the sampled current weapon is the knife. An earlier private
+supplement called1 Colt; that interpretation is corrected here without changing
+the recorded numbers or thresholds. The second-largest
 is A:0/global0 generation20:333.8919982910156–338.7908020019531,36 witnesses,
 all Useful mask2051,10HP. These are sampled same-life observations, not continuous
 physics proof. The first case has no native ranged FIRE flag in the broader

@@ -4,12 +4,15 @@ const which=process.argv[3],x=fixture();
 const name=process.argv[4]||'Engine.dll',base=x.bases[name],nt=name==='Engine.dll'?264:248,b=x.regions.get(base);
 function finish(){x.api.stop();assert(x.api.status().idle);assert(x.api.finishstop().stopped);const p=x.api.drain();assert(p.detached);assert(Object.values(p.restored).every(Boolean));assert.equal(x.nativeWrites.length,0);return p;}
 if(which==='wine'){
- x.arm();const t=x.startTick();x.call('apply_action',0x310000,[0x720000,['f',1]]);x.init();x.shot();x.leave(t);
+ x.arm();assert.equal(x.attaches,19);assert.equal(x.callbacks.size,18);const t=x.startTick();x.call('apply_action',0x310000,[0x720000,['f',1]]);x.init();x.shot();x.leave(t);
  const p=finish();assert.equal(p.counters.faults,0);const r=p.events.find(e=>e.kind==='receive_damage'&&e.edge==='leave');assert.equal(r.player.health,80);assert(r.data.payload.chain_bound);
 }else if(which==='lifetime'){
  x.arm();b[0]=0;x.call('post_moving',0x300000);const p=finish();assert(p.counters.faults>0);assert(JSON.stringify(p.errors).includes('module DOS header'));
+}else if(which==='leavefault'){
+ x.arm();const t=x.startTick();x.api.stop();assert.equal(x.api.status().idle,false);b[0]=0;x.leave(t);
+ const p=finish();assert(p.counters.faults>0);assert.equal(p.terminal_record.edge,'leave');assert.equal(p.events.filter(e=>e.kind==='process_game_tick'&&e.edge==='leave').length,0);assert.equal(p.in_flight,0);
 }else if(which==='disabled'){
- const y=fixture({testReviewed:false});assert.throws(()=>y.api.arm(y.cfg),/gate false/);assert.equal(y.attaches,0);
+ const y=fixture({testReviewed:false});assert.throws(()=>y.api.arm(y.cfg),/gate false/);assert.equal(y.attaches,0);assert.equal(y.reads,0);
 }else{
  let reason;
  if(which==='base'){x.cfg.engine_base='0x600c1000';reason=/unmapped read/;}

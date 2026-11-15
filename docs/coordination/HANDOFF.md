@@ -1,4 +1,4 @@
-# Aktueller Handoff – 15.11.2026, 05:29 UTC
+# Aktueller Handoff – 15.11.2026, 05:37 UTC
 
 Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker.
 Reguläres lokales Terminal funktioniert; RDC bleibt gesperrt und unbenutzt.
@@ -29,9 +29,16 @@ beendet, inklusive Worker und aller drei regulär geschlossenen Spielrollen.
 Delta068 vollständig Drive-rückgelesen und 1138 Dateimetadaten geprüft05:10:06:
 17005507B, SHA `7b496b0ae1a529681257dfde0f13d7858c5555fc4391daff2451c37f9a1b6210`,
 Drive `1GPjgf2bMe0EXzyL9L0rCRze9CIXcZXr-`. **Die beiden neuen Nativearme sind
-noch nicht in069 gesichert.** Source077 Remote `2dac458382939fd0044e99d7ca704e7424757dbe`
-ist tatsächlich gefetcht, exakt lokaler9a41a43/Tree179cbf20. Bundle9a41 benötigt
-1a0ad0b aus067. Root-Handoffänderungen danach noch lokal.
+in069 vollständig gesichert.** Source078 Remote `4bcfb15ff651c3e3d54d1a7828bd2d7e51644002`
+ist tatsächlich gefetcht05:30:37, exakt lokaler8a682eb/Tree4235c911. Bundle
+source-through-original-method-closed-storage-reserve.bundle benötigt9a41a43
+in068. Delta069 vollständig rückgelesen und1466Dateien/62251654Bzweimal mit
+UID/GID/mode/mtime_ns geprüft05:32:17,7859674B,
+SHA36108c9eb511748bb2aff74a91204c100b1e3d05c5b9c21d934ff123ec50f959,
+Drive1bcgnfjg2OWBE-ZplWiToex5L8HsKXtYE. Enthält beide Nativearme vollständig,
+Rootrestore/38Bereichsprüfung und alle sechs Storageoverlays/Restorehelfer/
+Rekonstruktionsquittungen. Kein gesamter Native-Restart aus Restore behauptet.
+
 
 027Skulls600diag1 geschlossen: `nav20-027-skulls-root-skulls-20261115-043608`,
 Result55954ed68802b99c8d2d4004e0840d94931b92975ee6698685d440a9c48dcb2b,
@@ -51,11 +58,28 @@ keine historische Originalmetadatenqualifikation erfunden. [Bericht](../reports/
 RootEV/six-retired-restore-copies-summary.json und sechs Metadatenoverlays/
 Restorehelfer, jeweils --restore-only. Vor weiteren Writes immer aktuelle Reserve.
 
-Wineheaderfix Teil1 integriert973ac7a (Autor dbc2a00, Spezifikation ausaa48bdb
-mitübernommen). Root19Tests/1,145sPASS, zwei tatsächliche Originalheader frisch
-gegen Dateihash/PE geprüft, ganze Body-/JSinverse gleich. Noch kein neuer Native-
-Nachweis; deaktivierter Freshfork in Arbeit. BefundRootEV/
-first-state-wine-identity-root-source-review.json. AlterTraceFAIL bleibt.
+Wineheaderfix integriert973ac7a+7631b51 (Autordbc2a00+7e4d363; Spezifikation
+ausaa48bdb und finaleClaimdatei konfliktfrei erhalten). Root38Tests/12,160sPASS;
+erster falscher CWD-Aufruf18ImportFAIL separat erhalten, Produktionscode unverändert.
+Rootreview: alle151/72 erwarteten Hashwerte, drei vollständige Sourceinversen,
+frische Originaldatei-/PE-Headerpins und alle Autorlog-/Quellhashes geprüft.
+Deaktiviertes Paket87d4c55 bleibt unverändert. Rootfreeze
+`/srv/tse-a1-first-state-wine-identity-root-frozen-20261115`, Manifest
+92fff30d638ac3e73562ce02765bb0d3241ef8e403fe0d74bd4be978d9823a95,
+Runner68b364054d57bca42306a84cd01f8164bac0cc4f79dcb6a588e8fcf52f838201,
+nested2c72c2402ab7c8dd7f2b02659e987cd838e4c90708be29d51efa75b407a0464a.
+Genau Main+Transport+kompiliertesJSfreigegeben, zweiNamespaces und abgeleitete
+Manifeste; fünf Dateien verändert/90andere bytegleich. Kein Native-/18ABI-/A1pass.
+Peer prüft ausschließlich unabhängigesRootdelta, nicht eigenePolicy.
+
+Root05:36:25 enger Kontrollreusebeleg: vollständiger neuerRunner ist bis auf zwei
+Namespaces exakt alteraktivierterRunner; zehn aktiveHelfer bytegleich, aktuelle
+Fixture-/Welt-/Originalpins und Zeit-/Budgetbedingungen identisch. Control051115
+bleibt historischer begrenzter uninstrumentierter Kontrolllauf, kein neuerNative-
+Befund. Nur Tracepfad braucht neuen Einzelfall. RootEV/
+first-state-wine-identity-control-reuse-review.json. Wrapper
+run-first-state-wine-identity-trace.py/ad046170, Outerba336d24 vorbereitet,
+setzen vollständige070Drive/Metadatenabnahme+Peer voraus. Noch NICHT ausgeführt.
 
 Der Nutzer hat den Mischstand ausdrücklich bestätigt: **live behalten, isoliert
 entwickeln, erst belegte Verbesserungen wieder ausrollen**. Seine spätere
@@ -107,7 +131,8 @@ Disk8882692096B, keineBudgetverletzung, Child1→FAIL_HOST_OBSERVATION. KeinRetr
 Root allein integriert und verändert Runtime. Zwei bestehende Worker:
 `a4_diagnosis` entwickelt den begrenzten Wine-Modulidentitätsfix in
 `/srv/tse-build026-skulls-closed-audit-20261115`; `candidate_audit` untersucht
-nur Storage/alte Restore-Testkopien in `/srv/tse-a1-pitch-feedback-20261115`.
+nach abgeschlossener Storageanalyse gezielt die zwei027Problemleben mit vorhandenen
+Outputs in `/srv/tse-a1-pitch-feedback-20261115`. Keine neue Vollauswertung.
 Beide getrennte Worktrees/Claims, kein Native oder Livezugriff, keine Löschrechte
 im Auftrag. Vor Native müssen ihre CPU-/Dateilesearbeiten beendet und STATICONLY
 bestätigt sein. Root integriert allein.

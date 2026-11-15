@@ -24,11 +24,13 @@ Create tools/first_state_wine_identity_patch.py +tools/test_first_state_wine_ide
 ### Task2 fresh disabled fork
 
 Create tools/prepare_first_state_wine_identity.py +focused tests; Parent51e1bc45 behalten. Body+compiledJS, zwei Runnernamespaces und abgeleitete Manifeste/Pins ausschließlich; Helper/API/Runnerbodies sonstbytegleich.
-- [ ] RED Repin-/Closure-/G-/Gate-/Policyänderung, dann minimaler Freshbuilder mit vollständigen erwarteten151+72Werten.
-- [ ] Fokussierter Gesamtlauf, private Belege/Hashes, bereinigter Report/Commit/alleJobsended. Root reviewed/enables/runs separat.
+- [x] RED Repin-/Closure-/G-/Gate-/Policyänderung, dann minimaler Freshbuilder mit vollständigen erwarteten151+72Werten.
+- [x] Fokussierter Gesamtlauf, private Belege/Hashes, bereinigter Report/Commit/alleJobsended. Root reviewed/enables/runs separat.
 
 ## Ledger
 
 PreflightTask1→Task2: Gprefix ist kein veränderbarer Pincontainer; Headerpins außerhalbG. Headerdateifelder dürfen als Metadaten veröffentlicht werden, keine Retailcodebytes. Rootruling vorImplementation gesendet; alle anderen Identitätsbelege bleiben. No delegation.
 
 Task1 complete: tatsächlicher alter Observer RED `unable to find module Engine.dll` (1 failure, nach korrigiertem privatem Bindingpfad); neuer Transform/VM 19 Tests GREEN (1.235s), inklusive neun Headergegenfällen auch für Entities. Zwei Testpräzisierungen benannten vorhandene frühe `pointer bounds` und `original import target changed` statt erfundener Meldungen; Produktionsguards nicht geändert. Ganze Body-/JSinverse und Gbytegleich. Logs privat `.codex/evidence/first-state-wine-identity/{red,green}.log`.
+
+Task2 complete: Freshbuilder fehlend RED6/6, GREEN6/6; vollständiger Abschluss mit zusätzlichem admitted-leave-Gegenfall und geerbten MethodWindow-Tests 38/38 PASS/12.308s. Tatsächlicher Leave-Headerfehler folgt unverändertem fault/terminal-Catch, nicht dem zunächst erwarteten bounded(false)-aborted-Zweig; Test berichtigt, Counter nicht verändert. Freshmanifest87d4c55a,151/72Pins/89lokaleDateienbytegleich und3Sourceinversen geprüft. Keine Parent-/Runtimeänderung. Öffentliche Quellen/Tests und Bericht zur unabhängigen Rootreview bereit; keine Delegation. Kein gleichartiger weiterer Testlauf vorgesehen.
