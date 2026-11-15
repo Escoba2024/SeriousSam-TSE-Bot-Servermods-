@@ -77,7 +77,7 @@ def prepare(destination,qualification=None):
  def mapped(p):
   p=Path(p);return dest/p.relative_to(PARENT)if p.is_relative_to(PARENT)else p
  def repin(pins):return{str(mapped(p)):sha(mapped(p))for p in pins}
- cm['source_pins']=repin(cm['source_pins']);write(dest/'collector/source-manifest.json',cm)
+ cm['source_pins']=repin(cm['source_pins']);cm['runtime_reviewed']=False;write(dest/'collector/source-manifest.json',cm)
  m.update(schema='DISABLED_A1_XRES_RECORD_LIFECYCLE_V1',runtime_reviewed=False,runtime_performed=False,gate='DISABLED_LIFECYCLE_METHOD_AND_ROOT_REVIEW_REQUIRED',collector_source=str(dest/'collector/a1_original_input_collector.py'))
  m['runtime_dependencies']=repin(m['runtime_dependencies'])
  for name in ADAPTER_FILES+PID_FILES:m['runtime_dependencies'][str(dest/name)]=sha(dest/name)

@@ -21,6 +21,7 @@ class Builder(unittest.TestCase):
    for name in a.ADAPTER_FILES:self.assertEqual((root/'a1'/name).read_bytes(),(root/'method'/name).read_bytes())
    self.assertEqual(ra['fingerprints'],rm['fingerprints'])
    m=json.loads((root/'a1/source-manifest.json').read_bytes());self.assertIsNone(m['passive_xrecord']['xres_lifecycle_qualification'])
+   self.assertFalse(json.loads((root/'a1/collector/source-manifest.json').read_bytes())['runtime_reviewed'],'new disabled collector manifest must not inherit the parent review gate')
    self.assertEqual(m['host_budget'],json.loads((a.PARENT/'source-manifest.json').read_bytes())['host_budget'])
    old=(a.PARENT/'run_dual.py').read_text();new=(root/'a1/run_dual.py').read_text()
    for name in('action_step','native_rotation_pair'):
