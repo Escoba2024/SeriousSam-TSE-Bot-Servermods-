@@ -1,3 +1,10 @@
+<!-- Aktualisierung09:30UTC15.11.: Aoffen/Bnichtbegonnen, Liveunverändert.
+030source7aedcdb/DLLbf705857/454144B/Manifest89eef08d gebaut79pins;
+3968Root+3968AuthorASanPASS, nurHoldpositionsfortschritt; NO_NATIVE_ACCEPTANCE.
+029vollauditgeschlossen. NeuerA1Control085539limited/Trace085939FAILGetter,
+Root664DateienbeideNS/3LogsRestorePASS. Cleanup25e/Getterreceipt202dea integriert;
+neuerRootF0a178e7 168/75PinsPeerA279eScopePASS. NächsteSource089/080Vollbackup,
+neuerControl/Trace, danach030Skulls600. ÄltereStatuszeilen unten historisch. -->
 <!-- Fortschreibung 2026-11-15 08:47UTC: Source087/Delta078 vollständig geprüft.
 029Skulls600 nun CLOSED/reaped0/640snapshotNS+4LogsRestorePASS;97Useful/238Leben,
 218Fremdkillzeilen, keineA4Freigabe; kompletterDriverFinalaudit läuft isoliert.

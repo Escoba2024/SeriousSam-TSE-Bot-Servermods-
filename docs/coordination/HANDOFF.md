@@ -1,3 +1,46 @@
+# Aktueller Handoff – 15.11.2026 09:30 UTC
+
+**A offen, B nicht begonnen. Live-Mischstand unverändert. Kein Native aktiv.**
+Der Nutzerclient ist abgemeldet; externe Verbindungen niemals ihm zuordnen.
+
+Build030 gebaut/reaped0: Source7aedcdb21f7180b9abfeed2ea9e8bbbf5553564e,
+Treee48736240423b15d0d31af8508418b9dae8e1ae3,
+DLLbf70585708cb5cc0d0d62416b641c1df758c90b8cdbd062a04dccecca2a29412,
+454144B, Manifest89eef08dfce8f2b5f40fba0290e5778bdb42831c7280731ad5cd44c21338a5d3.
+Alle79Source-/Overlay-/DLL-/Manifestpins geprüft,15MSVC+Link0.
+NurBotSupplyNative.h gegenüber029 verändert: tatsächlicher gebundener3D-
+Positionsfortschritt statt falschem2s-Stillstandsabbruch. Root3968normale und
+Author3968ASan/UBSanPrüfungenPASS, unabhängigerReviewdfa6c4a1PASS_SCOPE.
+**Keine native Verbesserung oder Promotion belegt.**
+[Mechanismus und Grenzen](../reports/2026-11-15-moving-neutral-hold-correction.md).
+
+029vollständigerRaw-/Driveraudit geschlossen/integr.5bcb44d;17private+3publicPins
+Rootfrischgeprüft. A0g32 zeigte tatsächlicheHöhenbewegung bei neutralerNavigation
+undunreachable_hold; reduzierteBridge reproduziert diesenMechanismus.
+
+A1neuerControl085539 begrenztPASS, Trace085939weiterhinFAIL bereits erster
+Gettervergleich. Root09:00:41 beideSnapshotNS/664Dateien/9Abwesenheiten/
+3Abschlusslogs/RollenUnitsDisplays4LocksPASS, Exec7522reaped1. Kein Ursachennachweis.
+RootControl hatte nach eigenemHashread genaueineatime explizitkorrigiert;
+kein stillschweigenderununterbrochenerMetadatenclaim.
+[GeschlossenerA1-Bericht](../reports/2026-11-15-a1-autodrain-closed-and-getter-evidence.md).
+
+Cleanup25e3847 erhältFinalcaptureNenner bei authentischemFaultstop, FAILbleibt;
+Root61TestsPASS. Getter-Faultbeleg202dea5 Root8TestsPASS, Peeraf5eb1ac_SCOPE.
+NeuerdisabledForkcd61d6b0/Rootf0a178e7, Runner877f4c0a/Nestedd323191e/
+Worker1d3ca2dc/Observer22af8406;168/75Pins/106Dateiengleich, PeerA279e16d
+PASS_SCOPEnurRootanwendung. Genaugleicher22BRead/Guard, nurFehlerbyteserhalten.
+Drei eigeneELF32Gegenproben reproduzieren äußerenNativefehler NICHT.
+
+Source088/Delta079 bereits externvollständig geprüft. **Source089/Delta080
+noch auszuführen**, enthaltenneueControl/Trace/Rootkorrekturen/voll029Audit/
+Methodenproben/030Build/neuenA1Fork, dann EIN neuerControl und EINTrace,
+jeweils unabhängigClose/Restore/reap; kein alterControltransfer.
+Anschließend030 genauaufSkulls600isoliertprüfen; alteFAILsbleibenFAIL.
+Keine zusätzlichen gleichartigenLangtests ohnekonkretenPrüfgrund.
+
+## Frühere belegte Stände (historisch)
+
 # Fortschreibung – 15.11.2026 08:53UTC
 
 A1Rootfreeze f7de4234/Runner2451ecbd/Nestedf81c85f4/WorkerCDF0f39b,

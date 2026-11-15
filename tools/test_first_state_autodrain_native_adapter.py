@@ -49,8 +49,8 @@ class NativeAdapterTests(unittest.TestCase):
         obj.ports.script.exports_sync.finishstop = lambda: {'stopped': True, 'stop_reason': 'TTL'}
         self.assertEqual(obj.finishstop()['stop_reason'], 'TTL')
         self.assertTrue(obj.idle_detached)
-        # The pump applies the unchanged exact host-requested acknowledgement;
-        # this state only allows safe cleanup, never technical success.
+        # The pump binds this ACK to the idle stop reason and keeps non-host
+        # reasons sticky; safe cleanup/final capture never implies success.
 
     def test_unexpected_messages_and_wrong_identity_rejected(self):
         obj, journal = self.make(); obj.ports.messages.append({'unexpected': True})

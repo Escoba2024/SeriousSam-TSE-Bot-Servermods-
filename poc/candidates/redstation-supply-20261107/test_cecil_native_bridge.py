@@ -20,6 +20,7 @@ STUBS = r'''
 #include <cmath>
 #include "cecil_motion.h"
 #include "cecil_rules.h"
+#include "driver_final_decision.h"
 static bool measuring=false;static size_t allocations=0;
 void* operator new(size_t n){if(measuring)++allocations;void* p=std::malloc(n?n:1);if(!p)throw std::bad_alloc();return p;}
 void operator delete(void* p)noexcept{std::free(p);}
@@ -1070,6 +1071,123 @@ void groundedAcquireHandshakeFixture(){
  floorEntity.en_ulID=1;floorEntity.type=CEntity::RT_BRUSH;floorEntity.cls.name="Classes/WorldBase.ecl";
  player.world.wo_cenEntities.push_back(&floorEntity);player.en_penReference=&floorEntity;
  // NO assignment of state.anchor after landing.
+}
+// Closed029 A0g32: original267->112, neutral stay above112 during real
+// positional ascent. Intermediate20Hz poses below are synthetic mechanism
+// fixtures, not an interpolated native trace or collision/launcher proof.
+void movingNeutral029Fixture(){
+ setup(268);auto& g=BotSupplyGraph();
+ for(int i=0;i<268;++i){g.points[i].x=10000+10*i;g.points[i].y=10000;g.points[i].z=10000;g.points[i].links.clear();}
+ const int ids[3]={267,112,0};
+ const float poses[3][3]={{-6.5f,-64,-52},{-6.5f,-64,-56},{-7,-12,-34}};
+ for(int i=0;i<3;++i){auto& n=g.points[ids[i]];n.x=poses[i][0];n.y=poses[i][1];n.z=poses[i][2];n.radius=i==0?1:(i==1?2:4);n.flags=0;}
+ g.points[267].links={112};g.points[112].links={0};g.points[0].important_entity=1025;
+ auto& item=addItem(1025,-7.203f,-33.906f,botcore::CecilItemKind::Weapon);
+ item.item.weapon=9;item.pl.pl_PositionVector(2)=-12.499f;
+ player.en_ulID=1850;player.en_pwoWorld=&player.world;player.m_pstState=PST_FALL;
+ player.pl.pl_PositionVector=FLOAT3D(-6.5f,-64,-52);
+ auto& s=BotSupplyState(0);s.entity=1850;s.generation=32;s.anchor=267;
+ s.goal=0;s.goalEntity=1025;s.goalSince=0;s.goalDeadline=45;s.mappedWeaponGoal=true;s.scanTick=999999;
+ _botRayBudget=16;BotSupplyTick(&player,0,1,1000);
+ check(s.navigator.SourceSlot(0)==267&&s.hop==112&&s.goalEntity==1025,
+  "029 actual267 radius commits unmodified directed112 hop and W9 attempt");
+}
+void movingNeutral029Reproduction(){
+ for(int mode=0;mode<6;++mode){
+  movingNeutral029Fixture();auto& s=BotSupplyState(0);bool neutral=true,bounded=true;int firstEnd=-1;
+  for(int tick=2;tick<=84;++tick){
+   // mode0 follows both measured vertical anchors with synthetic intermediate
+   // poses; mode1 only fakes velocity, mode2 remains genuinely stationary,
+   // mode3 never moves0.75m, mode4 moves genuinely but expires its fixed deadline.
+   const double dy=(mode==0||mode==4||mode==5)?34.65*((mode==5?std::min(tick,4):tick)-2)/40.0:(mode==3?.01*(tick-2):0);
+   player.pl.pl_PositionVector=FLOAT3D(-6.499f,(float)(-45.293+dy),-56.082f);
+   player.en_vCurrentTranslationAbsolute=mode==1?FLOAT3D(0,35,0):FLOAT3D(0,0,0);
+   if(mode==4)s.goalDeadline=1.5;
+   _botRayBudget=16;const int before=rayCount;const auto m=BotSupplyTick(&player,0,tick,1000);
+   bounded&=rayCount-before<=16&&_botRayBudget>=0;
+   if(firstEnd<0&&s.goalEntity!=1025)firstEnd=tick;
+   if(firstEnd<0)neutral&=m.active&&m.forward==0&&m.strafe==0&&m.up==0;
+   if(firstEnd>=0)break;
+  }
+  std::printf("029 moving-neutral mode=%d ended=%d reason=%s goal=%lu neutral=%d deadline=%.3f\n",
+    mode,firstEnd,lastEnd,(unsigned long)s.goalEntity,neutral,s.goalDeadline);
+  check(bounded,"029 neutral-hold fixture retains original shared ray budget");
+  if(mode==0){
+   check(firstEnd<0&&neutral&&s.goalEntity==1025&&s.goalSince==0&&s.goalDeadline==45,
+    "029 genuine ascending neutral pose must not expire a stationary2s timer");
+  }else if(mode==4){
+   check(firstEnd==30&&std::strcmp(lastEnd,"timeout")==0,
+    "029 genuine neutral movement never extends the fixed goal deadline");
+  }else if(mode==5){
+   check(firstEnd==44&&std::strcmp(lastEnd,"unreachable_hold")==0,
+    "029 movement then genuine stagnation still expires exactly2s after last measured progress");
+  }else{
+   check(firstEnd==42&&std::strcmp(lastEnd,"unreachable_hold")==0,
+    "029 frozen pose FALL velocity or sub0.75m motion cannot bypass unchanged2s hold");
+  }
+ }
+}
+void movingNeutralProgressGuards(){
+ // The actual production-used observer, not a duplicated policy/model. Every
+ // context reset below must returnfalse and leave the existing hold timer alone.
+ for(int bad=-2;bad<41;++bad){
+  movingNeutral029Fixture();auto& s=BotSupplyState(0);s.holdSince=.05;
+  botcore::CecilMotionInput in;in.alive=true;in.x=-6.499;in.y=-45.293;in.z=-56.082;
+  in.now=.1;in.dt=.05;in.goal=0;in.anchor=267;
+  botcore::CecilMotion m;m.active=true;m.hop=112;
+  check(!BotCecilHeldPositionProgress(&player,s,in,m,112,2),"first neutral observation is baseline only");
+  in.now=.15;in.y+=bad==-2?.749:.75;int tick=3;CWorld other;
+  if(bad==0)++s.generation;
+  if(bad==1){++s.entity;player.en_ulID=s.entity;}
+  if(bad==2)player.en_pwoWorld=&other;
+  if(bad==3)++s.goalEntity;
+  if(bad==4)s.goalSince=.01;
+  if(bad==5)s.goalDeadline=44;
+  if(bad==6){s.navigator.Reset();}
+  if(bad==7){in.now=.2;tick=4;}
+  if(bad==8)in.now=.09;
+  if(bad==9)in.now=.1;
+  if(bad==10)in.now=.3500001;
+  if(bad==11)in.dt=.1;
+  if(bad==12)in.gravity[0]=.1;
+  if(bad==13)in.y=std::numeric_limits<double>::quiet_NaN();
+  if(bad==14)in.now=std::numeric_limits<double>::infinity();
+  if(bad==15)s.followEntity=55;
+  if(bad==16)s.goalEntity=0;
+  if(bad==17)s.mappedWeaponGoal=false;
+  if(bad==18)s.goalKind=botcore::CecilItemKind::Health;
+  if(bad==19)s.importantGoal=true;
+  if(bad==20)s.interactionPoint=112;
+  if(bad==21)s.flightFinishing=true;
+  if(bad==22)s.flightWorld=&player.world;
+  if(bad==23)m.stuck=true;
+  if(bad==24)m.relocated=true;
+  if(bad==25)BotSupplyGraph().points[112].flags=botcore::CECIL_JUMP;
+  if(bad==26)s.blocked[112]=1;
+  if(bad==27)BotSupplyGraph().points[112].next_slot=1;
+  if(bad==28)BotSupplyGraph().points[112].lock_entity=1;
+  if(bad==29)m.forward=.1;
+  if(bad==30)player.en_pwoWorld=nullptr;
+  if(bad==31)in.alive=false;
+  if(bad==32)m.hop=111;
+  if(bad==33)s.goal=1;
+  if(bad==34)BotSupplyGraph().points.reserve(536);
+  if(bad==35)s.patrolAlternate=true;
+  if(bad==36)in.dt=0;
+  if(bad==37)in.anchor=112;
+  if(bad==38)in.goal=1;
+  if(bad==39)in.gravity[1]=0;
+  if(bad==40)s.ClearHeldProgress();
+  const int lookups=worldLookups,rays=rayCount;
+  const bool progress=BotCecilHeldPositionProgress(&player,s,in,m,112,tick);
+  check(progress==(bad==-1),"only continuous identical-domain full3D0.75m (not0.749) credits progress");
+  check(worldLookups==lookups&&rayCount==rays,"held position observer adds no world lookup or ray");
+  check(s.holdSince==.05,"passive context recapture never creates fresh2s hold allowance");
+  if(bad==-1){
+   check(s.heldPosition[1]==in.y,"full3D vertical displacement updates actual position anchor");
+   s.ClearGoal();check(s.heldPlayer==nullptr&&s.heldLast<0,"goal reset invalidates held movement evidence");
+  }
+ }
 }
 void groundedAcquireHandshakeReproduction(){
  for(int mode=0;mode<6;++mode){
@@ -4721,6 +4839,8 @@ void reacquireDecisionBounds(){
 }
 
 int main(){
+ movingNeutral029Reproduction();
+ movingNeutralProgressGuards();
  negativeMapCombatRecovery();
  automaticCombatRecovery();
  automaticCombatRecoveryGuards();
@@ -5983,7 +6103,7 @@ def main():
     driver=(here / "BotDriver.cpp").read_text()
     choice=re.search(r'if\((ready&&[\s\S]*?)\)\{\s*bs\.bs_aHeading=player->m_aLastRotation',driver)
     if not choice:raise ValueError("actual Driver supply arbitration missing")
-    ownership="\nstatic bool bridgeDriverOwns(bool ready,const SCecilMove& supply,CPlayer* player,bool targetVisible){return "+choice[1]+";}\n"
+    ownership="\nstatic bool bridgeDriverOwns(bool ready,const SCecilMove& supply,CPlayer* player,bool targetVisible){botcore::CecilDriverFinal finalDecision;return "+choice[1]+";}\n"
     with tempfile.TemporaryDirectory(prefix="cecil-bridge-") as temp:
         cpp, exe = Path(temp) / "bridge.cpp", Path(temp) / "bridge"
         items_source = (support / "BotCecilItems.h").read_text()

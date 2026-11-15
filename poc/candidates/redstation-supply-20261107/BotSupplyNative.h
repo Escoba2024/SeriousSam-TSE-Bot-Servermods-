@@ -148,6 +148,11 @@ struct SSupplyState {
   int currentNavGoal=-1; // Fresh navigator context; an anchor/old hop alone is not a current point.
   int goal=-1,anchor=-1,hop=-1,spawnTick=0,scanTick=0,itemScanAfter=0,avoidNode=-1,heldNode=-1;
   double searchAfter=0,goalSince=0,goalDeadline=0,deadSince=-1,followAfter=0,avoidUntil=0,holdSince=-1;
+  // Passive neutral-weapon hold progress, never NAV/support authority.
+  CPlayer* heldPlayer=NULL;CWorld* heldWorld=NULL;const botcore::CecilNavPoint* heldGraph=NULL;
+  uint32_t heldEntity=0,heldGeneration=0,heldItem=0;uint64_t heldNavReset=0;
+  int heldGoal=-1,heldSource=-1,heldProgressHop=-1,heldTick=-1;
+  double heldLast=-1,heldDt=0,heldAttempt=0,heldDeadline=0,heldPosition[3]={0,0,0},heldGravity[3]={0,0,0};
   uint32_t avoidFollowEntity=0,lastUseEntity=0;
   int interactionPoint=-1,useReleaseTick=-1;
   int reacquireNode=-1,reacquireRejected=-1;
@@ -181,8 +186,10 @@ struct SSupplyState {
     rejected[victim].id=id;rejected[victim].until=now+30;rejected[victim].localOnly=localOnly;
   }
   void ClearRejections(){for(auto& r:rejected)r=Rejection();}
+  void ClearHeldProgress(){heldPlayer=NULL;heldWorld=NULL;heldGraph=NULL;heldEntity=heldGeneration=heldItem=0;
+    heldNavReset=0;heldGoal=heldSource=heldProgressHop=heldTick=-1;heldLast=-1;}
   void ClearReacquireScan(){std::fill(reacquireTried,reacquireTried+sizeof(reacquireTried),0);reacquireScanTime=-1;}
-  void ClearAvoidance(){ClearImportantOrigin();avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
+  void ClearAvoidance(){ClearHeldProgress();ClearImportantOrigin();avoidNode=heldNode=reacquireNode=reacquireRejected=-1;avoidUntil=reacquireRetryAfter=0;holdSince=reacquireSince=-1;avoidFollowEntity=0;ClearReacquireScan();}
   void ClearHopCheckpoint(){hopCheckpointLast=hopCheckpointSince=-1;hopCheckpointGoal=hopCheckpointSource=hopCheckpointHop=-1;hopCheckpointEntity=hopCheckpointGeneration=0;hopCheckpointWorld=NULL;}
   void ClearItemTransit(){itemTransitWorld=NULL;itemTransitMap=-1;itemTransitEntity=itemTransitGeneration=itemTransitItem=0;
     itemTransitGoal=itemTransitSource=itemTransitHop=-1;itemTransitLast=itemTransitSince=-1;}
@@ -192,7 +199,7 @@ struct SSupplyState {
   void ClearFlight(){flightWorld=NULL;flightGoal=flightSource=flightHop=-1;flightAccepted=flightPlanned=-1;flightFinishing=false;flightSuccessor=flightSuccessorPlanned=-1;flightSuccessorConsumed=false;}
   void ClearHealthConnector(){healthConnector=SCecilHealthConnector();currentHealthConnector=false;}
   void ClearImportantOrigin(){importantOrigin=SCecilImportantOrigin();currentImportantOriginRecovery=false;}
-  void ClearGoal(){if(importantOrigin.goal>=0)ClearImportantOrigin();localSupply=SCecilLocalSupply();ClearHealthConnector();ClearFlight();acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearItemTransit();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
+  void ClearGoal(){ClearHeldProgress();if(importantOrigin.goal>=0)ClearImportantOrigin();localSupply=SCecilLocalSupply();ClearHealthConnector();ClearFlight();acquiredAnchorTime=-1;acquiredAnchor=-1;ClearHopCheckpoint();ClearItemTransit();ClearPatrolEpisode();currentNavTime=-1;currentNavGoal=-1;currentNavTravel=false;interactionPoint=-1;interactionSince=-1;heldNode=-1;holdSince=-1;navigator.Reset();goal=-1;goalEntity=0;hop=-1;importantGoal=mappedWeaponGoal=goalRelocationBudgeted=false;goalDeadline=0;followEntity=followGeneration=0;followAfter=0;}
   void ClearEscape(){escapeUntil=escapeAfter=0;escapeClock=-1;escapeSide=1;escapeReverseUsed=false;}
   void ClearAirMovement(){airMovementTime=-1;airMovementEntity=airMovementGeneration=0;airMovementNode=-1;}
   void ClearGroundSweep(){groundEscapeTried=groundEscapeCursor=0;groundSweepReady=false;}
@@ -1754,6 +1761,55 @@ static bool BotCecilRecoverImportantOrigin(CPlayer* player,SSupplyState& s,INDEX
     slot,tick,h.node,s.goal,(unsigned long)s.goalEntity,distance,h.until);
   return true;
 }
+// Actual full-3D displacement only; this observes an existing ordinary neutral
+// weapon edge and grants no movement, support, arrival or deadline extension.
+static bool BotCecilHeldPositionProgress(CPlayer* player,SSupplyState& s,
+    const botcore::CecilMotionInput& in,const botcore::CecilMotion& move,int hop,int tick){
+  const auto& graph=BotSupplyGraph();const int source=s.navigator.SourceSlot(s.goal);
+  const double gravityLength=in.gravity[0]*in.gravity[0]+in.gravity[1]*in.gravity[1]+in.gravity[2]*in.gravity[2];
+  const bool eligible=player&&player->en_pwoWorld&&in.alive&&s.playable&&
+    s.entity&&s.entity==player->en_ulID&&s.generation&&in.goal==s.goal&&in.anchor==s.anchor&&
+    s.goalEntity&&s.mappedWeaponGoal&&s.goalKind==botcore::CecilItemKind::Weapon&&
+    !s.followEntity&&!s.importantGoal&&s.interactionPoint<0&&!s.flightWorld&&!s.flightFinishing&&
+    !s.patrolAlternate&&move.active&&!move.arrived&&!move.stuck&&!move.relocated&&!move.flags&&
+    move.forward==0&&move.strafe==0&&move.up==0&&move.pitch_delta==0&&
+    s.navigator.ResetSerial()!=0&&tick>=0&&source>=0&&hop>=0&&s.hop==hop&&move.hop==hop&&s.goal>=0&&
+    (size_t)source<graph.points.size()&&(size_t)hop<graph.points.size()&&(size_t)s.goal<graph.points.size()&&
+    s.blocked.size()==graph.points.size()&&!s.blocked[source]&&!s.blocked[hop]&&
+    !graph.points[source].flags&&!graph.points[hop].flags&&!graph.points[s.goal].flags&&
+    graph.points[source].lock_entity<0&&graph.points[hop].lock_entity<0&&
+    graph.points[source].next_slot<0&&graph.points[hop].next_slot<0&&
+    std::isfinite(in.now)&&in.now>=0&&std::isfinite(in.dt)&&in.dt>0&&in.dt<=1&&in.frame.Valid()&&
+    std::isfinite(s.goalSince)&&std::isfinite(s.goalDeadline)&&in.now>=s.goalSince&&in.now<s.goalDeadline&&
+    std::isfinite(in.x)&&std::isfinite(in.y)&&std::isfinite(in.z)&&
+    std::isfinite(in.gravity[0])&&std::isfinite(in.gravity[1])&&std::isfinite(in.gravity[2])&&
+    std::fabs(gravityLength-1)<1e-3; // Same finite/unit-gravity contract as Navigator::Valid.
+  if(!eligible){s.ClearHeldProgress();return false;}
+  // Reuse CecilGroundProgress's existing .25s maximum observation gap, and
+  // additionally require consecutive Source ticks with the same tick quantum.
+  // A context/gap reset captures a baseline, NEVER a new two-second allowance.
+  const bool continuous=s.heldPlayer==player&&s.heldWorld==player->en_pwoWorld&&
+    s.heldGraph==graph.points.data()&&s.heldEntity==s.entity&&s.heldGeneration==s.generation&&
+    s.heldItem==s.goalEntity&&s.heldNavReset==s.navigator.ResetSerial()&&
+    s.heldGoal==s.goal&&s.heldSource==source&&s.heldProgressHop==hop&&
+    s.heldAttempt==s.goalSince&&s.heldDeadline==s.goalDeadline&&
+    (int64_t)tick==(int64_t)s.heldTick+1&&s.heldLast>=0&&in.now>s.heldLast&&
+    in.now-s.heldLast<=.25&&in.dt==s.heldDt&&
+    in.gravity[0]==s.heldGravity[0]&&in.gravity[1]==s.heldGravity[1]&&in.gravity[2]==s.heldGravity[2];
+  const double dx=in.x-s.heldPosition[0],dy=in.y-s.heldPosition[1],dz=in.z-s.heldPosition[2];
+  const double distance2=dx*dx+dy*dy+dz*dz;
+  // Same full-3D threshold as CecilNavigator::Update, independent of gravity
+  // projection. Velocity, FALL, neutral intent and Navigator::Progress alone
+  // are deliberately not evidence.
+  const bool progressed=continuous&&std::isfinite(distance2)&&distance2>=.75*.75;
+  if(!continuous||progressed){s.heldPosition[0]=in.x;s.heldPosition[1]=in.y;s.heldPosition[2]=in.z;}
+  s.heldPlayer=player;s.heldWorld=player->en_pwoWorld;s.heldGraph=graph.points.data();
+  s.heldEntity=s.entity;s.heldGeneration=s.generation;s.heldItem=s.goalEntity;s.heldNavReset=s.navigator.ResetSerial();
+  s.heldGoal=s.goal;s.heldSource=source;s.heldProgressHop=hop;s.heldTick=tick;
+  s.heldLast=in.now;s.heldDt=in.dt;s.heldAttempt=s.goalSince;s.heldDeadline=s.goalDeadline;
+  for(int j=0;j<3;++j)s.heldGravity[j]=in.gravity[j];
+  return progressed;
+}
 static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double enemyDistance,const SCecilFollowGoal* follow=nullptr){
   SCecilMove result;SSupplyState &s=BotSupplyState(slot);s.acquiredAnchorTime=-1;s.acquiredAnchor=-1;s.currentNavTime=-1;s.currentNavGoal=-1;s.currentNavTravel=false;s.reacquiring=false;s.ClearAirMovement();s.groundRecoveryTime=s.groundObservationTime=s.recoveryMovementTime=-1;s.combatGroundFresh.valid=false;result.useControl=tick<=s.useReleaseTick;
   s.patrolProposalTime=-1;
@@ -1924,6 +1980,7 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
     }
     if(travelHop>=0&&move.forward==0&&move.strafe==0&&move.up==0&&move.pitch_delta==0){
       if(s.heldNode!=travelHop||s.holdSince<0||now<s.holdSince){s.heldNode=travelHop;s.holdSince=now;}
+      if(BotCecilHeldPositionProgress(player,s,in,move,travelHop,tick))s.holdSince=now;
       if(now-s.holdSince+1e-9>=2){
         if(BotCecilGroundedReplan(player,s,move,slot,tick)){
           result=SCecilMove();result.ownsMovement=true;return result;
@@ -1932,8 +1989,8 @@ static SCecilMove BotSupplyTick(CPlayer *player,INDEX slot,INDEX tick,double ene
         s.ClearImportantOrigin();s.avoidNode=travelHop;s.avoidUntil=now+10;s.avoidFollowEntity=s.followEntity;
         s.ClearGoal();s.searchAfter=now;s.scanTick=0;result=SCecilMove();result.ownsMovement=true;result.useControl=tick<=s.useReleaseTick;return result;
       }
-    }else{s.heldNode=-1;s.holdSince=-1;}
-  }else{s.heldNode=-1;s.holdSince=-1;}
+    }else{s.ClearHeldProgress();s.heldNode=-1;s.holdSince=-1;}
+  }else{s.ClearHeldProgress();s.heldNode=-1;s.holdSince=-1;}
   if(move.arrived||healthContinue){
     if(s.goalEntity){
       CEntity* item=player->GetWorld()->EntityFromID(s.goalEntity);

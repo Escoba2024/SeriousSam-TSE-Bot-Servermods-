@@ -350,8 +350,11 @@ class DrainPump:
             require(state['idle'] == idle, 'cleanup idle inconsistent')
             if idle:
                 result = self.collector.finishstop()
-                require(result == {'stopped': True, 'stop_reason': 'host requested'},
-                        'observer sticky non-host stop')
+                require(type(state['stop_reason']) is str and
+                        result == {'stopped': True, 'stop_reason': state['stop_reason']},
+                        'observer finishstop acknowledgement differs from idle state')
+                if state['stop_reason'] != 'host requested':
+                    self.error(protocol.ProtocolError('observer sticky non-host stop'))
                 self.capture()  # final raw packet after safe detach, still unchanged
                 self.index.finish()
         except BaseException as error: self.error(error)
