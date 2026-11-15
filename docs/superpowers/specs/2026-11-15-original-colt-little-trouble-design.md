@@ -114,3 +114,28 @@ Snapshots/Screenshots/sonstiger Sidecars und Forkgröße. Kein Preflight, solang
 diese Zusatzgrößen ungeklärt oder der Platz nicht wirklich frei ist. Kein
 Speicherretire durch Autor. Resource75%/1,5GiB/8GiB bleiben bindend. Ein größeres
 Metadatenbudget allein rechtfertigt keinen F4 und keinen Damage-PASS.
+
+## Spätere explizite Rootentscheidung für die neue Sourcebedingung
+
+Der Entwurf oben bleibt als solcher erhalten. Für die nun beauftragte Umsetzung
+ersetzt Root zwei Vorschläge ausdrücklich: **64MiB** operative Ownershipreserve
+statt512MiB, unverändert1024inkl.Initial und voller alter1,5MiB-Vorbehalt.
+Keine Garantie, dass beliebige1024Receipts in64MiB passen; der Payloadcap bleibt
+FAIL. Das ist eine getrennte neue Condition, kein Umschreiben der alten
+RP-3MiB-Bedingung oder des F3-FAIL.
+
+Prä-ArmAdmission darf innerhalb des normalen eigenen Controllerstarts die schon
+vorhandenen readonly Roleframes für tatsächliche erste beobachtete Positionen,
+Actor/Life und positiveHP→beobachteteHP-Abnahme→DEAD_READY verwenden. Diese
+ersten Positionen werden nicht zu gewählten/erstmaligen Spawnmarkern umbenannt.
+EineHP-Abnahme kann erstmals zusammen mit dem Tod beobachtet werden; dann
+keinen zusätzlichen lebenden Zwischentreffer erfinden. Owner/Colt/LOS werden
+daraus nicht abgeleitet; vollständigeColt-Schadenskette erst im echten Trace.
+FehlenderHP-Abfall/Tod ist weiterhin FAIL. VisuelleSichtprüfung bleibt ein
+vorbereiteter Reviewpunkt, aber kein versteckter neuer zwingenderRuntimeguard.
+Keine fremdenProzesse/Screens und keine automatischeSpawnwiederholung.
+
+Umzusetzender Aufbau: LittleTrouble/Festziel030/Move0, normaleSpawns und
+Testsprünge unverändert, OriginalStartDifficulty3 mit den tatsächlich gepinnten
+übrigen Startflags. Alle Fristen/Reader/ABI/Observer/Core/Inputs bleiben wie
+oben. Native-onlyRoot entscheidet erst nach Source-/Disabledpaketreview.

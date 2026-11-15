@@ -1,6 +1,6 @@
 # SSAM.AI – ausführbarer Gesamtplan A → B
 
-Stand 15.11.2026, 18:29 UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
+Stand 15.11.2026, 19:17 UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
 Maßgeblich sind der vollständige Nutzerauftrag, ursprüngliche
 [Milestonespezifikation](2026-11-11-milestones-a-b.md),
 [Toolchainrichtlinie](../../decisions/2026-10-17-tse-ai-tools-mcp-policy.md)
@@ -14,13 +14,13 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 
 ## Aktueller Zustand und Priorität
 
-Stand 15.11.2026, 18:29 UTC. Exakte private Pfade/Hashes und frühere Fehler stehen im Handoff; ältere Planstände bleiben in Git erhalten.
+Stand 15.11.2026, 19:17 UTC. Exakte private Pfade/Hashes und frühere Fehler stehen im Handoff; ältere Planstände bleiben in Git erhalten.
 
 | Arbeit | Status | Beleg und nächster Schritt |
 |---|---|---|
-| Live-Flotte | zuletzt 18:05 erneut geprüft | Dev048, Public Red Gen2, vier Public018; je acht eigene Bots, keine zusätzlichen Teilnehmer im Snapshot; 18 geladene Rollen/Startkonfigurationen wie Rollback051. Bis belegter Verbesserung erhalten. |
+| Live-Flotte | zuletzt 18:47 erneut geprüft | Dev048, Public Red Gen2, vier Public018; je acht eigene Bots, Hole ein ungeklärter zusätzlicher Teilnehmer, sonst keine; 18 geladene Rollen/Startkonfigurationen wie Rollback051. Bis belegter Verbesserung erhalten. |
 | Namen/Identitäten | Bestand erhalten | 458 Namen; 48 kollisionsfreie sichtbare Botnamen, stabile Profile/IDs wie Rollback051. |
-| Dev-Sync | frühere Ursache offen | 17:21–18:06 neue7611OK/20BAD/1Disconnect; vorher15:59–17:21 16.191OK/10BAD/1Disconnect; ältere23BAD/2Disconnect und70BAD/3Disconnect bleiben FAIL. |
+| Dev-Sync | frühere Ursache offen | 18:06–18:47 5943OK/0BAD/0Disconnect; vorher17:21–18:06 7611OK/20BAD/1Disconnect; vorher15:59–17:21 16.191OK/10BAD/1Disconnect; ältere23BAD/2Disconnect und70BAD/3Disconnect bleiben FAIL. |
 | A1 Eingabekalibrierung | offen | Maus-/Tastatur-/Pitchbefunde fehlgeschlagen; keine Toleranzänderung. |
 | A1 neue Messmethode | begrenzt bestanden | Kontroll-/Traceprobe geschlossen und voll ausgewertet: 414 tatsächlich beendete exkludierte Weltcasts, 207 GameTickpaare bis F, 38 Originalbereiche restauriert; Init/Colt/Schaden jeweils 0. Kein A1-Pass. |
 | A1 normaler Originalrespawn | F1/F2/F3 bleiben FAIL vor Input; F3 ausgewertet: kein Tod/HP-Abfall, Budget blockiert Capture85 | Echter regulärer Tod vor Arm/MayRespawn2; danach ein normaler Fire-Release und tatsächliche Init-/erste-Tick-/Normal-/Fatal-Schadenskette. Neue Bedingung, alte Inputfree-/Coltverträge unverändert. |
@@ -30,9 +30,9 @@ Stand 15.11.2026, 18:29 UTC. Exakte private Pfade/Hashes und frühere Fehler ste
 | A4 Trouble031 | geschlossen, vollständig ausgewertet | 600,074s/292 Leben/205 Gains/259 Spielerkillmeldungen; 38,45s Versorgungslücke. Root-Restore und Auditdateihashes geprüft; kein A4-Pass. |
 | A4 Build032 Trouble | geschlossen, vollständig ausgewertet | 600,053s/0BAD/0Disconnect in vier Logs, Rootrestore640Dateien PASS; 311Leben/194Gains/0neue first_weapon-Marker/44,24s NoUseful; keine Verbesserung belegt. Atomischer Erstwaffenwechsel SDK4175/0. Übrige Karten/Übergänge offen; Desert Temple gesperrt, Welt fehlt. |
 | A4 Build033 Rundlaufschutz | RootSource/SDK4214/0/MSVC15+Link0; 81Pins geprüft, keine Nativefreigabe | DLL49443e2a…/464896B, nurBotSupplyNative.h geändert. Gezielter DIAG1-Beleg vor Native erforderlich: bisher kein Arm-/Disarmgrund sichtbar. |
-| A4 Build034 Diagnose | Source/SDK4231/0/Build81Pins/Rootfreeze+Anwendungspeer geprüft | Passive ARM/DISARM/UNADMITTED/END-Diagnose; genau300s LittleTrouble nachSource112/FULL104. KeinA4Gate/keineNativewirkung belegt. |
+| A4 Build034 Diagnose | Source/SDK4231/0/Build81Pins/Rootfreeze+Anwendungspeer geprüft | Passive ARM/DISARM/UNADMITTED/END-Diagnose; 300.022s LittleTrouble sauber geschlossen/alle4Logs0BAD/Disconnect/Rootrestore640PASS, vollerAudit149Lives/101Gains/43.65sNoUseful;1LoopabbruchohnekausalenPickupbeweis. KeinA4Gate/keineVerbesserung belegt. |
 | A5 formale Stabilität | nicht begonnen | Funktional geeigneter Kandidat erforderlich; 1/4/8 Bots für 60/60/120 Minuten. |
-| Sicherung/Veröffentlichung | Source111 / Delta103 vollständig geprüft,112/104 vor034Native | Remote-Fetch/Baum/Diff0; privater Vollrücklauf und zwei vollständige Perfile-Metadatenrestores. 032Closedraws in101; 21 geschlossene A1-Backupbäume eigenständig vollständig extern gesichert. NeueF2Raw/033/D-v5F3 folgen103 vor neuerNative. |
+| Sicherung/Veröffentlichung | Source112 / Delta104 vollständig geprüft,113/105 vor neuerNative | Remote-Fetch/Baum/Diff0; privater Vollrücklauf und zwei vollständige Perfile-Metadatenrestores. 032Closedraws in101; 21 geschlossene A1-Backupbäume eigenständig vollständig extern gesichert. NeueF2Raw/033/D-v5F3 folgen103 vor neuerNative. |
 | B Sessions/Chat | nicht begonnen | Erst nach nachgewiesenem Abschluss von A. |
 
 ## Unmittelbare Ausführung und Claims

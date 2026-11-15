@@ -1,3 +1,103 @@
+## Aktuell 2026-11-15T19:16:38.558153+00:00 — 034 vollständig ausgewertet; neue A1-Bedingung F2 geprüft
+
+034Audit integriert58c2403/a3f720e/9a4c9fd/f0441af, Root24Puretests0.100sPASS,
+RootSourceReviewE/trouble034-closed-audit-root-source-review.json/15Derivedpinsgeprüft/keinRootRawreplay.
+EINAuthorRawpass63393404B/128MiB, finaleOutputs<8MiB; privateHandoff
+/srv/tse-trouble034-closed-audit-evidence-20261115/complete034-handoff.json
+SHA7f941ff31ec8ca24b2a3b5494774e66aef7a6a8f38422cf19f41af366db983db.
+149Leben/73Useful-possession/101Gains/190failedAttemptsbehalten; längste43.652664sNoUseful,
+B0g12 bewegtesich322.44m/HP25–100/owned3oder7, maxstationär0.50003s, keinbloßesFesthängen.
+179ARM/179DISARM/179END/133UNADMITTED, keineCAP/Format/Serialfehler; 27BindingsUNKNOWN.
+Einrevisited_edges-AbbruchA0g13, neuesZiel/Weapon218späterbelegt; Gain3→19überlapptGoalEnd-
+WPOintervall, keinPickupACK/keinursächlicherVerbesserungsbeweis. 51owner_lostSourceSafemotion(false),
+48vorherSupply/39nachherCombat; zweiB0g12EinzelfälleohnegleichenSourcezeitDriverwitness.
+Rootfand%.9gRundungsbugvorfinalerVerwertung: echte5RED→24GREEN; neuekleineCorrection
+26f91071b0853beb1b6d593dba646556ca36d261d8ae813e6ee2d581a17799ff hält3vorhandeneKandidaten
+40/57/60bei, alteOutputsbyteunverändert/keinRawreplay. GedruckteSourcezeit istkeineCall-/Nativezeitidentität.
+ZweiSourcepfad-/OutputvolumefehlerundzweiAufrufkontextfehlerwurdenvorerstemRawreadkorrigiert,
+bleibenprivatbelegt. Keine034Promotion/A4freigabe. A4AgentdarfengenPolicywiderspruchnurquellseitig
+prüfen: retainedurgenteErstwaffegegencloseCombat<8(derzeitnurHealthausgenommen), allefinalSafety/
+Deadline-/Armed-/Spezialpfadebewahren, realerSDKREDvorFix. KeineNeueDiagnosebuildschleife.
+
+A1neueSourcesd6402d9/592ea55/76a742f; Root17gezielteTests0.265sPASS.
+D1/D2/F1bleibenNEVER_NATIVE: zusätzlicheRootprüfungfandaktivenNaturalAI-NAV-/Snapshotmetadaten-
+widerspruchzuLittleTrouble. EchterBuilderRED→D3Fix, altePakete/Quittungenunverändert.
+D3 /srv/tse-a1-original-colt-trouble030-v3-disabled-20261115,
+Manifest9bd7202c269634ff90c09ffccf24b4b8cecb3cd50878aa595df87720bbede9f2;
+RootF2 /srv/tse-a1-original-colt-trouble030-v2-root-frozen-20261115,
+Manifeste5fe7b333bb558c97bc7b520003155e658b164ea057a958fbbfffeeb8b556e4b,
+Runner9e18bf3e86cae81e01541e56f5846ef10ed3c3741d430da5269f4088531d7796,
+Nested60a0feae093ce4b040616a0455a0a8464a3e106b2ee16338129e51784cb18dab.
+5Fragmente/3Sources/2Manifeste/144bytegleich/28877PinsRootPASS; aktiveNAV/SnapshotsgegenNAI-AST
+gepaart, alteRP/Core/Gates/ABI/Zeiten/Damageguardsbehalten. Peeracb4de3510d013a579d0bde67c0c6b966c483ad2ff3ecc59dfabeb864a1ca2e6
+PASS_SCOPE/ROOT_APPLICATION_ONLY/notindependentowntemplate. D3AuthorReceiptff7b128d8cdd195a330b7a38a5ad6699bc088139d8caf367a090ab8616b0e80f.
+
+GeplanteKontrolle:E/run-colt-trouble030-v2-control.py --preflight erstnachSource113/FULL105,
+exaktOriginalserver+Originalopfer+1Festziel030/Move0/LittleTrouble/Serious3/Invul0, normaleSpawnslagen.
+KeineHP/Pose/Winkelwrites, zunächstpositiveHP→echterAbfall→DEAD_READY, dannmaxeinFireDownUp mit
+ACK/.35hold/2sACK/10sNative/85sinner/90souterstreng; ControlPASSkeinDamageproof.
+RAMEVIDENZBase /dev/shm/ssam-a1-colt-trouble030-root-evidence-20261115 leer0700Rootangelegt;
+BASE-ToolsundRuntimebleibenaufDisk, echtesTmpfs+beideVolumebudgetsprüfen. Diskmindestens8724152320B,
+MemAvailable2818572288B/RAMVolume671088640B, alte3MiBRPunverändert/neu64MiBohne1024Fitgarantie.
+VorNativealleCPUjobsquieszent/4Locks/Source113+FULL105. OuterHostobserver+OwnCPUbegleiten.
+NachCloseE/persist-colt-trouble030-v2-case.py control: exaktesCasearchiv/2volleByte+alleMetadata-
+Treerestores/N-Persistenz, RAMoriginalbehaltenbisexternesBackup. DannE/check-colt-trouble030-v2-arm-closed.py control
+unabhängigRuntimeRestoreprüfen/Execabholen. TraceNURbeiControlPASS+Restore+frischenBudgets/Backup,
+sonstFAILbehalten/keinenBlindretry. BeideWrappernurvorbereitet, keinNativeaktiv.
+
+Source112/FULL104weiterletztegeprüfteRemote-Sicherung, neue034Raws/Audits/A1D3F2/Recovery28-
+Quittungen+Source113bundlegehören105. SeparateRecovery28/21/Arena/Maps/Sync/Trouble031 undOriginal-
+archive/Rollback051erforderlich. AlleArchivepersistent, keinerleiRAMarchivstagesoffen.
+LiveMixedwie18:47 erhalten, Hole1UNKNOWNzusätzlich/sonst0/je8own; Devneu0BAD/5943OK/0Kick18:06–18:47,
+frühere20BAD/1KickweiterFAIL. Nutzerclientnichtmehrverbunden, keineTeilnehmerzuordnung.
+Aoffen/Bunbegonnen/keinexternerBlocker. Rootarbeitetweiter, keinGesamtabschlussamCheckpoint.
+
+## Geschlossen 2026-11-15T18:49:30.627914+00:00 — Build034300 sauber beendet; Vollauswertung folgt
+
+RootExec75144 natürlichbeendet0/abgeholt. CaseN/nav20-034-trouble-root-trouble-20261115-183149,
+ResultSHA bb91a86973a2241ef0eddaf541c3f3160c73ec380811236534068dbf92a458e5,
+observed300.0217553838156s. StatusPASS_LIMITED_REACQUIRE_DIAGNOSTIC_OBSERVATION_ONLY,
+functional_pass/qualified/first_simulation_state/map_resetweiterfalse. VierClosedlogsje0BAD/0SyncDisconnect/
+keineCRC-/Crash-/Invalid-/Joinfailureevents. Rootrestore18:38:27.091718PASS640Dateien/beideSnapshotNS/
+vierLogs/viergestarteteRollen+Units/PIDgenerationen/X154/vierLocks. Outer372SamplesCPUmax61.2244898%,
+RAMmin2559496192B/Diskmin8621101056B/gap1.0018894sPASS_HOST_OBSERVATION_ONLY.
+KeinA4-/Waffen-/NavigationsverbesserungspassoderformalesA5Gate. Auditjetztein128MiBgloballimitierter
+Rawpass mitunverändertenV3Lives/allen8undneuenHistoryketten; Outputsmax8MiB, keinOldRawreplay.
+
+Source112actualfetch/tree/diff0PASS18:30:57: remote46ccf814e9c5cf231f767d2dc583663b8b3a12e7,
+local0a80de6c78d30fc005c5f33473ad0f5c9187a12a/tree899b2c0a4175d3f595ec1baaa8ed8f3965c68233.
+FULL10418:31:33:9249061B/ef2395c300c99b839b7b1d745b930bbbd7aa76e90cdfab7cbca02099a86d32e2,
+Drive1pcVG8cqFO3J2VbmJOL-_M6Eh1Hqar3xP/1256Dateien43175051B; Vollrücklauf+zweiDateiMetadaten-
+rekonstruktionenPASS. Enthält034Sourcebuild/D034/F034+allePins/Wholeinversebelege/F3kompletterFAILcase/
+Source112bundle(requireslocalaa38acdein103), nochNICHT034ClosedRaw/neuereRecovery. Diegehören105.
+
+ZusätzlicherStoragerecovery:28bereitsgeschlossene eigeneRestore-backup-Kopien380132444B→55855828B
+Einzelarchive; jedeDatei+DirectoryUIDGIDMode/atimeNSmtimeNS/xattrszweifachvollrekonstruiertUNDactualCLI28.
+RecoveryarchivB/closed-large-cache-recovery-20261115.tar.gz56420579B/
+SHA4ee74e3696c4e7939ffe3ab13ac904d48f66e338d96ed0624d0e83eb0d16b165,
+Drive1DmXG7eZfMOzFbU1o7qAvWo8Nij2CIa2K/34Dateien62937057Bvollrückgelesen+zweiteDateiMetadaten-
+rekonstruktion18:45:00PASS. ErstunterCurrentvollerTree-/ResultSHA-/PIDgeneration-/NoHandle-/vierLockprüfung
+28redundanteCacheDARSTELLUNGENentfernt18:46:14; alleEinzelarchive+Recoveryarchivpersistent.
+E/restore-closed-large-cache.py --output-dir FRESH_DIR bzw --original-paths /optional--case EXACT
+restauriertvoll; defaultpersistenteSourcegegenRAMzielactualCLI28alleBytes+alleMetadaten18:46:48PASS.
+Originalarchive/Runtimeunangetastet; Delta101einmalfürRecoveryRAMstaged/exaktallCurrentmetadatenzurück,
+keinRAMarchivekörpermehr. ErsterRetireaufrufPENDINGpreconditionFAILvorWrites; ersterReturnHashPASS,
+danachRAM-RestoreDiskreserveFAILvorRetirement, konkretgesichert; neuerVollverifierPASSmaßgeblich.
+RAMstaginghatDiskpayloadreserve8MiBstatt64MiB fürkleineMetadaten gebraucht, absolute8GiBFloorniegesenkt.
+
+FrischeFlotte18:47:21 sechs×8own/18Module+Configs exaktRollback051; Hole1UNKNOWNzusätzlich,
+alleanderen0. Dev18:06:10→18:47:22 server5943OK/0BAD/0SyncDisconnect; beideBotlogs0BAD/Disconnect.
+Frühere20BAD/1KickundandereFAILSunverändert/UrsacheUNKNOWN; Nutzerclientnichtmehrverbunden,
+keineTeilnehmerattribution. LiveMixedbewahren/Aoffen/Bunbegonnen/keinexternerBlocker.
+
+CandidateentwickeltneueA1LittleTrouble030FestzielMove0/Serious3/Originalbedingungmit64MiBOwnership-
+reserve; bisherkleineechteRED→GREENs, Quellennochunintegriert. NeueexpliziteRAM-EVIDENZ-Optiondarf
+zunächstreinquellseitiggeprüftwerden, Runtime/ToolBASEbleibenaufDisk. Diskdefault9328132096BFreiminimum
+bleibtbestehen; RAMoptionreserviert512MiBJournal+64MiBOwnership+64MiBCaseund512MiBNativeheadroom
+zusätzlichzu1.5GiBMemAvailablefloor. DiskfürFixture8GiB+128MiB; keineABI/ACK/Zeiten-/Schadenlockerung,
+keinHP-/Pose-/Winkelwrite. VorNativeSourceReview/Rootfreeze/Peer/Persistenzplan/Source113+FULL105.
+KeinNativeaktiv; beideAgenteningetrenntenWTsSource/Audit, nurRootintegriert/Runtime.
+
 ## Aktuell 2026-11-15T18:30:09.227938+00:00 — Build034 geschlossen, isolierte 300s-Diagnose vorbereitet
 
 Build034 Source9fc6f79676e5eecf5a95aab4744576b23d456ccf/Tree88906c6a40edb850b8cd07ffeca35ea35ed62914,

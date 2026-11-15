@@ -61,3 +61,42 @@ Keine Änderung bestehender qualifizierter Dateien oder Rootpakete.
   Ticks/normal+fatalColtketten; fehlende Beispiele INCOMPLETE. Alle Raws/S-F/38-
   Restore-/Cleanup-/Hostkosten bewahren. Kein Aim-/FirstState-/Botopfer-PASS aus
   begrenzten späteren Beispielen, kein unbekannter Weaponowner zugelassen.
+
+## Rootruling / tatsächlicher Umsetzungsauftrag
+
+Neu beauftragt: LittleTrouble/Festziel030/Move0, normaleSpawns/Testsprünge,
+OriginalStartDifficulty3/sonstige beobachteteStartflags unverändert. KeineRuntime.
+Der512MiB-Entwurf oben ist NICHT der umzusetzende Wert: separate neue Condition
+hat64MiB operative Ownershippayloadreserve, weiter1024Reads und vorhandenen
+1,5MiB-Vorbehalt. Alte RP-3MiB-Quelle/Condition/F3 bleiben unverändert.
+Keine Garantie für alle1024Reads, Payloadcap bleibt FAIL.
+
+Claim NEU tools/a1_colt_trouble_condition.py, prepare_a1_colt_trouble.py und je
+Tests. Generierte neue Method-/Policykopien werden aus ganzen gepinnten alten
+RP-Dateien abgeleitet; exakte Inversen statt gemeinsamer Refaktor/Monkeypatch.
+Die neue Condition übernimmt vorhandeneplacements/ActorLife aus Roleframes,
+archiviert beide getrennten Server-/Originalread-Geometrien ohne Clockfusion,
+fordert tatsächlich positiveHP→HP-Abfall→DEAD_READY und behauptet keineLOS.
+
+1. Kurze pure REDs: tatsächliche Geometryfelder/Actor-Life/HPabfall ohne neueReads.
+   GREEN kleinsterConditionhelper; RootNativepause jederzeit beachten.
+2. ActualSource REDs: alter3MiB-Guard/realeMap-/Configbedingungen scheitern;
+   erzeugte neue64MiB-Method-/Policykopie und exakteNAI/Runner-Transforms.
+   GanzeInversen; alteRP/Reader/ABI/Observer/Core unverändert.
+3. Neue transaktionaleStartupscript-Mapauswahl nachseal; echteTempdatei-
+   Snapshot/Restore- und Falsepositiveprüfungen. Kein Stage in echtemLab.
+4. Fresh disabledFork nur nach Speicherprüfung:8GiB+64MiBSicherheitsreserve+
+   64MiBMetadata+bestehende512MiBRawjournalreserve+Copybytes+expliziteNebenreserve.
+   NeueMetadatenwahrheit/pins, Rootreview/Handoff. KeinNativeReady ausSource/TDD.
+# Vorwärtsstand: explizites RAM-Evidenzvolume
+
+Root hat nach dem unverändert erhaltenen D-v1 ausschließlich eine optionale Evidenzvolume-Wahl beauftragt. `--evidence-ram-base` bzw. der entsprechende explizite `main`-Parameter wählt ein bereits vorhandenes eigenes0700-Verzeichnis unter `/dev/shm`. BASE, Programme, DLLs, Fixture, Locks und Toolpfade bleiben auf Disk. Aliase/Symlinks, fremderOwner, falscherModus/Typ oder abweichendesDevice werden abgewiesen. Ohne Option bleibt die9328132096B-Diskreserve bestehen.
+
+Mit RAM-Option gelten vorCaseanlage und bei jedem vorhandenen Hostsample: FixtureDisk mindestens8GiB+64MiB Safety+64MiB Runtime; MemAvailable mindestens1,5GiB+64MiB Ownership+512MiB Journal+64MiB Case+512MiB Nativeheadroom; freies gewähltes RAM-Volume mindestens640MiB. Die bestehenden CPU/RAM/Disk-Messwerte werden genau einmal erfasst und wiederverwendet; nur der freie Platz des separaten Evidenzvolumes wird zusätzlich einmal gelesen. Fehlende/untypisierte Werte oder unterschrittene Reserven bleiben FAIL. Hostsample und RAM-Freiplatz werden vor neuerReservevalidierung archiviert, bestehendes `finally`/Cleanup bleibt erhalten.
+
+Vor jedem Nativefall prüft Root zusätzlich das tatsächliche tmpfs-Mount und die exklusive frische Verzeichnisverantwortung. Nach vollständigem Close bleiben die RAMdaten erhalten, bis Root bei genügend freiem Diskplatz die vollständige exakte persistente Kopie samt Hash-/Metadatenbeleg erstellt hat. Kein automatisches Löschen, keine Symlinks/Mountänderung, kein Runtime-/Input-/Fallbackpfad. Source-/Unit-PASS ist keine Nativebereitschaft.
+
+Beobachteter neuer RED: zwei fehlende Volume-/Pfad-Funktionen; danach16 gezielte Tests GREEN. Ganze sechs Quelleninversen bleiben verbindlich; alter RP und D-v1 bleiben unverändert. Ein frischer D-v2 enthält diesen Vorwärtsstand.
+# Metadaten-Forwardfix nach Rootbefund
+
+D-v2/F-v1 sind vor Native superseded/NEVER_NATIVE. Echter RED gegen tatsächliche Builderstatements reproduzierte RedStation-Nav-/Snapshotmetadaten trotz tatsächlicher LittleTrouble-NAI-Quelle. Nur aktive `natural_ai_condition`-Nav-/Snapshotfelder werden nun in beiden Manifesten aus statischen tatsächlichen NAI-Literalen abgeleitet. Historische Parent-Status-/Inputs0-/Sourcepinprovenienz bleibt erhalten und explizit vom aktuellen Conditioninputtotal2 abgegrenzt.17gezielte GREEN; frischer D-v3, keine Runtimequellen-/Guardänderung. Details und vollständige Quittung im Vorbereitungsbericht.
