@@ -1,3 +1,24 @@
+# Aktueller Handoff – 15.11.2026 08:28 UTC
+
+**A offen/B nicht begonnen. Live unverändert. Kein Nativejob aktiv.**
+Aktueller Rootstand nach b2b158e enthält Timestampfix13ed08d und029Controller
+ d7d0808/b2b158e. Rootfreeze/Peer vollständig; noch vor Start Source087 und
+Delta078 veröffentlichen/rücklesen. Dann EIN Skulls600 mit Build029/diag1,
+keine Wiederholung oder automatische Ausrollung. Bericht:
+[Rootfreeze029](../reports/2026-11-15-build029-root-skulls-freeze.md).
+
+Source086/Delta077 sind bereits abgeschlossen. Der frühere nächsteSchritt
+Source086/077 unten ist historisch. Timestamprestoration gilt ausschließlich
+ab neuemFork, nicht rückwirkend für alte Restorebelege.
+
+A1author ff205d7 noch NICHT integriert; unabhängiger Review fand IMPORTANT:
+letzte Batchverarbeitung kann Deadline/2s überschreiten ohne stickyFAIL.
+A1agent bearbeitet enges RED/GREEN; candidate_audit quieszent. Beide vorNative
+STATICONLY, keine Tests/Compiler/Archive/Downloads/Gitoperationen im Fenster.
+Root allein integriert, buildet und verändert eigeneRuntime.
+
+## Vorheriger belegter Stand (historischer Handoff)
+
 # Aktueller Handoff – 15.11.2026 07:51 UTC
 
 **A offen, B nicht begonnen; kein externer Zugriffsblocker.** Kein Nativejob aktiv.
