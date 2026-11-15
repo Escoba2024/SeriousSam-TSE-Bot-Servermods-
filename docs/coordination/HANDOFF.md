@@ -1,3 +1,13 @@
+## Aktuell 15.11.2026, 12:59 UTC — Build031 vor einzelnem Diagnosefenster
+
+A bleibt offen; B hat nicht begonnen. Live unverändert Dev048/RedGen2/vierPublic018. Frische geladene18Rollen/Startkonfigurationen12:49 wieRollback051. Ein einziger60s-Livebeleg bis12:57 zeigt je8 eigene Bots und echte protokollierte Abschüsse unter ihnen: PublicRed20,Yodeller28,Skulls17,Trouble20,Hole16,Dev7 erkannteKillzeilen; begrenzterParser/keine Rangliste oder Vollzählung. AufHole zusätzlich1UNKNOWN, unberührt. Alle Namenspopulationen im Fenster stabil. Dev11:52→12:50 zusätzlich8487OK/0BAD/0SyncDisconnect; historischeFehlerbleibenoffen.
+
+Build031aus226276880c847ed145ee36f1415eb53fd3c01588 fertig: DLL5c5c21d651f5513bcba4c1c3cc8ddc6495fbfbe7cdbbee506c70853bd15bbb0b,461824B;Manifest9c8cabf8d2a3a56803ac25ce8af55a38884a14de47ebeb5b1399095a2d4b40c5. 81Pins(49Source/30Overlay/DLL/Manifest)vollständiggeprüft. Nur2Quelländerungen+picker_custody.h gegen030; passiveDiagnose, keinGameplayfix undkeinNativepass.
+
+Reset031-DIAG1-Source65d80e6integriert; Root13TestsPASS0.162s. Disabledmanifest25c97a964e51b52679e221a948bccf83583279574a742a4acdd4dc6df5dabdbc. Rootfreeze29a4911f0b9a9f336090fd0bc91e37d4fc13e60c051cbfc8813d6b6b9e7cebd5,Controller37472c7c54cc281ae3d4bd4463651d02806ec2d3a8bd2e2d99a455107e4f6d92,152/92/47Pins. UnabhängigerRootanwendungsreviewPASS_SCOPE247b8b90,keineC/I;keinunabhängigerOwnTemplateclaim. 3Rootfragmentevollinvertierbar/94andereDateienbytegleich. FesterRed→Red→Red480s/2Resets/24Slotphasen/Hard2/8DEMON3/Original30FPS/DIAG1;keinealtenQualifikationenübertragen. NeueRootwrapperkompiliert, verlangenDelta090vorNative, nochkeinRuntimeaktiv. AgentA4quieszent; CandidatearbeitetisoliertanNaturalAISource, vorNativePausebestätigenerforderlich.
+
+LetzterSource096remote07fe2bd67add07bb106ea547687ce138656a358e/Baumb4d4fcc01599e76abb8ec527bc3fb23086b7eadd,Fetch+diffPASS. Delta0898592056B/SHA95c3d1c76a13ee1b29e6d13e4ee9f515916c0b18ed698f37e9a274f588c90b3f,Drive1T_FaWPuo8Vben7fpfgklV77ljoOyNxzj:1749Dateien58720871B,Vollrücklauf+zweivollständigePerfile-MetadatenrestoresPASS. EnthältV4beidegeschlossenenNativefälle/Vollaudit/Build031, nochNICHT031Resetfork. NächsterSchrittSource097/Delta090,Preflight,einzelnerDiagnoselauf;danachnormalerClose+unabhängigeRestoreprüfungundvollständigergezielterPicker-/Lifebefund. Kein automatischerRetry, keine unbeaufsichtigteWeiterarbeitbehauptet.
+
 ## Aktuell 15.11.2026, 12:49 UTC — V4 geschlossen, passiver Build031 in Arbeit
 
 Live bleibt nach jüngster Nutzerentscheidung unverändert: Dev048/RedGen2/vierPublic018, letzter Laufzeitbeleg11:52 sechs×8 eigene Bots/0 zusätzliche und18 geladene Rollen+Startkonfigurationen rollback051gleich. Kein heutiger neuer Promotionnachweis; A offen, B nicht begonnen.

@@ -36,24 +36,23 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 
 ## Aktueller Zustand und Priorität
 
-| Arbeit | Status | Nachweis bzw. nächste konkrete Aktion |
+Stand 15.11.2026, 12:50 UTC. Der aktuelle Handoff enthält die genaue private Belegzuordnung. Frühere Prüfungen und Fehlschläge sind darunter chronologisch erhalten.
+
+| Arbeit | Status | Beleg und nächster Schritt |
 |---|---|---|
-|Tatsächliche Flotte|geprüft06:29|sechs×8eigeneBots/18Targets051gleich,Dev048/RedGen2/4Public018;keineZusätzlichen|
-|Namen/Identitäten erhalten|Bestand geprüft|458Pool/48Anzeigenamen/Profile051gleich, Instanz+ID verwenden|
-|Dev-Sync|**FAIL/Ursache offen**|bis02:49 70BAD/3Kick; zusätzlichbis07:36 23BAD/2Kick, eigeneBotclients0; unverändert048+PowerupDedicated|
-|026passiveDiagnose|Build/Portable bestanden|15MSVC+Link/77Closure,3532normal+ASan, keinRuntime-/Skullsfixclaim|
-|026Skulls600diag1|geschlossen, A4 weiter offen|Root640Dateien/4LogsRestore; vierstufigerAudit bytegleich, bewaffneter16,546sStillstand; keinePromotion|
-|A1Maus/Keyboard|historischeFAILs|MousevariableAntwort,Keyboard7,5°Rückkehrfehler; Rootclosedaudit vollständig|
-|A1Pitchfeedback|Native034224 FAIL vor ersterEmission|nur+12Detour/1pxFeedback/0,75°diagnostischeRückkehr,keinSchuss/A1pass|
-|027Combat-Recovery|gebaut/Skulls600geschlossen;keineA4Abnahme|190Leben97Useful118Gain;Exactstill5,15s;neverUseful52,09soffen|
-|A1Methodwindow|Control begrenzt bestanden; neuerTrace060723FAIL|Getter/TLS/21Calls zuerstvalide, dannLegacy-Colt-ownHook-Konflikt+NachlaufQueueoverflow; Monitor-/Drainfix undneuerControl nötig|
-|DevPowerup-Kontrast|V2OFF600begrenzt; ON600FAILcleanup|OFF600,135s/4Logs; ON600,0495s/0BADobserved, ServercleanupFileNotFound/3Logs; Root640FileRestorePASS;076sichern, Cleanupursacheklären;keinCRC-Ursachenclaim|
-|028Contentiondiagnose|gebaut/portabelbelegt;keineNativeabnahme|3733Bridge/3SourceformatPASS/77Buildpins;Headeronly/Drivergleich;OwnerUNKNOWNkorrekt|
-|029Endaktionsdiagnose|gebaut/Root9Tests+79Buildpins;keinNative|sameCallProposal→Arbitration→Poll→SafeMotion→SetActionArgument;keineVerhaltensänderung;SkullscontrollerWIP|
-|A3Tiernachweis|offen|020STARK13:3,Swap5:6; keinbelegtesSTARK>MITTELüberbeide|
-|A4Karten|teilweiseBeobachtung|024Red/Skulls/Trouble600geschlossen, Skulls242,49sNoUseful; weitereMaps/Transitions/Resetoffen|
-|A5Formalgates|nichtbegonnen|nachfunktionalgeeignetemKandidaten1/4/8Bots60/60/120min|
-|BImplementierung/Dev/Flotte|nichtbegonnen|erstnachbelegtemA-Abschluss|
+| Live-Flotte | erneut geprüft 12:49 | Dev048, Public Red Gen2, vier Public018; je acht eigene Bots, keine zusätzlichen Teilnehmer; 18 geladene Rollen und Startkonfigurationen unverändert |
+| Namen und Identitäten | Bestand erhalten | 458 Namen, 48 sichtbare Namen; Profile und instanzbezogene IDs wie Rollback051 |
+| Dev-Sync | Ursache früherer Fehler offen | 11:52–12:50 keine neuen BAD/Disconnects, 8.487 OK; frühere 23BAD/2Disconnect und 70BAD/3Disconnect bleiben Fehlbefunde |
+| A1 Eingabekalibrierung | offen | Maus-/Tastatur-/Pitchbefunde bleiben fehlgeschlagen; keine Toleranzänderung |
+| A1 QJS10V4-Messung | begrenzt bestanden, geschlossen | vollständiger Audit: vier beobachtete Hookarten, 2.870 Events, 38 Originalregionen nach Unload identisch; kein Treffer-, Respawn- oder Schadensnachweis |
+| A1 echter KI-Schütze | isolierte Quellenumsetzung | exakt ein eigener Bot030 gegen unveränderten Originalclient; neue passende Kontrolle und Trace erst nach Rollen-/Ownership-/Configprüfung |
+| A3 Schwierigkeitsstufen | offen | bisherige Vergleiche belegen STARK>MITTEL noch nicht; menschliches Spielniveau ebenfalls offen |
+| A4 Reset030 | geschlossen, fehlgeschlagen | 22/24 Slotphasen aktiv; fehlende Waffenbeschaffung und Fernwaffenaktivität nicht umetikettiert |
+| A4 Diagnose031 | gebaut, noch kein Native | passive Picker-/Same-call-Quittungen; 81 Buildpins geprüft, portable Source-/SDK-Tests bestanden; ein isoliertes Red→Red→Red-DIAG1-Fenster als Nächstes |
+| A4 Karten und Übergänge | teilweise geprüft | vorhandene Red/Skulls/Trouble-Beobachtungen genügen keiner vollständigen Matrix; übrige Karten und Spezialübergänge offen, fehlende Welt ausdrücklich sperren |
+| A5 formale Stabilität | noch nicht begonnen | erst funktional geeigneter Kandidat: 1/4/8 Bots für 60/60/120 Minuten; geeignete Laufzeitbeobachtungen nutzen |
+| Sicherung und Veröffentlichung | Source096 / Delta089 geprüft | tatsächlicher Remote-Fetch und identischer Baum; privater Vollrücklauf und zweimalige vollständige Perfile-Wiederherstellung; ursprüngliche Archive und Live-Rollback erhalten |
+| B Sessions und Chat | noch nicht begonnen | Beginn erst nach nachgewiesenem Abschluss von A |
 
 ## Unmittelbare Ausführung
 
