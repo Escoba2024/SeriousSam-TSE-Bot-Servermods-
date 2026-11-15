@@ -1,0 +1,12 @@
+# Reset030-Audit, Sicherung und nächste A1-Bedingung — 15.11.2026
+
+Stand 11:47 UTC: A offen, B nicht begonnen. Live bleibt der vom Nutzer bestätigte Mischstand; keine Veröffentlichung eines neuen Botkandidaten auf die Runtime.
+
+Der geschlossene Reset030-Lauf bleibt FAIL: 22/24 aktive Slotphasen, zwei tatsächlich beobachtete Kartenresets, 425,42 s. Der vollständige Audit aller 24 Slotphasen belegt bei einem Bot über fünf beobachtete Leben nur Messer/Colt, trotz erheblicher Bewegung und dreimal korrekt gemeldeter Cecil-Navigation. Bei einem anderen Bot liegt ein später brauchbarer Waffengewinn vor, aber kein rechtzeitig beobachtetes Fernfeuer. Picker-/Arbitrationsursache und serverseitiges Action-ACK sind nicht belegt. Keine Kriterienänderung, kein Wiederholungslauf ohne neue Diagnose.
+
+Ein neuer source-only Pack-/Restorehelfer bewahrt reguläre Dateien und Verzeichnisse samt SHA256, UID/GID, Modus, atime_ns, mtime_ns und allen erweiterten Attributen. 12 portable Fixturetests bestanden auch auf tmpfs; Links, Sparse-/Spezialdateien und Quellenänderungen werden abgelehnt. Zwei entbehrliche historische Restorekopien wurden gegen ihre damaligen Archive geprüft, erneut exakt gesichert, in Drive vollständig rückgelesen und aus lokalem Archiv sowie Drive-Rücklauf jeweils frisch auf tmpfs wiederhergestellt. Erst danach wurden die Kopien entfernt. Originalarchive und produktiver Rückrollstand bleiben erhalten. Dies ist ein Dateiwiederherstellungsnachweis, kein Runtime-Start aus einem Restore.
+
+- Build007-Kopie: 270 Dateien, 109738306 Nutzbytes; exaktes neues Archiv `04cfccd96a0c33550a7ea210bacf3b022482a47d4d184a4ccfcaadeb5a9badc0`, 60852707 Bytes.
+- Build009-Kopie: 233 Dateien, 127551099 Nutzbytes; exaktes neues Archiv `472e0f8cdcefbbbeee4b5ecc7d2fb8b172d89a8ffd63a8f0dbf8becf28b527f6`, 14742315 Bytes.
+
+Nächster begrenzter A1-Diagnoseschritt: explizite QJS-Runtime mit kalter gleichskriptiger Runtime-/PID-/Architektur-Attestierung und beiden eigenen unveränderten Originalclients auf konfiguriert 10/10 FPS. Diese neue Bedingung benötigt eine eigene Kontrollprobe und einen einzelnen Trace. Tatsächliche FPS und Gleichwertigkeit des Input-Prescans sind unbekannt; frühere Kontrollen werden nicht übertragen. Observer-/Hostgrenzen, Hookpfade, TTL und Abnahmekriterien bleiben unverändert. Das Paket hat einen unabhängigen Quellen-/Pinreview ohne Critical/Important durchlaufen (173 äußere, 75 innere Pins); dies ist noch keine Native-Abnahme. Der frühere V8-Crash und frühere CPU-Fehlschläge bleiben fehlgeschlagen.

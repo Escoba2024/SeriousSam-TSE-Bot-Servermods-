@@ -1,3 +1,48 @@
+## Aktuell 15.11.2026, 11:47 UTC — geschlossen, A offen
+
+Reset030 vollständig auditiert, weiterhin FAIL 22/24, keine Ursachenbehauptung; Quellencommit a2965be. Quellenhelfer 6f110cd: 12 Roottests PASS auf Disk und tmpfs. Historische Restorekopien Build007/009 erst nach Originalvergleich, neuer Drive-Sicherung mit Vollrücklauf und je zwei vollständigen metadatentreuen tmpfs-Restores entfernt. Exakte neue Archive lokal im bestehenden Backupverzeichnis; Originalarchive unverändert. RootE `exact-historical{007,009}-copy-retired-private.json` bindet alle Nachweise. /srv frei 8822599680 B um 11:46:24, 8-GiB-Grenze erhalten.
+
+QJS10-V2-Paket unabhängig PASS_SCOPE (173/75 Pins), noch kein Native. Rootfreeze aa3935c40cbbcb1b487667941bf2a5db4567cfc0689e688f996b10200d359212. Wrapper für genau neue Kontrolle + einen Trace vorbereitet, erfordern vor Start Delta086-Vollrücklauf. Quellen-/Backupveröffentlichung als nächster Schritt, dann Preflight/Kontrolle, geschlossene Wiederherstellung, einzelner Trace. Keine automatische Wiederholung, keine V8-Retail-Wiederholung. Live-Mischflotte unverändert; alle eigenen Native-/ELF-Jobs weiterhin geschlossen. A offen, B nicht begonnen.
+
+# Aktueller Handoff – 2026-11-15T11:19:21.325342+00:00
+
+**KeinNativeaktiv. Aoffen/Bunbegonnen. Reset030vollständiggeschlossenFAIL.**
+Nativecasea4-reset030-v3-root-20261115-110253,Resultdc38ebb2f86fb3364ae5bd64bf77a47c7f1aebb3df1f200b4e58f4903c97ce7a,
+425.421824009s,3Phasen/24Slotphasen/2Resetsbeobachtet,Originalobserver3normalSessions,
+aberactiveEvidenceMissingPhase1botA:1UsefulPickupLives/Gains+NativeRangedFire/BoundFlag;
+Phase2botA:2NativeRangedFire/BoundFlag. Kein24/24AktivitätsPASS/keineToleranzänderung.
+Root11:11:48:643Files5Absent/beideSnapshotNS4normalLogs/RollenUnitsDisplays4LocksPASS,
+OuterExec41231reaped1/492SamplesCPUmax62.65985RAMmin2609410048Diskmin8772648960gap1.00212;
+OuterStatusFAIL_HOST_OBSERVATIONwegenChildexit1, keineGesamtbudgetfreigabe.
+CandidateAuditiertgezieltalle24Nenner/RawsmitvorhandenenReadernEINMAL,Outputs<10MB.
+
+QJSsource61a379d(vonAuthorE2bfb5d)integriert, Root7TestsPASS0.769s.
+Runtimeexplizitqjs/QJS/Rohquittung,dreiPythonfragmentegegenV8helper,3volleInversen,
+JSbytegleichV8coldVersion. KeinPackage/Native/FPSWechselbisher.
+A1V8bleibtFAIL/gesperrt/RootPostCrash664RestorePASS; keinV8Retry.
+NächsterA1PlanseparateConditionQJS+beideOwnOriginalconfig30→10, möglicheInputprescan-
+Änderungoffen;neueControl+Trace,keineTTL/CPU/Guardlockerung.
+
+Source092remote6463702a51332ed317187c1e807cef2db83fae57,
+lokal35519fad05a7df77a8ef56f247825f347da2c4c4/Treea49a04037cb069506d7164e88b60c32ea110365a.
+Delta085Drive1gN8uU1zCQeAmUp5CF8VAjpPMoYHwq4-e,7198581B968dbf94,
+739Dateien81910175B,vollständigerReturn+zweiteDateimetadatenPASS11:16:51.
+EnthältvollständigeReset030Raws+Rootrestoresource/Outerberichte, nochkeinenWIPA4Audit,
+nochkeineneueQJSsource61a. Source093/Delta086nachAudit+QJSForknochzuführen.
+Disk~8.74GB/8GiBFloor; kleineNeuPackagevorbereitungenokay, bevorlängerenFolgetests
+weitereverlustfreieArchivierung/Restorekopienentlastungbegründen. Originalarchive/
+qualifizierteRuntime/LiveRollback051erhalten. NativeResetRawsbisCandidateAuditgeschlossen
+nichtkomprimieren; danngzip+vollRestoretestnachextern085 möglich.
+
+LiveletzterBeleg10:47:01:six×8own/Skulls1ungeklärt/alle18Targets051gleich;
+Dev048/RedGen2/vierPublic018. Dev093702→1047030BAD/0Disconnect10073OK.
+
+## Frühere belegte Stände (historisch)
+
+# Laufender eigener Test – 2026-11-15T11:04:05.259183+00:00
+
+2026-11-15T11:04:05.259183+00:00 AKTIV: eigenerReset030Native, OwnerPID 1668666/start 136697094,Rootwrapperb83b9778/OuterExec41231; ChildcontrollerundFixtureLocklaufend. NurMainRuntime.480s24SlotsRed/Red/Red/Hard2diag0, nochKEINEAbnahme. Source092actual6463702a/Treea49a0403,Delta08430835185B6790e1bd/1661Files69940811B/Drive1SXG51aUfNPTAlxk52uULn7sOp_5foznv vollReturn+2FilemetadataPASS11:02:39. KeineandereNativeparallel; AgentQJStests bisClosedaufschieben.
+
 # Aktueller Handoff – 15.11.2026 10:59UTC
 
 Aoffen/Bunbegonnen, alleNative/ELFJobsbeendet. Live10:47unverändert.
