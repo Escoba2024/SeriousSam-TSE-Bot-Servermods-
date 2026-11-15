@@ -1,8 +1,28 @@
-# Aktueller Handoff – 15.11.2026, 05:37 UTC
+# Aktueller Handoff – 15.11.2026, 05:43 UTC
 
 Gesamtstatus **A offen, B nicht begonnen**. Kein externer Zugriffsblocker.
 Reguläres lokales Terminal funktioniert; RDC bleibt gesperrt und unbenutzt.
-**Keine Native-/Buildausführung aktiv.** Beide First-State-Methodenarme sind
+**Kein Native-/Buildjob aktiv.** Neuer Wine-Trace054021 ist geschlossen FAIL:
+Rootwrapper1614764/Start134761835, Execsession69140 beendet. Result
+2c0cdcd772864a3a97904dd04f6bfd954483163fe8a69e20267fb9f14ef8dd71.
+Armierung erfolgreich nach Headerfix; erster Fault im Gettercallback:
+`getter restore mismatch after binding`, unmittelbar nach detach und vor
+Callbackreturn. Raw2Calls/ProcessGameTick+ApplyActionENTER,1Getter,1Fault,
+2abortedLeaves; keine qualifizierte Methodenbeobachtung. Keine Wiederholung.
+Rootrestore05:41:28 PASS664Dateien/9Abwesenheiten/3Logs, Units/PIDs/Displays/
+vierSperrenfrei. PureRoot38Originalbereiche+Identitätvor/nachgleich05:41:56;
+Unload/Detach erfolgreich, Worker1615178 erst nachdreiNormalcloses beendet.
+Outer44SamplesCPUmax69,89796%,RAMmin2723041280B,Diskmin10898923520B,
+maxGap1,001422s; keine Budgetverletzung, Child1→FAIL_HOST_OBSERVATION.
+RootEVfirst-state-wine-identity-trace-root-restore.json und
+first-state-wine-identity-trace-closed-region-audit.json.
+
+Nächste getrennte Arbeiten: a4_diagnosis prüft tatsächliche verzögerte
+Getterrestaurierung/korrekten Guardzeitpunkt mit VM-RED, erstDesignruling;
+candidate_audit bereitet gleichenDevDedicatedfe4 beiPowerupflag0/1 isoliert
+vor. Root allein Native/Integration. NeueTrace054021-Rohdaten noch071sichern.
+
+Beide First-State-Methodenarme sind
 beendet, inklusive Worker und aller drei regulär geschlossenen Spielrollen.
 
 - Control `a1-first-state-method-enabled-root-control-20261115-051115`:
@@ -70,7 +90,8 @@ Runner68b364054d57bca42306a84cd01f8164bac0cc4f79dcb6a588e8fcf52f838201,
 nested2c72c2402ab7c8dd7f2b02659e987cd838e4c90708be29d51efa75b407a0464a.
 Genau Main+Transport+kompiliertesJSfreigegeben, zweiNamespaces und abgeleitete
 Manifeste; fünf Dateien verändert/90andere bytegleich. Kein Native-/18ABI-/A1pass.
-Peer prüft ausschließlich unabhängigesRootdelta, nicht eigenePolicy.
+Peer c9f5cb04 PASS_SCOPE: ausschließlich unabhängigesRootdelta/151+72Pins,
+nicht eigenePolicy oder Kontrollreuse. Alle Peerjobs beendet.
 
 Root05:36:25 enger Kontrollreusebeleg: vollständiger neuerRunner ist bis auf zwei
 Namespaces exakt alteraktivierterRunner; zehn aktiveHelfer bytegleich, aktuelle
@@ -78,8 +99,11 @@ Fixture-/Welt-/Originalpins und Zeit-/Budgetbedingungen identisch. Control051115
 bleibt historischer begrenzter uninstrumentierter Kontrolllauf, kein neuerNative-
 Befund. Nur Tracepfad braucht neuen Einzelfall. RootEV/
 first-state-wine-identity-control-reuse-review.json. Wrapper
-run-first-state-wine-identity-trace.py/ad046170, Outerba336d24 vorbereitet,
-setzen vollständige070Drive/Metadatenabnahme+Peer voraus. Noch NICHT ausgeführt.
+run-first-state-wine-identity-trace.py/5ce5312e, Outer605f3477 vorbereitet.
+070 vollständigDrive+215DateimetadatenPASS05:39:26,815418B,
+SHAb1d2959140c7bee13599f865d41bbf9e966d0492f1d7ff642c8d917fa60c204a,
+Drive1n5YBsDE8_YzpBur5wM_wcHtWwyFCudiN. BeidePakete/Peer/Rootreview/
+Wrapper/Source079 enthalten. PreflightPASS05:39:26. NeuerTrace054021 jetzt geschlossen FAIL; Angaben oben.
 
 Der Nutzer hat den Mischstand ausdrücklich bestätigt: **live behalten, isoliert
 entwickeln, erst belegte Verbesserungen wieder ausrollen**. Seine spätere
@@ -129,10 +153,10 @@ Disk8882692096B, keineBudgetverletzung, Child1→FAIL_HOST_OBSERVATION. KeinRetr
 ## Zugriff, Arbeitsbereiche und Sperren
 
 Root allein integriert und verändert Runtime. Zwei bestehende Worker:
-`a4_diagnosis` entwickelt den begrenzten Wine-Modulidentitätsfix in
+`a4_diagnosis` entwickelt den getrennten Getter-Guardzeitpunktfix in
 `/srv/tse-build026-skulls-closed-audit-20261115`; `candidate_audit` untersucht
-nach abgeschlossener Storageanalyse gezielt die zwei027Problemleben mit vorhandenen
-Outputs in `/srv/tse-a1-pitch-feedback-20261115`. Keine neue Vollauswertung.
+nach abgeschlossener Storage- und027Zweikettendiagnose den deaktivierten
+Powerup-OFF/ON-Kontrast in `/srv/tse-a1-pitch-feedback-20261115`. Keine neueVollauswertung.
 Beide getrennte Worktrees/Claims, kein Native oder Livezugriff, keine Löschrechte
 im Auftrag. Vor Native müssen ihre CPU-/Dateilesearbeiten beendet und STATICONLY
 bestätigt sein. Root integriert allein.

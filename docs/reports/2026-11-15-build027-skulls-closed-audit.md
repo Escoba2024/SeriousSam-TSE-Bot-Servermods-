@@ -136,3 +136,27 @@ World/Nav/source pins and historical statuses remain unchanged. Damage, exact
 killer/life attribution, causal escape, shifted-gravity radius and complete
 continuous state remain unknown. No SourceTick/JS/host/native clock fusion, new
 tests, gameplay code, Runtime, live change or A4 acceptance occurs here.
+
+
+## Targeted follow-up: sampled supply ownership and enum correction
+
+A later narrow read of the two existing lives did not repeat the full audit.
+The52.087s NoUseful life has52living Source samples with supplyActive/nav1,
+47without and5with a visible opponent. Three successive weapon targets become
+explicitly unavailable/render5; a fourth elevated rocket route ends at death.
+The sampled canonical path is substantial, so this is not a52s freeze. A final
+higher-score choice is consistent with the pinned local contention preference,
+but the actual claim flags and the alternative route's outcome are not logged.
+No whole-life causal explanation or policy change follows.
+
+The5.150s exact stillness also has sampled nav1/vis0 ownership. This does not
+positively identify the new automatic combat-recovery mode, which requires
+!supplyActive and a visible opponent. Selected source escape actions still do
+not prove actual movement or safe arrival. Full same-call arbitration remains
+unknown; the unchanged normal guard is not relaxed.
+
+The SDK enum is1=knife,2=Colt,5=double shotgun. The old public numeric records
+remain correct; an earlier agent chat interpretation called1 Colt in error.
+The private standalone erratum preserves that correction without rewriting raw
+values or thresholds. Reproduction and exact two-life/source/enum pins are in
+`/srv/tse-build027-targeted-supply-diagnosis-20261115/{memo.md,erratum.md,handoff.json}`.

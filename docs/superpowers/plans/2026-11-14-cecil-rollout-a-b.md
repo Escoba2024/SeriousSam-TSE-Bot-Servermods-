@@ -1,6 +1,6 @@
 # SSAM.AI – ausführbarer Gesamtplan A → B
 
-Stand15.11.2026,05:37UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
+Stand15.11.2026,05:46UTC. Umsetzung läuft; **A offen, B nicht begonnen**.
 Maßgeblich sind der vollständige Nutzerauftrag, ursprüngliche
 [Milestonespezifikation](2026-11-11-milestones-a-b.md),
 [Toolchainrichtlinie](../../decisions/2026-10-17-tse-ai-tools-mcp-policy.md)
@@ -24,7 +24,7 @@ normale Arbeit. Keine Produktionspromotion nur aufgrund von Buildnummer/Buildpas
 |A1Maus/Keyboard|historischeFAILs|MousevariableAntwort,Keyboard7,5°Rückkehrfehler; Rootclosedaudit vollständig|
 |A1Pitchfeedback|Native034224 FAIL vor ersterEmission|nur+12Detour/1pxFeedback/0,75°diagnostischeRückkehr,keinSchuss/A1pass|
 |027Combat-Recovery|gebaut/Skulls600geschlossen;keineA4Abnahme|190Leben97Useful118Gain;Exactstill5,15s;neverUseful52,09soffen|
-|A1Methodwindow|Control begrenzt bestanden; Trace FAIL vor Hooks|Wine-PE-Fix Root38TestsPASS/151+72Pins/Rootfreeze92fff30; Peer+070Backup vor neuemTrace, alte FAILs behalten|
+|A1Methodwindow|Control begrenzt bestanden; Trace FAIL vor Hooks|Wine-PE-Fix nativ armiert; Trace054021FAIL Getterrestore nach self-detach, Boundaryfix mit unveränderten Vollbytesguards entwickeln|
 |A3Tiernachweis|offen|020STARK13:3,Swap5:6; keinbelegtesSTARK>MITTELüberbeide|
 |A4Karten|teilweiseBeobachtung|024Red/Skulls/Trouble600geschlossen, Skulls242,49sNoUseful; weitereMaps/Transitions/Resetoffen|
 |A5Formalgates|nichtbegonnen|nachfunktionalgeeignetemKandidaten1/4/8Bots60/60/120min|
@@ -106,8 +106,8 @@ Source077 Remote `2dac458382939fd0044e99d7ca704e7424757dbe`,
 Tree `179cbf20f46915d241849893461e8751f47a1f5a`, tatsächlich gefetcht/exakt
 lokaler9a41a43. Delta022–068 voll Drive-rückgelesen und Dateimetadaten geprüft;
 068 SHA7b496b0a/17005507B/1138Dateien, Drive1GPjgf2bMe0EXzyL9L0rCRze9CIXcZXr-.
-051 bleibt Mischrollback. Die neuen Control/Trace-Rohdaten müssen in069 gesichert
-werden. Sechs alte eigene Restore-Testkopien vollständig geprüft/neu rekonstruiert:
+051 bleibt Mischrollback. Control/Trace-Rohdaten sind in069 vollständig extern gesichert. Neuer
+Wine-Trace054021 bleibt FAIL und muss in071 gesichert werden. Sechs alte eigene Restore-Testkopien vollständig geprüft/neu rekonstruiert:
 31.321 Dateien/2.252.459.190B samt aktuellen Tempmetadaten, danach nur Kopien
 entfernt; Originalarchive/Drive erhalten. Frei11.000.229.888B05:27:38.
 Weiterhin aktuelle Reserve vor Native/Restore prüfen, keine Schutzreserve senken.
