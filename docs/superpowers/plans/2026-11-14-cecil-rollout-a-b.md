@@ -1,3 +1,4 @@
+<!-- Fortschreibung15.11.2026 10:34UTC: Build030600 geschlossen, Vollaudit offenlegt weiter50sNoUseful/Stillstand; keinePromotion. V8Source15Tests/CPUhelper6Tests; neuerNativefork erst nachReview/Source091/Delta082. Aoffen/Bunbegonnen. -->
 <!-- 09:48UTC: livefresh6x8/0additional/18Targets051gleich; Dev0736→0937
 0neueBAD0Kick19134OK, alteFehleroffen. A1neuerControl093301limitedPASS,
 Trace093359CPUFAIL77.5056%;Root664beideNS/3LogsRestorePASS.203kompletteCalls,

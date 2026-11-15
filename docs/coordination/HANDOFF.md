@@ -1,3 +1,50 @@
+# Aktueller Handoff – 15.11.2026 10:34 UTC
+
+**A offen, B nicht begonnen. Live-Mischstand unverändert; kein Native aktiv.**
+Der Nutzerclient ist abgemeldet. Letzte Livekontrolle09:37:10: sechs×8eigene,
+keine zusätzlichen Teilnehmer, alle18Modul-/Konfigtargets identischRollback051.
+Dev048/RedGen2/vierPublic018. Keine neue Promotion.
+
+Build030 Skulls600 geschlossen: Resultc24b7402,600,074s,4normale Abschlüsse,
+0BAD/Disconnect; Root640Dateien/beideSnapshotNS/4Logs/RollenUnitsDisplays/4Locks
+PASS10:02:59, Exec55779reaped0. Vollaudit9620d73:192Leben/184Tode,
+101Usefulbesitz/119strikteGains, alle8SlotsGains;529fehlgeschlageneReads bleiben.
+NoUseful50,0031s linkszensiert und7,75047s exakter bewaffneterStillstand verbleiben.
+Zwei exakt Nativeclockgebundene DriverFinals bleibenNONZERO Submit/Safety2;
+Submit ist keinACK und keine tatsächliche Bewegung. Alter bewegter267→112-
+Neutralfall nicht positiv wiederholt; **keine native Fix-/A4-Freigabe**.
+Audit übersah drittenNOATIME-Navread außerhalbFixtureRoot; ohneVorherpin ist
+atimeÄnderungUNKNOWN. Keine Metadatenreparatur oderFullreaderwiederholung.
+RootallePrivate/PublicAuditpins geprüft, volle Rohbelege jetzt extern sichern.
+
+A1neuerControl093301 begrenztPASS, Trace093359FAILHostCPU77,5056%/1,15928s;
+664Dateien/beideSnapshotNS/9Abwesenheiten/3NormalLogs/alleRessourcenbeendetPASS.
+203vollständigeCalls/406Events/28Pakete,0FaultDropAbort,38Originalregionengleich,
+UnloadDetachTrue; keineInit/Bullet/ReceiveDamage-Events undkeinA1Schadensnachweis.
+KeineProzessCPUaufzeichnung damals: Ursachen-/AnteilzuordnungUNKNOWN.
+
+V8Source371ccd8: expliziter runtime='v8' ohneFallback plus kalterRPC desselben
+Scripts vorArm, Rawantwortatomic0600 undexakteV8/PID/ia32/4-Prüfung.
+Root15TestsPASS; unabhängigerSourcepeer6f7572b7PASS_SCOPE. Drei volleInversen,
+Hotpath/Guardsunverändert; JSHashänderung ausdrücklich erfasst. KeineNative bisher.
+CPUhelper756de09/8789059: Root6FakeFSTestsPASS0,004s, getrennte ownPID/start-
+undCgroup-Inode/CPU-Domänen, UNKNOWN beiQuellenwechsel/-verlust. Peerläuft.
+NächsterbegründeterA1Schritt: frischerV8Fork, gleicheControl/Tracebedingungen mit
+begrenzter passiverProzess-/Cgroupmessung. KeineGrenzwert-/TTL-/Guardlockerung.
+
+Source090actualfetch9a6b744db5373d5997bb98fd114a2293222e2699,
+lokal55d79c9c30e2b94dcdb244701ad899689aa564b5/Tree851be37dcd1fcee7541be43b60fb61eb3405e0ea.
+Delta081vollDrive+zweiteDateimetadatenPASS09:50:03:33285455B/f9adefd7,
+1721Dateien73722566B,Drive120hoCJ-kqG2QrfqlebtA6i_vXrcQgxS6.
+030Raw/Audit undneueSource nochin082 sichern. Platteknapp aber8GiBFloorerhalten;
+082Rekonstruktionen jeweils dateiweise mitvollerSHA/UID/GID/mode/mtime-Prüfung,
+begrenzterPlatzbedarfstattallerDateiengleichzeitig; keineRuntimeRestoreStartbehauptung.
+SechsälteregeschlosseneNativeStreams verlustfrei171493185→11551660Bgzip,
+volleTestrestoresPASS; Originale044/055/075externgeprüft,neueGzipsin082.
+A3Stufenvergleich/A4MapsReset24Slots/A5formale60/60/120minGatesweiteroffen.
+
+## Frühere belegte Stände (historisch)
+
 # Aktueller Handoff – 15.11.2026 09:48 UTC
 
 **A offen/B nicht begonnen. Kein Native aktiv, Live unverändert.**
