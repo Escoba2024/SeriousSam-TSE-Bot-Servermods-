@@ -1,5 +1,37 @@
 # Cecil-Flottenrollout und Abschluss A → B
 
+## Aktuell 15.11.2026, 02:03 UTC
+
+- [x] Trouble024600 geschlossen/Rootrestore640Dateien/4Logs/PIDgenerationen/
+  Display154/Sperren bestanden; V3-Lifeauswertung279Leben/137Useful/184Gains.
+- [x] Geschlossenen Kartenbericht geschrieben; kein neuerStale-Anchor-Beweis,
+  keine funktionale Gesamtqualifikation oder Livepromotion daraus.
+- [ ] Beide bestehenden Worker nachClose für gezielteCPU-Tests freigegeben;
+  Keyboardreview14Tests lautAutor grün, Rootreview/Builder noch offen.
+- [ ] Reacquirediagnose RED→minimalerZusatz→GREEN/Parentregression/ASan.
+- [ ] NeuesteQuellen publizieren/Remote tatsächlich prüfen; Delta061 mit
+  Trouble-Rohbelegen extern rücklesen. Danach nächste einzelne Nativeprüfung.
+
+A offen/B nicht begonnen, bestätigte Liveflotte unverändert.
+
+## Aktuell 15.11.2026, 01:56 UTC
+
+- [x] Remote4b32e230 tatsächlich gefetched/Tree bcf14ac9 gleich Root6f4fbbd.
+- [x] Delta060 vollständig extern rückgelesen und zweimal Dateiinhalte und
+  Metadaten geprüft:26991579B/SHA c08dcf3f,1713 Dateien/372981976B.
+- [x] Keyboardplan mit sechs Aktionen einschließlich zweier normaler Forward-
+  Followups sowie passive Reacquire-Diagnosespezifikation integriert.
+- [ ] Trouble024600 seit01:48:19 läuft, ParentPID1571551/Sitzung92408.
+  Nach Close Rootrestore mit case_result, Lebensauswertung und Kartenreview.
+- [ ] Keyboard-Releasefehler erst RED→Fix→GREEN, dann Rootreview; getrennte
+  admitted/attempted/released/acked-Zähler, keine SharedCore-Änderung.
+- [ ] Reacquirediagnose mit tatsächlichen Bodies und unveränderter Steuerlogik
+  prüfen; Skullsursache weiterhin offen. Beide Worker bis Nativeclose STATICONLY.
+- [ ] Neuere Quellen/Belege publizieren und nächsten Delta sichern; Hole und
+  Yodeller einzeln ohne parallele CPU-Jobs prüfen.
+
+Live unverändert gemäß Nutzerentscheidung. A offen/B nicht begonnen.
+
 ## Aktuell 15.11.2026, 01:37 UTC
 
 - [x] Vollständiger NoFireaudit7b7a56d3 und Skullscomplete65546be4/

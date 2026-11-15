@@ -1,4 +1,61 @@
-# Aktueller Handoff — 15.11.2026, 01:37 UTC
+# Aktueller Handoff — 15.11.2026, 02:03 UTC
+
+## Stand 15.11.2026, 02:03 UTC – Trouble024 geschlossen
+
+Trouble024600 geschlossen:600,173441590s, Resultatdc01c2d8,
+236 serverseitige Fremdabschusszeilen,279beobachteteLeben/137Useful/
+184Inventargewinne;13956Versuche einschließlich376Fehler unverändert ausgewertet.
+188links-/8rechtszensiert,4HPmehrdeutig,3reineLeichenleben. Alle8Slots
+Bewegung/Fernfeuerflags/Usefulgains. Längstes niemalsUseful beobachtetes
+Lebendfenster33,391845703s; kein vollerKarten-/Routen-/Reset-PASS.
+EinGroundReplanLocal2/Tick7437/Source16/Hop18/Anker99; vorherigerSnapshot
+hatte bereits99, daher neueStale-Anchor-Verzweigung weiterhin unbekannt.
+
+RootRestore02:00:03PASS640Dateien/4Loghashes/4normaleCloses/PIDgenerationen/
+Units/Display154/4Sperren, mit absolutemcase_result-Pfad für nächstenHolefall.
+ViergeschlosseneLogs0neue6Fehlerklassen. Outer697Proben/maxGap1,003213597/
+CPU64,467005%/RAM2555777024B/Disk9415987200B/0Verletzungen/Exit0reaped,
+nurHOST_OBSERVATION_ONLY. Bericht2026-11-15-build024-trouble-closed.md.
+
+Nativefenstergeschlossen, beideWorker02:00wiederfürfokussierteCPU-Testsfreigegeben.
+KeyboardreviewRED→14gezielteGREENlautAutorcd2d7ec; Root hatFixdiffgelesen,
+nochkeineIntegration/Nativequalifikation. Builder-/Completionreviewfolgt.
+Reacquireworker zuerstweitereechteREDs, dannpassiveDiagnose;keinGameplayfixclaim.
+KeinNativeprozessjetztaktiv. NächsteRootschrittepublizieren/nächsterDelta061
+mitTroubleraw undneuenQuellen; unabhängigeReviews/gezielteTests abschließen,
+danachHole/Yodeller oderneuenOriginalkeyboardfall seriellprüfen.
+
+## Stand 15.11.2026, 01:56 UTC – Delta060 gesichert, Trouble024 läuft
+
+Delta060 vollständig extern gesichert und rückgelesen: 26991579 Bytes,
+SHA256 c08dcf3fb04fae06890e9b5a4dde73bc0d994300b30a4cbf0012ea12c02d80d6,
+Drive 19tK0-B77wpSC55KXj7ogkR1ZhU0WnXYx; 1713 Dateien/372981976
+entpackte Bytes zweimal vollständig SHA/UID/GID/Modus/mtime_ns geprüft.
+Enthält geschlossene NoFire-/Skulls-Rohbelege, vollständige Autoren- und
+Rootanalysen, drei weitere Kartenfreezes und Sourcebundle bis 6f4fbbd.
+Erster Reservecheck stoppte vor Archivschreiben; nach exakt drei weiteren
+verifizierten temporären Drive-Partduplikaten erfolgreich. Alle Originalteile,
+Rohdaten und Rollbacks erhalten. Freier Platz danach 9606172672 Bytes.
+
+Remote 4b32e230 tatsächlich gefetched; Tree bcf14ac9 bytegleich Root6f4fbbd.
+Neuere Reacquire-Diagnosespezifikation/Plan integriert8f9b88f, noch nicht
+extern publiziert. Separater Keyboard-WT und Reacquire-WT arbeiten nur statisch
+während Nativefenster; keine parallelen Tests/Compiler/Generatoren.
+
+Trouble024600 tatsächlich gestartet01:48:19.667326 UTC, ParentPID1571551/
+Startticks133369758, Sitzung92408, Owner navigation024-trouble-owner.json.
+Manifest58faf8c7/Controller7e012b0f/Parentf0eef760/Outere7e0da23;
+acht DEMON, Hard2, Original20FPS, diag0; eigener Unitpräfix
+ssam-nav20-024-trouble-root-trouble-20261114. Um01:55:49 noch laufend,
+kein geschlossenes Ergebnis. Nächster Schritt vollständiger Close/Rootrestore
+mit case_result-Pfad, unveränderte Lebensauswertung und funktionaler Review.
+Erst danach CPU-Arbeit der beiden Worker wieder zulassen.
+
+Rootstatische Keyboardreview fand erforderliche Fehlerfälle für Native-Keyup
+bei Metadatenfehler sowie ungenaue completed-Zählung; Worker bereitet erst
+REDs vor. Kein SharedCore-/EPS-/Inputbudgetumbau. Reacquirediagnose bleibt
+passiv; tatsächlicher Grund des Skulls-Recoveryfehlers weiterhin unbekannt.
+Live unverändert Dev048/RedGen2/vier Public018. A offen, B nicht begonnen.
 
 ## Stand 15.11.2026, 01:37 UTC – geschlossene Audits exakt reproduziert
 
